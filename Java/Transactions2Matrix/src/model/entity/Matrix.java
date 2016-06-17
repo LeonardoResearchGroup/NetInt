@@ -35,15 +35,20 @@ public class Matrix {
 		
 		if(first)
 		{
-			if(transactions == -1)
+			
+			if(geneticAlgorithm)
 			{
-				cells.add(new Cell(numRows, 0, 1));
-				cells.add(new Cell(numRows, 1, 1));
+			cells.add(new Cell(numRows, 0, 1));
+			cells.add(new Cell(numRows, 1, 1));
 			}
 			else
 			{
-				cells.add(new Cell(numRows, 0, transactions));
-				cells.add(new Cell(numRows, 1, transactions));
+				for(int i = 0; i < transactions ; i++)
+				{
+					cells.add(new Cell(numRows, 0, 1));
+					cells.add(new Cell(numRows, 1, 1));
+					numRows++;
+				}
 			}
 			
 			columns.add(payer);
@@ -70,25 +75,31 @@ public class Matrix {
 			
 			receiverColumn = receiverColumn != -1 ? receiverColumn : columns.size()-1;
 			
-			if(transactions == -1)
+			if(geneticAlgorithm)
 			{
-				cells.add(new Cell(numRows, payerColumn, 1));
-				cells.add(new Cell(numRows, receiverColumn, 1));
+			cells.add(new Cell(numRows, payerColumn, 1));
+			cells.add(new Cell(numRows, receiverColumn, 1));
 			}
 			else
 			{
-				cells.add(new Cell(numRows, payerColumn, transactions));
-				cells.add(new Cell(numRows, receiverColumn, transactions));
+				for(int i = 0; i < transactions ; i++)
+				{
+					cells.add(new Cell(numRows, payerColumn, 1));
+					cells.add(new Cell(numRows, receiverColumn, 1));
+					numRows++;
+				}
 			}
+			
 			
 		}
 		
 		if(geneticAlgorithm)
 		{
 			transactionNumbers.add(transactionsCopy);
+			numRows++;
 		}
 		
-		numRows++;
+		
 		
 	}
 	

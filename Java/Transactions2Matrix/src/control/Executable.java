@@ -16,16 +16,12 @@ public class Executable {
 				
 				boolean ga = ((int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Using Genetic Algorithm (0 = No | 1 = Yes)?")) == 1 ? true: false;
 				
-				boolean transactions = ga ? true : ((int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Include transactions (0 = No | 1 = Yes)?")) == 1;
-				
 				int transactionsColumn = -1;
 				int payerColumn = -1;
 				int receiverColumn = -1;
 				
-				if(transactions)
-				{
-					transactionsColumn = (int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Transactions column (starting from 0)?");
-				}
+				transactionsColumn = (int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Transactions column (starting from 0)?");
+			
 				
 				payerColumn = (int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Payer column (starting from 0)?");
 				
@@ -33,9 +29,7 @@ public class Executable {
 				
 				boolean removeQuotes = ((int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Remove quotes from strings (0 = No | 1 = Yes)?")) == 1 ? true: false;
 				
-				boolean columnShuffle = ((int) ViewManager.getInput(ViewManager.INPUT_TYPE_INT, "Column shuffle (0 = No | 1 = Yes)?")) == 1 ? true: false;
-				
-				Operator.TransformFile(ViewManager.getFile(), transactions, transactionsColumn, payerColumn, receiverColumn, removeQuotes, columnShuffle , ga);
+				Operator.TransformFile(ViewManager.getFile(), transactionsColumn, payerColumn, receiverColumn, removeQuotes, ga);
 				
 				ViewManager.showInformationMessage("Done!", "Work complete");
 				

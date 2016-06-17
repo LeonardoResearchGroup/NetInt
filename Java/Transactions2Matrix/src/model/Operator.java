@@ -19,7 +19,7 @@ import model.entity.Matrix;
 
 public final class Operator {
 
-	public static void TransformFile(File file, boolean transactions, int transactionsColumn, int payerColumn, int receiverColumn, boolean removeQuotes, boolean columnShuffle, boolean geneticAlgorithm) throws IOException, URISyntaxException
+	public static void TransformFile(File file, int transactionsColumn, int payerColumn, int receiverColumn, boolean removeQuotes, boolean geneticAlgorithm) throws IOException, URISyntaxException
 	{
 		
 		ArrayList<String> lines = readLines(file);
@@ -35,12 +35,12 @@ public final class Operator {
 		{
 			String[] split = s.split(";");
 			
-			int numTransactions = transactions?Integer.parseInt(split[transactionsColumn]):-1;
+			int numTransactions = Integer.parseInt(split[transactionsColumn]);
 			
 			matrix.appendRow(split[payerColumn], split[receiverColumn], numTransactions);
 		}
 		
-		saveMatrix(matrix, columnShuffle, geneticAlgorithm);
+		saveMatrix(matrix, geneticAlgorithm);
 	}
 	
 	private static ArrayList<String> readLines(File file) throws IOException
@@ -112,10 +112,10 @@ public final class Operator {
 		return list;
 	}
 	
-	private static  void saveMatrix(Matrix myMatrix, boolean columnShuffle, boolean geneticAlgorithm) throws IOException, URISyntaxException
+	private static  void saveMatrix(Matrix myMatrix, boolean geneticAlgorithm) throws IOException, URISyntaxException
 	{
 		
-		int[][] matrix = myMatrix.toIntMatrix(true,columnShuffle);
+		int[][] matrix = myMatrix.toIntMatrix(true,false);
 		
 		String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
 

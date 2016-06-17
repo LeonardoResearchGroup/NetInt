@@ -34,7 +34,7 @@ public class Operator {
 			
 			String cluster = clusters.get(i);
 			
-			String transformedCluster = "Cluster " + (i+1) + ": ";
+			String transformedCluster = "Community " + (i+1) + ": ";
 			
 			String[] elements = cluster.split(",");
 			
@@ -104,20 +104,11 @@ public class Operator {
 		
 		InputStream fis=new FileInputStream(file);
 	    BufferedReader br=new BufferedReader(new InputStreamReader(fis));
-	    
-	    boolean firstTime = true;
+	   
 	    
 	    for (String line = br.readLine(); line != null; line = br.readLine()) {
 	      
-	    	if(firstTime)
-	    	{
-	    		firstTime = false;
-	    	}
-	    	else
-	    	{
 	    		 list.add(line);
-	    	}
-	    	
 	     }
 
 	     br.close();
