@@ -1,38 +1,12 @@
 library(kohonen)
 
-setwd("C://Users//Fell//Desktop")
-data <- read.csv2("sectores.csv");
-data$X <- NULL
-data$CANTIDAD_TRNS <- NULL
-data$VALORES_MOVILIZADOS <- NULL
+setwd("C://Users//Fell//OneDrive//Icesi//Maestría//Semestre 1//Machine Learning//Proyecto del Curso//ML - Communities//Matrix_2016_06_17_06_13_27")
 
-pagadores <- unique(data$SECTOR_PAGADOR)
-beneficiarios <- unique(data$SECTOR_BENEFICIARIO)
+#Se obtiene la matriz.
+my.matrix <- "Matrix_2016_06_17_06_13_27.txt"
+data_train_matrix <- as.matrix(read.table(file = my.matrix, header = FALSE))
 
-#Se crea la matriz de ceros
-data_train_matrix <- matrix(0, nrow = length(pagadores), ncol = length(beneficiarios))
-
-rownames(data_train_matrix) <- pagadores
-colnames(data_train_matrix) <- beneficiarios
-
-dataset.size <- nrow(data)
-
-for(i in 1:dataset.size) {
-  
-  row <- data[i,]
-  
-  pagador <- as.character(row$SECTOR_PAGADOR)
-  beneficiario <- as.character(row$SECTOR_BENEFICIARIO)
-  
-  pagador.position <- match(pagador, pagadores)
-  beneficiario.position <- match(beneficiario, beneficiarios)
-  
-  data_train_matrix[pagador.position,beneficiario.position] <- 1
-}
-
-write.table(data_train_matrix, file="mymatrix.txt", row.names=FALSE, col.names=FALSE)
-
-som_grid <- somgrid(xdim = 9, ydim=9, topo="hexagonal")
+som_grid <- somgrid(xdim = 10, ydim=10, topo="hexagonal")
 
 som_model <- som(data_train_matrix, grid=som_grid, rlen=100, alpha=c(0.05,0.01), keep.data = TRUE, n.hood="square")
 
