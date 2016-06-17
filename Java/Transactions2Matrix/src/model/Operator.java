@@ -115,7 +115,7 @@ public final class Operator {
 	private static  void saveMatrix(Matrix myMatrix, boolean geneticAlgorithm) throws IOException, URISyntaxException
 	{
 		
-		int[][] matrix = myMatrix.toIntMatrix(false,false);
+		int[][] matrix = myMatrix.toIntMatrix(true,false);
 		
 		String desktopPath = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
 
