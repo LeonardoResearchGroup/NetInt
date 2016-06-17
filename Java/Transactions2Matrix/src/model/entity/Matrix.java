@@ -60,7 +60,9 @@ public class Matrix {
 		{
 			int payerColumn = getColumn(payer);
 			int receiverColumn = getColumn(receiver);
+			boolean identical = payerColumn == receiverColumn ? true : false;
 			
+
 			if(payerColumn==-1)
 			{
 				columns.add(payer);
@@ -70,7 +72,10 @@ public class Matrix {
 			
 			if(receiverColumn==-1)
 			{
-				columns.add(receiver);
+				if(!identical)
+				{
+					columns.add(receiver);
+				}
 			}
 			
 			receiverColumn = receiverColumn != -1 ? receiverColumn : columns.size()-1;
