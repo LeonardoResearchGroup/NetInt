@@ -10,8 +10,8 @@ import graphElements.Node;
 public class VEdge {
 	Edge edge;
 	boolean aboveArc;
-	PVector orig, dest;
-	int color;
+	VNode orig, dest;
+	// int color;
 	Bezier bezier;
 
 	public VEdge(Edge edge) {
@@ -24,63 +24,50 @@ public class VEdge {
 		int indxOrg = nodes.indexOf(edge.getSource());
 		if (indxOrg > -1) {
 			// ask for its coordinates
-			orig = vNodes.get(indxOrg).pos;
+			orig = vNodes.get(indxOrg);
 		}
-
 		// look in the collection of nodes where is the edge's target
 		int indxDes = nodes.indexOf(edge.getTarget());
 		if (indxDes > -1) {
 			// ask for its coordinates
-			dest = vNodes.get(indxDes).pos;
+			dest = vNodes.get(indxDes);
 		}
-		setDirection(indxOrg, indxDes);
+		// This works fine in linear arrays
+		setDirection(orig.pos.x, dest.pos.x);
 	}
 
 	public void makeBezier() {
-		try {
-			// if not loop
-			if (!edge.isLoop()) {
-				float control = (dest.x - orig.x) / 2;
-				if (!edge.isDirected())
-					control = Math.abs(control);
-				bezier = new Bezier(orig.x, orig.y, orig.x, orig.y - control, dest.x, dest.y - control, dest.x, dest.y);
-
-			} else {
-				bezier = new Bezier(orig.x, orig.y, orig.x - 20, orig.y - 20, orig.x + 20, orig.y - 20, dest.x, dest.y);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		bezier = new Bezier(orig.pos, dest.pos, (orig.pos.x - dest.pos.x) / 2, aboveArc);
 	}
 
 	public void show(PApplet app) {
+
+		switch (edge.getMark()) {
+		case 0:
+			bezier.setColor(app.color(255, 100, 255));
+			bezier.setAlpha(20);
+			break;
+		case 1:
+			bezier.setColor(app.color(255, 0, 0));
+			bezier.setAlpha(20);
+			break;
+		case 2:
+			bezier.setColor(app.color(0, 255, 0));
+			bezier.setAlpha(90);
+			break;
+		case 3:
+			bezier.setColor(app.color(255, 255, 0));
+			bezier.setAlpha(90);
+			break;
+		}
+
 		bezier.drawBezier2D(app);
 		bezier.drawHeadBezier2D(app);
 	}
 
-	public void showSourceToTarget(PApplet app) {
-		try {
-			app.noFill();
-			app.stroke(200, 30);
-			// if not loop
-			if (!edge.isLoop()) {
-				float control = (dest.x - orig.x) / 2;
-				if (!edge.isDirected())
-					control = Math.abs(control);
-				app.bezier(orig.x, orig.y, orig.x, orig.y - control, dest.x, dest.y - control, dest.x, dest.y);
-
-			} else {
-				app.bezier(orig.x, orig.y, orig.x - 20, orig.y - 20, orig.x + 20, orig.y - 20, dest.x, dest.y);
-			}
-			// app.line(dest.x, dest.y, dest.x+10, dest.y-10);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void setDirection(int indxS, int indxT) {
+	private void setDirection(float posXOrg, float posXDes) {
 		if (edge.isDirected()) {
-			if (indxS - indxT < 0)
+			if (posXOrg - posXDes < 0)
 				aboveArc = true;
 			else
 				aboveArc = false;
@@ -90,5 +77,9 @@ public class VEdge {
 	// getters and setters
 	public boolean isAboveArc() {
 		return aboveArc;
+	}
+
+	public void setColor(int color) {
+		bezier.setColor(color);
 	}
 }

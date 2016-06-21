@@ -1,4 +1,4 @@
-package visualElements;
+package comparators;
 
 import java.util.Comparator;
 import graphElements.Node;

@@ -1,15 +1,19 @@
 package graphElements;
 import java.util.ArrayList;
+import java.util.Observable;
 
 
-public class Node implements Comparable <Node>{
+public class Node extends Observable implements Comparable <Node>{
 	
 	private int inDegree, outDegree, Degree, id;
 	private String name;
 	private float Excentricity, Betweeness;
 	private ArrayList<Integer> communities;
 	
+	
+	
 	public Node(){
+		
 	}
 	
 	public Node(int id){
@@ -22,6 +26,8 @@ public class Node implements Comparable <Node>{
 
 	
 	// *** Getters and setters
+	
+	
 
 		public int getInDegree() {
 			return inDegree;
@@ -87,7 +93,15 @@ public class Node implements Comparable <Node>{
 			this.communities = communities;
 		}
 
-
+		// 
+		
+		public void change() {
+			setChanged();
+		}
+		
+		public void clear() {
+			clearChanged();
+		}
 	
 
 }

@@ -11,52 +11,52 @@ public class Graph {
 		this.vertices = vertices;
 		this.edges = edges;
 	}
-	
+
 	// Degree
-	public void setInDegree(){
-		for(Node n : vertices){
+	public void setInDegree() {
+		for (Node n : vertices) {
 			setNodeInDegree(n);
 		}
 	}
-	
-	public void setOutDegree(){
-		for(Node n : vertices){
+
+	public void setOutDegree() {
+		for (Node n : vertices) {
 			setNodeOutDegree(n);
 		}
 	}
-	
-	public void setDegree(){
-		for(Node n : vertices){
+
+	public void setDegree() {
+		for (Node n : vertices) {
 			setNodeDegree(n);
 		}
 	}
 
 	public void setNodeInDegree(Node n) {
 		int count = 0;
-			for (Edge e : edges) {
-				if (e.getTarget().equals(n))
-					count++;
-			}
-			n.setInDegree(count);
+		for (Edge e : edges) {
+			if (e.getTarget().equals(n))
+				count++;
+		}
+		n.setInDegree(count);
 	}
 
 	public void setNodeOutDegree(Node n) {
 		int count = 0;
-			for (Edge e : edges) {
-				if (e.getSource().equals(n))
-					count++;
-			}
-			n.setOutDegree(count);
+		for (Edge e : edges) {
+			if (e.getSource().equals(n))
+				count++;
+		}
+		n.setOutDegree(count);
 	}
-	
-	public void setNodeDegree(Node n){
-		if (n.getInDegree() == 0){
-			setNodeInDegree(n);	
+
+	public void setNodeDegree(Node n) {
+		if (n.getInDegree() == 0) {
+			setNodeInDegree(n);
 		}
-		if (n.getOutDegree() == 0){
-			setNodeOutDegree(n);	
+		if (n.getOutDegree() == 0) {
+			setNodeOutDegree(n);
 		}
-			n.setDegree(n.getInDegree()+n.getOutDegree());
+		n.setDegree(n.getInDegree() + n.getOutDegree());
 	}
 
 	// Getters and setters
@@ -75,8 +75,8 @@ public class Graph {
 	public void setEdges(ArrayList<Edge> edges) {
 		this.edges = edges;
 	}
-	
-	public int size(){
+
+	public int size() {
 		return vertices.size();
 	}
 

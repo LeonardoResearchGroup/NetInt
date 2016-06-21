@@ -29,7 +29,7 @@ public abstract class Button implements MouseListener {
 
 	public abstract void show();
 
-	public boolean detectMouse() {
+	public boolean isMouseOver() {
 		boolean temp = false;
 		// If the button is a rectangle
 		if (wdth != 0) {
@@ -64,25 +64,25 @@ public abstract class Button implements MouseListener {
 
 	// ---------------- implementing MouseEvent methods ----------------
 	public void mousePressed(MouseEvent e) {
-		if (detectMouse())
-			PApplet.println(this.getClass() + " mousePressed");
+		//if (isMouseOver())
+			//PApplet.println(this.getClass() + " mousePressed");
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		if (detectMouse())
-			PApplet.println(this.getClass() + " mouseReleased");
+		//if (isMouseOver())
+			//PApplet.println(this.getClass() + " mouseReleased");
 	}
 
 	public void mouseExited(MouseEvent e) {
-		PApplet.println("mouse exited");
+		// PApplet.println("mouse exited");
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		PApplet.println("mouse entered");
+		// PApplet.println("mouse entered");
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (detectMouse())
-			PApplet.println(this.getClass() + " mouse clicked");
+		//if (isMouseOver())
+			//PApplet.println(this.getClass() + " mouse clicked");
 	}
 }

@@ -8,8 +8,9 @@ import interactiveElements.Button;
 
 /**
  * A community is defined as a subset of nodes linked to other nodes within the
- * same subset. This class visualizes only edges within the community. External
- * links to or from nodes of other communities are not displayed
+ * same subset. This class visualizes only edges within a visual network
+ * VNetwork. External links to or from nodes of other communities are not
+ * displayed, yet.
  * 
  * @author jsalam
  *
@@ -20,9 +21,9 @@ public class VCommunity extends Button {
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
 	private boolean open, unlocked;
-	private PVector intersect, involute, extendedCordOrigin, extendedCordEnd;
-	int i, increment;
+	private int i, increment;
 	public VNetwork vNet;
+	private int Id;
 
 	public VCommunity(PApplet app, VNetwork vNet, float posX, float posY, float diam) {
 		super(app, posX, posY, diam);
@@ -30,44 +31,52 @@ public class VCommunity extends Button {
 		open = false;
 		unlocked = false;
 		i = 0;
-		increment = 4;
-		setCommunityParameters();
+		increment = 10;
+		setLayoutParameters();
 		setNetworkParameters();
 	}
 
-	private void setCommunityParameters() {
+	private void setLayoutParameters() {
 		// Calculate the community diameter
-		minCommunityDiam = 50;
-		maxCommunityDiam = 300;
+		minCommunityDiam = 70;
+		maxCommunityDiam = 200;
 		minCommunitySize = 1;
 		maxCommunitySize = 1000;
 		diam = PApplet.map(vNet.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
-		// determine the origin and end PVectors for the linear visualization
-		extendedCordOrigin = new PVector(pos.x - getLength(360f, diam / 2), pos.y + diam / 2);
-		extendedCordEnd = new PVector(pos.x + getLength(360f, diam / 2), pos.y + diam / 2);
 	}
 
 	private void setNetworkParameters() {
-		vNet.sortInDegree();
+		// **SORTERS
+		//vNet.sortInDegree();
 		vNet.sortOutDegree();
-		//vNet.linearLayout(app, extendedCordOrigin, extendedCordEnd);
-		vNet.circularLayout(app, pos, diam / 2);
+
+		// ** CIRCULAR LAYOUT
+		// vNet.circularLayout(app, pos, diam / 2);
+
+		// ** LINEAR LAYOUT
+		// determine the origin and end PVectors for the linear visualization
+		// PVector extendedCordOrigin = new PVector(pos.x -
+		// getLength(PConstants.TWO_PI, diam / 4), pos.y + diam / 2);
+		// PVector extendedCordEnd = new PVector(pos.x +
+		// getLength(PConstants.TWO_PI, diam / 4), pos.y + diam / 2);
+
+		PVector extendedCordOrigin = new PVector(50, pos.y + diam / 2);
+		PVector extendedCordEnd = new PVector(app.width - 50, pos.y + diam / 2);
+
+		vNet.linearLayout(app, extendedCordOrigin, extendedCordEnd);
 	}
 
 	public void show() {
-		// DetectMouse is necessary to detect mouse events
-		detectMouse();
 		// Switch control
+		app.text("COMMUNITY X", pos.x, pos.y);
 		if (unlocked) {
 			if (!open) {
+
 				if (i < 180) {
 					i += increment;
 				} else {
 					open = true;
 				}
-			} else {
-				// Show nodes
-				vNet.show(app, true, false);
 			}
 		} else {
 			if (i > 0) {
@@ -78,55 +87,35 @@ public class VCommunity extends Button {
 			}
 		}
 		// Open or close the community
-		showInvolute();
+		showSimpleCommunityInvolute();
 	}
-	
-	private void involuteNetwork(){
-	//	vNet.setNodesXY();
-	}
-	
-	private void showInvolute() {
+
+	private void showSimpleCommunityInvolute() {
+		// Visualize nodes & edges
+		boolean visualizeNodes = isMouseOver();
+		boolean visualizeEdges = unlocked;
+		boolean showInvolute = unlocked;
+		vNet.show(app, visualizeNodes, visualizeEdges, showInvolute);
+
+		// Visualize community cover
+		app.stroke(100);
+		app.strokeWeight(0);
+		app.fill(255, 30);
 		// *** DRAWS RIGHT HALF
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// Gets the PVector for angle2
-		intersect = getXY(angle2);
-
+		PVector intersect = getXY(angle2);
 		// *** Arc right half
-		app.stroke(100);
-		app.strokeWeight(0);
-		app.fill(255, 30);
 		app.arc(pos.x, pos.y, diam, diam, angle2, PConstants.TWO_PI + PConstants.HALF_PI);
 
-		// *** Involute right half
-		involute = getXY(PConstants.PI + (angle2 + PConstants.HALF_PI));
-		app.stroke(100);
-		app.strokeWeight(0);
-		app.ellipse( pos.x + intersect.x * (diam / 2) + involute.x * getLength(i, diam),
-				pos.y + intersect.y * (diam / 2) + involute.y * getLength(i, diam),5,5);
-		app.line(pos.x + intersect.x * (diam / 2), pos.y + intersect.y * (diam / 2),
-				pos.x + intersect.x * (diam / 2) + involute.x * getLength(i, diam),
-				pos.y + intersect.y * (diam / 2) + involute.y * getLength(i, diam));
-	
 		// *** DRAWS LEFT HALF
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// Gets the PVector for angle2
 		intersect = getXY(angle2);
-
 		// *** Arc left half
-		app.stroke(100);
-		app.strokeWeight(0);
 		app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
-
-		// *** Involute left half
-		involute = getXY(PConstants.PI + (angle2 + PConstants.HALF_PI));
-		app.stroke(100);
-		app.strokeWeight(0);
-		app.line(pos.x + intersect.x * (diam / 2), pos.y + intersect.y * (diam / 2),
-				pos.x + intersect.x * (diam / 2) - involute.x * getLength(i, diam),
-				pos.y + intersect.y * (diam / 2) - involute.y * getLength(i, diam));
-		involute = getXY(PConstants.PI + (angle2 + PConstants.HALF_PI));
 	}
 
 	// ***** Getters
@@ -141,30 +130,9 @@ public class VCommunity extends Button {
 		return rtn;
 	}
 
-	/**
-	 * Gets the XY PVector on the circumference of radius 1 for a given angle
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	private PVector getXYInvolute(float angle) {
-		PVector rtn = new PVector((PApplet.cos(angle) + angle * PApplet.sin(angle)),
-				(PApplet.sin(angle) - angle * PApplet.cos(angle)));
+	private float getLength(float angle, float radius) {
+		float rtn = angle * radius;
 		return rtn;
-	}
-
-	/**
-	 * Calculates the length of a cord (circumference section)
-	 * 
-	 * @param i
-	 *            The angle of the cord
-	 * @param rad
-	 *            The radius of the circumference
-	 * @return
-	 */
-	private float getLength(float i, float rad) {
-		float rtn = ((PConstants.TWO_PI * rad) / 360) * i;
-		return rtn / 2;
 	}
 
 	// ***** Setters
@@ -174,7 +142,7 @@ public class VCommunity extends Button {
 
 	// ***** Events
 	public void mouseClicked(MouseEvent e) {
-		if (detectMouse()) {
+		if (isMouseOver()) {
 			unlocked = !unlocked;
 			PApplet.println(this.getClass() + " mouseClicked");
 		}

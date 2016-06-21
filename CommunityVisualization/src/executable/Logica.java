@@ -10,51 +10,66 @@ import processing.core.*;
 import visualElements.VNetwork;
 
 public class Logica {
-	ArrayList<Edge> edges;
-	ArrayList<Node> vertices;
-	Graph graph;
-	VNetwork network;
-	VCommunity community;
-	int n = 100;
+	ArrayList<Edge> edgesA, edgesB;
+	ArrayList<Node> verticesA, verticesB;
+	Graph graphA, graphB;
+	VNetwork vNetA, vNetB;
+	VCommunity communityA, communityB;
+	int nA = 2;
+	int nB = 50;
 
 	public Logica(PApplet app) {
-		vertices = new ArrayList<Node>();
-		edges = new ArrayList<Edge>();
+		verticesA = new ArrayList<Node>();
+		edgesA = new ArrayList<Edge>();
+		verticesB = new ArrayList<Node>();
+		edgesB = new ArrayList<Edge>();
 
 		// create nodes
-		for (int i = 0; i < n; i++) {
-			Node tmp = new Node(i);
-			vertices.add(tmp);
+		for (int i = 0; i < nA; i++) {
+			Node tmpA = new Node(i);
+			verticesA.add(tmpA);
+		}
+		for (int i = 0; i < nB; i++) {
+			Node tmpB = new Node(i);
+			verticesB.add(tmpB);
 		}
 		// create edges
-		for (int i = 1; i < vertices.size() * 2; i++) {
-			int src = (int) (Math.random()* vertices.size());
-			int trg = (int) (Math.random()* vertices.size());
-			Edge tmp = new Edge(vertices.get(src), vertices.get(trg), true);
-			edges.add(tmp);
+		for (int i = 0; i < verticesA.size(); i++) {
+			int src = (int) (Math.random()* verticesA.size());
+			int trg = (int) (Math.random()* verticesA.size());
+			Edge tmp = new Edge(verticesA.get(src), verticesA.get(trg), true);
+			edgesA.add(tmp);
+		}
+		for (int i = 0; i < verticesB.size(); i++) {
+			int src = (int) (Math.random()* verticesB.size());
+			int trg = (int) (Math.random()* verticesB.size());
+			Edge tmp = new Edge(verticesB.get(src), verticesB.get(trg), true);
+			edgesB.add(tmp);
 		}
 
 		// Making the graph
-		graph = new Graph(vertices, edges);
+		graphA = new Graph(verticesA, edgesA);
+		graphB = new Graph(verticesB, edgesB);
 		
 		// Set Degree
-		graph.setDegree();
+		graphA.setDegree();
+		graphB.setDegree();
 
 		// Visualizing the graph
-		network = new VNetwork(graph);
+		vNetA = new VNetwork(app, graphA);
+		vNetB = new VNetwork(app, graphB);
+		//network.sortOutDegree();
+		//network.linearLayout(app, new PVector(100, 100), new PVector(400,100));
 		
 		// instantiating & visualizing community
-		community = new VCommunity(app, network, 450, 250,100);
+		communityA = new VCommunity(app, vNetA, app.width/2, 150,100);
+		communityB = new VCommunity(app, vNetB, app.width/2, 400,100);
 		
-		// Creating visual edges
-		community.vNet.sortInDegree();
-		community.vNet.sortOutDegree();
-	//	community.vNet.linearLayout(app, community., community.);
-		//network.circularLayout(app, new PVector (app.width/2,app.height/2), 200);
 	}
 
 	public void show(PApplet app) {
 		//network.show(app, true, true);
-		community.show();
+		communityA.show();
+		communityB.show();
 	}
 }
