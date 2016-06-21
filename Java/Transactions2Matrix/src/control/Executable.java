@@ -37,6 +37,10 @@ public class Executable {
 			{
 				ViewManager.showErrorMessage(e.getMessage(), "Error");
 			}
+			catch(Error er)
+			{
+				ViewManager.showErrorMessage(er.getMessage(), "Several Error");
+			}
 			finally{
 				
 				try
