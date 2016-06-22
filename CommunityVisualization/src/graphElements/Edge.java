@@ -3,7 +3,7 @@ package graphElements;
 import java.util.Observable;
 import java.util.Observer;
 
-import utilities.HeapMessenger;
+import utilities.HopMessenger;
 
 /**
  * @author jsalam
@@ -95,11 +95,11 @@ public class Edge implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 
-		if (arg instanceof HeapMessenger) {
+		if (arg instanceof HopMessenger) {
 
 			// Node test = (Node)o;
 			// System.out.println("node: " + test.getId());
-			HeapMessenger heapMsn = ((HeapMessenger) arg);
+			HopMessenger heapMsn = ((HopMessenger) arg);
 
 			// If mouse over
 			System.out.println("current value: " + heapMsn.getCurrentHop());

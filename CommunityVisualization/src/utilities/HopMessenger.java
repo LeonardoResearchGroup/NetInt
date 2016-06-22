@@ -1,13 +1,13 @@
 package utilities;
 
-public class HeapMessenger {
+public class HopMessenger {
 	private int hops;
 	private int currentHop;
 	private String message;
 	private String log;
 	private int nLog;
 	
-	public HeapMessenger() {
+	public HopMessenger() {
 		log = "";
 		nLog = 0;
 	}

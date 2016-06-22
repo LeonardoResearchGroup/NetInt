@@ -10,7 +10,7 @@ import graphElements.Node;
 public class VEdge {
 	Edge edge;
 	boolean aboveArc;
-	VNode orig, dest;
+	VNode source, target;
 	// int color;
 	Bezier bezier;
 
@@ -24,20 +24,21 @@ public class VEdge {
 		int indxOrg = nodes.indexOf(edge.getSource());
 		if (indxOrg > -1) {
 			// ask for its coordinates
-			orig = vNodes.get(indxOrg);
+			source = vNodes.get(indxOrg);
 		}
 		// look in the collection of nodes where is the edge's target
 		int indxDes = nodes.indexOf(edge.getTarget());
 		if (indxDes > -1) {
 			// ask for its coordinates
-			dest = vNodes.get(indxDes);
+			target = vNodes.get(indxDes);
 		}
 		// This works fine in linear arrays
-		setDirection(orig.pos.x, dest.pos.x);
+		setDirection(source.pos.x, target.pos.x);
+
 	}
 
 	public void makeBezier() {
-		bezier = new Bezier(orig.pos, dest.pos, (orig.pos.x - dest.pos.x) / 2, aboveArc);
+		bezier = new Bezier(aboveArc);
 	}
 
 	public void show(PApplet app) {
@@ -61,6 +62,8 @@ public class VEdge {
 			break;
 		}
 
+		bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
+		bezier.setControl((source.pos.x - target.pos.x) / 2);
 		bezier.drawBezier2D(app);
 		bezier.drawHeadBezier2D(app);
 	}

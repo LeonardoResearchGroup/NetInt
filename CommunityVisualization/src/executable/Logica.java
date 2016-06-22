@@ -15,8 +15,8 @@ public class Logica {
 	Graph graphA, graphB;
 	VNetwork vNetA, vNetB;
 	VCommunity communityA, communityB;
-	int nA = 2;
-	int nB = 50;
+	int nA = 100;
+	int nB = 10;
 
 	public Logica(PApplet app) {
 		verticesA = new ArrayList<Node>();

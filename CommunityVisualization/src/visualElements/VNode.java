@@ -3,7 +3,7 @@ package visualElements;
 import graphElements.Node;
 import interactiveElements.Button;
 import processing.core.*;
-import utilities.HeapMessenger;
+import utilities.HopMessenger;
 import utilities.geometry.Involute;
 
 public class VNode extends Button {
@@ -44,7 +44,7 @@ public class VNode extends Button {
 
 			// Observer
 			if (!notifiedIn) {
-				HeapMessenger heap = new HeapMessenger();
+				HopMessenger heap = new HopMessenger();
 				heap.setMessage("selected");
 				// This parameter defines the length of the propagation sequence
 				heap.setHops(15);
@@ -60,7 +60,7 @@ public class VNode extends Button {
 
 			// Observer
 			if (!notifiedOut) {
-				HeapMessenger heap = new HeapMessenger();
+				HopMessenger heap = new HopMessenger();
 				heap.setMessage("free");
 				// This parameter defines the length of the propagation sequence
 				heap.setHops(15);
