@@ -1,25 +1,25 @@
-package interactiveElements;
+package visualElements.interactive;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
 import processing.core.*;
 
-public abstract class Button implements MouseListener {
+public abstract class VisualAtom implements MouseListener {
 
 	public PApplet app;
 	private int wdth, hght;
 	public float diam;
 	public PVector pos;
 
-	public Button(PApplet app, float x, float y, float diam) {
+	public VisualAtom(PApplet app, float x, float y, float diam) {
 		this.app = app;
 		this.diam = diam;
 		pos = new PVector(x, y);
 		app.addMouseListener(this);
 	}
 
-	public Button(PApplet app, float x, float y, int wdth, int hght) {
+	public VisualAtom(PApplet app, float x, float y, int wdth, int hght) {
 		this.app = app;
 		this.wdth = wdth;
 		this.hght = hght;

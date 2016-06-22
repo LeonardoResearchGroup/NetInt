@@ -1,6 +1,8 @@
 package visualElements;
 
 import processing.core.*;
+import utilities.containers.Container;
+import visualElements.interactive.VisualAtom;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,29 +13,27 @@ import comparators.InDegreeComparator;
 import comparators.OutDegreeComparator;
 import graphElements.*;
 
-public class VNetwork {
+public class Arrangement {
 	private Graph graph;
-	private ArrayList<VNode> VNodes;
-	private ArrayList<VEdge> VEdges;
+	private ArrayList<VisualAtom> VAtoms;
+	private ArrayList<Container> containers;
 	public PApplet app;
 
-	public VNetwork(PApplet app, Graph graph) {
+	public Arrangement(PApplet app, Graph graph) {
 		this.graph = graph;
 		this.app = app;
-		VNodes = new ArrayList<VNode>();
-		VEdges = new ArrayList<VEdge>();
+		VAtoms = new ArrayList<VisualAtom>();
 		for (int i = 0; i < graph.getVertices().size(); i++) {
 			Node n = graph.getVertices().get(i);
 			VNode tmp = new VNode(app, n, 0, 0, 0);
-			VNodes.add(tmp);
+			VAtoms.add(tmp);
 		}
-		for (int i = 0; i < graph.getEdges().size(); i++) {
-			Edge e = graph.getEdges().get(i);
-			VEdge tmp = new VEdge(e);
-			tmp.layout(VNodes, graph.getVertices());
-			tmp.makeBezier();
-			VEdges.add(tmp);
-		}
+	}
+
+	public Arrangement(PApplet app) {
+		this.app = app;
+		VAtoms = new ArrayList<VisualAtom>();
+		VEdges = new ArrayList<VEdge>();
 	}
 
 	/**
@@ -41,18 +41,18 @@ public class VNetwork {
 	 * It is used to update the positions after invoking a comparator. Sort
 	 * methods invoke updateNetwork() by default
 	 */
-	private void updateVNetwork() {
-		VNodes.clear();
+	private void updateContainer(Graph graph) {
+		VAtoms.clear();
 
 		for (int i = 0; i < graph.getVertices().size(); i++) {
 			Node n = graph.getVertices().get(i);
 			VNode tmp = new VNode(app, n, 0, 0, 0);
-			VNodes.add(tmp);
+			VAtoms.add(tmp);
 		}
 		for (int i = 0; i < graph.getEdges().size(); i++) {
 			Edge e = graph.getEdges().get(i);
 			VEdge tmp = new VEdge(e);
-			tmp.layout(VNodes, graph.getVertices());
+			tmp.setCoordinates(VAtoms, graph.getVertices());
 			tmp.makeBezier();
 			VEdges.add(tmp);
 		}
@@ -61,51 +61,26 @@ public class VNetwork {
 	// Sorters
 	public void sortInDegree() {
 		Collections.sort(graph.getVertices(), new InDegreeComparator());
-		updateVNetwork();
+		updateContainer(graph);
 	}
 
 	public void sortOutDegree() {
 		Collections.sort(graph.getVertices(), new OutDegreeComparator());
-		updateVNetwork();
+		updateContainer(graph);
 	}
 
 	public void sortDegree() {
 		Collections.sort(graph.getVertices(), new DegreeComparator());
-		updateVNetwork();
-	}
-
-	/**
-	 * Assigns coordinates to each VNode on an horizontal axis
-	 */
-	public void linearLayout(PApplet app, PVector orig, PVector end) {
-		int count = 0;
-		float dist = orig.dist(end);
-		float xStep = (float) dist / (graph.getVertices().size());
-
-		// Organize nodes on a line
-		Iterator<VNode> itrVNode = VNodes.iterator();
-		while (itrVNode.hasNext()) {
-			VNode tmp = itrVNode.next();
-			tmp.setX(orig.x + xStep + (xStep * count));
-			tmp.setY(orig.y);
-			count++;
-		}
-		// Draw bezier curves
-		Iterator<VEdge> itrVEdge = VEdges.iterator();
-		while (itrVEdge.hasNext()) {
-			VEdge tmp = itrVEdge.next();
-			tmp.layout(VNodes, graph.getVertices());
-			tmp.makeBezier();
-		}
+		updateContainer(graph);
 	}
 
 	public void circularLayout(PApplet app, PVector center, float radius) {
 
 		int count = 0;
 		// Organize nodes on a circle
-		Iterator<VNode> itrVNode = VNodes.iterator();
+		Iterator<VisualAtom> itrVNode = VAtoms.iterator();
 		while (itrVNode.hasNext()) {
-			VNode tmp = itrVNode.next();
+			VNode tmp = (VNode) itrVNode.next();
 			tmp.setIndex(count);
 			tmp.setArcSections(graph.getVertices().size());
 			tmp.setNetworkRadius(radius);
@@ -117,32 +92,18 @@ public class VNetwork {
 		Iterator<VEdge> itrVEdge = VEdges.iterator();
 		while (itrVEdge.hasNext()) {
 			VEdge tmp = itrVEdge.next();
-			tmp.layout(VNodes, graph.getVertices());
+			tmp.setCoordinates(VAtoms, graph.getVertices());
 			tmp.makeBezier();
 		}
 
 	}
 
 	public void setNodeXY(int index, PVector pos) {
-		VNodes.get(index).setX(pos.x);
-		VNodes.get(index).setY(pos.y);
+		VAtoms.get(index).setX(pos.x);
+		VAtoms.get(index).setY(pos.y);
 	}
 
 	// app, visualizeNodes, visualizeEdges, showInvolute
-	public void show(PApplet app, boolean showNodes, boolean showEdges, boolean networkVisible) {
-
-		if (showEdges || networkVisible) {
-			for (VEdge e : VEdges) {
-				e.show(app);
-			}
-		}
-		if (showNodes || networkVisible) {
-			for (VNode n : VNodes) {
-				n.setDiam(n.getVertex().getOutDegree() + 5);
-				n.show(showNodes, networkVisible);
-			}
-		}
-	}
 
 	// getters and setters
 	public Graph getGraph() {

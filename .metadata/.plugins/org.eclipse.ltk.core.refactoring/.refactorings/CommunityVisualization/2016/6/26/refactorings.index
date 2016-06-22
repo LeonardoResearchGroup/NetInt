@@ -1,0 +1,14 @@
+1466629019552	Rename type 'Button'
+1466629145739	Copy package
+1466629157438	Delete element
+1466629161871	Copy package
+1466629185251	Delete element
+1466629227235	Delete element
+1466629255230	Rename package 'interactiveElements'
+1466629372680	Rename type 'VNetwork'
+1466630139676	Rename field 'VNodes'
+1466631477874	Rename method 'updateVNetwork'
+1466632183855	Rename local variable 'itrVNode'
+1466632895264	Move compilation unit
+1466632924951	Move compilation unit
+1466636207828	Rename method 'layout'

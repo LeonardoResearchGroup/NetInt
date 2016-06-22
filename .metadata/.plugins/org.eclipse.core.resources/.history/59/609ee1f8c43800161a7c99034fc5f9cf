@@ -1,0 +1,36 @@
+package utilities.containers;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import processing.core.PApplet;
+import visualElements.VEdge;
+import visualElements.interactive.VisualAtom;
+
+public abstract class Container {
+
+	PApplet app;
+	ArrayList<VisualAtom> visualElements;
+
+	public Container(PApplet app) {
+		this.app = app;
+	}
+	
+	public void addElements(ArrayList<VisualAtom> collection){
+		visualElements = collection;
+	}
+	
+	public void updateEdges( ArrayList <VEdge> VEdges){
+		// Draw bezier curves
+		Iterator<VEdge> itrVEdge = VEdges.iterator();
+		while (itrVEdge.hasNext()) {
+			VEdge edge = itrVEdge.next();
+//			edge.layout(visualElements, graph.getVertices());
+			edge.makeBezier();
+		}
+	}
+	
+	public abstract void updateContainer();
+
+	public abstract void show();
+}

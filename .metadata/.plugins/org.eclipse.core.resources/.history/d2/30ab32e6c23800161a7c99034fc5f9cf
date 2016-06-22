@@ -1,0 +1,16 @@
+package utilities;
+
+import processing.core.PApplet;
+
+public abstract class Container {
+
+	PApplet app;
+
+	public Container(PApplet app) {
+		this.app = app;
+	}
+	
+	public abstract void updateContainer();
+
+	public abstract void show();
+}

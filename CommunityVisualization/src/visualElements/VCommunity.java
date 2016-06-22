@@ -3,8 +3,9 @@ package visualElements;
 import processing.core.PVector;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import visualElements.interactive.VisualAtom;
+
 import java.awt.event.MouseEvent;
-import interactiveElements.Button;
 
 /**
  * A community is defined as a subset of nodes linked to other nodes within the
@@ -15,17 +16,17 @@ import interactiveElements.Button;
  * @author jsalam
  *
  */
-public class VCommunity extends Button {
+public class VCommunity extends VisualAtom {
 	private float minCommunityDiam, maxCommunityDiam;
 	private int minCommunitySize, maxCommunitySize;
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
 	private boolean open, unlocked;
 	private int i, increment;
-	public VNetwork vNet;
+	public Arrangement vNet;
 	private int Id;
 
-	public VCommunity(PApplet app, VNetwork vNet, float posX, float posY, float diam) {
+	public VCommunity(PApplet app, Arrangement vNet, float posX, float posY, float diam) {
 		super(app, posX, posY, diam);
 		this.vNet = vNet;
 		open = false;
@@ -136,7 +137,7 @@ public class VCommunity extends Button {
 	}
 
 	// ***** Setters
-	public void setVNetwork(VNetwork net) {
+	public void setVNetwork(Arrangement net) {
 		vNet = net;
 	}
 

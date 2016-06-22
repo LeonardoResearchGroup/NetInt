@@ -1,12 +1,12 @@
 package visualElements;
 
 import graphElements.Node;
-import interactiveElements.Button;
 import processing.core.*;
 import utilities.HopMessenger;
 import utilities.geometry.Involute;
+import visualElements.interactive.VisualAtom;
 
-public class VNode extends Button {
+public class VNode extends VisualAtom {
 
 	private Node vertex;
 	private int alpha = 30;

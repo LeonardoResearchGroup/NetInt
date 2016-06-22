@@ -1,6 +1,7 @@
 package visualElements;
 
 import processing.core.*;
+import visualElements.interactive.VisualAtom;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ import graphElements.Node;
 public class VEdge {
 	Edge edge;
 	boolean aboveArc;
-	VNode source, target;
+	VisualAtom source, target;
 	// int color;
 	Bezier bezier;
 
@@ -19,7 +20,7 @@ public class VEdge {
 		aboveArc = true;
 	}
 
-	public void layout(ArrayList<VNode> vNodes, ArrayList<Node> nodes) {
+	public void setCoordinates(ArrayList<VisualAtom> vNodes, ArrayList<Node> nodes) {
 		// look in the collection of nodes where is the edge's source
 		int indxOrg = nodes.indexOf(edge.getSource());
 		if (indxOrg > -1) {
@@ -34,6 +35,12 @@ public class VEdge {
 		}
 		// This works fine in linear arrays
 		setDirection(source.pos.x, target.pos.x);
+
+	}
+	
+	public void layout(ArrayList<VisualAtom> vNodes) {
+		// look in the collection of nodes where is the edge's source
+		System.out.println("VEdge, define the method layout");
 
 	}
 

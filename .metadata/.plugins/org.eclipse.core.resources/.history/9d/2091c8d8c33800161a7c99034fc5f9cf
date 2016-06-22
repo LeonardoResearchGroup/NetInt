@@ -1,0 +1,23 @@
+package utilities;
+
+import java.util.ArrayList;
+import processing.core.PApplet;
+import visualElements.interactive.VisualAtom;
+
+public abstract class Container {
+
+	PApplet app;
+	ArrayList<VisualAtom> visualElements;
+
+	public Container(PApplet app) {
+		this.app = app;
+	}
+	
+	public void addElements(ArrayList<VisualAtom> collection){
+		visualElements = collection;
+	}
+	
+	public abstract void updateContainer();
+
+	public abstract void show();
+}

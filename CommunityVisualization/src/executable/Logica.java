@@ -7,13 +7,13 @@ import graphElements.Graph;
 import graphElements.Node;
 import visualElements.VCommunity;
 import processing.core.*;
-import visualElements.VNetwork;
+import visualElements.Arrangement;
 
 public class Logica {
 	ArrayList<Edge> edgesA, edgesB;
 	ArrayList<Node> verticesA, verticesB;
 	Graph graphA, graphB;
-	VNetwork vNetA, vNetB;
+	Arrangement vNetA, vNetB;
 	VCommunity communityA, communityB;
 	int nA = 100;
 	int nB = 10;
@@ -56,8 +56,8 @@ public class Logica {
 		graphB.setDegree();
 
 		// Visualizing the graph
-		vNetA = new VNetwork(app, graphA);
-		vNetB = new VNetwork(app, graphB);
+		vNetA = new Arrangement(app, graphA);
+		vNetB = new Arrangement(app, graphB);
 		//network.sortOutDegree();
 		//network.linearLayout(app, new PVector(100, 100), new PVector(400,100));
 		
