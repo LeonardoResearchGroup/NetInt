@@ -1,0 +1,36 @@
+package utilities.visualArrangements;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import processing.core.PApplet;
+import processing.core.PVector;
+import visualElements.VEdge;
+import visualElements.VNode;
+import visualElements.interactive.VisualAtom;
+
+public class CircularArrangement implements Arrangement {
+
+	public PApplet app;
+
+	public CircularArrangement(PApplet app) {
+		this.app = app;
+	}
+
+	public void circularLayout(PApplet app, PVector center, float radius,
+			ArrayList<VisualAtom> visualElements) {
+
+		int count = 0;
+		// Organize nodes on a circle
+		Iterator<VisualAtom> itrVNode = visualElements.iterator();
+		while (itrVNode.hasNext()) {
+			VNode tmp = (VNode) itrVNode.next();
+			tmp.setIndex(count);
+			tmp.setArcSections(visualElements.size());
+			tmp.setNetworkRadius(radius);
+			tmp.setCenter(center);
+			tmp.setup();
+			count++;
+		}
+	}
+}

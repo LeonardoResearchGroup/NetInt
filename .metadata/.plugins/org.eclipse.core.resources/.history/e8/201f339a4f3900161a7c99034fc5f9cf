@@ -1,0 +1,14 @@
+package utilities.containers;
+
+import graphElements.Edge;
+
+import java.util.ArrayList;
+
+import processing.core.PApplet;
+import visualElements.VEdge;
+import visualElements.interactive.VisualAtom;
+
+public abstract interface Arrangement {
+
+
+}

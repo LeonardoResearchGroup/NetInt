@@ -12,3 +12,14 @@
 1466632895264	Move compilation unit
 1466632924951	Move compilation unit
 1466636207828	Rename method 'layout'
+1466690353701	Rename type 'Container'
+1466690372874	Rename type 'Arrangement'
+1466690408018	Rename type 'ContainerA'
+1466691388301	Rename type 'LinearContainer'
+1466691411913	Rename method 'updateContainer'
+1466691828942	Rename local variable 'orig'
+1466691839842	Rename local variable 'end'
+1466692534279	Rename package 'utilities.containers'
+1466692556374	Rename package 'utilities.arrangements'
+1466717097470	Rename field 'vNet'
+1466720376644	Move compilation unit

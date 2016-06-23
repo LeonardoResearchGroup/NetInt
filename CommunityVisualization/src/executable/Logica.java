@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import graphElements.Edge;
 import graphElements.Graph;
 import graphElements.Node;
+import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
 import processing.core.*;
-import visualElements.Arrangement;
 
 public class Logica {
 	ArrayList<Edge> edgesA, edgesB;
 	ArrayList<Node> verticesA, verticesB;
 	Graph graphA, graphB;
-	Arrangement vNetA, vNetB;
+	Container vNetA, vNetB;
 	VCommunity communityA, communityB;
 	int nA = 100;
-	int nB = 10;
+	int nB = 3;
 
 	public Logica(PApplet app) {
 		verticesA = new ArrayList<Node>();
@@ -56,8 +56,8 @@ public class Logica {
 		graphB.setDegree();
 
 		// Visualizing the graph
-		vNetA = new Arrangement(app, graphA);
-		vNetB = new Arrangement(app, graphB);
+		vNetA = new Container(app, graphA);
+		vNetB = new Container(app, graphB);
 		//network.sortOutDegree();
 		//network.linearLayout(app, new PVector(100, 100), new PVector(400,100));
 		

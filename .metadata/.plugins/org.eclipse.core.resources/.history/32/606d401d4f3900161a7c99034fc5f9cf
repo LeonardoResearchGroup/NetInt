@@ -1,0 +1,23 @@
+package utilities.containers;
+
+import graphElements.Edge;
+
+import java.util.ArrayList;
+
+import processing.core.PApplet;
+import visualElements.VEdge;
+import visualElements.interactive.VisualAtom;
+
+public abstract class Arrangement {
+
+	public PApplet app;
+	public ArrayList<VisualAtom> visualElements;
+
+	public Arrangement(PApplet app) {
+		this.app = app;
+	}
+
+	public void addElements(ArrayList<VisualAtom> collection) {
+		visualElements = collection;
+	}
+}

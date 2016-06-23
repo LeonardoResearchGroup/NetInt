@@ -1,0 +1,144 @@
+package visualElements;
+
+import processing.core.*;
+import utilities.visualArrangements.Arrangement;
+import visualElements.interactive.VisualAtom;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
+import comparators.DegreeComparator;
+import comparators.InDegreeComparator;
+import comparators.OutDegreeComparator;
+import graphElements.*;
+
+public class Container {
+	private Graph graph;
+	private ArrayList<VisualAtom> vAtoms;
+	private ArrayList<VEdge> vEdges;
+	private ArrayList<Arrangement> arrangements;
+	public PApplet app;
+
+	public Container(PApplet app, Graph graph) {
+		this.graph = graph;
+		this.app = app;
+		vAtoms = new ArrayList<VisualAtom>();
+		for (int i = 0; i < graph.getVertices().size(); i++) {
+			Node n = graph.getVertices().get(i);
+			VNode tmp = new VNode(app, n, 0, 0, 0);
+			vAtoms.add(tmp);
+		}
+		
+		/// MAKE VEDGES HERE
+	}
+
+	public Container(PApplet app) {
+		this.app = app;
+		vAtoms = new ArrayList<VisualAtom>();
+		vEdges = new ArrayList<VEdge>();
+	}
+	
+	private ArrayList<VEdge> vEdgeFactory(Graph graph){
+		
+	}
+
+	
+	@Override
+	public void updateContainer() {
+		// public void updateEdges( ArrayList <VEdge> VEdges){
+		// // Draw bezier curves
+		// Iterator<VEdge> itrVEdge = VEdges.iterator();
+		// while (itrVEdge.hasNext()) {
+		// VEdge edge = itrVEdge.next();
+		// edge.layout(visualElements, graph.getVertices());
+		// edge.makeBezier();
+		// }
+		// }
+
+	}
+	
+	/**
+	 * Clears the ArrayList of VNodes and recreates all the VNodes and VEdges.
+	 * It is used to update the positions after invoking a comparator. Sort
+	 * methods invoke updateNetwork() by default
+	 */
+	private void updateContainer(Graph graph) {
+		VAtoms.clear();
+
+		for (int i = 0; i < graph.getVertices().size(); i++) {
+			Node n = graph.getVertices().get(i);
+			VNode tmp = new VNode(app, n, 0, 0, 0);
+			VAtoms.add(tmp);
+		}
+		for (int i = 0; i < graph.getEdges().size(); i++) {
+			Edge e = graph.getEdges().get(i);
+			VEdge tmp = new VEdge(e);
+			tmp.setCoordinates(VAtoms, graph.getVertices());
+			tmp.makeBezier();
+			VEdges.add(tmp);
+		}
+	}
+
+	// Sorters
+	public void sortInDegree() {
+		Collections.sort(graph.getVertices(), new InDegreeComparator());
+		updateContainer(graph);
+	}
+
+	public void sortOutDegree() {
+		Collections.sort(graph.getVertices(), new OutDegreeComparator());
+		updateContainer(graph);
+	}
+
+	public void sortDegree() {
+		Collections.sort(graph.getVertices(), new DegreeComparator());
+		updateContainer(graph);
+	}
+
+	public void setNodeXY(int index, PVector pos) {
+		VAtoms.get(index).setX(pos.x);
+		VAtoms.get(index).setY(pos.y);
+	}
+	
+	public void setArrangement(Arrangement arg){
+		arrangements.add(arg);
+	}
+
+	// app, visualizeNodes, visualizeEdges, showInvolute
+
+	// getters and setters
+	public Graph getGraph() {
+		return graph;
+	}
+
+	public int size() {
+		return graph.size();
+	}
+
+	
+//	public void show() {
+//		for (VisualAtom vA : visualElements) {
+//			VNode n = (VNode) vA;
+//			n.setDiam(n.getVertex().getOutDegree() + 5);
+//			n.show(true, true);
+//		}
+//	}
+//
+//	public void show(ArrayList<VEdge> VEdges, boolean showNodes,
+//			boolean showEdges, boolean networkVisible) {
+//		if (showEdges || networkVisible) {
+//			for (VEdge e : VEdges) {
+//				e.show(app);
+//			}
+//		}
+//		if (showNodes || networkVisible) {
+//			for (VisualAtom vA : visualElements) {
+//				VNode n = (VNode) vA;
+//				n.setDiam(n.getVertex().getOutDegree() + 5);
+//				n.show(showNodes, networkVisible);
+//			}
+//		}
+//	}
+	
+}

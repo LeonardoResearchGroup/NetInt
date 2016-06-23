@@ -12,6 +12,17 @@ public class Involute {
 	private float cordBase, cordLength;
 	private int index;
 
+	/**
+	 * @param app
+	 * @param radius
+	 *            the radius of the circumference
+	 * @param sections
+	 *            the total number of anchors to be accommodated in the
+	 *            circumference
+	 * @param index
+	 *            the index of the VisualAtom in the sequence around the
+	 *            circumference
+	 */
 	public Involute(PApplet app, float radius, int sections, int index) {
 		this.radius = radius;
 		this.app = app;
@@ -26,9 +37,10 @@ public class Involute {
 		// in the total circumference.
 		step = PConstants.TWO_PI / sections;
 
-		// calculate the startAngle for that index. Save a copy in AnchorAngleStart
+		// calculate the startAngle for that index. Save a copy in
+		// AnchorAngleStart
 		anchorAngle = calcAngle(index);
-		//anchorAngleStart = anchorAngle;
+		// anchorAngleStart = anchorAngle;
 
 		// calculate the cord base (never changes) and the cordLength (extended
 		// cord for a given angle)
@@ -76,7 +88,8 @@ public class Involute {
 		}
 	}
 
-	public boolean rotateAnchor(float limit, float increment, boolean rollingDown) {
+	public boolean rotateAnchor(float limit, float increment,
+			boolean rollingDown) {
 		boolean completed = false;
 		// If the unfolding direction is not clockwise
 		if (!clockwise) {
@@ -168,7 +181,7 @@ public class Involute {
 	// GETTERS & SETTERS
 
 	public PVector getInvoluteCoords(PVector center) {
-		//PVector vEnding = PVector.add(ending, center);
+		// PVector vEnding = PVector.add(ending, center);
 		PVector vEnding = PVector.add(ending, anchor);
 		vEnding.add(center);
 		return vEnding;

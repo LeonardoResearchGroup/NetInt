@@ -1,0 +1,6 @@
+package utilities.arrangements;
+
+public  interface Arrangement {
+
+
+}

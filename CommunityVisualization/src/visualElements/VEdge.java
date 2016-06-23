@@ -20,28 +20,21 @@ public class VEdge {
 		aboveArc = true;
 	}
 
-	public void setCoordinates(ArrayList<VisualAtom> vNodes, ArrayList<Node> nodes) {
+	public void setCoordinates(ArrayList<VisualAtom> vAtom, ArrayList<Node> nodes) {
 		// look in the collection of nodes where is the edge's source
 		int indxOrg = nodes.indexOf(edge.getSource());
 		if (indxOrg > -1) {
 			// ask for its coordinates
-			source = vNodes.get(indxOrg);
+			source = vAtom.get(indxOrg);
 		}
 		// look in the collection of nodes where is the edge's target
 		int indxDes = nodes.indexOf(edge.getTarget());
 		if (indxDes > -1) {
 			// ask for its coordinates
-			target = vNodes.get(indxDes);
+			target = vAtom.get(indxDes);
 		}
 		// This works fine in linear arrays
 		setDirection(source.pos.x, target.pos.x);
-
-	}
-	
-	public void layout(ArrayList<VisualAtom> vNodes) {
-		// look in the collection of nodes where is the edge's source
-		System.out.println("VEdge, define the method layout");
-
 	}
 
 	public void makeBezier() {

@@ -3,6 +3,7 @@ package visualElements;
 import processing.core.PVector;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import utilities.visualArrangements.Container;
 import visualElements.interactive.VisualAtom;
 
 import java.awt.event.MouseEvent;
@@ -23,18 +24,18 @@ public class VCommunity extends VisualAtom {
 	private float angle2;
 	private boolean open, unlocked;
 	private int i, increment;
-	public Arrangement vNet;
+	public Container container;
 	private int Id;
 
-	public VCommunity(PApplet app, Arrangement vNet, float posX, float posY, float diam) {
+	public VCommunity(PApplet app, Container container, float posX, float posY, float diam) {
 		super(app, posX, posY, diam);
-		this.vNet = vNet;
+		this.container = container;
 		open = false;
 		unlocked = false;
 		i = 0;
 		increment = 10;
 		setLayoutParameters();
-		setNetworkParameters();
+		communityLayout();
 	}
 
 	private void setLayoutParameters() {
@@ -43,28 +44,19 @@ public class VCommunity extends VisualAtom {
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
 		maxCommunitySize = 1000;
-		diam = PApplet.map(vNet.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
+		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
-	private void setNetworkParameters() {
+	private void communityLayout() {
 		// **SORTERS
 		//vNet.sortInDegree();
-		vNet.sortOutDegree();
-
+		container.sortOutDegree();
 		// ** CIRCULAR LAYOUT
-		// vNet.circularLayout(app, pos, diam / 2);
-
+		//container.arrangeBy("circular");
 		// ** LINEAR LAYOUT
-		// determine the origin and end PVectors for the linear visualization
-		// PVector extendedCordOrigin = new PVector(pos.x -
-		// getLength(PConstants.TWO_PI, diam / 4), pos.y + diam / 2);
-		// PVector extendedCordEnd = new PVector(pos.x +
-		// getLength(PConstants.TWO_PI, diam / 4), pos.y + diam / 2);
+		container.arrangeBy("linear");
+		container.recenter(pos);
 
-		PVector extendedCordOrigin = new PVector(50, pos.y + diam / 2);
-		PVector extendedCordEnd = new PVector(app.width - 50, pos.y + diam / 2);
-
-		vNet.linearLayout(app, extendedCordOrigin, extendedCordEnd);
 	}
 
 	public void show() {
@@ -96,7 +88,8 @@ public class VCommunity extends VisualAtom {
 		boolean visualizeNodes = isMouseOver();
 		boolean visualizeEdges = unlocked;
 		boolean showInvolute = unlocked;
-		vNet.show(app, visualizeNodes, visualizeEdges, showInvolute);
+		
+		container.show(visualizeNodes, visualizeEdges, showInvolute);
 
 		// Visualize community cover
 		app.stroke(100);
@@ -137,8 +130,8 @@ public class VCommunity extends VisualAtom {
 	}
 
 	// ***** Setters
-	public void setVNetwork(Arrangement net) {
-		vNet = net;
+	public void setVNetwork(Container net) {
+		container = net;
 	}
 
 	// ***** Events

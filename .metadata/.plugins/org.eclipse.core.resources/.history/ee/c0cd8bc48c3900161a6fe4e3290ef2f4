@@ -1,0 +1,6 @@
+package utilities.visualArrangements;
+
+public interface Arrangement {
+
+
+}
