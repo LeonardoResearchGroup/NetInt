@@ -1,0 +1,71 @@
+package executable;
+
+import java.util.ArrayList;
+
+import graphElements.Edge;
+import graphElements.Graph;
+import graphElements.Node;
+import utilities.Filter;
+import utilities.visualArrangements.Container;
+import visualElements.VCommunity;
+import processing.core.*;
+
+public class Logica {
+
+	Graph rootGraph;
+	Container vNetA, vNetB;
+	VCommunity community;
+	int nA = 1000;
+
+	public Logica(PApplet app) {
+		Filter filter = new Filter (0,1);
+		rootGraph = randomGraphFactory(nA, filter);
+
+		// Container of visual graph the graph
+		vNetA = new Container(app, rootGraph);
+
+		// instantiating & visualizing community
+		community = new VCommunity(app, vNetA, app.width / 2, 150, 100);
+
+	}
+
+	// Factories
+
+	private Graph randomGraphFactory(int graphSize, Filter filter) {
+		Graph rtn = new Graph();
+		ArrayList<Edge> edges = new ArrayList<Edge>();
+		ArrayList<Node> vertices = new ArrayList<Node>();
+
+		// create nodes
+		for (int i = 0; i < graphSize; i++) {
+			Node tmpA = new Node(i);
+			vertices.add(tmpA);
+		}
+
+		// create edges
+		edges = randomEdgeFactory(vertices);
+
+		// Making the graph
+		rtn = new Graph(vertices, edges);
+
+		// Set Degree
+		rtn.setDegree();
+		return rtn;
+
+	}
+
+	private ArrayList<Edge> randomEdgeFactory(ArrayList<Node> nodes) {
+		ArrayList<Edge> rtn = new ArrayList<Edge>();
+		for (int i = 0; i < nodes.size(); i++) {
+			int src = (int) (Math.random() * nodes.size());
+			int trg = (int) (Math.random() * nodes.size());
+			Edge tmp = new Edge(nodes.get(src), nodes.get(trg), true);
+			rtn.add(tmp);
+		}
+		return rtn;
+	}
+
+	public void show(PApplet app) {
+		community.show();
+	}
+}

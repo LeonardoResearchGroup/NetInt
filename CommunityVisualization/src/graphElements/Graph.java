@@ -4,34 +4,41 @@ import java.util.ArrayList;
 
 public class Graph {
 
-	private ArrayList<Node> vertices;
-	private ArrayList<Edge> edges;
+	protected ArrayList<Node> nodes;
+	protected ArrayList<Edge> edges;
 
+	// Constructors
+	public Graph() {
+
+	}
+	
 	public Graph(ArrayList<Node> vertices, ArrayList<Edge> edges) {
-		this.vertices = vertices;
+		this.nodes = vertices;
 		this.edges = edges;
+		// Set Degree
+		setDegree();
 	}
 
 	// Degree
-	public void setInDegree() {
-		for (Node n : vertices) {
+	private void setInDegree() {
+		for (Node n : nodes) {
 			setNodeInDegree(n);
 		}
 	}
 
-	public void setOutDegree() {
-		for (Node n : vertices) {
+	private void setOutDegree() {
+		for (Node n : nodes) {
 			setNodeOutDegree(n);
 		}
 	}
 
-	public void setDegree() {
-		for (Node n : vertices) {
+	private void setDegree() {
+		for (Node n : nodes) {
 			setNodeDegree(n);
 		}
 	}
 
-	public void setNodeInDegree(Node n) {
+	private void setNodeInDegree(Node n) {
 		int count = 0;
 		for (Edge e : edges) {
 			if (e.getTarget().equals(n))
@@ -40,7 +47,7 @@ public class Graph {
 		n.setInDegree(count);
 	}
 
-	public void setNodeOutDegree(Node n) {
+	private void setNodeOutDegree(Node n) {
 		int count = 0;
 		for (Edge e : edges) {
 			if (e.getSource().equals(n))
@@ -49,7 +56,7 @@ public class Graph {
 		n.setOutDegree(count);
 	}
 
-	public void setNodeDegree(Node n) {
+	private void setNodeDegree(Node n) {
 		if (n.getInDegree() == 0) {
 			setNodeInDegree(n);
 		}
@@ -61,23 +68,38 @@ public class Graph {
 
 	// Getters and setters
 	public ArrayList<Node> getVertices() {
-		return vertices;
+		return nodes;
 	}
 
 	public ArrayList<Edge> getEdges() {
 		return edges;
 	}
 
-	public void setVertices(ArrayList<Node> vertices) {
-		this.vertices = vertices;
+	public ArrayList<Edge> getDirectedEdgesFrom(Node source) {
+		ArrayList<Edge> edgeSubset = new ArrayList<Edge>();
+		try {
+			for(Edge e: edges){
+				if(e.getSource().equals(source)){
+					edgeSubset.add(e);
+					System.out.println("Graph getDirectedEdges() :"+ e.getSource().getId() + " "+ e.getTarget().getId());
+				}
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return edgeSubset;
 	}
 
-	public void setEdges(ArrayList<Edge> edges) {
+	private void setVertices(ArrayList<Node> vertices) {
+		this.nodes = vertices;
+	}
+
+	private void setEdges(ArrayList<Edge> edges) {
 		this.edges = edges;
 	}
 
 	public int size() {
-		return vertices.size();
+		return nodes.size();
 	}
 
 }

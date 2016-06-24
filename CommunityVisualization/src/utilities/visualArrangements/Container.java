@@ -61,7 +61,7 @@ public class Container {
 			for (Arrangement a : arrangements) {
 				if (a.getName().equals("linear")) {
 					LinearArrangement lA = (LinearArrangement) a;
-					lA.linearLayout(20, vAtoms);
+					lA.linearLayout(60, vAtoms);
 				}
 			}
 		} else if (str.equals("circular")) {

@@ -1,0 +1,29 @@
+package graphElements;
+
+import java.util.ArrayList;
+
+/**
+ * This is a set of references to the nodes in the rootGraph
+ * 
+ * @author juansalamanca
+ * 
+ */
+public class SubGraph {
+
+	private ArrayList<Node> nodes;
+
+	public SubGraph() {
+		nodes = new ArrayList<Node>();
+	}
+	
+	public SubGraph(ArrayList<Node> nodes) {
+		this.nodes = nodes;
+	}
+	
+	public void addNode(Node n){
+		nodes.add(n);
+	}
+	
+	
+
+}

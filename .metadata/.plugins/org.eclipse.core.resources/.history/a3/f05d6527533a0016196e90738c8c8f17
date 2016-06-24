@@ -1,0 +1,87 @@
+package executable;
+
+import java.util.ArrayList;
+
+import graphElements.Edge;
+import graphElements.Graph;
+import graphElements.Node;
+import graphElements.SubGraph;
+import utilities.Filter;
+import utilities.visualArrangements.Container;
+import visualElements.VCommunity;
+import processing.core.*;
+
+public class Logica {
+
+	Graph rootGraph;
+	ArrayList <SubGraph> subGraphs;
+	Container containerA;
+	VCommunity community;
+	int nA = 100;
+	int comNumber = 3;
+
+	public Logica(PApplet app) {
+
+		rootGraph = randomGraphFactory(nA);
+
+		// Container of visual graph the graph
+		containerA = new Container(app, rootGraph);
+
+		// instantiating & visualizing community
+		community = new VCommunity(app, containerA, app.width / 2, 150, 100);
+
+	}
+
+	// Factories
+	private Graph randomGraphFactory(int graphSize) {
+		Graph rtn = new Graph();
+		ArrayList<Edge> edges = new ArrayList<Edge>();
+		ArrayList<Node> nodes = new ArrayList<Node>();
+
+		// create nodes
+		for (int i = 0; i < graphSize; i++) {
+			Node tmpA = new Node(i);
+			// include in community
+			tmpA.includeInSubGraph((int) Math.round( Math.random() * comNumber));
+			nodes.add(tmpA);
+		}
+
+		// create edges
+		edges = randomEdgeFactory(nodes);
+
+		// Making the graph
+		rtn = new Graph(nodes, edges);
+
+		return rtn;
+	}
+
+	/**
+	 * This class makes a set of edges distributed according to a filter
+	 * (radial, sinusoidal, sigmoid, linear)
+	 * 
+	 * @param nodes
+	 * @return
+	 */
+	private ArrayList<Edge> randomEdgeFactory(ArrayList<Node> nodes) {
+		Filter filter = new Filter(0, 1);
+		ArrayList<Edge> rtn = new ArrayList<Edge>();
+		// Gets a random integer using a filter. In this case I use a
+		// sinusoidal to emulate a social phenomena
+		for (int i = 0; i < nodes.size(); i++) {
+			// source
+			float val = filter.sinusoidal((float) Math.random());
+			int src = PApplet.floor((val * (nodes.size())));
+			// target
+			val = filter.sinusoidal((float) Math.random());
+			int trg = PApplet.floor((val * (nodes.size())));
+			// edge
+			Edge tmp = new Edge(nodes.get(src), nodes.get(trg), true);
+			rtn.add(tmp);
+		}
+		return rtn;
+	}
+
+	public void show(PApplet app) {
+		community.show();
+	}
+}

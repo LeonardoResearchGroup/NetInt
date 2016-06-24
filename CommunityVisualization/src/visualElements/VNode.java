@@ -8,7 +8,7 @@ import visualElements.interactive.VisualAtom;
 
 public class VNode extends VisualAtom {
 
-	private Node vertex;
+	private Node node;
 	private int alpha = 30;
 	// For involute
 	private PVector center;
@@ -19,9 +19,9 @@ public class VNode extends VisualAtom {
 	private boolean notifiedIn;
 	private boolean notifiedOut;
 
-	public VNode(PApplet app, Node vertex, float x, float y, float diam) {
+	public VNode(PApplet app, Node node, float x, float y, float diam) {
 		super(app, x, y, diam);
-		this.vertex = vertex;
+		this.node = node;
 		notifiedIn = false;
 		notifiedOut = false;
 	}
@@ -49,8 +49,8 @@ public class VNode extends VisualAtom {
 				// This parameter defines the length of the propagation sequence
 				heap.setHops(15);
 				heap.setCurrentHope(1);
-				vertex.change();
-				vertex.notifyObservers(heap);
+				node.change();
+				node.notifyObservers(heap);
 				notifiedIn = true;
 				notifiedOut = false;
 			}
@@ -65,8 +65,8 @@ public class VNode extends VisualAtom {
 				// This parameter defines the length of the propagation sequence
 				heap.setHops(15);
 				heap.setCurrentHope(1);
-				vertex.change();
-				vertex.notifyObservers(heap);
+				node.change();
+				node.notifyObservers(heap);
 				notifiedOut = true;
 				notifiedIn = false;
 			}
@@ -88,12 +88,13 @@ public class VNode extends VisualAtom {
 		if (isMouseOver()) {
 			alpha = 200;
 			app.fill(0, alpha);
-			app.rect(pos.x - 5, pos.y - 3, 60, -43);
+			app.rect(pos.x - 5, pos.y - 3, 60, -53);
 			app.fill(200, alpha);
-			app.text("ID: " + vertex.getId(), pos.x + 5, pos.y - 35);
-			app.text("degree: " + vertex.getDegree(), pos.x + 5, pos.y - 25);
-			app.text("in: " + vertex.getInDegree(), pos.x + 5, pos.y - 15);
-			app.text("out: " + vertex.getOutDegree(), pos.x + 5, pos.y - 5);
+			app.text("Com: " + node.getSubGraphIDs(), pos.x + 5, pos.y - 45);
+			app.text("ID: " + node.getId(), pos.x + 5, pos.y - 35);
+			app.text("degree: " + node.getDegree(), pos.x + 5, pos.y - 25);
+			app.text("in: " + node.getInDegree(), pos.x + 5, pos.y - 15);
+			app.text("out: " + node.getOutDegree(), pos.x + 5, pos.y - 5);
 
 		} else {
 			alpha = 90;
@@ -115,7 +116,7 @@ public class VNode extends VisualAtom {
 	}
 
 	public Node getVertex() {
-		return vertex;
+		return node;
 	}
 
 	public int getAlpha() {
@@ -127,7 +128,7 @@ public class VNode extends VisualAtom {
 	}
 
 	public void setVertex(Node vertex) {
-		this.vertex = vertex;
+		this.node = vertex;
 	}
 
 	public void setCenter(PVector center) {

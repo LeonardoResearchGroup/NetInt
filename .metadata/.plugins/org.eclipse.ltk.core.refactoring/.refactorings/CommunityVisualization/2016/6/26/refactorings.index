@@ -23,3 +23,13 @@
 1466692556374	Rename package 'utilities.arrangements'
 1466717097470	Rename field 'vNet'
 1466720376644	Move compilation unit
+1466787793719	Rename field 'subGraphs'
+1466793399571	Rename field 'mySubGraphs'
+1466793410739	Rename field 'inSubGraphs'
+1466795316673	Rename method 'edgeFactory'
+1466796569443	Rename method 'getDirectedEdges'
+1466796673314	Rename field 'graph'
+1466801606184	Rename field 'vNetA'
+1466803058984	Rename field 'vertices'
+1466803286794	Rename local variable 'vertices'
+1466808575867	Rename field 'vertex'

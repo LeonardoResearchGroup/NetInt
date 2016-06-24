@@ -1,107 +1,123 @@
 package graphElements;
+
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.TreeSet;
 
+public class Node extends Observable implements Comparable<Node> {
 
-public class Node extends Observable implements Comparable <Node>{
-	
 	private int inDegree, outDegree, Degree, id;
+	private TreeSet<Integer> insideSubGraphs;
 	private String name;
 	private float Excentricity, Betweeness;
-	private ArrayList<Integer> communities;
-	
-	
-	
-	public Node(){
-		
-	}
-	
-	public Node(int id){
+
+	public Node(int id) {
 		this.id = id;
+		insideSubGraphs = new TreeSet<Integer>();
+		insideSubGraphs.add(0);
 	}
-	
+
 	public int compareTo(Node vertex) {
 		return id - vertex.id;
 	}
 
-	
+	// Methods community related
+	public void includeInSubGraph(int arg) {
+		insideSubGraphs.add(arg);
+	}
+
+	public boolean belongsTo(int communityID) {
+		boolean rtn = false;
+		for (Integer i : insideSubGraphs) {
+			if (i.equals(communityID)) {
+				rtn = true;
+			} else
+				rtn = false;
+		}
+		return rtn;
+	}
+
+	public String getSubGraphIDs() {
+		String indexes = "";
+		int cont = 0;
+		for (Integer val : insideSubGraphs) {
+			indexes = indexes + val.toString();
+			if (cont < insideSubGraphs.size() - 1) {
+				indexes = indexes + ",";
+			}
+			cont++;
+		}
+		return indexes;
+	}
+
 	// *** Getters and setters
-	
-	
+	public int getInDegree() {
+		return inDegree;
+	}
 
-		public int getInDegree() {
-			return inDegree;
-		}
+	public int getOutDegree() {
+		return outDegree;
+	}
 
-		public int getOutDegree() {
-			return outDegree;
-		}
+	public int getDegree() {
+		return Degree;
+	}
 
-		public int getDegree() {
-			return Degree;
-		}
+	public int getId() {
+		return id;
+	}
 
-		public int getId() {
-			return id;
-		}
+	public String getName() {
+		return name;
+	}
 
-		public String getName() {
-			return name;
-		}
+	public float getExcentricity() {
+		return Excentricity;
+	}
 
-		public float getExcentricity() {
-			return Excentricity;
-		}
+	public float getBetweeness() {
+		return Betweeness;
+	}
 
-		public float getBetweeness() {
-			return Betweeness;
-		}
+	public void setInDegree(int inDegree) {
+		this.inDegree = inDegree;
+	}
 
-		public ArrayList<Integer> getCommunities() {
-			return communities;
-		}
+	public void setOutDegree(int outDegree) {
+		this.outDegree = outDegree;
+	}
 
-		public void setInDegree(int inDegree) {
-			this.inDegree = inDegree;
-		}
+	public void setDegree(int degree) {
+		Degree = degree;
+	}
 
-		public void setOutDegree(int outDegree) {
-			this.outDegree = outDegree;
-		}
+	public void setId(int id) {
+		this.id = id;
+	}
 
-		public void setDegree(int degree) {
-			Degree = degree;
-		}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-		public void setId(int id) {
-			this.id = id;
-		}
+	public void setExcentricity(float excentricity) {
+		Excentricity = excentricity;
+	}
 
-		public void setName(String name) {
-			this.name = name;
-		}
+	public void setBetweeness(float betweeness) {
+		Betweeness = betweeness;
+	}
 
-		public void setExcentricity(float excentricity) {
-			Excentricity = excentricity;
-		}
+	public TreeSet<Integer> getMySubGraphs() {
+		return insideSubGraphs;
+	}
 
-		public void setBetweeness(float betweeness) {
-			Betweeness = betweeness;
-		}
+	// Observer pattern
+	public void change() {
+		setChanged();
+	}
 
-		public void setCommunities(ArrayList<Integer> communities) {
-			this.communities = communities;
-		}
-
-		// 
-		
-		public void change() {
-			setChanged();
-		}
-		
-		public void clear() {
-			clearChanged();
-		}
-	
+	public void clear() {
+		clearChanged();
+	}
 
 }

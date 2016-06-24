@@ -1,0 +1,57 @@
+package graphElements;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+/**
+ * This is a set of references to the nodes in the rootGraph
+ * 
+ * @author juansalamanca
+ * 
+ */
+public class SubGraph {
+
+	private ArrayList<Node> nodes;
+	private ArrayList<Edge> edges;
+
+	// Constructors
+	public SubGraph() {
+		nodes = new ArrayList<Node>();
+	}
+
+	public SubGraph(ArrayList<Node> nodes) {
+		this.nodes = nodes;
+	}
+
+	public SubGraph(Graph graph, int communityID) {
+		nodes = setNodesFrom(graph, communityID);
+	}
+
+	// Methods
+
+	public void addNode(Node n) {
+		nodes.add(n);
+	}
+
+	/**
+	 * Search in the graph for the nodes that belong to the communityID.
+	 * 
+	 * @param graph
+	 *            Usually the root graph
+	 * @param communityID
+	 *            Must be larger than 0
+	 * @return
+	 */
+	public ArrayList<Node> setNodesFrom(Graph graph, int communityID) {
+		ArrayList<Node> rtn = new ArrayList<Node>();
+		Iterator<Node> graphItr = graph.getVertices().iterator();
+		while (graphItr.hasNext()) {
+			Node nd = graphItr.next();
+			if (nd.belongsTo(communityID)) {
+				rtn.add(nd);
+			}
+		}
+		return rtn;
+	}
+
+}
