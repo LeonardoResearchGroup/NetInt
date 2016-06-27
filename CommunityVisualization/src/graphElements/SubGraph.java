@@ -40,7 +40,7 @@ public class SubGraph extends Graph{
 	 * @return The list of references to nodes in the root graph
 	 */
 	public void setNodesFromGraph(Graph graph, int communityID) {
-		Iterator<Node> graphItr = graph.getVertices().iterator();
+		Iterator<Node> graphItr = graph.getNodes().iterator();
 		while (graphItr.hasNext()) {
 			Node nd = graphItr.next();
 			if (nd.belongsTo(communityID)) {

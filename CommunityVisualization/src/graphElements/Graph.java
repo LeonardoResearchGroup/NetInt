@@ -1,6 +1,12 @@
 package graphElements;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import comparators.DegreeComparator;
+import comparators.InDegreeComparator;
+import comparators.OutDegreeComparator;
 
 public class Graph {
 
@@ -21,18 +27,6 @@ public class Graph {
 	}
 
 	// Degree
-	private void setInDegree() {
-		for (Node n : nodes) {
-			setNodeInDegree(n);
-		}
-	}
-
-	private void setOutDegree() {
-		for (Node n : nodes) {
-			setNodeOutDegree(n);
-		}
-	}
-
 	private void setDegree() {
 		for (Node n : nodes) {
 			setNodeDegree(n);
@@ -66,9 +60,14 @@ public class Graph {
 		}
 		n.setDegree(n.getInDegree() + n.getOutDegree());
 	}
+	
+	// Sorters
+	public void sort(Comparator<Node> comp) {
+		Collections.sort(getNodes(), comp);
+	}
 
 	// Getters and setters
-	public ArrayList<Node> getVertices() {
+	public ArrayList<Node> getNodes() {
 		return nodes;
 	}
 
@@ -88,14 +87,6 @@ public class Graph {
 			e.printStackTrace();
 		}
 		return edgeSubset;
-	}
-
-	private void setVertices(ArrayList<Node> vertices) {
-		this.nodes = vertices;
-	}
-
-	private void setEdges(ArrayList<Edge> edges) {
-		this.edges = edges;
 	}
 
 	public int size() {

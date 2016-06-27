@@ -1,8 +1,7 @@
 package executable;
 
+
 import processing.core.*;
-import utilities.Filter;
-import utilities.geometry.Involute;
 
 public class Executable extends PApplet {
 	Logica app;
@@ -21,6 +20,8 @@ public class Executable extends PApplet {
 	public void draw() {
 		background(0);
 		 app.show(this);
+		 fill(255,100);
+		 text(frameRate,20,10);
 	}
 
 	
@@ -29,4 +30,5 @@ public class Executable extends PApplet {
 			clockwise = !clockwise;
 		}
 	}
+	
 }

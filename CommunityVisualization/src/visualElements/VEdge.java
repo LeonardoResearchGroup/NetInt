@@ -20,19 +20,19 @@ public class VEdge {
 		aboveArc = true;
 	}
 
-	public void setCoordinates(ArrayList<VisualAtom> vAtom, ArrayList<Node> nodes) {
-		// look in the collection of nodes where is the edge's source
+	public void setSourceAndTarget(ArrayList<VisualAtom> visualAtoms, ArrayList<Node> nodes) {
+		// look for the edge source's index in the collection of nodes 
 		int indxSource = nodes.indexOf(edge.getSource());
 		if (indxSource > -1) {
 			// ask for its coordinates
-			source = vAtom.get(indxSource);
+			source = visualAtoms.get(indxSource);
 		}
 		// look in the collection of nodes where is the edge's target
 		int indxTarget = nodes.indexOf(edge.getTarget());
-		//System.out.println("VEdge>setCoordinates: index Target:" + indxTarget);
+		 System.out.println("VEdge>setCoordinates: index Target:" +indxTarget);
 		if (indxTarget > -1) {
 			// ask for its coordinates
-			target = vAtom.get(indxTarget);
+			target = visualAtoms.get(indxTarget);
 		}
 		if (source != null && target != null) {
 			setDirection(source.pos.x, target.pos.x);
@@ -64,11 +64,10 @@ public class VEdge {
 			bezier.setAlpha(90);
 			break;
 		}
-	//	System.out.println("VEdge>Show: target: " + target);
 		bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
 		bezier.setControl((source.pos.x - target.pos.x) / 2);
 		bezier.drawBezier2D(app);
-		 bezier.drawHeadBezier2D(app);
+		bezier.drawHeadBezier2D(app);
 	}
 
 	private void setDirection(float posXOrg, float posXDes) {
