@@ -25,7 +25,7 @@ public class SubGraph extends Graph{
 	public SubGraph(Graph graph, int communityID) {
 		nodes = new ArrayList<Node>();
 		edges = new ArrayList<Edge>();
-		setNodesFrom(graph, communityID);
+		setNodesFromGraph(graph, communityID);
 	}
 
 	// Methods
@@ -39,7 +39,7 @@ public class SubGraph extends Graph{
 	 *            Must be larger than 0
 	 * @return The list of references to nodes in the root graph
 	 */
-	public void setNodesFrom(Graph graph, int communityID) {
+	public void setNodesFromGraph(Graph graph, int communityID) {
 		Iterator<Node> graphItr = graph.getVertices().iterator();
 		while (graphItr.hasNext()) {
 			Node nd = graphItr.next();

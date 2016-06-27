@@ -33,3 +33,6 @@
 1466803058984	Rename field 'vertices'
 1466803286794	Rename local variable 'vertices'
 1466808575867	Rename field 'vertex'
+1466975019195	Rename method 'setNodesFrom'
+1466982797301	Rename local variable 'indxOrg'
+1466982807414	Rename local variable 'indxDes'

@@ -25,7 +25,6 @@ public class VCommunity extends VisualAtom {
 	private boolean open, unlocked;
 	private int i, increment;
 	public Container container;
-	private int Id;
 
 	public VCommunity(PApplet app, Container container, float posX, float posY, float diam) {
 		super(app, posX, posY, diam);
@@ -50,18 +49,21 @@ public class VCommunity extends VisualAtom {
 	private void communityLayout() {
 		// **SORTERS
 		//vNet.sortInDegree();
-		container.sortOutDegree();
+		//container.sortOutDegree();
 		// ** CIRCULAR LAYOUT
-		//container.arrangeBy("circular");
+		container.arrangeBy("circular");
 		// ** LINEAR LAYOUT
-		container.arrangeBy("linear");
+		//container.arrangeBy("linear");
 		container.recenter(pos);
 
 	}
 
 	public void show() {
 		// Switch control
-		app.text("COMMUNITY X", pos.x, pos.y);
+		app.fill(250,200);
+		// Community Name
+		app.text(container.getID(), pos.x, pos.y);
+		app.text("Com. size: "+container.getGraph().size(), pos.x, pos.y+20);
 		if (unlocked) {
 			if (!open) {
 
@@ -132,6 +134,10 @@ public class VCommunity extends VisualAtom {
 	// ***** Setters
 	public void setVNetwork(Container net) {
 		container = net;
+	}
+
+	public int getID() {
+		return container.getID();
 	}
 
 	// ***** Events

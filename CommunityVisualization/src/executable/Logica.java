@@ -14,36 +14,47 @@ import processing.core.*;
 public class Logica {
 
 	Graph rootGraph;
-	ArrayList<SubGraph> subGraphs;
-	Container containerA, containerB;
-	VCommunity communityA, communityB;
-	int nA = 10;
-	int comNumber = 3;
+	ArrayList<Graph> graphs;
+	Container rootContainer, containerSubGraph1,containerSubGraph2,containerSubGraph3;
+	VCommunity vRootCommunity, vSubCommunity1, vSubCommunity2, vSubCommunity3;
+	int nA = 1000;
+	int communities = 3;
 
 	public Logica(PApplet app) {
 
 		rootGraph = randomGraphFactory(nA);
-		subGraphs = new ArrayList<SubGraph>();
+		rootGraph.setID(0);
+		graphs = new ArrayList<Graph>();
+		graphs.add(rootGraph);
 
-		for (int i = 0; i <= comNumber; i++) {
+		for (int i = 1; i <= communities; i++) {
 			SubGraph tmp = new SubGraph();
-			tmp.setNodesFrom(rootGraph, i);
-			subGraphs.add(tmp);
+			tmp.setID(i);
+			tmp.setNodesFromGraph(rootGraph, i);
+			graphs.add(tmp);
 		}
 
 		// Container of visual graph the graph
-		containerA = new Container(app, rootGraph);
-		containerB= new Container(app, subGraphs.get(1));
-		
+		rootContainer = new Container(app, rootGraph);
+		containerSubGraph1 = new Container(app, graphs.get(1));
+		containerSubGraph1.retrieveVElements(rootContainer);
+		containerSubGraph2 = new Container(app, graphs.get(2));
+		containerSubGraph2.retrieveVElements(rootContainer);
+		containerSubGraph3 = new Container(app, graphs.get(3));
+		containerSubGraph3.retrieveVElements(rootContainer);
 
 		// instantiating & visualizing community
-		communityA = new VCommunity(app, containerA, app.width / 2, 150, 100);
-		//communityB = new VCommunity(app, containerB, app.width / 2, 350, 100);
+		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150, 100);
+		vSubCommunity1 = new VCommunity(app, containerSubGraph1, 200, 350, 100);
+		vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width / 2, 350, 100);
+		vSubCommunity3 = new VCommunity(app, containerSubGraph3, app.width -200, 350, 100);
 	}
 
 	public void show(PApplet app) {
-		communityA.show();
-		//communityB.show();
+		vRootCommunity.show();
+		vSubCommunity1.show();
+		vSubCommunity2.show();
+		vSubCommunity3.show();
 	}
 
 	// Factories
@@ -61,7 +72,7 @@ public class Logica {
 		// include node in communities
 		for (int i = 0; i < graphSize; i++) {
 			Node tmp = nodes.get((int) (Math.random() * graphSize));
-			int com = (int) Math.round(Math.random() * comNumber);
+			int com = (int) Math.round(Math.random() * communities);
 			if (!tmp.belongsTo(com))
 				tmp.includeInSubGraph(com);
 		}
@@ -71,13 +82,14 @@ public class Logica {
 
 		// Making the graph
 		rtn = new Graph(nodes, edges);
-
 		return rtn;
 	}
 
 	/**
-	 * This class makes a set of edges distributed according to a filter
-	 * (radial, sinusoidal, sigmoid, linear)
+	 * This class returns a list of edges with source and target chosen randomly
+	 * according to a distribution filter (radial, sinusoidal, sigmoid, linear).
+	 * The idea of the filter is to skew the distribution of source and target
+	 * nodes so it is possible to emulate social phenomena distribution of links
 	 * 
 	 * @param nodes
 	 * @return

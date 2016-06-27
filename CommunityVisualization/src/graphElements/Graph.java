@@ -6,12 +6,13 @@ public class Graph {
 
 	protected ArrayList<Node> nodes;
 	protected ArrayList<Edge> edges;
+	private int ID;
 
 	// Constructors
 	public Graph() {
 
 	}
-	
+
 	public Graph(ArrayList<Node> vertices, ArrayList<Edge> edges) {
 		this.nodes = vertices;
 		this.edges = edges;
@@ -78,10 +79,9 @@ public class Graph {
 	public ArrayList<Edge> getDirectedEdgesFrom(Node source) {
 		ArrayList<Edge> edgeSubset = new ArrayList<Edge>();
 		try {
-			for(Edge e: edges){
-				if(e.getSource().equals(source)){
+			for (Edge e : edges) {
+				if (e.getSource().equals(source)) {
 					edgeSubset.add(e);
-					System.out.println("Graph getDirectedEdges() :"+ e.getSource().getId() + " "+ e.getTarget().getId());
 				}
 			}
 		} catch (NullPointerException e) {
@@ -102,4 +102,29 @@ public class Graph {
 		return nodes.size();
 	}
 
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	// Printers
+	public void printNodes() {
+		System.out.println("Graph>printNodes Graph: " + ID + " total Nodes: " + nodes.size());
+		for (Node n : nodes) {
+			String node = String.valueOf(n.getId());
+			System.out.println("  Node Id: " + node);
+		}
+	}
+
+	public void printEdges() {
+		System.out.println("Graph>printEdges Graph: " + ID + " total Edges: " + edges.size());
+		for (Edge e : edges) {
+			String source = String.valueOf(e.getSource().getId());
+			String target = String.valueOf(e.getTarget().getId());
+			System.out.println("  Edge Source: " + source + " target: " + target);
+		}
+	}
 }

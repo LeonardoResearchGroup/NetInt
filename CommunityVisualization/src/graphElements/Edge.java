@@ -17,9 +17,8 @@ public class Edge implements Observer {
 	private float weight;
 	private String name;
 	private boolean loop;
-
+	// Observer
 	private int mark;
-
 
 	public Edge(Node source, Node target, boolean directed) {
 		this.source = source;
@@ -27,7 +26,7 @@ public class Edge implements Observer {
 		this.directed = directed;
 		// Observer
 		this.source.addObserver(this);
-		//this.target.addObserver(this);
+		// this.target.addObserver(this);
 
 		if (source.equals(target))
 			loop = true;
@@ -99,10 +98,10 @@ public class Edge implements Observer {
 			HopMessenger heapMsn = ((HopMessenger) arg);
 
 			// If mouse over
-//			System.out.println("current value: " + heapMsn.getCurrentHop());
-//			System.out.println("-----------LOG-----------");
-//			System.out.println(heapMsn.getLog());
-//			System.out.println("-------------------------");
+			// System.out.println("current value: " + heapMsn.getCurrentHop());
+			// System.out.println("-----------LOG-----------");
+			// System.out.println(heapMsn.getLog());
+			// System.out.println("-------------------------");
 			if (heapMsn.getMessage().contains("selected")) {
 				mark = 1;
 				// if source
@@ -125,7 +124,7 @@ public class Edge implements Observer {
 					target.notifyObservers(heapMsn);
 					// target.clear();
 				} else {
-//					System.out.println("FIN PROCESO");
+					// System.out.println("FIN PROCESO");
 				}
 				// }
 
@@ -142,7 +141,7 @@ public class Edge implements Observer {
 					target.notifyObservers(heapMsn);
 					// target.clear();
 				} else {
-//					System.out.println("FIN PROCESO");
+					// System.out.println("FIN PROCESO");
 				}
 			}
 			// System.out.println(value);

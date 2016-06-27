@@ -22,20 +22,21 @@ public class VEdge {
 
 	public void setCoordinates(ArrayList<VisualAtom> vAtom, ArrayList<Node> nodes) {
 		// look in the collection of nodes where is the edge's source
-		int indxOrg = nodes.indexOf(edge.getSource());
-		if (indxOrg > -1) {
+		int indxSource = nodes.indexOf(edge.getSource());
+		if (indxSource > -1) {
 			// ask for its coordinates
-			source = vAtom.get(indxOrg);
+			source = vAtom.get(indxSource);
 		}
 		// look in the collection of nodes where is the edge's target
-		int indxDes = nodes.indexOf(edge.getTarget());
-		System.out.println("VEdge :"+ indxDes);
-		if (indxDes > -1) {
+		int indxTarget = nodes.indexOf(edge.getTarget());
+		//System.out.println("VEdge>setCoordinates: index Target:" + indxTarget);
+		if (indxTarget > -1) {
 			// ask for its coordinates
-			target = vAtom.get(indxDes);
+			target = vAtom.get(indxTarget);
 		}
-		// This works fine in linear arrays
-		setDirection(source.pos.x, target.pos.x);
+		if (source != null && target != null) {
+			setDirection(source.pos.x, target.pos.x);
+		}
 	}
 
 	public void makeBezier() {
@@ -47,13 +48,14 @@ public class VEdge {
 		switch (edge.getMark()) {
 		case 0:
 			bezier.setColor(app.color(255, 100, 255));
-			bezier.setAlpha(20);
+			bezier.setAlpha(40);
 			break;
 		case 1:
 			bezier.setColor(app.color(255, 0, 0));
-			bezier.setAlpha(20);
+			bezier.setAlpha(40);
 			break;
 		case 2:
+			// propagation chain
 			bezier.setColor(app.color(0, 255, 0));
 			bezier.setAlpha(90);
 			break;
@@ -62,11 +64,11 @@ public class VEdge {
 			bezier.setAlpha(90);
 			break;
 		}
-
+	//	System.out.println("VEdge>Show: target: " + target);
 		bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
 		bezier.setControl((source.pos.x - target.pos.x) / 2);
 		bezier.drawBezier2D(app);
-		bezier.drawHeadBezier2D(app);
+		 bezier.drawHeadBezier2D(app);
 	}
 
 	private void setDirection(float posXOrg, float posXDes) {
@@ -85,5 +87,25 @@ public class VEdge {
 
 	public void setColor(int color) {
 		bezier.setColor(color);
+	}
+
+	public VisualAtom getSource() {
+		return source;
+	}
+
+	public void setSource(VisualAtom source) {
+		this.source = source;
+	}
+
+	public VisualAtom getTarget() {
+		return target;
+	}
+
+	public void setTarget(VisualAtom target) {
+		this.target = target;
+	}
+
+	public Edge getEdge() {
+		return edge;
 	}
 }

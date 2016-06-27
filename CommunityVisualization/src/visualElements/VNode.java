@@ -79,7 +79,7 @@ public class VNode extends VisualAtom {
 		if (inv != null) {
 			inv.runInvolute(90, 10, visible);
 			pos = inv.getInvoluteCoords(center);
-			// inv.show(center);
+			//inv.show(center);
 		}
 	}
 
@@ -121,6 +121,14 @@ public class VNode extends VisualAtom {
 
 	public int getAlpha() {
 		return alpha;
+	}
+
+	public Node getNode() {
+		return node;
+	}
+
+	public void setNode(Node node) {
+		this.node = node;
 	}
 
 	public void setAlpha(int alpha) {

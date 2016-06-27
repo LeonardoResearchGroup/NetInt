@@ -6,13 +6,14 @@ import java.awt.Color;
 
 public class Bezier {
 	public PVector A, B, cA, cB;
-	private int alpha = 40;
+	private int alpha = 80;
 	private Color bodyColor = Color.WHITE;
 	private Color headColor = new Color (255, 158, 15);
 	private Color tailColor = new Color (115, 33, 86);
 	private float control;
 	private boolean aboveArc;
 
+	// Constructors
 	/**
 	 * Bezier 2D
 	 */
@@ -114,6 +115,7 @@ public class Bezier {
 		updateControlPoints(A, B);
 	}
 
+	// Display Methods
 	/**
 	 * To be used after the source and target PVectors were set after instantiation. See setSourceAndTarget()
 	 * @param app
@@ -152,6 +154,7 @@ public class Bezier {
 		getBezierThird(B, cB, cA, A).drawBezier2D(app,tailColor);
 	}
 
+	// Partition methods
 	/**
 	 * based on
 	 * http://stackoverflow.com/questions/18655135/divide-bezier-curve-into-two-
@@ -192,6 +195,7 @@ public class Bezier {
 		return new Bezier(A, C, F, H);
 	}
 
+	// Getters and setters
 	private PVector getThird(PVector a, PVector b) {
 		float tempX = a.x - ((a.x - b.x) / 3);
 		float tempY = a.y - ((a.y - b.y) / 3);

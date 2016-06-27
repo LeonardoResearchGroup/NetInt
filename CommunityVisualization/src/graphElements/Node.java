@@ -1,6 +1,5 @@
 package graphElements;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.TreeSet;
 
