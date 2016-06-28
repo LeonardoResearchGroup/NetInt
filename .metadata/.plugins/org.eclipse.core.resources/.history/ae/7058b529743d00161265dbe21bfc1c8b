@@ -40,6 +40,7 @@ public class Container {
 		if (!SubGraph.class.isInstance(graph)) {
 			vAtoms = vNodeFactory();
 			vEdges = vEdgeFactory();
+			System.out.println("Constructor: "+vAtoms);
 		}
 		// Graph Visual Layouts
 		addVisualArrangements();
@@ -59,7 +60,6 @@ public class Container {
 		if (SubGraph.class.isInstance(graph)) {
 			vAtoms = new ArrayList<VisualAtom>();
 			vEdges = new ArrayList<VEdge>();
-			System.out.println("Constructor bubgraphos "+ vAtoms);
 		}
 		// Graph Visual Layouts
 		addVisualArrangements();

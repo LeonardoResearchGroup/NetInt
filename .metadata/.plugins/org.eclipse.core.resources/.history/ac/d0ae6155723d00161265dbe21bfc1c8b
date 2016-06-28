@@ -16,16 +16,15 @@ public class Logica {
 
 	Graph rootGraph;
 	ArrayList<Graph> graphs;
-	Container rootContainer, containerSubGraph1, containerSubGraph2,
-			containerSubGraph3;
+	Container rootContainer, containerSubGraph1,containerSubGraph2,containerSubGraph3;
 	VCommunity vRootCommunity, vSubCommunity1, vSubCommunity2, vSubCommunity3;
 	int nA = 1000;
-	int communities = 5;
+	int communities = 3;
 
 	public Logica(PApplet app) {
 
-		// rootGraph = randomGraphFactory(nA);
-		String XML_FILE = "../data/L-UN-MOV.graphml";
+		//rootGraph = randomGraphFactory(nA);
+		String XML_FILE = "/home/cdloaiza/Dropbox/Docs Icesi/CAOBA/Normalizacion/sectores/L-UN-MOV.graphml";  
 		GraphReader gr = new GraphReader(XML_FILE);
 		rootGraph = gr.getGraph();
 		rootGraph.setID(0);
@@ -41,33 +40,30 @@ public class Logica {
 
 		// Container of visual graph the graph
 		rootContainer = new Container(app, rootGraph);
-
+		/*
 		containerSubGraph1 = new Container(app, graphs.get(1));
-		containerSubGraph1.retrieveVisualElements(rootContainer);
-		/*
-		 * containerSubGraph2 = new Container(app, graphs.get(2));
-		 * containerSubGraph2.retrieveVElements(rootContainer);
-		 * containerSubGraph3 = new Container(app, graphs.get(3));
-		 * containerSubGraph3.retrieveVElements(rootContainer);
-		 */
+		containerSubGraph1.retrieveVElements(rootContainer);
+		containerSubGraph2 = new Container(app, graphs.get(2));
+		containerSubGraph2.retrieveVElements(rootContainer);
+		containerSubGraph3 = new Container(app, graphs.get(3));
+		containerSubGraph3.retrieveVElements(rootContainer);
+		*/
 		// instantiating & visualizing community
-		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150);
-
-		vSubCommunity1 = new VCommunity(app, containerSubGraph1, 200, 350);
+		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150, 100);
 		/*
-		 * vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width /
-		 * 2, 350); vSubCommunity3 = new VCommunity(app, containerSubGraph3,
-		 * app.width -200, 350);
-		 */
+		vSubCommunity1 = new VCommunity(app, containerSubGraph1, 200, 350, 100);
+		vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width / 2, 350, 100);
+		vSubCommunity3 = new VCommunity(app, containerSubGraph3, app.width -200, 350, 100);
+		*/
 	}
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
-
-		vSubCommunity1.show();
 		/*
-		 * vSubCommunity2.show(); vSubCommunity3.show();
-		 */
+		vSubCommunity1.show();
+		vSubCommunity2.show();
+		vSubCommunity3.show();
+		*/
 	}
 
 	// Factories
