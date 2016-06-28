@@ -7,6 +7,7 @@ import graphElements.Graph;
 import graphElements.Node;
 import graphElements.SubGraph;
 import utilities.Filter;
+import utilities.GraphReader;
 import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
 import processing.core.*;
@@ -22,7 +23,10 @@ public class Logica {
 
 	public Logica(PApplet app) {
 
-		rootGraph = randomGraphFactory(nA);
+		//rootGraph = randomGraphFactory(nA);
+		String XML_FILE = "/home/cdloaiza/Dropbox/Docs Icesi/CAOBA/Normalizacion/sectores/L-UN-MOV.graphml";  
+		GraphReader gr = new GraphReader(XML_FILE);
+		rootGraph = gr.getGraph();
 		rootGraph.setID(0);
 		graphs = new ArrayList<Graph>();
 		graphs.add(rootGraph);
@@ -36,25 +40,30 @@ public class Logica {
 
 		// Container of visual graph the graph
 		rootContainer = new Container(app, rootGraph);
+		/*
 		containerSubGraph1 = new Container(app, graphs.get(1));
 		containerSubGraph1.retrieveVElements(rootContainer);
 		containerSubGraph2 = new Container(app, graphs.get(2));
 		containerSubGraph2.retrieveVElements(rootContainer);
 		containerSubGraph3 = new Container(app, graphs.get(3));
 		containerSubGraph3.retrieveVElements(rootContainer);
-
+		*/
 		// instantiating & visualizing community
 		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150, 100);
+		/*
 		vSubCommunity1 = new VCommunity(app, containerSubGraph1, 200, 350, 100);
 		vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width / 2, 350, 100);
 		vSubCommunity3 = new VCommunity(app, containerSubGraph3, app.width -200, 350, 100);
+		*/
 	}
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
+		/*
 		vSubCommunity1.show();
 		vSubCommunity2.show();
 		vSubCommunity3.show();
+		*/
 	}
 
 	// Factories
