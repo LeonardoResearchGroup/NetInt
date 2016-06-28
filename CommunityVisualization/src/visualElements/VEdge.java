@@ -29,7 +29,7 @@ public class VEdge {
 		}
 		// look in the collection of nodes where is the edge's target
 		int indxTarget = nodes.indexOf(edge.getTarget());
-		 System.out.println("VEdge>setCoordinates: index Target:" +indxTarget);
+		// System.out.println("VEdge>setSourceAndTarget: index Target:" +indxTarget);
 		if (indxTarget > -1) {
 			// ask for its coordinates
 			target = visualAtoms.get(indxTarget);

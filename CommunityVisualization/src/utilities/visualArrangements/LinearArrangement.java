@@ -5,8 +5,6 @@ import java.util.Iterator;
 
 import processing.core.PApplet;
 import processing.core.PVector;
-import visualElements.VEdge;
-import visualElements.VNode;
 import visualElements.interactive.VisualAtom;
 
 public class LinearArrangement implements Arrangement {

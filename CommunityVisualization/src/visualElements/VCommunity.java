@@ -28,8 +28,8 @@ public class VCommunity extends VisualAtom {
 	private int i, increment;
 	public Container container;
 
-	public VCommunity(PApplet app, Container container, float posX, float posY, float diam) {
-		super(app, posX, posY, diam);
+	public VCommunity(PApplet app, Container container, float posX, float posY) {
+		super(app, posX, posY, 0);
 		this.container = container;
 		open = false;
 		unlocked = false;
@@ -49,8 +49,6 @@ public class VCommunity extends VisualAtom {
 	}
 
 	private void communityLayout() {
-		// **SORTERS
-		container.sort(new OutDegreeComparator());
 		// ** CIRCULAR LAYOUT
 		container.arrangeBy("circular");
 		// ** LINEAR LAYOUT

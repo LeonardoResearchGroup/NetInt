@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import comparators.DegreeComparator;
-import comparators.InDegreeComparator;
-import comparators.OutDegreeComparator;
-
 public class Graph {
 
 	protected ArrayList<Node> nodes;
