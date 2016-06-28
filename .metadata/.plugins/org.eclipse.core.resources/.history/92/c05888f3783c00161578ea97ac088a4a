@@ -117,8 +117,6 @@ public class Container {
 					break;
 				}
 			}
-		}else {
-			System.out.println("Container>arrangeBy: ARRANGEMENT NOT AVAILABLE. Check spelling");
 		}
 	}
 

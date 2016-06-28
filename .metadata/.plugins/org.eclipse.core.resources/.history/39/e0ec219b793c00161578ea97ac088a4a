@@ -17,7 +17,7 @@ public class Logica {
 	ArrayList<Graph> graphs;
 	Container rootContainer, containerSubGraph1,containerSubGraph2,containerSubGraph3;
 	VCommunity vRootCommunity, vSubCommunity1, vSubCommunity2, vSubCommunity3;
-	int nA = 500;
+	int nA = 1000;
 	int communities = 3;
 
 	public Logica(PApplet app) {
@@ -47,6 +47,7 @@ public class Logica {
 		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150, 100);
 		vSubCommunity1 = new VCommunity(app, containerSubGraph1, 200, 350, 100);
 		vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width / 2, 350, 100);
+		vSubCommunity2.communityLayout("linear");
 		vSubCommunity3 = new VCommunity(app, containerSubGraph3, app.width -200, 350, 100);
 	}
 

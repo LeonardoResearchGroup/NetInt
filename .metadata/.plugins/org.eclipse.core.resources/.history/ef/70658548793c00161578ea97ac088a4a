@@ -17,7 +17,7 @@ public class Logica {
 	ArrayList<Graph> graphs;
 	Container rootContainer, containerSubGraph1,containerSubGraph2,containerSubGraph3;
 	VCommunity vRootCommunity, vSubCommunity1, vSubCommunity2, vSubCommunity3;
-	int nA = 500;
+	int nA = 1000;
 	int communities = 3;
 
 	public Logica(PApplet app) {
