@@ -7,6 +7,7 @@ import visualElements.interactive.VisualAtom;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import comparators.DegreeComparator;
@@ -21,10 +22,10 @@ import graphElements.*;
  * updateContainer()
  * 
  * @author jsalam
- *
+ * 
  */
 public class Container {
-	private Graph graph;
+	private Graph graph, rootGraph;
 	private ArrayList<VisualAtom> vAtoms;
 	private ArrayList<VEdge> vEdges;
 	private ArrayList<Arrangement> arrangements;
@@ -33,40 +34,55 @@ public class Container {
 	public Container(PApplet app, Graph graph) {
 		this.graph = graph;
 		this.app = app;
-		// if graph is not a subGraph, generate all the vElements
+		this.rootGraph = graph;
+		// If graph is the rootGraph generate all the visual elements
 		if (!SubGraph.class.isInstance(graph)) {
-			vAtoms = vNodeFactory(graph);
-			vEdges = vEdgeFactory(graph);
-			System.out.println("Container: Container: VEdge list size: " + vEdges.size());
-		} // if subGraph retrieve the vElements
-		else {
+			vAtoms = vNodeFactory();
+			vEdges = vEdgeFactory();
+		}
+		// Graph Visual Layouts
+		addVisualArrangements();
+	}
+
+	public Container(PApplet app, SubGraph graph) {
+		this.graph = graph;
+		this.app = app;
+		// If graph is a subGraph just instantiate empty collections for visual
+		// elements
+		if (SubGraph.class.isInstance(graph)) {
 			vAtoms = new ArrayList<VisualAtom>();
 			vEdges = new ArrayList<VEdge>();
-			System.out.println("Container>Container: SubGraph Container must invoke vElementsRetriever()");
 		}
+		// Graph Visual Layouts
+		addVisualArrangements();
+	}
+
+	/**
+	 * These arrangements serve to layout the visual elements on screen
+	 */
+	public void addVisualArrangements() {
 		arrangements = new ArrayList<Arrangement>();
 		arrangements.add(new LinearArrangement(app, "linear"));
 		arrangements.add(new CircularArrangement(app, "circular"));
 	}
 
-	// *** Nodes factory
-	private ArrayList<VisualAtom> vNodeFactory(Graph rootGraph) {
+	// *** Visual Nodes factory
+	private ArrayList<VisualAtom> vNodeFactory() {
 		ArrayList<VisualAtom> theNodes = new ArrayList<VisualAtom>();
-		for (int i = 0; i < rootGraph.getVertices().size(); i++) {
-			Node n = rootGraph.getVertices().get(i);
-			VNode tmp = new VNode(app, n, 0, 0, 10);
+		for (Node n : graph.getNodes()) {
+			VNode tmp = new VNode(app, n, 0, 0, 0);
 			theNodes.add(tmp);
 		}
 		return theNodes;
 	}
 
-	// *** Edges factory
-	private ArrayList<VEdge> vEdgeFactory(Graph rootGraph) {
+	// *** Visual Edges factory
+	private ArrayList<VEdge> vEdgeFactory() {
 		ArrayList<VEdge> theEdges = new ArrayList<VEdge>();
-		Iterator<Edge> itr = rootGraph.getEdges().iterator();
-		while (itr.hasNext()) {
-			VEdge vEdge = new VEdge(itr.next());
-			vEdge.setCoordinates(vAtoms, rootGraph.getVertices());
+		System.out.println("Container> vEdgesFactory:  edges count:" + graph.getEdges().size());
+		for (Edge e : graph.getEdges()) {
+			VEdge vEdge = new VEdge(e);
+			vEdge.setSourceAndTarget(vAtoms, graph.getNodes());
 			vEdge.makeBezier();
 			theEdges.add(vEdge);
 		}
@@ -74,8 +90,8 @@ public class Container {
 	}
 
 	// *** Nodes And Edges retriever
-	public void retrieveVElements(Container rootContainer) {
-		for (Node n : graph.getVertices()) {
+	public void retrieveVisualElements(Container rootContainer) {
+		for (Node n : graph.getNodes()) {
 			for (VisualAtom vAtm : rootContainer.getVAtoms()) {
 				// If a VNode
 				if (VNode.class.isInstance(vAtm)) {
@@ -128,9 +144,15 @@ public class Container {
 		int maxCommunityDiam = 200;
 		int minCommunitySize = 1;
 		int maxCommunitySize = 1000;
-		int diam = (int) PApplet.map(vAtoms.size(), minCommunitySize, maxCommunitySize, minCommunityDiam,
-				maxCommunityDiam);
+		int diam = (int) PApplet.map(vAtoms.size(), minCommunitySize,
+				maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 		return diam;
+	}
+
+	// Sort Container graph
+	public void sort(Comparator<Node> comp) {
+		graph.sort(comp);
+		updateContainer();
 	}
 
 	/**
@@ -138,27 +160,11 @@ public class Container {
 	 * and VEdges. It is used to update the positions after invoking a
 	 * comparator. Sort methods invoke updateNetwork() by default
 	 */
-	private void updateContainer(Graph graph) {
+	public void updateContainer() {
 		vAtoms.clear();
 		vEdges.clear();
-		vAtoms = vNodeFactory(graph);
-		vEdges = vEdgeFactory(graph);
-	}
-
-	// Sorters
-	public void sortInDegree() {
-		Collections.sort(graph.getVertices(), new InDegreeComparator());
-		updateContainer(graph);
-	}
-
-	public void sortOutDegree() {
-		Collections.sort(graph.getVertices(), new OutDegreeComparator());
-		updateContainer(graph);
-	}
-
-	public void sortDegree() {
-		Collections.sort(graph.getVertices(), new DegreeComparator());
-		updateContainer(graph);
+		vAtoms = vNodeFactory();
+		vEdges = vEdgeFactory();
 	}
 
 	public void setNodeXY(int index, PVector pos) {
@@ -191,6 +197,14 @@ public class Container {
 		return vEdges;
 	}
 
+	public Graph getRootGraph() {
+		return rootGraph;
+	}
+
+	public void setRootGraph(Graph rootGraph) {
+		this.rootGraph = rootGraph;
+	}
+
 	public void recenter(PVector pos) {
 		for (VisualAtom vA : vAtoms) {
 			VNode n = (VNode) vA;
@@ -207,7 +221,8 @@ public class Container {
 		}
 	}
 
-	public void show(boolean showNodes, boolean showEdges, boolean networkVisible) {
+	public void show(boolean showNodes, boolean showEdges,
+			boolean networkVisible) {
 
 		if (showNodes || networkVisible) {
 			for (VisualAtom vA : vAtoms) {
