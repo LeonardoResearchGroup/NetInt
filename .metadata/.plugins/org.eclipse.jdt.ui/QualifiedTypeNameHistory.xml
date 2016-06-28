@@ -9,4 +9,7 @@
 <fullyQualifiedTypeName name="processing.core.PApplet"/>
 <fullyQualifiedTypeName name="java.lang.Math"/>
 <fullyQualifiedTypeName name="java.util.TreeSet"/>
+<fullyQualifiedTypeName name="comparators.OutDegreeComparator"/>
+<fullyQualifiedTypeName name="comparators.InDegreeComparator"/>
+<fullyQualifiedTypeName name="utilities.RandomGraphFactory"/>
 </qualifiedTypeNameHistroy>
