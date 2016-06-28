@@ -2,40 +2,89 @@ package executable;
 
 import java.util.ArrayList;
 
-import graphElements.Edge;
+import comparators.InDegreeComparator;
+import comparators.OutDegreeComparator;
 import graphElements.Graph;
-import graphElements.Node;
 import graphElements.SubGraph;
+<<<<<<< HEAD
+import utilities.RandomGraphFactory;
+=======
 import utilities.Filter;
 import utilities.GraphReader;
+>>>>>>> c2202e41b5f8bacfa5ac52b2cd94793cb148ed97
 import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
 import processing.core.*;
 
 public class Logica {
 
+	// Graph Elements
 	Graph rootGraph;
 	ArrayList<Graph> graphs;
-	Container rootContainer, containerSubGraph1,containerSubGraph2,containerSubGraph3;
-	VCommunity vRootCommunity, vSubCommunity1, vSubCommunity2, vSubCommunity3;
-	int nA = 1000;
+	RandomGraphFactory randomFactory;
+
+	// Visual Elements
+	Container rootContainer;
+	VCommunity vRootCommunity;
+	ArrayList<Container> containers;
+	ArrayList<VCommunity> vCommunities;
+
+
+	// RootGraph Parameters
+	int nA = 150;
 	int communities = 3;
 
 	public Logica(PApplet app) {
 
+<<<<<<< HEAD
+		// Initialization
+=======
 		//rootGraph = randomGraphFactory(nA);
 		String XML_FILE = "/home/cdloaiza/Dropbox/Docs Icesi/CAOBA/Normalizacion/sectores/L-UN-MOV.graphml";  
 		GraphReader gr = new GraphReader(XML_FILE);
 		rootGraph = gr.getGraph();
 		rootGraph.setID(0);
+>>>>>>> c2202e41b5f8bacfa5ac52b2cd94793cb148ed97
 		graphs = new ArrayList<Graph>();
-		graphs.add(rootGraph);
+		containers = new ArrayList<Container>();
+		vCommunities = new ArrayList<VCommunity>();
+		randomFactory = new RandomGraphFactory();
 
+		// ***** RootGraph *****
+		rootGraph = randomFactory.makeRandomGraph(nA, communities);
+		rootGraph.setID(0);
+		// Container of visual rootGraph
+		rootContainer = new Container(app, rootGraph);
+		rootContainer.sort(new OutDegreeComparator());
+		rootContainer.sort(new InDegreeComparator());
+		rootContainer.updateContainer();
+		// Add to collections
+		graphs.add(rootGraph); // always at position 0
+		containers.add(rootContainer);
+		// Instantiating & root visual community
+		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150);
+
+		// ***** SubGraphs *****
 		for (int i = 1; i <= communities; i++) {
+			// SubGraph instantiation
 			SubGraph tmp = new SubGraph();
 			tmp.setID(i);
 			tmp.setNodesFromGraph(rootGraph, i);
 			graphs.add(tmp);
+<<<<<<< HEAD
+
+			// SubGraph Containers
+			Container cTmp = new Container(app, (SubGraph) graphs.get(i));
+			cTmp.setRootGraph(rootGraph);
+			//cTmp.sort(new InDegreeComparator());
+			cTmp.retrieveVisualElements(rootContainer);
+			containers.add(cTmp);
+			
+			// SubGraph Communities
+			VCommunity vComTmp = new VCommunity(app, cTmp, 200 + (i-1)*400, 350);
+			vCommunities.add(vComTmp);
+		}
+=======
 		}
 
 		// Container of visual graph the graph
@@ -55,10 +104,15 @@ public class Logica {
 		vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width / 2, 350, 100);
 		vSubCommunity3 = new VCommunity(app, containerSubGraph3, app.width -200, 350, 100);
 		*/
+>>>>>>> c2202e41b5f8bacfa5ac52b2cd94793cb148ed97
 	}
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
+<<<<<<< HEAD
+		for (VCommunity vCom: vCommunities) {
+			vCom.show();
+=======
 		/*
 		vSubCommunity1.show();
 		vSubCommunity2.show();
@@ -118,8 +172,7 @@ public class Logica {
 			// edge
 			Edge tmp = new Edge(nodes.get(src), nodes.get(trg), true);
 			rtn.add(tmp);
+>>>>>>> c2202e41b5f8bacfa5ac52b2cd94793cb148ed97
 		}
-		return rtn;
 	}
-
 }
