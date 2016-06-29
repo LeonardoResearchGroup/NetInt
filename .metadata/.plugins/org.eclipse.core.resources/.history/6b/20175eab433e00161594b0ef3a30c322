@@ -171,7 +171,7 @@ public class Container {
 		int minCommunityDiam = 70;
 		int maxCommunityDiam = 200;
 		int minCommunitySize = 1;
-		int maxCommunitySize = 2000;
+		int maxCommunitySize = 1000;
 		int diam = (int) PApplet.map(vAtoms.size(), minCommunitySize, maxCommunitySize, minCommunityDiam,
 				maxCommunityDiam);
 		return diam;

@@ -44,7 +44,7 @@ public class VCommunity extends VisualAtom {
 		minCommunityDiam = 70;
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
-		maxCommunitySize = 2000;
+		maxCommunitySize = 1000;
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
