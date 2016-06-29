@@ -52,15 +52,15 @@ public graphElements.Graph getGraph(){
 	ArrayList<graphElements.Edge> edges = new ArrayList<graphElements.Edge>();
 	ArrayList<Node> nodes = new ArrayList<Node>();
 
-	System.out.println("Vertices of " + graph);
+	//System.out.println("Vertices of " + graph);
 	for (Vertex vertex : graph.getVertices()) {
-	  System.out.println(vertex.getId().toString().replace("n", "") + " está en el comunidad " + vertex.getProperty("comunidad"));
+	  //System.out.println(vertex.getId().toString().replace("n", "") + " está en el comunidad " + vertex.getProperty("comunidad"));
 	  int i = Integer.parseInt(vertex.getId().toString().replace("n", ""));
 	  Node tmpA = new Node(i);
 	  tmpA.includeInSubGraph((int)Double.parseDouble(vertex.getProperty("comunidad").toString()));
 	  nodes.add(tmpA);
 	}
-	System.out.println("Edges of " + graph);
+	//System.out.println("Edges of " + graph);
 	for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 	  //System.out.println(edge.getLabel());
 	  //System.out.println(edge.getVertex(Direction.IN).getId());

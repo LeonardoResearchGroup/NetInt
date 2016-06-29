@@ -32,7 +32,7 @@ public class Logica {
 
 		// *** Initialization
 		// rootGraph = randomGraphFactory(nA);
-		String XML_FILE = "../data/L-UN-MOV.graphml";
+		String XML_FILE = "../data/comunidadesGirvanNewman.graphml";
 		GraphReader gr = new GraphReader(XML_FILE);
 
 		graphs = new ArrayList<Graph>();

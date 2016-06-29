@@ -59,7 +59,6 @@ public class Container {
 		if (SubGraph.class.isInstance(graph)) {
 			vAtoms = new ArrayList<VisualAtom>();
 			vEdges = new ArrayList<VEdge>();
-			System.out.println("Constructor bubgraphos "+ vAtoms);
 		}
 		// Graph Visual Layouts
 		addVisualArrangements();
@@ -120,7 +119,6 @@ public class Container {
 					if (n.equals(vN.getNode())) {
 						// Add the VNode to the collection of vAtoms of this
 						// container
-						System.out.println(vAtoms);
 						vAtoms.add(vN);
 						// Look for all the edges of that VNode and add them all
 						// to the collection of vEdges of this container
