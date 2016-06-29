@@ -18,3 +18,5 @@
 1467068957333	Rename method 'setCoordinates'
 1467069691150	Rename method 'getVertices'
 1467147404425	Move file
+1467165617442	Rename method 'arrangeBy'
+1467165631931	Rename method 'arrangementLayout'

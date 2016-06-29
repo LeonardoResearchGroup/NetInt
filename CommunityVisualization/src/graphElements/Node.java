@@ -5,7 +5,8 @@ import java.util.TreeSet;
 
 public class Node extends Observable implements Comparable<Node> {
 
-	private int inDegree, outDegree, Degree, id;
+	private int inDegree, outDegree, Degree;
+	private int id;// Must have a unique identifier. See equals(Object obj)
 	private TreeSet<Integer> insideSubGraphs;
 	private String name;
 	private float Excentricity, Betweeness;
@@ -47,6 +48,13 @@ public class Node extends Observable implements Comparable<Node> {
 			cont++;
 		}
 		return indexes;
+	}
+
+	// *** equals
+	public boolean equals(Object obj) {
+		Node n = (Node) obj;
+		boolean rtn = n.getId() == this.getId();
+		return rtn;
 	}
 
 	// *** Getters and setters

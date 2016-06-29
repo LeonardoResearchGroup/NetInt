@@ -6,7 +6,7 @@ import comparators.OutDegreeComparator;
 import graphElements.Graph;
 import graphElements.SubGraph;
 import utilities.GraphReader;
-import utilities.RandomGraphFactory;
+//import utilities.RandomGraphFactory;
 import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
 import processing.core.*;
@@ -16,7 +16,7 @@ public class Logica {
 	// Graph Elements
 	Graph rootGraph;
 	ArrayList<Graph> graphs;
-	RandomGraphFactory randomFactory;
+	// RandomGraphFactory randomFactory;
 
 	// Visual Elements
 	Container rootContainer;
@@ -34,25 +34,29 @@ public class Logica {
 		// rootGraph = randomGraphFactory(nA);
 		String XML_FILE = "../data/L-UN-MOV.graphml";
 		GraphReader gr = new GraphReader(XML_FILE);
-		rootGraph = gr.getGraph();
-		rootGraph.setID(0);
+
 		graphs = new ArrayList<Graph>();
 
 		containers = new ArrayList<Container>();
 		vCommunities = new ArrayList<VCommunity>();
-		randomFactory = new RandomGraphFactory();
+		// randomFactory = new RandomGraphFactory();
 
 		// ***** RootGraph *****
-		rootGraph = randomFactory.makeRandomGraph(nA, communities);
+		rootGraph = gr.getGraph();
 		rootGraph.setID(0);
+		// rootGraph = randomFactory.makeRandomGraph(nA, communities);
+		// rootGraph.setID(0);
+		
 		// Container of visual rootGraph
 		rootContainer = new Container(app, rootGraph);
 		rootContainer.sort(new OutDegreeComparator());
-		rootContainer.sort(new InDegreeComparator());
+		//rootContainer.sort(new InDegreeComparator());
 		rootContainer.updateContainer();
+		
 		// Add to collections
 		graphs.add(rootGraph); // always at position 0
 		containers.add(rootContainer);
+		
 		// Instantiating & root visual community
 		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150);
 
@@ -72,12 +76,15 @@ public class Logica {
 			containers.add(cTmp);
 
 			// SubGraph Communities
-			VCommunity vComTmp = new VCommunity(app, cTmp, 200 + (i - 1) * 400, 350);
+			VCommunity vComTmp = new VCommunity(app, cTmp, 200 + (i - 1) * 200, 350);
 			vCommunities.add(vComTmp);
 		}
 	}
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
+		for (VCommunity vCom : vCommunities) {
+			vCom.show();
+		}
 	}
 }

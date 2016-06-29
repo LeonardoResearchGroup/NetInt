@@ -146,7 +146,7 @@ public class Container {
 	}
 	
 	// *** Arrangements
-	public void arrangeBy(String str) {
+	public void arrangement(String str) {
 		if (str.equals("linear")) {
 			for (Arrangement a : arrangements) {
 				if (a.getName().equals("linear")) {
@@ -159,7 +159,7 @@ public class Container {
 			for (Arrangement a : arrangements) {
 				if (a.getName().equals("circular")) {
 					CircularArrangement lA = (CircularArrangement) a;
-					lA.circularLayout(containerDiameter() / 2, vAtoms);
+					lA.circularLayout(containerDiameter()/2, vAtoms);
 					break;
 				}
 			}
