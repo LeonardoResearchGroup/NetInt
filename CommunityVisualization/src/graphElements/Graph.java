@@ -32,8 +32,9 @@ public class Graph {
 	private void setNodeInDegree(Node n) {
 		int count = 0;
 		for (Edge e : edges) {
-			if (e.getTarget().equals(n))
+			if (e.getTarget().equals(n)) {
 				count++;
+			}
 		}
 		n.setInDegree(count);
 	}
@@ -41,8 +42,9 @@ public class Graph {
 	private void setNodeOutDegree(Node n) {
 		int count = 0;
 		for (Edge e : edges) {
-			if (e.getSource().equals(n))
+			if (e.getSource().equals(n)) {
 				count++;
+			}
 		}
 		n.setOutDegree(count);
 	}
@@ -56,7 +58,7 @@ public class Graph {
 		}
 		n.setDegree(n.getInDegree() + n.getOutDegree());
 	}
-	
+
 	// Sorters
 	public void sort(Comparator<Node> comp) {
 		Collections.sort(getNodes(), comp);

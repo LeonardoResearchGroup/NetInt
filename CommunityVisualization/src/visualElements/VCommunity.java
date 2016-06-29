@@ -44,15 +44,15 @@ public class VCommunity extends VisualAtom {
 		minCommunityDiam = 70;
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
-		maxCommunitySize = 1000;
+		maxCommunitySize = 100;
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
 	private void communityLayout() {
 		// ** CIRCULAR LAYOUT
-		container.arrangeBy("circular");
+		container.arrangement("circular");
 		// ** LINEAR LAYOUT
-		//container.arrangeBy("linear");
+		//container.arrangement("linear");
 		container.recenter(pos);
 
 	}

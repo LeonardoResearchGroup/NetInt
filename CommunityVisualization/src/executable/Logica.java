@@ -1,129 +1,90 @@
 package executable;
 
 import java.util.ArrayList;
-
-import graphElements.Edge;
+import comparators.InDegreeComparator;
+import comparators.OutDegreeComparator;
 import graphElements.Graph;
-import graphElements.Node;
 import graphElements.SubGraph;
-import utilities.Filter;
 import utilities.GraphReader;
+//import utilities.RandomGraphFactory;
 import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
 import processing.core.*;
 
 public class Logica {
 
+	// Graph Elements
 	Graph rootGraph;
 	ArrayList<Graph> graphs;
-	Container rootContainer, containerSubGraph1, containerSubGraph2,
-			containerSubGraph3;
-	VCommunity vRootCommunity, vSubCommunity1, vSubCommunity2, vSubCommunity3;
+	// RandomGraphFactory randomFactory;
+
+	// Visual Elements
+	Container rootContainer;
+	VCommunity vRootCommunity;
+	ArrayList<Container> containers;
+	ArrayList<VCommunity> vCommunities;
+
+	// RootGraph Parameters
 	int nA = 1000;
 	int communities = 5;
 
 	public Logica(PApplet app) {
 
+		// *** Initialization
 		// rootGraph = randomGraphFactory(nA);
 		String XML_FILE = "../data/L-UN-MOV.graphml";
 		GraphReader gr = new GraphReader(XML_FILE);
+
+		graphs = new ArrayList<Graph>();
+
+		containers = new ArrayList<Container>();
+		vCommunities = new ArrayList<VCommunity>();
+		// randomFactory = new RandomGraphFactory();
+
+		// ***** RootGraph *****
 		rootGraph = gr.getGraph();
 		rootGraph.setID(0);
-		graphs = new ArrayList<Graph>();
-		graphs.add(rootGraph);
+		// rootGraph = randomFactory.makeRandomGraph(nA, communities);
+		// rootGraph.setID(0);
+		
+		// Container of visual rootGraph
+		rootContainer = new Container(app, rootGraph);
+		rootContainer.sort(new OutDegreeComparator());
+		//rootContainer.sort(new InDegreeComparator());
+		rootContainer.updateContainer();
+		
+		// Add to collections
+		graphs.add(rootGraph); // always at position 0
+		containers.add(rootContainer);
+		
+		// Instantiating & root visual community
+		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150);
 
+		// ***** SubGraphs *****
 		for (int i = 1; i <= communities; i++) {
+			// SubGraph instantiation
 			SubGraph tmp = new SubGraph();
 			tmp.setID(i);
 			tmp.setNodesFromGraph(rootGraph, i);
 			graphs.add(tmp);
+
+			// SubGraph Containers
+			Container cTmp = new Container(app, (SubGraph) graphs.get(i));
+			cTmp.setRootGraph(rootGraph);
+			// cTmp.sort(new InDegreeComparator());
+			cTmp.retrieveVisualElements(rootContainer);
+			containers.add(cTmp);
+
+			// SubGraph Communities
+			VCommunity vComTmp = new VCommunity(app, cTmp, 200 + (i - 1) * 200, 350);
+			vCommunities.add(vComTmp);
 		}
-
-		// Container of visual graph the graph
-		rootContainer = new Container(app, rootGraph);
-
-		containerSubGraph1 = new Container(app, graphs.get(1));
-		containerSubGraph1.retrieveVisualElements(rootContainer);
-		/*
-		 * containerSubGraph2 = new Container(app, graphs.get(2));
-		 * containerSubGraph2.retrieveVElements(rootContainer);
-		 * containerSubGraph3 = new Container(app, graphs.get(3));
-		 * containerSubGraph3.retrieveVElements(rootContainer);
-		 */
-		// instantiating & visualizing community
-		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150);
-
-		vSubCommunity1 = new VCommunity(app, containerSubGraph1, 200, 350);
-		/*
-		 * vSubCommunity2 = new VCommunity(app, containerSubGraph2, app.width /
-		 * 2, 350); vSubCommunity3 = new VCommunity(app, containerSubGraph3,
-		 * app.width -200, 350);
-		 */
 	}
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
-
-		vSubCommunity1.show();
-		/*
-		 * vSubCommunity2.show(); vSubCommunity3.show();
-		 */
-	}
-
-	// Factories
-	private Graph randomGraphFactory(int graphSize) {
-		Graph rtn = new Graph();
-		ArrayList<Edge> edges = new ArrayList<Edge>();
-		ArrayList<Node> nodes = new ArrayList<Node>();
-
-		// create nodes
-		for (int i = 0; i < graphSize; i++) {
-			Node tmpA = new Node(i);
-			nodes.add(tmpA);
+		for (VCommunity vCom : vCommunities) {
+			vCom.show();
 		}
-
-		// include node in communities
-		for (int i = 0; i < graphSize; i++) {
-			Node tmp = nodes.get((int) (Math.random() * graphSize));
-			int com = (int) Math.round(Math.random() * communities);
-			if (!tmp.belongsTo(com))
-				tmp.includeInSubGraph(com);
-		}
-
-		// create edges
-		edges = randomEdgeFactory(nodes);
-
-		// Making the graph
-		rtn = new Graph(nodes, edges);
-		return rtn;
 	}
-
-	/**
-	 * This class returns a list of edges with source and target chosen randomly
-	 * according to a distribution filter (radial, sinusoidal, sigmoid, linear).
-	 * The idea of the filter is to skew the distribution of source and target
-	 * nodes so it is possible to emulate social phenomena distribution of links
-	 * 
-	 * @param nodes
-	 * @return
-	 */
-	private ArrayList<Edge> randomEdgeFactory(ArrayList<Node> nodes) {
-		Filter filter = new Filter(0, 1);
-		ArrayList<Edge> rtn = new ArrayList<Edge>();
-		// Gets a random integer using a filter. In this case I use a
-		// sinusoidal to emulate a social phenomena
-		for (int i = 0; i < nodes.size(); i++) {
-			// source
-			float val = filter.sinusoidal((float) Math.random());
-			int src = PApplet.floor((val * (nodes.size() - 1)));
-			// target
-			val = filter.sinusoidal((float) Math.random());
-			int trg = PApplet.floor((val * (nodes.size() - 1)));
-			// edge
-			Edge tmp = new Edge(nodes.get(src), nodes.get(trg), true);
-			rtn.add(tmp);
-		}
-		return rtn;
-	}
-
 }

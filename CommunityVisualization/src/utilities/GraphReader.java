@@ -61,9 +61,9 @@ public graphElements.Graph getGraph(){
 	  nodes.add(tmpA);
 	}
 	System.out.println("Edges of " + graph);
-	for (Edge edge : graph.getEdges()) {
-	  System.out.println(edge.getLabel());
-	  System.out.println(edge.getVertex(Direction.IN).getId());
+	for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
+	  //System.out.println(edge.getLabel());
+	  //System.out.println(edge.getVertex(Direction.IN).getId());
 	  Vertex source = edge.getVertex(Direction.IN);
 	  int idSOurce = Integer.parseInt(source.getId().toString().replace("n", ""));
 	  Node tmpA = new Node(idSOurce);

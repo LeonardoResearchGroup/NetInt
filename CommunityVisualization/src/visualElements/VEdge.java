@@ -21,7 +21,7 @@ public class VEdge {
 	}
 
 	public void setSourceAndTarget(ArrayList<VisualAtom> visualAtoms, ArrayList<Node> nodes) {
-		// look for the edge source's index in the collection of nodes 
+		// look for the edge source's index in the collection of nodes
 		int indxSource = nodes.indexOf(edge.getSource());
 		if (indxSource > -1) {
 			// ask for its coordinates
@@ -29,7 +29,8 @@ public class VEdge {
 		}
 		// look in the collection of nodes where is the edge's target
 		int indxTarget = nodes.indexOf(edge.getTarget());
-		// System.out.println("VEdge>setSourceAndTarget: index Target:" +indxTarget);
+		// System.out.println("VEdge>setSourceAndTarget: index Target:"
+		// +indxTarget);
 		if (indxTarget > -1) {
 			// ask for its coordinates
 			target = visualAtoms.get(indxTarget);
@@ -64,6 +65,7 @@ public class VEdge {
 			bezier.setAlpha(90);
 			break;
 		}
+		//System.out.println("VEdge>show(): source= " + source);
 		bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
 		bezier.setControl((source.pos.x - target.pos.x) / 2);
 		bezier.drawBezier2D(app);

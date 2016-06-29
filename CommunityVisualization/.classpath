@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="libs/core.jar"/>
 	<classpathentry kind="lib" path="libs/gephi-toolkit-0.9.1-all.jar"/>
 	<classpathentry kind="lib" path="libs/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="libs/blueprints-core-2.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/jsalam/caoba-comunidades/CommunityVisualization/libs/blueprints-core-2.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
