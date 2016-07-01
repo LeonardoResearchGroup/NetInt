@@ -44,7 +44,7 @@ public class VCommunity extends VisualAtom {
 		minCommunityDiam = 70;
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
-		maxCommunitySize = 100;
+		maxCommunitySize = 1000;
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
@@ -87,8 +87,8 @@ public class VCommunity extends VisualAtom {
 	private void showSimpleCommunityInvolute() {
 		// Visualize nodes & edges
 		boolean visualizeNodes = isMouseOver();
-		boolean visualizeEdges = unlocked;
-		boolean showInvolute = unlocked;
+		boolean visualizeEdges = unlocked && open;
+		boolean showInvolute = unlocked && open ;
 		
 		container.show(visualizeNodes, visualizeEdges, showInvolute);
 

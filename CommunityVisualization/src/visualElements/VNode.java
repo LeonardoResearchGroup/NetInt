@@ -99,7 +99,7 @@ public class VNode extends VisualAtom {
 		} else {
 			alpha = 90;
 		}
-		app.textAlign(PConstants.CENTER);
+		app.textAlign(PConstants.CENTER, PConstants.CENTER);
 	}
 
 	// *** GETTERS AND SETTERS

@@ -1,0 +1,14 @@
+package gui;
+
+import processing.core.*;
+public class GUI {
+	public InfoBox infoBox;
+	
+	public GUI(PApplet app){
+		infoBox = new InfoBox(app);
+	}
+
+	public void show(){
+
+	}
+}

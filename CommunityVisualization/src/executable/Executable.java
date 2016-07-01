@@ -1,6 +1,5 @@
 package executable;
 
-
 import processing.core.*;
 
 public class Executable extends PApplet {
@@ -8,8 +7,8 @@ public class Executable extends PApplet {
 	boolean clockwise = true;
 
 	public void setup() {
-		size(1200,600);
-		//size(1500, 600);
+		size(1200, 600);
+		// size(1500, 600);
 		app = new Logica(this);
 		textSize(10);
 		textAlign(CENTER);
@@ -19,16 +18,13 @@ public class Executable extends PApplet {
 
 	public void draw() {
 		background(0);
-		 app.show(this);
-		 fill(255,100);
-		 text(frameRate,20,10);
+		app.show(this);
 	}
 
-	
-	public void keyPressed(){
-		if (key=='r'){
+	public void keyPressed() {
+		if (key == 'r') {
 			clockwise = !clockwise;
 		}
 	}
-	
+
 }

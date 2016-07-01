@@ -1,6 +1,5 @@
 package executable;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphController;
 import org.gephi.project.api.ProjectController;
@@ -10,8 +9,6 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.gephi.io.importer.api.ImportController;
 import java.io.File;
-import org.gephi.graph.api.Graph;
-import processing.core.*;
 
 public class ArcDiagram {
 

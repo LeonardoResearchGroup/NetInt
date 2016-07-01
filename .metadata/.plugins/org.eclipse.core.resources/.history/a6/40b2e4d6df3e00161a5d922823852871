@@ -1,0 +1,14 @@
+package gui;
+
+import processing.core.*;
+public class GUI {
+	public BasicWindow bw;
+	
+	public GUI(PApplet app){
+		bw = new BasicWindow(app);
+	}
+
+	public void show(){
+
+	}
+}

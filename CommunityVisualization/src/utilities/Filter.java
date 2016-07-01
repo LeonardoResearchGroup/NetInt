@@ -82,8 +82,7 @@ public class Filter {
 		return p;
 	}
 
-	public float convertToUnits(float val, float minOut, float maxOut,
-			boolean sigmoid) {
+	public float convertToUnits(float val, float minOut, float maxOut, boolean sigmoid) {
 		float p;
 		if (sigmoid)
 			p = (maxOut - minOut) * val + minOut;
@@ -136,11 +135,41 @@ public class Filter {
 			break;
 		case 3:
 			app.text("Sigmoid", origX - 130, origY - 87);
-			app.text(("·Alpha= " + alpha), origX - 130, origY - 74);
-			app.text(("·Beta = " + beta), origX - 130, origY - 61);
+			app.text(("Alpha= " + alpha), origX - 130, origY - 74);
+			app.text(("Beta = " + beta), origX - 130, origY - 61);
 			break;
 		case 4:
 			app.text("Radial", origX - 130, origY - 87);
 		}
+	}
+
+	/**
+	 * Returns a float between 0 and 1 using a filter type defined in the
+	 * parameter.
+	 * 
+	 * @param filterName
+	 *            It must be either radial, sinusoidal, sigmoid or linear
+	 * @return
+	 */
+	public float getRandomValue(String filterName) {
+		Float val = null;
+		if (filterName.equalsIgnoreCase("radial")) {
+			val = radial((float) Math.random());
+		} else if (filterName.equalsIgnoreCase("sinusoidal")) {
+			val = sinusoidal((float) Math.random());
+		} else if (filterName.equalsIgnoreCase("sigmoid")) {
+			val = sinusoidal((float) Math.random());
+		} else if (filterName.equalsIgnoreCase("linear")) {
+			val = linear((float) Math.random());
+		}
+		try {
+			if (val.isNaN())
+				;
+		} catch (NullPointerException e) {
+			System.out.println("Check the filter name: '" + filterName
+					+ "'. It must be either radial, sinusoidal, sigmoid or linear.");
+
+		}
+		return val;
 	}
 }
