@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="OptionalMessageDialog.hide.">
+	</section>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
 		<item value="true" key="group_libraries"/>
 		<item value="false" key="linkWithEditor"/>
@@ -9,39 +11,11 @@
 	</section>
 	<section name="completion_proposal_size">
 	</section>
-<<<<<<< HEAD
 	<section name="JavaElementSearchActions">
 	</section>
-	<section name="DialogBounds_GetterSetterTreeSelectionDialog">
-		<item value="520" key="DIALOG_WIDTH"/>
-		<item value="93" key="DIALOG_Y_ORIGIN"/>
-		<item value="639" key="DIALOG_HEIGHT"/>
-		<item value="658" key="DIALOG_X_ORIGIN"/>
-		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
-	</section>
-	<section name="org.eclipse.ltk.ui.refactoring.settings">
-	</section>
-	<section name="RenameInformationPopup">
+	<section name="BuildPathsPropertyPage">
+		<item value="2" key="pageIndex"/>
 	</section>
 	<section name="quick_assist_proposal_size">
 	</section>
-	<section name="NewClassWizardPage">
-		<item value="false" key="create_constructor"/>
-		<item value="true" key="create_unimplemented"/>
-	</section>
-	<section name="SourceActionDialog.methods">
-		<item value="false" key="Comments"/>
-		<item value="1" key="VisibilityModifier"/>
-		<item value="2" key="InsertPosition.v2"/>
-		<item value="false" key="SynchronizedModifier"/>
-		<item value="false" key="FinalModifier"/>
-	</section>
-	<section name="AddGetterSetterDialog">
-		<item value="false" key="RemoveFinal"/>
-		<item value="false" key="SortOrdering"/>
-	</section>
-=======
-	<section name="quick_assist_proposal_size">
-	</section>
->>>>>>> 67fbafae8ce55356166dc3d17e6a24fb9bdfeea4
 </section>
