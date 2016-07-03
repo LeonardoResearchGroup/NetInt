@@ -10,6 +10,7 @@ import utilities.GraphReader;
 import utilities.RandomGraphFactory;
 import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
+import visualElements.interactive.VisualAtom;
 import processing.core.*;
 
 public class Logica {
@@ -25,20 +26,25 @@ public class Logica {
 	ArrayList<Container> containers;
 	ArrayList<VCommunity> vCommunities;
 
+	// Elements for visualization of community set
+	Graph communitiesInGraph;
+	Container cCommunities;
+	VCommunity vCommunitySet;
+
 	// RootGraph Parameters
 	int nA = 1000;
-	int communities = 5;
+	int communityNumber = 5;
 
 	// GUI
 	GUI gui;
 
 	public Logica(PApplet app) {
 		// *** randomGraph. This is to create a random graph easily
-		//makeRandomGraph(nA, communities);
+		// makeRandomGraph(nA, communities);
 
 		// *** Initialization GraphReader
 		String XML_FILE = "../data/L-UN-MOV.graphml";
-		//String XML_FILE = "../data/Risk.graphml";
+		// String XML_FILE = "../data/Risk.graphml";
 		GraphReader gr = new GraphReader(XML_FILE);
 
 		// *** Initialization Collections
@@ -64,7 +70,7 @@ public class Logica {
 		vRootCommunity = new VCommunity(app, rootContainer, app.width / 2, 150);
 
 		// ***** SubGraphs *****
-		for (int i = 1; i <= communities; i++) {
+		for (int i = 1; i <= communityNumber; i++) {
 			// SubGraph instantiation
 			SubGraph tmp = new SubGraph();
 			tmp.setID(i);
@@ -78,10 +84,29 @@ public class Logica {
 			cTmp.retrieveVisualElements(rootContainer);
 			containers.add(cTmp);
 
-			// SubGraph Communities
+			// SubGraph VCommunities
 			VCommunity vComTmp = new VCommunity(app, cTmp, 200 + (i - 1) * 200, 350);
+			vComTmp.communityLayout(); // Circular or linear . Recenter
 			vCommunities.add(vComTmp);
 		}
+
+		// For visualization of community set. Make the graph that contains the
+		// communities
+		communitiesInGraph = new Graph();
+		// Add nodes to the Graph
+		for (VCommunity comm : vCommunities) {
+			communitiesInGraph.addNode(comm);
+		}
+		// Make container of communities
+		cCommunities = new Container(app, communitiesInGraph);
+		// Make Visual Community of communities
+		vCommunitySet = new VCommunity(app, cCommunities, 200, 200);
+		vCommunitySet.recenterContainer(new PVector(200, 200));
+
+//		for (VCommunity comm : vCommunities) {
+//			for (VisualAtom vA : vCommunitySet.container.getVAtoms())
+//				comm.recenterContainer(new PVector(400, 200));
+//		}
 
 		// GUI
 		gui = new GUI(app);
@@ -94,12 +119,13 @@ public class Logica {
 		for (VCommunity vCom : vCommunities) {
 			vCom.show();
 		}
+		vCommunitySet.show();
 		gui.show();
 	}
 
 	public void makeRandomGraph(int size, int communities) {
 		randomFactory = new RandomGraphFactory();
-		rootGraph = randomFactory.makeRandomGraph(size, communities,"radial");
+		rootGraph = randomFactory.makeRandomGraph(size, communities, "radial");
 	}
 
 }

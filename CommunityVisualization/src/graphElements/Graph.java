@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import visualElements.VCommunity;
+
 public class Graph {
 
 	protected ArrayList<Node> nodes;
 	protected ArrayList<Edge> edges;
 	private int ID;
+	private String name;
 
 	// Constructors
 	public Graph() {
-
+		nodes = new ArrayList<Node>();
+		edges = new ArrayList<Edge>();
 	}
 
 	public Graph(ArrayList<Node> vertices, ArrayList<Edge> edges) {
@@ -22,6 +26,19 @@ public class Graph {
 		setDegree();
 	}
 
+	// Graphs of Communities
+	public void addNode(Object obj){
+		if (obj instanceof Node){
+			nodes.add((Node)obj);
+		}else if (obj instanceof VCommunity) {
+			VCommunity tmpCommunity = (VCommunity) obj;
+			Node tmpNode = new Node(tmpCommunity.getID());
+			nodes.add(tmpNode);
+			tmpCommunity.setNode(tmpNode);
+			// Here additional method for edge compression are needed
+		}
+	}
+	
 	// Degree
 	private void setDegree() {
 		for (Node n : nodes) {
@@ -97,6 +114,14 @@ public class Graph {
 
 	public void setID(int iD) {
 		ID = iD;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	// Printers

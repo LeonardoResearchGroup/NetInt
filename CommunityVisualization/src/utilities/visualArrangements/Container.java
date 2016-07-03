@@ -132,62 +132,50 @@ public class Container {
 	// *** Edges retriever (For SubGraphs)
 	private void vEdgeRetriever(VNode vNode, ArrayList<VEdge> rootEdgeList) {
 		for (VEdge vEdg : rootEdgeList) {
-			// Check if the VNode source matches any of the VEdge sources in the rootGraph
+			// Check if the VNode source matches any of the VEdge sources in the
+			// rootGraph
 			if (vEdg.getSource().equals(vNode))
 				vEdges.add(vEdg);
 		}
 	}
 
 	// *** Sort container graph
-	public void sort(Comparator<Node> comp){
+	public void sort(Comparator<Node> comp) {
 		graph.sort(comp);
 	}
-	
+
 	// *** Arrangements
-	public void arrangement(String str) {
-		if (str.equals("linear")) {
-			for (Arrangement a : arrangements) {
-				if (a.getName().equals("linear")) {
-					LinearArrangement lA = (LinearArrangement) a;
-					lA.linearLayout(60, vAtoms);
-					break;
-				}
+	public void linearArrangement() {
+		for (Arrangement a : arrangements) {
+			if (a.getName().equals("linear")) {
+				LinearArrangement lA = (LinearArrangement) a;
+				lA.linearLayout(60, vAtoms);
+				break;
 			}
-		} else if (str.equals("circular")) {
-			for (Arrangement a : arrangements) {
-				if (a.getName().equals("circular")) {
-					CircularArrangement lA = (CircularArrangement) a;
-					lA.circularLayout(containerDiameter()/2, vAtoms);
-					break;
-				}
-			}
-		} else {
-			System.out.println("Container>arrangeBy: ARRANGEMENT NOT AVAILABLE. Check spelling");
 		}
 	}
 
-	private int containerDiameter() {
-		// Calculate the community diameter
-		int minCommunityDiam = 70;
-		int maxCommunityDiam = 200;
-		int minCommunitySize = 1;
-		int maxCommunitySize = 2000;
-		int diam = (int) PApplet.map(vAtoms.size(), minCommunitySize, maxCommunitySize, minCommunityDiam,
-				maxCommunityDiam);
-		return diam;
+	public void circularArrangement(float radius) {
+		for (Arrangement a : arrangements) {
+			if (a.getName().equals("circular")) {
+				CircularArrangement cA = (CircularArrangement) a;
+				cA.circularLayout(radius,vAtoms);
+				break;
+			}
+		}
 	}
 
-	 /**
+	/**
 	 * Clears the ArrayList of VNodes and VEdges and recreates all the VNodes
 	 * and VEdges. It is used to update the positions after invoking a
 	 * comparator. Sort methods invoke updateNetwork() by default
 	 */
-	 public void updateContainer() {
-	 vAtoms.clear();
-	 vEdges.clear();
-	 vAtoms = vNodeFactory();
-	 vEdges = vEdgeFactory();
-	 }
+	public void updateContainer() {
+		vAtoms.clear();
+		vEdges.clear();
+		vAtoms = vNodeFactory();
+		vEdges = vEdgeFactory();
+	}
 
 	public void setArrangement(Arrangement arg) {
 		arrangements.add(arg);
@@ -226,6 +214,13 @@ public class Container {
 		for (VisualAtom vA : vAtoms) {
 			VNode n = (VNode) vA;
 			n.pos.add(pos);
+		}
+	}
+
+	public void setCenter(PVector pos) {
+		for (VisualAtom vA : vAtoms) {
+			VNode n = (VNode) vA;
+			n.pos.set(pos);
 		}
 	}
 

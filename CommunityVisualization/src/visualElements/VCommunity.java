@@ -9,6 +9,7 @@ import visualElements.interactive.VisualAtom;
 import java.awt.event.MouseEvent;
 
 import comparators.OutDegreeComparator;
+import graphElements.Node;
 
 /**
  * A community is defined as a subset of nodes linked to other nodes within the
@@ -19,7 +20,7 @@ import comparators.OutDegreeComparator;
  * @author jsalam
  *
  */
-public class VCommunity extends VisualAtom {
+public class VCommunity extends VNode {
 	private float minCommunityDiam, maxCommunityDiam;
 	private int minCommunitySize, maxCommunitySize;
 	private float angle = PConstants.TWO_PI / 360;
@@ -27,16 +28,16 @@ public class VCommunity extends VisualAtom {
 	private boolean open, unlocked;
 	private int i, increment;
 	public Container container;
+	
 
 	public VCommunity(PApplet app, Container container, float posX, float posY) {
-		super(app, posX, posY, 0);
+		super(app, null,posX, posY, 0);
 		this.container = container;
 		open = false;
 		unlocked = false;
 		i = 0;
 		increment = 10;
 		setLayoutParameters();
-		communityLayout();
 	}
 
 	private void setLayoutParameters() {
@@ -48,13 +49,18 @@ public class VCommunity extends VisualAtom {
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
-	private void communityLayout() {
+	public void communityLayout() {
 		// ** CIRCULAR LAYOUT
-		container.arrangement("circular");
+		container.circularArrangement(diam);
 		// ** LINEAR LAYOUT
-		//container.arrangement("linear");
-		container.recenter(pos);
+		//container.linearArrangement();
+		// container.recenter(pos);
 
+	}
+	
+	public void recenterContainer(PVector newCenter){
+		container.circularArrangement(200);
+		container.recenter(newCenter);
 	}
 
 	public void show() {

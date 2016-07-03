@@ -3,6 +3,8 @@ package graphElements;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import visualElements.VCommunity;
+
 /**
  * This is a set of references to the nodes in the rootGraph
  * 
