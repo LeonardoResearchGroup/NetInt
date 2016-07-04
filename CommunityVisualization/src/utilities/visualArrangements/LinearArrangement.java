@@ -7,11 +7,11 @@ import processing.core.PApplet;
 import processing.core.PVector;
 import visualElements.interactive.VisualAtom;
 
-public class LinearArrangement implements Arrangement {
+public class LinearArrangement extends Arrangement {
 	public PApplet app;
-	private String name;
 
 	public LinearArrangement(PApplet app, String name) {
+		super();
 		this.app = app;
 		this.name = name;
 	}
@@ -25,6 +25,7 @@ public class LinearArrangement implements Arrangement {
 	 *            the gap between the Applet margin and each extreme of the axis
 	 */
 	public void linearLayout(float margin, ArrayList<VisualAtom> visualElements) {
+		clearLayout(visualElements);
 		float dist = app.width - (2 * margin);
 		float xStep = (float) dist / (visualElements.size()-1);
 		PVector left = new PVector(dist/-2, 0);
@@ -38,20 +39,5 @@ public class LinearArrangement implements Arrangement {
 			tmp.setY(left.y);
 			count++;
 		}
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean hasName(String str) {
-		if (str.equals(name))
-			return true;
-		else
-			return false;
 	}
 }

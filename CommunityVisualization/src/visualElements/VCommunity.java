@@ -28,10 +28,18 @@ public class VCommunity extends VNode {
 	private boolean open, unlocked;
 	private int i, increment;
 	public Container container;
-	
 
-	public VCommunity(PApplet app, Container container, float posX, float posY) {
-		super(app, null,posX, posY, 0);
+	public VCommunity(PApplet app, Node node, Container container, float posX, float posY) {
+		super(app, node, posX, posY, 0);
+		this.container = container;
+		open = false;
+		unlocked = false;
+		i = 0;
+		increment = 10;
+		setLayoutParameters();
+	}
+	public VCommunity(VNode vNode, Container container) {
+		super(vNode);
 		this.container = container;
 		open = false;
 		unlocked = false;
@@ -48,27 +56,23 @@ public class VCommunity extends VNode {
 		maxCommunitySize = 1000;
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
-
-	public void communityLayout() {
-		// ** CIRCULAR LAYOUT
-		container.circularArrangement(diam);
-		// ** LINEAR LAYOUT
-		//container.linearArrangement();
-		// container.recenter(pos);
-
-	}
 	
-	public void recenterContainer(PVector newCenter){
-		container.circularArrangement(200);
-		container.recenter(newCenter);
+	public void layoutContainer(PVector center, String layout, float radius){
+		if(layout.equalsIgnoreCase("linear")){
+			//Linear
+			container.linearArrangement();
+		}else if (layout.equalsIgnoreCase("circular")){
+			//Circular
+			container.circularArrangement(center, radius);
+		}
 	}
 
 	public void show() {
 		// Switch control
-		app.fill(250,200);
+		app.fill(250, 200);
 		// Community Name
 		app.text(container.getID(), pos.x, pos.y);
-		app.text("Com. size: "+container.getGraph().size(), pos.x, pos.y+20);
+		app.text("Com. size: " + container.getGraph().size(), pos.x, pos.y + 20);
 		if (unlocked) {
 			if (!open) {
 
@@ -87,34 +91,33 @@ public class VCommunity extends VNode {
 			}
 		}
 		// Open or close the community
-		showSimpleCommunityInvolute();
-	}
+		showCommunityCover();
 
-	private void showSimpleCommunityInvolute() {
-		// Visualize nodes & edges
+		// Visualize nodes & edges in container
 		boolean visualizeNodes = isMouseOver();
 		boolean visualizeEdges = unlocked && open;
-		boolean showInvolute = unlocked && open ;
-		
+		boolean showInvolute = unlocked && open;
 		container.show(visualizeNodes, visualizeEdges, showInvolute);
+	}
 
+	private void showCommunityCover() {
 		// Visualize community cover
 		app.stroke(100);
 		app.strokeWeight(0);
 		app.fill(255, 30);
-		// *** DRAWS RIGHT HALF
+		// *** DRAWS RIGHT HALF INVOLUTE
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// Gets the PVector for angle2
-		PVector intersect = getXY(angle2);
+		// PVector intersect = getXY(angle2);
 		// *** Arc right half
 		app.arc(pos.x, pos.y, diam, diam, angle2, PConstants.TWO_PI + PConstants.HALF_PI);
 
-		// *** DRAWS LEFT HALF
+		// *** DRAWS LEFT HALF INVOLUTE
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// Gets the PVector for angle2
-		intersect = getXY(angle2);
+		// intersect = getXY(angle2);
 		// *** Arc left half
 		app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
 	}

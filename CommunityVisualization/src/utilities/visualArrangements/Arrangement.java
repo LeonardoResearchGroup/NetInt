@@ -1,9 +1,38 @@
 package utilities.visualArrangements;
 
-public interface Arrangement {
+import java.util.ArrayList;
 
-	public boolean hasName(String name);
+import visualElements.interactive.VisualAtom;
+
+public abstract class Arrangement {
+
+	String name;
+
+	public Arrangement() {
+
+	}
 	
-	public String getName();
+	protected void clearLayout(ArrayList<VisualAtom> visualElements){
+		for(VisualAtom e: visualElements){
+			e.setX(0);
+			e.setY(0);
+		}
+	}
+
+	public boolean hasName(String name) {
+		if (this.name.equals(name)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 
 }

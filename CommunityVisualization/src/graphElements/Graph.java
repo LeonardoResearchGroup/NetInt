@@ -27,10 +27,10 @@ public class Graph {
 	}
 
 	// Graphs of Communities
-	public void addNode(Object obj){
-		if (obj instanceof Node){
-			nodes.add((Node)obj);
-		}else if (obj instanceof VCommunity) {
+	public void addNode(Object obj) {
+		if (obj instanceof Node) {
+			nodes.add((Node) obj);
+		} else if (obj instanceof VCommunity) {
 			VCommunity tmpCommunity = (VCommunity) obj;
 			Node tmpNode = new Node(tmpCommunity.getID());
 			nodes.add(tmpNode);
@@ -38,7 +38,12 @@ public class Graph {
 			// Here additional method for edge compression are needed
 		}
 	}
-	
+
+	public void addEdge(Edge edge) {
+		// this might result in several edges from and to the same nodes
+		edges.add(edge);
+	}
+
 	// Degree
 	private void setDegree() {
 		for (Node n : nodes) {
@@ -141,11 +146,11 @@ public class Graph {
 			System.out.println("  Edge Source: " + source + " target: " + target);
 		}
 	}
-	
-	public String getBasicStats(){
+
+	public String getBasicStats() {
 		String graphSize = String.valueOf(size());
 		String totalEdges = String.valueOf(getEdges().size());
-		String rtn= "Total nodes: "+graphSize+" Total edges: "+totalEdges;
+		String rtn = "Total nodes: " + graphSize + " Total edges: " + totalEdges;
 		return rtn;
 	}
 }

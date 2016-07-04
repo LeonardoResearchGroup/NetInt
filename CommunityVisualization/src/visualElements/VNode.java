@@ -25,6 +25,13 @@ public class VNode extends VisualAtom {
 		notifiedIn = false;
 		notifiedOut = false;
 	}
+	
+	public VNode(VNode vNode) {
+		super(vNode.app, vNode.getX(),vNode.getY(), vNode.diam);
+		this.node = vNode.getNode();
+		notifiedIn = false;
+		notifiedOut = false;
+	}
 
 	public void setup() {
 		inv = new Involute(app, radius, sections, index);
@@ -113,10 +120,6 @@ public class VNode extends VisualAtom {
 
 	public float getZ() {
 		return pos.z;
-	}
-
-	public Node getVertex() {
-		return node;
 	}
 
 	public int getAlpha() {

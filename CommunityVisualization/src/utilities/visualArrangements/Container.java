@@ -1,6 +1,7 @@
 package utilities.visualArrangements;
 
 import processing.core.*;
+import visualElements.VCommunity;
 import visualElements.VEdge;
 import visualElements.VNode;
 import visualElements.interactive.VisualAtom;
@@ -18,7 +19,7 @@ import graphElements.*;
  * 
  */
 public class Container {
-	private Graph graph, rootGraph;
+	private Graph graph;
 	private ArrayList<VisualAtom> vAtoms;
 	private ArrayList<VEdge> vEdges;
 	private ArrayList<Arrangement> arrangements;
@@ -35,7 +36,6 @@ public class Container {
 	public Container(PApplet app, Graph graph) {
 		this.graph = graph;
 		this.app = app;
-		this.rootGraph = graph;
 		// If graph is the rootGraph generate all the visual elements
 		if (!SubGraph.class.isInstance(graph)) {
 			vAtoms = vNodeFactory();
@@ -155,11 +155,11 @@ public class Container {
 		}
 	}
 
-	public void circularArrangement(float radius) {
+	public void circularArrangement(PVector center, float radius) {
 		for (Arrangement a : arrangements) {
 			if (a.getName().equals("circular")) {
 				CircularArrangement cA = (CircularArrangement) a;
-				cA.circularLayout(radius,vAtoms);
+				cA.layout(center, radius, vAtoms);
 				break;
 			}
 		}
@@ -181,7 +181,7 @@ public class Container {
 		arrangements.add(arg);
 	}
 
-	// getters and setters
+	// *** Getters and setters
 	public Graph getGraph() {
 		return graph;
 	}
@@ -202,33 +202,29 @@ public class Container {
 		return vEdges;
 	}
 
-	public Graph getRootGraph() {
-		return rootGraph;
+	public void setGraph(Graph graph) {
+		this.graph = graph;
+
 	}
 
-	public void setRootGraph(Graph rootGraph) {
-		this.rootGraph = rootGraph;
-	}
-
-	public void recenter(PVector pos) {
-		for (VisualAtom vA : vAtoms) {
-			VNode n = (VNode) vA;
-			n.pos.add(pos);
+	public void setVNode(VNode atom) {
+		vAtoms.add(atom);
+		if (!graph.getNodes().contains(atom)) {
+			graph.addNode(atom.getNode());
 		}
 	}
 
-	public void setCenter(PVector pos) {
-		for (VisualAtom vA : vAtoms) {
-			VNode n = (VNode) vA;
-			n.pos.set(pos);
-		}
+	public void setVEdge(VEdge vEdge) {
+		vEdges.add(vEdge);
+		if (!graph.getEdges().contains(vEdge.getEdge()))
+			graph.addEdge(vEdge.getEdge());
 	}
 
 	// show
 	public void showVNode() {
 		for (VisualAtom vA : vAtoms) {
 			VNode n = (VNode) vA;
-			n.setDiam(n.getVertex().getOutDegree() + 5);
+			n.setDiam(n.getNode().getOutDegree() + 5);
 			n.show(true, true);
 		}
 	}
@@ -238,8 +234,13 @@ public class Container {
 		if (showNodes || networkVisible) {
 			for (VisualAtom vA : vAtoms) {
 				VNode n = (VNode) vA;
-				n.setDiam(n.getVertex().getOutDegree() + 5);
-				n.show(showNodes, networkVisible);
+				if (n instanceof VCommunity) {
+					n.show(showNodes, networkVisible);
+				} else {
+					n.setDiam(n.getNode().getOutDegree() + 5);
+					n.show(showNodes, networkVisible);
+				}
+
 			}
 		}
 		if (showEdges || networkVisible) {
@@ -248,4 +249,5 @@ public class Container {
 			}
 		}
 	}
+
 }
