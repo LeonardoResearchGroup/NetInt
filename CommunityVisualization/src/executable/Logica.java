@@ -46,8 +46,7 @@ public class Logica {
 		// makeRandomGraph(nA, communities);
 
 		// *** Initialization GraphReader
-		String XML_FILE = "../data/L-UN-MOV.graphml";
-		// String XML_FILE = "../data/Risk.graphml";
+		String XML_FILE = "./data/Risk.graphml";
 		GraphReader gr = new GraphReader(XML_FILE);
 
 		// ***** RootGraph *****
@@ -74,7 +73,7 @@ public class Logica {
 		// vCommunity and added to the container's graph
 
 		// Make Visual Community of containerOfCommunities
-		vCommunitySet = new VCommunity(vRootCommunity,containerOfCommunities);
+		vCommunitySet = new VCommunity(vRootCommunity, containerOfCommunities);
 
 		// // ***** SubGraphs for communities *****
 		for (int i = 1; i <= communityNumber; i++) {
@@ -100,9 +99,10 @@ public class Logica {
 			tmp.layoutContainer(vCommunitySet.container.getVAtoms().get(i).pos, "circular", 50);
 		}
 
-//		VCommunity tmp2 = (VCommunity) containerOfCommunities.getVAtoms().get(0);
-//		tmp2.container.circularArrangement(new PVector (500,350), 50);
-		
+		// VCommunity tmp2 = (VCommunity)
+		// containerOfCommunities.getVAtoms().get(0);
+		// tmp2.container.circularArrangement(new PVector (500,350), 50);
+
 		// GUI
 		gui = new GUI(app);
 		gui.infoBox.setBox(100, 20, 300, 50);

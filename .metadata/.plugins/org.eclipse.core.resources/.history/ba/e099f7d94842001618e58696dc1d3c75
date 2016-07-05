@@ -1,0 +1,55 @@
+package executable;
+
+import java.util.Collection;
+import java.util.Iterator;
+
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
+
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+
+import graphElements.Edge;
+import graphElements.Node;
+import utilities.GraphReader;
+
+public class CommunityViz {
+
+	DirectedSparseMultigraph<Node, Edge> jungGraph;
+	GraphReader reader;
+	
+	Graph tinkerGraph;; 
+
+	public CommunityViz() {
+		reader = new GraphReader("./data/graphs/Risk.graphml");
+		jungGraph = reader.getJUNGDirectedGraph();
+		tinkerGraph = reader.getTinkerGraph(); 
+		
+		Iterator itr = tinkerGraph.getVertices().iterator();
+		
+		while(itr.hasNext()){
+			
+			Node xN= (Node) itr.next();
+			
+			System.out.println(" " + xN.getId());
+		}
+	}
+
+	public void printGraph() {
+		System.out.println("Nodes: " + jungGraph.getVertexCount());
+		Collection<Edge> edges = jungGraph.getEdges();
+		for (Edge e : edges) {
+			System.out.println("from: " + e.getSource().getName() + " to: " + e.getTarget().getName());
+		}
+
+		Collection<Node> nodes = jungGraph.getVertices();
+		for (Node n : nodes) {
+			System.out.print(n.getName() + " has ID: " + n.getId());
+			System.out.println("  Predecessors count: " + jungGraph.getPredecessorCount(n));
+		}
+	}
+
+	public static void main(String[] args) {
+		CommunityViz graph = new CommunityViz();
+	}
+}

@@ -1,0 +1,17 @@
+package executable;
+
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+
+public class CommunityViz {
+
+	DirectedSparseMultigraph<Integer, String> graph;
+
+	public CommunityViz() {
+		graph = new DirectedSparseMultigraph<Integer, String>();
+
+	}
+
+	public static void main(String[] args) {
+
+	}
+}

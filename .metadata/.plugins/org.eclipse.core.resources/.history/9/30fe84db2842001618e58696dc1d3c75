@@ -1,0 +1,123 @@
+package executable;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.collections15.Transformer;
+import org.xml.sax.SAXException;
+
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.io.GraphIOException;
+import edu.uci.ics.jung.io.GraphMLReader;
+import edu.uci.ics.jung.io.graphml.*;
+import edu.uci.ics.jung.io.graphml.Metadata.MetadataType;
+import graphElements.Edge;
+import graphElements.Node;
+
+public class CommunityViz {
+
+	GraphMLReader2<DirectedSparseMultigraph<Node, Edge>, Node, Edge> mlReader;
+	GraphMLReader<DirectedSparseMultigraph<Node, Edge>, Node, Edge> gmlReader;
+	Reader reader;
+
+	DirectedSparseMultigraph<Node, Edge> graph;
+
+	public CommunityViz() throws FileNotFoundException {
+		String file = "./data/graphs/Risk.graphml";
+		reader = new FileReader(file);
+		graph = new DirectedSparseMultigraph<Node, Edge>();
+
+		try {
+			gmlReader = new GraphMLReader<DirectedSparseMultigraph<Node, Edge>, Node, Edge>();
+			gmlReader.load(reader, graph);
+
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println(graph.getVertexCount());
+
+		// ****
+
+//		// Graph
+//		Transformer<GraphMetadata, DirectedSparseMultigraph<Node, Edge>> graphTransformer;
+//		graphTransformer = new Transformer<GraphMetadata, DirectedSparseMultigraph<Node, Edge>>() {
+//			public DirectedSparseMultigraph<Node, Edge> transform(GraphMetadata gmd) {
+//				return new DirectedSparseMultigraph<Node, Edge>();
+//			}
+//		};
+//		// Vertex
+//		Transformer<NodeMetadata, Node> vertexTransformer;
+//		vertexTransformer = new Transformer<NodeMetadata, Node>() {
+//			public Node transform(NodeMetadata nmd) {
+//				Node v = new Node();
+//				System.out.println("Node: " + nmd.getProperty("label"));
+//				return v;
+//			}
+//		};
+//		// Edge
+//		Transformer<EdgeMetadata, Edge> edgeTransformer;
+//		edgeTransformer = new Transformer<EdgeMetadata, Edge>() {
+//			public Edge transform(EdgeMetadata emd) {
+//				Edge e = new Edge();
+//				return e;
+//			}
+//		};
+//		// HyperEdge
+//		Transformer<HyperEdgeMetadata, Edge> hyperEdgeTransformer;
+//		hyperEdgeTransformer = new Transformer<HyperEdgeMetadata, Edge>() {
+//			public Edge transform(HyperEdgeMetadata emd) {
+//				Edge e = new Edge();
+//				System.out.println("emd2 " + emd);
+//				return e;
+//			}
+//		};
+//
+//		mlReader = new GraphMLReader2<DirectedSparseMultigraph<Node, Edge>, Node, Edge>(reader, graphTransformer,
+//				vertexTransformer, edgeTransformer, hyperEdgeTransformer);
+//
+//		GraphMLDocument graphDocument = mlReader.getGraphMLDocument();
+//		KeyMap map = graphDocument.getKeyMap();
+//		Set<Entry<MetadataType, List<Key>>> set = map.entrySet();
+//		System.out.println(set.size());
+//		Iterator<Entry<MetadataType, List<Key>>> itr = set.iterator();
+//		while (itr.hasNext()) {
+//			System.out.println("KeyMap: " + (itr.next().getValue()));
+//		}
+//
+//		try {
+//			Graph<Node, Edge> g = mlReader.readGraph();
+//		} catch (GraphIOException e) {
+//			e.printStackTrace();
+//		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			CommunityViz graph = new CommunityViz();
+			System.out.println("Done");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+}

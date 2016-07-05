@@ -1,0 +1,80 @@
+package executable;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
+
+import org.apache.commons.collections15.Transformer;
+
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.io.GraphIOException;
+import edu.uci.ics.jung.io.graphml.*;
+import graphElements.Edge;
+import graphElements.Node;
+
+public class CommunityViz {
+
+	GraphMLReader2<DirectedSparseMultigraph<Node, Edge>, Node, Edge> mlReader;
+	Reader reader;
+
+	DirectedSparseMultigraph<Node, Edge> graph;
+
+	public CommunityViz() throws FileNotFoundException {
+		String file = "./data/graphs/Risk.graphml";
+		reader = new FileReader(file);
+		// Graph
+		Transformer<GraphMetadata, DirectedSparseMultigraph<Node, Edge>> graphTransformer;
+		graphTransformer = new Transformer<GraphMetadata, DirectedSparseMultigraph<Node, Edge>>() {
+			public DirectedSparseMultigraph<Node, Edge> transform(GraphMetadata gmd) {
+				return new DirectedSparseMultigraph<Node, Edge>();
+			}
+		};
+		// Vertex
+		Transformer<NodeMetadata, Node> vertexTransformer;
+		vertexTransformer = new Transformer<NodeMetadata, Node>() {
+			public Node transform(NodeMetadata nmd) {
+				Node v = new Node();
+				System.out.println("Node: "+nmd.getDescription());
+				return v;
+			}
+		};
+		// Edge
+		Transformer<EdgeMetadata, Edge> edgeTransformer;
+		edgeTransformer = new Transformer<EdgeMetadata, Edge>() {
+			public Edge transform(EdgeMetadata emd) {
+				Edge e = new Edge();
+				System.out.println("Edge: "+emd.getDescription());
+				return e;
+			}
+		};
+		// HyperEdge
+		Transformer<HyperEdgeMetadata, Edge> hyperEdgeTransformer;
+		hyperEdgeTransformer = new Transformer<HyperEdgeMetadata, Edge>() {
+			public Edge transform(HyperEdgeMetadata emd) {
+				Edge e = new Edge();
+				System.out.println("emd2 " + emd.getDescription());
+				return e;
+			}
+		};
+
+		mlReader = new GraphMLReader2<DirectedSparseMultigraph<Node, Edge>, Node, Edge>(reader, graphTransformer,
+				vertexTransformer, edgeTransformer, hyperEdgeTransformer);
+		try {
+			Graph<Node,Edge> g = mlReader.readGraph();
+			g.getVertexCount();
+		} catch (GraphIOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			CommunityViz graph = new CommunityViz();
+			System.out.println("Done");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,77 @@
+package executable;
+
+import java.io.FileReader;
+import java.io.Reader;
+
+import org.apache.commons.collections15.Transformer;
+
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.io.graphml.*;
+import graphElements.Edge;
+import graphElements.Node;
+
+public class CommunityViz {
+
+	GraphMLReader2 mlReader;
+	Reader reader;
+
+	DirectedSparseMultigraph<Node, Edge> graph;
+
+	public CommunityViz() {
+		String file = "test.xsl";
+		reader = new FileReader(file);
+		// Graph
+		Transformer<GraphMetadata, DirectedSparseMultigraph<Node, Edge>> graphTransformer;
+		graphTransformer = new Transformer<GraphMetadata, DirectedSparseMultigraph<Node, Edge>>() {
+			public DirectedSparseMultigraph<Node, Edge> transform(GraphMetadata gmd) {
+				return new DirectedSparseMultigraph<Node, Edge>();
+			}
+		};
+		// Vertex
+		Transformer<NodeMetadata, Node> vertexTransformer;
+		vertexTransformer = new Transformer<NodeMetadata,Node>(){
+            public Node transform(NodeMetadata nmd ){
+                Node v = new Node() ;
+                System.out.println(nmd.getDescription());
+                return v;
+        }
+};
+		// Edge
+		Transformer<EdgeMetadata, Edge> edgeTransformer;
+		edgeTransformer = new Transformer<EdgeMetadata,Edge>(){
+            public Edge transform( EdgeMetadata emd ){
+                Edge e = new Edge() ;
+                System.out.println(emd.getDescription());
+                return e;
+        }
+};
+		// HyperEdge
+		Transformer<HyperEdgeMetadata, Edge> hyperEdgeTransformer;
+		hyperEdgeTransformer = new Transformer<HyperEdgeMetadata, Edge>() {
+			public Edge transform(HyperEdgeMetadata emd) {
+				Edge e = new Edge();
+				 System.out.println("emd2 "+ emd.getDescription());
+				return e;
+			}
+		};
+
+		/*
+		 * (Reader fileReader,
+		 * org.apache.commons.collections15.Transformer<GraphMetadata,G>
+		 * graphTransformer,
+		 * org.apache.commons.collections15.Transformer<NodeMetadata,V>
+		 * vertexTransformer,
+		 * org.apache.commons.collections15.Transformer<EdgeMetadata,E>
+		 * edgeTransformer,
+		 * org.apache.commons.collections15.Transformer<HyperEdgeMetadata,E>
+		 * hyperEdgeTransformer)
+		 */
+		mlReader = new GraphMLReader2();
+		graph = new DirectedSparseMultigraph<Integer, String>();
+
+	}
+
+	public static void main(String[] args) {
+
+	}
+}

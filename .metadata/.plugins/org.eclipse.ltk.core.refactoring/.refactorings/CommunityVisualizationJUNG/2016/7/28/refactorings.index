@@ -1,0 +1,14 @@
+1467646264725	Infer generic type arguments
+1467647107723	Rename field 'reader'
+1467647578156	Delete elements
+1467647762315	Delete elements
+1467660557172	Infer generic type arguments
+1467665935830	Rename field 'name'
+1467672457585	Rename local variable 'is'
+1467678292292	Rename field 'graph'
+1467680837621	Rename method 'getJUNGDirectedGraph'
+1467681315171	Delete element
+1467681449275	Delete elements
+1467681541611	Delete element
+1467683604664	Rename local variable 'visualAtoms'
+1467683696251	Rename field 'vAtoms'

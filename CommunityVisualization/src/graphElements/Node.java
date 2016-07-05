@@ -56,6 +56,10 @@ public class Node extends Observable implements Comparable<Node> {
 		boolean rtn = n.getId() == this.getId();
 		return rtn;
 	}
+	
+	public int hashCode(){
+		return id;
+	}
 
 	// *** Getters and setters
 	public int getInDegree() {

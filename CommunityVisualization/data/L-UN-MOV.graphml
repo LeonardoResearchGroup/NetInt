@@ -9,7 +9,7 @@
   <key id="e_CANTIDAD_TRNS" for="edge" attr.name="CANTIDAD_TRNS" attr.type="double"/>
   <key id="e_VALORES_MOVILIZADOS" for="edge" attr.name="VALORES_MOVILIZADOS" attr.type="double"/>
   <key id="e_weight" for="edge" attr.name="weight" attr.type="double"/>
-  <graph id="G" edgedefault="undirected">
+  <graph id="G" edgedefault="directed">
     <node id="n0">
       <data key="v_name">EDIFICACIONES</data>
       <data key="v_comunidad">1</data>

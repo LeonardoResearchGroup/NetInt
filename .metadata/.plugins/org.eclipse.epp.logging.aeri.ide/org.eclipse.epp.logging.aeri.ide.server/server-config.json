@@ -1,7 +1,7 @@
 {
   "version": "v1",
   "title": "Eclipse Automated Error Reporting",
-  "timestamp": 1466974920960,
+  "timestamp": 1467642263290,
   "ttl": 10080,
   "helpUrl": "https://dev.eclipse.org/recommenders/community/aeri/v2/help/",
   "feedbackUrl": "http://ctrlflow.com/automated-error-reporting",
@@ -48,6 +48,7 @@
   "acceptOtherPackages": true,
   "acceptUiFreezes": true,
   "ignoredStatuses": [
+    ":java.io.IOException:There is not enough space on the disk",
     ":java.net.*:",
     "org.eclipse.core.filesystem::Could not delete*",
     "org.eclipse.core.filesystem::Could not move*",
@@ -59,5 +60,5 @@
     "org.eclipse.pde.core::The current target platform contains errors*",
     "org.eclipse.ui::Conflicting handlers for*"
   ],
-  "problemsZipLastDownloadTimestamp": 1466975337259
+  "problemsZipLastDownloadTimestamp": 1467642967058
 }

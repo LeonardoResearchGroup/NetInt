@@ -1,0 +1,38 @@
+package executable;
+
+import graphElements.Node;
+import utilities.visualArrangements.Container;
+import visualElements.VCommunity;
+import processing.core.*;
+
+public class Logica {
+
+	// Graph Elements
+	CommunityViz rootGraph;
+
+	// Visual Elements
+	Container rootContainer;
+	VCommunity vRootCommunity;
+
+
+	public Logica(PApplet app) {
+		// ***** RootGraph *****
+		String XML_FILE = "./data/Risk.graphml";
+		rootGraph = new CommunityViz(XML_FILE);
+
+		// Container of visual rootGraph
+		rootContainer = new Container(app, rootGraph.jungGraph);
+		rootContainer.updateContainer();
+
+		// Instantiating & root visual community
+		Node nodeTmp = new Node(0);
+		vRootCommunity = new VCommunity(app, nodeTmp, rootContainer, app.width / 2, 150);
+
+	}
+
+	public void show(PApplet app) {
+		vRootCommunity.show();
+	}
+
+
+}

@@ -1,0 +1,5 @@
+package graphElements;
+
+public class Node {
+
+}
