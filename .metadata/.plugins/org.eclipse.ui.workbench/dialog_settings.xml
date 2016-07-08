@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="WorkbenchPreferenceDialogSettings">
+		<item value="155" key="DIALOG_Y_ORIGIN"/>
+		<item value="538" key="DIALOG_X_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="1200" key="dialogWidth"/>
 		<item value="675" key="dialogHeight"/>
+		<item value="1200" key="dialogWidth"/>
+		<list key="textEntries">
+		</list>
+		<list key="orderedElements">
+		</list>
 		<list key="orderedProviders">
 		</list>
 		<list key="textArray">
 		</list>
-		<list key="orderedElements">
-		</list>
-		<list key="textEntries">
-		</list>
 	</section>
 	<section name="NewWizardAction">
+	</section>
+	<section name="InstallationDialogSettings">
+		<item value="702" key="DIALOG_WIDTH"/>
+		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
+		<item value="652" key="DIALOG_HEIGHT"/>
+		<item value="-279" key="DIALOG_Y_ORIGIN"/>
+		<item value="-86" key="DIALOG_X_ORIGIN"/>
 	</section>
 	<section name="ImportExportAction">
 		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
