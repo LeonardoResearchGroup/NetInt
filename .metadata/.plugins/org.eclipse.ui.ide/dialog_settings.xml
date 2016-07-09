@@ -5,6 +5,7 @@
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_NESTED_PROJECTS"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="/Users/juansalamanca/caoba-comunidades/CommunityVisualizationJUNG"/>
 			<item value="/Users/jsalam/caoba-comunidades/CommunityVisualization"/>
 			<item value="/Users/juansalamanca/caoba-comunidades/CommunityVisualization"/>
 		</list>
@@ -19,6 +20,9 @@
 		<item value="250" key="DIALOG_HEIGHT"/>
 		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
 	</section>
+<<<<<<< HEAD
 	<section name="NewWizardAction">
 	</section>
+=======
+>>>>>>> 8f265cf6aa1154bace6f0837e0b7f83d673606e3
 </section>
