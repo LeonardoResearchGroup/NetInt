@@ -46,7 +46,7 @@ public class Logica {
 		// makeRandomGraph(nA, communities);
 
 		// *** Initialization GraphReader
-		String XML_FILE = "./data/Risk.graphml";
+		String XML_FILE = "../data/L-UN-MOV.graphml";
 		GraphReader gr = new GraphReader(XML_FILE);
 
 		// ***** RootGraph *****
@@ -92,7 +92,7 @@ public class Logica {
 			containerOfCommunities.setVNode(vComTmp);
 		}
 
-		vCommunitySet.layoutContainer(vCommunitySet.pos, "circular", 200);
+		vCommunitySet.layoutContainer(vCommunitySet.pos, "linear", 200);
 
 		for (int i = 0; i < containerOfCommunities.getVAtoms().size(); i++) {
 			VCommunity tmp = (VCommunity) containerOfCommunities.getVAtoms().get(i);
@@ -111,9 +111,9 @@ public class Logica {
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
-		// for (VCommunity vCom : vCommunities) {
-		// vCom.show();
-		// }
+//		 for (VCommunity vCom : vCommunities) {
+//		 vCom.show();
+//		 }
 		vCommunitySet.show();
 		gui.show();
 	}
