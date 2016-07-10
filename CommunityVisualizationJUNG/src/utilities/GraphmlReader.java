@@ -18,11 +18,11 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Node;
 import graphElements.Edge;
 
-public class GraphReader {
+public class GraphmlReader {
 
 	private Graph graph;
 
-	public GraphReader(String xmlFile) {
+	public GraphmlReader(String xmlFile) {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
 

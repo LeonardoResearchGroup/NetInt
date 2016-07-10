@@ -10,7 +10,7 @@ import processing.core.*;
 public class Logica {
 
 	// Graph Elements
-	CommunityViz rootGraph;
+	GraphLoader rootGraph;
 
 	// Visual Elements
 	Container rootContainer;
@@ -19,7 +19,7 @@ public class Logica {
 	public Logica(PApplet app) {
 		// ***** RootGraph *****
 		String XML_FILE = "../data/graphs/Risk.graphml";
-		rootGraph = new CommunityViz(XML_FILE);
+		rootGraph = new GraphLoader(XML_FILE);
 		rootGraph.setNodesOutDegree();
 		rootGraph.setNodesInDegree();
 

@@ -8,15 +8,15 @@ import edu.uci.ics.jung.algorithms.filters.VertexPredicateFilter;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import graphElements.Edge;
 import graphElements.Node;
-import utilities.GraphReader;
+import utilities.GraphmlReader;
 
-public class CommunityViz {
+public class GraphLoader {
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
-	GraphReader reader;
+	GraphmlReader reader;
 
-	public CommunityViz(String file) {
-		reader = new GraphReader(file);
+	public GraphLoader(String file) {
+		reader = new GraphmlReader(file);
 		jungGraph = reader.getJungDirectedGraph();
 		System.out.println("CommunityViz: Graph Created from file:" + file);
 	}
@@ -76,6 +76,6 @@ public class CommunityViz {
 	}
 
 	public static void main(String[] args) {
-		new CommunityViz("./data/graphs/Risk.graphml");
+		new GraphLoader("./data/graphs/Risk.graphml");
 	}
 }
