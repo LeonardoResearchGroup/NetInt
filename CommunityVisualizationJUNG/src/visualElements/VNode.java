@@ -15,21 +15,14 @@ public class VNode extends VisualAtom {
 	private int sections, index;
 	private float radius;
 
-	private boolean notifiedIn;
-	private boolean notifiedOut;
-
 	public VNode(PApplet app, Node node, float x, float y, float diam) {
 		super(app, x, y, diam);
 		this.node = node;
-		notifiedIn = false;
-		notifiedOut = false;
 	}
 
 	public VNode(VNode vNode) {
 		super(vNode.app, vNode.getX(), vNode.getY(), vNode.diam);
 		this.node = vNode.getNode();
-		notifiedIn = false;
-		notifiedOut = false;
 	}
 
 	public void setup() {

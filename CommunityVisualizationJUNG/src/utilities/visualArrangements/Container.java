@@ -8,7 +8,6 @@ import visualElements.interactive.VisualAtom;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -33,12 +32,15 @@ public class Container {
 	public AbstractLayout<Node, Edge> layout;
 
 	/**
-	 * Constructor to be used with instances of Graph. Specially intended for
-	 * the rootGraph
+	 * Constructor to be used with instances of edu.uci.ics.jung.graph
 	 * 
 	 * @param app
 	 * @param graph
-	 *            the root graph
+	 *            The graph
+	 * @param kindOfLayout
+	 *            Integer defining the kind of layout
+	 * @param dimension
+	 *            The Dimension of the component that contain the visualElements
 	 */
 	public Container(PApplet app, Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
 		this.graph = graph;
@@ -60,22 +62,29 @@ public class Container {
 		}
 
 		// VFactories
-		vNodes = vNodeFactory();
-		vEdges = vEdgeFactory();
+		vNodes = visualNodeFactory();
+		vEdges = visualEdgeFactory();
 	}
 
 	// *** Visual Nodes factory (For rootGraph)
-	private ArrayList<VNode> vNodeFactory() {
+	private ArrayList<VNode> visualNodeFactory() {
 		ArrayList<VNode> theNodes = new ArrayList<VNode>();
+		// For translation to canvas origin
+		float xDimensionCenter = 0;
+		float yDimensionCenter = 0;
+//		float xDimensionCenter = (float) layout.getSize().getWidth()/2;
+//		float yDimensionCenter = (float) layout.getSize().getHeight()/2;
+		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
-			VNode tmp = new VNode(app, n, (float) layout.getX(n), (float) layout.getY(n), 10);
+			VNode tmp = new VNode(app, n, (float) layout.getX(n) - xDimensionCenter,
+					(float) layout.getY(n) - yDimensionCenter, 10);
 			theNodes.add(tmp);
 		}
 		return theNodes;
 	}
 
 	// *** Visual Edges factory (For rootGraph)
-	private ArrayList<VEdge> vEdgeFactory() {
+	private ArrayList<VEdge> visualEdgeFactory() {
 		ArrayList<VEdge> theEdges = new ArrayList<VEdge>();
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
@@ -86,7 +95,9 @@ public class Container {
 		return theEdges;
 	}
 
+	// *** Regenerates Visual Nodes relative to a given position
 
+	
 	// *** Nodes And Edges retriever (For SubGraphs)
 	/**
 	 * Get the visual elements (visualElements package) associated to the
@@ -137,11 +148,11 @@ public class Container {
 	 * and VEdges. It is used to update the positions after invoking a
 	 * comparator. Sort methods invoke updateNetwork() by default
 	 */
-	public void updateContainer() {
+	public void remakeVisualElements() {
 		vNodes.clear();
 		vEdges.clear();
-		vNodes = vNodeFactory();
-		vEdges = vEdgeFactory();
+		vNodes = visualNodeFactory();
+		vEdges = visualEdgeFactory();
 	}
 
 	public void setArrangement(Arrangement arg) {

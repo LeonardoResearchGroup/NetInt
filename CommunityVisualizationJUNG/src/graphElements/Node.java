@@ -11,7 +11,6 @@ public class Node implements Comparable<Node> {
 	private float Excentricity, Betweeness, size;
 	private String community;
 	
-	
 	public Node(){
 		
 	}

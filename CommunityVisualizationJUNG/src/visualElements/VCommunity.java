@@ -8,14 +8,11 @@ import visualElements.interactive.VisualAtom;
 
 import java.awt.event.MouseEvent;
 
-import comparators.OutDegreeComparator;
 import graphElements.Node;
 
 /**
  * A community is defined as a subset of nodes linked to other nodes within the
- * same subset. This class visualizes only edges within a visual network
- * VNetwork. External links to or from nodes of other communities are not
- * displayed, yet.
+ * same subset.
  * 
  * @author jsalam
  *
@@ -25,25 +22,29 @@ public class VCommunity extends VNode {
 	private int minCommunitySize, maxCommunitySize;
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
-	private boolean open, unlocked;
+	private boolean unlocked;
 	private int i, increment;
 	public Container container;
+	private PVector lastPosition;
 
 	public VCommunity(PApplet app, Node node, Container container) {
+		// super(app, node, (float) container.layout.getSize().getWidth() / 2,
+		// (float) container.layout.getSize().getHeight() / 2, 0);
 		super(app, node, (float) container.layout.getSize().getWidth() / 2,
 				(float) container.layout.getSize().getHeight() / 2, 0);
 		this.container = container;
-		open = false;
 		unlocked = false;
 		i = 0;
 		increment = 10;
 		setLayoutParameters();
+		lastPosition = pos;
+		// Move vNodes relative to the vCommnity center
+		// updateVNodeCoordinates();
 	}
 
 	public VCommunity(VNode vNode, Container container) {
 		super(vNode);
 		this.container = container;
-		open = false;
 		unlocked = false;
 		i = 0;
 		increment = 10;
@@ -62,12 +63,49 @@ public class VCommunity extends VNode {
 	public void show() {
 		// Switch control
 		app.fill(250, 200);
+		
 		// Community Name
 		app.text(container.getName(), pos.x, pos.y);
+		app.noFill();
+		app.stroke(180);
+		app.rect(0, 0, container.layout.getSize().width, container.layout.getSize().height);
 		app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
+		
+		// Move vCommunity to mouse position
+		setPosCoordinates(new PVector(app.mouseX, app.mouseY));
+		
+		// Open or close the community
+		boolean open = showCommunityCover();
+		
+		// Update position of each node relative to vCommunity pos
+		updateVNodeCoordinates(unlocked && open);
+		
+		// Visualize nodes & edges in container
+		boolean visualizeNodes = isMouseOver();
+		boolean visualizeEdges = unlocked && open;
+		boolean showInvolute = unlocked && open;
+		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+	}
+
+	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
+		if (showNodes || networkVisible) {
+			for (VisualAtom vA : container.getVNodes()) {
+				VNode vN = (VNode) vA;
+				vN.setDiam(vN.getNode().getOutDegree() + 5);
+				vN.show(showNodes, networkVisible);
+			}
+		}
+		if (showEdges || networkVisible) {
+			for (VEdge vE : container.getVEdges()) {
+				vE.show(app);
+			}
+		}
+	}
+
+	private boolean showCommunityCover() {
+		boolean open = false;
 		if (unlocked) {
 			if (!open) {
-
 				if (i < 180) {
 					i += increment;
 				} else {
@@ -82,33 +120,6 @@ public class VCommunity extends VNode {
 				open = false;
 			}
 		}
-		// Open or close the community
-		showCommunityCover();
-
-		// Visualize nodes & edges in container
-		boolean visualizeNodes = isMouseOver();
-		boolean visualizeEdges = unlocked && open;
-		boolean showInvolute = unlocked && open;
-		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
-	}
-
-	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
-
-		if (showNodes || networkVisible) {
-			for (VisualAtom vA : container.getVNodes()) {
-				VNode n = (VNode) vA;
-				n.setDiam(n.getNode().getOutDegree() + 5);
-				n.show(showNodes, networkVisible);
-			}
-		}
-		if (showEdges || networkVisible) {
-			for (VEdge e : container.getVEdges()) {
-				e.show(app);
-			}
-		}
-	}
-
-	private void showCommunityCover() {
 		// Visualize community cover
 		app.stroke(100);
 		app.strokeWeight(0);
@@ -128,28 +139,31 @@ public class VCommunity extends VNode {
 		// intersect = getXY(angle2);
 		// *** Arc left half
 		app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
+		return open;
 	}
 
-	// ***** Getters
-	/**
-	 * Gets the XY PVector for a given angle for a circumference of radius 1
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	private PVector getXY(float angle) {
-		PVector rtn = new PVector(PApplet.cos(angle), PApplet.sin(angle));
-		return rtn;
+	public void updateVNodeCoordinates(boolean update) {
+		if (update) {
+			if (!lastPosition.equals(pos)) {
+				PVector diffPos = lastPosition;
+				// Get the difference of center pos
+				diffPos.sub(pos);
+				// set new vNode coordinates
+				for (VisualAtom vA : container.getVNodes()) {
+					vA.pos.sub(diffPos);
+				}
+				lastPosition = pos;
+			}
+		}
 	}
 
-	private float getLength(float angle, float radius) {
-		float rtn = angle * radius;
-		return rtn;
+	public void setPosCoordinates(PVector newPos) {
+		this.pos = newPos;
 	}
 
 	// ***** Setters
-	public void setVNetwork(Container net) {
-		container = net;
+	public void setContainer(Container nodesAndedges) {
+		container = nodesAndedges;
 	}
 
 	// ***** Events

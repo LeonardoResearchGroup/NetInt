@@ -24,7 +24,7 @@ public class Logica {
 		rootGraph.setNodesInDegree();
 
 		// Container of visual rootGraph
-		rootContainer = new Container(app, rootGraph.jungGraph, 0 ,new Dimension(app.width/2, app.height/2));
+		rootContainer = new Container(app, rootGraph.jungGraph, 0 ,new Dimension(250, 250));
 		rootContainer.setName("Root");
 
 		// Instantiating & root visual community
