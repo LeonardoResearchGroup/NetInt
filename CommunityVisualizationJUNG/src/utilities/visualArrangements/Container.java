@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.*;
@@ -28,8 +30,7 @@ public class Container {
 	private String name = "n-n";
 	public PApplet app;
 
-	public Layout<Node, Edge> layout;
-	public CircleLayout<Node, Edge> circle;
+	public AbstractLayout<Node, Edge> layout;
 
 	/**
 	 * Constructor to be used with instances of Graph. Specially intended for
@@ -39,14 +40,25 @@ public class Container {
 	 * @param graph
 	 *            the root graph
 	 */
-	public Container(PApplet app, Graph<Node, Edge> graph, Dimension dimension) {
+	public Container(PApplet app, Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
 		this.graph = graph;
 		this.app = app;
-		// Layout
-		layout = new CircleLayout<Node, Edge>(graph);
-		layout.setSize(dimension);
-		circle = (CircleLayout<Node, Edge>) layout;
-		circle.setRadius(100);
+
+		switch (kindOfLayout) {
+		// Circular layout
+		case (0):
+			CircleLayout<Node, Edge> circle = new CircleLayout<Node, Edge>(graph);
+			circle.setSize(dimension);
+			circle.setRadius(100);
+			layout = circle;
+			break;
+		// SpringLayout
+		case (1):
+			SpringLayout<Node, Edge> spring = new SpringLayout<Node, Edge>(graph);
+			spring.setSize(dimension);
+			break;
+		}
+
 		// VFactories
 		vNodes = vNodeFactory();
 		vEdges = vEdgeFactory();
@@ -55,8 +67,8 @@ public class Container {
 	// *** Visual Nodes factory (For rootGraph)
 	private ArrayList<VNode> vNodeFactory() {
 		ArrayList<VNode> theNodes = new ArrayList<VNode>();
-		for (Node n : circle.getGraph().getVertices()) {
-			VNode tmp = new VNode(app, n, (float) circle.getX(n), (float) circle.getY(n), 10);
+		for (Node n : layout.getGraph().getVertices()) {
+			VNode tmp = new VNode(app, n, (float) layout.getX(n), (float) layout.getY(n), 10);
 			theNodes.add(tmp);
 		}
 		return theNodes;
@@ -74,19 +86,21 @@ public class Container {
 		return theEdges;
 	}
 
+
 	// *** Nodes And Edges retriever (For SubGraphs)
 	/**
-	 * Get the visual elements associated to the SubGraph nodes and edges
+	 * Get the visual elements (visualElements package) associated to the
+	 * SubGraph nodes and edges
 	 * 
-	 * @param rootContainer
+	 * @param container
 	 */
-	public void retrieveVisualElements(Container rootContainer) {
+	public void retrieveVisualElements(Container container) {
 
 		// For each node of subGraph
 		for (Node n : graph.getVertices()) {
 
 			// Look for the corresponding VNode in the collection of VAtoms
-			for (VisualAtom vAtm : rootContainer.getVNodes()) {
+			for (VisualAtom vAtm : container.getVNodes()) {
 
 				// Get only the visualAtoms that are visual Nodes
 				if (VNode.class.isInstance(vAtm)) {
@@ -101,7 +115,7 @@ public class Container {
 						vNodes.add(vN);
 						// Look for all the edges of that VNode and add them all
 						// to the collection of vEdges of this container
-						vEdgeRetriever(vN, rootContainer.getVEdges());
+						vEdgeRetriever(vN, container.getVEdges());
 					}
 				}
 			}
@@ -151,19 +165,6 @@ public class Container {
 		return vEdges;
 	}
 
-	// public void setVNode(VNode atom) {
-	// vAtoms.add(atom);
-	// if (!graph.getVertices().contains(atom)) {
-	// graph.addVertex(atom.getNode());
-	// }
-	// }
-	//
-	// public void setVEdge(VEdge vEdge) {
-	// vEdges.add(vEdge);
-	// if (!graph.getEdges().contains(vEdge.getEdge()))
-	// graph.addEdge(vEdge.getEdge());
-	// }
-
 	// show
 	public void showVNode() {
 		for (VisualAtom vA : vNodes) {
@@ -183,22 +184,6 @@ public class Container {
 
 	public ArrayList<VEdge> getvEdges() {
 		return vEdges;
-	}
-
-	public void show(boolean showNodes, boolean showEdges, boolean networkVisible) {
-
-		if (showNodes || networkVisible) {
-			for (VisualAtom vA : vNodes) {
-				VNode n = (VNode) vA;
-				n.setDiam(n.getNode().getOutDegree() + 5);
-				n.show(showNodes, networkVisible);
-			}
-		}
-		if (showEdges || networkVisible) {
-			for (VEdge e : vEdges) {
-				e.show(app);
-			}
-		}
 	}
 
 }

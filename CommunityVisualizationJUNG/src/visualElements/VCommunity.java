@@ -59,16 +59,6 @@ public class VCommunity extends VNode {
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
-	// public void layoutContainer(PVector center, String layout, float radius){
-	// if(layout.equalsIgnoreCase("linear")){
-	// //Linear
-	// container.linearArrangement();
-	// }else if (layout.equalsIgnoreCase("circular")){
-	// //Circular
-	// container.circularArrangement(center, radius);
-	// }
-	// }
-
 	public void show() {
 		// Switch control
 		app.fill(250, 200);
@@ -99,7 +89,23 @@ public class VCommunity extends VNode {
 		boolean visualizeNodes = isMouseOver();
 		boolean visualizeEdges = unlocked && open;
 		boolean showInvolute = unlocked && open;
-		container.show(visualizeNodes, visualizeEdges, showInvolute);
+		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+	}
+
+	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
+
+		if (showNodes || networkVisible) {
+			for (VisualAtom vA : container.getVNodes()) {
+				VNode n = (VNode) vA;
+				n.setDiam(n.getNode().getOutDegree() + 5);
+				n.show(showNodes, networkVisible);
+			}
+		}
+		if (showEdges || networkVisible) {
+			for (VEdge e : container.getVEdges()) {
+				e.show(app);
+			}
+		}
 	}
 
 	private void showCommunityCover() {
