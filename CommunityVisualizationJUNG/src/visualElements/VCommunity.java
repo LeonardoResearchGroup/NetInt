@@ -7,7 +7,6 @@ import utilities.visualArrangements.Container;
 import visualElements.interactive.VisualAtom;
 
 import java.awt.event.MouseEvent;
-
 import graphElements.Node;
 
 /**
@@ -22,14 +21,13 @@ public class VCommunity extends VNode {
 	private int minCommunitySize, maxCommunitySize;
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
-	private boolean unlocked;
-	private int i, increment;
+	private boolean unlocked, iterationCompleted;
+	private int i, increment, containerIterations;
 	public Container container;
 	private PVector lastPosition;
+	private int count = 0;
 
 	public VCommunity(PApplet app, Node node, Container container) {
-		// super(app, node, (float) container.layout.getSize().getWidth() / 2,
-		// (float) container.layout.getSize().getHeight() / 2, 0);
 		super(app, node, (float) container.layout.getSize().getWidth() / 2,
 				(float) container.layout.getSize().getHeight() / 2, 0);
 		this.container = container;
@@ -38,8 +36,9 @@ public class VCommunity extends VNode {
 		increment = 10;
 		setLayoutParameters();
 		lastPosition = pos;
+		containerIterations = 100;
 		// Move vNodes relative to the vCommnity center
-		// updateVNodeCoordinates();
+		updateContainer(true);
 	}
 
 	public VCommunity(VNode vNode, Container container) {
@@ -48,6 +47,8 @@ public class VCommunity extends VNode {
 		unlocked = false;
 		i = 0;
 		increment = 10;
+		lastPosition = pos;
+		containerIterations = 100;
 		setLayoutParameters();
 	}
 
@@ -61,30 +62,37 @@ public class VCommunity extends VNode {
 	}
 
 	public void show() {
-		// Switch control
-		app.fill(250, 200);
-		
-		// Community Name
-		app.text(container.getName(), pos.x, pos.y);
-		app.noFill();
-		app.stroke(180);
-		app.rect(0, 0, container.layout.getSize().width, container.layout.getSize().height);
-		app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
-		
+		// mouse interaction
+		unlocked = leftClicked;
+
 		// Move vCommunity to mouse position
-		setPosCoordinates(new PVector(app.mouseX, app.mouseY));
-		
+		if (rightPressed) {
+			setCommunityCenter(new PVector(app.mouseX, app.mouseY));
+		}
+		// Community cover data
+		showCoverLable();
 		// Open or close the community
-		boolean open = showCommunityCover();
-		
-		// Update position of each node relative to vCommunity pos
-		updateVNodeCoordinates(unlocked && open);
-		
+		boolean communityIsOpen = showCommunityCover();
+		// Layout iterations
+		if (communityIsOpen && !iterationCompleted) {
+			if (count < containerIterations) {
+				container.stepIterativeLayout(pos);
+				count++;
+			} else {
+				iterationCompleted = true;
+				System.out.println("VCommunity > Layout iteration completed");
+			}
+		}
+		// Update position of each visualElement in the container relative to
+		// current vCommunity center
+		updateContainer(communityIsOpen);
+
 		// Visualize nodes & edges in container
 		boolean visualizeNodes = isMouseOver();
-		boolean visualizeEdges = unlocked && open;
-		boolean showInvolute = unlocked && open;
+		boolean visualizeEdges = unlocked && communityIsOpen;
+		boolean showInvolute = unlocked && communityIsOpen;
 		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+
 	}
 
 	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
@@ -142,23 +150,30 @@ public class VCommunity extends VNode {
 		return open;
 	}
 
-	public void updateVNodeCoordinates(boolean update) {
+	public void updateContainer(boolean update) {
 		if (update) {
 			if (!lastPosition.equals(pos)) {
+				// Get the difference of centers
 				PVector diffPos = lastPosition;
-				// Get the difference of center pos
 				diffPos.sub(pos);
-				// set new vNode coordinates
-				for (VisualAtom vA : container.getVNodes()) {
-					vA.pos.sub(diffPos);
-				}
+				// set new vNodes coordinates
+				container.updateVNodesCoordinates(diffPos);
 				lastPosition = pos;
 			}
 		}
 	}
 
-	public void setPosCoordinates(PVector newPos) {
+	public void setCommunityCenter(PVector newPos) {
 		this.pos = newPos;
+	}
+
+	public void showCoverLable() {
+		app.fill(250, 200);
+		app.text(container.getName(), pos.x, pos.y);
+		app.noFill();
+		app.stroke(180);
+		app.rect(0, 0, container.layout.getSize().width, container.layout.getSize().height);
+		app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
 	}
 
 	// ***** Setters
@@ -167,10 +182,11 @@ public class VCommunity extends VNode {
 	}
 
 	// ***** Events
-	public void mouseClicked(MouseEvent e) {
-		if (isMouseOver()) {
-			unlocked = !unlocked;
-		}
-	}
+	// public void mouseClicked(MouseEvent e) {
+	// if (isMouseOver()) {
+	// System.out.println(leftClicked);
+	// unlocked = !unlocked;
+	// }
+	// }
 
 }

@@ -11,11 +11,14 @@ public abstract class VisualAtom implements MouseListener {
 	private int wdth, hght;
 	public float diam;
 	public PVector pos;
+	public boolean leftClicked, rightClicked, centerClicked;
+	public boolean leftPressed, rightPressed, centerPressed;
 
 	public VisualAtom(PApplet app, float x, float y, float diam) {
 		this.app = app;
 		this.diam = diam;
 		pos = new PVector(x, y);
+		leftClicked = false;
 		app.addMouseListener(this);
 	}
 
@@ -24,6 +27,7 @@ public abstract class VisualAtom implements MouseListener {
 		this.wdth = wdth;
 		this.hght = hght;
 		pos = new PVector(x, y);
+		leftClicked = false;
 		app.addMouseListener(this);
 	}
 
@@ -49,28 +53,49 @@ public abstract class VisualAtom implements MouseListener {
 		}
 		return temp;
 	}
-	
-	public void setX(float x){
+
+	public void setX(float x) {
 		pos.x = x;
 	}
-	
-	public void setY(float y){
+
+	public void setY(float y) {
 		pos.y = y;
 	}
-	
-	public void setDiam(float d){
+
+	public void setDiam(float d) {
 		diam = d;
 	}
 
 	// ---------------- implementing MouseEvent methods ----------------
 	public void mousePressed(MouseEvent e) {
-		//if (isMouseOver())
-			//PApplet.println(this.getClass() + " mousePressed");
+		if (isMouseOver()) {
+			switch (e.getButton()) {
+			case MouseEvent.BUTTON1:
+				leftPressed = true;
+				break;
+			case MouseEvent.BUTTON2:
+				centerPressed = true;
+				break;
+			case MouseEvent.BUTTON3:
+				rightPressed = true;
+				break;
+			}
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		//if (isMouseOver())
-			//PApplet.println(this.getClass() + " mouseReleased");
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON1:
+			leftPressed = false;
+			break;
+		case MouseEvent.BUTTON2:
+			centerPressed = false;
+			break;
+		case MouseEvent.BUTTON3:
+			rightPressed = false;
+			break;
+		}
+
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -82,7 +107,18 @@ public abstract class VisualAtom implements MouseListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		//if (isMouseOver())
-			//PApplet.println(this.getClass() + " mouse clicked");
+		if (isMouseOver()) {
+			switch (e.getButton()) {
+			case MouseEvent.BUTTON1:
+				leftClicked = !leftClicked;
+				break;
+			case MouseEvent.BUTTON2:
+				centerClicked = !centerClicked;
+				break;
+			case MouseEvent.BUTTON3:
+				rightClicked = !rightClicked;
+				break;
+			}
+		}
 	}
 }

@@ -84,7 +84,23 @@ public class VNode extends VisualAtom {
 		return this.node.equals(node);
 	}
 
+	// *** equals
+	public boolean equals(Object obj) {
+		VNode vN = (VNode) obj;
+		boolean rtn = vN.getNode().equals(this.node);
+		return rtn;
+	}
+	
+	public int hashCode(){
+		return node.getId();
+	}
+	
 	// *** GETTERS AND SETTERS
+	
+	public void absoluteToRelative(PVector center){
+		pos = PVector.sub(pos, center);
+	}
+
 	public float getX() {
 		return pos.x;
 	}

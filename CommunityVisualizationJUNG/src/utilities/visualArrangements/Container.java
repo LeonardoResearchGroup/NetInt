@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.graph.Graph;
@@ -22,12 +23,15 @@ import graphElements.*;
  * 
  */
 public class Container {
+	public static final int CIRCULAR = 0;
+	public static final int SPRING = 1;
 	private Graph<Node, Edge> graph;
 	private ArrayList<VNode> vNodes;
 	private ArrayList<VEdge> vEdges;
 	private ArrayList<Arrangement> arrangements;
-	private String name = "n-n";
+	private String name = "no name";
 	public PApplet app;
+	public PVector layoutCenter;
 
 	public AbstractLayout<Node, Edge> layout;
 
@@ -53,11 +57,15 @@ public class Container {
 			circle.setSize(dimension);
 			circle.setRadius(100);
 			layout = circle;
+			layoutCenter = new PVector(0, 0);
 			break;
 		// SpringLayout
 		case (1):
 			SpringLayout<Node, Edge> spring = new SpringLayout<Node, Edge>(graph);
 			spring.setSize(dimension);
+			layout = spring;
+			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
+					(float) (layout.getSize().getHeight() / 2));
 			break;
 		}
 
@@ -66,24 +74,27 @@ public class Container {
 		vEdges = visualEdgeFactory();
 	}
 
-	// *** Visual Nodes factory (For rootGraph)
+	/**
+	 * Visual Nodes factory (For rootGraph)
+	 * 
+	 * @return
+	 */
 	private ArrayList<VNode> visualNodeFactory() {
 		ArrayList<VNode> theNodes = new ArrayList<VNode>();
-		// For translation to canvas origin
-		float xDimensionCenter = 0;
-		float yDimensionCenter = 0;
-//		float xDimensionCenter = (float) layout.getSize().getWidth()/2;
-//		float yDimensionCenter = (float) layout.getSize().getHeight()/2;
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
-			VNode tmp = new VNode(app, n, (float) layout.getX(n) - xDimensionCenter,
-					(float) layout.getY(n) - yDimensionCenter, 10);
+			VNode tmp = new VNode(app, n, (float) layout.getX(n), (float) layout.getY(n), 10);
+			tmp.absoluteToRelative(layoutCenter);
 			theNodes.add(tmp);
 		}
 		return theNodes;
 	}
 
-	// *** Visual Edges factory (For rootGraph)
+	/**
+	 * Visual Edges factory (For rootGraph)
+	 * 
+	 * @return
+	 */
 	private ArrayList<VEdge> visualEdgeFactory() {
 		ArrayList<VEdge> theEdges = new ArrayList<VEdge>();
 		for (Edge e : graph.getEdges()) {
@@ -95,18 +106,58 @@ public class Container {
 		return theEdges;
 	}
 
-	// *** Regenerates Visual Nodes relative to a given position
-
-	
-	// *** Nodes And Edges retriever (For SubGraphs)
 	/**
-	 * Get the visual elements (visualElements package) associated to the
-	 * SubGraph nodes and edges
+	 * Update Visual Nodes relative to a given position
+	 * 
+	 * @param diffPos
+	 */
+	public void updateVNodesCoordinates(PVector diffPos) {
+		for (VNode vN : getVNodes()) {
+			vN.pos.sub(diffPos);
+		}
+	}
+
+	/**
+	 * Check if the current layout is an IterativeContext and makes one layout
+	 * step
+	 * 
+	 */
+	public void stepIterativeLayout(PVector vCommunityCenter) {
+		boolean currentLayoutIsIterativeInterface = false;
+		// check if the layout implements IterativeContext
+		for (int i = 0; i < layout.getClass().getGenericInterfaces().length; i++) {
+			if (layout.getClass().getGenericInterfaces()[i].toString()
+					.equals("interface edu.uci.ics.jung.algorithms.util.IterativeContext")) {
+				currentLayoutIsIterativeInterface = true;
+			}
+		}
+		// Step iteration as many times as parameterized
+		if (currentLayoutIsIterativeInterface) {
+			IterativeContext itrContext = (IterativeContext) layout;
+			itrContext.step();
+			// get nodes in layout positions
+			for (Node n : layout.getGraph().getVertices()) {
+				PVector nPos = new PVector((float) layout.getX(n), (float) layout.getY(n));
+				// Get all vNodes
+				for (VNode vN : vNodes) {
+					if (vN.getNode().equals(n)) {
+						// set new position
+						vN.pos.set(nPos);
+						vN.absoluteToRelative(layoutCenter);
+						vN.pos.add(vCommunityCenter);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get instances of the visual elements from a given graph (usually
+	 * rootGraph) that are included in the Container's subGraph
 	 * 
 	 * @param container
 	 */
 	public void retrieveVisualElements(Container container) {
-
 		// For each node of subGraph
 		for (Node n : graph.getVertices()) {
 
@@ -133,7 +184,12 @@ public class Container {
 		}
 	}
 
-	// *** Edges retriever (For SubGraphs)
+	/**
+	 * Edges retriever (For SubGraphs). Invoked by retrieveVisualElements()
+	 * 
+	 * @param vNode
+	 * @param rootEdgeList
+	 */
 	private void vEdgeRetriever(VNode vNode, ArrayList<VEdge> rootEdgeList) {
 		for (VEdge vEdg : rootEdgeList) {
 			// Check if the VNode source matches any of the VEdge sources in the
@@ -176,7 +232,11 @@ public class Container {
 		return vEdges;
 	}
 
-	// show
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	// *** Show
 	public void showVNode() {
 		for (VisualAtom vA : vNodes) {
 			VNode n = (VNode) vA;
@@ -187,14 +247,6 @@ public class Container {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public ArrayList<VEdge> getvEdges() {
-		return vEdges;
 	}
 
 }
