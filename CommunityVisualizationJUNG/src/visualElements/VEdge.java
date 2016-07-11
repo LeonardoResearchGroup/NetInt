@@ -2,12 +2,8 @@ package visualElements;
 
 import processing.core.*;
 import visualElements.interactive.VisualAtom;
-
 import java.util.ArrayList;
-import java.util.Collection;
-
 import graphElements.Edge;
-import graphElements.Node;
 
 public class VEdge {
 	Edge edge;

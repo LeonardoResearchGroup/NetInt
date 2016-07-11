@@ -2,6 +2,8 @@ package executable;
 
 import java.awt.Dimension;
 
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import graphElements.Edge;
 import graphElements.Node;
 import utilities.visualArrangements.Container;
 import visualElements.VCommunity;
@@ -13,8 +15,8 @@ public class Logica {
 	GraphLoader rootGraph;
 
 	// Visual Elements
-	Container rootContainer;
-	VCommunity vRootCommunity;
+	Container rootContainer, subGraphContainer;
+	VCommunity vRootCommunity, subGraphCommunity;
 
 	public Logica(PApplet app) {
 		// ***** RootGraph *****
@@ -24,15 +26,21 @@ public class Logica {
 		rootGraph.setNodesInDegree();
 
 		// Container of visual rootGraph
-		rootContainer = new Container(app, rootGraph.jungGraph, Container.CIRCULAR ,new Dimension(250, 250));
+		rootContainer = new Container(app, rootGraph.jungGraph, Container.CIRCULAR, new Dimension(250, 250));
 		rootContainer.setName("Root");
 
-		// Instantiating & root visual community
-		Node nodeTmp = new Node(0);
-		vRootCommunity = new VCommunity(app, nodeTmp, rootContainer);
+		// Instantiating & root visualization
+		vRootCommunity = new VCommunity(app, new Node(0), rootContainer);
+
+		// ***** Community *****
+		DirectedSparseMultigraph<Node, Edge> community = GraphLoader.filterByCommunity(rootGraph.jungGraph, "AS");
+		subGraphContainer = new Container(app, community, Container.SPRING, new Dimension(250, 150));
+		subGraphContainer.setName("AU");
+		subGraphCommunity = new VCommunity(app, new Node(0), subGraphContainer);
 	}
 
 	public void show(PApplet app) {
 		vRootCommunity.show();
+		subGraphCommunity.show();
 	}
 }

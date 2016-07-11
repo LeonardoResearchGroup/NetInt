@@ -123,16 +123,8 @@ public class Container {
 	 * 
 	 */
 	public void stepIterativeLayout(PVector vCommunityCenter) {
-		boolean currentLayoutIsIterativeInterface = false;
-		// check if the layout implements IterativeContext
-		for (int i = 0; i < layout.getClass().getGenericInterfaces().length; i++) {
-			if (layout.getClass().getGenericInterfaces()[i].toString()
-					.equals("interface edu.uci.ics.jung.algorithms.util.IterativeContext")) {
-				currentLayoutIsIterativeInterface = true;
-			}
-		}
 		// Step iteration as many times as parameterized
-		if (currentLayoutIsIterativeInterface) {
+		if (isCurrentLayoutIterative()) {
 			IterativeContext itrContext = (IterativeContext) layout;
 			itrContext.step();
 			// get nodes in layout positions
@@ -197,6 +189,25 @@ public class Container {
 			if (vEdg.getSource().equals(vNode))
 				vEdges.add(vEdg);
 		}
+	}
+
+	/**
+	 * True if the container's layout implements IterativeContext. This means
+	 * that the layout need to iterate over several times to achieve the
+	 * distribution of vNodes
+	 * 
+	 * @return
+	 */
+	public boolean isCurrentLayoutIterative() {
+		boolean currentLayoutIsIterativeInterface = false;
+		// check if the layout implements IterativeContext
+		for (int i = 0; i < layout.getClass().getGenericInterfaces().length; i++) {
+			if (layout.getClass().getGenericInterfaces()[i].toString()
+					.equals("interface edu.uci.ics.jung.algorithms.util.IterativeContext")) {
+				currentLayoutIsIterativeInterface = true;
+			}
+		}
+		return currentLayoutIsIterativeInterface;
 	}
 
 	/**

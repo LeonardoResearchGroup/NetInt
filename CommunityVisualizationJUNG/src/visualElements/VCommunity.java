@@ -5,8 +5,6 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import utilities.visualArrangements.Container;
 import visualElements.interactive.VisualAtom;
-
-import java.awt.event.MouseEvent;
 import graphElements.Node;
 
 /**
@@ -71,16 +69,16 @@ public class VCommunity extends VNode {
 		}
 		// Community cover data
 		showCoverLable();
+		
 		// Open or close the community
 		boolean communityIsOpen = showCommunityCover();
 		// Layout iterations
-		if (communityIsOpen && !iterationCompleted) {
+		if (communityIsOpen && container.isCurrentLayoutIterative()) {
 			if (count < containerIterations) {
 				container.stepIterativeLayout(pos);
 				count++;
 			} else {
-				iterationCompleted = true;
-				System.out.println("VCommunity > Layout iteration completed");
+				System.out.println("VCommunity >"+ container.getName() +" Layout iteration completed");
 			}
 		}
 		// Update position of each visualElement in the container relative to
@@ -93,21 +91,6 @@ public class VCommunity extends VNode {
 		boolean showInvolute = unlocked && communityIsOpen;
 		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
 
-	}
-
-	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
-		if (showNodes || networkVisible) {
-			for (VisualAtom vA : container.getVNodes()) {
-				VNode vN = (VNode) vA;
-				vN.setDiam(vN.getNode().getOutDegree() + 5);
-				vN.show(showNodes, networkVisible);
-			}
-		}
-		if (showEdges || networkVisible) {
-			for (VEdge vE : container.getVEdges()) {
-				vE.show(app);
-			}
-		}
 	}
 
 	private boolean showCommunityCover() {
@@ -150,6 +133,21 @@ public class VCommunity extends VNode {
 		return open;
 	}
 
+	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
+		if (showNodes || networkVisible) {
+			for (VisualAtom vA : container.getVNodes()) {
+				VNode vN = (VNode) vA;
+				vN.setDiam(vN.getNode().getOutDegree() + 5);
+				vN.show(showNodes, networkVisible);
+			}
+		}
+		if (showEdges || networkVisible) {
+			for (VEdge vE : container.getVEdges()) {
+				vE.show(app);
+			}
+		}
+	}
+
 	public void updateContainer(boolean update) {
 		if (update) {
 			if (!lastPosition.equals(pos)) {
@@ -182,11 +180,5 @@ public class VCommunity extends VNode {
 	}
 
 	// ***** Events
-	// public void mouseClicked(MouseEvent e) {
-	// if (isMouseOver()) {
-	// System.out.println(leftClicked);
-	// unlocked = !unlocked;
-	// }
-	// }
 
 }

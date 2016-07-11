@@ -2,6 +2,7 @@ package executable;
 
 import processing.core.*;
 
+@SuppressWarnings("serial")
 public class Executable extends PApplet {
 	Logica app;
 	boolean clockwise = true;

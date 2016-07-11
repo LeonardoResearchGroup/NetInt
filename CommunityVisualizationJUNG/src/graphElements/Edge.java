@@ -87,4 +87,8 @@ public class Edge {
 		this.ID = property;
 	}
 
+	public int getID() {
+		return ID;
+	}
+
 }
