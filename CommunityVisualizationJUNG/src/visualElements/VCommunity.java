@@ -19,11 +19,10 @@ public class VCommunity extends VNode {
 	private int minCommunitySize, maxCommunitySize;
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
-	private boolean unlocked, iterationCompleted;
-	private int i, increment, containerIterations;
+	private boolean unlocked;
+	private int i, increment, count, containerIterations;
 	public Container container;
 	private PVector lastPosition;
-	private int count = 0;
 
 	public VCommunity(PApplet app, Node node, Container container) {
 		super(app, node, (float) container.layout.getSize().getWidth() / 2,
@@ -32,6 +31,7 @@ public class VCommunity extends VNode {
 		unlocked = false;
 		i = 0;
 		increment = 10;
+		count = 0;
 		setLayoutParameters();
 		lastPosition = pos;
 		containerIterations = 100;
@@ -45,6 +45,7 @@ public class VCommunity extends VNode {
 		unlocked = false;
 		i = 0;
 		increment = 10;
+		count = 0;
 		lastPosition = pos;
 		containerIterations = 100;
 		setLayoutParameters();
@@ -77,8 +78,6 @@ public class VCommunity extends VNode {
 			if (count < containerIterations) {
 				container.stepIterativeLayout(pos);
 				count++;
-			} else {
-				System.out.println("VCommunity >"+ container.getName() +" Layout iteration completed");
 			}
 		}
 		// Update position of each visualElement in the container relative to
@@ -90,7 +89,6 @@ public class VCommunity extends VNode {
 		boolean visualizeEdges = unlocked && communityIsOpen;
 		boolean showInvolute = unlocked && communityIsOpen;
 		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
-
 	}
 
 	private boolean showCommunityCover() {
@@ -175,8 +173,8 @@ public class VCommunity extends VNode {
 	}
 
 	// ***** Setters
-	public void setContainer(Container nodesAndedges) {
-		container = nodesAndedges;
+	public void setContainer(Container nodesAndEdges) {
+		container = nodesAndEdges;
 	}
 
 	// ***** Events

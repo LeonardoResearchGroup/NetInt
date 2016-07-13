@@ -1,77 +1,53 @@
 package utilities.visualArrangements;
 
-import processing.core.*;
+import java.awt.Dimension;
+import java.util.ArrayList;
+
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.Graph;
+import graphElements.Edge;
+import graphElements.Node;
+import processing.core.PApplet;
+import processing.core.PVector;
 import visualElements.VEdge;
 import visualElements.VNode;
 import visualElements.interactive.VisualAtom;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-
-import edu.uci.ics.jung.algorithms.layout.SpringLayout;
-import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
-import edu.uci.ics.jung.graph.Graph;
-import graphElements.*;
-
 /**
- * This class contains two collections, one for the visualNodes and one for the
- * visualEdges.
+ * This abstract class contains two collections, one for the visualNodes and one
+ * for the visualEdges.
  * 
  * @author jsalam
  * 
  */
-public class Container {
+public abstract class Container {
+	// Kinds of layouts
 	public static final int CIRCULAR = 0;
 	public static final int SPRING = 1;
-	private Graph<Node, Edge> graph;
-	private ArrayList<VNode> vNodes;
-	private ArrayList<VEdge> vEdges;
-	private ArrayList<Arrangement> arrangements;
-	private String name = "no name";
+	// JUNG graph
+	protected Graph<Node, Edge> graph;
+	// Visual Elements
+	protected ArrayList<VNode> vNodes;
+	protected ArrayList<VEdge> vEdges;
+	// Custom Layouts
+	public ArrayList<Arrangement> customLayouts;
+	protected String name = "no name";
 	public PApplet app;
 	public PVector layoutCenter;
 
 	public AbstractLayout<Node, Edge> layout;
 
-	/**
-	 * Constructor to be used with instances of edu.uci.ics.jung.graph
-	 * 
-	 * @param app
-	 * @param graph
-	 *            The graph
-	 * @param kindOfLayout
-	 *            Integer defining the kind of layout
-	 * @param dimension
-	 *            The Dimension of the component that contain the visualElements
-	 */
-	public Container(PApplet app, Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
-		this.graph = graph;
+	// *** Constructor
+	public Container(PApplet app, Graph<Node, Edge> graph) {
 		this.app = app;
+		this.graph = graph;
 
-		switch (kindOfLayout) {
-		// Circular layout
-		case (0):
-			CircleLayout<Node, Edge> circle = new CircleLayout<Node, Edge>(graph);
-			circle.setSize(dimension);
-			circle.setRadius(100);
-			layout = circle;
-			layoutCenter = new PVector(0, 0);
-			break;
-		// SpringLayout
-		case (1):
-			SpringLayout<Node, Edge> spring = new SpringLayout<Node, Edge>(graph);
-			spring.setSize(dimension);
-			layout = spring;
-			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
-					(float) (layout.getSize().getHeight() / 2));
-			break;
-		}
-
-		// VFactories
-		vNodes = visualNodeFactory();
-		vEdges = visualEdgeFactory();
+		// Instantiate empty collections
+		vNodes = new ArrayList<VNode>();
+		vEdges = new ArrayList<VEdge>();
 	}
 
 	/**
@@ -79,15 +55,13 @@ public class Container {
 	 * 
 	 * @return
 	 */
-	private ArrayList<VNode> visualNodeFactory() {
-		ArrayList<VNode> theNodes = new ArrayList<VNode>();
+	protected void runNodeFactory() {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(app, n, (float) layout.getX(n), (float) layout.getY(n), 10);
 			tmp.absoluteToRelative(layoutCenter);
-			theNodes.add(tmp);
+			vNodes.add(tmp);
 		}
-		return theNodes;
 	}
 
 	/**
@@ -95,15 +69,13 @@ public class Container {
 	 * 
 	 * @return
 	 */
-	private ArrayList<VEdge> visualEdgeFactory() {
-		ArrayList<VEdge> theEdges = new ArrayList<VEdge>();
+	protected void runEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
-			theEdges.add(vEdge);
+			vEdges.add(vEdge);
 		}
-		return theEdges;
 	}
 
 	/**
@@ -118,7 +90,7 @@ public class Container {
 	}
 
 	/**
-	 * Check if the current layout is an IterativeContext and makes one layout
+	 * Check if the current layout is an IterativeContext and runs one layout
 	 * step
 	 * 
 	 */
@@ -140,54 +112,6 @@ public class Container {
 					}
 				}
 			}
-		}
-	}
-
-	/**
-	 * Get instances of the visual elements from a given graph (usually
-	 * rootGraph) that are included in the Container's subGraph
-	 * 
-	 * @param container
-	 */
-	public void retrieveVisualElements(Container container) {
-		// For each node of subGraph
-		for (Node n : graph.getVertices()) {
-
-			// Look for the corresponding VNode in the collection of VAtoms
-			for (VisualAtom vAtm : container.getVNodes()) {
-
-				// Get only the visualAtoms that are visual Nodes
-				if (VNode.class.isInstance(vAtm)) {
-					VNode vN = (VNode) vAtm;
-
-					// If the current node of the subGraph matches the node of
-					// the visual node retrieved from the collection of visual
-					// atoms
-					if (n.equals(vN.getNode())) {
-						// Add the VNode to the collection of vAtoms of this
-						// container
-						vNodes.add(vN);
-						// Look for all the edges of that VNode and add them all
-						// to the collection of vEdges of this container
-						vEdgeRetriever(vN, container.getVEdges());
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Edges retriever (For SubGraphs). Invoked by retrieveVisualElements()
-	 * 
-	 * @param vNode
-	 * @param rootEdgeList
-	 */
-	private void vEdgeRetriever(VNode vNode, ArrayList<VEdge> rootEdgeList) {
-		for (VEdge vEdg : rootEdgeList) {
-			// Check if the VNode source matches any of the VEdge sources in the
-			// rootGraph
-			if (vEdg.getSource().equals(vNode))
-				vEdges.add(vEdg);
 		}
 	}
 
@@ -218,12 +142,43 @@ public class Container {
 	public void remakeVisualElements() {
 		vNodes.clear();
 		vEdges.clear();
-		vNodes = visualNodeFactory();
-		vEdges = visualEdgeFactory();
+		runNodeFactory();
+		runEdgeFactory();
 	}
 
 	public void setArrangement(Arrangement arg) {
-		arrangements.add(arg);
+		customLayouts.add(arg);
+	}
+
+	// *** Layouts
+	
+	protected void distributeNodesInLayout(int kindOfLayout, Dimension dimension){
+		switch (kindOfLayout) {
+		// Circular layout
+		case (0):
+			layout = circle(dimension);
+			layoutCenter = new PVector(0, 0);
+			break;
+		// SpringLayout
+		case (1):
+
+			layout = spring(dimension);
+			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
+					(float) (layout.getSize().getHeight() / 2));
+			break;
+		}
+	}
+	
+	protected AbstractLayout<Node, Edge> circle(Dimension dimension) {
+		CircleLayout<Node, Edge> circle = new CircleLayout<Node, Edge>(graph);
+		circle.setSize(dimension);
+		return circle;
+	}
+
+	protected AbstractLayout<Node, Edge> spring(Dimension dimension) {
+		SpringLayout<Node, Edge> spring = new SpringLayout<Node, Edge>(graph);
+		spring.setSize(dimension);
+		return spring;
 	}
 
 	// *** Getters and setters
@@ -248,16 +203,15 @@ public class Container {
 	}
 
 	// *** Show
-	public void showVNode() {
-		for (VisualAtom vA : vNodes) {
-			VNode n = (VNode) vA;
-			n.setDiam(n.getNode().getOutDegree() + 5);
-			n.show(true, true);
-		}
-	}
-
 	public String getName() {
 		return name;
 	}
 
+	public AbstractLayout<Node, Edge> getLayout() {
+		return layout;
+	}
+
+	public void setLayout(AbstractLayout<Node, Edge> layout) {
+		this.layout = layout;
+	}
 }
