@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
@@ -26,6 +27,7 @@ public abstract class Container {
 	// Kinds of layouts
 	public static final int CIRCULAR = 0;
 	public static final int SPRING = 1;
+	public static final int FRUCHTERMAN_REINGOLD = 2;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
 	// Visual Elements
@@ -150,8 +152,8 @@ public abstract class Container {
 	}
 
 	// *** Layouts
-	
-	protected void distributeNodesInLayout(int kindOfLayout, Dimension dimension){
+
+	protected void distributeNodesInLayout(int kindOfLayout, Dimension dimension) {
 		switch (kindOfLayout) {
 		// Circular layout
 		case (0):
@@ -160,14 +162,19 @@ public abstract class Container {
 			break;
 		// SpringLayout
 		case (1):
-
 			layout = spring(dimension);
+			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
+					(float) (layout.getSize().getHeight() / 2));
+			break;
+		// LinearLayout
+		case (2):
+			layout = fruchtermanReingold(dimension);
 			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
 					(float) (layout.getSize().getHeight() / 2));
 			break;
 		}
 	}
-	
+
 	protected AbstractLayout<Node, Edge> circle(Dimension dimension) {
 		CircleLayout<Node, Edge> circle = new CircleLayout<Node, Edge>(graph);
 		circle.setSize(dimension);
@@ -178,6 +185,22 @@ public abstract class Container {
 		SpringLayout<Node, Edge> spring = new SpringLayout<Node, Edge>(graph);
 		spring.setSize(dimension);
 		return spring;
+	}
+
+	/**
+	 * https://github.com/gephi/gephi/wiki/Fruchterman-Reingold
+	 * http://jung.sourceforge.net/doc/api/index.html?edu/uci/ics/jung/
+	 * algorithms/layout/CircleLayout.CircleVertexData.html
+	 * 
+	 * @return
+	 */
+	protected AbstractLayout<Node, Edge> fruchtermanReingold(Dimension dimension) {
+		FRLayout<Node, Edge> frLayout = new FRLayout<Node, Edge>(graph, dimension);
+		frLayout.setAttractionMultiplier(0.5);
+		frLayout.setRepulsionMultiplier(0.5);
+		frLayout.setMaxIterations(100);
+
+		return frLayout;
 	}
 
 	// *** Getters and setters

@@ -1,5 +1,6 @@
 package utilities.visualArrangements;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -7,13 +8,12 @@ import processing.core.PApplet;
 import processing.core.PVector;
 import visualElements.interactive.VisualAtom;
 
-public class LinearArrangement extends Arrangement {
+public class LinearLayout extends Arrangement  {
 	public PApplet app;
 
-	public LinearArrangement(PApplet app, String name) {
+	public LinearLayout(PApplet app) {
 		super();
 		this.app = app;
-		this.name = name;
 	}
 
 	/**
@@ -40,4 +40,5 @@ public class LinearArrangement extends Arrangement {
 			count++;
 		}
 	}
+
 }

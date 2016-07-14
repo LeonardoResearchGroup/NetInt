@@ -14,7 +14,6 @@ public class CircularArrangement extends Arrangement {
 	public CircularArrangement(PApplet app, String name) {
 		super();
 		this.app = app;
-		this.name = name;
 	}
 
 	public void layout(PVector center, float radius, ArrayList<VisualAtom> visualElements) {

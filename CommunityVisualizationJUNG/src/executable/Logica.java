@@ -32,9 +32,9 @@ public class Logica {
 
 		// ***** CONTAINERS *****
 		//Container of rootGraph
-		mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR, new Dimension(250, 250));
+		mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.SPRING, new Dimension(250, 250));
 		mainCommunity.setName("World");
-		subCommunityAsia = new SubContainer(asia,mainCommunity,Container.SPRING,new Dimension(180, 180));
+		subCommunityAsia = new SubContainer(asia,mainCommunity,Container.FRUCHTERMAN_REINGOLD,new Dimension(180, 180));
 		subCommunityAsia.setName("Asia");
 		subCommunityEuropa = new SubContainer(europa,mainCommunity,Container.SPRING,new Dimension(150, 150));
 		subCommunityEuropa.setName("Europa");
