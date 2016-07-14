@@ -4,9 +4,14 @@ import java.util.Comparator;
 import graphElements.Node;
 
 public class DegreeComparator implements Comparator<Node> {
-
+	
+	int key;
+	
+	public void setKey(int key){
+		this.key = key;
+	}
 	@Override
 	public int compare(Node a, Node b) {
-		return a.getDegree() - b.getDegree();
+		return a.getDegree(key) - b.getDegree(key);
 	}
 }

@@ -1,17 +1,9 @@
 package utilities.visualArrangements;
 
 import processing.core.*;
-import visualElements.VEdge;
-import visualElements.VNode;
-import visualElements.interactive.VisualAtom;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 
-import edu.uci.ics.jung.algorithms.layout.SpringLayout;
-import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.*;
 

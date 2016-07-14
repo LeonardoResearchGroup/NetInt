@@ -26,8 +26,6 @@ public class Logica {
 		// Root
 		String XML_FILE = "../data/graphs/Risk.graphml";
 		rootGraph = new GraphLoader(XML_FILE);
-		rootGraph.setNodesOutDegree();
-		rootGraph.setNodesInDegree();
 		// SubCommunities
 		DirectedSparseMultigraph<Node, Edge> asia = GraphLoader.filterByCommunity(rootGraph.jungGraph, "AS");
 		DirectedSparseMultigraph<Node, Edge> europa = GraphLoader.filterByCommunity(rootGraph.jungGraph, "EU");
@@ -36,9 +34,9 @@ public class Logica {
 		//Container of rootGraph
 		mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR, new Dimension(250, 250));
 		mainCommunity.setName("World");
-		subCommunityAsia = new SubContainer(asia,mainCommunity,Container.CIRCULAR,new Dimension(180, 180));
+		subCommunityAsia = new SubContainer(asia,mainCommunity,Container.SPRING,new Dimension(180, 180));
 		subCommunityAsia.setName("Asia");
-		subCommunityEuropa = new SubContainer(europa,mainCommunity,Container.CIRCULAR,new Dimension(150, 150));
+		subCommunityEuropa = new SubContainer(europa,mainCommunity,Container.SPRING,new Dimension(150, 150));
 		subCommunityEuropa.setName("Europa");
 
 		// ***** VISUALIZERS *****

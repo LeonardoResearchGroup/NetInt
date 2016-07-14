@@ -6,6 +6,7 @@ import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.jung.algorithms.filters.VertexPredicateFilter;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import utilities.GraphmlReader;
@@ -18,27 +19,29 @@ public class GraphLoader {
 	public GraphLoader(String file) {
 		reader = new GraphmlReader(file);
 		jungGraph = reader.getJungDirectedGraph();
+		setNodesOutDegree(jungGraph);
+		setNodesInDegree(jungGraph);
 		System.out.println("CommunityViz: Graph Created from file:" + file);
 	}
 
-	public void setNodesDegree() {
+	public static void setNodesDegree(Graph<Node, Edge> graph) {
 		// Degree
-		for (Node n : jungGraph.getVertices()) {
-			n.setDegree(jungGraph.degree(n));
+		for (Node n : graph.getVertices()) {
+			n.setDegree(0, graph.degree(n));
 		}
 	}
 
-	public void setNodesOutDegree() {
+	public static void setNodesOutDegree(Graph<Node, Edge> graph) {
 		// Degree
-		for (Node n : jungGraph.getVertices()) {
-			n.setOutDegree(jungGraph.getSuccessorCount(n));
+		for (Node n : graph.getVertices()) {
+			n.setOutDegree(0, graph.getSuccessorCount(n));
 		}
 	}
 
-	public void setNodesInDegree() {
+	public static void setNodesInDegree(Graph<Node, Edge> graph) {
 		// Degree
-		for (Node n : jungGraph.getVertices()) {
-			n.setInDegree(jungGraph.getPredecessorCount(n));
+		for (Node n : graph.getVertices()) {
+			n.setInDegree(0, graph.getPredecessorCount(n));
 		}
 	}
 
@@ -71,13 +74,17 @@ public class GraphLoader {
 		Predicate<Node> inSubgraph = new Predicate<Node>() {
 			@Override
 			public boolean evaluate(Node nodo) {
-				// System.out.println(nodo.getCommunity());
-				return nodo.getCommunity().equals(community);
+				return nodo.belongsTo(community);
 			}
 		};
 		VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(inSubgraph);
 		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
 				.transform(jungGraph);
+		// Set In and Out Degree
+		for (Node n : problemGraph.getVertices()) {
+			n.setOutDegree(n.getMetadataSize()-1, problemGraph.getSuccessorCount(n));
+			n.setInDegree(n.getMetadataSize()-1, problemGraph.getPredecessorCount(n));
+		}
 		return problemGraph;
 
 	}

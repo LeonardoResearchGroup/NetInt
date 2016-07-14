@@ -51,10 +51,14 @@ public class GraphmlReader {
 			Node sourceNode = new Node(idSource);
 			Node targetNode = new Node(idTarget);
 			// Add Attributes
-			sourceNode.setName(source.getProperty("label"));
-			sourceNode.setCommunity(source.getProperty("Continent"));
-			targetNode.setName(target.getProperty("label"));
-			targetNode.setCommunity(target.getProperty("Continent"));
+			sourceNode.setName((String) source.getProperty("label"));
+			sourceNode.setCommunity("World");
+			sourceNode.setCommunity((String)source.getProperty("Continent"),1);
+
+			targetNode.setName((String) target.getProperty("label"));
+			targetNode.setCommunity("World");
+			targetNode.setCommunity((String)target.getProperty("Continent"),1);
+
 
 			// Add graphElements to collection
 			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
@@ -79,10 +83,10 @@ public class GraphmlReader {
 			Node sourceNode = new Node(idSource);
 			Node targetNode = new Node(idTarget);
 			// Add Attributes
-			sourceNode.setName(source.getProperty("label"));
-			sourceNode.setCommunity(source.getProperty("Continent"));
-			targetNode.setName(target.getProperty("label"));
-			targetNode.setCommunity(target.getProperty("Continent"));
+			sourceNode.setName((String) source.getProperty("label"));
+			sourceNode.setCommunity((String)source.getProperty("Continent"));
+			targetNode.setName((String) target.getProperty("label"));
+			targetNode.setCommunity((String)target.getProperty("Continent"));
 
 			// Add graphElements to collection
 			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);

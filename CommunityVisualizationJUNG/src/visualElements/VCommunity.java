@@ -135,7 +135,7 @@ public class VCommunity extends VNode {
 		if (showNodes || networkVisible) {
 			for (VisualAtom vA : container.getVNodes()) {
 				VNode vN = (VNode) vA;
-				vN.setDiam(vN.getNode().getOutDegree() + 5);
+				vN.setDiam(vN.getNode().getOutDegree(0) + 5);
 				vN.show(showNodes, networkVisible);
 			}
 		}

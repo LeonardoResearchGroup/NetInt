@@ -1,57 +1,55 @@
 package graphElements;
 
-import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Node implements Comparable<Node> {
 
-	private int inDegree, outDegree, Degree;
 	private int id;// Must have a unique identifier. See equals(Object obj)
-	private TreeSet<Integer> insideSubGraphs;
+	private float size;
 	private String label;
-	private float Excentricity, Betweeness, size;
-	private String community;
-	
-	public Node(){
-		
+	private HashMap<Integer, NodeCommunityData> metadata;
+
+	public Node() {
+
 	}
 
 	public Node(int id) {
 		this.id = id;
-		insideSubGraphs = new TreeSet<Integer>();
-		insideSubGraphs.add(0);
+		metadata = new HashMap<Integer, NodeCommunityData>();
+		NodeCommunityData comData = new NodeCommunityData();
+		metadata.put(0, comData);
 	}
 
-	public int compareTo(Node vertex) {
-		return id - vertex.id;
+	public int compareTo(Node node) {
+		return id - node.id;
 	}
 
 	// Methods community related
-	public void includeInSubGraph(int arg) {
-		insideSubGraphs.add(arg);
-	}
 
-	public boolean belongsTo(int communityID) {
+	public boolean belongsTo(String community) {
 		boolean rtn = false;
-		for (Integer i : insideSubGraphs) {
-			if (i.equals(communityID)) {
+		for (NodeCommunityData mD : metadata.values()) {
+			if (mD.getCommunity().equals(community)) {
 				rtn = true;
+				break;
 			} else
 				rtn = false;
 		}
 		return rtn;
 	}
 
-	public String getSubGraphIDs() {
-		String indexes = "";
+	public String getCommunityNames() {
+		String communities = "";
 		int cont = 0;
-		for (Integer val : insideSubGraphs) {
-			indexes = indexes + val.toString();
-			if (cont < insideSubGraphs.size() - 1) {
-				indexes = indexes + ",";
+		for (NodeCommunityData mD : metadata.values()) {
+			communities = communities + mD.getCommunity();
+			if (cont < metadata.size() - 1) {
+				communities = communities + ",";
 			}
 			cont++;
 		}
-		return indexes;
+		return communities;
 	}
 
 	// *** equals
@@ -60,24 +58,13 @@ public class Node implements Comparable<Node> {
 		boolean rtn = n.getId() == this.getId();
 		return rtn;
 	}
-	
-	public int hashCode(){
+
+	public int hashCode() {
 		return id;
 	}
 
 	// *** Getters and setters
-	public int getInDegree() {
-		return inDegree;
-	}
-
-	public int getOutDegree() {
-		return outDegree;
-	}
-
-	public int getDegree() {
-		return Degree;
-	}
-
+	
 	public int getId() {
 		return id;
 	}
@@ -86,60 +73,88 @@ public class Node implements Comparable<Node> {
 		return label;
 	}
 
-	public float getExcentricity() {
-		return Excentricity;
+	public float getSize() {
+		return size;
 	}
 
-	public float getBetweeness() {
-		return Betweeness;
+	public String getCommunity(int key) {
+		return metadata.get(key).getCommunity();
+	}
+	
+	public int getMetadataSize() {
+		return metadata.size();
 	}
 
-	public void setInDegree(int inDegree) {
-		this.inDegree = inDegree;
+	public Set<Integer> getMetadataKeys(){
+		return metadata.keySet();
 	}
-
-	public void setOutDegree(int outDegree) {
-		this.outDegree = outDegree;
-	}
-
-	public void setDegree(int degree) {
-		Degree = degree;
-	}
+	
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public void setName(Object object) {
-		this.label =(String) object;
+	public void setName(String object) {
+		this.label = object;
 	}
-
-	public void setExcentricity(float excentricity) {
-		Excentricity = excentricity;
-	}
-
-	public void setBetweeness(float betweeness) {
-		Betweeness = betweeness;
-	}
-
-	public float getSize() {
-		return size;
-	}
-
+	
 	public void setSize(float size) {
 		this.size = size;
 	}
-
-	public String getCommunity() {
-		return community;
+	
+	public void setCommunity(String community) {
+		NodeCommunityData comData = metadata.get(0);
+		comData.setCommunity(community);
+		metadata.put(0, comData);
+	}
+	
+	public void setCommunity(String community, int key) {
+		NodeCommunityData comData = new NodeCommunityData();
+		comData.setCommunity(community);
+		metadata.put(key, comData);
 	}
 
-	public void setCommunity(Object object) {
-		this.community = (String) object;
+	// *****Get & set metrics
+	// Getters metric
+	public int getInDegree(int key) {
+		return metadata.get(key).getInDegree();
+	}
+	
+	public int getOutDegree(int key) {
+		return metadata.get(key).getOutDegree();
 	}
 
-	public TreeSet<Integer> getMySubGraphs() {
-		return insideSubGraphs;
+	public int getDegree(int key) {
+		return metadata.get(key).getDegree();
+	}
+
+	public float getBetweeness(int key) {
+		return metadata.get(key).getBetweeness();
+	}
+	
+	public float getExcentricity(int key) {
+		return metadata.get(key).getExcentricity();
+	}
+	
+	// Setters metrics
+	public void setInDegree(int key, int inDegree) {
+		this.metadata.get(key).setInDegree(inDegree);
+	}
+
+	public void setOutDegree(int key, int outDegree) {
+		this.metadata.get(key).setOutDegree(outDegree);
+	}
+
+	public void setDegree(int key, int degree) {
+		this.metadata.get(key).setDegree(degree);
+	}
+	
+	public void setBetweeness(int key, float betweeness) {
+		this.metadata.get(key).setBetweeness(betweeness);
+	}
+	
+	public void setExcentricity(int key, float excentricity) {
+		this.metadata.get(key).setExcentricity(excentricity);
 	}
 
 }

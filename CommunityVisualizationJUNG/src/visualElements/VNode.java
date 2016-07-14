@@ -1,5 +1,7 @@
 package visualElements;
 
+import java.util.Iterator;
+
 import graphElements.Node;
 import processing.core.*;
 import utilities.geometry.Involute;
@@ -68,12 +70,20 @@ public class VNode extends VisualAtom {
 			app.fill(0, alpha);
 			app.rect(pos.x - 5, pos.y - 3, 60, -53);
 			app.fill(200, alpha);
-			app.text("Com: " + node.getCommunity(), pos.x + 5, pos.y - 45);
-			app.text("Name: " + node.getName(), pos.x + 5, pos.y - 35);
-			app.text("ID: " + node.getId(), pos.x + 5, pos.y - 25);
-			app.text("in: " + node.getInDegree(), pos.x + 5, pos.y - 15);
-			app.text("out: " + node.getOutDegree(), pos.x + 5, pos.y - 5);
-
+			// Identification Data
+			app.text("Name: " + node.getName(), pos.x + 5, pos.y - 5);
+			app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);
+			// Communities data
+			Iterator<Integer> itr = node.getMetadataKeys().iterator();
+			int count = 0;
+			while (itr.hasNext()) {
+				int key = itr.next();
+				int shift = count * 35;
+				app.text("Com: " + node.getCommunity(key), pos.x + 5, pos.y - 45 - shift);
+				app.text("in: " + node.getInDegree(key), pos.x + 5, pos.y - 35 - shift);
+				app.text("out: " + node.getOutDegree(key), pos.x + 5, pos.y - 25 - shift);
+				count++;
+			}
 		} else {
 			alpha = 90;
 		}
@@ -90,14 +100,14 @@ public class VNode extends VisualAtom {
 		boolean rtn = vN.getNode().equals(this.node);
 		return rtn;
 	}
-	
-	public int hashCode(){
+
+	public int hashCode() {
 		return node.getId();
 	}
-	
+
 	// *** GETTERS AND SETTERS
-	
-	public void absoluteToRelative(PVector center){
+
+	public void absoluteToRelative(PVector center) {
 		pos = PVector.sub(pos, center);
 	}
 

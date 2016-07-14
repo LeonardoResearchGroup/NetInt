@@ -14,7 +14,6 @@ import processing.core.PApplet;
 import processing.core.PVector;
 import visualElements.VEdge;
 import visualElements.VNode;
-import visualElements.interactive.VisualAtom;
 
 /**
  * This abstract class contains two collections, one for the visualNodes and one
