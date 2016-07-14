@@ -25,8 +25,9 @@ public class VCommunity extends VNode {
 	private PVector lastPosition;
 
 	public VCommunity(PApplet app, Node node, Container container) {
-		super(app, node, (float) container.layout.getSize().getWidth() / 2,
-				(float) container.layout.getSize().getHeight() / 2, 0);
+		super(app, node, (float) container.dimension.width / 2, (float) container.dimension.height / 2, 0);
+		// super(app, node, (float) container.layout.getSize().getWidth() / 2,
+		// (float) container.layout.getSize().getHeight() / 2, 0);
 		this.container = container;
 		unlocked = false;
 		i = 0;
@@ -70,9 +71,13 @@ public class VCommunity extends VNode {
 		}
 		// Community cover data
 		showCoverLable();
-		
+
 		// Open or close the community
 		boolean communityIsOpen = showCommunityCover();
+
+		// Initialize community
+		container.initialize(communityIsOpen);
+
 		// Layout iterations
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
 			if (count < containerIterations) {
@@ -168,7 +173,7 @@ public class VCommunity extends VNode {
 		app.text(container.getName(), pos.x, pos.y);
 		app.noFill();
 		app.stroke(180);
-		app.rect(0, 0, container.layout.getSize().width, container.layout.getSize().height);
+		//app.rect(0, 0, container.dimension.width, container.dimension.height);
 		app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
 	}
 

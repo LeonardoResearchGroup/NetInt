@@ -22,10 +22,7 @@ public class RootContainer extends Container {
 	 */
 	public RootContainer(PApplet app, Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
 		super(app, graph);
-		distributeNodesInLayout(kindOfLayout, dimension);
-		// Generate Visual Elements
-		runNodeFactory();
-		runEdgeFactory();
+		this.kindOfLayout = kindOfLayout;
+		this.dimension = dimension;
 	}
-
 }

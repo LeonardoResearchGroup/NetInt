@@ -19,12 +19,12 @@ public class Executable extends PApplet {
 		ellipseMode(CENTER);
 
 		// Zoom & Pan
-		mousePos = new PVector();
+//		mousePos = new PVector();
 		zoomer = new ZoomPan(this);
-		// zoomer.setMouseMask(app.SHIFT); // Only active while shift key held
-		// down.
-		zoomer.allowZoomButton(true);
-		zoomer.allowPanButton(true);
+//		// zoomer.setMouseMask(app.SHIFT); // Only active while shift key held
+//		// down.
+//		zoomer.allowZoomButton(true);
+//		zoomer.allowPanButton(true);
 	}
 
 	public void draw() {

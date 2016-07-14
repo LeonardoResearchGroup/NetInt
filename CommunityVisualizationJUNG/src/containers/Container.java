@@ -40,6 +40,9 @@ public abstract class Container {
 	public PVector layoutCenter;
 
 	public AbstractLayout<Node, Edge> layout;
+	protected boolean done = false;
+	public int kindOfLayout;
+	public Dimension dimension;
 
 	// *** Constructor
 	public Container(PApplet app, Graph<Node, Edge> graph) {
@@ -49,6 +52,19 @@ public abstract class Container {
 		// Instantiate empty collections
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
+	}
+	
+	public void initialize(boolean initialize) {
+		if (initialize && !done) {
+			System.out.println("Container> Initialize: Distributing nodes in: " + getName());
+			distributeNodesInLayout(kindOfLayout, dimension);
+			// Generate Visual Elements
+			System.out.println("Container> Building visual nodes");
+			runNodeFactory();
+			System.out.println("Container> Building visual edges");
+			runEdgeFactory();
+			done = true;
+		}
 	}
 
 	/**

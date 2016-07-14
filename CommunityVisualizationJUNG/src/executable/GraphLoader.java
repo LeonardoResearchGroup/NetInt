@@ -18,9 +18,9 @@ public class GraphLoader {
 	GraphmlReader reader;
 	
 
-	public GraphLoader(String file, String coomunityFilter) {
+	public GraphLoader(String file, String coomunityFilter, String nodeLabel) {
 		reader = new GraphmlReader(file);
-		jungGraph = reader.getJungDirectedGraph(coomunityFilter);
+		jungGraph = reader.getJungDirectedGraph(coomunityFilter, nodeLabel);
 		for (String s : reader.getCommunities()){
 			System.out.println("GRaphLoadr> community: "+ s);
 		}
@@ -99,6 +99,6 @@ public class GraphLoader {
 	}
 
 	public static void main(String[] args) {
-		new GraphLoader("./data/graphs/Risk.graphml", "comunidad");
+		new GraphLoader("./data/graphs/Risk.graphml", "comunidad", "name");
 	}
 }

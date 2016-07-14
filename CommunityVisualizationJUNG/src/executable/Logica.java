@@ -29,11 +29,11 @@ public class Logica {
 		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
 
 		// ***** ROOT GRAPH*****
-		rootGraph = new GraphLoader(XML_FILE, "comunidad");
+		rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR,
 				new Dimension(250, 250));
-		mainCommunity.setName("World");
+		mainCommunity.setName("Root");
 		// Root Community
 		vMainCommunity = new VCommunity(app, new Node(0), mainCommunity);
 
@@ -47,7 +47,7 @@ public class Logica {
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(rootGraph.jungGraph,
 					communityName);
 			// SubContainers
-			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.CIRCULAR,
+			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.FRUCHTERMAN_REINGOLD,
 					new Dimension(100 + (cont * 30), 100 + (cont * 30)));
 			containerTemp.setName(communityName);
 			// Visualizers
@@ -64,7 +64,7 @@ public class Logica {
 
 	public void show(PApplet app) {
 
-		vMainCommunity.show();
+		//vMainCommunity.show();
 		for (VCommunity vC : vCommunities) {
 			vC.show();
 		}

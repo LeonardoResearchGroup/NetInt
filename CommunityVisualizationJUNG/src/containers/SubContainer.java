@@ -14,18 +14,16 @@ import visualElements.interactive.VisualAtom;
 public class SubContainer extends Container {
 	Container sourceContainer;
 
+
+
 	public SubContainer(Graph<Node, Edge> subGraph, Container sourceContainer, int kindOfLayout, Dimension dimension) {
 		super(sourceContainer.app, subGraph);
 		this.sourceContainer = sourceContainer;
-		// set nodes coordinates
-		distributeNodesInLayout(kindOfLayout, dimension);
-		// Extraction of visual elements
-		retrieveVisualElements2(sourceContainer);
-		runEdgeFactory();
-		// NOTE: If you want a separate community from the source container run
-		// remakeVisualElements()
-
+		this.kindOfLayout = kindOfLayout;
+		this.dimension = dimension;
 	}
+
+
 
 	/**
 	 * Get instances of the visual elements from a given graph (usually

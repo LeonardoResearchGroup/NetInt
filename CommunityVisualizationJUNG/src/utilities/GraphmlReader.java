@@ -41,7 +41,7 @@ public class GraphmlReader {
 		}
 	}
 
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey) {
+	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey) {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
@@ -68,6 +68,14 @@ public class GraphmlReader {
 
 			} else {
 				System.out.println("No matches!!! Check the community key String");
+			}
+			
+			// Check if exist a property matching nameKey
+			if (source.getProperty(nameKey) != null && target.getProperty(nameKey) != null) {
+				sourceNode.setName(source.getProperty(nameKey).toString());
+				targetNode.setName(target.getProperty(nameKey).toString());
+			} else {
+				System.out.println("No matches!!! Check the names key String");
 			}
 
 			// Add graphElements to collection
