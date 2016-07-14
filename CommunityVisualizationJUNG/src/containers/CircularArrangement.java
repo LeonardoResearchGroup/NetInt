@@ -1,4 +1,4 @@
-package utilities.visualArrangements;
+package containers;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,5 +1,6 @@
 package executable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.collections15.Predicate;
@@ -15,15 +16,23 @@ public class GraphLoader {
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
 	GraphmlReader reader;
+	
 
-	public GraphLoader(String file) {
+	public GraphLoader(String file, String coomunityFilter) {
 		reader = new GraphmlReader(file);
-		jungGraph = reader.getJungDirectedGraph();
+		jungGraph = reader.getJungDirectedGraph(coomunityFilter);
+		for (String s : reader.getCommunities()){
+			System.out.println("GRaphLoadr> community: "+ s);
+		}
 		setNodesOutDegree(jungGraph);
 		setNodesInDegree(jungGraph);
 		System.out.println("CommunityViz: Graph Created from file:" + file);
 	}
 
+	public ArrayList<String> getCommunityNames(){
+		return reader.getCommunities();
+	}
+	
 	public static void setNodesDegree(Graph<Node, Edge> graph) {
 		// Degree
 		for (Node n : graph.getVertices()) {
@@ -90,6 +99,6 @@ public class GraphLoader {
 	}
 
 	public static void main(String[] args) {
-		new GraphLoader("./data/graphs/Risk.graphml");
+		new GraphLoader("./data/graphs/Risk.graphml", "comunidad");
 	}
 }

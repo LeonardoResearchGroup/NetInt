@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Set;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -21,10 +23,12 @@ import graphElements.Edge;
 public class GraphmlReader {
 
 	private Graph graph;
+	ArrayList<String> communities;
 
 	public GraphmlReader(String xmlFile) {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
+		communities = new ArrayList<String>();
 
 		InputStream input;
 		try {
@@ -37,7 +41,7 @@ public class GraphmlReader {
 		}
 	}
 
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph() {
+	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey) {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
@@ -50,25 +54,34 @@ public class GraphmlReader {
 			// Instantiate Nodes
 			Node sourceNode = new Node(idSource);
 			Node targetNode = new Node(idTarget);
-			// Add Attributes
-			sourceNode.setName((String) source.getProperty("label"));
-			sourceNode.setCommunity("World");
-			sourceNode.setCommunity((String)source.getProperty("Continent"),1);
 
-			targetNode.setName((String) target.getProperty("label"));
-			targetNode.setCommunity("World");
-			targetNode.setCommunity((String)target.getProperty("Continent"),1);
+			// Check if exist a property matching communityKey
+			if (source.getProperty(communityKey) != null && target.getProperty(communityKey) != null) {
+				// Get and store communities
+				sourceNode.setCommunity("Root", 0);
+				targetNode.setCommunity("Root", 0);
+				sourceNode.setCommunity(source.getProperty(communityKey).toString(), 1);
+				targetNode.setCommunity(target.getProperty(communityKey).toString(), 1);
 
+				addCommunity(sourceNode.getCommunity(1));
+				addCommunity(targetNode.getCommunity(1));
+
+			} else {
+				System.out.println("No matches!!! Check the community key String");
+			}
 
 			// Add graphElements to collection
 			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
-			String val = String.valueOf((Double) edge.getProperty("weight"));
-			e.setWeight(Float.valueOf(val));
+			if ((Double) edge.getProperty("weight") != null) {
+				String val = String.valueOf((Double) edge.getProperty("weight"));
+				e.setWeight(Float.valueOf(val));
+			}
 			rtnGraph.addEdge(e, sourceNode, targetNode, EdgeType.DIRECTED);
-		}	
+
+		}
 		return rtnGraph;
 	}
-	
+
 	public TinkerGraph getTinkerGraph() {
 		TinkerGraph rtnGraph = new TinkerGraph();
 
@@ -84,9 +97,9 @@ public class GraphmlReader {
 			Node targetNode = new Node(idTarget);
 			// Add Attributes
 			sourceNode.setName((String) source.getProperty("label"));
-			sourceNode.setCommunity((String)source.getProperty("Continent"));
+			sourceNode.setCommunity((String) source.getProperty("Continent"));
 			targetNode.setName((String) target.getProperty("label"));
-			targetNode.setCommunity((String)target.getProperty("Continent"));
+			targetNode.setCommunity((String) target.getProperty("Continent"));
 
 			// Add graphElements to collection
 			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
@@ -95,6 +108,26 @@ public class GraphmlReader {
 			rtnGraph.addEdge(e, source, target, "directed");
 		}
 		return rtnGraph;
+	}
+
+	/**
+	 * ArrayList of community values obtained from the graphML file
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getCommunities() {
+		return communities;
+	}
+
+	private void addCommunity(String string) {
+		// If community not in the list yet
+		if (!communities.contains(string)) {
+			communities.add(string);
+		}
+	}
+
+	public Set<String> getKeys() {
+		return graph.getVertices().iterator().next().getPropertyKeys();
 	}
 
 }

@@ -3,8 +3,8 @@ package visualElements;
 import processing.core.PVector;
 import processing.core.PApplet;
 import processing.core.PConstants;
-import utilities.visualArrangements.Container;
 import visualElements.interactive.VisualAtom;
+import containers.Container;
 import graphElements.Node;
 
 /**

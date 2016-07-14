@@ -1,55 +1,72 @@
 package executable;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
+import containers.Container;
+import containers.RootContainer;
+import containers.SubContainer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import graphElements.Edge;
 import graphElements.Node;
-import utilities.visualArrangements.Container;
-import utilities.visualArrangements.RootContainer;
-import utilities.visualArrangements.SubContainer;
 import visualElements.VCommunity;
 import processing.core.*;
 
 public class Logica {
+	// Interaction elements
+	public PVector mousePos;
 
 	// Graph Elements
-	GraphLoader rootGraph;
+	private GraphLoader rootGraph;
+	private ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs;
 
 	// Visual Elements
-	RootContainer mainCommunity;
-	SubContainer subCommunityAsia,subCommunityEuropa;
-	VCommunity vMainCommunity, vAsia, vEuropa;
+	private ArrayList<SubContainer> containers;
+	private ArrayList<VCommunity> vCommunities;
+	private VCommunity vMainCommunity;
 
 	public Logica(PApplet app) {
-		// ***** GRAPHS and SUBGRAPHS*****
-		// Root
-		String XML_FILE = "../data/graphs/Risk.graphml";
-		rootGraph = new GraphLoader(XML_FILE);
-		// SubCommunities
-		DirectedSparseMultigraph<Node, Edge> asia = GraphLoader.filterByCommunity(rootGraph.jungGraph, "AS");
-		DirectedSparseMultigraph<Node, Edge> europa = GraphLoader.filterByCommunity(rootGraph.jungGraph, "EU");
+		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
 
-		// ***** CONTAINERS *****
-		//Container of rootGraph
-		mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.SPRING, new Dimension(250, 250));
+		// ***** ROOT GRAPH*****
+		rootGraph = new GraphLoader(XML_FILE, "comunidad");
+		// Container of rootGraph
+		RootContainer mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR,
+				new Dimension(250, 250));
 		mainCommunity.setName("World");
-		subCommunityAsia = new SubContainer(asia,mainCommunity,Container.FRUCHTERMAN_REINGOLD,new Dimension(180, 180));
-		subCommunityAsia.setName("Asia");
-		subCommunityEuropa = new SubContainer(europa,mainCommunity,Container.SPRING,new Dimension(150, 150));
-		subCommunityEuropa.setName("Europa");
+		// Root Community
+		vMainCommunity = new VCommunity(app, new Node(0), mainCommunity);
+
+		containers = new ArrayList<SubContainer>();
+		vCommunities = new ArrayList<VCommunity>();
+		// ***** SUBGRAPHS & CONTAINERS *****
+		subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
+		int cont = 0;
+		for (String communityName : rootGraph.getCommunityNames()) {
+			// SubGraphs
+			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(rootGraph.jungGraph,
+					communityName);
+			// SubContainers
+			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.CIRCULAR,
+					new Dimension(100 + (cont * 30), 100 + (cont * 30)));
+			containerTemp.setName(communityName);
+			// Visualizers
+			VCommunity communityTemp = new VCommunity(app, new Node(0), containerTemp);
+			subGraphs.add(graphTemp);
+			containers.add(containerTemp);
+			vCommunities.add(communityTemp);
+			cont++;
+		}
 
 		// ***** VISUALIZERS *****
-		// Main Community
-		vMainCommunity = new VCommunity(app, new Node(0), mainCommunity);
-		// SubCommunities
-		vAsia = new VCommunity(app, new Node(0), subCommunityAsia);
-		vEuropa = new VCommunity(app, new Node(0), subCommunityEuropa);
+
 	}
 
 	public void show(PApplet app) {
+
 		vMainCommunity.show();
-		vAsia.show();
-		vEuropa.show();
+		for (VCommunity vC : vCommunities) {
+			vC.show();
+		}
 	}
 }

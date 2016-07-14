@@ -6,7 +6,7 @@ import java.util.Set;
 public class Node implements Comparable<Node> {
 
 	private int id;// Must have a unique identifier. See equals(Object obj)
-	private float size;
+	private float diameter;
 	private String label;
 	private HashMap<Integer, NodeCommunityData> metadata;
 
@@ -74,7 +74,7 @@ public class Node implements Comparable<Node> {
 	}
 
 	public float getSize() {
-		return size;
+		return diameter;
 	}
 
 	public String getCommunity(int key) {
@@ -99,7 +99,7 @@ public class Node implements Comparable<Node> {
 	}
 	
 	public void setSize(float size) {
-		this.size = size;
+		this.diameter = size;
 	}
 	
 	public void setCommunity(String community) {

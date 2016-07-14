@@ -1,4 +1,4 @@
-package utilities.visualArrangements;
+package containers;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class SubContainer extends Container {
 		distributeNodesInLayout(kindOfLayout, dimension);
 		// Extraction of visual elements
 		retrieveVisualElements2(sourceContainer);
-		this.runEdgeFactory();
+		runEdgeFactory();
 		// NOTE: If you want a separate community from the source container run
 		// remakeVisualElements()
 

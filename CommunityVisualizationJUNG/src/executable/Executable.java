@@ -1,11 +1,13 @@
 package executable;
 
+import org.gicentre.utils.move.*;
 import processing.core.*;
 
-@SuppressWarnings("serial")
 public class Executable extends PApplet {
 	Logica app;
 	boolean clockwise = true;
+	private ZoomPan zoomer;
+	PVector mousePos;
 
 	public void setup() {
 		size(1200, 600);
@@ -15,10 +17,27 @@ public class Executable extends PApplet {
 		textAlign(CENTER);
 		// noLoop();
 		ellipseMode(CENTER);
+
+		// Zoom & Pan
+		mousePos = new PVector();
+		zoomer = new ZoomPan(this);
+		// zoomer.setMouseMask(app.SHIFT); // Only active while shift key held
+		// down.
+		zoomer.allowZoomButton(true);
+		zoomer.allowPanButton(true);
 	}
 
 	public void draw() {
 		background(0);
+
+		// Zoom Pan
+		// app.pushMatrix();
+		zoomer.transform();
+		// mousePos = zoomer.getMouseCoord();
+		// app.popMatrix();
+		// mousePos = zoomer.getCoordToDisp(mousePos);
+		//
+
 		app.show(this);
 	}
 
