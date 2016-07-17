@@ -1,0 +1,7 @@
+package executable;
+
+class Constants {
+	public final int val = -1;
+	public Constants(){}
+
+}
