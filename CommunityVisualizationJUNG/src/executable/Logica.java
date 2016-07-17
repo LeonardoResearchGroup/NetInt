@@ -47,7 +47,7 @@ public class Logica {
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(rootGraph.jungGraph,
 					communityName);
 			// SubContainers
-			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.FRUCHTERMAN_REINGOLD,
+			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.FRUCHTERMAN_REINGOLD ,
 					new Dimension(100 + (cont * 30), 100 + (cont * 30)));
 			containerTemp.setName(communityName);
 			// Visualizers
