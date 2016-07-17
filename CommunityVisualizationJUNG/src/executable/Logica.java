@@ -26,10 +26,10 @@ public class Logica {
 	private VCommunity vMainCommunity;
 
 	public Logica(PApplet app) {
-		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+		String XML_FILE = "../data/graphs/Risk.graphml";
 
 		// ***** ROOT GRAPH*****
-		rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
+		rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR,
 				new Dimension(250, 250));
@@ -57,13 +57,9 @@ public class Logica {
 			vCommunities.add(communityTemp);
 			cont++;
 		}
-
-		// ***** VISUALIZERS *****
-
 	}
 
 	public void show(PApplet app) {
-
 		//vMainCommunity.show();
 		for (VCommunity vC : vCommunities) {
 			vC.show();
