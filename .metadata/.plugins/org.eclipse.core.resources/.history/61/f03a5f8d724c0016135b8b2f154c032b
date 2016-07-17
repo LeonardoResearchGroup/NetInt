@@ -7,7 +7,7 @@ import visualElements.Dot;
 public class Executable extends PApplet {
 	Logica app;
 	PVector mousePos;
-	Zoom canvasTransformer;
+	Zoom z;
 	Dot[] dots;
 
 	public void setup() {
@@ -19,7 +19,7 @@ public class Executable extends PApplet {
 		ellipseMode(CENTER);
 
 		// Zoom
-		canvasTransformer = new Zoom(this);
+		z = new Zoom(this);
 		//z.translateCenter(width / 2, height / 2);
 		dots = new Dot[10];
 		makeElements();
@@ -30,13 +30,13 @@ public class Executable extends PApplet {
 
 		// Transformation of the canvas according to the zoom parameters
 		pushMatrix();
-		canvasTransformer.active();
+		z.active();
 		app.show(this);
-		drawElements(canvasTransformer.getCanvasMouse());
+		drawElements(z.getCanvasMouse());
 		popMatrix();
 		// Display GUI info
-		canvasTransformer.showLegend(new PVector(width-20,20));
-		canvasTransformer.displayValues(new PVector(width-20,45));
+		z.showLegend(new PVector(width-20,20));
+		z.displayValues(new PVector(width-20,35));
 	}
 	
 	

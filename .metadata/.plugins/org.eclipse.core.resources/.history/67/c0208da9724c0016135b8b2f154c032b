@@ -58,16 +58,10 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 		app.scale(zoom);
 		// The offset
 		app.translate(offset.x, offset.y);
+
+		System.out.println(isCanvasInTransformation());
 	}
 
-	/**
-	 * Reset zoom and pan to original values
-	 */
-	public void reset(){
-		zoom = 1;
-		offset.set(0, 0);
-	}
-	
 	/**
 	 * Zoom in keyboard
 	 * 
@@ -125,7 +119,6 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	public void showLegend(PVector pos) {
 		app.textAlign(PConstants.RIGHT);
 		app.text("Hold SHIFT and the left mouse button to zoom and pan", pos.x, pos.y);
-		app.text("Press r to restore zoom and pan to default values", pos.x, pos.y + 10);
 		app.textAlign(PConstants.CENTER);
 	}
 
@@ -175,8 +168,6 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 			in(0.1f);
 		} else if (arg0.getKeyChar() == 'z') {
 			out(0.1f);
-		} else if (arg0.getKeyChar() == 'r'){
-			reset();
 		}
 		shiftDown = arg0.isShiftDown();
 	}

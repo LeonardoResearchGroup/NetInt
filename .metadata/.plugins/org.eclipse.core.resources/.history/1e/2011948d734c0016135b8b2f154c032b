@@ -36,7 +36,7 @@ public class Executable extends PApplet {
 		popMatrix();
 		// Display GUI info
 		canvasTransformer.showLegend(new PVector(width-20,20));
-		canvasTransformer.displayValues(new PVector(width-20,45));
+		canvasTransformer.displayValues(new PVector(width-20,35));
 	}
 	
 	

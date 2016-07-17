@@ -125,7 +125,6 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	public void showLegend(PVector pos) {
 		app.textAlign(PConstants.RIGHT);
 		app.text("Hold SHIFT and the left mouse button to zoom and pan", pos.x, pos.y);
-		app.text("Press r to restore zoom and pan to default values", pos.x, pos.y + 10);
 		app.textAlign(PConstants.CENTER);
 	}
 
