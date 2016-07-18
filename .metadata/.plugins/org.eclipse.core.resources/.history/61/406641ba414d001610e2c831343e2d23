@@ -24,6 +24,7 @@ public class Executable extends PApplet {
 
 	public void draw() {
 		background(0);
+
 		// Transformation of the canvas according to the zoom parameters
 		pushMatrix();
 		canvasTransformer.active();
