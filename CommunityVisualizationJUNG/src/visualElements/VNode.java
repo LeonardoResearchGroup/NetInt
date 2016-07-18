@@ -86,7 +86,7 @@ public class VNode extends VisualAtom {
 		} else {
 			setAlpha(90);
 		}
-		app.textAlign(PConstants.CENTER, PConstants.CENTER);
+		app.textAlign(PConstants.CENTER, PConstants.TOP);
 	}
 
 	public boolean hasNode(Node node) {

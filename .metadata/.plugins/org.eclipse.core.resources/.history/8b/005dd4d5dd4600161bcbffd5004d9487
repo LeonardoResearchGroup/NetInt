@@ -1,6 +1,0 @@
-package executable;
-
-class Constants {
-	public Constants(){}
-
-}

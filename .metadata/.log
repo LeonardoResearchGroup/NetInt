@@ -7158,3 +7158,34 @@ Caused by: org.eclipse.jgit.errors.TransportException: https://jsalam@bitbucket.
 	at org.eclipse.jgit.transport.Transport.push(Transport.java:1200)
 	at org.eclipse.jgit.api.PushCommand.call(PushCommand.java:157)
 	... 4 more
+!SESSION 2016-07-18 15:55:22.391 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_91
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product -keyring /Users/juansalamanca/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -keyring /Users/juansalamanca/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2016-07-18 15:56:05.406
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.epp.logging.aeri.ide 2 16 2016-07-18 15:56:32.524
+!MESSAGE Server ‘org.eclipse.epp.logging.aeri.ide.server’ failed with exception: com.google.gson.stream.MalformedJsonException: Expected ':' at line 4 column 10. ; version: 1.100.0.v20160217-0435
+!STACK 0
+com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: Expected ':' at line 4 column 10
+	at com.google.gson.Gson.fromJson(Gson.java:818)
+	at com.google.gson.Gson.fromJson(Gson.java:768)
+	at org.eclipse.epp.internal.logging.aeri.ide.server.json.Json.deserialize(Json.java:97)
+	at org.eclipse.epp.internal.logging.aeri.ide.server.json.Json.deserialize(Json.java:106)
+	at org.eclipse.epp.internal.logging.aeri.ide.server.mars.IO.loadConfiguration(IO.java:75)
+	at org.eclipse.epp.internal.logging.aeri.ide.server.mars.ServerConnection.startUp(ServerConnection.java:98)
+	at com.google.common.util.concurrent.AbstractIdleService$2$1.run(AbstractIdleService.java:54)
+	at com.google.common.util.concurrent.Callables$3.run(Callables.java:93)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: com.google.gson.stream.MalformedJsonException: Expected ':' at line 4 column 10
+	at com.google.gson.stream.JsonReader.syntaxError(JsonReader.java:1505)
+	at com.google.gson.stream.JsonReader.doPeek(JsonReader.java:519)
+	at com.google.gson.stream.JsonReader.skipValue(JsonReader.java:1209)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:170)
+	at com.google.gson.Gson.fromJson(Gson.java:803)
+	... 8 more

@@ -11,10 +11,12 @@ public class VEdge {
 	VisualAtom source, target;
 	// int color;
 	Bezier bezier;
+	private float thickness;
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
 		aboveArc = true;
+		thickness = 1;
 	}
 
 	public void setSourceAndTarget(ArrayList<VNode> visualNodes) {
@@ -40,7 +42,7 @@ public class VEdge {
 	}
 
 	public void show(PApplet app) {
-
+		app.strokeWeight(thickness);
 		switch (edge.getMark()) {
 		case 0:
 			bezier.setColor(app.color(255, 100, 255));
@@ -103,5 +105,13 @@ public class VEdge {
 
 	public Edge getEdge() {
 		return edge;
+	}
+
+	public float getThickness() {
+		return thickness;
+	}
+
+	public void setThickness(float thickness) {
+		this.thickness = thickness;
 	}
 }

@@ -1,11 +1,13 @@
 package visualElements.interactive;
 
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
+//import java.awt.event.MouseListener;
+//import java.awt.event.MouseEvent;
 
 import processing.core.*;
+import processing.event.MouseEvent;
 
-public abstract class VisualAtom implements MouseListener {
+public abstract class VisualAtom {
+	// public abstract class VisualAtom implements MouseListener {
 
 	public PApplet app;
 	private int wdth, hght;
@@ -20,7 +22,8 @@ public abstract class VisualAtom implements MouseListener {
 		this.diam = diam;
 		pos = new PVector(x, y);
 		leftClicked = false;
-		app.addMouseListener(this);
+		myRegister(app);
+		// app.addMouseListener(this);
 	}
 
 	public VisualAtom(PApplet app, float x, float y, int wdth, int hght) {
@@ -29,7 +32,8 @@ public abstract class VisualAtom implements MouseListener {
 		this.hght = hght;
 		pos = new PVector(x, y);
 		leftClicked = false;
-		app.addMouseListener(this);
+		myRegister(app);
+		// app.addMouseListener(this);
 	}
 
 	public abstract void show();
@@ -70,63 +74,80 @@ public abstract class VisualAtom implements MouseListener {
 	public void setAlpha(int alpha) {
 		this.alpha = alpha;
 	}
-	
+
 	public int getAlpha() {
 		return alpha;
 	}
+
 	// ---------------- implementing MouseEvent methods ----------------
-	public void mousePressed(MouseEvent e) {
+	private void mousePressed(MouseEvent e) {
 		if (isMouseOver()) {
 			switch (e.getButton()) {
-			case MouseEvent.BUTTON1:
+			case PConstants.LEFT:
 				leftPressed = true;
 				break;
-			case MouseEvent.BUTTON2:
+			case PConstants.CENTER:
 				centerPressed = true;
 				break;
-			case MouseEvent.BUTTON3:
+			case PConstants.RIGHT:
 				rightPressed = true;
 				break;
 			}
 		}
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	private void mouseReleased(MouseEvent e) {
 		switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
+		case PConstants.LEFT:
 			leftPressed = false;
 			break;
-		case MouseEvent.BUTTON2:
+		case PConstants.CENTER:
 			centerPressed = false;
 			break;
-		case MouseEvent.BUTTON3:
+		case PConstants.RIGHT:
 			rightPressed = false;
 			break;
 		}
 
 	}
 
-	public void mouseExited(MouseEvent e) {
+	private void mouseExited(MouseEvent e) {
 		// PApplet.println("mouse exited");
 	}
 
-	public void mouseEntered(MouseEvent e) {
+	private void mouseEntered(MouseEvent e) {
 		// PApplet.println("mouse entered");
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	private void mouseClicked(MouseEvent e) {
 		if (isMouseOver()) {
 			switch (e.getButton()) {
-			case MouseEvent.BUTTON1:
+			// switch (e.getButton()) {
+			case PConstants.LEFT:
 				leftClicked = !leftClicked;
 				break;
-			case MouseEvent.BUTTON2:
+			case PConstants.CENTER:
 				centerClicked = !centerClicked;
 				break;
-			case MouseEvent.BUTTON3:
+			case PConstants.RIGHT:
 				rightClicked = !rightClicked;
 				break;
 			}
+		}
+	}
+
+	// P3
+	public void myRegister(PApplet theApp) {
+		theApp.registerMethod("mouseEvent", this);
+	}
+
+	public void mouseEvent(MouseEvent e) {
+		if (e.getAction() == MouseEvent.CLICK) {
+			mouseClicked(e);
+		} else if (e.getAction() == MouseEvent.RELEASE) {
+			mouseReleased(e);
+		} else if (e.getAction() == MouseEvent.PRESS) {
+			mousePressed(e);
 		}
 	}
 }

@@ -12,7 +12,7 @@ public class Executable extends PApplet {
 	Dot[] dots;
 
 	public void setup() {
-		size(displayWidth -100, displayHeight-200);
+		size(displayWidth - 100, displayHeight - 200, P2D);
 		app = new Logica(this);
 		textSize(10);
 		textAlign(CENTER);
@@ -21,7 +21,7 @@ public class Executable extends PApplet {
 
 		// Zoom
 		canvasTransformer = new Zoom(this);
-		//z.translateCenter(width / 2, height / 2);
+		// z.translateCenter(width / 2, height / 2);
 		dots = new Dot[10];
 		makeElements();
 	}
@@ -36,13 +36,13 @@ public class Executable extends PApplet {
 		drawElements(canvasTransformer.getCanvasMouse());
 		popMatrix();
 		// Display GUI info
-		canvasTransformer.showLegend(new PVector(width-20,20));
-		canvasTransformer.displayValues(new PVector(width-20,45));
+		canvasTransformer.showLegend(new PVector(width - 20, 20));
+		canvasTransformer.displayValues(new PVector(width - 20, 45));
+
 	}
-	
-	
+
 	// These methods are provisional while the implementation of the Zoom Class
-	
+
 	void makeElements() {
 		// An arbitrary design so that we have something to see!
 		for (int i = 0; i < 10; i++) {

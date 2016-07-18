@@ -1,14 +1,16 @@
 package gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
+//import java.awt.event.MouseEvent;
+//import java.awt.event.MouseListener;
+//import java.awt.event.MouseMotionListener;
 
 import processing.core.*;
+import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
-public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
+public class Zoom {
 
 	// The scale of our world
 	private float zoom;
@@ -37,9 +39,10 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 		endOffset = new PVector(0, 0);
 		canvasMouse = new PVector(0, 0);
 		newCenter = new PVector(0, 0);
-		app.addMouseListener(this);
-		app.addMouseMotionListener(this);
-		app.addKeyListener(this);
+//		app.addMouseListener(this);
+//		app.addMouseMotionListener(this);
+//		app.addKeyListener(this);
+		myRegister(app);
 	}
 
 	public void active() {
@@ -63,11 +66,11 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	/**
 	 * Reset zoom and pan to original values
 	 */
-	public void reset(){
+	public void reset() {
 		zoom = 1;
 		offset.set(0.0f, 0.0f, 0);
 	}
-	
+
 	/**
 	 * Zoom in keyboard
 	 * 
@@ -133,19 +136,9 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 		return canvasBeingTransformed;
 	}
 
-	
-// *** Overwritten methods from implemented interfaces
-	public void mouseClicked(MouseEvent arg0) {
-	}
-
-	public void mouseEntered(MouseEvent arg0) {
-	}
-
-	public void mouseExited(MouseEvent arg0) {
-	}
-
+	// *** Overwritten methods from implemented interfaces
 	public void mousePressed(MouseEvent arg0) {
-		startOffset.set(app.mouseX, app.mouseY,0);
+		startOffset.set(app.mouseX, app.mouseY, 0);
 		System.out.println("Zoom > pressed");
 	}
 
@@ -156,27 +149,24 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	public void mouseDragged(MouseEvent e) {
 		if (shiftDown) {
 			// set end for current drag iteration
-			endOffset.set(app.mouseX, app.mouseY,0);
+			endOffset.set(app.mouseX, app.mouseY, 0);
 			// set the difference
 			offset.add(PVector.sub(endOffset, startOffset));
 			// reset start for next drag iteration
-			startOffset.set(app.mouseX, app.mouseY,0);
+			startOffset.set(app.mouseX, app.mouseY, 0);
 			canvasBeingTransformed = true;
 		} else {
 			canvasBeingTransformed = false;
 		}
 	}
 
-	public void mouseMoved(MouseEvent e) {
-	}
-
 	public void keyPressed(KeyEvent arg0) {
 		// Control of zoom by keyboard
-		if (arg0.getKeyChar() == 'a') {
+		if (arg0.getKey() == 'a') {
 			in(0.1f);
-		} else if (arg0.getKeyChar() == 'z') {
+		} else if (arg0.getKey() == 'z') {
 			out(0.1f);
-		} else if (arg0.getKeyChar() == 'r'){
+		} else if (arg0.getKey() == 'r') {
 			reset();
 		}
 		shiftDown = arg0.isShiftDown();
@@ -189,6 +179,27 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 
 	public void keyTyped(KeyEvent arg0) {
 
+	}
+
+	// P3
+	public void myRegister(PApplet theApp) {
+		theApp.registerMethod("mouseEvent", this);
+		theApp.registerMethod("keyEvent", this);
+	}
+
+	public void keyEvent(KeyEvent k) {
+		keyPressed(k);
+	}
+
+	public void mouseEvent(MouseEvent e) {
+		if (e.getAction() == MouseEvent.RELEASE) {
+			mouseReleased(e);
+		} else if (e.getAction() == MouseEvent.PRESS) {
+			mousePressed(e);
+		}
+		if (e.getAction() == MouseEvent.DRAG) {
+			mouseDragged(e);
+		}
 	}
 
 }
