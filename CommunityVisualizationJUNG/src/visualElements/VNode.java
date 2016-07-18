@@ -10,7 +10,6 @@ import visualElements.interactive.VisualAtom;
 public class VNode extends VisualAtom {
 
 	private Node node;
-	private int alpha = 70;
 	// For involute
 	private PVector center;
 	private Involute inv;
@@ -58,7 +57,7 @@ public class VNode extends VisualAtom {
 					// inv.show(center);
 				}
 			} else {
-				alpha = 70;
+				setAlpha(90);
 			}
 		}
 	}
@@ -66,7 +65,7 @@ public class VNode extends VisualAtom {
 	private void verbose() {
 		app.textAlign(PConstants.LEFT);
 		if (isMouseOver()) {
-			alpha = 200;
+			setAlpha(200);
 			app.fill(0, alpha);
 			app.rect(pos.x - 5, pos.y - 3, 60, -53);
 			app.fill(200, alpha);
@@ -85,7 +84,7 @@ public class VNode extends VisualAtom {
 				count++;
 			}
 		} else {
-			alpha = 90;
+			setAlpha(90);
 		}
 		app.textAlign(PConstants.CENTER, PConstants.CENTER);
 	}
@@ -123,20 +122,12 @@ public class VNode extends VisualAtom {
 		return pos.z;
 	}
 
-	public int getAlpha() {
-		return alpha;
-	}
-
 	public Node getNode() {
 		return node;
 	}
 
 	public void setNode(Node node) {
 		this.node = node;
-	}
-
-	public void setAlpha(int alpha) {
-		this.alpha = alpha;
 	}
 
 	public void setVertex(Node vertex) {

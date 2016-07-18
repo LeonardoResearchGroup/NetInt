@@ -3,6 +3,7 @@ package executable;
 import gui.Zoom;
 import processing.core.*;
 import visualElements.Dot;
+import processing.opengl.*;
 
 public class Executable extends PApplet {
 	Logica app;
@@ -11,7 +12,7 @@ public class Executable extends PApplet {
 	Dot[] dots;
 
 	public void setup() {
-		size(1200, 600);
+		size(displayWidth -100, displayHeight-200);
 		app = new Logica(this);
 		textSize(10);
 		textAlign(CENTER);

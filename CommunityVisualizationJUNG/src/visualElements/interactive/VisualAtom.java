@@ -13,6 +13,7 @@ public abstract class VisualAtom implements MouseListener {
 	public PVector pos;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
+	protected int alpha = 90;
 
 	public VisualAtom(PApplet app, float x, float y, float diam) {
 		this.app = app;
@@ -66,6 +67,13 @@ public abstract class VisualAtom implements MouseListener {
 		diam = d;
 	}
 
+	public void setAlpha(int alpha) {
+		this.alpha = alpha;
+	}
+	
+	public int getAlpha() {
+		return alpha;
+	}
 	// ---------------- implementing MouseEvent methods ----------------
 	public void mousePressed(MouseEvent e) {
 		if (isMouseOver()) {

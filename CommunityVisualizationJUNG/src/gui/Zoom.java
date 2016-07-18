@@ -65,7 +65,7 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	 */
 	public void reset(){
 		zoom = 1;
-		offset.set(0, 0);
+		offset.set(0.0f, 0.0f, 0);
 	}
 	
 	/**
@@ -145,7 +145,8 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	}
 
 	public void mousePressed(MouseEvent arg0) {
-		startOffset.set(app.mouseX, app.mouseY);
+		startOffset.set(app.mouseX, app.mouseY,0);
+		System.out.println("Zoom > pressed");
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
@@ -155,11 +156,11 @@ public class Zoom implements MouseListener, MouseMotionListener, KeyListener {
 	public void mouseDragged(MouseEvent e) {
 		if (shiftDown) {
 			// set end for current drag iteration
-			endOffset.set(app.mouseX, app.mouseY);
+			endOffset.set(app.mouseX, app.mouseY,0);
 			// set the difference
 			offset.add(PVector.sub(endOffset, startOffset));
 			// reset start for next drag iteration
-			startOffset.set(app.mouseX, app.mouseY);
+			startOffset.set(app.mouseX, app.mouseY,0);
 			canvasBeingTransformed = true;
 		} else {
 			canvasBeingTransformed = false;

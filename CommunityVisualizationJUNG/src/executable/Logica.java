@@ -26,10 +26,10 @@ public class Logica {
 	private VCommunity vMainCommunity;
 
 	public Logica(PApplet app) {
-		String XML_FILE = "../data/graphs/Risk.graphml";
+		String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
 
 		// ***** ROOT GRAPH*****
-		rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
+		rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR,
 				new Dimension(250, 250));
@@ -47,8 +47,8 @@ public class Logica {
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(rootGraph.jungGraph,
 					communityName);
 			// SubContainers
-			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.FRUCHTERMAN_REINGOLD ,
-					new Dimension(100 + (cont * 30), 100 + (cont * 30)));
+			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.SPRING ,
+					new Dimension(300 + (cont * 30), 300 + (cont * 30)));
 			containerTemp.setName(communityName);
 			// Visualizers
 			VCommunity communityTemp = new VCommunity(app, new Node(0), containerTemp);

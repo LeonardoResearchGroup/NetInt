@@ -94,6 +94,12 @@ public class VCommunity extends VNode {
 		boolean visualizeEdges = unlocked && communityIsOpen;
 		boolean showInvolute = unlocked && communityIsOpen;
 		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+		
+		if (isMouseOver()){
+			setAlpha(110);
+		}else{
+			setAlpha(90);
+		}
 	}
 
 	private boolean showCommunityCover() {
@@ -117,7 +123,7 @@ public class VCommunity extends VNode {
 		// Visualize community cover
 		app.stroke(100);
 		app.strokeWeight(0);
-		app.fill(255, 30);
+		app.fill(255, alpha);
 		// *** DRAWS RIGHT HALF INVOLUTE
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
@@ -181,7 +187,4 @@ public class VCommunity extends VNode {
 	public void setContainer(Container nodesAndEdges) {
 		container = nodesAndEdges;
 	}
-
-	// ***** Events
-
 }
