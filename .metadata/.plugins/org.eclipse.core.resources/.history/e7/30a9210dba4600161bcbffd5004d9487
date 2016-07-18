@@ -1,0 +1,21 @@
+package utilities.geometry;
+
+import java.awt.geom.Point2D;
+
+import org.apache.commons.collections15.Transformer;
+import graphElements.Node;
+
+
+public class Initializer implements Transformer<Node,Point2D>{
+	
+	public Initializer(){
+		
+	}
+
+	@Override
+	public Point2D transform(Node arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

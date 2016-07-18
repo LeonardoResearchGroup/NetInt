@@ -1,0 +1,108 @@
+package gui;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import processing.core.*;
+
+public class Zoom implements MouseListener{
+
+	// The scale of our world
+	float zoom;
+	// A vector to store the offset from the center
+	PVector offset;
+	// The previous offset
+	PVector poffset;
+	// A vector for the mouse position
+	PVector zMouse;
+	PApplet app;
+
+	public Zoom(PApplet app) {
+		this.app = app;
+		zoom = 1;
+		offset = new PVector(0, 0);
+		poffset = new PVector(0, 0);
+		zMouse = new PVector(0, 0);
+		app.addMouseListener(this);
+	}
+
+	public void run() {
+		// Everything must be drawn relative to center
+		translate(width / 2, height / 2);
+		// Use scale for 2D "zoom"
+		scale(zoom);
+		// The offset (note how we scale according to the zoom)
+		translate(offset.x / zoom, offset.y / zoom);
+	}
+
+	public void pOffset() {
+		poffset.set(offset);
+	}
+
+	public void setCanvasMouse(PVector canvasMouse) {
+		zMouse = canvasMouse;
+	}
+
+	public PVector getMouse() {
+		return zMouse;
+	}
+
+	public void pan(PVector canvasMouse) {
+		offset.x = canvasMouse.x - zMouse.x + poffset.x;
+		offset.y = canvasMouse.y - zMouse.y + poffset.y;
+	}
+
+	public float getValue() {
+		return zoom;
+	}
+
+	public PVector getOffset() {
+		return offset;
+	}
+
+	public PVector getPOffset() {
+		return poffset;
+	}
+
+	public void in(float val) {
+		zoom += val;
+	}
+
+	public void out(float val) {
+		zoom -= val;
+	}
+
+	public void setValue(float val) {
+		zoom = val;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+}

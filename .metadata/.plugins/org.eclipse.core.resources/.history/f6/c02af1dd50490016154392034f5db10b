@@ -1,0 +1,132 @@
+package graphElements;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
+
+public class Node implements Comparable<Node> {
+
+	private int id;// Must have a unique identifier. See equals(Object obj)
+	private float size;
+	private String label;
+	private HashMap<Integer,NodeCommunityData> metadata;
+
+	public Node() {
+
+	}
+
+	public Node(int id) {
+		this.id = id;
+		NodeCommunityData comData = new NodeCommunityData();
+		metadata.put(0,comData);
+	}
+
+	public int compareTo(Node node) {
+		return id - node.id;
+	}
+
+	// Methods community related
+
+	public boolean belongsTo(String community) {
+		boolean rtn = false;
+		for (NodeCommunityData mD : metadata.values()) {
+			if (mD.getCommunity().equals(community)) {
+				rtn = true;
+			} else
+				rtn = false;
+		}
+		return rtn;
+	}
+
+	public String getSubGraphNames() {
+		String communities = "";
+		int cont = 0;
+		for (NodeCommunityData mD : metadata.values()) {
+			communities = communities + mD.getCommunity();
+			if (cont < metadata.size() - 1) {
+				communities = communities + ",";
+			}
+			cont++;
+		}
+		return communities;
+	}
+
+	// *** equals
+	public boolean equals(Object obj) {
+		Node n = (Node) obj;
+		boolean rtn = n.getId() == this.getId();
+		return rtn;
+	}
+
+	public int hashCode() {
+		return id;
+	}
+
+	// *** Getters and setters
+	public int getInDegree(int key) {
+		return metadata.get(key).getInDegree();
+	}
+
+	public int getOutDegree(int key) {
+		return metadata.get(key).getOutDegree();
+	}
+
+	public int getDegree(int key) {
+		return metadata.get(key).getDegree();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return label;
+	}
+
+	public float getExcentricity(int key) {
+		return metadata.get(key).getExcentricity();
+	}
+
+	public float getBetweeness(int key) {
+		return metadata.get(key).getBetweeness();
+	}
+
+	public void setInDegree(int key, int inDegree) {
+		this.metadata.get(key).setInDegree(inDegree);
+	}
+
+	public void setOutDegree(int key, int outDegree) {
+		this.metadata.get(key).setOutDegree(outDegree);
+	}
+
+	public void setDegree(int key, int degree) {
+		this.metadata.get(key).setDegree(degree);
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(Object object) {
+		this.label = (String) object;
+	}
+
+	public void setExcentricity(float excentricity) {
+		Excentricity = excentricity;
+	}
+
+	public void setBetweeness(float betweeness) {
+		Betweeness = betweeness;
+	}
+
+	public float getSize() {
+		return size;
+	}
+
+	public void setSize(float size) {
+		this.size = size;
+	}
+
+
+
+}

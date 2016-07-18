@@ -1,0 +1,57 @@
+package executable;
+
+import org.gicentre.utils.move.*;
+
+import gui.Dot;
+import gui.Zoom;
+import processing.core.*;
+
+public class Executable extends PApplet {
+	Logica app;
+	boolean clockwise = true;
+	PVector mousePos;
+	Zoom z;
+	Dot[] dots;
+
+	public void setup() {
+		size(1200, 600);
+		// size(1500, 600);
+		// app = new Logica(this);
+		textSize(10);
+		textAlign(CENTER);
+		// noLoop();
+		ellipseMode(CENTER);
+		z = new Zoom(this);
+		makeElements();
+	}
+
+	public void draw() {
+		background(0);
+		// app.show(this);
+		drawElements(new PVector(mouseX, mouseY));
+	}
+
+	public void keyPressed() {
+		if (key == 'r') {
+			clockwise = !clockwise;
+		}
+	}
+
+	void makeElements() {
+		// An arbitrary design so that we have something to see!
+		for (int i = 0; i < 10; i++) {
+			stroke(0, 50);
+			float h = 100;
+			Dot temp = new Dot(random(-h, h), random(-h, h), 12f);
+			dots[i] = temp;
+		}
+	}
+
+	void drawElements(PVector theMouse) {
+		// An arbitrary design so that we have something to see!
+		randomSeed(1);
+		for (int i = 0; i < 10; i++) {
+			dots[i].show(this, theMouse);
+		}
+	}
+}

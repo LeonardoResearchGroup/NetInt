@@ -1,0 +1,8 @@
+package utilities.visualArrangements;
+
+public abstract class AbstractContainer {
+	// Kinds of layouts
+		public static final int CIRCULAR = 0;
+		public static final int SPRING = 1;
+
+}

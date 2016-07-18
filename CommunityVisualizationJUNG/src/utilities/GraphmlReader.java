@@ -67,7 +67,7 @@ public class GraphmlReader {
 				addCommunity(targetNode.getCommunity(1));
 
 			} else {
-				System.out.println("No matches!!! Check the community key String");
+				System.out.println("GraphmlReader> No filter matches!!! Check the key String of the community filter");
 			}
 			
 			// Check if exist a property matching nameKey
@@ -75,7 +75,7 @@ public class GraphmlReader {
 				sourceNode.setName(source.getProperty(nameKey).toString());
 				targetNode.setName(target.getProperty(nameKey).toString());
 			} else {
-				System.out.println("No matches!!! Check the names key String");
+				System.out.println("GraphmlReader> No filter matches!!! Check the key String of the community filter");
 			}
 
 			// Add graphElements to collection

@@ -1,0 +1,19 @@
+package utilities.geometry;
+
+import java.awt.geom.Point2D;
+
+import org.apache.commons.collections15.Transformer;
+import processing.core.*;
+
+public class PVectorToPoint2D implements Transformer<PVector, Point2D> {
+
+	public PVectorToPoint2D() {
+
+	}
+
+	public Point2D transform(PVector arg) {
+		Point2D.Float point = new Point2D.Float(arg.x, arg.y);
+		return point;
+	}
+
+}

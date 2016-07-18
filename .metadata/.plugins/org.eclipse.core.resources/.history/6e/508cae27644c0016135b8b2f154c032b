@@ -1,0 +1,141 @@
+package gui;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+import processing.core.*;
+
+public class Zoom implements MouseListener, MouseMotionListener {
+
+	// The scale of our world
+	private float zoom;
+	// A vector to store the offset
+	private PVector offset;
+	// A vector to store the start offset
+	private PVector startOffset;
+	// The previous offset
+	private PVector endOffset;
+	// A vector for the mouse position
+	private PVector canvasMouse;
+	// A Vector for the canvas center
+	private PVector newCenter;
+	// The PApplet
+	public PApplet app;
+
+	public Zoom(PApplet app) {
+		this.app = app;
+		zoom = 1;
+		offset = new PVector(0, 0);
+		startOffset = new PVector(0, 0);
+		endOffset = new PVector(0, 0);
+		canvasMouse = new PVector(0, 0);
+		newCenter = new PVector(0, 0);
+		app.addMouseListener(this);
+		app.addMouseMotionListener(this);
+	}
+
+	public void run() {
+
+		// **** Convert screenMouse into canvasMouse
+		canvasMouse = new PVector(app.mouseX , app.mouseY);
+		//canvasMouse = new PVector(app.mouseX - newCenter.x, app.mouseY- newCenter.y);
+		canvasMouse.sub(newCenter);
+		// Zoom
+		canvasMouse.div(zoom);
+		// Pan
+		canvasMouse.sub(offset);
+
+		// **** Transformation of canvas
+		app.translate(newCenter.x, newCenter.y);
+		// Use scale for 2D "zoom"
+		app.scale(zoom);
+		// The offset
+		app.translate(offset.x, offset.y);
+
+	}
+
+	/**
+	 * Zoom in keyboard
+	 * 
+	 * @param val
+	 */
+	public void in(float val) {
+		zoom += val;
+	}
+
+	/**
+	 * Zoom out keyboard
+	 * 
+	 * @param val
+	 */
+	public void out(float val) {
+		zoom -= val;
+		if (zoom < 0.1) {
+			zoom = 0.1f;
+		}
+	}
+
+	/**
+	 * Returns the current zoom value
+	 * 
+	 * @return
+	 */
+	public float getZoomValue() {
+		return zoom;
+	}
+
+	/**
+	 * Returns the current mouse coordinate in the transformed canvas
+	 * 
+	 * @return
+	 */
+	public PVector getCanvasMouse() {
+		return canvasMouse;
+	}
+
+	public void translateCenter(float x, float y){
+		newCenter = new PVector(x,y);
+	}
+	public void displayValues() {
+		// **** Legends
+		app.textAlign(PConstants.LEFT);
+		app.text("Canvas mouse: " + canvasMouse, app.mouseX, app.mouseY + 10);
+		app.text("Zoom: " + zoom, app.mouseX, app.mouseY + 20);
+		app.text("Offset: " + offset, app.mouseX, app.mouseY + 30);
+		app.text("startOffset: " + startOffset, app.mouseX, app.mouseY + 40);
+		app.text("endOffset: " + endOffset, app.mouseX, app.mouseY + 50);
+		app.textAlign(PConstants.CENTER);
+	}
+
+	// *** Implemented methods from interfaces
+
+	public void mouseClicked(MouseEvent arg0) {
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	public void mousePressed(MouseEvent arg0) {
+		startOffset.set(app.mouseX, app.mouseY);
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+	}
+
+	public void mouseDragged(MouseEvent e) {
+		// set end for current drag iteration
+		endOffset.set(app.mouseX, app.mouseY);
+		// set the difference
+		offset.add(PVector.sub(endOffset, startOffset));
+		// reset start for next drag iteration
+		startOffset.set(app.mouseX, app.mouseY);
+	}
+
+	public void mouseMoved(MouseEvent e) {
+	}
+
+}

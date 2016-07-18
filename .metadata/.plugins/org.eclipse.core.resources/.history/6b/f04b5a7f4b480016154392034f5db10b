@@ -1,0 +1,31 @@
+package utilities.visualArrangements;
+
+import java.util.ArrayList;
+
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.graph.Graph;
+import graphElements.Edge;
+import graphElements.Node;
+import processing.core.PApplet;
+import processing.core.PVector;
+import visualElements.VEdge;
+import visualElements.VNode;
+
+public abstract class Container {
+	// Kinds of layouts
+	public static final int CIRCULAR = 0;
+	public static final int SPRING = 1;
+	// JUNG graph
+	protected Graph<Node, Edge> graph;
+	// Visual Elements
+	protected ArrayList<VNode> vNodes;
+	protected ArrayList<VEdge> vEdges;
+	// Custom Layouts
+	public ArrayList<Arrangement> customLayouts;
+	protected String name = "no name";
+	public PApplet app;
+	public PVector layoutCenter;
+
+	public AbstractLayout<Node, Edge> layout;
+
+}

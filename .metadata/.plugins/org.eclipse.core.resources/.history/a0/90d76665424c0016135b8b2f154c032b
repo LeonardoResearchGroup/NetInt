@@ -1,0 +1,80 @@
+package executable;
+
+import org.gicentre.utils.move.*;
+
+import gui.Dot;
+import gui.Zoom;
+import processing.core.*;
+
+public class Executable extends PApplet {
+	Logica app;
+	boolean clockwise = true;
+	PVector mousePos;
+	Zoom z;
+	Dot[] dots;
+
+	public void setup() {
+		size(1200, 600);
+		// size(1500, 600);
+		// app = new Logica(this);
+		textSize(10);
+		textAlign(CENTER);
+		// noLoop();
+		ellipseMode(CENTER);
+		// Zoom
+		z = new Zoom(this);
+		dots = new Dot[10];
+		makeElements();
+	}
+
+	public void draw() {
+		background(0);
+		// app.show(this);
+		PVector pos = new PVector(mouseX - (width / 2), mouseY - (height / 2));
+		pos.div(z.getValue());
+		pos.sub(z.getOffset());
+
+		pushMatrix();
+		z.run();
+		drawElements(pos);
+		popMatrix();
+
+		text(pos.toString(), mouseX, mouseY);
+		text(z.getValue(), mouseX, mouseY+10);
+
+		stroke(255, 100);
+		line(width / 2, 0, width / 2, height);
+		line(0, height / 2, width, height / 2);
+
+	}
+
+	public void keyPressed() {
+		if (key == 'r') {
+			clockwise = !clockwise;
+		}
+		if (key == 'a') {
+			z.in(0.1f);
+		} else if (key == 'z') {
+			z.out(0.1f);
+		}
+		z.setValue(constrain(z.getValue(), 0, 100));
+	}
+
+	void makeElements() {
+		// An arbitrary design so that we have something to see!
+		for (int i = 0; i < 10; i++) {
+			stroke(0, 50);
+			float h = 100;
+			Dot temp = new Dot(random(-h, h), random(-h, h), 12f);
+			dots[i] = temp;
+		}
+	}
+
+	void drawElements(PVector theMouse) {
+		// An arbitrary design so that we have something to see!
+		randomSeed(1);
+		for (int i = 0; i < 10; i++) {
+			dots[i].show(this, theMouse);
+		}
+	}
+}
