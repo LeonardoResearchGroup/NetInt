@@ -6,11 +6,16 @@
 	<classpathentry kind="lib" path="libs/JUNG/jung-graph-impl-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/JUNG/jung-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/blueprints-core-2.6.0.jar"/>
-	<classpathentry kind="lib" path="/Users/jsalam/caoba-comunidades/CommunityVisualization/libs/core.jar"/>
 	<classpathentry kind="lib" path="libs/gicentreUtils.jar"/>
+	<classpathentry kind="lib" path="libs/core.jar"/>
 	<classpathentry kind="lib" path="libs/gluegen-rt-natives-macosx-universal.jar"/>
 	<classpathentry kind="lib" path="libs/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="libs/jogl-all-natives-macosx-universal.jar"/>
-	<classpathentry kind="lib" path="libs/jogl-all.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="libs/OpenGL/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="libs/OpenGL/jogl-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
