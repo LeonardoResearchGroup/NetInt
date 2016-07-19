@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+<<<<<<< HEAD
 	<section name="FileSystemImportWizard">
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="true" key="WizardFileSystemResourceImportPage1.STORE_PATH_VARIABLE_SELECTED_ID"/>
@@ -16,17 +17,14 @@
 			<item value="/Users/jsalam/caoba-comunidades/CommunityVisualization/src/graphElements"/>
 		</list>
 	</section>
+=======
+>>>>>>> c6a766527088a643315bfb22b54927bde2314f4f
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="800" key="dialogWidth"/>
-		<item value="500" key="dialogHeight"/>
-		<list key="orderedProviders">
-		</list>
-		<list key="textArray">
-		</list>
-		<list key="orderedElements">
-		</list>
+		<item value="-1" key="dialogHeight"/>
+		<item value="-1" key="dialogWidth"/>
 		<list key="textEntries">
 		</list>
+<<<<<<< HEAD
 	</section>
 	<section name="WorkbenchPreferenceDialogSettings">
 		<item value="116" key="DIALOG_Y_ORIGIN"/>
@@ -46,9 +44,13 @@
 		<item value="org.eclipse.ui.wizards.export.ZipFile" key="ImportExportPage.STORE_SELECTED_EXPORT_WIZARD_ID"/>
 		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
 			<item value="org.eclipse.ui.Basic"/>
+=======
+		<list key="orderedElements">
 		</list>
-		<list key="ImportExportPage.STORE_EXPANDED_EXPORT_CATEGORIES">
-			<item value="org.eclipse.ui.Basic"/>
+		<list key="orderedProviders">
+>>>>>>> c6a766527088a643315bfb22b54927bde2314f4f
+		</list>
+		<list key="textArray">
 		</list>
 	</section>
 </section>
