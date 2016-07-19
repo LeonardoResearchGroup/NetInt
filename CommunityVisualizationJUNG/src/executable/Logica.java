@@ -63,6 +63,9 @@ public class Logica {
 		//vMainCommunity.show();
 		for (VCommunity vC : vCommunities) {
 			vC.show();
+			if(vC.itOpens){
+				
+			}
 		}
 	}
 }

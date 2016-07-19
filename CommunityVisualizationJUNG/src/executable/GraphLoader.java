@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.apache.commons.collections15.Predicate;
 
+import edu.uci.ics.jung.algorithms.filters.EdgePredicateFilter;
 import edu.uci.ics.jung.algorithms.filters.VertexPredicateFilter;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
@@ -97,8 +98,45 @@ public class GraphLoader {
 		return problemGraph;
 
 	}
+	
+	/**
+	 * Returns a subgraph of jungGraph whose edges connect the specified communities
+	 * community
+	 * 
+	 * @param jungGraph
+	 * @param comumnity1
+	 * @param comumnity2
+	 * @return
+	 */
+	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
+			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph,
+			final String community1, final String community2) {
+
+		Predicate<Edge> inSubgraph = new Predicate<Edge>() {
+			@Override
+			public boolean evaluate(Edge edge) {
+				boolean connectsOneWay = edge.getSource().belongsTo(community1) && edge.getTarget().belongsTo(community2);
+				boolean connectsOtherWay = edge.getSource().belongsTo(community2) && edge.getTarget().belongsTo(community1);
+				boolean connectsCommunities = connectsOneWay || connectsOtherWay;
+				return connectsCommunities;
+			}
+		};
+		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(inSubgraph);
+		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+				.transform(jungGraph);
+		// Set In and Out Degree
+		for (Node n : problemGraph.getVertices()) {
+			n.setOutDegree(n.getMetadataSize()-1, problemGraph.getSuccessorCount(n));
+			n.setInDegree(n.getMetadataSize()-1, problemGraph.getPredecessorCount(n));
+		}
+		return problemGraph;
+
+	}
 
 	public static void main(String[] args) {
-		new GraphLoader("./data/graphs/Risk.graphml", "comunidad", "name");
+		GraphLoader rootGraph = new GraphLoader("./data/graphs/Risk.graphml", "Continent", "Label");
+		DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByInterCommunities(rootGraph.jungGraph,
+				"AF", "EU");
+		System.out.println(graphTemp.getEdgeCount());
 	}
 }

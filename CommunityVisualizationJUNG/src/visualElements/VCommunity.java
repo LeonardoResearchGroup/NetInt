@@ -20,6 +20,10 @@ public class VCommunity extends VNode {
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
 	private boolean unlocked;
+	//
+	private boolean notOpened;
+	public boolean itOpens;
+	
 	private int i, increment, count, containerIterations;
 	public Container container;
 	private PVector lastPosition;
@@ -38,6 +42,8 @@ public class VCommunity extends VNode {
 		containerIterations = 100;
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
+		
+		notOpened = true;
 	}
 
 	public VCommunity(VNode vNode, Container container) {
@@ -62,6 +68,7 @@ public class VCommunity extends VNode {
 	}
 
 	public void show() {
+		itOpens = false;
 		// mouse interaction
 		unlocked = leftClicked;
 
@@ -74,9 +81,17 @@ public class VCommunity extends VNode {
 
 		// Open or close the community
 		boolean communityIsOpen = showCommunityCover();
+		
+		//check if occurs the first community opening
+		if( notOpened && communityIsOpen){
+			itOpens = true;
+			notOpened = false;
+			// Initialize community
+			container.initialize(communityIsOpen);
+		}
 
-		// Initialize community
-		container.initialize(communityIsOpen);
+		
+		//System.out.println(communityIsOpen);
 
 		// Layout iterations
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
