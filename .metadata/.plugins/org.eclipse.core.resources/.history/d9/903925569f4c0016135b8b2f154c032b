@@ -24,7 +24,7 @@ public class Logica {
 	// Visual Elements
 	private ArrayList<SubContainer> containers;
 	private ArrayList<VCommunity> vCommunities;
-	private VCommunity vMainCommunity, vComCommunities;
+	private VCommunity vMainCommunity;
 
 	public Logica(PApplet app) {
 		String XML_FILE = "../data/graphs/Risk.graphml";
@@ -43,7 +43,6 @@ public class Logica {
 		containers = new ArrayList<SubContainer>();
 		vCommunities = new ArrayList<VCommunity>();
 		subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
-		
 		int cont = 0;
 		for (String communityName : rootGraph.getCommunityNames()) {
 			// SubGraphs
@@ -60,6 +59,9 @@ public class Logica {
 			vCommunities.add(communityTemp);
 			cont++;
 		}
+		Graph<Node,Edge> theGraph = new DirectedSparseMultigraph<Node,Edge>();
+		
+		Container c = new Container(app,theGraph); 
 	}
 
 	public void show(PApplet app) {
@@ -67,6 +69,5 @@ public class Logica {
 		for (VCommunity vC : vCommunities) {
 			vC.show();
 		}
-		vComCommunities.show();
 	}
 }

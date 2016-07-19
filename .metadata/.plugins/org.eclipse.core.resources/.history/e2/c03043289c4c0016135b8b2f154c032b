@@ -20,7 +20,7 @@ public class Executable extends PApplet {
 
 		// Zoom
 		canvasTransformer = new Zoom(this);
-		//canvasTransformer.translateCenter(width / 2, height / 2);
+		//z.translateCenter(width / 2, height / 2);
 		dots = new Dot[10];
 		makeElements();
 	}

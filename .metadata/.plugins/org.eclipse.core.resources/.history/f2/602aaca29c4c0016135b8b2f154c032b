@@ -7,7 +7,6 @@ import containers.Container;
 import containers.RootContainer;
 import containers.SubContainer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import visualElements.VCommunity;
@@ -24,7 +23,7 @@ public class Logica {
 	// Visual Elements
 	private ArrayList<SubContainer> containers;
 	private ArrayList<VCommunity> vCommunities;
-	private VCommunity vMainCommunity, vComCommunities;
+	private VCommunity vMainCommunity;
 
 	public Logica(PApplet app) {
 		String XML_FILE = "../data/graphs/Risk.graphml";
@@ -38,23 +37,21 @@ public class Logica {
 		// Root Community
 		vMainCommunity = new VCommunity(app, new Node(0), mainCommunity);
 
-		
-		// ***** SUBGRAPHS & CONTAINERS *****
 		containers = new ArrayList<SubContainer>();
 		vCommunities = new ArrayList<VCommunity>();
+		// ***** SUBGRAPHS & CONTAINERS *****
 		subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
-		
 		int cont = 0;
 		for (String communityName : rootGraph.getCommunityNames()) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(rootGraph.jungGraph,
 					communityName);
 			// SubContainers
-			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.FRUCHTERMAN_REINGOLD,
+			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.FRUCHTERMAN_REINGOLD ,
 					new Dimension(100 + (cont * 30), 100 + (cont * 30)));
 			containerTemp.setName(communityName);
 			// Visualizers
-			VCommunity communityTemp = new VCommunity(app, new Node(cont), containerTemp);
+			VCommunity communityTemp = new VCommunity(app, new Node(0), containerTemp);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
 			vCommunities.add(communityTemp);
@@ -63,10 +60,9 @@ public class Logica {
 	}
 
 	public void show(PApplet app) {
-		// vMainCommunity.show();
+		//vMainCommunity.show();
 		for (VCommunity vC : vCommunities) {
 			vC.show();
 		}
-		vComCommunities.show();
 	}
 }

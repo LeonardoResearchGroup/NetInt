@@ -67,7 +67,6 @@ public abstract class Container {
 		}
 	}
 
-	// *** Factories
 	/**
 	 * Visual Nodes factory (For rootGraph)
 	 * 
@@ -96,7 +95,6 @@ public abstract class Container {
 		}
 	}
 
-	// *** Other methods
 	/**
 	 * Update Visual Nodes relative to a given position
 	 * 
@@ -170,6 +168,7 @@ public abstract class Container {
 	}
 
 	// *** Layouts
+
 	protected void distributeNodesInLayout(int kindOfLayout, Dimension dimension) {
 		switch (kindOfLayout) {
 		// Circular layout

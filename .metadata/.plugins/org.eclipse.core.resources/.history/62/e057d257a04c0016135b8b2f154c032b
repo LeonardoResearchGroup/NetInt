@@ -96,7 +96,6 @@ public abstract class Container {
 		}
 	}
 
-	// *** Other methods
 	/**
 	 * Update Visual Nodes relative to a given position
 	 * 

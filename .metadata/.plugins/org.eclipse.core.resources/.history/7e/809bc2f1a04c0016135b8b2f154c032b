@@ -44,6 +44,8 @@ public class Logica {
 		vCommunities = new ArrayList<VCommunity>();
 		subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
 		
+		Graph<Node,Edge> theGraphOfContainers = new DirectedSparseMultigraph<Node,Edge>();
+		
 		int cont = 0;
 		for (String communityName : rootGraph.getCommunityNames()) {
 			// SubGraphs
@@ -59,7 +61,14 @@ public class Logica {
 			containers.add(containerTemp);
 			vCommunities.add(communityTemp);
 			cont++;
+			
+			theGraphOfContainers.addVertex(communityTemp.getNode());
 		}
+		
+		
+		RootContainer con = new RootContainer (app,theGraphOfContainers,Container.CIRCULAR,new Dimension(500,500)); 
+		con.setName("Com Communities");
+		vComCommunities = new VCommunity(app, new Node(0), con); 
 	}
 
 	public void show(PApplet app) {

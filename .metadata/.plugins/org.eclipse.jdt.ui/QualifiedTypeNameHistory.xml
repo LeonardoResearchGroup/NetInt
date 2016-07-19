@@ -40,7 +40,6 @@
 <fullyQualifiedTypeName name="java.util.ListIterator"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.util.TreeSet"/>
-<fullyQualifiedTypeName name="edu.uci.ics.jung.graph.Graph"/>
 <fullyQualifiedTypeName name="edu.uci.ics.jung.algorithms.layout.Layout"/>
 <fullyQualifiedTypeName name="graphElements.Node"/>
 <fullyQualifiedTypeName name="graphElements.Edge"/>
@@ -48,9 +47,15 @@
 <fullyQualifiedTypeName name="processing.core.PApplet"/>
 <fullyQualifiedTypeName name="java.awt.Dimension"/>
 <fullyQualifiedTypeName name="visualElements.interactive.VisualAtom"/>
-<fullyQualifiedTypeName name="processing.core.PVector"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="java.util.Set"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="containers.Container"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseListener"/>
+<fullyQualifiedTypeName name="gui.Zoom"/>
+<fullyQualifiedTypeName name="gui.Dot"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseMotionListener"/>
+<fullyQualifiedTypeName name="processing.core.PVector"/>
+<fullyQualifiedTypeName name="java.awt.event.KeyListener"/>
+<fullyQualifiedTypeName name="edu.uci.ics.jung.graph.Graph"/>
 </qualifiedTypeNameHistroy>
