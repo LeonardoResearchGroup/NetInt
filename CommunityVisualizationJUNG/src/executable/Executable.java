@@ -10,16 +10,16 @@ public class Executable extends PApplet {
 	Zoom canvasTransformer;
 
 	public void setup() {
-		size(displayWidth - 100, displayHeight - 200, P2D);
+		size(displayWidth - 300, displayHeight - 300);
 		app = new Logica(this);
 		textSize(10);
 		textAlign(CENTER);
-		// noLoop();
 		ellipseMode(CENTER);
 
 		// Zoom
 		canvasTransformer = new Zoom(this);
 		// z.translateCenter(width / 2, height / 2);
+
 	}
 
 	public void draw() {

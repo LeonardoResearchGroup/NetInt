@@ -139,7 +139,6 @@ public class Zoom {
 	// *** Overwritten methods from implemented interfaces
 	public void mousePressed(MouseEvent arg0) {
 		startOffset.set(app.mouseX, app.mouseY, 0);
-		System.out.println("Zoom > pressed");
 	}
 
 	public void mouseReleased(MouseEvent arg0) {

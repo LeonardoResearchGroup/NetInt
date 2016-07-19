@@ -2,6 +2,7 @@ package executable;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import containers.Container;
 import containers.RootContainer;
@@ -59,8 +60,32 @@ public class Logica {
 		}
 	}
 
+	private void tracePropagationForward(int nodeID, int steps) {
+		// Retrieve the node
+		Collection<Node> nodes = rootGraph.jungGraph.getVertices();
+		Node tmp = (Node) nodes.toArray()[nodeID - 1];
+		System.out.println(tmp.getName());
+	}
+
+	private void tracePropagationForward(Node from, int steps) {
+		Collection<Node> sucessors = rootGraph.jungGraph.getSuccessors(from);
+		for (int i=0; i< steps ; i++){
+			
+		}
+
+		/*
+		 * Iterator <Node> itr = sucessors.iterator(); while(itr.hasNext()){
+		 * Node tmp2 = itr.next(); System.out.println(">"+tmp2.getName());
+		 * Collection <Node> sucessors2 =
+		 * rootGraph.jungGraph.getSuccessors(tmp2); Iterator <Node> itr2 =
+		 * sucessors2.iterator(); while(itr2.hasNext()){ Node tmp3 =
+		 * itr2.next(); System.out.println(">>"+tmp3.getName()); } }
+		 */
+
+	}
+
 	public void show(PApplet app) {
-		//vMainCommunity.show();
+		// vMainCommunity.show();
 		for (VCommunity vC : vCommunities) {
 			vC.show();
 		}

@@ -175,6 +175,7 @@ public class VCommunity extends VNode {
 	}
 
 	public void showCoverLable() {
+		app.textAlign(PConstants.CENTER, PConstants.CENTER);
 		app.fill(250, 200);
 		app.text(container.getName(), pos.x, pos.y);
 		app.noFill();

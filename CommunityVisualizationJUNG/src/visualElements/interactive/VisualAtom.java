@@ -2,8 +2,9 @@ package visualElements.interactive;
 
 //import java.awt.event.MouseListener;
 //import java.awt.event.MouseEvent;
-
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PConstants;
+import processing.core.PVector;
 import processing.event.MouseEvent;
 
 public abstract class VisualAtom {
