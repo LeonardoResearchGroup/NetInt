@@ -71,15 +71,9 @@ public class Logica {
 		Iterator <Node> itr = sucessors.iterator();
 		while(itr.hasNext()){
 			Node tmp2 = itr.next();
-			System.out.println(">"+tmp2.getName());
-			Collection <Node> sucessors2 = rootGraph.jungGraph.getSuccessors(tmp2);
-			Iterator <Node> itr2 = sucessors2.iterator();
-			while(itr2.hasNext()){
-				Node tmp3 = itr2.next();
-				System.out.println(">>"+tmp3.getName());
-			}
+			System.out.println(tmp2.getName());
 		}
-
+		System.out.println(sucessors.size());
 	}
 
 	public void show(PApplet app) {

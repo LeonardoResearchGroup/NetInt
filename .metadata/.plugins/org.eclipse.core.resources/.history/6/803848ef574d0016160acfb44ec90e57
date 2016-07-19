@@ -3,7 +3,6 @@ package executable;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import containers.Container;
 import containers.RootContainer;
@@ -63,30 +62,16 @@ public class Logica {
 			cont++;
 		}
 		
-		//rootGraph.printJungGraph();
-		Collection <Node> nodes =  rootGraph.jungGraph.getVertices();
-		Node tmp = (Node) nodes.toArray()[37];
-		System.out.println(tmp.getName());
-		Collection <Node> sucessors = rootGraph.jungGraph.getSuccessors(tmp);
-		Iterator <Node> itr = sucessors.iterator();
-		while(itr.hasNext()){
-			Node tmp2 = itr.next();
-			System.out.println(">"+tmp2.getName());
-			Collection <Node> sucessors2 = rootGraph.jungGraph.getSuccessors(tmp2);
-			Iterator <Node> itr2 = sucessors2.iterator();
-			while(itr2.hasNext()){
-				Node tmp3 = itr2.next();
-				System.out.println(">>"+tmp3.getName());
-			}
-		}
-
+		rootGraph.printJungGraph();
+		Collection <Node> sucessors = rootGraph.jungGraph.getSuccessors(new Node(1));
+		System.out.println(sucessors.size());
 	}
 
 	public void show(PApplet app) {
 		 vMainCommunity.show();
-//		for (VCommunity vC : vCommunities) {
-//			vC.show();
-//		}
+		for (VCommunity vC : vCommunities) {
+			vC.show();
+		}
 	//	vComCommunities.show();
 	}
 }
