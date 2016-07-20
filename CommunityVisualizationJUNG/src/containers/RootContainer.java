@@ -1,11 +1,10 @@
 package containers;
 
-import processing.core.*;
-
 import java.awt.Dimension;
 
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.*;
+import visualElements.Canvas;
 
 public class RootContainer extends Container {
 
@@ -20,8 +19,8 @@ public class RootContainer extends Container {
 	 * @param dimension
 	 *            The Dimension of the component that contain the visualElements
 	 */
-	public RootContainer(PApplet app, Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
-		super(app, graph);
+	public RootContainer(Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
+		super(graph);
 		this.kindOfLayout = kindOfLayout;
 		this.dimension = dimension;
 	}

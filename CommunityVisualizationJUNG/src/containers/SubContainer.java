@@ -17,8 +17,14 @@ public class SubContainer extends Container {
 
 
 	public SubContainer(Graph<Node, Edge> subGraph, Container sourceContainer, int kindOfLayout, Dimension dimension) {
-		super(sourceContainer.app, subGraph);
+		super(subGraph);
 		this.sourceContainer = sourceContainer;
+		this.kindOfLayout = kindOfLayout;
+		this.dimension = dimension;
+	}
+	
+	public SubContainer(Graph<Node, Edge> subGraph,  int kindOfLayout, Dimension dimension) {
+		super(subGraph);
 		this.kindOfLayout = kindOfLayout;
 		this.dimension = dimension;
 	}

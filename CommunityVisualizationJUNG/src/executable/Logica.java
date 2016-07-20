@@ -8,69 +8,78 @@ import containers.Container;
 import containers.RootContainer;
 import containers.SubContainer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
+import visualElements.Canvas;
 import visualElements.VCommunity;
-import processing.core.*;
 
 public class Logica {
-	// Interaction elements
-	public PVector mousePos;
-
-	// Graph Elements
-	private GraphLoader rootGraph;
-	private ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs;
-
-	// Visual Elements
-	private ArrayList<SubContainer> containers;
-	private ArrayList<VCommunity> vCommunities;
+	
+	// Visual Communities
 	private VCommunity vMainCommunity;
+	private ArrayList<VCommunity> vSubCommunities;
 
-	public Logica(PApplet app) {
+	public Logica() {
 		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
+		// String XML_FILE = "../data/graphs/Risk.graphml";
+		// rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
 
-		// ***** ROOT GRAPH*****
-		rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
+		// Root visual community
+		vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
+		// Sub communities
+		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames());
+
+	}
+
+	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
 		// Container of rootGraph
-		RootContainer mainCommunity = new RootContainer(app, rootGraph.jungGraph, RootContainer.CIRCULAR,
-				new Dimension(250, 250));
+		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(250, 250));
 		mainCommunity.setName("Root");
 		// Root Community
-		vMainCommunity = new VCommunity(app, new Node(0), mainCommunity);
+		VCommunity vCommunity = new VCommunity(new Node(0), mainCommunity);
+		return vCommunity;
+	}
 
-		containers = new ArrayList<SubContainer>();
-		vCommunities = new ArrayList<VCommunity>();
-		// ***** SUBGRAPHS & CONTAINERS *****
-		subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
+	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
+			ArrayList<String> communityNames) {
+		//
+		ArrayList<SubContainer> containers = new ArrayList<SubContainer>();
+		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+		//
+		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs= new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
 		int cont = 0;
-		for (String communityName : rootGraph.getCommunityNames()) {
+		for (String communityName : communityNames) {
 			// SubGraphs
-			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(rootGraph.jungGraph,
-					communityName);
+			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
-			SubContainer containerTemp = new SubContainer(graphTemp, mainCommunity, Container.CIRCULAR,
+			SubContainer containerTemp = new SubContainer(graphTemp, Container.CIRCULAR,
 					new Dimension(300 + (cont * 30), 300 + (cont * 30)));
 			containerTemp.setName(communityName);
 			// Visualizers
-			VCommunity communityTemp = new VCommunity(app, new Node(0), containerTemp);
+			VCommunity communityTemp = new VCommunity(new Node(0), containerTemp);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
 			vCommunities.add(communityTemp);
 			cont++;
 		}
+		subGraphs = null;
+		containers = null;		
+		return vCommunities;
 	}
 
-	private void tracePropagationForward(int nodeID, int steps) {
+	private void tracePropagationForward(DirectedSparseMultigraph<Node,Edge> graph, int nodeID, int steps) {
 		// Retrieve the node
-		Collection<Node> nodes = rootGraph.jungGraph.getVertices();
+		Collection<Node> nodes = graph.getVertices();
 		Node tmp = (Node) nodes.toArray()[nodeID - 1];
 		System.out.println(tmp.getName());
 	}
 
-	private void tracePropagationForward(Node from, int steps) {
-		Collection<Node> sucessors = rootGraph.jungGraph.getSuccessors(from);
-		for (int i=0; i< steps ; i++){
-			
+	private void tracePropagationForward(DirectedSparseMultigraph<Node,Edge> graph, Node from, int steps) {
+		Collection<Node> sucessors = graph.getSuccessors(from);
+		for (int i = 0; i < steps; i++) {
+
 		}
 
 		/*
@@ -84,10 +93,10 @@ public class Logica {
 
 	}
 
-	public void show(PApplet app) {
-		// vMainCommunity.show();
-		for (VCommunity vC : vCommunities) {
-			vC.show();
+	public void show(Canvas canvas) {
+		// vMainCommunity.show(canvas);
+		for (VCommunity vC : vSubCommunities) {
+			vC.show(canvas);
 		}
 	}
 }
