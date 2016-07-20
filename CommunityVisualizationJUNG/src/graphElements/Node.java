@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Node implements Comparable<Node> {
 
-	private int id;// Must have a unique identifier. See equals(Object obj)
+	private String id;// Must have a unique identifier. See equals(Object obj)
 	private float diameter;
 	private String label;
 	private HashMap<Integer, NodeCommunityData> metadata;
@@ -14,7 +14,7 @@ public class Node implements Comparable<Node> {
 
 	}
 
-	public Node(int id) {
+	public Node(String id) {
 		this.id = id;
 		metadata = new HashMap<Integer, NodeCommunityData>();
 		NodeCommunityData comData = new NodeCommunityData();
@@ -22,7 +22,7 @@ public class Node implements Comparable<Node> {
 	}
 
 	public int compareTo(Node node) {
-		return id - node.id;
+		return id.compareTo(node.id);
 	}
 
 	// Methods community related
@@ -55,17 +55,17 @@ public class Node implements Comparable<Node> {
 	// *** equals
 	public boolean equals(Object obj) {
 		Node n = (Node) obj;
-		boolean rtn = n.getId() == this.getId();
+		boolean rtn = n.getId().equals(this.getId());
 		return rtn;
 	}
 
 	public int hashCode() {
-		return id;
+		return id.hashCode();
 	}
 
 	// *** Getters and setters
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -90,7 +90,7 @@ public class Node implements Comparable<Node> {
 	}
 	
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -35,6 +35,9 @@ public class Canvas {
 		myRegister();
 	}
 
+	/**
+	 * This method MUST be invoked iteratively to get a fresh mouseCoordinate. Ideally within PApplet.draw()
+	 */
 	public void transform() {
 		// **** Convert screenMouse into canvasMouse
 		canvasMouse = new PVector(app.mouseX, app.mouseY);

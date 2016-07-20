@@ -15,16 +15,18 @@ import visualElements.Canvas;
 import visualElements.VCommunity;
 
 public class Logica {
-	
+
 	// Visual Communities
 	private VCommunity vMainCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {
-		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+		// String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+		String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
 		// String XML_FILE = "../data/graphs/Risk.graphml";
-		// rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
+		// GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent",
+		// "label");
 
 		// Root visual community
 		vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
@@ -38,7 +40,8 @@ public class Logica {
 		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(250, 250));
 		mainCommunity.setName("Root");
 		// Root Community
-		VCommunity vCommunity = new VCommunity(new Node(0), mainCommunity);
+		String nodeID = mainCommunity.getName() +"_"+ String.valueOf(0);
+		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
 		return vCommunity;
 	}
 
@@ -48,35 +51,36 @@ public class Logica {
 		ArrayList<SubContainer> containers = new ArrayList<SubContainer>();
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		//
-		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs= new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
+		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
 		int cont = 0;
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
-			SubContainer containerTemp = new SubContainer(graphTemp, Container.CIRCULAR,
+			SubContainer containerTemp = new SubContainer(graphTemp, Container.FRUCHTERMAN_REINGOLD,
 					new Dimension(300 + (cont * 30), 300 + (cont * 30)));
 			containerTemp.setName(communityName);
 			// Visualizers
-			VCommunity communityTemp = new VCommunity(new Node(0), containerTemp);
+			String nodeID = communityName +"_"+ String.valueOf(cont);
+			VCommunity communityTemp = new VCommunity(new Node(nodeID), containerTemp);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
 			vCommunities.add(communityTemp);
 			cont++;
 		}
 		subGraphs = null;
-		containers = null;		
+		containers = null;
 		return vCommunities;
 	}
 
-	private void tracePropagationForward(DirectedSparseMultigraph<Node,Edge> graph, int nodeID, int steps) {
+	private void tracePropagationForward(DirectedSparseMultigraph<Node, Edge> graph, int nodeID, int steps) {
 		// Retrieve the node
 		Collection<Node> nodes = graph.getVertices();
 		Node tmp = (Node) nodes.toArray()[nodeID - 1];
 		System.out.println(tmp.getName());
 	}
 
-	private void tracePropagationForward(DirectedSparseMultigraph<Node,Edge> graph, Node from, int steps) {
+	private void tracePropagationForward(DirectedSparseMultigraph<Node, Edge> graph, Node from, int steps) {
 		Collection<Node> sucessors = graph.getSuccessors(from);
 		for (int i = 0; i < steps; i++) {
 

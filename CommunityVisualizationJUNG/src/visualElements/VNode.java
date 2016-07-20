@@ -120,7 +120,7 @@ public class VNode extends VisualAtom {
 	}
 
 	public int hashCode() {
-		return node.getId();
+		return node.getId().hashCode();
 	}
 
 	// *** GETTERS AND SETTERS

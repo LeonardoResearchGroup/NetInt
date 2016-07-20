@@ -10,7 +10,7 @@ public class Executable extends PApplet {
 	TestPerformance performance;
 	
 	public void setup(){
-		size(1200,600,P2D);
+		size(1200,600, P2D);
 		canvas = new Canvas(this);
 		textSize(10);
 		//
@@ -24,7 +24,7 @@ public class Executable extends PApplet {
 		background(0);
 		//
 		pushMatrix();
-		//canvas.translateCenter(width/2, height/2);
+		canvas.translateCenter(width/2, height/2);
 		canvas.transform();
 		app.show(canvas);
 		popMatrix();

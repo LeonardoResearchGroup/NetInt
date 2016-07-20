@@ -52,8 +52,8 @@ public class GraphmlReader {
 			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 			// Instantiate Nodes
-			Node sourceNode = new Node(idSource);
-			Node targetNode = new Node(idTarget);
+			Node sourceNode = new Node(String.valueOf(idSource));
+			Node targetNode = new Node(String.valueOf(idTarget));
 
 			// Check if exist a property matching communityKey
 			if (source.getProperty(communityKey) != null && target.getProperty(communityKey) != null) {
@@ -101,8 +101,8 @@ public class GraphmlReader {
 			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 			// Instantiate Nodes
-			Node sourceNode = new Node(idSource);
-			Node targetNode = new Node(idTarget);
+			Node sourceNode = new Node(String.valueOf(idSource));
+			Node targetNode = new Node(String.valueOf(idTarget));
 			// Add Attributes
 			sourceNode.setName((String) source.getProperty("label"));
 			sourceNode.setCommunity((String) source.getProperty("Continent"));

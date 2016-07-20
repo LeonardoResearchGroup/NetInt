@@ -36,6 +36,10 @@ public abstract class VisualAtom {
 
 	public abstract void show(Canvas canvas);
 
+	/**
+	 * WARNING: Every instance of this class MUST invoke this method within show()
+	 * @param canvas
+	 */
 	protected void registerEvents(Canvas canvas) {
 		if (this.canvas == null) {
 			this.canvas = canvas;
@@ -47,6 +51,10 @@ public abstract class VisualAtom {
 		}
 	}
 
+	/**
+	 * WARNING: Every instance of this class MUST invoke this method within show()
+	 * @param mouse
+	 */
 	public void detectMouseOver(PVector mouse) {
 		isMouseOver = false;
 		// If the button is a rectangle
