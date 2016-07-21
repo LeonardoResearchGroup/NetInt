@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
+import visualElements.VCommunity;
 import visualElements.VEdge;
 import visualElements.VNode;
 import visualElements.interactive.VisualAtom;
@@ -14,16 +15,18 @@ import visualElements.interactive.VisualAtom;
 public class SubContainer extends Container {
 	Container sourceContainer;
 
-
-
 	public SubContainer(Graph<Node, Edge> subGraph, Container sourceContainer, int kindOfLayout, Dimension dimension) {
-		super(sourceContainer.app, subGraph);
+		super(subGraph);
 		this.sourceContainer = sourceContainer;
 		this.kindOfLayout = kindOfLayout;
 		this.dimension = dimension;
 	}
 
-
+	public SubContainer(Graph<Node, Edge> subGraph, int kindOfLayout, Dimension dimension) {
+		super(subGraph);
+		this.kindOfLayout = kindOfLayout;
+		this.dimension = dimension;
+	}
 
 	/**
 	 * Get instances of the visual elements from a given graph (usually
@@ -32,7 +35,7 @@ public class SubContainer extends Container {
 	 * 
 	 * @param container
 	 */
-	private void retrieveVisualElements(Container sourceContainer) {
+	public void retrieveVisualElements(Container sourceContainer) {
 		// For each node of Graph
 		for (Node n : graph.getVertices()) {
 
@@ -71,7 +74,7 @@ public class SubContainer extends Container {
 	 * 
 	 * @param container
 	 */
-	private void retrieveVisualElements2(Container sourceContainer) {
+	public void retrieveVisualElements2(Container sourceContainer) {
 		// For each node of Graph
 		for (Node n : graph.getVertices()) {
 
@@ -96,6 +99,32 @@ public class SubContainer extends Container {
 					vEdgeRetriever(vN, sourceContainer.getVEdges());
 					// Remove to node from the other container
 					iterator.remove();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get instances of the visual elements from a given list whose Nodes are
+	 * included in the Container's graph
+	 * 
+	 * @param container
+	 */
+	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
+		// For each node of Graph
+		for (Node n : graph.getVertices()) {
+
+			// Look for the corresponding VNode in the collection of VAtoms
+			for (VCommunity vC : vCommunities) {
+				/*
+				 * If the current node of the subGraph matches the node inside
+				 * the VisualAtom retrieved from the collection of visual atoms
+				 */
+				if (n.equals(vC.getNode())) {
+					vNodes.add(vC);
+					// Look for all the edges of that VNode and add them all
+					// to the collection of vEdges of this container
+					// vEdgeRetriever(vC, sourceContainer.getVEdges());
 				}
 			}
 		}

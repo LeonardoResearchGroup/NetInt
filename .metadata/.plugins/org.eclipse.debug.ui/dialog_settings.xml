@@ -2,6 +2,11 @@
 <section name="Workbench">
 	<section name="FAVORITES_DIALOG_SECTION">
 		<item value="350" key="DIALOG_WIDTH"/>
+<<<<<<< HEAD
+		<item value="203" key="DIALOG_Y_ORIGIN"/>
+		<item value="644" key="DIALOG_X_ORIGIN"/>
+		<item value="400" key="DIALOG_HEIGHT"/>
+=======
 		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
 		<item value="400" key="DIALOG_HEIGHT"/>
 		<item value="203" key="DIALOG_Y_ORIGIN"/>
@@ -9,6 +14,7 @@
 	</section>
 	<section name="org.eclipse.debug.ui.SCOPED_SAVE_SELECTION_DIALOG">
 		<item value="289" key="DIALOG_WIDTH"/>
+>>>>>>> c6a766527088a643315bfb22b54927bde2314f4f
 		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
 		<item value="352" key="DIALOG_HEIGHT"/>
 	</section>

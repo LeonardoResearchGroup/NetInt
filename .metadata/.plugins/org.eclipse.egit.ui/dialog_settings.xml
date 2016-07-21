@@ -7,12 +7,34 @@
 	<list key="CommitDialog.committerValues">
 		<item value="jsalam &lt;jsalam@icesi.edu.co&gt;"/>
 	</list>
+<<<<<<< HEAD
+	<section name="GitCommitMessageComponent">
+	</section>
+	<section name="org.eclipse.egit.ui.COMMIT_DIALOG_SECTION">
+		<item value="626" key="DIALOG_WIDTH"/>
+		<item value="70" key="DIALOG_Y_ORIGIN"/>
+		<item value="654" key="DIALOG_X_ORIGIN"/>
+		<item value="623" key="DIALOG_HEIGHT"/>
+		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.pull.PullResultDialog.dialogBounds">
+		<item value="304" key="DIALOG_Y_ORIGIN"/>
+		<item value="737" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.push.PushResultDialog.dialogBounds">
+		<item value="650" key="DIALOG_WIDTH"/>
+		<item value="202" key="DIALOG_Y_ORIGIN"/>
+		<item value="429" key="DIALOG_X_ORIGIN"/>
+		<item value="440" key="DIALOG_HEIGHT"/>
+		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
+=======
 	<section name="org.eclipse.egit.ui.internal.push.PushResultDialog.dialogBounds">
 		<item value="650" key="DIALOG_WIDTH"/>
 		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
 		<item value="440" key="DIALOG_HEIGHT"/>
 		<item value="202" key="DIALOG_Y_ORIGIN"/>
 		<item value="429" key="DIALOG_X_ORIGIN"/>
+>>>>>>> c6a766527088a643315bfb22b54927bde2314f4f
 		<list key="sashWeights">
 			<item value="600"/>
 			<item value="400"/>

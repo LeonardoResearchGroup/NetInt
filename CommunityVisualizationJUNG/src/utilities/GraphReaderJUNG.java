@@ -45,7 +45,7 @@ public class GraphReaderJUNG {
 				Node v = new Node();
 				v.setName(nmd.getProperty("label"));
 				v.setCommunity(nmd.getProperty("continent"));
-				v.setId(cont);
+				v.setId(String.valueOf(cont));
 				cont++;
 				return v;
 			}

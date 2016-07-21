@@ -24,8 +24,8 @@ public class VCommunity extends VNode {
 	public Container container;
 	private PVector lastPosition;
 
-	public VCommunity(PApplet app, Node node, Container container) {
-		super(app, node, (float) container.dimension.width / 2, (float) container.dimension.height / 2, 0);
+	public VCommunity(Node node, Container container) {
+		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2, 0);
 		// super(app, node, (float) container.layout.getSize().getWidth() / 2,
 		// (float) container.layout.getSize().getHeight() / 2, 0);
 		this.container = container;
@@ -35,7 +35,7 @@ public class VCommunity extends VNode {
 		count = 0;
 		setLayoutParameters();
 		lastPosition = pos;
-		containerIterations = 100;
+		containerIterations = 50;
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 	}
@@ -61,19 +61,29 @@ public class VCommunity extends VNode {
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
 	}
 
-	public void show() {
+	public void show(Canvas canvas) {
+
+		// Visualize nodes & edges in container
+		boolean visualizeNodes = false;
+		boolean visualizeEdges = false;
+
+		// Register mouse, touch or key events triggered on this object in the
+		// context of the canvas
+		registerEvents(canvas);
+		// retrieve mouse coordinates
+		detectMouseOver(canvas.getCanvasMouse());
 		// mouse interaction
 		unlocked = leftClicked;
 
 		// Move vCommunity to mouse position
 		if (rightPressed) {
-			setCommunityCenter(new PVector(app.mouseX, app.mouseY));
+			setCommunityCenter(new PVector(canvas.getCanvasMouse().x, canvas.getCanvasMouse().y));
 		}
 		// Community cover data
-		showCoverLable();
+		showCoverLable(canvas);
 
 		// Open or close the community
-		boolean communityIsOpen = showCommunityCover();
+		boolean communityIsOpen = showCommunityCover(canvas);
 
 		// Initialize community
 		container.initialize(communityIsOpen);
@@ -82,27 +92,29 @@ public class VCommunity extends VNode {
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
 			if (count < containerIterations) {
 				container.stepIterativeLayout(pos);
+				visualizeEdges = false;
 				count++;
+			} else {
+				visualizeEdges = unlocked && communityIsOpen;
 			}
+		}else {
+			visualizeEdges = unlocked && communityIsOpen;
 		}
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center
 		updateContainer(communityIsOpen);
-
 		// Visualize nodes & edges in container
-		boolean visualizeNodes = isMouseOver();
-		boolean visualizeEdges = unlocked && communityIsOpen;
-		boolean showInvolute = unlocked && communityIsOpen;
-		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
-		
-		if (isMouseOver()){
+		visualizeNodes = unlocked;
+		showCommunity(canvas, visualizeNodes, visualizeEdges, communityIsOpen);
+
+		if (isMouseOver) {
 			setAlpha(110);
-		}else{
+		} else {
 			setAlpha(90);
 		}
 	}
 
-	private boolean showCommunityCover() {
+	private boolean showCommunityCover(Canvas canvas) {
 		boolean open = false;
 		if (unlocked) {
 			if (!open) {
@@ -121,16 +133,16 @@ public class VCommunity extends VNode {
 			}
 		}
 		// Visualize community cover
-		app.stroke(100);
-		app.strokeWeight(0);
-		app.fill(255, alpha);
+		canvas.app.stroke(100);
+		canvas.app.strokeWeight(0);
+		canvas.app.fill(255, alpha);
 		// *** DRAWS RIGHT HALF INVOLUTE
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// Gets the PVector for angle2
 		// PVector intersect = getXY(angle2);
 		// *** Arc right half
-		app.arc(pos.x, pos.y, diam, diam, angle2, PConstants.TWO_PI + PConstants.HALF_PI);
+		canvas.app.arc(pos.x, pos.y, diam, diam, angle2, PConstants.TWO_PI + PConstants.HALF_PI);
 
 		// *** DRAWS LEFT HALF INVOLUTE
 		// Decrements the angle of the involute
@@ -138,21 +150,30 @@ public class VCommunity extends VNode {
 		// Gets the PVector for angle2
 		// intersect = getXY(angle2);
 		// *** Arc left half
-		app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
+		canvas.app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
 		return open;
 	}
 
-	public void showCommunity(boolean showNodes, boolean showEdges, boolean networkVisible) {
-		if (showNodes || networkVisible) {
-			for (VisualAtom vA : container.getVNodes()) {
-				VNode vN = (VNode) vA;
-				vN.setDiam(vN.getNode().getOutDegree(0) + 5);
-				vN.show(showNodes, networkVisible);
+	public void showCommunity(Canvas canvas, boolean showNodes, boolean showEdges, boolean networkVisible) {
+		if (networkVisible) {
+			if (showNodes) {
+				for (VisualAtom vA : container.getVNodes()) {
+					// If vA is a VCommunity
+					if (vA instanceof VCommunity) {
+						VCommunity vC = (VCommunity) vA;
+						vC.show(canvas);
+					} else {
+						// If vA is a VNode
+						VNode vN = (VNode) vA;
+						vN.setDiam(vN.getNode().getOutDegree(0) + 5);
+						vN.show(canvas, networkVisible);
+					}
+				}
 			}
-		}
-		if (showEdges || networkVisible) {
-			for (VEdge vE : container.getVEdges()) {
-				vE.show(app);
+			if (showEdges) {
+				for (VEdge vE : container.getVEdges()) {
+					vE.show(canvas.app);
+				}
 			}
 		}
 	}
@@ -174,13 +195,15 @@ public class VCommunity extends VNode {
 		this.pos = newPos;
 	}
 
-	public void showCoverLable() {
-		app.fill(250, 200);
-		app.text(container.getName(), pos.x, pos.y);
-		app.noFill();
-		app.stroke(180);
-		//app.rect(0, 0, container.dimension.width, container.dimension.height);
-		app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
+	public void showCoverLable(Canvas canvas) {
+		canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);
+		canvas.app.fill(250, 200);
+		canvas.app.text(container.getName(), pos.x, pos.y);
+		canvas.app.noFill();
+		canvas.app.stroke(180);
+		// canvas.app.rect(0, 0, container.dimension.width,
+		// container.dimension.height);
+		canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
 	}
 
 	// ***** Setters

@@ -13,5 +13,5 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="executable.Executable"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="CommunityVisualizationJUNG"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms512m&#10;-Xmx1024m"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m&#10;-Xms256m"/>
 </launchConfiguration>

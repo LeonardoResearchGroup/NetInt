@@ -13,6 +13,7 @@ import graphElements.Edge;
 import graphElements.Node;
 import processing.core.PApplet;
 import processing.core.PVector;
+import visualElements.Canvas;
 import visualElements.VEdge;
 import visualElements.VNode;
 
@@ -36,7 +37,7 @@ public abstract class Container {
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
-	public PApplet app;
+	// public Canvas canvas;
 	public PVector layoutCenter;
 
 	public AbstractLayout<Node, Edge> layout;
@@ -45,28 +46,38 @@ public abstract class Container {
 	public Dimension dimension;
 
 	// *** Constructor
-	public Container(PApplet app, Graph<Node, Edge> graph) {
-		this.app = app;
+	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 
 		// Instantiate empty collections
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
 	}
-	
+
+	/**
+	 * This method is used to distribute nodes in layout only once after the
+	 * user clicks (opens) on the vCommunity cover
+	 * 
+	 * @param initialize
+	 */
 	public void initialize(boolean initialize) {
 		if (initialize && !done) {
 			System.out.println("Container> Initialize: Distributing nodes in: " + getName());
 			distributeNodesInLayout(kindOfLayout, dimension);
-			// Generate Visual Elements
-			System.out.println("Container> Building visual nodes");
-			runNodeFactory();
-			System.out.println("Container> Building visual edges");
-			runEdgeFactory();
+			if (vNodes.size() == 0) {
+				// Generate Visual Elements
+				System.out.println("Container> Building visual nodes");
+				runNodeFactory();
+				System.out.println("Container> Building visual edges");
+				runEdgeFactory();
+			}else{
+				setVElementCoordinates();
+			}
 			done = true;
 		}
 	}
 
+	// *** Factories
 	/**
 	 * Visual Nodes factory (For rootGraph)
 	 * 
@@ -75,7 +86,7 @@ public abstract class Container {
 	protected void runNodeFactory() {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
-			VNode tmp = new VNode(app, n, (float) layout.getX(n), (float) layout.getY(n), 10);
+			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n), 10);
 			tmp.absoluteToRelative(layoutCenter);
 			vNodes.add(tmp);
 		}
@@ -95,6 +106,7 @@ public abstract class Container {
 		}
 	}
 
+	// *** Other methods
 	/**
 	 * Update Visual Nodes relative to a given position
 	 * 
@@ -168,7 +180,6 @@ public abstract class Container {
 	}
 
 	// *** Layouts
-
 	protected void distributeNodesInLayout(int kindOfLayout, Dimension dimension) {
 		switch (kindOfLayout) {
 		// Circular layout
@@ -240,6 +251,15 @@ public abstract class Container {
 		this.name = name;
 	}
 
+	/**
+	 * Set coordinates to Visual Elements
+	 */
+	private void setVElementCoordinates() {
+		for (VNode vN : vNodes) {
+			vN.setX((float) layout.getX(vN.getNode()));
+			vN.setY((float) layout.getY(vN.getNode()));
+		}
+	}
 	// *** Show
 	public String getName() {
 		return name;

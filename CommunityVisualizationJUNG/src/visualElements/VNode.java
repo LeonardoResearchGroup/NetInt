@@ -12,81 +12,100 @@ public class VNode extends VisualAtom {
 	private Node node;
 	// For involute
 	private PVector center;
-	private Involute inv;
+	// private Involute inv;
 	private int sections, index;
 	private float radius;
 
-	public VNode(PApplet app, Node node, float x, float y, float diam) {
-		super(app, x, y, diam);
+	public VNode(Node node, float x, float y, float diam) {
+		super(x, y, diam);
 		this.node = node;
 	}
 
 	public VNode(VNode vNode) {
-		super(vNode.app, vNode.getX(), vNode.getY(), vNode.diam);
+		super(vNode.getX(), vNode.getY(), vNode.diam);
 		this.node = vNode.getNode();
 	}
 
-	public void setup() {
-		inv = new Involute(app, radius, sections, index);
-		pos = inv.getInvoluteCoords(center);
-	}
+	// public void setup(Canvas canvas) {
+	// inv = new Involute(radius, sections, index);
+	// pos = inv.getInvoluteCoords(center);
+	// }
 
 	// *** SHOW METHODS ***
-	public void show() {
-		app.noStroke();
-		app.ellipse(pos.x, pos.y, diam, diam);
+	public void show(Canvas canvas) {
+		// Register mouse, touch or key events triggered on this object in the
+		// context of the canvas
+		registerEvents(canvas);
+		// retrieve mouse coordinates
+		detectMouseOver(canvas.getCanvasMouse());
+		canvas.app.noStroke();
+		canvas.app.fill(200, 0, 200, alpha);
+		if (isMouseOver) {
+			canvas.app.fill(200, 200, 0, 30);
+			// Show comments
+			verbose(canvas);
+		} else {
+			setAlpha(90);
+		}
+		canvas.app.ellipse(pos.x, pos.y, diam, diam);
 	}
 
 	// showNodes, networkVisible
-	public void show(boolean showNode, boolean visible) {
-		if (visible) {
-			app.fill(200, alpha);
-			app.noStroke();
-			app.ellipse(pos.x, pos.y, diam, diam);
+	public void show(Canvas canvas, boolean visible) {
+		// Register mouse, touch or key events triggered on this object in the
+		// context of the canvas
+		registerEvents(canvas);
+		// retrieve mouse coordinates
+		detectMouseOver(canvas.getCanvasMouse());
 
-			if (isMouseOver()) {
-				app.fill(200, 0, 0, alpha);
-				app.noStroke();
-				app.ellipse(pos.x, pos.y, diam, diam);
+		if (visible) {
+			canvas.app.fill(200, alpha);
+			canvas.app.noStroke();
+			canvas.app.ellipse(pos.x, pos.y, diam, diam);
+
+			if (isMouseOver) {
+				canvas.app.fill(200, 0, 0, alpha);
+				canvas.app.noStroke();
+				canvas.app.ellipse(pos.x, pos.y, diam, diam);
 				// Show comments
-				verbose();
+				verbose(canvas);
 				// If community unlocked
-				if (inv != null) {
-					inv.runInvolute(90, 10, visible);
-					pos = inv.getInvoluteCoords(center);
-					// inv.show(center);
-				}
+				// if (inv != null) {
+				// inv.runInvolute(90, 10, visible);
+				// pos = inv.getInvoluteCoords(center);
+				// // inv.show(center);
+				// }
 			} else {
 				setAlpha(90);
 			}
 		}
 	}
 
-	private void verbose() {
-		app.textAlign(PConstants.LEFT);
-		if (isMouseOver()) {
+	private void verbose(Canvas canvas) {
+		canvas.app.textAlign(PConstants.LEFT);
+		if (isMouseOver) {
 			setAlpha(200);
-			app.fill(0, alpha);
-			app.rect(pos.x - 5, pos.y - 3, 60, -53);
-			app.fill(200, alpha);
+			canvas.app.fill(0, alpha);
+			canvas.app.rect(pos.x - 5, pos.y - 3, 60, -53);
+			canvas.app.fill(200, alpha);
 			// Identification Data
-			app.text("Name: " + node.getName(), pos.x + 5, pos.y - 5);
-			app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);
+			canvas.app.text("Name: " + node.getName(), pos.x + 5, pos.y - 5);
+			canvas.app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);
 			// Communities data
 			Iterator<Integer> itr = node.getMetadataKeys().iterator();
 			int count = 0;
 			while (itr.hasNext()) {
 				int key = itr.next();
 				int shift = count * 35;
-				app.text("Com: " + node.getCommunity(key), pos.x + 5, pos.y - 45 - shift);
-				app.text("in: " + node.getInDegree(key), pos.x + 5, pos.y - 35 - shift);
-				app.text("out: " + node.getOutDegree(key), pos.x + 5, pos.y - 25 - shift);
+				canvas.app.text("Com: " + node.getCommunity(key), pos.x + 5, pos.y - 45 - shift);
+				canvas.app.text("in: " + node.getInDegree(key), pos.x + 5, pos.y - 35 - shift);
+				canvas.app.text("out: " + node.getOutDegree(key), pos.x + 5, pos.y - 25 - shift);
 				count++;
 			}
 		} else {
 			setAlpha(90);
 		}
-		app.textAlign(PConstants.CENTER, PConstants.TOP);
+		canvas.app.textAlign(PConstants.CENTER, PConstants.TOP);
 	}
 
 	public boolean hasNode(Node node) {
@@ -101,7 +120,7 @@ public class VNode extends VisualAtom {
 	}
 
 	public int hashCode() {
-		return node.getId();
+		return node.getId().hashCode();
 	}
 
 	// *** GETTERS AND SETTERS

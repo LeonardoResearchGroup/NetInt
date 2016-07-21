@@ -1,37 +1,36 @@
 package executable;
 
-import gui.Zoom;
 import processing.core.*;
-import visualElements.Dot;
-import processing.opengl.*;
+import utilities.TestPerformance;
+import visualElements.Canvas;
 
 public class Executable extends PApplet {
 	Logica app;
-	Zoom canvasTransformer;
-
-	public void setup() {
-		size(displayWidth - 100, displayHeight - 200, P2D);
-		app = new Logica(this);
+	Canvas canvas;
+	TestPerformance performance;
+	
+	public void setup(){
+		size(1200,600);
+		canvas = new Canvas(this);
 		textSize(10);
-		textAlign(CENTER);
-		// noLoop();
-		ellipseMode(CENTER);
-
-		// Zoom
-		canvasTransformer = new Zoom(this);
-		// z.translateCenter(width / 2, height / 2);
+		//
+		app = new Logica();
+		//
+		performance = new TestPerformance();
+		
 	}
-
-	public void draw() {
+	
+	public void draw (){
 		background(0);
-		// Transformation of the canvas according to the zoom parameters
+		//
 		pushMatrix();
-		canvasTransformer.active();
-		app.show(this);
+		canvas.translateCenter(width/2, height/2);
+		canvas.transform();
+		app.show(canvas);
 		popMatrix();
-		// Display GUI info
-		canvasTransformer.showLegend(new PVector(width - 20, 20));
-		canvasTransformer.displayValues(new PVector(width - 20, 45));
-
+		//
+		canvas.showLegend(new PVector(width-20, 20));
+		canvas.displayValues(new PVector(width-20, 40));
+		performance.displayValues(canvas, new PVector(width-20, height-60));
 	}
 }
