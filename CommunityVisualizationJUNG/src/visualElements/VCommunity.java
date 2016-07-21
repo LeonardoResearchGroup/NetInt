@@ -23,6 +23,7 @@ public class VCommunity extends VNode {
 	//
 	private boolean notOpened;
 	public boolean itOpens;
+	public boolean despuesOpens = false;
 	
 	private int i, increment, count, containerIterations;
 	public Container container;
@@ -108,7 +109,11 @@ public class VCommunity extends VNode {
 		boolean visualizeNodes = isMouseOver();
 		boolean visualizeEdges = unlocked && communityIsOpen;
 		boolean showInvolute = unlocked && communityIsOpen;
-		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+		if(!container.getName().equals("SA") || despuesOpens)
+			showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+		if( itOpens ){
+			despuesOpens = true;
+		}
 	}
 
 	private boolean showCommunityCover() {
@@ -157,11 +162,17 @@ public class VCommunity extends VNode {
 				VNode vN = (VNode) vA;
 				vN.setDiam(vN.getNode().getOutDegree(0) + 5);
 				vN.show(showNodes, networkVisible);
+				//System.out.println("PintaNodos");
 			}
 		}
 		if (showEdges || networkVisible) {
 			for (VEdge vE : container.getVEdges()) {
 				vE.show(app);
+				//System.out.println("PintaArsitas");
+			}
+			for (VEdge vEE : container.getVExtEdges()) {
+				vEE.show(app);
+				//System.out.println("PintaExt");
 			}
 		}
 	}

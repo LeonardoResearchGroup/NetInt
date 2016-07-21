@@ -36,6 +36,7 @@ public abstract class Container {
 	// Visual Elements
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
+	protected ArrayList<VEdge> vExtEdges;
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
@@ -55,6 +56,7 @@ public abstract class Container {
 		// Instantiate empty collections
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
+		vExtEdges = new ArrayList<VEdge>();
 	}
 	
 	public void initialize(boolean initialize) {
@@ -238,6 +240,10 @@ public abstract class Container {
 	public ArrayList<VEdge> getVEdges() {
 		return vEdges;
 	}
+	
+	public ArrayList<VEdge> getVExtEdges() {
+		return vExtEdges;
+	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -294,5 +300,22 @@ public abstract class Container {
 			}
 		}
 		return nodo;
+	}
+	/**
+	 * Visual External Edges factory (For rootGraph)
+	 * 
+	 * @return
+	 */
+	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ) {
+		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
+		vNodesBothCommunities.addAll(this.vNodes);
+		vNodesBothCommunities.addAll(externalContainer.getVNodes());
+		for( Edge e : this.getExternalEdges(completeGraph, externalCommunity, externalContainer) ){
+			VEdge vEdge = new VEdge(e);
+			vEdge.setSourceAndTarget(vNodesBothCommunities);
+			vEdge.makeBezier();
+			vExtEdges.add(vEdge);
+			System.out.println("Ketelin");
+		}
 	}
 }
