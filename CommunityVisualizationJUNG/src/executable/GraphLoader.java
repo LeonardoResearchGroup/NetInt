@@ -20,10 +20,8 @@ public class GraphLoader {
 	public GraphLoader(String file, String coomunityFilter, String nodeLabel) {
 		reader = new GraphmlReader(file);
 		jungGraph = reader.getJungDirectedGraph(coomunityFilter, nodeLabel);
-		for (String s : reader.getCommunities()) {
-			System.out.println("GRaphLoadr> community: " + s);
-		}
-	//TODO Improve degree assigning with JUNG library method
+		System.out.println("GraphLoader> " + reader.getCommunities().size() + "communities loaded");
+		// TODO Improve degree assigning with JUNG library method
 		setNodesDegrees(jungGraph);
 		System.out.println("GraphLoader> Graph Created from file:" + file);
 		System.out.println(" Total Nodes: " + jungGraph.getVertexCount());
@@ -36,6 +34,7 @@ public class GraphLoader {
 
 	/**
 	 * Uses 0 as index because this method is only ussed for root Graphs
+	 * 
 	 * @param graph
 	 */
 	public static void setNodesDegrees(Graph<Node, Edge> graph) {
@@ -45,10 +44,13 @@ public class GraphLoader {
 			n.setOutDegree(0, graph.getSuccessorCount(n));
 			n.setInDegree(0, graph.getPredecessorCount(n));
 		}
+		
+		System.out.println("GraphLoader> degrees assigned to " + graph.getVertices().size() + " nodes");
 	}
 
 	/**
 	 * Uses 0 as index because this method is only ussed for root Graphs
+	 * 
 	 * @param graph
 	 */
 	public static void setNodesOutDegree(Graph<Node, Edge> graph) {
@@ -60,6 +62,7 @@ public class GraphLoader {
 
 	/**
 	 * Uses 0 as index because this method is only ussed for root Graphs
+	 * 
 	 * @param graph
 	 */
 	public static void setNodesInDegree(Graph<Node, Edge> graph) {

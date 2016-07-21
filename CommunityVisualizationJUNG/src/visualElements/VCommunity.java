@@ -35,7 +35,7 @@ public class VCommunity extends VNode {
 		count = 0;
 		setLayoutParameters();
 		lastPosition = pos;
-		containerIterations = 100;
+		containerIterations = 50;
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 	}
@@ -62,11 +62,16 @@ public class VCommunity extends VNode {
 	}
 
 	public void show(Canvas canvas) {
+
+		// Visualize nodes & edges in container
+		boolean visualizeNodes = false;
+		boolean visualizeEdges = false;
+
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
 		registerEvents(canvas);
 		// retrieve mouse coordinates
-		detectMouseOver(canvas.getCanvasMouse());		
+		detectMouseOver(canvas.getCanvasMouse());
 		// mouse interaction
 		unlocked = leftClicked;
 
@@ -87,22 +92,24 @@ public class VCommunity extends VNode {
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
 			if (count < containerIterations) {
 				container.stepIterativeLayout(pos);
+				visualizeEdges = false;
 				count++;
+			} else {
+				visualizeEdges = unlocked && communityIsOpen;
 			}
+		}else {
+			visualizeEdges = unlocked && communityIsOpen;
 		}
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center
 		updateContainer(communityIsOpen);
-
 		// Visualize nodes & edges in container
-		boolean visualizeNodes = isMouseOver;
-		boolean visualizeEdges = unlocked && communityIsOpen;
-		boolean showInvolute = unlocked && communityIsOpen;
-		showCommunity(canvas, visualizeNodes, visualizeEdges, showInvolute);
-		
-		if (isMouseOver){
+		visualizeNodes = unlocked;
+		showCommunity(canvas, visualizeNodes, visualizeEdges, communityIsOpen);
+
+		if (isMouseOver) {
 			setAlpha(110);
-		}else{
+		} else {
 			setAlpha(90);
 		}
 	}
@@ -148,16 +155,25 @@ public class VCommunity extends VNode {
 	}
 
 	public void showCommunity(Canvas canvas, boolean showNodes, boolean showEdges, boolean networkVisible) {
-		if (showNodes || networkVisible) {
-			for (VisualAtom vA : container.getVNodes()) {
-				VNode vN = (VNode) vA;
-				vN.setDiam(vN.getNode().getOutDegree(0) + 5);
-				vN.show(canvas, networkVisible);
+		if (networkVisible) {
+			if (showNodes) {
+				for (VisualAtom vA : container.getVNodes()) {
+					// If vA is a VCommunity
+					if (vA instanceof VCommunity) {
+						VCommunity vC = (VCommunity) vA;
+						vC.show(canvas);
+					} else {
+						// If vA is a VNode
+						VNode vN = (VNode) vA;
+						vN.setDiam(vN.getNode().getOutDegree(0) + 5);
+						vN.show(canvas, networkVisible);
+					}
+				}
 			}
-		}
-		if (showEdges || networkVisible) {
-			for (VEdge vE : container.getVEdges()) {
-				vE.show(canvas.app);
+			if (showEdges) {
+				for (VEdge vE : container.getVEdges()) {
+					vE.show(canvas.app);
+				}
 			}
 		}
 	}
@@ -185,7 +201,8 @@ public class VCommunity extends VNode {
 		canvas.app.text(container.getName(), pos.x, pos.y);
 		canvas.app.noFill();
 		canvas.app.stroke(180);
-		//canvas.app.rect(0, 0, container.dimension.width, container.dimension.height);
+		// canvas.app.rect(0, 0, container.dimension.width,
+		// container.dimension.height);
 		canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
 	}
 

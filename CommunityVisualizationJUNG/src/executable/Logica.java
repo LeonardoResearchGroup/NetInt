@@ -13,16 +13,18 @@ import graphElements.Edge;
 import graphElements.Node;
 import visualElements.Canvas;
 import visualElements.VCommunity;
+import visualElements.VNode;
+import visualElements.interactive.VisualAtom;
 
 public class Logica {
 
 	// Visual Communities
-	private VCommunity vMainCommunity;
+	private VCommunity vMainCommunity, vSubSubCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {
-		// String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
-		String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
+		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+		// String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
 		// String XML_FILE = "../data/graphs/Risk.graphml";
 		// GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent",
@@ -32,7 +34,8 @@ public class Logica {
 		vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
 		// Sub communities
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames());
-
+		// Community of communities
+		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities");
 	}
 
 	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
@@ -40,37 +43,56 @@ public class Logica {
 		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(250, 250));
 		mainCommunity.setName("Root");
 		// Root Community
-		String nodeID = mainCommunity.getName() +"_"+ String.valueOf(0);
+		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
 		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
 		return vCommunity;
 	}
 
 	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
 			ArrayList<String> communityNames) {
-		//
 		ArrayList<SubContainer> containers = new ArrayList<SubContainer>();
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		//
 		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
-		int cont = 0;
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
 			SubContainer containerTemp = new SubContainer(graphTemp, Container.FRUCHTERMAN_REINGOLD,
-					new Dimension(300 + (cont * 30), 300 + (cont * 30)));
+					new Dimension(300, 300));
 			containerTemp.setName(communityName);
-			// Visualizers
-			String nodeID = communityName +"_"+ String.valueOf(cont);
+			// CommunityCover
+			String nodeID = communityName;
 			VCommunity communityTemp = new VCommunity(new Node(nodeID), containerTemp);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
 			vCommunities.add(communityTemp);
-			cont++;
 		}
 		subGraphs = null;
 		containers = null;
 		return vCommunities;
+	}
+
+	private VCommunity createCommunityOfvCommunities(ArrayList<VCommunity> communities, String communityName) {
+		// Make a temporary graph
+		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
+		for (VNode vN : communities) {
+			VCommunity vC = (VCommunity) vN;
+			// add Nodes
+			graphTemp.addVertex(vC.getNode());
+			// add edges
+			/* Edge compression will come here or inside the community initializer*/
+		}
+
+		// make a Container
+		SubContainer subContainer = new SubContainer(graphTemp, Container.CIRCULAR, new Dimension(1200, 800));
+		subContainer.setName(communityName);
+		// Assign each vCommunity cover to this subContainer
+		subContainer.assignVisualElements(communities);
+		// CommunityCover
+		String nodeID = communityName + "_" + String.valueOf(0);
+		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
+		return communityTemp;
 	}
 
 	private void tracePropagationForward(DirectedSparseMultigraph<Node, Edge> graph, int nodeID, int steps) {
@@ -99,8 +121,9 @@ public class Logica {
 
 	public void show(Canvas canvas) {
 		// vMainCommunity.show(canvas);
-		for (VCommunity vC : vSubCommunities) {
-			vC.show(canvas);
-		}
+		// for (VCommunity vC : vSubCommunities) {
+		// vC.show(canvas);
+		// }
+		vSubSubCommunity.show(canvas);
 	}
 }

@@ -10,7 +10,7 @@ public class Executable extends PApplet {
 	TestPerformance performance;
 	
 	public void setup(){
-		size(1200,600, P2D);
+		size(1200,600);
 		canvas = new Canvas(this);
 		textSize(10);
 		//
