@@ -64,12 +64,13 @@ public class Logica {
 		//vMainCommunity.show();
 		for (VCommunity vC : vCommunities) {
 			vC.show();
-			if(vC.itOpens && vC.container.getName().equals("SA")){
+			if(vC.itOpens ){
 				for (VCommunity vC2 : vCommunities) {
-					if (vC2.container.getName().equals("AF")){
-						System.out.println("Abre");
+					//if (vC2.container.getName().equals("AF")){
+					if (!vC2.notOpened){
+						System.out.println("construye de verdad");
 						vC.container.runExternalEdgeFactory(rootGraph.jungGraph, vC2.container.getName(), vC2.container);
-						vC.showCommunity(true, true, true);
+						//vC.showCommunity(true, true, true);
 //						System.out.println("\n");
 //						System.out.println("\n");
 //						System.out.println("\n");
@@ -82,7 +83,7 @@ public class Logica {
 //							System.out.println(edge.getTarget().getName());
 //							System.out.println("Son iguales los braziles");
 //							if(edge.getSource().getName().equals("Brazil")){
-//								System.out.println("Entró");
+//								System.out.println("Entrï¿½");
 //								System.out.println(edge.getSource().getName());
 //								System.out.println(nodo.getName());
 //								System.out.println(edge.getSource() == nodo);

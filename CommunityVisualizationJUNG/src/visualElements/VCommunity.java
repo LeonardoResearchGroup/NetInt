@@ -21,7 +21,7 @@ public class VCommunity extends VNode {
 	private float angle2;
 	private boolean unlocked;
 	//
-	private boolean notOpened;
+	public boolean notOpened;
 	public boolean itOpens;
 	public boolean despuesOpens = false;
 	
@@ -109,11 +109,11 @@ public class VCommunity extends VNode {
 		boolean visualizeNodes = isMouseOver();
 		boolean visualizeEdges = unlocked && communityIsOpen;
 		boolean showInvolute = unlocked && communityIsOpen;
-		if(!container.getName().equals("SA") || despuesOpens)
-			showCommunity(visualizeNodes, visualizeEdges, showInvolute);
-		if( itOpens ){
-			despuesOpens = true;
-		}
+		//if(!container.getName().equals("SA") || despuesOpens)
+		showCommunity(visualizeNodes, visualizeEdges, showInvolute);
+//		if( itOpens ){
+//			despuesOpens = true;
+//		}
 	}
 
 	private boolean showCommunityCover() {
