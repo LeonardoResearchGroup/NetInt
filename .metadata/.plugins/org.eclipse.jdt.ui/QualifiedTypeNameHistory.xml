@@ -53,4 +53,6 @@
 <fullyQualifiedTypeName name="java.util.Set"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="containers.Container"/>
+<fullyQualifiedTypeName name="processing.event.MouseEvent"/>
+<fullyQualifiedTypeName name="processing.event.KeyEvent"/>
 </qualifiedTypeNameHistroy>
