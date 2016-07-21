@@ -2,6 +2,7 @@ package executable;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import containers.Container;
 import containers.RootContainer;
@@ -64,7 +65,51 @@ public class Logica {
 		for (VCommunity vC : vCommunities) {
 			vC.show();
 			if(vC.itOpens){
-				
+				for (VCommunity vC2 : vCommunities) {
+					if (vC2.container.getName().equals("AF")){
+						System.out.println("Abre");
+						System.out.println("\n");
+						System.out.println("\n");
+						System.out.println("\n");
+						System.out.println("\n");
+						System.out.println("\n");
+						System.out.println("Nueva Ronda");
+						Node nodo = new Node(-1);
+						for( Edge edge : vC.container.getGraph().getEdges() ){
+							System.out.println(edge.getSource().getName());
+							System.out.println(edge.getTarget().getName());
+							System.out.println("Son iguales los braziles");
+							if(edge.getSource().getName().equals("Brazil")){
+								System.out.println("Entró");
+								System.out.println(edge.getSource().getName());
+								System.out.println(nodo.getName());
+								System.out.println(edge.getSource() == nodo);
+								nodo = edge.getSource();
+							}
+							
+							
+						}
+//						System.out.println("Despues del filtro");
+//						for( Edge edge : vC.container.getExternalEdges(rootGraph.jungGraph, vC2.container.getName(), vC2.container) ){
+//							System.out.println(edge.getSource().getName());
+//							System.out.println(edge.getTarget().getName());
+//							for( Edge edge2 : vC.container.getGraph().getEdges() ){
+//								System.out.println("source comunidad");
+//								System.out.println(edge2.getSource().getName());
+//								System.out.println("Target Comunidad");
+//								System.out.println(edge2.getTarget().getName());
+//								System.out.println("source Externo");
+//								System.out.println(edge.getSource().getName());
+//								System.out.println("Target Externo");
+//								System.out.println(edge.getTarget().getName());
+//								System.out.println(edge.getSource() == edge2.getSource());
+//								System.out.println(edge.getTarget() == edge2.getSource());
+//								System.out.println(edge.getSource() == edge2.getTarget());
+//								System.out.println(edge.getTarget() == edge2.getTarget());
+//							}
+//						}
+					}
+				}
 			}
 		}
 	}

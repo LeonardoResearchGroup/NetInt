@@ -2,13 +2,16 @@ package containers;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import executable.GraphLoader;
 import graphElements.Edge;
 import graphElements.Node;
 import processing.core.PApplet;
@@ -251,5 +254,45 @@ public abstract class Container {
 
 	public void setLayout(AbstractLayout<Node, Edge> layout) {
 		this.layout = layout;
+	}
+	
+	public ArrayList<Edge> getExternalEdges(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ){
+		ArrayList<Edge> newEdges = new ArrayList<Edge>();
+		Graph filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
+		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
+		for(Edge edgeBetweenCommunities : edgesBetweenCommunities){
+//			System.out.println("Nodos del filtrado por Jung");
+			Node sourceOfComplete = edgeBetweenCommunities.getSource();
+			Node targetOfComplete = edgeBetweenCommunities.getTarget();
+//			System.out.println(sourceOfComplete.getName());
+//			System.out.println(targetOfComplete.getName());
+			Node newSource = getEqualNode(this.graph, sourceOfComplete);
+			Node newTarget;
+			if(newSource.getId() != -1 ){
+				newTarget = getEqualNode(externalContainer.graph, targetOfComplete);
+			} else {
+				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
+				newTarget = getEqualNode(this.graph, targetOfComplete);	
+			}
+//			System.out.println(newSource.getId());
+//			System.out.println(newTarget.getId());
+			newEdges.add(new Edge(newSource,newTarget,true));
+		}
+		return newEdges;
+	}
+	
+	protected Node getEqualNode(Graph<Node, Edge> graph, Node lookingForNode){
+		Node nodo = new Node(-1);
+		for(Node node : graph.getVertices()){
+//			System.out.println("Dentro de getEqualNode");
+//			System.out.println(node.getName());
+//			System.out.println(lookingForNode.getName());
+			if(lookingForNode.equals(node)){
+//				System.out.println(node.getName());
+				nodo = node;
+				return nodo;
+			}
+		}
+		return nodo;
 	}
 }
