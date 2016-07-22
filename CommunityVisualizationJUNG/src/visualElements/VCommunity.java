@@ -252,4 +252,10 @@ public class VCommunity extends VNode {
 		container = nodesAndEdges;
 	}
 
+	// *** Events
+	
+	public void eventRegister(PApplet theApp) {
+		theApp.registerMethod("mouseEvent", this);
+		System.out.println("VCommunity> event");
+	}
 }

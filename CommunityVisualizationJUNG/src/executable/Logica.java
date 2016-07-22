@@ -24,15 +24,15 @@ public class Logica {
 	private ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {
-		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+		// String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
 		// String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
-		GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
-//		 String XML_FILE = "../data/graphs/Risk.graphml";
-//		 GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent",
-//		 "label");
+		// GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad",
+		// "name");
+		String XML_FILE = "../data/graphs/Risk.graphml";
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
 
 		// Root visual community
-		vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
+		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
 		// Sub communities
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames());
 		// Community of communities
@@ -75,7 +75,6 @@ public class Logica {
 		return vCommunities;
 	}
 
-
 	private VCommunity createCommunityOfvCommunities(ArrayList<VCommunity> communities, String communityName) {
 		// Make a temporary graph
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
@@ -84,7 +83,10 @@ public class Logica {
 			// add Nodes
 			graphTemp.addVertex(vC.getNode());
 			// add edges
-			/* Edge compression will come here or inside the community initializer*/
+			/*
+			 * Edge compression will come here or inside the community
+			 * initializer
+			 */
 		}
 
 		// make a Container
@@ -124,9 +126,6 @@ public class Logica {
 
 	public void show(Canvas canvas) {
 		// vMainCommunity.show(canvas);
-		// for (VCommunity vC : vSubCommunities) {
-		// vC.show(canvas);
-		// }
 		vSubSubCommunity.show(canvas);
 
 	}

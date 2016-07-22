@@ -5,6 +5,8 @@ import processing.core.PConstants;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 import visualElements.Canvas;
+import visualElements.VCommunity;
+import visualElements.VNode;
 
 public abstract class VisualAtom {
 	public Canvas canvas;
@@ -37,7 +39,9 @@ public abstract class VisualAtom {
 	public abstract void show(Canvas canvas);
 
 	/**
-	 * WARNING: Every instance of this class MUST invoke this method within show()
+	 * WARNING: Every instance of this class MUST invoke this method within
+	 * show()
+	 * 
 	 * @param canvas
 	 */
 	protected void registerEvents(Canvas canvas) {
@@ -47,12 +51,14 @@ public abstract class VisualAtom {
 		} else if (!this.canvas.equals(canvas)) {
 			this.canvas = canvas;
 			eventRegister(this.canvas.app);
-			//System.out.println("VAtom> registerCanvas:  Atom registered");
+			// System.out.println("VAtom> registerCanvas: Atom registered");
 		}
 	}
 
 	/**
-	 * WARNING: Every instance of this class MUST invoke this method within show()
+	 * WARNING: Every instance of this class MUST invoke this method within
+	 * show()
+	 * 
 	 * @param mouse
 	 */
 	public void detectMouseOver(PVector mouse) {
@@ -144,13 +150,18 @@ public abstract class VisualAtom {
 	}
 
 	// P3
-	public void eventRegister(PApplet theApp) {
-		theApp.registerMethod("mouseEvent", this);
-	}
+	public abstract void eventRegister(PApplet theApp);
+
+	// public void eventRegister(PApplet theApp) {
+	// theApp.registerMethod("mouseEvent", this);
+	// }
 
 	public void mouseEvent(MouseEvent e) {
-
 		if (e.getAction() == MouseEvent.CLICK) {
+			VCommunity tmp = (VCommunity) this;
+			if (tmp != null && isMouseOver) {
+				System.out.println("Visual Coomunity> event: " + tmp.container.getName());
+			}
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {
 			mouseReleased(e);

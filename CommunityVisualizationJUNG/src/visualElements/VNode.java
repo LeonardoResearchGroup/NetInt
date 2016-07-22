@@ -173,4 +173,8 @@ public class VNode extends VisualAtom {
 
 	// ***** Events
 
+	public void eventRegister(PApplet theApp) {
+//		theApp.registerMethod("mouseEvent", this);
+//		System.out.println("VNode> event");
+	}
 }
