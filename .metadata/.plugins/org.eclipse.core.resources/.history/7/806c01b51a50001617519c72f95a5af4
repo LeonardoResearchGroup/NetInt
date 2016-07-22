@@ -57,11 +57,7 @@ public class GraphmlReader {
 			Node targetNode = new Node(idTarget);
 
 			if (rtnGraph.containsVertex(sourceNode)){
-				sourceNode = getEqualNode(rtnGraph,sourceNode);
-			}
-			
-			if (rtnGraph.containsVertex(targetNode)){
-				targetNode = getEqualNode(rtnGraph,targetNode);
+				sourceNode = rtnGraph.getVertexCount()
 			}
 			
 			// Check if exist a property matching communityKey
@@ -178,8 +174,8 @@ public class GraphmlReader {
 	 * @param lookingForNode
 	 * @return
 	 */
-	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node lookingForNode){
-		Node nodo =null;
+	protected Node getEqualNode(Graph<Node, Edge> graph, Node lookingForNode){
+		Node nodo = new Node(-1);
 		for(Node node : graph.getVertices()){
 			if(lookingForNode.equals(node)){
 				nodo = node;

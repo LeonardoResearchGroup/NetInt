@@ -52,18 +52,9 @@ public class GraphmlReader {
 			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 			// Instantiate Nodes
-			
 			Node sourceNode = new Node(idSource);
 			Node targetNode = new Node(idTarget);
 
-			if (rtnGraph.containsVertex(sourceNode)){
-				sourceNode = getEqualNode(rtnGraph,sourceNode);
-			}
-			
-			if (rtnGraph.containsVertex(targetNode)){
-				targetNode = getEqualNode(rtnGraph,targetNode);
-			}
-			
 			// Check if exist a property matching communityKey
 			if (source.getProperty(communityKey) != null && target.getProperty(communityKey) != null) {
 				// Get and store communities
@@ -93,15 +84,15 @@ public class GraphmlReader {
 				String val = String.valueOf((Double) edge.getProperty("weight"));
 				e.setWeight(Float.valueOf(val));
 			}
-//			if (rtnGraph.containsVertex(targetNode)) {
-//				System.out.println("Este nodo target " + targetNode.getName() + " ya esta en el grafo");
-//				System.out.println("Hay " + rtnGraph.getVertexCount() + " nodos en el grafo");
-//			}
-//
-//			if (rtnGraph.containsVertex(sourceNode)) {
-//				System.out.println("Este nodo source " + sourceNode.getId() + " ya esta en el grafo");
-//				System.out.println("Hay " + rtnGraph.getVertexCount() + " nodos en el grafo");
-//			}
+			if (rtnGraph.containsVertex(targetNode)) {
+				System.out.println("Este nodo target " + targetNode.getName() + " ya esta en el grafo");
+				System.out.println("Hay " + rtnGraph.getVertexCount() + " nodos en el grafo");
+			}
+
+			if (rtnGraph.containsVertex(sourceNode)) {
+				System.out.println("Este nodo source " + sourceNode.getId() + " ya esta en el grafo");
+				System.out.println("Hay " + rtnGraph.getVertexCount() + " nodos en el grafo");
+			}
 			rtnGraph.addEdge(e, sourceNode, targetNode, EdgeType.DIRECTED);
 
 		}
@@ -109,6 +100,7 @@ public class GraphmlReader {
 		Edge B_P = null;
 		Edge B_V = null;
 		for (Edge edgeJung : rtnGraph.getEdges()) {
+			System.out.println("In "+ edgeJung.getSource().getName());
 			if (edgeJung.getSource().getName().equals("Brazil")) {
 			
 				if (edgeJung.getTarget().getName().equals("Peru")) {
@@ -172,20 +164,4 @@ public class GraphmlReader {
 		return graph.getVertices().iterator().next().getPropertyKeys();
 	}
 
-	/**
-	 * 
-	 * @param graph
-	 * @param lookingForNode
-	 * @return
-	 */
-	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node lookingForNode){
-		Node nodo =null;
-		for(Node node : graph.getVertices()){
-			if(lookingForNode.equals(node)){
-				nodo = node;
-				return nodo;
-			}
-		}
-		return nodo;
-	}
 }
