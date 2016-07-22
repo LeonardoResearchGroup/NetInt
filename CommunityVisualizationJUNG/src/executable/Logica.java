@@ -11,6 +11,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
+import utilities.GraphLoader;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
@@ -26,9 +27,9 @@ public class Logica {
 		String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
 		// String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad", "name");
-		// String XML_FILE = "../data/graphs/Risk.graphml";
-		// GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent",
-		// "label");
+//		 String XML_FILE = "../data/graphs/Risk.graphml";
+//		 GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent",
+//		 "label");
 
 		// Root visual community
 		vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
@@ -36,6 +37,7 @@ public class Logica {
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames());
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities");
+		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 	}
 
 	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
@@ -72,6 +74,7 @@ public class Logica {
 		containers = null;
 		return vCommunities;
 	}
+
 
 	private VCommunity createCommunityOfvCommunities(ArrayList<VCommunity> communities, String communityName) {
 		// Make a temporary graph
@@ -125,5 +128,6 @@ public class Logica {
 		// vC.show(canvas);
 		// }
 		vSubSubCommunity.show(canvas);
+
 	}
 }

@@ -44,6 +44,9 @@ public class GraphmlReader {
 	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey) {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 
+		System.out.println("GraphmlReader> Building Nodes and Edges");
+		System.out.println("GraphmlReader> Working on it ...");
+		
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.IN);
@@ -54,6 +57,21 @@ public class GraphmlReader {
 			// Instantiate Nodes
 			Node sourceNode = new Node(String.valueOf(idSource));
 			Node targetNode = new Node(String.valueOf(idTarget));
+			
+			// Stores the sourceNode retrieved from the collection of nodes if it
+			// exists, else stores null
+			Node tmp = getEqualNode(rtnGraph, sourceNode);
+			if (tmp != null) {
+				// If the node does exist assign it to source 
+				sourceNode = tmp;
+			}
+			// Stores the targetNode retrieved from the collection of nodes if it
+			// exists, else stores null
+			tmp = getEqualNode(rtnGraph, targetNode);
+			if (tmp != null) {
+				// If the node does exist assign it to target
+				targetNode = tmp;
+			}
 
 			// Check if exist a property matching communityKey
 			if (source.getProperty(communityKey) != null && target.getProperty(communityKey) != null) {
@@ -69,7 +87,7 @@ public class GraphmlReader {
 			} else {
 				System.out.println("GraphmlReader> No filter matches!!! Check the key String of the community filter");
 			}
-			
+
 			// Check if exist a property matching nameKey
 			if (source.getProperty(nameKey) != null && target.getProperty(nameKey) != null) {
 				sourceNode.setName(source.getProperty(nameKey).toString());
@@ -138,4 +156,20 @@ public class GraphmlReader {
 		return graph.getVertices().iterator().next().getPropertyKeys();
 	}
 
+	/**
+	 * 
+	 * @param graph
+	 * @param lookingForNode
+	 * @return
+	 */
+	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node lookingForNode) {
+		Node nodo = null;
+		for (Node node : graph.getVertices()) {
+			if (lookingForNode.equals(node)) {
+				nodo = node;
+				return nodo;
+			}
+		}
+		return nodo;
+	}
 }

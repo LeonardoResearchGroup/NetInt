@@ -2,17 +2,20 @@ package containers;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import processing.core.PApplet;
 import processing.core.PVector;
+import utilities.GraphLoader;
 import visualElements.Canvas;
 import visualElements.VEdge;
 import visualElements.VNode;
@@ -31,9 +34,11 @@ public abstract class Container {
 	public static final int FRUCHTERMAN_REINGOLD = 2;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
+	public DirectedSparseMultigraph<Node, Edge> rootGraph;
 	// Visual Elements
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
+	protected ArrayList<VEdge> vExtEdges;
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
@@ -52,6 +57,7 @@ public abstract class Container {
 		// Instantiate empty collections
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
+		vExtEdges = new ArrayList<VEdge>();
 	}
 
 	/**
@@ -246,6 +252,10 @@ public abstract class Container {
 	public ArrayList<VEdge> getVEdges() {
 		return vEdges;
 	}
+	
+	public ArrayList<VEdge> getVExtEdges() {
+		return vExtEdges;
+	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -260,6 +270,10 @@ public abstract class Container {
 			vN.setY((float) layout.getY(vN.getNode()));
 		}
 	}
+	public void setRootGraph(DirectedSparseMultigraph<Node, Edge> rootGraph) {
+		this.rootGraph = rootGraph;
+	}
+
 	// *** Show
 	public String getName() {
 		return name;
@@ -271,5 +285,64 @@ public abstract class Container {
 
 	public void setLayout(AbstractLayout<Node, Edge> layout) {
 		this.layout = layout;
+	}
+	/**
+	 * 
+	 * @param completeGraph
+	 * @param externalCommunity
+	 * @param externalContainer
+	 * @return
+	 */
+	public ArrayList<Edge> getExternalEdges(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ){
+		ArrayList<Edge> newEdges = new ArrayList<Edge>();
+		Graph filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
+		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
+		for(Edge edgeBetweenCommunities : edgesBetweenCommunities){
+			Node sourceOfComplete = edgeBetweenCommunities.getSource();
+			Node targetOfComplete = edgeBetweenCommunities.getTarget();
+			Node newSource = getEqualNode(this.graph, sourceOfComplete);
+			Node newTarget;
+			if(newSource != null ){
+				newTarget = getEqualNode(externalContainer.graph, targetOfComplete);
+			} else {
+				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
+				newTarget = getEqualNode(this.graph, targetOfComplete);	
+			}
+			newEdges.add(new Edge(newSource,newTarget,true));
+		}
+		return newEdges;
+	}
+	
+	/**
+	 * 
+	 * @param graph
+	 * @param lookingForNode
+	 * @return
+	 */
+	protected Node getEqualNode(Graph<Node, Edge> graph, Node lookingForNode){
+		Node nodo = null;
+		for(Node node : graph.getVertices()){
+			if(lookingForNode.equals(node)){
+				nodo = node;
+				return nodo;
+			}
+		}
+		return nodo;
+	}
+	/**
+	 * Visual External Edges factory (For rootGraph)
+	 * 
+	 * @return
+	 */
+	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ) {
+		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
+		vNodesBothCommunities.addAll(this.vNodes);
+		vNodesBothCommunities.addAll(externalContainer.getVNodes());
+		for( Edge e : this.getExternalEdges(completeGraph, externalCommunity, externalContainer) ){
+			VEdge vEdge = new VEdge(e);
+			vEdge.setSourceAndTarget(vNodesBothCommunities);
+			vEdge.makeBezier();
+			vExtEdges.add(vEdge);
+		}
 	}
 }

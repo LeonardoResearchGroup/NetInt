@@ -16,6 +16,11 @@ import edu.uci.ics.jung.io.graphml.NodeMetadata;
 import graphElements.Edge;
 import graphElements.Node;
 
+/**
+ * @deprecated
+ * @author juansalamanca
+ *
+ */
 public class GraphReaderJUNG {
 	
 	Reader reader;

@@ -11,7 +11,7 @@ public class Executable extends PApplet {
 	
 	public void setup(){
 		//size(1200,600,P2D);
-		size(displayWidth,displayHeight-100,P2D);
+		size(displayWidth,displayHeight-100);
 		canvas = new Canvas(this);
 		textSize(10);
 		//
