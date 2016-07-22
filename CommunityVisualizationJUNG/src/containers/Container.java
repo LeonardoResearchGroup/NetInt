@@ -261,17 +261,20 @@ public abstract class Container {
 	public void setLayout(AbstractLayout<Node, Edge> layout) {
 		this.layout = layout;
 	}
-	
+	/**
+	 * 
+	 * @param completeGraph
+	 * @param externalCommunity
+	 * @param externalContainer
+	 * @return
+	 */
 	public ArrayList<Edge> getExternalEdges(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ){
 		ArrayList<Edge> newEdges = new ArrayList<Edge>();
 		Graph filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		for(Edge edgeBetweenCommunities : edgesBetweenCommunities){
-//			System.out.println("Nodos del filtrado por Jung");
 			Node sourceOfComplete = edgeBetweenCommunities.getSource();
 			Node targetOfComplete = edgeBetweenCommunities.getTarget();
-//			System.out.println(sourceOfComplete.getName());
-//			System.out.println(targetOfComplete.getName());
 			Node newSource = getEqualNode(this.graph, sourceOfComplete);
 			Node newTarget;
 			if(newSource.getId() != -1 ){
@@ -280,21 +283,21 @@ public abstract class Container {
 				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
 				newTarget = getEqualNode(this.graph, targetOfComplete);	
 			}
-//			System.out.println(newSource.getId());
-//			System.out.println(newTarget.getId());
 			newEdges.add(new Edge(newSource,newTarget,true));
 		}
 		return newEdges;
 	}
 	
+	/**
+	 * 
+	 * @param graph
+	 * @param lookingForNode
+	 * @return
+	 */
 	protected Node getEqualNode(Graph<Node, Edge> graph, Node lookingForNode){
 		Node nodo = new Node(-1);
 		for(Node node : graph.getVertices()){
-//			System.out.println("Dentro de getEqualNode");
-//			System.out.println(node.getName());
-//			System.out.println(lookingForNode.getName());
 			if(lookingForNode.equals(node)){
-//				System.out.println(node.getName());
 				nodo = node;
 				return nodo;
 			}
@@ -315,7 +318,6 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
 			vEdge.makeBezier();
 			vExtEdges.add(vEdge);
-			System.out.println("Ketelin");
 		}
 	}
 }

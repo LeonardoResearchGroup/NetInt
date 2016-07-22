@@ -68,7 +68,6 @@ public class Logica {
 				for (VCommunity vC2 : vCommunities) {
 					//if (vC2.container.getName().equals("AF")){
 					if (!vC2.notOpened){
-						System.out.println("construye de verdad");
 						vC.container.runExternalEdgeFactory(rootGraph.jungGraph, vC2.container.getName(), vC2.container);
 						//vC.showCommunity(true, true, true);
 //						System.out.println("\n");
