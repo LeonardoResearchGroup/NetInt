@@ -90,7 +90,7 @@ public class GraphLoader {
 			
 			for(Object ob: jungGraph.getVertices()){
 				Node n = (Node) ob;
-				System.out.println(n.getName() + " has ID: " + n.getId());
+				System.out.print(n.getName() + " has ID: " + n.getId());
 			}
 		}
 	}

@@ -36,6 +36,7 @@ public class Logica {
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames());
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities");
+		rootGraph = null;
 	}
 
 	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
@@ -85,7 +86,7 @@ public class Logica {
 		}
 
 		// make a Container
-		SubContainer subContainer = new SubContainer(graphTemp, Container.SPRING, new Dimension(1200, 800));
+		SubContainer subContainer = new SubContainer(graphTemp, Container.CIRCULAR, new Dimension(1200, 800));
 		subContainer.setName(communityName);
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);

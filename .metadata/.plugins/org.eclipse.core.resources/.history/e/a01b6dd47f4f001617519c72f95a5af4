@@ -76,21 +76,16 @@ public class GraphLoader {
 		System.out.println("Nodes: " + jungGraph.getVertexCount());
 		System.out.println("Edges: " + jungGraph.getEdgeCount());
 		if (printDetails) {
-//			Collection<graphElements.Edge> edges = jungGraph.getEdges();
-//			for (graphElements.Edge e : edges) {
-//				System.out.println("from: " + e.getSource().getName() + " " + e.getSource().getId() + " to: "
-//						+ e.getTarget().getName() + " " + e.getTarget().getId());
-//			}
-//
-//			Collection<Node> nodes = jungGraph.getVertices();
-//			for (Node n : nodes) {
-//				System.out.print(n.getName() + " has ID: " + n.getId());
-//				System.out.println("  Predecessors count: " + jungGraph.getPredecessorCount(n));
-//			}
-			
-			for(Object ob: jungGraph.getVertices()){
-				Node n = (Node) ob;
-				System.out.println(n.getName() + " has ID: " + n.getId());
+			Collection<graphElements.Edge> edges = jungGraph.getEdges();
+			for (graphElements.Edge e : edges) {
+				System.out.println("from: " + e.getSource().getName() + " " + e.getSource().getId() + " to: "
+						+ e.getTarget().getName() + " " + e.getTarget().getId());
+			}
+
+			Collection<Node> nodes = jungGraph.getVertices();
+			for (Node n : nodes) {
+				System.out.print(n.getName() + " has ID: " + n.getId());
+				System.out.println("  Predecessors count: " + jungGraph.getPredecessorCount(n));
 			}
 		}
 	}
@@ -125,7 +120,6 @@ public class GraphLoader {
 	}
 
 	public static void main(String[] args) {
-		GraphLoader gL = new GraphLoader("./data/graphs/Risk.graphml", "Continent", "label");
-		gL.printJungGraph(true);
+		new GraphLoader("./data/graphs/Risk.graphml", "comunidad", "name");
 	}
 }

@@ -38,6 +38,7 @@ public class SubContainer extends Container {
 	public void retrieveVisualElements(Container sourceContainer) {
 		// For each node of Graph
 		for (Node n : graph.getVertices()) {
+
 			// Look for the corresponding VNode in the collection of VAtoms
 			for (VisualAtom vAtm : sourceContainer.getVNodes()) {
 

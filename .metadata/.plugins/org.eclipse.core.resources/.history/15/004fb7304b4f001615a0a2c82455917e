@@ -85,7 +85,7 @@ public class Logica {
 		}
 
 		// make a Container
-		SubContainer subContainer = new SubContainer(graphTemp, Container.SPRING, new Dimension(1200, 800));
+		SubContainer subContainer = new SubContainer(graphTemp, Container.CIRCULAR, new Dimension(1200, 800));
 		subContainer.setName(communityName);
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
