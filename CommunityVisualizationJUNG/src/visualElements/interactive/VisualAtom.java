@@ -159,8 +159,12 @@ public abstract class VisualAtom {
 	public void mouseEvent(MouseEvent e) {
 		if (e.getAction() == MouseEvent.CLICK) {
 			VCommunity tmp = (VCommunity) this;
-			if (tmp != null && isMouseOver) {
-				System.out.println("Visual Coomunity> event: " + tmp.container.getName());
+			if (tmp != null) {
+				if(tmp.container.getName().equals("SubSubcommunities")){
+					System.out.println("pintando externas");
+					tmp.paintExternalEdges();
+				}
+				
 			}
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {

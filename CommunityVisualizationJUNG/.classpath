@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="libs/OpenGL/jogl-all-natives-macosx-universal.jar"/>
 	<classpathentry kind="lib" path="libs/OpenGL/jogl-all.jar"/>
 	<classpathentry kind="lib" path="libs/core.jar"/>
+	<classpathentry kind="lib" path="/home/cdloaiza/Downloads/commons-collections4-4.1/commons-collections4-4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

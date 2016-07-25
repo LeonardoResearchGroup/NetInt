@@ -99,8 +99,8 @@ public class VCommunity extends VNode {
 			notOpened = false;
 		}
 
-		// Initialize community: building vNodes and vEdges
-		container.initialize(communityIsOpen);
+//		// Initialize community: building vNodes and vEdges
+//		container.initialize(communityIsOpen);
 
 		// Layout iterations
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
@@ -177,20 +177,20 @@ public class VCommunity extends VNode {
 						VCommunity vC = (VCommunity) vA;
 						// *** External Edges
 						vC.show(canvas);
-						if (vC.itOpens) {
+//						if (vC.itOpens) {
 
-							// Builds vEdges for all open communities
-							for (VisualAtom internalVA : container.getVNodes()) {
-								// If vA is a VCommunity
-								if (internalVA instanceof VCommunity) {
-									VCommunity internalVC = (VCommunity) internalVA;
-									if (!internalVC.notOpened) {
-										vC.container.runExternalEdgeFactory(container.rootGraph,
-												internalVC.container.getName(), internalVC.container);
-									}
-								}
-							}
-						}
+//							// Builds vEdges for all open communities
+//							for (VisualAtom internalVA : container.getVNodes()) {
+//								// If vA is a VCommunity
+//								if (internalVA instanceof VCommunity) {
+//									VCommunity internalVC = (VCommunity) internalVA;
+//									if (!internalVC.notOpened) {
+//										vC.container.runExternalEdgeFactory(container.rootGraph,
+//												internalVC.container.getName(), internalVC.container);
+//									}
+//								}
+//							}
+//						}
 					} 
 					else {
 						// If vA is a VNode
@@ -257,5 +257,30 @@ public class VCommunity extends VNode {
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 		System.out.println("VCommunity> event");
+	}
+	
+	public void paintExternalEdges(){
+		this.container.initialize(true);
+		System.out.println("CLICK SOBRE COMUNIDAD");
+		for (VisualAtom vA : container.getVNodes()) {
+			// If vA is a VCommunity
+			if (vA instanceof VCommunity) {
+				VCommunity vC = (VCommunity) vA;
+				if (vC.isMouseOver) {
+					vC.container.initialize(true);
+					// Builds vEdges for all open communities
+					for (VisualAtom internalVA : container.getVNodes()) {
+						// If vA is a VCommunity
+						if (internalVA instanceof VCommunity) {
+							VCommunity internalVC = (VCommunity) internalVA;
+							if (!internalVC.notOpened) {
+								vC.container.runExternalEdgeFactory(container.rootGraph,
+										internalVC.container.getName(), internalVC.container);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
