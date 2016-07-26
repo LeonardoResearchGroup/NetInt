@@ -24,12 +24,12 @@ public class Logica {
 	private ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {
-		 String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
-		// String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
-		 GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad",
-		 "name");
-//		String XML_FILE = "../data/graphs/Risk.graphml";
-//		GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
+//		 String XML_FILE = "../data/graphs/MuestraCompletaLouvain.graphml";
+//		// String XML_FILE = "../data/graphs/L-UN-MOV.graphml";
+//		 GraphLoader rootGraph = new GraphLoader(XML_FILE, "comunidad",
+//		 "name");
+		String XML_FILE = "../data/graphs/Risk.graphml";
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, "Continent", "label");
 
 		// Root visual community
 		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);

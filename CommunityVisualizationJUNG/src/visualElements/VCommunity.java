@@ -1,5 +1,7 @@
 package visualElements;
 
+import java.util.ArrayList;
+
 import processing.core.PVector;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -24,6 +26,7 @@ public class VCommunity extends VNode {
 	public boolean notOpened;
 	public boolean itOpens;
 	public boolean despuesOpens = false;
+	public boolean communityIsOpen = false;
 
 	private int i, increment, count, containerIterations;
 	public Container container;
@@ -91,7 +94,7 @@ public class VCommunity extends VNode {
 		showCoverLable(canvas);
 
 		// Open or close the community
-		boolean communityIsOpen = showCommunityCover(canvas);
+		communityIsOpen = showCommunityCover(canvas);
 		// *CESAR
 		// check if occurs the first community opening
 		if (notOpened && communityIsOpen) {
@@ -266,19 +269,25 @@ public class VCommunity extends VNode {
 			// If vA is a VCommunity
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
-				if (vC.isMouseOver) {
+				if (vC.isMouseOver && !vC.communityIsOpen) {
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
 						// If vA is a VCommunity
 						if (internalVA instanceof VCommunity) {
 							VCommunity internalVC = (VCommunity) internalVA;
-							if (!internalVC.notOpened) {
+							if (!internalVC.notOpened && !internalVC.equals(vC)) {
 								vC.container.runExternalEdgeFactory(container.rootGraph,
 										internalVC.container.getName(), internalVC.container);
 							}
 						}
 					}
+					System.out.println("Holai");
+				} else if(vC.isMouseOver && vC.communityIsOpen){
+					System.out.println("Holelu");
+					System.out.println("Cantidad de externas");
+					System.out.println(vC.container.getVExtEdges().size());
+					vC.container.setvExtEdges(new ArrayList<VEdge>());
 				}
 			}
 		}

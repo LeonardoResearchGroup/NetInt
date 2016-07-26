@@ -39,6 +39,10 @@ public abstract class Container {
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
+	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
+		this.vExtEdges = vExtEdges;
+	}
+
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
@@ -293,8 +297,11 @@ public abstract class Container {
 	 * @param externalContainer
 	 * @return
 	 */
-	public ArrayList<Edge> getExternalEdges(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ){
-		ArrayList<Edge> newEdges = new ArrayList<Edge>();
+	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ){
+		
+		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
+		vNodesBothCommunities.addAll(this.vNodes);
+		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		Graph filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		for(Edge edgeBetweenCommunities : edgesBetweenCommunities){
@@ -302,15 +309,25 @@ public abstract class Container {
 			Node targetOfComplete = edgeBetweenCommunities.getTarget();
 			Node newSource = getEqualNode(this.graph, sourceOfComplete);
 			Node newTarget;
+			//Determines whether the edge gets out the community
+			boolean out = false;
 			if(newSource != null ){
 				newTarget = getEqualNode(externalContainer.graph, targetOfComplete);
+				out = true;
 			} else {
 				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
 				newTarget = getEqualNode(this.graph, targetOfComplete);	
 			}
-			newEdges.add(new Edge(newSource,newTarget,true));
+			VEdge vEdge = new VEdge(new Edge(newSource,newTarget,true));
+			vEdge.setSourceAndTarget(vNodesBothCommunities);
+			vEdge.makeBezier();
+			if(out){
+				vExtEdges.add(vEdge);
+			}else{
+				externalContainer.vExtEdges.add(vEdge);
+			}
 		}
-		return newEdges;
+
 	}
 	
 	/**
@@ -329,11 +346,12 @@ public abstract class Container {
 		}
 		return nodo;
 	}
+	/*
 	/**
 	 * Visual External Edges factory (For rootGraph)
 	 * 
 	 * @return
-	 */
+	 
 	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity, Container externalContainer ) {
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
 		vNodesBothCommunities.addAll(this.vNodes);
@@ -345,4 +363,5 @@ public abstract class Container {
 			vExtEdges.add(vEdge);
 		}
 	}
+	*/
 }
