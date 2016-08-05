@@ -4,6 +4,7 @@ import processing.core.*;
 import visualElements.interactive.VisualAtom;
 import java.util.ArrayList;
 import graphElements.Edge;
+import graphElements.Node;
 
 public class VEdge {
 	Edge edge;
@@ -113,5 +114,12 @@ public class VEdge {
 
 	public void setThickness(float thickness) {
 		this.thickness = thickness;
+	}
+	
+	public boolean equals(Object obj) {
+		VEdge vEdge = (VEdge) obj;
+		boolean sourceIsEqual = vEdge.getSource().equals(this.getSource());
+		boolean targetIsEqual = vEdge.getTarget().equals(this.getTarget());
+		return sourceIsEqual && targetIsEqual;
 	}
 }

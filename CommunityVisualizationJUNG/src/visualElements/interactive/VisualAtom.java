@@ -162,7 +162,7 @@ public abstract class VisualAtom {
 			if (tmp != null) {
 				if(tmp.container.getName().equals("SubSubcommunities")){
 					System.out.println("pintando externas");
-					tmp.paintExternalEdges();
+					tmp.buildExternalEdges();
 				}
 				
 			}

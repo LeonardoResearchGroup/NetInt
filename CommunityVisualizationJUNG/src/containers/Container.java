@@ -291,7 +291,7 @@ public abstract class Container {
 		this.layout = layout;
 	}
 	/**
-	 * 
+	 * Build the vEdges between this and another community.  
 	 * @param completeGraph
 	 * @param externalCommunity
 	 * @param externalContainer
@@ -302,6 +302,7 @@ public abstract class Container {
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
 		vNodesBothCommunities.addAll(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
+		//Here, we get a copy of all edges between the two communities and loop over them.
 		Graph filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		for(Edge edgeBetweenCommunities : edgesBetweenCommunities){
@@ -309,7 +310,7 @@ public abstract class Container {
 			Node targetOfComplete = edgeBetweenCommunities.getTarget();
 			Node newSource = getEqualNode(this.graph, sourceOfComplete);
 			Node newTarget;
-			//Determines whether the edge gets out the community
+			//Determines whether the edge gets out this community
 			boolean out = false;
 			if(newSource != null ){
 				newTarget = getEqualNode(externalContainer.graph, targetOfComplete);
@@ -324,7 +325,9 @@ public abstract class Container {
 			if(out){
 				vExtEdges.add(vEdge);
 			}else{
-				externalContainer.vExtEdges.add(vEdge);
+				if ( !externalContainer.vExtEdges.contains(vEdge) ){
+					externalContainer.vExtEdges.add(vEdge);
+				}
 			}
 		}
 
