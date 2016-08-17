@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+<key attr.name="label" attr.type="string" for="node" id="label"/>
+<key attr.name="Edge Label" attr.type="string" for="edge" id="edgelabel"/>
+<key attr.name="weight" attr.type="double" for="edge" id="weight"/>
+<key attr.name="Edge Id" attr.type="string" for="edge" id="edgeid"/>
+<key attr.name="r" attr.type="int" for="node" id="r"/>
+<key attr.name="g" attr.type="int" for="node" id="g"/>
+<key attr.name="b" attr.type="int" for="node" id="b"/>
+<key attr.name="x" attr.type="float" for="node" id="x"/>
+<key attr.name="y" attr.type="float" for="node" id="y"/>
+<key attr.name="size" attr.type="float" for="node" id="size"/>
+<key attr.name="Continent" attr.type="string" for="node" id="Continent"/>
+<key attr.name="Degree" attr.type="int" for="node" id="degree"/>
+<graph edgedefault="directed">
+<node id="1">
+<data key="label">Alaska</data>
+<data key="Continent">NA</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-1042.5549</data>
+<data key="y">800.05237</data>
+</node>
+<node id="2">
+<data key="label">Alberta</data>
+<data key="Continent">NA</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-965.617</data>
+<data key="y">650.5191</data>
+</node>
+<node id="3">
+<data key="label">Central America</data>
+<data key="Continent">NA</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-855.8108</data>
+<data key="y">310.53265</data>
+</node>
+<node id="4">
+<data key="label">Eastern United States</data>
+<data key="Continent">NA</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-634.1504</data>
+<data key="y">413.30655</data>
+</node>
+<node id="5">
+<data key="label">Greenland</data>
+<data key="Continent">NA</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-485.89874</data>
+<data key="y">726.47687</data>
+</node>
+<node id="6">
+<data key="label">Northwest Territory</data>
+<data key="Continent">NA</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-752.58777</data>
+<data key="y">698.2208</data>
+</node>
+<node id="7">
+<data key="label">Ontario</data>
+<data key="Continent">NA</data>
+<data key="degree">6</data>
+<data key="size">29.5</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-708.7735</data>
+<data key="y">594.1668</data>
+</node>
+<node id="8">
+<data key="label">Quebec</data>
+<data key="Continent">NA</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-537.29614</data>
+<data key="y">596.5044</data>
+</node>
+<node id="9">
+<data key="label">Western United States</data>
+<data key="Continent">NA</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">-883.5176</data>
+<data key="y">400.7138</data>
+</node>
+<node id="10">
+<data key="label">Argentina</data>
+<data key="Continent">SA</data>
+<data key="degree">2</data>
+<data key="size">11.0</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">155</data>
+<data key="x">-750.68085</data>
+<data key="y">-258.2079</data>
+</node>
+<node id="11">
+<data key="label">Brazil</data>
+<data key="Continent">SA</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">155</data>
+<data key="x">-578.8207</data>
+<data key="y">95.51556</data>
+</node>
+<node id="12">
+<data key="label">Peru</data>
+<data key="Continent">SA</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">155</data>
+<data key="x">-839.4538</data>
+<data key="y">66.323494</data>
+</node>
+<node id="13">
+<data key="label">Venezuela</data>
+<data key="Continent">SA</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">10</data>
+<data key="g">155</data>
+<data key="b">155</data>
+<data key="x">-800.8732</data>
+<data key="y">230.59958</data>
+</node>
+<node id="14">
+<data key="label">Great Britain</data>
+<data key="Continent">EU</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-332.90292</data>
+<data key="y">524.634</data>
+</node>
+<node id="15">
+<data key="label">Iceland</data>
+<data key="Continent">EU</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-364.09186</data>
+<data key="y">629.38806</data>
+</node>
+<node id="16">
+<data key="label">Northern Europe</data>
+<data key="Continent">EU</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-151.20024</data>
+<data key="y">549.275</data>
+</node>
+<node id="17">
+<data key="label">Scandinavia</data>
+<data key="Continent">EU</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-153.83685</data>
+<data key="y">677.851</data>
+</node>
+<node id="18">
+<data key="label">Southern Europe</data>
+<data key="Continent">EU</data>
+<data key="degree">6</data>
+<data key="size">29.5</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-65.35152</data>
+<data key="y">398.87354</data>
+</node>
+<node id="19">
+<data key="label">Ukraine</data>
+<data key="Continent">EU</data>
+<data key="degree">6</data>
+<data key="size">29.5</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">19.938993</data>
+<data key="y">627.1872</data>
+</node>
+<node id="20">
+<data key="label">Western Europe</data>
+<data key="Continent">EU</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">10</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-367.0421</data>
+<data key="y">402.1119</data>
+</node>
+<node id="21">
+<data key="label">Congo</data>
+<data key="Continent">AF</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-194.52162</data>
+<data key="y">38.064728</data>
+</node>
+<node id="22">
+<data key="label">East Africa</data>
+<data key="Continent">AF</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">43.041737</data>
+<data key="y">132.38548</data>
+</node>
+<node id="23">
+<data key="label">Egypt</data>
+<data key="Continent">AF</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-74.15408</data>
+<data key="y">226.5307</data>
+</node>
+<node id="24">
+<data key="label">Madagascar</data>
+<data key="Continent">AF</data>
+<data key="degree">2</data>
+<data key="size">11.0</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">103.997406</data>
+<data key="y">-65.02855</data>
+</node>
+<node id="25">
+<data key="label">North Africa</data>
+<data key="Continent">AF</data>
+<data key="degree">6</data>
+<data key="size">29.5</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-390.78125</data>
+<data key="y">237.44565</data>
+</node>
+<node id="26">
+<data key="label">South Africa</data>
+<data key="Continent">AF</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">155</data>
+<data key="x">-153.35904</data>
+<data key="y">-279.9642</data>
+</node>
+<node id="27">
+<data key="label">Afghanistan</data>
+<data key="Continent">AS</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">298.08743</data>
+<data key="y">420.12177</data>
+</node>
+<node id="28">
+<data key="label">China</data>
+<data key="Continent">AS</data>
+<data key="degree">6</data>
+<data key="size">29.5</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">746.3982</data>
+<data key="y">360.59036</data>
+</node>
+<node id="29">
+<data key="label">India</data>
+<data key="Continent">AS</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">379.3944</data>
+<data key="y">172.85866</data>
+</node>
+<node id="30">
+<data key="label">Irkutsk</data>
+<data key="Continent">AS</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">607.9373</data>
+<data key="y">638.63245</data>
+</node>
+<node id="31">
+<data key="label">Japan</data>
+<data key="Continent">AS</data>
+<data key="degree">2</data>
+<data key="size">11.0</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">810.5609</data>
+<data key="y">520.43176</data>
+</node>
+<node id="32">
+<data key="label">Kamchatka</data>
+<data key="Continent">AS</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">779.1365</data>
+<data key="y">788.1859</data>
+</node>
+<node id="33">
+<data key="label">Middle East</data>
+<data key="Continent">AS</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">122.361</data>
+<data key="y">278.72833</data>
+</node>
+<node id="34">
+<data key="label">Mongolia</data>
+<data key="Continent">AS</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">673.6792</data>
+<data key="y">488.58966</data>
+</node>
+<node id="35">
+<data key="label">Siam</data>
+<data key="Continent">AS</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">683.82166</data>
+<data key="y">232.5715</data>
+</node>
+<node id="36">
+<data key="label">Siberia</data>
+<data key="Continent">AS</data>
+<data key="degree">5</data>
+<data key="size">24.875</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">323.74176</data>
+<data key="y">602.1527</data>
+</node>
+<node id="37">
+<data key="label">Ural</data>
+<data key="Continent">AS</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">163.57271</data>
+<data key="y">595.91754</data>
+</node>
+<node id="38">
+<data key="label">Yakutsk</data>
+<data key="Continent">AS</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">155</data>
+<data key="b">10</data>
+<data key="x">516.5769</data>
+<data key="y">734.2418</data>
+</node>
+<node id="39">
+<data key="label">Eastern Australia</data>
+<data key="Continent">AU</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">10</data>
+<data key="x">685.7429</data>
+<data key="y">-142.88466</data>
+</node>
+<node id="40">
+<data key="label">Indonesia</data>
+<data key="Continent">AU</data>
+<data key="degree">4</data>
+<data key="size">20.25</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">10</data>
+<data key="x">678.5824</data>
+<data key="y">161.41547</data>
+</node>
+<node id="41">
+<data key="label">New Guinea</data>
+<data key="Continent">AU</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">10</data>
+<data key="x">961.6873</data>
+<data key="y">33.78579</data>
+</node>
+<node id="42">
+<data key="label">Western Australia</data>
+<data key="Continent">AU</data>
+<data key="degree">3</data>
+<data key="size">15.625</data>
+<data key="r">155</data>
+<data key="g">10</data>
+<data key="b">10</data>
+<data key="x">783.27106</data>
+<data key="y">-4.45732</data>
+</node>
+<edge source="1" target="2">
+<data key="weight">1.0</data>
+</edge>
+<edge source="1" target="6">
+<data key="weight">1.0</data>
+</edge>
+<edge source="1" target="32">
+<data key="weight">1.0</data>
+</edge>
+<edge source="2" target="6">
+<data key="weight">1.0</data>
+</edge>
+<edge source="2" target="7">
+<data key="weight">1.0</data>
+</edge>
+<edge source="2" target="9">
+<data key="weight">1.0</data>
+</edge>
+<edge source="3" target="4">
+<data key="weight">1.0</data>
+</edge>
+<edge source="3" target="9">
+<data key="weight">1.0</data>
+</edge>
+<edge source="3" target="13">
+<data key="weight">1.0</data>
+</edge>
+<edge source="4" target="7">
+<data key="weight">1.0</data>
+</edge>
+<edge source="4" target="8">
+<data key="weight">1.0</data>
+</edge>
+<edge source="4" target="9">
+<data key="weight">1.0</data>
+</edge>
+<edge source="5" target="6">
+<data key="weight">1.0</data>
+</edge>
+<edge source="5" target="7">
+<data key="weight">1.0</data>
+</edge>
+<edge source="5" target="15">
+<data key="weight">1.0</data>
+</edge>
+<edge source="6" target="7">
+<data key="weight">1.0</data>
+</edge>
+<edge source="7" target="8">
+<data key="weight">1.0</data>
+</edge>
+<edge source="8" target="5">
+<data key="weight">1.0</data>
+</edge>
+<edge source="9" target="7">
+<data key="weight">1.0</data>
+</edge>
+<edge source="10" target="11">
+<data key="weight">1.0</data>
+</edge>
+<edge source="11" target="25">
+<data key="weight">1.0</data>
+</edge>
+<edge source="12" target="10">
+<data key="weight">1.0</data>
+</edge>
+<edge source="12" target="11">
+<data key="weight">1.0</data>
+</edge>
+<edge source="13" target="11">
+<data key="weight">1.0</data>
+</edge>
+<edge source="13" target="12">
+<data key="weight">1.0</data>
+</edge>
+<edge source="14" target="16">
+<data key="weight">1.0</data>
+</edge>
+<edge source="14" target="17">
+<data key="weight">1.0</data>
+</edge>
+<edge source="14" target="20">
+<data key="weight">1.0</data>
+</edge>
+<edge source="15" target="14">
+<data key="weight">1.0</data>
+</edge>
+<edge source="15" target="17">
+<data key="weight">1.0</data>
+</edge>
+<edge source="16" target="17">
+<data key="weight">1.0</data>
+</edge>
+<edge source="16" target="18">
+<data key="weight">1.0</data>
+</edge>
+<edge source="16" target="19">
+<data key="weight">1.0</data>
+</edge>
+<edge source="17" target="19">
+<data key="weight">1.0</data>
+</edge>
+<edge source="18" target="19">
+<data key="weight">1.0</data>
+</edge>
+<edge source="18" target="23">
+<data key="weight">1.0</data>
+</edge>
+<edge source="18" target="25">
+<data key="weight">1.0</data>
+</edge>
+<edge source="18" target="33">
+<data key="weight">1.0</data>
+</edge>
+<edge source="19" target="27">
+<data key="weight">1.0</data>
+</edge>
+<edge source="19" target="37">
+<data key="weight">1.0</data>
+</edge>
+<edge source="20" target="16">
+<data key="weight">1.0</data>
+</edge>
+<edge source="20" target="18">
+<data key="weight">1.0</data>
+</edge>
+<edge source="20" target="25">
+<data key="weight">1.0</data>
+</edge>
+<edge source="21" target="26">
+<data key="weight">1.0</data>
+</edge>
+<edge source="22" target="21">
+<data key="weight">1.0</data>
+</edge>
+<edge source="22" target="24">
+<data key="weight">1.0</data>
+</edge>
+<edge source="22" target="26">
+<data key="weight">1.0</data>
+</edge>
+<edge source="23" target="22">
+<data key="weight">1.0</data>
+</edge>
+<edge source="23" target="33">
+<data key="weight">1.0</data>
+</edge>
+<edge source="25" target="21">
+<data key="weight">1.0</data>
+</edge>
+<edge source="25" target="22">
+<data key="weight">1.0</data>
+</edge>
+<edge source="25" target="23">
+<data key="weight">1.0</data>
+</edge>
+<edge source="26" target="24">
+<data key="weight">1.0</data>
+</edge>
+<edge source="27" target="28">
+<data key="weight">1.0</data>
+</edge>
+<edge source="27" target="29">
+<data key="weight">1.0</data>
+</edge>
+<edge source="27" target="37">
+<data key="weight">1.0</data>
+</edge>
+<edge source="28" target="34">
+<data key="weight">1.0</data>
+</edge>
+<edge source="28" target="35">
+<data key="weight">1.0</data>
+</edge>
+<edge source="28" target="36">
+<data key="weight">1.0</data>
+</edge>
+<edge source="28" target="37">
+<data key="weight">1.0</data>
+</edge>
+<edge source="29" target="28">
+<data key="weight">1.0</data>
+</edge>
+<edge source="29" target="35">
+<data key="weight">1.0</data>
+</edge>
+<edge source="30" target="32">
+<data key="weight">1.0</data>
+</edge>
+<edge source="30" target="36">
+<data key="weight">1.0</data>
+</edge>
+<edge source="30" target="38">
+<data key="weight">1.0</data>
+</edge>
+<edge source="31" target="34">
+<data key="weight">1.0</data>
+</edge>
+<edge source="32" target="31">
+<data key="weight">1.0</data>
+</edge>
+<edge source="33" target="19">
+<data key="weight">1.0</data>
+</edge>
+<edge source="33" target="27">
+<data key="weight">1.0</data>
+</edge>
+<edge source="33" target="29">
+<data key="weight">1.0</data>
+</edge>
+<edge source="34" target="30">
+<data key="weight">1.0</data>
+</edge>
+<edge source="34" target="32">
+<data key="weight">1.0</data>
+</edge>
+<edge source="34" target="36">
+<data key="weight">1.0</data>
+</edge>
+<edge source="35" target="40">
+<data key="weight">1.0</data>
+</edge>
+<edge source="36" target="37">
+<data key="weight">1.0</data>
+</edge>
+<edge source="36" target="38">
+<data key="weight">1.0</data>
+</edge>
+<edge source="38" target="32">
+<data key="weight">1.0</data>
+</edge>
+<edge source="39" target="41">
+<data key="weight">1.0</data>
+</edge>
+<edge source="40" target="39">
+<data key="weight">1.0</data>
+</edge>
+<edge source="40" target="41">
+<data key="weight">1.0</data>
+</edge>
+<edge source="40" target="42">
+<data key="weight">1.0</data>
+</edge>
+<edge source="41" target="42">
+<data key="weight">1.0</data>
+</edge>
+<edge source="42" target="39">
+<data key="weight">1.0</data>
+</edge>
+</graph>
+</graphml>
