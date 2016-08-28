@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="libs/processing/core.jar"/>
 	<classpathentry kind="lib" path="libs/processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
+	<classpathentry kind="lib" path="libs/JUNG/jung-algorithms-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
