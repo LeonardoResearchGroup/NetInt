@@ -19,6 +19,7 @@ public class Edge implements Serializable{
 	private String name;
 	private boolean loop;
 	private int ID;
+	private int frequency;
 
 	public Edge(Node source, Node target, boolean directed) {
 		this.source = source;
@@ -50,6 +51,9 @@ public class Edge implements Serializable{
 		return weight;
 	}
 
+	public int getFrequency() {
+		return frequency;
+	}
 	public String getName() {
 		return name;
 	}
@@ -70,6 +74,9 @@ public class Edge implements Serializable{
 		this.weight = weight;
 	}
 
+	public void setFrequency(int freq) {
+		this.frequency = freq;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}

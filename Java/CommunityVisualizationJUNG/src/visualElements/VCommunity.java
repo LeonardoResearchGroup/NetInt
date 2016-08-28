@@ -281,6 +281,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 								vC.container.runExternalEdgeFactory(container.rootGraph,
 										internalVC.container.getName(), internalVC.container);
 								vC.container.retrieveExternalVNodeSuccessors(container.rootGraph,internalVC.container);
+								internalVC.container.retrieveExternalVNodeSuccessors(container.rootGraph,vC.container);
 							}
 						}
 					}

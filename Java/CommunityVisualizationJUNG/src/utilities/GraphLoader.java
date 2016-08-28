@@ -19,7 +19,7 @@ public class GraphLoader {
 
 	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector) {
 		reader = new GraphmlReader(file);
-		jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector);
+		jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, "VALORES_MOVILIZADOS", "CANTIDAD_TRNS");
 		System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
 		// TODO Improve degree assigning with JUNG library method
 		setNodesDegrees(jungGraph);

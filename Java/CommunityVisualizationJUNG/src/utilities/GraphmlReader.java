@@ -41,7 +41,8 @@ public class GraphmlReader {
 		}
 	}
 
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey, String sectorKey) {
+	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, 
+			String nameKey, String sectorKey, String weightKey, String frequecyKey) {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 
 		System.out.println("GraphmlReader> Building Nodes and Edges");
@@ -106,11 +107,20 @@ public class GraphmlReader {
 
 			// Add graphElements to collection
 			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
-			if ((Double) edge.getProperty("weight") != null) {
-				String val = String.valueOf((Double) edge.getProperty("weight"));
+			if (edge.getProperty(weightKey) != null) {
+				String val = edge.getProperty(weightKey).toString();
 				e.setWeight(Float.valueOf(val));
+			} else {
+				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the weight");
+			}
+			if (edge.getProperty(frequecyKey) != null) {
+				String freq = edge.getProperty(frequecyKey).toString();
+				e.setFrequency(Double.valueOf(freq).intValue());
+			} else {
+				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the frequency");
 			}
 			rtnGraph.addEdge(e, sourceNode, targetNode, EdgeType.DIRECTED);
+
 
 		}
 		return rtnGraph;
