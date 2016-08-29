@@ -42,6 +42,7 @@ public class Executable extends PApplet {
 			canvas.showLegend(new PVector(width - 20, 20));
 			canvas.displayValues(new PVector(width - 20, 40));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
+			this.noLoop();
 		}
 	}
 
