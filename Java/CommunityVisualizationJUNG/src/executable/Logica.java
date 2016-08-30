@@ -119,5 +119,20 @@ public class Logica {
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 	}
+	
+public void loadGraph(String file, String communityFilter, String nodeName) {
+		
+		String XML_FILE = file;
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, communityFilter, nodeName,"sector");
+
+		// Root visual community
+		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
+		
+		// Sub communities
+		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), Container.FRUCHTERMAN_REINGOLD);
+		// Community of communities
+		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", Container.FRUCHTERMAN_REINGOLD);
+		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+	}
 
 }

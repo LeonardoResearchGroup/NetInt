@@ -23,6 +23,8 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
+		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label");
+		this.setActiveGraph(true);
 		
 	}
 
