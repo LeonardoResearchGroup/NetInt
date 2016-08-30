@@ -24,15 +24,17 @@ public class ControlPanel extends PApplet {
 
 	public void setup() {
 		this.surface.setSize(w, h);
-		this.surface.setLocation(3, 45);
+		this.surface.setLocation(180, 45);
 		this.surface.setAlwaysOnTop(true);
 		cp5 = new ControlP5(this);
 		cp5.addButton("Import Graph").plugTo(parent).setPosition(10, 10).setSize(180,20);
-		cp5.addSlider("Edge degree threshold").setPosition(10,60).setSize(180,10).setRange(0,35);
+		cp5.addSlider("Degree threshold").setPosition(10,60).setSize(100,10).setRange(0,35).setNumberOfTickMarks(20);
 	}
 
 	public void draw() {
 		background(70);
+		fill(250);
+		text("Nodos",10,50);
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -41,7 +43,7 @@ public class ControlPanel extends PApplet {
 		case "Import Graph":
 			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
 		break;
-		case "Edge degree threshold":
+		case "Degree threshold":
 			Executable.retrieveControlPanelEvent("vCommunity", theEvent.getValue());
 			break;
 		}

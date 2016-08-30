@@ -42,7 +42,8 @@ public class VEdge {
 	}
 
 	public void show(PApplet app) {
-		if (source.isVisible() && target.isVisible()) {
+	//	if (source.isVisible() && target.isVisible()) {
+		if(source.isVisible()){
 			// Set thickness
 			app.strokeWeight(thickness);
 			// Set color
