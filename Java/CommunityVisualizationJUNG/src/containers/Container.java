@@ -108,7 +108,7 @@ public abstract class Container {
 	 * 
 	 * @return
 	 */
-	protected void runEdgeFactory() {
+	public void runEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
@@ -271,6 +271,7 @@ public abstract class Container {
 	public Graph<Node, Edge> getGraph() {
 		return graph;
 	}
+	
 
 	public int size() {
 		return graph.getVertexCount();

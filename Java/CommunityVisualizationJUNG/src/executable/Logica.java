@@ -10,6 +10,7 @@ import containers.RootContainer;
 import containers.SubContainer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
 import utilities.GraphLoader;
@@ -89,7 +90,7 @@ public class Logica {
 
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout,
-				new Dimension(600, 600));
+				new Dimension(1200, 1200));
 		subContainer.setName(communityName);
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
@@ -97,6 +98,27 @@ public class Logica {
 		String nodeID = communityName + "_" + String.valueOf(0);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 		return communityTemp;
+	}
+	
+	/**
+	 * It creates the edges between communities before they are opened.
+	 * @param communities
+	 */
+	private void createEdgesBetweenSubcommunities(ArrayList<VCommunity> communities){
+		Graph<Node, Edge> graphInter;	
+		for (int i = 0; i<communities.size() ; i++ ) {
+			for (int j = i+1; j<communities.size() ; j++ ) {
+				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
+						communities.get(i).container.getName(), communities.get(j).container.getName());
+				//This condition decides wich edges are created
+				if(graphInter.getEdgeCount() >= 150){		
+					graphElements.Edge e = new graphElements.Edge(communities.get(i).getNode(),
+							communities.get(j).getNode(), true);
+					vSubSubCommunity.container.getGraph().addEdge(e, communities.get(i).getNode(),
+							communities.get(j).getNode(), EdgeType.DIRECTED);
+				}
+			}
+		}		
 	}
 
 	public void show(Canvas canvas) {
@@ -118,9 +140,11 @@ public class Logica {
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+		createEdgesBetweenSubcommunities(vSubCommunities);
+		vSubSubCommunity.container.runEdgeFactory();
 	}
 	
-public void loadGraph(String file, String communityFilter, String nodeName) {
+	public void loadGraph(String file, String communityFilter, String nodeName) {
 		
 		String XML_FILE = file;
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, communityFilter, nodeName,"sector");
@@ -133,6 +157,9 @@ public void loadGraph(String file, String communityFilter, String nodeName) {
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", Container.FRUCHTERMAN_REINGOLD);
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+		createEdgesBetweenSubcommunities(vSubCommunities);
+		vSubSubCommunity.container.runEdgeFactory();
+		
 	}
 
 }
