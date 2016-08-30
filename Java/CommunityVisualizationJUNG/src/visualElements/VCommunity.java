@@ -33,6 +33,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	boolean vNodesCentered = false;
 	// public boolean despuesOpens = false;
 	public boolean communityIsOpen = false;
+	// Controls nodes visibility
+	public float visibilityThreshold = 0;
 
 	private int i, increment, count, containerIterations;
 	public Container container;
@@ -103,7 +105,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			notOpened = false;
 		}
 		// Initialize community: building vNodes and vEdges
-//		container.initialize(communityIsOpen);
+		// container.initialize(communityIsOpen);
 		// Layout iterations
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
 			if (count < containerIterations) {
@@ -121,7 +123,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		updateContainer(communityIsOpen);
 		// Visualize nodes & edges in container
 		visualizeNodes = unlocked;
-		showCommunity(canvas, visualizeNodes, visualizeEdges, communityIsOpen);
+		showCommunity(canvas, visualizeNodes, visualizeEdges);
 		// Circular mask of Community cover data
 		showCoverLable(canvas);
 	}
@@ -165,20 +167,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		return open;
 	}
 
-	public void showCommunity(Canvas canvas, boolean showNodes, boolean showEdges, boolean networkVisible) {
-		if (networkVisible) {
-			if (showEdges) {
-				for (
-
-				VEdge vE : container.getVEdges()) {
-					vE.show(canvas.app);
-				}
-				// System.out.println("PintaArsitas");
-				for (VEdge vEE : container.getVExtEdges()) {
-					vEE.show(canvas.app);
-					// System.out.println("PintaExt");
-				}
-			}
+	public void showCommunity(Canvas canvas, boolean showNodes, boolean showEdges) {
+		if (communityIsOpen) {
 			if (showNodes) {
 				for (VisualAtom vA : container.getVNodes()) {
 					// If vA is a VCommunity
@@ -189,24 +179,39 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					} else {
 						// If vA is a VNode
 						VNode vN = (VNode) vA;
+						vN.setVisibility(visibilityThreshold);
 						/*
-						 * outDegree 0= degree in rootCommunity, outDegree 1 =
-						 * degree in this community
+						 * The integer parameter for getOutDegree(int) is the
+						 * number of the community to which that node belongs
+						 * and from where you want to get its degree. int = 0 is
+						 * the degree in the bottom tier (rootCommunity), int =
+						 * 1 is the degree in tier 1 community, and so on.
 						 */
-						vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
-						vN.show(canvas, networkVisible);
-						// This is to rearrange the vNodes once the community is
-						// opened
-						if (vNodesCentered) {
-							// reset vNode coordinates to the coordinates
-							// assigned in the container's layout
-							PVector newOrigin = new PVector(container.dimension.width / 2,
-									container.dimension.height / 2);
-							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+						if (vN.isVisible()) {
+							vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
+							vN.show(canvas, communityIsOpen);
+							// This is to rearrange the vNodes once the
+							// community is
+							// opened
+							if (vNodesCentered) {
+								// reset vNode coordinates to the coordinates
+								// assigned in the container's layout
+								PVector newOrigin = new PVector(container.dimension.width / 2,
+										container.dimension.height / 2);
+								container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+							}
 						}
 					}
 				}
 				vNodesCentered = false;
+			}
+			if (showEdges) {
+				for (VEdge vE : container.getVEdges()) {
+					vE.show(canvas.app);
+				}
+				for (VEdge vEE : container.getVExtEdges()) {
+					vEE.show(canvas.app);
+				}
 			}
 		} // If network not visible
 		else {
@@ -260,11 +265,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 	}
-	
+
 	/**
 	 * Build all the external edges of a clicked community
 	 */
-	public void buildExternalEdges(){
+	public void buildExternalEdges() {
 		this.container.initialize(true);
 		for (VisualAtom vA : container.getVNodes()) {
 			// If vA is a VCommunity
@@ -278,16 +283,24 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (internalVA instanceof VCommunity) {
 							VCommunity internalVC = (VCommunity) internalVA;
 							if (internalVC.communityIsOpen && !internalVC.equals(vC)) {
-								vC.container.runExternalEdgeFactory(container.rootGraph,
-										internalVC.container.getName(), internalVC.container);
-								vC.container.retrieveExternalVNodeSuccessors(container.rootGraph,internalVC.container);
+								vC.container.runExternalEdgeFactory(container.rootGraph, internalVC.container.getName(),
+										internalVC.container);
+								vC.container.retrieveExternalVNodeSuccessors(container.rootGraph, internalVC.container);
 							}
 						}
 					}
-				} else if(vC.isMouseOver && vC.communityIsOpen){
+				} else if (vC.isMouseOver && vC.communityIsOpen) {
 					vC.container.setvExtEdges(new ArrayList<VEdge>());
 				}
 			}
 		}
+	}
+
+	public float getVisibilityThreshold() {
+		return visibilityThreshold;
+	}
+
+	public void setVisibilityThreshold(float visibilityThreshold) {
+		this.visibilityThreshold = visibilityThreshold;
 	}
 }

@@ -112,16 +112,16 @@ public class VNode extends VisualAtom {
 
 	/**
 	 * @param canvas
-	 * @param visible
+	 * @param communityOpen
 	 */
-	public void show(Canvas canvas, boolean visible) {
+	public void show(Canvas canvas, boolean communityOpen) {
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
 		registerEvents(canvas);
 		// retrieve mouse coordinates
 		detectMouseOver(canvas.getCanvasMouse());
 
-		if (visible) {
+		if (communityOpen) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {
 				setAlpha(125);
@@ -241,6 +241,14 @@ public class VNode extends VisualAtom {
 
 	public void setVertex(Node vertex) {
 		this.node = vertex;
+	}
+	
+	public void setVisibility(float visibilityThreshold){
+		if (visibilityThreshold >= getNode().getOutDegree(1)){
+			setVisibility(false);
+		}else{
+			setVisibility(true);
+		}
 	}
 
 	// ***** Events
