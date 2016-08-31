@@ -271,6 +271,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
 				if (vC.isMouseOver && !vC.communityIsOpen) {
+					//It clears the edges between communities of the opened community
+					container.getGraph().removeVertex(vC.getNode());
+					container.getVEdges().clear();
+					container.runEdgeFactory();
+					
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
