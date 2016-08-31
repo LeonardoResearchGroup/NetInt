@@ -10,6 +10,7 @@ import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;
 import visualElements.gui.GUIHelper;
 import visualElements.gui.ControlPanel;
+import controlP5.ControlEvent;
 
 public class Executable extends PApplet {
 	static Logica app;
@@ -80,18 +81,15 @@ public class Executable extends PApplet {
 		}
 	}
 
-	public static void retrieveControlPanelEvent(String target, Float value) {
-		if (target != null && value != null) {
-			if (target.equals("vCommunity")) {
-				try {
-					for (VCommunity temp : app.getVisualCommunities()) {
-						temp.setVisibilityThreshold(value);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+	public static void retrieveControlPanelEvent(ControlEvent event) {
+		try {
+			if (event.isFrom("Umbral grados")) {
+				for (VCommunity temp : app.getVisualCommunities()) {
+					temp.setVisibilityThreshold(event.getValue());
 				}
-				System.out.println("Executable> retrieveControlPanelEvent > event:" + value);
 			}
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
 		}
 	}
 }
