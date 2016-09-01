@@ -20,35 +20,30 @@ public class ChooseHelper {
 	// Private constructor.
 	private ChooseHelper() {
 	}
-	
-	public static ChooseHelper getInstance()
-	{
+
+	public static ChooseHelper getInstance() {
 		return INSTANCE;
 	}
 
+	/**
+	 * Shows the Open File window of the OS
+	 * @param save
+	 * @param extension
+	 * @param applet
+	 */
 	public void showFileChooser(boolean save, String extension, PApplet applet) {
-		
-		
 		if (!save) {
 			applet.selectInput("Select a file to process:", "selectImport");
 		}
-		
-	}
-	
-	public void processImport(File file, Executable applet)
-	{
-		ModalWindow modalW = new ModalWindow("Loading graph", new Dimension(188, 190), applet);
-		
-		modalW.open();
-		
-		Object[] data = modalW.getData();
-		
-		if(data != null)
-		{
-			applet.getApp().loadGraph(file,(String)data[0],(String)data[1],(Integer)data[2]);
-			applet.setActiveGraph(true);
-		}
-		
 	}
 
+	public void processImport(File file, Executable applet) {
+		ModalWindow modalW = new ModalWindow("Loading graph", new Dimension(188, 190), applet);
+		modalW.open();
+		Object[] data = modalW.getData();
+		if (data != null) {
+			applet.getApp().loadGraph(file, (String) data[0], (String) data[1], (Integer) data[2]);
+			applet.setActiveGraph(true);
+		}
+	}
 }

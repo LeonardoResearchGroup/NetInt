@@ -42,24 +42,27 @@ public class VEdge {
 	}
 
 	public void show(PApplet app) {
-		// Set thickness
-		app.strokeWeight(thickness);
-		// Set color
-		if (source.isPropagated()){
-			bezier.color(Bezier.PROPAGATE);
-			//setAlpha(90);
-		}else{
-			bezier.color(Bezier.NORMAL);
-			//setAlpha(40);
+		if (source.isVisible() && target.isVisible()) {
+		//if(source.isVisible()){
+			// Set thickness
+			app.strokeWeight(thickness);
+			// Set color
+			if (source.isPropagated()) {
+				bezier.color(Bezier.PROPAGATE);
+				// setAlpha(90);
+			} else {
+				bezier.color(Bezier.NORMAL);
+				// setAlpha(40);
 
+			}
+			bezier.brighter();
+			// Update source and target
+			bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
+			bezier.setControl((source.pos.x - target.pos.x) / 2);
+			// Edge mode: simple, head, tail or both
+			bezier.drawBezier2D(app);
+			bezier.drawHeadBezier2D(app);
 		}
-		bezier.brighter();
-		// Update source and target
-		bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
-		bezier.setControl((source.pos.x - target.pos.x) / 2);
-		// Edge mode: simple, head, tail or both
-		bezier.drawBezier2D(app);
-		bezier.drawHeadBezier2D(app);
 	}
 
 	private void setDirection(float posXOrg, float posXDes) {
@@ -107,11 +110,11 @@ public class VEdge {
 	public void setThickness(float thickness) {
 		this.thickness = thickness;
 	}
-	
-	public void setAlpha(int alpha){
+
+	public void setAlpha(int alpha) {
 		bezier.setAlpha(alpha);
 	}
-	
+
 	public boolean equals(Object obj) {
 		VEdge vEdge = (VEdge) obj;
 		boolean sourceIsEqual = vEdge.getSource().equals(this.getSource());

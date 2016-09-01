@@ -19,6 +19,7 @@ public abstract class VisualAtom {
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
+	private boolean visible;
 	protected Color color;
 
 	public VisualAtom(float x, float y, float diam) {
@@ -28,6 +29,7 @@ public abstract class VisualAtom {
 		leftClicked = false;
 		canvas = null;
 		color = new Color(255, 255, 255, 90);
+		visible = true;
 	}
 
 	public VisualAtom(float x, float y, int wdth, int hght) {
@@ -38,6 +40,7 @@ public abstract class VisualAtom {
 		leftClicked = false;
 		canvas = null;
 		color = new Color(0, 100, 100, 90);
+		visible = true;
 	}
 
 	public abstract void show(Canvas canvas);
@@ -115,6 +118,10 @@ public abstract class VisualAtom {
 	public int getColorRGB() {
 		return color.getRGB();
 	}
+	
+	public boolean isVisible(){
+		return visible;
+	}
 
 	public int setColor(Color color) {
 		this.color = color;
@@ -142,6 +149,10 @@ public abstract class VisualAtom {
 
 	public int brighter() {
 		return this.color.brighter().getRGB();
+	}
+	
+	 protected void setVisibility(boolean visible){
+		this.visible = visible;
 	}
 
 	// ---------------- MouseEvent methods ----------------

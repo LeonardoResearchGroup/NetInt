@@ -126,10 +126,9 @@ public class Logica {
 		vSubSubCommunity.show(canvas);
 	}
 
-
 	public void loadGraph(File file, String communityFilter, String nodeName, int layout) {
-		
 		String XML_FILE = file.getAbsolutePath();
+		////*************CORREGIR SECTOR *****************
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, communityFilter, nodeName,"sector");
 
 		// Root visual community
@@ -160,6 +159,10 @@ public class Logica {
 		createEdgesBetweenSubcommunities(vSubCommunities);
 		vSubSubCommunity.container.runEdgeFactory();
 		
+	}
+
+	public ArrayList<VCommunity> getVisualCommunities() {
+		return vSubCommunities;
 	}
 
 }

@@ -14,21 +14,14 @@ public class GUIHelper {
 
 	private CallbackListener barEvents() {
 		return new CallbackListener() {
-
 			public void controlEvent(CallbackEvent ev) {
-
 				ButtonBar bar = (ButtonBar) ev.getController();
 				int clicked = bar.hover();
-
 				// Graph import.
 				if (clicked == 0) {
-
 					ChooseHelper.getInstance().showFileChooser(false, "graphml", applet);
-
 				}
-
 			}
-
 		};
 	}
 
