@@ -244,7 +244,7 @@ public class VNode extends VisualAtom {
 	}
 	
 	public void setVisibility(float visibilityThreshold){
-		if (visibilityThreshold >= getNode().getOutDegree(1)){
+		if (visibilityThreshold > getNode().getOutDegree(1)){
 			setVisibility(false);
 		}else{
 			setVisibility(true);
