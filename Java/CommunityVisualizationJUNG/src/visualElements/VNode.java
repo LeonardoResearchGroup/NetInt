@@ -1,8 +1,11 @@
 package visualElements;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import org.jcolorbrewer.ColorBrewer;
 
 import graphElements.Node;
 import processing.core.*;
@@ -155,7 +158,20 @@ public class VNode extends VisualAtom {
 			} else {
 				canvas.app.noStroke();
 			}
-			canvas.app.fill(getColorRGB());
+			
+			boolean colorBlindSave = true;
+			ColorBrewer[] sequentialPalettes = ColorBrewer.getSequentialColorPalettes(colorBlindSave);	
+
+
+			ColorBrewer myBrewer = sequentialPalettes[7];
+			
+
+			System.out.println( "Name of this color brewer: " + myBrewer);
+
+			// I want a gradient of 8 colors:
+			Color[] myGradient = ColorBrewer.BuGn.getColorPalette(8);
+			
+			canvas.app.fill(myGradient[5].getRGB());
 			canvas.app.ellipse(pos.x, pos.y, diam, diam);
 		}
 	}
