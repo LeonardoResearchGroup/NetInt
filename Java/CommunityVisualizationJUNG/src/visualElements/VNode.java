@@ -149,7 +149,7 @@ public class VNode extends VisualAtom {
 			}
 
 			if (isMouseOver) {
-				canvas.app.fill(setColor(200, 0, 0, 120));
+//				canvas.app.fill(setColor(200, 0, 0, 120));
 				canvas.app.noFill();
 				canvas.app.stroke(225, 0, 0);
 				canvas.app.ellipse(pos.x, pos.y, diam + 2, diam + 2);
@@ -171,7 +171,8 @@ public class VNode extends VisualAtom {
 			// I want a gradient of 8 colors:
 			Color[] myGradient = ColorBrewer.BuGn.getColorPalette(8);
 			
-			canvas.app.fill(myGradient[5].getRGB());
+//			canvas.app.fill(myGradient[5].getRGB());
+			canvas.app.fill(getColorRGB());
 			canvas.app.ellipse(pos.x, pos.y, diam, diam);
 		}
 	}

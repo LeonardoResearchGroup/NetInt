@@ -1,5 +1,6 @@
 package containers;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +53,8 @@ public abstract class Container {
 	protected boolean done = false;
 	public int kindOfLayout;
 	public Dimension dimension;
+	
+	protected Color color;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -99,6 +102,7 @@ public abstract class Container {
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n), 0); // key
 			tmp.absoluteToRelative(layoutCenter);
+			tmp.setColor(color);
 			vNodes.add(tmp);
 		}
 	}
