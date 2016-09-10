@@ -48,6 +48,11 @@ public class GraphmlReader {
 		System.out.println("GraphmlReader> Building Nodes and Edges");
 		System.out.println("GraphmlReader> Working on it ...");
 		
+		for (Vertex vertex : graph.getVertices()) {
+			System.out.println(vertex.getId());
+			
+		}
+		
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.IN);
