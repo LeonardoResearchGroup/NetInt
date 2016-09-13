@@ -1,8 +1,0 @@
-1467339805280	Rename local variable 'tmpA'
-1467339816272	Rename local variable 'tmpB'
-1467341822278	Delete element
-1467343874708	Rename field 'communities'
-1467414620054	Rename field 'gCommunities'
-1467414645111	Rename field 'graphCommunities'
-1467559913417	Rename method 'showSimpleCommunityInvolute'
-1467560613770	Rename method 'circularLayout'
