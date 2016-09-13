@@ -27,6 +27,8 @@ public class Logica {
 	// Visual Communities
 	private VCommunity vMainCommunity, vSubSubCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
+	private double maxWeight;
+	private double minWeight;
 
 	public Logica() {
 
@@ -156,6 +158,11 @@ public class Logica {
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		createEdgesBetweenSubcommunities(vSubCommunities);
 		vSubSubCommunity.container.runEdgeFactory();
+		//get the maximal y minimal weight into the graph
+		maxWeight = rootGraph.getMaxWeight();
+		minWeight = rootGraph.getMinWeight();
+		System.out.println(" Maximal Weight: " + maxWeight);
+		System.out.println(" Minimal Weight: " + minWeight);
 	}
 	
 	public void loadGraph(String file, String communityFilter, String nodeName) {
