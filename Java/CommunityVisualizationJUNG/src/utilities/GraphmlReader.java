@@ -23,6 +23,8 @@ import graphElements.Edge;
 public class GraphmlReader {
 
 	private Graph graph;
+	private double maxWeight;
+	private double minWeight;
 	ArrayList<String> communities;
 
 	public GraphmlReader(String xmlFile) {
@@ -48,6 +50,47 @@ public class GraphmlReader {
 		System.out.println("GraphmlReader> Building Nodes and Edges");
 		System.out.println("GraphmlReader> Working on it ...");
 		
+		Node[]nodes = new Node[30000]; 
+
+
+		for (Vertex vertex : graph.getVertices()) {
+			
+			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
+			
+			Node node = new Node(String.valueOf(id));
+			
+			if (vertex.getProperty(communityKey) != null) {
+				node.setCommunity("Root", 0);
+				node.setCommunity(vertex.getProperty(communityKey).toString(), 1);
+				addCommunity(node.getCommunity(1));
+			} else {
+				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches!!! Check the key String of the community filter");
+			}
+			
+			// Check if exist a property matching nameKey
+			if (vertex.getProperty(nameKey) != null ) {
+				node.setName(vertex.getProperty(nameKey).toString());
+			} else {
+				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the graphML label");
+			}
+			
+			// Check if exist a property matching sectorKey
+			if (vertex.getProperty(sectorKey) != null ) {
+				node.setSector(vertex.getProperty(sectorKey).toString());
+			}else {
+				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the sector");
+			}	
+			
+			
+			
+			nodes[id] = node; 
+			
+			
+		}
+		
+		maxWeight = 0;
+		minWeight = Float.POSITIVE_INFINITY;
+		
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.IN);
@@ -55,6 +98,7 @@ public class GraphmlReader {
 			// Get their ID
 			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
+			/*
 			// Instantiate Nodes
 			Node sourceNode = new Node(String.valueOf(idSource));
 			Node targetNode = new Node(String.valueOf(idTarget));
@@ -104,12 +148,19 @@ public class GraphmlReader {
 			} else {
 				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the sector");
 			}
-
+			*/
 			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
+			graphElements.Edge e = new graphElements.Edge(nodes[idSource], nodes[idTarget], true);
 			if (edge.getProperty(weightKey) != null) {
 				String val = edge.getProperty(weightKey).toString();
-				e.setWeight(Float.valueOf(val));
+				float weight = Float.valueOf(val);
+				if (weight > maxWeight){
+					maxWeight = weight;
+				}
+				if (weight < minWeight){
+					minWeight = weight;
+				}
+				e.setWeight(weight);
 			} else {
 				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the weight");
 			}
@@ -119,10 +170,12 @@ public class GraphmlReader {
 			} else {
 				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the frequency");
 			}
-			rtnGraph.addEdge(e, sourceNode, targetNode, EdgeType.DIRECTED);
+			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
 
 
 		}
+		System.out.println(maxWeight);
+		System.out.println(minWeight);
 		return rtnGraph;
 	}
 
@@ -189,5 +242,12 @@ public class GraphmlReader {
 			}
 		}
 		return nodo;
+	}
+	
+	public double getMaxWeight(){
+		return maxWeight;
+	}
+	public double getMinWeight(){
+		return minWeight;
 	}
 }

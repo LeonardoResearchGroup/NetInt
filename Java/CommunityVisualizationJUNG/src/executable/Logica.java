@@ -1,9 +1,12 @@
 package executable;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.jcolorbrewer.ColorBrewer;
 
 import containers.Container;
 import containers.RootContainer;
@@ -24,6 +27,8 @@ public class Logica {
 	// Visual Communities
 	private VCommunity vMainCommunity, vSubSubCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
+	private double maxWeight;
+	private double minWeight;
 
 	public Logica() {
 
@@ -45,18 +50,30 @@ public class Logica {
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		//
 		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
+		
+		boolean colorBlindSave = true;
+		ColorBrewer[] sequentialPalettes = ColorBrewer.getSequentialColorPalettes(colorBlindSave);	
+		ColorBrewer myBrewer = sequentialPalettes[3];
+//		System.out.println( "Name of this color brewer: " + myBrewer);
+//		Color[] myGradient = myBrewer.Spectral.getColorPalette(communityNames.size());
+		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
+		
+		int i = 0;
+		
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
 			SubContainer containerTemp = new SubContainer(graphTemp, layout,
-					new Dimension(600, 600));
+					new Dimension(600, 600), myGradient[i]);
+			i++;
 			containerTemp.setName(communityName);
 			// CommunityCover
 			String nodeID = communityName;
 			VCommunity communityTemp = new VCommunity(new Node(nodeID), containerTemp);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
+			communityTemp.setColor( myGradient[i-1]);
 			vCommunities.add(communityTemp);
 		}
 		subGraphs = null;
@@ -74,10 +91,10 @@ public class Logica {
 			if (vC.getNode().getId().equals("10.0") || vC.getNode().getId().equals("9.0")
 					|| vC.getNode().getId().equals("22.0")) {
 				System.out.println(vC.getNode().getId());
-				vC.setColor(125, 0, 175, 120);
+//				vC.setColor(125, 0, 175, 120);
 			} // Other communities
 			else {
-				vC.setColor(0, 125, 155, 120);
+//				vC.setColor(0, 125, 155, 120);
 			}
 			// add Nodes
 			graphTemp.addVertex(vC.getNode());
@@ -141,6 +158,11 @@ public class Logica {
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		createEdgesBetweenSubcommunities(vSubCommunities);
 		vSubSubCommunity.container.runEdgeFactory();
+		//get the maximal y minimal weight into the graph
+		maxWeight = rootGraph.getMaxWeight();
+		minWeight = rootGraph.getMinWeight();
+		System.out.println(" Maximal Weight: " + maxWeight);
+		System.out.println(" Minimal Weight: " + minWeight);
 	}
 	
 	public void loadGraph(String file, String communityFilter, String nodeName) {

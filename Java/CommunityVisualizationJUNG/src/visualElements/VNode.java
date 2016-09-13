@@ -1,8 +1,11 @@
 package visualElements;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import org.jcolorbrewer.ColorBrewer;
 
 import graphElements.Node;
 import processing.core.*;
@@ -146,8 +149,9 @@ public class VNode extends VisualAtom {
 			}
 
 			if (isMouseOver) {
-				canvas.app.fill(setColor(200, 0, 0, 120));
-				canvas.app.noFill();
+//				canvas.app.fill(setColor(200, 0, 0, 120));
+//				canvas.app.noFill();
+				canvas.app.fill(brighter());
 				canvas.app.stroke(225, 0, 0);
 				canvas.app.ellipse(pos.x, pos.y, diam + 2, diam + 2);
 				// Show comments
@@ -155,6 +159,7 @@ public class VNode extends VisualAtom {
 			} else {
 				canvas.app.noStroke();
 			}
+			
 			canvas.app.fill(getColorRGB());
 			canvas.app.ellipse(pos.x, pos.y, diam, diam);
 		}
@@ -164,9 +169,12 @@ public class VNode extends VisualAtom {
 		canvas.app.textAlign(PConstants.LEFT);
 		if (isMouseOver) {
 			canvas.app.noStroke();
-			canvas.app.fill(setColor(50, 150));
+//			canvas.app.fill(setColor(50, 150));
+			canvas.app.fill(new Color(50, 50, 50, 150).getRGB());
 			canvas.app.rect(pos.x - 5, pos.y - 3, 160, -103);
-			canvas.app.fill(setColor(200, 170));
+//			canvas.app.fill(setColor(200, 170));
+			canvas.app.fill(new Color(200, 200, 200, 170).getRGB());
+			
 			// Identification Data
 			canvas.app.text("Name: " + node.getName(), pos.x + 5, pos.y - 5);
 			//canvas.app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);

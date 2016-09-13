@@ -1,5 +1,6 @@
 package containers;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,11 +27,18 @@ public class SubContainer extends Container implements Serializable{
 		this.kindOfLayout = kindOfLayout;
 		this.dimension = dimension;
 	}
-
+	
 	public SubContainer(Graph<Node, Edge> subGraph, int kindOfLayout, Dimension dimension) {
 		super(subGraph);
 		this.kindOfLayout = kindOfLayout;
 		this.dimension = dimension;
+	}
+
+	public SubContainer(Graph<Node, Edge> subGraph, int kindOfLayout, Dimension dimension, Color color) {
+		super(subGraph);
+		this.kindOfLayout = kindOfLayout;
+		this.dimension = dimension;
+		this.color = color;
 	}
 
 	/**
