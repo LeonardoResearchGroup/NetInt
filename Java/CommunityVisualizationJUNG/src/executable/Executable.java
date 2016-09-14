@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import processing.core.*;
 import utilities.TestPerformance;
-import utilities.mapping.MappingTool;
+import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;
@@ -20,7 +20,6 @@ public class Executable extends PApplet {
 	// GUIHelper guiHelper;
 	boolean activeGraph;
 	ControlPanel cFrame;
-	MappingTool converter;
 
 	public void setup() {
 		textSize(10);
@@ -35,7 +34,6 @@ public class Executable extends PApplet {
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
-		converter = new MappingTool(0f,100f);
 	}
 
 	public void draw() {
@@ -52,7 +50,6 @@ public class Executable extends PApplet {
 			canvas.displayValues(new PVector(width - 20, 40));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
 		}
-		converter.drawFilter(this, "radial", 230, 130);;
 	}
 
 	public Logica getApp() {

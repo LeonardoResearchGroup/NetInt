@@ -6,14 +6,14 @@ import processing.core.PApplet;
  * @author juansalamanca
  *
  */
-public class MappingTool {
+public class Mapper {
 
 	float minIn;
 	float maxIn;
 	float alpha = 1;
 	float beta = 1;
 
-	public MappingTool(float minIn, float maxIn) {
+	public Mapper(float minIn, float maxIn) {
 		this.minIn = minIn;
 		this.maxIn = maxIn;
 	}
