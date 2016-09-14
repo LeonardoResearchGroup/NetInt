@@ -1,6 +1,7 @@
 package visualElements;
 
 import processing.core.PVector;
+import utilities.mapping.Mapper;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -18,12 +19,10 @@ import graphElements.Node;
  *
  */
 public class VCommunity extends VNode implements java.io.Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	private float minCommunityDiam, maxCommunityDiam;
-	private int minCommunitySize, maxCommunitySize;
+	// private float minCommunityDiam, maxCommunityDiam;
+	// private int minCommunitySize, maxCommunitySize;
 	private float angle = PConstants.TWO_PI / 360;
 	private float angle2;
 	private boolean unlocked;
@@ -35,6 +34,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public boolean communityIsOpen = false;
 	// Controls nodes visibility
 	public float visibilityThreshold = 0;
+	// Mapper
+	private Mapper mapper;
 
 	private int i, increment, count, containerIterations;
 	public Container container;
@@ -49,13 +50,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		i = 0;
 		increment = 10;
 		count = 0;
-		setLayoutParameters();
 		lastPosition = pos;
 		containerIterations = 50;
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 		// *CESAR
 		notOpened = true;
+		mapper = new Mapper();
 	}
 
 	public VCommunity(VNode vNode, Container container) {
@@ -67,16 +68,18 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		count = 0;
 		lastPosition = pos;
 		containerIterations = 100;
-		setLayoutParameters();
+		mapper = new Mapper();
 	}
 
-	private void setLayoutParameters() {
+	public void setDiameter(float maxCommunityDiam) {
 		// Calculate the community diameter
-		minCommunityDiam = 70;
-		maxCommunityDiam = 200;
-		minCommunitySize = 1;
-		maxCommunitySize = 1000;
-		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
+		 float minCommunityDiam = 70;
+		 // float maxCommunityDiam = 200;
+		 float minCommunitySize = 1;
+		float maxCommunitySize = 1000;
+		 //diam = PApplet.map(container.size(), minCommunitySize,maxCommunitySize, minCommunityDiam, maxCommunityDiam);
+		diam = maxCommunityDiam * mapper.sinusoidal(container.size());
+		System.out.println("VCommunity>diam " +this.getNode().getId() + ": "+ this.diam);
 	}
 
 	public void show(Canvas canvas) {
@@ -276,11 +279,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
 				if (vC.isMouseOver && !vC.communityIsOpen) {
-					//It clears the edges between communities of the opened community
+					// It clears the edges between communities of the opened
+					// community
 					container.getGraph().removeVertex(vC.getNode());
 					container.getVEdges().clear();
 					container.runEdgeFactory();
-					
+
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
@@ -300,7 +304,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 		}
 	}
-								
 
 	public float getVisibilityThreshold() {
 		return visibilityThreshold;
@@ -308,5 +311,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void setVisibilityThreshold(float visibilityThreshold) {
 		this.visibilityThreshold = visibilityThreshold;
+	}
+
+	public void setMapperMaxMin(float minIn, float maxIn) {
+		mapper.setMaxMin(minIn, maxIn);
+	}
+
+	public void setMapperAlphaBeta(float alpha, float beta) {
+		mapper.setSigmoidAlphaBeta(alpha, beta);
 	}
 }

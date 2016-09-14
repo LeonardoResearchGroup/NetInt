@@ -6,16 +6,20 @@ import processing.core.PApplet;
  * @author juansalamanca
  *
  */
-public class MappingTool {
+public class Mapper {
 
-	float minIn;
-	float maxIn;
-	float alpha = 1;
-	float beta = 1;
+	private float minIn;
+	private float maxIn;
+	private float alpha = 1;
+	private float beta = 1;
 
-	public MappingTool(float minIn, float maxIn) {
+	public Mapper(float minIn, float maxIn) {
 		this.minIn = minIn;
 		this.maxIn = maxIn;
+	}
+	
+	public Mapper() {
+	
 	}
 
 	// Linear mapping
@@ -87,11 +91,11 @@ public class MappingTool {
 
 	/**
 	 * Use this method ONLY to visualize the filter
-	 * 
+	 * @deprecated
 	 * @param val
 	 * @return
 	 */
-	public float sigmoid(float val) {
+	private float sigmoid(float val) {
 		val = PApplet.map(val, minIn, maxIn, 255, 0);
 		float t = (float) Math.pow(Math.E, ((val - beta) / alpha));
 		float p = (1 / (1 + t));
@@ -183,5 +187,33 @@ public class MappingTool {
 		case "radial":
 			app.text("Radial", origX - 130, origY - 87);
 		}
+	}
+
+	// ***** Getters
+	public float getMinIn() {
+		return minIn;
+	}
+
+	public float getMaxIn() {
+		return maxIn;
+	}
+
+	// ***** Setters
+	public void setMinIn(float minIn) {
+		this.minIn = minIn;
+	}
+
+	public void setMaxIn(float maxIn) {
+		this.maxIn = maxIn;
+	}
+	
+	public void setMaxMin(float minIn, float maxIn){
+		this.minIn = minIn;
+		this.maxIn = maxIn;
+	}
+	
+	public void setSigmoidAlphaBeta(float alpha, float beta){
+		this.alpha = alpha;
+		this.beta = beta;
 	}
 }

@@ -27,8 +27,8 @@ public class Logica {
 	// Visual Communities
 	private VCommunity vMainCommunity, vSubSubCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
-	private double maxWeight;
-	private double minWeight;
+	private float maxWeight;
+	private float minWeight;
 
 	public Logica() {
 
@@ -41,6 +41,9 @@ public class Logica {
 		// Root Community
 		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
 		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
+		// Initialize vCommunity visual attributes
+		vCommunity.setMapperMaxMin(minWeight, maxWeight);
+		vCommunity.setDiameter(100);
 		return vCommunity;
 	}
 
@@ -71,6 +74,10 @@ public class Logica {
 			// CommunityCover
 			String nodeID = communityName;
 			VCommunity communityTemp = new VCommunity(new Node(nodeID), containerTemp);
+			// Initialize vCommunity visual attributes
+
+			communityTemp.setMapperMaxMin(1, 18);
+			communityTemp.setDiameter(100);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
 			communityTemp.setColor( myGradient[i-1]);
@@ -114,6 +121,8 @@ public class Logica {
 		// CommunityCover
 		String nodeID = communityName + "_" + String.valueOf(0);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
+		communityTemp.setMapperMaxMin(1, 18);
+		communityTemp.setDiameter(100);
 		return communityTemp;
 	}
 	
@@ -159,8 +168,8 @@ public class Logica {
 		createEdgesBetweenSubcommunities(vSubCommunities);
 		vSubSubCommunity.container.runEdgeFactory();
 		//get the maximal y minimal weight into the graph
-		maxWeight = rootGraph.getMaxWeight();
-		minWeight = rootGraph.getMinWeight();
+		maxWeight = (float) rootGraph.getMaxWeight();
+		minWeight = (float) rootGraph.getMinWeight();
 		System.out.println(" Maximal Weight: " + maxWeight);
 		System.out.println(" Minimal Weight: " + minWeight);
 	}

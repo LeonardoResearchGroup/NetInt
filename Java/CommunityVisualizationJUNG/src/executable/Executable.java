@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import processing.core.*;
 import utilities.TestPerformance;
-import utilities.mapping.MappingTool;
+import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;
@@ -20,7 +20,7 @@ public class Executable extends PApplet {
 	// GUIHelper guiHelper;
 	boolean activeGraph;
 	ControlPanel cFrame;
-	MappingTool converter;
+	Mapper converter;
 
 	public void setup() {
 		textSize(10);
@@ -35,7 +35,7 @@ public class Executable extends PApplet {
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
-		converter = new MappingTool(0f,100f);
+		converter = new Mapper(0f,100f);
 	}
 
 	public void draw() {
@@ -75,7 +75,7 @@ public class Executable extends PApplet {
 
 	public void settings() {
 		// size(995, 600, P2D);
-		size(displayWidth - 201, displayHeight - 400, P2D);
+		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
 	public static void main(String[] args) {
