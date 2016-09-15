@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import processing.core.*;
 import utilities.TestPerformance;
+import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;

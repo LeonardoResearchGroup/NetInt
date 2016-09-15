@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
 	<classpathentry kind="lib" path="libs/JUNG/jung-algorithms-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/jcolorbrewer-5.2.jar"/>
+	<classpathentry kind="lib" path="libs/JUNG/jung-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/JUNG/collections-generic-4.01.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

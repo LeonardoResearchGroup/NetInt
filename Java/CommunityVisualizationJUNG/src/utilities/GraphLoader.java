@@ -16,9 +16,7 @@ public class GraphLoader {
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
 	GraphmlReader reader;
-	private double maxWeight;
-	private double minWeight;
-
+	
 	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector) {
 		reader = new GraphmlReader(file);
 		jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, "VALORES_MOVILIZADOS", "CANTIDAD_TRNS");
@@ -28,9 +26,6 @@ public class GraphLoader {
 		System.out.println("GraphLoader> Graph Created from file:" + file);
 		System.out.println(" Total Nodes: " + jungGraph.getVertexCount());
 		System.out.println(" Total Edges: " + jungGraph.getEdgeCount());
-		//get the maximal y minimal weight into the graph
-		maxWeight = reader.getMaxWeight();
-		minWeight = reader.getMinWeight();
 	}
 
 	public ArrayList<String> getCommunityNames() {
@@ -164,11 +159,5 @@ public class GraphLoader {
 				"EU");
 		System.out.println(graphTemp.getEdgeCount());
 	}
-	
-	public double getMaxWeight(){
-		return maxWeight;
-	}
-	public double getMinWeight(){
-		return minWeight;
-	}
+
 }

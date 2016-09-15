@@ -42,7 +42,7 @@ public class ControlPanel extends PApplet {
 		cp5.addButton("Abrir").plugTo(parent).setPosition(5, 7).setSize(170, 18).moveTo(g1);
 		cp5.addButton("Guardar").plugTo(parent).setPosition(5, 27).setSize(170, 18).moveTo(g1);
 		cp5.addButton("Importar").plugTo(parent).setPosition(5, 47).setSize(170, 18).moveTo(g1);
-		cp5.addButton("Exportar").plugTo(parent).setPosition(5, 67).setSize(170, 18).moveTo(g1);
+		cp5.addAccordion("Exportar").setPosition(5, 67).setSize(170, 18).moveTo(g1);
 		cp5.addButton("Salir").plugTo(parent).setPosition(5, 87).setSize(170, 18).moveTo(g1);
 		
 		// Nodos / Clientes
