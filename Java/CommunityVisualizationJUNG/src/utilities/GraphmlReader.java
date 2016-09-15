@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
+import utilities.mapping.Mapper;
+
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.Direction;
@@ -23,8 +25,6 @@ import graphElements.Edge;
 public class GraphmlReader {
 
 	private Graph graph;
-	private double maxWeight;
-	private double minWeight;
 	ArrayList<String> communities;
 
 	public GraphmlReader(String xmlFile) {
@@ -88,8 +88,8 @@ public class GraphmlReader {
 			
 		}
 		
-		maxWeight = 0;
-		minWeight = Float.POSITIVE_INFINITY;
+		float maxWeight = 0;
+		float minWeight = Float.POSITIVE_INFINITY;
 		
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
@@ -174,8 +174,9 @@ public class GraphmlReader {
 
 
 		}
-		System.out.println(maxWeight);
-		System.out.println(minWeight);
+		Mapper.getInstance().setMaxIn(maxWeight);
+		Mapper.getInstance().setMaxIn(minWeight);
+		
 		return rtnGraph;
 	}
 
@@ -243,11 +244,5 @@ public class GraphmlReader {
 		}
 		return nodo;
 	}
-	
-	public double getMaxWeight(){
-		return maxWeight;
-	}
-	public double getMinWeight(){
-		return minWeight;
-	}
+
 }

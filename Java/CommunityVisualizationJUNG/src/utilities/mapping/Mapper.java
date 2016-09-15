@@ -12,10 +12,17 @@ public class Mapper {
 	float maxIn;
 	float alpha = 1;
 	float beta = 1;
+	
+	private static Mapper mapperInstance = null;
+	
+	public static Mapper getInstance(){
+		if(mapperInstance == null){
+			mapperInstance = new Mapper();
+		}
+		return mapperInstance;
+	}
 
-	public Mapper(float minIn, float maxIn) {
-		this.minIn = minIn;
-		this.maxIn = maxIn;
+	protected Mapper() {
 	}
 
 	// Linear mapping
@@ -184,4 +191,14 @@ public class Mapper {
 			app.text("Radial", origX - 130, origY - 87);
 		}
 	}
+	
+	public void setMinIn(float minIn) {
+		this.minIn = minIn;
+	}
+
+	public void setMaxIn(float maxIn) {
+		this.maxIn = maxIn;
+	}
+	
+	
 }
