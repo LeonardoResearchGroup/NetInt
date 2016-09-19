@@ -29,11 +29,13 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label");
+		//public void loadGraph(String file, String communityFilter, String nodeName, String sector, String edgeWeight)
+		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector" ,"weight");
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
+		System.out.println("MAX: " + Mapper.getInstance().getMaxIn() + " MIN: " +Mapper.getInstance().getMinIn());
 	}
 
 	public void draw() {
@@ -75,24 +77,34 @@ public class Executable extends PApplet {
 		size(displayWidth - 201, displayHeight - 400, P2D);
 	}
 
+	public static void retrieveControlPanelEvent(ControlEvent event) {
+		try {
+			if (event.isFrom("Umbral grados")) {
+				for (VCommunity temp : app.getVisualCommunities()) {
+					temp.setNodeVisibilityThreshold(event.getValue());
+				}
+			}
+			if (event.isFrom("Vol. Transaccion")) {
+				for (VCommunity temp : app.getVisualCommunities()) {
+					temp.setEdgeVisibilityThreshold(event.getValue());
+				}
+			}
+			if (event.isFrom("Propagacion")) {
+				for (VCommunity temp : app.getVisualCommunities()) {
+					temp.setPropagationSteps((int) event.getValue());
+				}
+			}
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		String[] appletArgs = new String[] { "executable.Executable" };
 		if (args != null) {
 			PApplet.main(concat(appletArgs, args));
 		} else {
 			PApplet.main(appletArgs);
-		}
-	}
-
-	public static void retrieveControlPanelEvent(ControlEvent event) {
-		try {
-			if (event.isFrom("Umbral grados")) {
-				for (VCommunity temp : app.getVisualCommunities()) {
-					temp.setVisibilityThreshold(event.getValue());
-				}
-			}
-		} catch (NullPointerException e) {
-			//e.printStackTrace();
 		}
 	}
 }

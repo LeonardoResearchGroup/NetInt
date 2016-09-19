@@ -8,10 +8,10 @@ import processing.core.PApplet;
  */
 public class Mapper {
 
-	float minIn;
-	float maxIn;
-	float alpha = 1;
-	float beta = 1;
+	private float minIn;
+	private float maxIn;
+	private float alpha = 1;
+	private float beta = 1;
 	
 	private static Mapper mapperInstance = null;
 	
@@ -29,6 +29,10 @@ public class Mapper {
 	public float linear(float val) {
 		float yp = PApplet.map(val, minIn, maxIn, 0, 1);
 		return yp;
+	}
+	
+	public float log(float val){
+		return (float) Math.log10(val);
 	}
 
 	// Sinusoidal mapping
@@ -198,6 +202,14 @@ public class Mapper {
 
 	public void setMaxIn(float maxIn) {
 		this.maxIn = maxIn;
+	}
+
+	public float getMinIn() {
+		return minIn;
+	}
+
+	public float getMaxIn() {
+		return maxIn;
 	}
 	
 	

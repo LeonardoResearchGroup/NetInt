@@ -52,7 +52,6 @@ public class GraphmlReader {
 		
 		Node[]nodes = new Node[30000]; 
 
-
 		for (Vertex vertex : graph.getVertices()) {
 			
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
@@ -64,28 +63,25 @@ public class GraphmlReader {
 				node.setCommunity(vertex.getProperty(communityKey).toString(), 1);
 				addCommunity(node.getCommunity(1));
 			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches!!! Check the key String of the community filter");
+				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches " + communityKey + "!!! Check the key String of the community filter");
 			}
 			
 			// Check if exist a property matching nameKey
 			if (vertex.getProperty(nameKey) != null ) {
 				node.setName(vertex.getProperty(nameKey).toString());
 			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the graphML label");
+				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + nameKey + "!!! Check the key String of the graphML label");
 			}
 			
 			// Check if exist a property matching sectorKey
 			if (vertex.getProperty(sectorKey) != null ) {
 				node.setSector(vertex.getProperty(sectorKey).toString());
 			}else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches!!! Check the key String of the sector");
+				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + sectorKey + "!!! Check the key String of the sector");
 			}	
 			
-			
-			
-			nodes[id] = node; 
-			
-			
+			nodes[id] = node; 			
+
 		}
 		
 		float maxWeight = 0;
@@ -175,7 +171,7 @@ public class GraphmlReader {
 
 		}
 		Mapper.getInstance().setMaxIn(maxWeight);
-		Mapper.getInstance().setMaxIn(minWeight);
+		Mapper.getInstance().setMinIn(minWeight);
 		
 		return rtnGraph;
 	}

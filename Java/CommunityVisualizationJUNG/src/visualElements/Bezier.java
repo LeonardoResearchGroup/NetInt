@@ -128,10 +128,11 @@ public class Bezier {
 	 * @param source
 	 * @param target
 	 */
-	public void drawBezier2D(PApplet app) {
+	public void drawBezier2D(PApplet app, float thickness) {
 		updateControlPoints(A, B);
 		app.noFill();
 		app.stroke(currentColor.getRGB(), alpha);
+		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
@@ -143,24 +144,25 @@ public class Bezier {
 	 * @param source
 	 * @param target
 	 */
-	private void drawBezier2D(PApplet app, Color color) {
+	private void drawBezier2D(PApplet app, Color color, float thickness) {
 		app.noFill();
 		app.stroke(color.getRGB(), alpha);
+		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
-	public void drawHeadBezier2D(PApplet app) {
+	public void drawHeadBezier2D(PApplet app, float thickness) {
 		//app.strokeWeight(2f);
-		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor);
+		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thickness);
 	}
 
-	public void drawTailBezier2D(PApplet app) {
-		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor);
+	public void drawTailBezier2D(PApplet app, float thickness) {
+		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thickness);
 	}
 
-	public void drawHeadAndTailBezier2D(PApplet app) {
-		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor);
-		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor);
+	public void drawHeadAndTailBezier2D(PApplet app, float thicknessHead, float thicknessTail ) {
+		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thicknessHead);
+		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thicknessTail);
 	}
 
 	// Partition methods

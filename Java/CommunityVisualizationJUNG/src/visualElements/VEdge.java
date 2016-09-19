@@ -1,6 +1,7 @@
 package visualElements;
 
 import processing.core.*;
+import utilities.mapping.Mapper;
 import visualElements.primitives.VisualAtom;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import graphElements.Edge;
 
 public class VEdge {
 	private Edge edge;
-	private boolean aboveArc;
+	private boolean aboveArc, visibility;
 	private VNode source, target;
 	private Bezier bezier;
 	private float thickness;
@@ -16,7 +17,12 @@ public class VEdge {
 	public VEdge(Edge edge) {
 		this.edge = edge;
 		aboveArc = true;
-		thickness = 1f;
+		thickness = Mapper.getInstance().log(edge.getWeight());
+		// thickness = Mapper.getInstance().sinusoidal(edge.getWeight());
+		// thickness = Mapper.getInstance().sigmoid(edge.getWeight())*10;
+		if (thickness < 1) {
+			thickness = 1;
+		}
 	}
 
 	public void setSourceAndTarget(ArrayList<VNode> visualNodes) {
@@ -43,25 +49,25 @@ public class VEdge {
 
 	public void show(PApplet app) {
 		if (source.isVisible() && target.isVisible()) {
-		//if(source.isVisible()){
-			// Set thickness
-			app.strokeWeight(thickness);
-			// Set color
-			if (source.isPropagated()) {
-				bezier.color(Bezier.PROPAGATE);
-				// setAlpha(90);
-			} else {
-				bezier.color(Bezier.NORMAL);
-				// setAlpha(40);
-
+			if (visibility) {
+				// Set thickness
+				app.strokeWeight(thickness);
+				// Set color
+				if (source.isPropagated()) {
+					bezier.color(Bezier.PROPAGATE);
+					// setAlpha(90);
+				} else {
+					bezier.color(Bezier.NORMAL);
+					// setAlpha(40);
+				}
+				bezier.brighter();
+				// Update source and target
+				bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
+				bezier.setControl((source.pos.x - target.pos.x) / 2);
+				// Edge mode: simple, head, tail or both
+				bezier.drawBezier2D(app, 1f);
+				bezier.drawHeadBezier2D(app, thickness);
 			}
-			bezier.brighter();
-			// Update source and target
-			bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
-			bezier.setControl((source.pos.x - target.pos.x) / 2);
-			// Edge mode: simple, head, tail or both
-			bezier.drawBezier2D(app);
-			bezier.drawHeadBezier2D(app);
 		}
 	}
 
@@ -120,5 +126,14 @@ public class VEdge {
 		boolean sourceIsEqual = vEdge.getSource().equals(this.getSource());
 		boolean targetIsEqual = vEdge.getTarget().equals(this.getTarget());
 		return sourceIsEqual && targetIsEqual;
+	}
+
+	public void setVisibility(float edgeVisibilityThreshold) {
+		if (edgeVisibilityThreshold > edge.getWeight()) {
+			visibility = false;
+		} else {
+			visibility = true;
+		}
+
 	}
 }

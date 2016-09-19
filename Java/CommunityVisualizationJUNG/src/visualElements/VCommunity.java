@@ -34,7 +34,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	// public boolean despuesOpens = false;
 	public boolean communityIsOpen = false;
 	// Controls nodes visibility
-	public float visibilityThreshold = 0;
+	public float nodeVisibilityThreshold = 0;
+	public float edgeVisibilityThreshold = 0;
 
 	private int i, increment, count, containerIterations;
 	public Container container;
@@ -179,7 +180,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					} else {
 						// If vA is a VNode
 						VNode vN = (VNode) vA;
-						vN.setVisibility(visibilityThreshold);
+						vN.setVisibility(nodeVisibilityThreshold);
 						/*
 						 * The integer parameter for getOutDegree(int) is the
 						 * number of the community to which that node belongs
@@ -207,9 +208,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 			if (showEdges) {
 				for (VEdge vE : container.getVEdges()) {
+					vE.setVisibility(edgeVisibilityThreshold);
 					vE.show(canvas.app);
 				}
 				for (VEdge vEE : container.getVExtEdges()) {
+					vEE.setVisibility(edgeVisibilityThreshold);
 					vEE.show(canvas.app);
 				}
 			}
@@ -303,11 +306,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 								
 
-	public float getVisibilityThreshold() {
-		return visibilityThreshold;
+	public float getNodeVisibilityThreshold() {
+		return nodeVisibilityThreshold;
 	}
 
-	public void setVisibilityThreshold(float visibilityThreshold) {
-		this.visibilityThreshold = visibilityThreshold;
+	public void setNodeVisibilityThreshold(float visibilityThreshold) {
+		this.nodeVisibilityThreshold = visibilityThreshold;
+	}
+	
+	public void setEdgeVisibilityThreshold(float visibilityThreshold) {
+		this.edgeVisibilityThreshold = visibilityThreshold;
 	}
 }

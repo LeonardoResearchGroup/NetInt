@@ -1,6 +1,7 @@
 package visualElements.gui;
 
 import processing.core.*;
+import utilities.mapping.Mapper;
 import controlP5.*;
 import executable.Executable;
 
@@ -42,16 +43,18 @@ public class ControlPanel extends PApplet {
 		cp5.addButton("Abrir").plugTo(parent).setPosition(5, 7).setSize(170, 18).moveTo(g1);
 		cp5.addButton("Guardar").plugTo(parent).setPosition(5, 27).setSize(170, 18).moveTo(g1);
 		cp5.addButton("Importar").plugTo(parent).setPosition(5, 47).setSize(170, 18).moveTo(g1);
-		cp5.addAccordion("Exportar").setPosition(5, 67).setSize(170, 18).moveTo(g1);
+		cp5.addButton("Exportar").setPosition(5, 67).setSize(170, 18).moveTo(g1);
 		cp5.addButton("Salir").plugTo(parent).setPosition(5, 87).setSize(170, 18).moveTo(g1);
 		
 		// Nodos / Clientes
-		Group g2 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150);
-		cp5.addSlider("Umbral grados").setPosition(5, 7).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(20)
-				.moveTo(g2);
+		Group g2 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150).setBackgroundColor(parent.color(39,67,110));
+		cp5.addSlider("Umbral grados").setPosition(5, 7).setSize(100, 10).setRange(0, 35).moveTo(g2);
 		
 		// Vinculos / Transacciones
-		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150);
+		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150).setBackgroundColor(parent.color(39,67,110));
+		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10).setRange(Mapper.getInstance().getMinIn(), Mapper.getInstance().getMaxIn()).moveTo(g3);
+		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(100, 10).setRange(1, 10).moveTo(g3);
+		
 		
 		// Riesgo y Rentabilidad
 		Group g4 = cp5.addGroup("Riesgo / Rentabilidad").setBackgroundColor(color(0, 64)).setBackgroundHeight(150);

@@ -127,12 +127,12 @@ public class VNode extends VisualAtom {
 		if (communityOpen) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {
-				setAlpha(125);
+				setAlpha(175);
 				canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 5);
 			} else {
 				// regular color
 				// canvas.app.fill(getColorRGB());
-				setAlpha(90);
+				setAlpha(150);
 			}
 			// Show propagation and source halo permanently
 			if (leftClicked) {
