@@ -29,13 +29,14 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		//public void loadGraph(String file, String communityFilter, String nodeName, String sector, String edgeWeight)
-		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector" ,"weight");
+		// public void loadGraph(String file, String communityFilter, String
+		// nodeName, String sector, String edgeWeight)
+		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector", "weight");
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
-		System.out.println("MAX: " + Mapper.getInstance().getMaxIn() + " MIN: " +Mapper.getInstance().getMinIn());
+		System.out.println("MAX: " + Mapper.getInstance().getMaxIn() + " MIN: " + Mapper.getInstance().getMinIn());
 	}
 
 	public void draw() {
@@ -74,31 +75,25 @@ public class Executable extends PApplet {
 
 	public void settings() {
 		// size(995, 600, P2D);
-		size(displayWidth - 201, displayHeight - 400, P2D);
+		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
 	public static void retrieveControlPanelEvent(ControlEvent event) {
 		try {
-			if (event.isFrom("Umbral grados")) {
-				for (VCommunity temp : app.getVisualCommunities()) {
+			for (VCommunity temp : app.getVisualCommunities()) {
+				if (event.isFrom("Umbral grados")) {
 					temp.setNodeVisibilityThreshold(event.getValue());
-				}
-			}
-			if (event.isFrom("Vol. Transaccion")) {
-				for (VCommunity temp : app.getVisualCommunities()) {
+				} else if (event.isFrom("Vol. Transaccion")) {
 					temp.setEdgeVisibilityThreshold(event.getValue());
-				}
-			}
-			if (event.isFrom("Propagacion")) {
-				for (VCommunity temp : app.getVisualCommunities()) {
+				} else if (event.isFrom("Propagacion")) {
 					temp.setPropagationSteps((int) event.getValue());
 				}
 			}
 		} catch (NullPointerException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		String[] appletArgs = new String[] { "executable.Executable" };
 		if (args != null) {

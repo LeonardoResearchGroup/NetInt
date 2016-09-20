@@ -49,6 +49,7 @@ public class ControlPanel extends PApplet {
 		// Nodos / Clientes
 		Group g2 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150).setBackgroundColor(parent.color(39,67,110));
 		cp5.addSlider("Umbral grados").setPosition(5, 7).setSize(100, 10).setRange(0, 35).moveTo(g2);
+		cp5.addButton("Mostrar Nombre").setPosition(5, 20).setSize(100, 10).moveTo(g2);
 		
 		// Vinculos / Transacciones
 		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150).setBackgroundColor(parent.color(39,67,110));

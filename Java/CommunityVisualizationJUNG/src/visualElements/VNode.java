@@ -23,7 +23,7 @@ public class VNode extends VisualAtom {
 		this.node = node;
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
-		propagationSteps = 4;
+		propagationSteps = 1;
 	}
 
 	public VNode(VNode vNode) {
@@ -31,7 +31,7 @@ public class VNode extends VisualAtom {
 		this.node = vNode.getNode();
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
-		propagationSteps = 4;
+		propagationSteps = 1;
 	}
 
 	// *** PROPAGATION
@@ -79,7 +79,7 @@ public class VNode extends VisualAtom {
 	}
 
 	/**
-	 * Is this VNode is a link in a propagation chain, propagationChain is set
+	 * If this VNode is a link in a propagation chain, propagationChain is set
 	 * to true and the number of next steps in the chain is returned
 	 * 
 	 * @param sequence
@@ -132,6 +132,7 @@ public class VNode extends VisualAtom {
 			} else {
 				// regular color
 				// canvas.app.fill(getColorRGB());
+				canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 				setAlpha(150);
 			}
 			// Show propagation and source halo permanently
@@ -141,6 +142,8 @@ public class VNode extends VisualAtom {
 				propagate(propagationSteps);
 				canvas.app.stroke(225, 0, 0);
 				canvas.app.ellipse(pos.x, pos.y, diam + 3, diam + 3);
+				canvas.app.fill(255,0,0);
+				canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 			} else {
 				if (propagationSource) {
 					reclaim();
