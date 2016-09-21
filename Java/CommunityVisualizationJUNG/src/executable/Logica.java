@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -17,10 +16,10 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
 import utilities.GraphLoader;
+import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
-import visualElements.primitives.VisualAtom;
 
 public class Logica {
 
@@ -34,7 +33,7 @@ public class Logica {
 
 	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
 		// Container of rootGraph
-		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(250, 250));
+		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(600, 600));
 		mainCommunity.setName("Root");
 		// Root Community
 		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
@@ -58,7 +57,7 @@ public class Logica {
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
 
 		int i = 0;
-
+		Mapper.getInstance().setMinCommunitySize( graph.getVertexCount());
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
@@ -73,6 +72,14 @@ public class Logica {
 			containers.add(containerTemp);
 			communityTemp.setColor(myGradient[i - 1]);
 			vCommunities.add(communityTemp);
+
+			// set maxOutDegree and minOutDegree
+			if (communityTemp.container.getGraph().getVertexCount() > Mapper.getInstance().getMaxCommunitySize()) {
+				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
+			}
+			if (communityTemp.container.getGraph().getVertexCount() < Mapper.getInstance().getMinCommunitySize()) {
+				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
+			}
 		}
 		subGraphs = null;
 		containers = null;
@@ -85,16 +92,6 @@ public class Logica {
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 		for (VNode vN : communities) {
 			VCommunity vC = (VCommunity) vN;
-			// setCommunity color
-			// Selected Communities
-			if (vC.getNode().getId().equals("10.0") || vC.getNode().getId().equals("9.0")
-					|| vC.getNode().getId().equals("22.0")) {
-				System.out.println(vC.getNode().getId());
-				// vC.setColor(125, 0, 175, 120);
-			} // Other communities
-			else {
-				// vC.setColor(0, 125, 155, 120);
-			}
 			// add Nodes
 			graphTemp.addVertex(vC.getNode());
 			// add edges

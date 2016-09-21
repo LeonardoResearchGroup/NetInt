@@ -194,7 +194,7 @@ public abstract class Container {
 	 * Retrieves all the VNode successors for all VNodes of the container from a
 	 * given graph
 	 * 
-	 * @param vN
+	 * @param graph
 	 * @return
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
@@ -207,7 +207,8 @@ public abstract class Container {
 	/**
 	 * Retrieves all the external VNode successors (taken from extContainer) for all VNodes 
 	 * of the container from a given graph
-	 * @return
+	 * @param graph
+	 * @param extContainer
 	 */
 	public void retrieveExternalVNodeSuccessors(Graph<Node, Edge> graph, Container extContainer) {
 		for (VNode tmp : vNodes) {

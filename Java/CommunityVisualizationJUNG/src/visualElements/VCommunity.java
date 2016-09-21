@@ -1,6 +1,8 @@
 package visualElements;
 
 import processing.core.PVector;
+import utilities.mapping.Mapper;
+import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -34,8 +36,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	// public boolean despuesOpens = false;
 	public boolean communityIsOpen = false;
 	// Controls nodes visibility
-	public float nodeVisibilityThreshold = 0;
-	public float edgeVisibilityThreshold = 0;
+	// public float nodeVisibilityThreshold = 0;
+	// public float edgeVisibilityThreshold = 0;
 
 	private int i, increment, count, containerIterations;
 	public Container container;
@@ -76,8 +78,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		minCommunityDiam = 70;
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
-		maxCommunitySize = 1000;
+		maxCommunitySize = 5000;
 		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
+		//diam = Mapper.getInstance().radial(container.size())*100;
 	}
 
 	public void show(Canvas canvas) {
@@ -180,7 +183,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					} else {
 						// If vA is a VNode
 						VNode vN = (VNode) vA;
-						vN.setVisibility(nodeVisibilityThreshold);
+						vN.setVisibility(VisibilitySettings.getInstance().getUmbralGrados());
 						/*
 						 * The integer parameter for getOutDegree(int) is the
 						 * number of the community to which that node belongs
@@ -189,11 +192,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						 * 1 is the degree in tier 1 community, and so on.
 						 */
 						if (vN.isVisible()) {
-							vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
+							//vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
 							vN.show(canvas, communityIsOpen);
 							// This is to rearrange the vNodes once the
-							// community is
-							// opened
+							// community is opened
 							if (vNodesCentered) {
 								// reset vNode coordinates to the coordinates
 								// assigned in the container's layout
@@ -207,12 +209,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				vNodesCentered = false;
 			}
 			if (showEdges) {
-				for (VEdge vE : container.getVEdges()) {
-					vE.setVisibility(edgeVisibilityThreshold);
+				for (VEdge vE : container.getVEdges()) {				
+					vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					vE.show(canvas.app);
 				}
 				for (VEdge vEE : container.getVExtEdges()) {
-					vEE.setVisibility(edgeVisibilityThreshold);
+					//vEE.setVisibility(1); // this is the edge minimal weight to be visible
 					vEE.show(canvas.app);
 				}
 			}
@@ -279,11 +281,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
 				if (vC.isMouseOver && !vC.communityIsOpen) {
-					//It clears the edges between communities of the opened community
+					// It clears the edges between communities of the opened
+					// community
 					container.getGraph().removeVertex(vC.getNode());
 					container.getVEdges().clear();
 					container.runEdgeFactory();
-					
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
@@ -294,7 +296,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 								vC.container.runExternalEdgeFactory(container.rootGraph, internalVC.container.getName(),
 										internalVC.container);
 								vC.container.retrieveExternalVNodeSuccessors(container.rootGraph, internalVC.container);
-								internalVC.container.retrieveExternalVNodeSuccessors(container.rootGraph,vC.container);
+								internalVC.container.retrieveExternalVNodeSuccessors(container.rootGraph, vC.container);
 							}
 						}
 					}
@@ -303,18 +305,5 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
-	}
-								
-
-	public float getNodeVisibilityThreshold() {
-		return nodeVisibilityThreshold;
-	}
-
-	public void setNodeVisibilityThreshold(float visibilityThreshold) {
-		this.nodeVisibilityThreshold = visibilityThreshold;
-	}
-	
-	public void setEdgeVisibilityThreshold(float visibilityThreshold) {
-		this.edgeVisibilityThreshold = visibilityThreshold;
 	}
 }

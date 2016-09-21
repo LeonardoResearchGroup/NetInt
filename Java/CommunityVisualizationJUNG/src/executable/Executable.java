@@ -1,17 +1,18 @@
 package executable;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 
+import containers.Container;
 import processing.core.*;
 import utilities.TestPerformance;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;
-import visualElements.gui.GUIHelper;
+
 import visualElements.gui.ControlPanel;
 import controlP5.ControlEvent;
+
 
 public class Executable extends PApplet {
 	static Logica app;
@@ -29,14 +30,15 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		// public void loadGraph(String file, String communityFilter, String
-		// nodeName, String sector, String edgeWeight)
-		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector", "weight");
+		//app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector", "weight");
+		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.CIRCULAR);
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
-		System.out.println("MAX: " + Mapper.getInstance().getMaxIn() + " MIN: " + Mapper.getInstance().getMinIn());
+		System.out.println("Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxIn() + " MIN: " + Mapper.getInstance().getMinIn());
+		System.out.println("Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxCommunitySize() + " MIN: " + Mapper.getInstance().getMinCommunitySize());
+
 	}
 
 	public void draw() {
@@ -75,23 +77,7 @@ public class Executable extends PApplet {
 
 	public void settings() {
 		// size(995, 600, P2D);
-		size(displayWidth - 201, displayHeight - 100, P2D);
-	}
-
-	public static void retrieveControlPanelEvent(ControlEvent event) {
-		try {
-			for (VCommunity temp : app.getVisualCommunities()) {
-				if (event.isFrom("Umbral grados")) {
-					temp.setNodeVisibilityThreshold(event.getValue());
-				} else if (event.isFrom("Vol. Transaccion")) {
-					temp.setEdgeVisibilityThreshold(event.getValue());
-				} else if (event.isFrom("Propagacion")) {
-					temp.setPropagationSteps((int) event.getValue());
-				}
-			}
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+		size(displayWidth - 201, displayHeight - 300, P2D);
 	}
 
 	public static void main(String[] args) {

@@ -2,6 +2,7 @@ package visualElements;
 
 import processing.core.*;
 import utilities.mapping.Mapper;
+import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 
 import java.util.ArrayList;
@@ -17,9 +18,7 @@ public class VEdge {
 	public VEdge(Edge edge) {
 		this.edge = edge;
 		aboveArc = true;
-		thickness = Mapper.getInstance().log(edge.getWeight());
-		// thickness = Mapper.getInstance().sinusoidal(edge.getWeight());
-		// thickness = Mapper.getInstance().sigmoid(edge.getWeight())*10;
+		thickness = Mapper.getInstance().linear(edge.getWeight()) * 5;
 		if (thickness < 1) {
 			thickness = 1;
 		}
@@ -67,6 +66,25 @@ public class VEdge {
 				// Edge mode: simple, head, tail or both
 				bezier.drawBezier2D(app, 1f);
 				bezier.drawHeadBezier2D(app, thickness);
+			}
+		}
+		// **** Thickness mapping
+		if (VisibilitySettings.getInstance().getFiltrosVinculo() != null) {
+			switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
+			case "Radial":
+				thickness = Mapper.getInstance().radial(edge.getWeight()) * 5;
+				break;
+			case "Lineal":
+				thickness = Mapper.getInstance().linear(edge.getWeight()) * 5;
+				break;
+			case "Logartimico":
+				thickness = Mapper.getInstance().log(edge.getWeight());
+				break;
+			case "Sinusoidal":
+				thickness = Mapper.getInstance().sinusoidal(edge.getWeight()) * 5;
+				break;
+			case "Sigmoideo":
+				thickness = Mapper.getInstance().sigmoid(edge.getWeight()) * 5;
 			}
 		}
 	}
