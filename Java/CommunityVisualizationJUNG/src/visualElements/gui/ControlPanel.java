@@ -65,7 +65,7 @@ public class ControlPanel extends PApplet {
 		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
-				.setRange(Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0],
+				.setRange(0,
 						Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1])
 				.moveTo(g3);
 

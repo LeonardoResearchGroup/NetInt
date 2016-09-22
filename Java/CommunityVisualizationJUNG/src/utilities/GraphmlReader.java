@@ -51,8 +51,7 @@ public class GraphmlReader {
 		System.out.println("GraphmlReader> Working on it ...");
 
 		Node[] nodes = new Node[30000];
-		int maxOutDegree = 0;
-		int minOutDegree = 0;
+
 		for (Vertex vertex : graph.getVertices()) {
 
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));

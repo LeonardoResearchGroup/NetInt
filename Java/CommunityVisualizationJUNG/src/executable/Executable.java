@@ -31,7 +31,7 @@ public class Executable extends PApplet {
 		app = new Logica();
 		performance = new TestPerformance();
 		//app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector", "weight");
-		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.CIRCULAR);
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
@@ -76,7 +76,7 @@ public class Executable extends PApplet {
 
 	public void settings() {
 		// size(995, 600, P2D);
-		size(displayWidth - 201, displayHeight - 300, P2D);
+		size(displayWidth - 201, displayHeight - 200, P2D);
 	}
 
 	public static void main(String[] args) {
