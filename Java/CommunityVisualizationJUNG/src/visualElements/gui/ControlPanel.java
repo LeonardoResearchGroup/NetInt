@@ -65,7 +65,10 @@ public class ControlPanel extends PApplet {
 		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
-				.setRange(Mapper.getInstance().getMinIn(), Mapper.getInstance().getMaxIn()).moveTo(g3);
+				.setRange(Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0],
+						Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1])
+				.moveTo(g3);
+
 		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(100, 10).setRange(1, 10).moveTo(g3);
 		cp5.addScrollableList("Filtros Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g3).close();

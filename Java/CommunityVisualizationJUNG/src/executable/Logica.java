@@ -73,11 +73,11 @@ public class Logica {
 			communityTemp.setColor(myGradient[i - 1]);
 			vCommunities.add(communityTemp);
 
-			// set maxOutDegree and minOutDegree
-			if (communityTemp.container.getGraph().getVertexCount() > Mapper.getInstance().getMaxCommunitySize()) {
+			// SET MAX & MIN COMMUNITY SIZE
+			if (communityTemp.container.getGraph().getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
 				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
 			}
-			if (communityTemp.container.getGraph().getVertexCount() < Mapper.getInstance().getMinCommunitySize()) {
+			if (communityTemp.container.getGraph().getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
 				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
 			}
 		}

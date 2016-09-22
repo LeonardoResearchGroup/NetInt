@@ -180,11 +180,8 @@ public class GraphmlReader {
 
 		}
 		// Setting limits in static class (Singleton pattern)
-		Mapper.getInstance().setMaxIn(maxWeight);
-		Mapper.getInstance().setMinIn(minWeight);
-//		Mapper.getInstance().setMaxOutDegree(maxOutDegree);
-//		Mapper.getInstance().setMinOutDegree(minOutDegree);
-
+		Mapper.getInstance().setMaxWeight(maxWeight);
+		Mapper.getInstance().setMinWeight(minWeight);
 		return rtnGraph;
 	}
 

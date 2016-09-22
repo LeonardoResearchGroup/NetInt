@@ -8,12 +8,39 @@ import processing.core.PApplet;
  */
 public class Mapper {
 
-	private float minIn;
-	private float maxIn;
-	private float alpha = 1;
-	private float beta = 1;
+	// ATTRIBUTE
+	public static final int COMUNITY_SIZE = 1;
+	public static final int EDGE_WEIGHT = 2;
+	public static final int EDGE_DENSITY = 3;
+	public static final int IN_DEGREE = 4;
+	public static final int OUT_DEGREE = 5;
+	public static final int BETWENESS = 6;
+	// FILTER
+	public static final String LINEAR = "linear";
+	public static final String SINUSOIDAL = "sinusoidal";
+	public static final String LOGARITMIC = "logarithmic";
+	public static final String RADIAL = "radial";
+	public static final String SIGMOID = "sigmoid";
+
+	// MAXs & MINs
+	// private float minWeight;
+	// private float maxWeight;
 	private int minCommunitySize;
 	private int maxCommunitySize;
+	private float minEdgeWeight;
+	private float maxEdgeWeight;
+	private int minEdgeDensity;
+	private int maxEdgeDensity;
+	private int minInDegree;
+	private int maxInDEgree;
+	private int minOutDegree;
+	private int maxOutDegree;
+	private float minBetweeness;
+	private float maxBetweeness;
+
+	// Other attributes
+	private float alpha = 1;
+	private float beta = 1;
 
 	private static Mapper mapperInstance = null;
 
@@ -27,15 +54,89 @@ public class Mapper {
 	protected Mapper() {
 	}
 
-	// Linear mapping
-	public float linear(float val) {
-		float yp = PApplet.map(val, minIn, maxIn, 0, 1);
-		return yp;
+	/**
+	 * @param filter
+	 *            filter name
+	 * @param val
+	 *            the number to be mapped
+	 * @param factor
+	 *            the max output value
+	 * @param graphAttribute
+	 * @return the value mapped equals to a number between 0 and 1 X factor
+	 */
+	public float convert(String filter, float val, float factor, int graphAttribute) {
+		float rtn = -1;
+		switch (filter) {
+		case "linear":
+			rtn = linear(val, getMaxMin(graphAttribute));
+			break;
+		case "sinusoidal":
+			rtn = sinusoidal(val, getMaxMin(graphAttribute));
+			break;
+		case "logarithmic":
+			rtn = log(val);
+			break;
+		case "radial":
+			rtn = radial(val, getMaxMin(graphAttribute));
+			break;
+		case "sigmoid":
+			rtn = sigmoid(val, getMaxMin(graphAttribute));
+			break;
+		}
+		rtn = rtn * factor;
+		
+		if (rtn == -1) {
+			System.out.println("   *** Error en filtro " + filter + " con valor" + val);
+		}
+		return rtn;
 	}
-	
-	public float linear(float val, float factor) {
-		float yp = PApplet.map(val, minCommunitySize, maxCommunitySize, 0, 1);
-		return yp*factor;
+
+	/**
+	 * @param graphAttribute
+	 *            Static attribute of the class
+	 * @return Array of floats [0] min, [1] max
+	 */
+	public float[] getMaxMin(int graphAttribute) {
+		float[] rtn = new float[2];
+		switch (graphAttribute) {
+		// COMUNITY_SIZE = 1;
+		case 1:
+			rtn[0] = minCommunitySize;
+			rtn[1] = maxCommunitySize;
+			break;
+		// EDGE_WEIGHT = 2;
+		case 2:
+			rtn[0] = minEdgeWeight;
+			rtn[1] = maxEdgeWeight;
+			break;
+		// EDGE_DENSITY = 3;
+		case 3:
+			rtn[0] = minEdgeDensity;
+			rtn[1] = maxEdgeDensity;
+			break;
+		// IN_DEGREE = 4;
+		case 4:
+			rtn[0] = minInDegree;
+			rtn[1] = maxInDEgree;
+			break;
+		// OUT_DEGREE = 5;
+		case 5:
+			rtn[0] = minOutDegree;
+			rtn[1] = maxOutDegree;
+			break;
+		// BETWENESS = 6;
+		case 6:
+			rtn[0] = minBetweeness;
+			rtn[1] = maxBetweeness;
+			break;
+		}
+		return rtn;
+	}
+
+	// Linear mapping
+	private float linear(float val, float[] minMax) {
+		float yp = PApplet.map(val, minMax[0], minMax[1], 0, 1);
+		return yp;
 	}
 
 	// Sinusoidal mapping
@@ -46,22 +147,13 @@ public class Mapper {
 	 * @param val
 	 * @return
 	 */
-	public float sinusoidal(float val) {
+	private float sinusoidal(float val, float[] minMax) {
 		// The radians are the limits if the circumference quarter to
 		// be used in the filter. PI to HALF_PI is the third quarter counter
 		// clockwise
-		float xp = PApplet.map(val, minIn, maxIn, PApplet.PI, PApplet.HALF_PI);
+		float xp = PApplet.map(val, minMax[0], minMax[1], PApplet.PI, PApplet.HALF_PI);
 		float y = PApplet.sin(xp);
 		return y;
-	}
-	
-	public float sinusoidal(float val, float factor) {
-		// The radians are the limits if the circumference quarter to
-		// be used in the filter. PI to HALF_PI is the third quarter counter
-		// clockwise
-		float xp = PApplet.map(val,  minCommunitySize, maxCommunitySize, PApplet.PI, PApplet.HALF_PI);
-		float y = PApplet.sin(xp);
-		return y * factor;
 	}
 
 	// Radial mapping
@@ -74,18 +166,11 @@ public class Mapper {
 	 * @param val
 	 * @return
 	 */
-	public float radial(float val) {
-		float xp = PApplet.map(val, minIn, maxIn, 1, 0);
+	private float radial(float val, float[] minMax) {
+		float xp = PApplet.map(val, minMax[0], minMax[1], 1, 0);
 		float angulo = PApplet.acos(xp);
 		float y = PApplet.sin(angulo);
 		return y;
-	}
-	
-	public float radial(float val, float factor) {
-		float xp = PApplet.map(val, minCommunitySize, maxCommunitySize, 1, 0);
-		float angulo = PApplet.acos(xp);
-		float y = PApplet.sin(angulo);
-		return y*factor;
 	}
 
 	/**
@@ -106,8 +191,8 @@ public class Mapper {
 	 *            : the intensity around which the range is centered
 	 * @return
 	 */
-	public float sigmoid(float val, float alpha, float beta) {
-		val = PApplet.map(val, minIn, maxIn, 255, 0);
+	private float sigmoid(float val, float[] minMax, float alpha, float beta) {
+		val = PApplet.map(val, minMax[0], minMax[1], 255, 0);
 		this.alpha = alpha;
 		this.beta = beta;
 		float t = (float) Math.pow(Math.E, ((val - beta) / alpha));
@@ -115,27 +200,30 @@ public class Mapper {
 		return p;
 	}
 
-
 	/**
 	 * Use this method ONLY to visualize the filter
 	 * 
 	 * @param val
 	 * @return
 	 */
-	public float sigmoid(float val) {
-		val = PApplet.map(val, minIn, maxIn, 255, 0);
+	private float sigmoid(float val, float[] minMax) {
+		val = PApplet.map(val, minMax[0], minMax[1], 255, 0);
 		float t = (float) Math.pow(Math.E, ((val - beta) / alpha));
 		float p = (1 / (1 + t));
 		return p;
 	}
 
-	public float sigmoid(float val, float factor) {
-		val = PApplet.map(val, minCommunitySize, maxCommunitySize, 255, 0);
-		float t = (float) Math.pow(Math.E, ((val - beta) / alpha));
-		float p = (1 / (1 + t));
-		return p*factor;
+	/**
+	 * Logarithm base 10
+	 * 
+	 * @param weight
+	 * @return
+	 */
+	private float log(float weight) {
+		float rtn = (float) Math.log(weight);
+		return rtn;
 	}
-	
+
 	/**
 	 * This method serves to convert a number between 0 and 1 to a given scale
 	 * defined by it lower and higher boundaries. It is mainly used to draw
@@ -176,26 +264,27 @@ public class Mapper {
 		float x = 0;
 		float y = 0;
 		app.strokeWeight(2);
-		for (int i = (int) minIn; i < (int) maxIn; i++) {
+		float[] mM = { 0, 100 };
+		for (int i = 0; i < mM[1]; i++) {
 			switch (kind) {
 			case "linear":
-				p = linear(i);
+				p = linear(i, mM);
 				x = origX + convertToUnits(p, 0, 100, false);
 				break;
 			case "sinusoidal":
-				p = sinusoidal(i);
+				p = sinusoidal(i, mM);
 				x = origX + convertToUnits(p, 0, 100, false);
 				break;
 			case "sigmoid":
-				p = sigmoid(i, alpha, beta);
+				p = sigmoid(i, mM, alpha, beta);
 				x = origX + convertToUnits(p, 0, 100, true);
 				break;
 			case "radial":
-				p = radial(i);
+				p = radial(i, mM);
 				x = origX + convertToUnits(p, 0, 100, false);
 				break;
 			}
-			y = origY - PApplet.map(i, minIn, maxIn, 0, 100);
+			y = origY - PApplet.map(i, mM[0], mM[1], 0, 100);
 			app.point(x, y);
 		}
 		app.strokeWeight(0);
@@ -224,17 +313,17 @@ public class Mapper {
 	}
 
 	// ***** Setters
-	public void setMinIn(float minIn) {
-		this.minIn = minIn;
+	public void setMinWeight(float minIn) {
+		minEdgeWeight = minIn;
 	}
 
-	public void setMaxIn(float maxIn) {
-		this.maxIn = maxIn;
+	public void setMaxWeight(float maxIn) {
+		maxEdgeWeight = maxIn;
 	}
 
-	public void setMaxMin(float minIn, float maxIn) {
-		this.minIn = minIn;
-		this.maxIn = maxIn;
+	public void setMaxMinWeight(float minIn, float maxIn) {
+		this.minEdgeWeight = minIn;
+		this.maxEdgeWeight = maxIn;
 	}
 
 	public void setSigmoidAlphaBeta(float alpha, float beta) {
@@ -242,35 +331,14 @@ public class Mapper {
 		this.beta = beta;
 	}
 
-	public float getMinIn() {
-		return minIn;
-	}
-
-	public float getMaxIn() {
-		return maxIn;
-	}
-
-	public float log(float weight) {
-		float rtn = (float) Math.log(weight);
-		return rtn;
-	}
-
 	public void setMinCommunitySize(int val) {
-		this.minCommunitySize = val; 
-		
+		this.minCommunitySize = val;
+
 	}
-	
+
 	public void setMaxCommunitySize(int val) {
-		this.maxCommunitySize = val; 
-		
-	}
+		this.maxCommunitySize = val;
 
-	public int getMinCommunitySize() {
-		return minCommunitySize;
-	}
-
-	public int getMaxCommunitySize() {
-		return maxCommunitySize;
 	}
 
 }

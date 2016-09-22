@@ -21,8 +21,8 @@ public class VNode extends VisualAtom {
 	public int propagationSteps;
 	private String currentMapper;
 
-	public VNode(Node node, float x, float y, float diam) {
-		super(x, y, diam);
+	public VNode(Node node, float x, float y) {
+		super(x, y, 0);
 		this.node = node;
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
@@ -30,7 +30,7 @@ public class VNode extends VisualAtom {
 	}
 
 	public VNode(VNode vNode) {
-		super(vNode.getX(), vNode.getY(), vNode.diam);
+		super(vNode.getX(), vNode.getY(), vNode.getDiameter());
 		this.node = vNode.getNode();
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
@@ -122,7 +122,7 @@ public class VNode extends VisualAtom {
 	// *** SHOW METHODS ***
 
 	public void show(Canvas canvas) {
-		canvas.app.ellipse(pos.x, pos.y, diam, diam);
+		canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
 	}
 
 	/**
@@ -137,27 +137,33 @@ public class VNode extends VisualAtom {
 		detectMouseOver(canvas.getCanvasMouse());
 
 		// **** Diameter mapping
-		if (VisibilitySettings.getInstance().getFiltrosNodo() != null &&  VisibilitySettings.getInstance().getFiltrosNodo() != currentMapper) {
+		if (VisibilitySettings.getInstance().getFiltrosNodo() != null
+				&& VisibilitySettings.getInstance().getFiltrosNodo() != currentMapper) {
 			switch (VisibilitySettings.getInstance().getFiltrosNodo()) {
 			case "Radial":
-				diam = Mapper.getInstance().radial(node.getOutDegree(1), 150);
+				setDiameter(
+						Mapper.getInstance().convert(Mapper.RADIAL, node.getOutDegree(1), 150, Mapper.COMUNITY_SIZE));
 				break;
 			case "Lineal":
-				diam = Mapper.getInstance().linear(node.getOutDegree(1), 150);
+				setDiameter(
+						Mapper.getInstance().convert(Mapper.LINEAR, node.getOutDegree(1), 150, Mapper.COMUNITY_SIZE));
 				break;
-			case "Logartimico":
-				diam = Mapper.getInstance().log(node.getOutDegree(1));
+			case "Logarithmic":
+				setDiameter(Mapper.getInstance().convert(Mapper.LOGARITMIC, node.getOutDegree(1), 150,
+						Mapper.COMUNITY_SIZE));
 				break;
 			case "Sinusoidal":
-				diam = Mapper.getInstance().sinusoidal(node.getOutDegree(1), 150);
+				setDiameter(Mapper.getInstance().convert(Mapper.SINUSOIDAL, node.getOutDegree(1), 150,
+						Mapper.COMUNITY_SIZE));
 				break;
-			case "Sigmoideo":
-				diam = Mapper.getInstance().sigmoid(node.getOutDegree(1), 150);
+			case "Sigmoid":
+				setDiameter(
+						Mapper.getInstance().convert(Mapper.SIGMOID, node.getOutDegree(1), 150, Mapper.COMUNITY_SIZE));
 				break;
 
 			}
 			// give a minimal interaction area to every vNode
-			diam += 5;
+			setDiameter(getDiameter() + 5);
 			currentMapper = VisibilitySettings.getInstance().getFiltrosNodo();
 		}
 
@@ -186,7 +192,8 @@ public class VNode extends VisualAtom {
 				propagate((int) VisibilitySettings.getInstance().getPropagacion());
 				// propagate(propagationSteps);
 				canvas.app.stroke(225, 0, 0);
-				canvas.app.ellipse(pos.x, pos.y, diam + 3, diam + 3);
+				canvas.app.strokeWeight(1.5f);
+				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
 				canvas.app.fill(255, 0, 0);
 				canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 
@@ -202,7 +209,7 @@ public class VNode extends VisualAtom {
 				// canvas.app.noFill();
 				canvas.app.fill(brighter());
 				canvas.app.stroke(225, 0, 0);
-				canvas.app.ellipse(pos.x, pos.y, diam + 2, diam + 2);
+				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
 				// Show comments
 				verbose(canvas);
 			} else {
@@ -210,7 +217,7 @@ public class VNode extends VisualAtom {
 			}
 
 			canvas.app.fill(getColorRGB());
-			canvas.app.ellipse(pos.x, pos.y, diam, diam);
+			canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
 		}
 
 	}

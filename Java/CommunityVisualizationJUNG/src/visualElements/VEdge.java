@@ -13,12 +13,13 @@ public class VEdge {
 	private boolean aboveArc, visibility;
 	private VNode source, target;
 	private Bezier bezier;
+	// Visual Attributes
 	private float thickness;
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
 		aboveArc = true;
-		thickness = Mapper.getInstance().linear(edge.getWeight()) * 5;
+		thickness = 1; //(int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 1, Mapper.EDGE_WEIGHT));
 		if (thickness < 1) {
 			thickness = 1;
 		}
@@ -44,6 +45,8 @@ public class VEdge {
 
 	public void makeBezier() {
 		bezier = new Bezier(aboveArc);
+		int alpha = 100; //(int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
+		bezier.setAlpha(alpha);
 	}
 
 	public void show(PApplet app) {
@@ -54,37 +57,40 @@ public class VEdge {
 				// Set color
 				if (source.isPropagated()) {
 					bezier.color(Bezier.PROPAGATE);
+					// bezier.setAlpha((int)alpha);
 					// setAlpha(90);
 				} else {
 					bezier.color(Bezier.NORMAL);
+					// bezier.setAlpha((int)alpha);
 					// setAlpha(40);
 				}
-				bezier.brighter();
+				// bezier.brighter();
 				// Update source and target
 				bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
 				bezier.setControl((source.pos.x - target.pos.x) / 2);
-				// Edge mode: simple, head, tail or both
+				// Edge mode: normal, head, tail or both
 				bezier.drawBezier2D(app, 1f);
-				bezier.drawHeadBezier2D(app, thickness);
+				int alpha = 100; //(int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
+				bezier.drawHeadBezier2D(app, thickness, alpha);
 			}
 		}
 		// **** Thickness mapping
 		if (VisibilitySettings.getInstance().getFiltrosVinculo() != null) {
 			switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
 			case "Radial":
-				thickness = Mapper.getInstance().radial(edge.getWeight()) * 5;
+				thickness = Mapper.getInstance().convert(Mapper.RADIAL, edge.getWeight(), 3, Mapper.EDGE_WEIGHT);
 				break;
 			case "Lineal":
-				thickness = Mapper.getInstance().linear(edge.getWeight()) * 5;
+				thickness = Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 3, Mapper.EDGE_WEIGHT);
 				break;
-			case "Logartimico":
-				thickness = Mapper.getInstance().log(edge.getWeight());
+			case "Logarithmic":
+				thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, edge.getWeight(), 3, Mapper.EDGE_WEIGHT);
 				break;
 			case "Sinusoidal":
-				thickness = Mapper.getInstance().sinusoidal(edge.getWeight()) * 5;
+				thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, edge.getWeight(), 3, Mapper.EDGE_WEIGHT);
 				break;
-			case "Sigmoideo":
-				thickness = Mapper.getInstance().sigmoid(edge.getWeight()) * 5;
+			case "Sigmoid":
+				thickness = Mapper.getInstance().convert(Mapper.SIGMOID, edge.getWeight(), 3, Mapper.EDGE_WEIGHT);
 			}
 		}
 	}
@@ -133,10 +139,6 @@ public class VEdge {
 
 	public void setThickness(float thickness) {
 		this.thickness = thickness;
-	}
-
-	public void setAlpha(int alpha) {
-		bezier.setAlpha(alpha);
 	}
 
 	public boolean equals(Object obj) {

@@ -44,7 +44,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private PVector lastPosition;
 
 	public VCommunity(Node node, Container container) {
-		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2, 0);
+		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
 		// super(app, node, (float) container.layout.getSize().getWidth() / 2,
 		// (float) container.layout.getSize().getHeight() / 2, 0);
 		this.container = container;
@@ -79,7 +79,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
 		maxCommunitySize = 5000;
-		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
+		setDiameter(PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
 		//diam = Mapper.getInstance().radial(container.size())*100;
 	}
 
@@ -162,12 +162,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc right half
-		canvas.app.arc(pos.x, pos.y, diam, diam, angle2, PConstants.TWO_PI + PConstants.HALF_PI);
+		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
 		// *** DRAWS LEFT HALF INVOLUTE
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc left half
-		canvas.app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
+		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), PConstants.HALF_PI, angle2);
 		return open;
 	}
 
