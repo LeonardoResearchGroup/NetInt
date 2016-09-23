@@ -387,7 +387,8 @@ public abstract class Container {
 				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
 				newTarget = getEqualNode(this.graph, targetOfComplete);
 			}
-			VEdge vEdge = new VEdge(new Edge(newSource, newTarget, true));
+//			VEdge vEdge = new VEdge(new Edge(newSource, newTarget, true));
+			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
 			vEdge.makeBezier();
 			if (out) {

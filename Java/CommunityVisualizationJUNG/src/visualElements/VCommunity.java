@@ -214,6 +214,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vE.show(canvas.app);
 				}
 				for (VEdge vEE : container.getVExtEdges()) {
+					vEE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					//vEE.setVisibility(1); // this is the edge minimal weight to be visible
 					vEE.show(canvas.app);
 				}
