@@ -1,17 +1,18 @@
 package executable;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 
+import containers.Container;
 import processing.core.*;
 import utilities.TestPerformance;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;
-import visualElements.gui.GUIHelper;
+
 import visualElements.gui.ControlPanel;
 import controlP5.ControlEvent;
+
 
 public class Executable extends PApplet {
 	static Logica app;
@@ -29,11 +30,14 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label");
+		//app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector", "weight");
+		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.CIRCULAR);
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
+		System.out.println("Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1] + " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
+		System.out.println("Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1] + " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
 	}
 
 	public void draw() {
@@ -72,7 +76,7 @@ public class Executable extends PApplet {
 
 	public void settings() {
 		// size(995, 600, P2D);
-		size(displayWidth - 201, displayHeight - 400, P2D);
+		size(displayWidth - 201, displayHeight - 200, P2D);
 	}
 
 	public static void main(String[] args) {
@@ -81,18 +85,6 @@ public class Executable extends PApplet {
 			PApplet.main(concat(appletArgs, args));
 		} else {
 			PApplet.main(appletArgs);
-		}
-	}
-
-	public static void retrieveControlPanelEvent(ControlEvent event) {
-		try {
-			if (event.isFrom("Umbral grados")) {
-				for (VCommunity temp : app.getVisualCommunities()) {
-					temp.setVisibilityThreshold(event.getValue());
-				}
-			}
-		} catch (NullPointerException e) {
-			//e.printStackTrace();
 		}
 	}
 }

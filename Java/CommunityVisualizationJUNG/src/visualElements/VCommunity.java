@@ -1,6 +1,8 @@
 package visualElements;
 
 import processing.core.PVector;
+import utilities.mapping.Mapper;
+import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -34,14 +36,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	// public boolean despuesOpens = false;
 	public boolean communityIsOpen = false;
 	// Controls nodes visibility
-	public float visibilityThreshold = 0;
+	// public float nodeVisibilityThreshold = 0;
+	// public float edgeVisibilityThreshold = 0;
 
 	private int i, increment, count, containerIterations;
 	public Container container;
 	private PVector lastPosition;
 
 	public VCommunity(Node node, Container container) {
-		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2, 0);
+		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
 		// super(app, node, (float) container.layout.getSize().getWidth() / 2,
 		// (float) container.layout.getSize().getHeight() / 2, 0);
 		this.container = container;
@@ -75,8 +78,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		minCommunityDiam = 70;
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
-		maxCommunitySize = 1000;
-		diam = PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam);
+		maxCommunitySize = 5000;
+		setDiameter(PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
+		//diam = Mapper.getInstance().radial(container.size())*100;
 	}
 
 	public void show(Canvas canvas) {
@@ -158,12 +162,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc right half
-		canvas.app.arc(pos.x, pos.y, diam, diam, angle2, PConstants.TWO_PI + PConstants.HALF_PI);
+		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
 		// *** DRAWS LEFT HALF INVOLUTE
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc left half
-		canvas.app.arc(pos.x, pos.y, diam, diam, PConstants.HALF_PI, angle2);
+		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), PConstants.HALF_PI, angle2);
 		return open;
 	}
 
@@ -179,7 +183,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					} else {
 						// If vA is a VNode
 						VNode vN = (VNode) vA;
-						vN.setVisibility(visibilityThreshold);
+						vN.setVisibility(VisibilitySettings.getInstance().getUmbralGrados());
 						/*
 						 * The integer parameter for getOutDegree(int) is the
 						 * number of the community to which that node belongs
@@ -188,11 +192,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						 * 1 is the degree in tier 1 community, and so on.
 						 */
 						if (vN.isVisible()) {
-							vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
+							//vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
 							vN.show(canvas, communityIsOpen);
 							// This is to rearrange the vNodes once the
-							// community is
-							// opened
+							// community is opened
 							if (vNodesCentered) {
 								// reset vNode coordinates to the coordinates
 								// assigned in the container's layout
@@ -206,10 +209,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				vNodesCentered = false;
 			}
 			if (showEdges) {
-				for (VEdge vE : container.getVEdges()) {
+				for (VEdge vE : container.getVEdges()) {				
+					vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					vE.show(canvas.app);
 				}
 				for (VEdge vEE : container.getVExtEdges()) {
+					//vEE.setVisibility(1); // this is the edge minimal weight to be visible
 					vEE.show(canvas.app);
 				}
 			}
@@ -276,11 +281,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
 				if (vC.isMouseOver && !vC.communityIsOpen) {
-					//It clears the edges between communities of the opened community
+					// It clears the edges between communities of the opened
+					// community
 					container.getGraph().removeVertex(vC.getNode());
 					container.getVEdges().clear();
 					container.runEdgeFactory();
-					
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
@@ -291,7 +296,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 								vC.container.runExternalEdgeFactory(container.rootGraph, internalVC.container.getName(),
 										internalVC.container);
 								vC.container.retrieveExternalVNodeSuccessors(container.rootGraph, internalVC.container);
-								internalVC.container.retrieveExternalVNodeSuccessors(container.rootGraph,vC.container);
+								internalVC.container.retrieveExternalVNodeSuccessors(container.rootGraph, vC.container);
 							}
 						}
 					}
@@ -300,14 +305,5 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
-	}
-								
-
-	public float getVisibilityThreshold() {
-		return visibilityThreshold;
-	}
-
-	public void setVisibilityThreshold(float visibilityThreshold) {
-		this.visibilityThreshold = visibilityThreshold;
 	}
 }

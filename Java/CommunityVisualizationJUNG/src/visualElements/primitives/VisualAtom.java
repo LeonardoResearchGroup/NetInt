@@ -14,7 +14,9 @@ public abstract class VisualAtom {
 	public Canvas canvas;
 	public PVector mouse;
 	private int wdth, hght;
-	public float diam;
+	private float diameter;
+
+
 	public PVector pos;
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
@@ -24,7 +26,7 @@ public abstract class VisualAtom {
 
 	public VisualAtom(float x, float y, float diam) {
 		// this.canvas = canvas;
-		this.diam = diam;
+		this.diameter = diam;
 		pos = new PVector(x, y);
 		leftClicked = false;
 		canvas = null;
@@ -82,7 +84,7 @@ public abstract class VisualAtom {
 		}
 		// if the button is an ellipse
 		else {
-			if (PApplet.dist(mouse.x, mouse.y, pos.x, pos.y) <= diam / 2) {
+			if (PApplet.dist(mouse.x, mouse.y, pos.x, pos.y) <= diameter / 2) {
 				isMouseOver = true;
 			}
 		}
@@ -98,8 +100,12 @@ public abstract class VisualAtom {
 		pos.y = y;
 	}
 
-	public void setDiam(float d) {
-		diam = d;
+	public void setDiameter(float d) {
+		diameter = d;
+	}
+	
+	public float getDiameter() {
+		return diameter;
 	}
 	// *** Color Methods ***
 

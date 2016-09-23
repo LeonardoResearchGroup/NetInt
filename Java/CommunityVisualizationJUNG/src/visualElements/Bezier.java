@@ -8,7 +8,7 @@ public class Bezier {
 	public static final int NORMAL = 1;
 	public static final int PROPAGATE = 2;
 	private PVector A, B, cA, cB;
-	private int alpha = 255;
+	private int localAlpha;
 	private Color bodyColor = new Color(75,38,93);
 	private Color currentColor = bodyColor;
 	private Color headColor = new Color(125,125,25);
@@ -28,6 +28,7 @@ public class Bezier {
 		B = new PVector(x4, y4);
 		control = Math.abs(y1 - y2);
 		aboveArc = false;
+		localAlpha = 255;
 	}
 
 	/**
@@ -48,6 +49,7 @@ public class Bezier {
 		control = distanceControlPoint;
 		this.aboveArc = aboveArc;
 		updateControlPoints(source, target);
+		localAlpha = 255;
 	}
 
 	/**
@@ -64,6 +66,7 @@ public class Bezier {
 		control = distanceControlPoint;
 		this.aboveArc = aboveArc;
 		updateControlPoints(A, B);
+		localAlpha = 255;
 	}
 
 	/**
@@ -77,6 +80,7 @@ public class Bezier {
 		control = 0;
 		this.aboveArc = aboveArc;
 		updateControlPoints(A, B);
+		localAlpha = 255;
 	}
 
 	/**
@@ -95,6 +99,7 @@ public class Bezier {
 		this.cA = cA;
 		this.cB = cB;
 		this.B = oB;
+		localAlpha = 255;
 	}
 
 	public void updateControlPoints(PVector source, PVector target) {
@@ -128,10 +133,12 @@ public class Bezier {
 	 * @param source
 	 * @param target
 	 */
-	public void drawBezier2D(PApplet app) {
+	public void drawBezier2D(PApplet app, float thickness) {
 		updateControlPoints(A, B);
 		app.noFill();
-		app.stroke(currentColor.getRGB(), alpha);
+		app.stroke(currentColor.getRGB(), localAlpha);
+		//System.out.println("Bezier> drawBezier2D A: "+ localAlpha);
+		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
@@ -143,24 +150,26 @@ public class Bezier {
 	 * @param source
 	 * @param target
 	 */
-	private void drawBezier2D(PApplet app, Color color) {
+	private void drawBezier2D(PApplet app, Color color, float thickness, int alpha) {
 		app.noFill();
 		app.stroke(color.getRGB(), alpha);
+		//System.out.println("Bezier> drawBezier2D B:"+ alpha);
+		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
-	public void drawHeadBezier2D(PApplet app) {
-		//app.strokeWeight(2f);
-		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor);
+	public void drawHeadBezier2D(PApplet app, float thickness, int alpha) {
+		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thickness, alpha);
+		//System.out.println("Bezier> drawHeadBezier2D:"+ alpha);
 	}
 
-	public void drawTailBezier2D(PApplet app) {
-		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor);
+	public void drawTailBezier2D(PApplet app, float thickness, int alpha) {
+		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thickness,alpha);
 	}
 
-	public void drawHeadAndTailBezier2D(PApplet app) {
-		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor);
-		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor);
+	public void drawHeadAndTailBezier2D(PApplet app, float thicknessHead, float thicknessTail, int alpha) {
+		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thicknessHead, alpha);
+		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thicknessTail, alpha);
 	}
 
 	// Partition methods
@@ -212,7 +221,7 @@ public class Bezier {
 	}
 
 	public void setAlpha(int val) {
-		alpha = val;
+		this.localAlpha = val;
 	}
 
 	public void setHeadColor(Color headColor) {
