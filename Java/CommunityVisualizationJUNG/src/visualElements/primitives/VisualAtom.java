@@ -233,6 +233,7 @@ public abstract class VisualAtom {
 		} else if (tmpCommunity != null) {
 			vCommunityEvent(tmpCommunity, e);
 		}
+//		canvas.app.redraw();
 
 	}
 

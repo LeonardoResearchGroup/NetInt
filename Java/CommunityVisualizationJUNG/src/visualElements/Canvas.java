@@ -22,6 +22,7 @@ public class Canvas {
 	// Transformation control
 	private boolean shiftDown;
 	private boolean canvasBeingTransformed;
+
 	public PApplet app;
 
 	public Canvas(PApplet app) {
