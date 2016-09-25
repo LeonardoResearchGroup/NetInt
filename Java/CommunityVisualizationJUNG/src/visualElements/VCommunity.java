@@ -208,7 +208,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 				vNodesCentered = false;
 			}
-			if (showEdges && !canvas.isCanvasInTransformation() && !rightPressed) {
+			if (showEdges && !canvas.isCanvasInTransformation() && !rightPressed && !canvas.canvasBeingZoomed) {
 				for (VEdge vE : container.getVEdges()) {				
 					vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					vE.show(canvas.app);

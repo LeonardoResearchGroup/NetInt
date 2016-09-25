@@ -1,5 +1,8 @@
 package visualElements;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import processing.core.*;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -22,6 +25,7 @@ public class Canvas {
 	// Transformation control
 	private boolean shiftDown;
 	private boolean canvasBeingTransformed;
+	public boolean canvasBeingZoomed = false;
 
 	public PApplet app;
 
@@ -186,11 +190,24 @@ public class Canvas {
 	}
 
 	private void kPressed(KeyEvent k) {
+		Timer timer = new Timer();
+		
+	    
 		// Control of zoom with keyboard
 		if (k.getAction() == KeyEvent.PRESS) {
 			if (k.getKey() == 'a') {
+				//canvas will being zoomed for 4 minutes
+				if(!canvasBeingZoomed){
+					canvasBeingZoomed = true;
+			        timer.schedule(new RemindTask(this), 4*1000);
+				}
 				in(0.1f);
 			} else if (k.getKey() == 'z') {
+				//canvas will being zoomed for 4 minutes
+				if(!canvasBeingZoomed){
+					canvasBeingZoomed = true;
+			        timer.schedule(new RemindTask(this), 4*1000);
+				}
 				out(0.1f);
 			} else if (k.getKey() == 'r') {
 				reset();
@@ -199,6 +216,22 @@ public class Canvas {
 				System.out.println("Pressed " + shiftDown );
 			}
 		}	
+	}
+	/**
+	 * It indicates when the canvas will not being zoomed anymore.
+	 * @author Loaiza Quintana
+	 *
+	 */
+	class RemindTask extends TimerTask {
+		private Canvas c;
+		public RemindTask(Canvas c){
+			this.c = c;
+		}	
+	    public void run() {
+	    	c.canvasBeingZoomed = false;
+	        System.out.println("Time's up!");
+	        //timer.cancel(); //Terminate the timer thread
+	    }
 	}
 
 	private void kReleased(KeyEvent k) {
