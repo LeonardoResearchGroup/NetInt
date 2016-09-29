@@ -32,6 +32,7 @@ public class Executable extends PApplet {
 		performance = new TestPerformance();
 //		app.loadGraph("./data/graphs/Risk.graphml", "Continent", "label", "sector", "weight");
 		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+//		app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");

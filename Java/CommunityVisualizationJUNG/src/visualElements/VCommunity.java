@@ -140,6 +140,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (isMouseOver) {
 			canvas.app.fill(darker());
 		}
+		if(isSought){
+			canvas.app.fill(255,0,0);
+			canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+		}
 		// Logics
 		boolean open = false;
 		if (unlocked) {
@@ -306,5 +310,36 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Search a vNode through his id and change the value of his isSought variable
+	 * @param id
+	 */
+	public void searchVnodeIntoCommunity(String id){
+		for (VisualAtom vA : container.getVNodes() ) {
+			VNode vN = (VNode) vA;
+			if(vN.getNode().getId().equals( id ) ){
+				vA.setSought(true);
+			}
+		}		
+	}
+	
+	/**
+	 * Search a vCommunity through the id of some node of his community and change the value of his isSought variable
+	 * @param id
+	 */
+	public void searchVnodeIntoSuperCommunity(String id){
+		for (VisualAtom vA : container.getVNodes() ) {
+			// If vA is a VCommunity
+			if (vA instanceof VCommunity) {
+				VCommunity vC = (VCommunity) vA;
+				for (Node node : vC.container.getGraph().getVertices()) {
+					if(node.getId().equals( id ) ){
+						vA.setSought(true);
+					}
+				}
+			}
+		}		
 	}
 }

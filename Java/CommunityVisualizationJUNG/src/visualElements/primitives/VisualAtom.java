@@ -23,6 +23,15 @@ public abstract class VisualAtom {
 	public boolean leftPressed, rightPressed, centerPressed;
 	private boolean visible;
 	protected Color color;
+	protected boolean isSought = false;
+
+	public boolean isSought() {
+		return isSought;
+	}
+
+	public void setSought(boolean isSought) {
+		this.isSought = isSought;
+	}
 
 	public VisualAtom(float x, float y, float diam) {
 		// this.canvas = canvas;
@@ -242,9 +251,13 @@ public abstract class VisualAtom {
 			if(vComm.container.getName().equals("SubSubcommunities")){
 				System.out.println("pintando externas");
 				vComm.buildExternalEdges();
+				vComm.searchVnodeIntoSuperCommunity("448");
 			}
-			if (vComm != null && isMouseOver) {
+			if (vComm != null && isMouseOver ) {
 				System.out.println("Visual Atom> event: " + vComm.container.getName());
+				vComm.searchVnodeIntoCommunity("448");
+				vComm.setSought(false);
+				
 			}
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {

@@ -21,6 +21,7 @@ public class VNode extends VisualAtom {
 	public int propagationSteps;
 	private String currentMapper;
 
+
 	public VNode(Node node, float x, float y) {
 		super(x, y, 0);
 		this.node = node;
@@ -214,6 +215,11 @@ public class VNode extends VisualAtom {
 				verbose(canvas);
 			} else {
 				canvas.app.noStroke();
+			}
+			
+			if(isSought){
+				canvas.app.fill(255,0,0);
+				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
 			}
 
 			canvas.app.fill(getColorRGB());
