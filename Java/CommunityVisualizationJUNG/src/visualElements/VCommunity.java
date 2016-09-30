@@ -10,6 +10,7 @@ import processing.core.PConstants;
 import java.util.ArrayList;
 
 import containers.Container;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import graphElements.Node;
 
 /**
@@ -200,17 +201,18 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							vN.show(canvas, communityIsOpen);
 							// This is to rearrange the vNodes once the
 							// community is opened
-							if (vNodesCentered) {
+							if ( itOpens ) {
 								// reset vNode coordinates to the coordinates
 								// assigned in the container's layout
 								PVector newOrigin = new PVector(container.dimension.width / 2,
 										container.dimension.height / 2);
 								container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+//								vNodesCentered = true;
 							}
 						}
 					}
 				}
-				vNodesCentered = false;
+//				vNodesCentered = false;
 			}
 			if (showEdges && !canvas.isCanvasInTransformation() && !rightPressed && !canvas.canvasBeingZoomed) {
 				for (VEdge vE : container.getVEdges()) {				
@@ -224,17 +226,17 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		} // If network not visible
-		else {
+//		else {
 			// If network never opened
-			if (!notOpened && !vNodesCentered) {
+//			if (!notOpened && !vNodesCentered) {
 				// Center all the VNodes in this community to the coordinates of
 				// the vNode of this community when the cover is closed
 //				for (VisualAtom vA : container.getVNodes()) {
 //					vA.pos.set(pos);
 //				}
-				vNodesCentered = true;
-			}
-		}
+//				vNodesCentered = true;
+//			}
+//		}
 	}
 
 	public void updateContainer(boolean update) {
