@@ -1,11 +1,15 @@
 package utilities;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Set;
 
 import utilities.mapping.Mapper;
@@ -46,7 +50,7 @@ public class GraphmlReader {
 	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey,
 			String sectorKey, String weightKey, String frequencyKey) {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
-
+		readFromPajek("./data/graphs/muestra.net");
 		System.out.println("GraphmlReader> Building Nodes and Edges");
 		System.out.println("GraphmlReader> Working on it ...");
 
@@ -182,6 +186,34 @@ public class GraphmlReader {
 		Mapper.getInstance().setMaxWeight(maxWeight);
 		Mapper.getInstance().setMinWeight(minWeight);
 		return rtnGraph;
+	}
+	
+	public void readFromPajek(String filename){
+		try {
+		    File file = new File(filename);
+		    FileReader fr = new FileReader(file);
+		    Scanner br = new Scanner(fr);
+		    
+		    String token;
+		    Node[] nodes = new Node[30000];
+		    
+
+		    while((token = br.next()) != null) {
+		    	int idS = Integer.parseInt(token);
+		    	if(nodes[idS] == null){
+		    		nodes[idS] = new Node(token);
+		    	}
+		    	
+	            System.out.println(token);
+//	            rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
+	        }
+
+		    br.close();
+
+		} catch (Exception e) {
+		   e.printStackTrace();
+		}
+		
 	}
 
 	public TinkerGraph getTinkerGraph() {

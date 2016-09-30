@@ -31,7 +31,7 @@ public class Executable extends PApplet {
 		app = new Logica();
 		performance = new TestPerformance();
 		app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",Container.CIRCULAR);
-//		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+//		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.CIRCULAR);
 //		app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
 		this.setActiveGraph(true);
 		// Control Frame
