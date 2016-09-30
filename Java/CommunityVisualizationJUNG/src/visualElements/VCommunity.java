@@ -229,9 +229,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (!notOpened && !vNodesCentered) {
 				// Center all the VNodes in this community to the coordinates of
 				// the vNode of this community when the cover is closed
-				for (VisualAtom vA : container.getVNodes()) {
-					vA.pos.set(pos);
-				}
+//				for (VisualAtom vA : container.getVNodes()) {
+//					vA.pos.set(pos);
+//				}
 				vNodesCentered = true;
 			}
 		}
