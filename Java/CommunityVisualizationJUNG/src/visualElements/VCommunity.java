@@ -272,7 +272,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		container = nodesAndEdges;
 	}
 
-	// *** Events
+	// ***** Events
 
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
@@ -314,6 +314,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 	}
 	
+	// ***** Search Methods
 	/**
 	 * Search a vNode through his id and change the value of his isSought variable
 	 * @param id
@@ -321,7 +322,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void searchVnodeIntoCommunity(String id){
 		for (VisualAtom vA : container.getVNodes() ) {
 			VNode vN = (VNode) vA;
-			if(vN.getNode().getId().equals( id ) ){
+			if(vN.getNode().getId().equals( id )){
 				vA.setSought(true);
 			}
 		}		
