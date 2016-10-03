@@ -8,9 +8,9 @@ Date: October 3, 2016
 
 The following libraries are being used in this application
 
-TINKERPOP
-Source: http://tinkerpop.apache.org/
-License: Apache 2. http://www.apache.org/licenses/LICENSE-2.0
+BLUEPRINTS TINKERPOP
+Source: https://github.com/tinkerpop/blueprints
+License: Copyright granted to TinkerPop. TinkerPop license is Apache 2. http://www.apache.org/licenses/LICENSE-2.0
 Authors: http://tinkerpop.apache.org/
 
 JUNG 2.0.1
