@@ -217,7 +217,7 @@ public class VNode extends VisualAtom {
 				canvas.app.noStroke();
 			}
 			
-			if(isSought){
+			if(node.isFound()){
 				canvas.app.fill(255,0,0);
 				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
 			}

@@ -29,11 +29,11 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
-				Container.CIRCULAR);
-		// app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"),
-		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
-		// Container.FRUCHTERMAN_REINGOLD);
+		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
+		// "label", "sector", "weight",
+		// Container.CIRCULAR);
+		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
+				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// Container.FRUCHTERMAN_REINGOLD);
@@ -66,7 +66,7 @@ public class Executable extends PApplet {
 			// this.noLoop();
 		}
 		textAlign(PConstants.LEFT);
-		text("Built with Processing 3", 20, height-10);
+		text("Built with Processing 3", 20, height - 10);
 	}
 
 	public Logica getApp() {

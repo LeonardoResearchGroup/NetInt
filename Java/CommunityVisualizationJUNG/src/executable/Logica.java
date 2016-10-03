@@ -20,6 +20,7 @@ import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
+import visualElements.gui.VisibilitySettings;
 
 public class Logica {
 
@@ -57,7 +58,7 @@ public class Logica {
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
 
 		int i = 0;
-		Mapper.getInstance().setMinCommunitySize( graph.getVertexCount());
+		Mapper.getInstance().setMinCommunitySize(graph.getVertexCount());
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
@@ -74,10 +75,12 @@ public class Logica {
 			vCommunities.add(communityTemp);
 
 			// SET MAX & MIN COMMUNITY SIZE
-			if (communityTemp.container.getGraph().getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
+			if (communityTemp.container.getGraph()
+					.getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
 				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
 			}
-			if (communityTemp.container.getGraph().getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
+			if (communityTemp.container.getGraph()
+					.getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
 				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
 			}
 		}
@@ -134,9 +137,12 @@ public class Logica {
 		}
 	}
 
+
+
 	public void show(Canvas canvas) {
 		// vMainCommunity.show(canvas);
 		vSubSubCommunity.show(canvas);
+		vSubSubCommunity.searchNode();
 	}
 
 	public void loadGraph(File file, String communityFilter, String nodeName, String sector, String edgeWeight,

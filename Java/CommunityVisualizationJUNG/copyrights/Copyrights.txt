@@ -1,7 +1,7 @@
 OUR AWESOME GRAPH VISUALIZATION SOFTWARE
 
 Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
-License: Not defined
+License: Not defined Check this link https://opensource.org/licenses/lgpl-2.1.php
 Authors: Juan Salamanca, Cesar Loaiza & Luis Felipe Rivera
 Acknowledgement: Javier Diaz
 Date: October 3, 2016
