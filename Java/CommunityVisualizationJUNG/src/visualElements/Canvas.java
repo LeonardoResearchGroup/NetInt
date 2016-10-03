@@ -6,7 +6,7 @@ import java.util.TimerTask;
 import processing.core.*;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-
+import visualElements.gui.VisibilitySettings;
 
 public class Canvas {
 
@@ -41,7 +41,8 @@ public class Canvas {
 	}
 
 	/**
-	 * This method MUST be invoked iteratively to get a fresh mouseCoordinate. Ideally within PApplet.draw()
+	 * This method MUST be invoked iteratively to get a fresh mouseCoordinate.
+	 * Ideally within PApplet.draw()
 	 */
 	public void transform() {
 		// **** Convert screenMouse into canvasMouse
@@ -132,8 +133,18 @@ public class Canvas {
 		app.text("Press r to restore zoom and pan to default values", pos.x, pos.y + 10);
 		app.textAlign(PConstants.CENTER);
 	}
-	
-	public void originCrossHair(){
+
+	public void showControlPanelMessages(PVector pos) {
+		app.fill(255, 90);
+		app.textAlign(PConstants.LEFT);
+		if (VisibilitySettings.getInstance().getIdBuscador() != null) {
+			app.text("Searching for node: " + VisibilitySettings.getInstance().getIdBuscador(), pos.x, pos.y);
+		}
+
+		app.textAlign(PConstants.CENTER);
+	}
+
+	public void originCrossHair() {
 		app.stroke(255);
 		app.strokeWeight(0.5F);
 		app.line(0, -app.height, 0, app.height);
@@ -191,53 +202,56 @@ public class Canvas {
 
 	private void kPressed(KeyEvent k) {
 		Timer timer = new Timer();
-		
-	    
+
 		// Control of zoom with keyboard
 		if (k.getAction() == KeyEvent.PRESS) {
 			if (k.getKey() == 'a') {
-				//canvas will being zoomed for 4 minutes
-				if(!canvasBeingZoomed){
+				// canvas will being zoomed for 4 minutes
+				if (!canvasBeingZoomed) {
 					canvasBeingZoomed = true;
-			        timer.schedule(new RemindTask(this), 4*1000);
+					timer.schedule(new RemindTask(this), 4 * 1000);
 				}
 				in(0.1f);
 			} else if (k.getKey() == 'z') {
-				//canvas will being zoomed for 4 minutes
-				if(!canvasBeingZoomed){
+				// canvas will being zoomed for 4 minutes
+				if (!canvasBeingZoomed) {
 					canvasBeingZoomed = true;
-			        timer.schedule(new RemindTask(this), 4*1000);
+					timer.schedule(new RemindTask(this), 4 * 1000);
 				}
 				out(0.1f);
 			} else if (k.getKey() == 'r') {
 				reset();
-			} else if (k.getKeyCode() == 16){
+			} else if (k.getKeyCode() == 16) {
 				shiftDown = k.isShiftDown();
-				System.out.println("Pressed " + shiftDown );
+				System.out.println("Pressed " + shiftDown);
 			}
-		}	
+		}
 	}
+
 	/**
 	 * It indicates when the canvas will not being zoomed anymore.
+	 * 
 	 * @author Loaiza Quintana
 	 *
 	 */
 	class RemindTask extends TimerTask {
 		private Canvas c;
-		public RemindTask(Canvas c){
+
+		public RemindTask(Canvas c) {
 			this.c = c;
-		}	
-	    public void run() {
-	    	c.canvasBeingZoomed = false;
-	        System.out.println("Time's up!");
-	        //timer.cancel(); //Terminate the timer thread
-	    }
+		}
+
+		public void run() {
+			c.canvasBeingZoomed = false;
+			System.out.println("Time's up!");
+			// timer.cancel(); //Terminate the timer thread
+		}
 	}
 
 	private void kReleased(KeyEvent k) {
-		if (k.getKeyCode() == 16 && k.getAction() == KeyEvent.RELEASE){
+		if (k.getKeyCode() == 16 && k.getAction() == KeyEvent.RELEASE) {
 			shiftDown = false;
-			System.out.println("Released " + shiftDown );
+			System.out.println("Released " + shiftDown);
 			canvasBeingTransformed = false;
 		}
 	}

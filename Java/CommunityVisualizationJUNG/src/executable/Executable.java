@@ -13,7 +13,6 @@ import visualElements.gui.ChooseHelper;
 import visualElements.gui.ControlPanel;
 import controlP5.ControlEvent;
 
-
 public class Executable extends PApplet {
 	static Logica app;
 	Canvas canvas;
@@ -30,15 +29,24 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",Container.CIRCULAR);
-//		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
+				Container.CIRCULAR);
+		// app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"),
+		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
+		// Container.FRUCHTERMAN_REINGOLD);
+		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
+		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
+		// Container.FRUCHTERMAN_REINGOLD);
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
-		System.out.println("Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1] + " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
-		System.out.println("Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1] + " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
+		System.out.println(
+				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
+						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
+		System.out.println(
+				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
+						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
 	}
 
 	public void draw() {
@@ -53,9 +61,12 @@ public class Executable extends PApplet {
 			//
 			canvas.showLegend(new PVector(width - 20, 20));
 			canvas.displayValues(new PVector(width - 20, 40));
+			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
-//			this.noLoop();
+			// this.noLoop();
 		}
+		textAlign(PConstants.LEFT);
+		text("Built with Processing 3", 20, height-10);
 	}
 
 	public Logica getApp() {

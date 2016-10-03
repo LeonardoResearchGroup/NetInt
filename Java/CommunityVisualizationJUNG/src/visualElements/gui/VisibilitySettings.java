@@ -3,6 +3,7 @@ package visualElements.gui;
 public class VisibilitySettings {
 
 	// NODE Visibility Settings
+	private String idBuscador;
 	private float umbralOutDegree;
 	private boolean mostrarNombre;
 	private String filtrosNodo;
@@ -53,6 +54,10 @@ public class VisibilitySettings {
 		return filtrosVinculo;
 	}
 
+	public String getIdBuscador() {
+		return idBuscador;
+	}
+
 	public void setUmbralGrados(float umbralGrados) {
 		this.umbralOutDegree = umbralGrados;
 	}
@@ -75,6 +80,14 @@ public class VisibilitySettings {
 
 	public void setFiltrosVinculo(String filtrosVinculo) {
 		this.filtrosVinculo = filtrosVinculo;
+	}
+
+	public void setIdBuscador(String stringValue) {
+		idBuscador = stringValue;
+	}
+	
+	public void resetIdBuscador(){
+		idBuscador = null;
 	}
 
 }

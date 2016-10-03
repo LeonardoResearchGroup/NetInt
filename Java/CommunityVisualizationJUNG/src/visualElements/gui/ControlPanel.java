@@ -55,22 +55,23 @@ public class ControlPanel extends PApplet {
 		// Nodos / Clientes
 		Group g2 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		cp5.addSlider("Umbral OutDegree").setPosition(5, 7).setSize(100, 10).setRange(0, 35).moveTo(g2);
-		cp5.addButton("Mostrar Nombre").setPosition(5, 20).setSize(100, 10).moveTo(g2);
+		// Buscador por ID de nodo
+		cp5.addTextfield("Buscar ID Nodo").setPosition(5, 7).setSize(100, 15).setAutoClear(false).moveTo(g2);
+		cp5.addBang("Clear").setPosition(115, 7).setSize(30, 15).moveTo(g2).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		cp5.addSlider("Umbral OutDegree").setPosition(5, 43).setSize(100, 10).setRange(0, 35).moveTo(g2);
+		cp5.addButton("Mostrar Nombre").setPosition(5, 56).setSize(100, 10).moveTo(g2);
 		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
-		cp5.addScrollableList("Filtros Nodo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		cp5.addScrollableList("Diametro Nodo").setPosition(5, 69).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g2).close();
 
 		// Vinculos / Transacciones
 		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
-				.setRange(0,
-						Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1])
-				.moveTo(g3);
+				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(g3);
 
 		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(100, 10).setRange(1, 10).moveTo(g3);
-		cp5.addScrollableList("Filtros Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g3).close();
 
 		// Riesgo y Rentabilidad
@@ -107,6 +108,15 @@ public class ControlPanel extends PApplet {
 				break;
 
 			// **** NODES ****
+			case "Buscar ID Nodo":
+				VisibilitySettings.getInstance().setIdBuscador(theEvent.getStringValue());
+				break;
+				
+			case "Clear":
+				cp5.get(Textfield.class,"Buscar ID Nodo").clear();
+				VisibilitySettings.getInstance().resetIdBuscador();
+				break;
+				
 			case "Umbral OutDegree":
 				VisibilitySettings.getInstance().setUmbralGrados(theEvent.getValue());
 				break;
@@ -114,7 +124,7 @@ public class ControlPanel extends PApplet {
 				Button b = (Button) theEvent.getController();
 				VisibilitySettings.getInstance().setMostrarNombre(b.getBooleanValue());
 				break;
-			case "Filtros Nodo":
+			case "Diametro Nodo":
 				VisibilitySettings.getInstance().setFiltrosNodo(theEvent.getController().getLabel());
 				break;
 
@@ -125,7 +135,7 @@ public class ControlPanel extends PApplet {
 			case "Propagacion":
 				VisibilitySettings.getInstance().setPropagacion(theEvent.getValue());
 				break;
-			case "Filtros Vinculo":
+			case "Espesor Vinculo":
 				VisibilitySettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
 				break;
 
