@@ -1,13 +1,16 @@
 package visualElements;
 
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import utilities.mapping.Mapper;
+import visualElements.Canvas.RemindTask;
 import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import containers.Container;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -36,6 +39,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	boolean vNodesCentered = false;
 	// public boolean despuesOpens = false;
 	public boolean communityIsOpen = false;
+	private boolean enableClosing = false;
 	// Controls nodes visibility
 	// public float nodeVisibilityThreshold = 0;
 	// public float edgeVisibilityThreshold = 0;
@@ -91,6 +95,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// diam = Mapper.getInstance().radial(container.size())*100;
 	}
 
+	boolean arrangementIterationsDone = false;
+
 	public void show(Canvas canvas) {
 		// Visualize nodes & edges in container
 		boolean visualizeNodes = false;
@@ -102,8 +108,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		detectMouseOver(canvas.getCanvasMouse());
 		// *CESAR
 		itOpens = false;
-		// mouse interaction
-		unlocked = leftClicked;
+		// if community not opened
+		if (!unlocked) {
+			// listen to the mouse
+			unlocked = leftClicked;
+			// ask if the C key is pressed
+		} else if (enableClosing) {
+			// listen to the mouse
+			unlocked = leftClicked;
+		}
 		// Move vCommunity to mouse position
 		if (rightPressed) {
 			setCommunityCenter(new PVector(canvas.getCanvasMouse().x, canvas.getCanvasMouse().y));
@@ -120,10 +133,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// container.initialize(communityIsOpen);
 		// Layout iterations
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
-			if (count < containerIterations) {
-				container.stepIterativeLayout(pos);
+			// if (count < containerIterations) {
+
+			if (!arrangementIterationsDone) {
+				arrangementIterationsDone = container.stepIterativeLayout(pos);
+				// container.stepIterativeLayout(pos);
 				visualizeEdges = false;
-				count++;
+				// count++;
 			} else {
 				visualizeEdges = unlocked && communityIsOpen;
 			}
@@ -149,9 +165,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			canvas.app.fill(darker());
 		}
 		if (hasFoundNode && !communityIsOpen) {
-			//canvas.app.fill(255, 0, 0);
-			//canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-			canvas.app.fill(255,0,0);
+			// canvas.app.fill(255, 0, 0);
+			// canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter()
+			// + 2);
+			canvas.app.fill(255, 0, 0);
 		}
 		// Logics
 		boolean open = false;
@@ -234,18 +251,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vEE.show(canvas.app);
 				}
 			}
-		} // If network not visible
-			// else {
-			// If network never opened
-			// if (!notOpened && !vNodesCentered) {
-			// Center all the VNodes in this community to the coordinates of
-			// the vNode of this community when the cover is closed
-			// for (VisualAtom vA : container.getVNodes()) {
-			// vA.pos.set(pos);
-			// }
-			// vNodesCentered = true;
-			// }
-			// }
+		}
 	}
 
 	public void updateContainer(boolean update) {
@@ -285,6 +291,29 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
+		theApp.registerMethod("keyEvent", this);
+	}
+
+	public void keyEvent(KeyEvent k) {
+		kPressed(k);
+	}
+
+	private void kPressed(KeyEvent k) {
+		// Control closing communities
+		if (k.getAction() == KeyEvent.PRESS) {
+			if (k.getKey() == 'c' || k.getKey() == 'C') {
+				enableClosing = true;
+				System.out.println("VCommunity > kPressed:" + enableClosing);
+			}
+		} else {
+			if (k.getAction() == KeyEvent.RELEASE) {
+				if (k.getKey() == 'c' || k.getKey() == 'C') {
+					enableClosing = false;
+					System.out.println("VCommunity > kPressed:" + enableClosing);
+				}
+			}
+
+		}
 	}
 
 	/**
@@ -325,7 +354,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	// ***** Search Methods *******
 	/**
-	 * This method must be invoked ONLY by VCommunities that contain other VCommunities
+	 * This method must be invoked ONLY by VCommunities that contain other
+	 * VCommunities
 	 */
 	public void searchNode() {
 		// Is the search tool is not null

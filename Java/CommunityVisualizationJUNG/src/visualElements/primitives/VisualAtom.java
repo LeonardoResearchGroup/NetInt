@@ -213,9 +213,6 @@ public abstract class VisualAtom {
 	// P3
 	public abstract void eventRegister(PApplet theApp);
 
-	// public void eventRegister(PApplet theApp) {
-	// theApp.registerMethod("mouseEvent", this);
-	// }
 
 	public void mouseEvent(MouseEvent e) {
 		VCommunity tmpCommunity = null;
@@ -242,7 +239,6 @@ public abstract class VisualAtom {
 		if (e.getAction() == MouseEvent.CLICK) {
 			if(vComm.container.getName().equals("SubSubcommunities")){
 				vComm.buildExternalEdges();
-				//vComm.searchVnodeIntoSuperCommunity("448");
 			}
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {
