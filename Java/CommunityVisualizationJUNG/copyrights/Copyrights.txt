@@ -1,10 +1,12 @@
-The following libraries are being used in this application
-
 OUR AWESOME GRAPH VISUALIZATION SOFTWARE
+
 Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
 License: Not defined
 Authors: Juan Salamanca, Cesar Loaiza & Luis Felipe Rivera
 Acknowledgement: Javier Diaz
+Date: October 3, 2016
+
+The following libraries are being used in this application
 
 TINKERPOP
 Source: http://tinkerpop.apache.org/
