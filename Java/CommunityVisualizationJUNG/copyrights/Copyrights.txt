@@ -1,8 +1,8 @@
 The following libraries are being used in this application
 
 OUR AWESOME GRAPH VISUALIZATION SOFTWARE
-Source:
-License:
+Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
+License: Not defined
 Authors: Juan Salamanca, Cesar Loaiza & Luis Felipe Rivera
 Acknowledgement: Javier Diaz
 
@@ -22,9 +22,9 @@ License: LGPL license
 Authors: https://processing.org/people/
 
 JOGL
-Source:
-License:
-Authors:
+Source: http://jogamp.org/jogl/www/
+License: New BSD 2-Clause License http://jogamp.org/git/?p=jogl.git;a=blob;f=LICENSE.txt
+Authors: 
 
 CONTROLP5
 Source: http://www.sojamo.de/libraries/controlP5/
@@ -34,5 +34,5 @@ Authors: Andreas Schlegel
 JCOLORBREWER
 Source: https://github.com/rcsb/colorbrewer
 License: LGPL 2.1 https://github.com/rcsb/colorbrewer/blob/master/LICENSE
-Authors:
+Authors: Andreas Prlic https://github.com/andreasprlic
 Acknowledgments: Cynthia Brewer, Mark Harrower and The Pennsylvania State University http://colorbrewer2.org/
