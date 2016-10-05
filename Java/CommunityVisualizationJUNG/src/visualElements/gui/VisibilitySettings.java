@@ -1,6 +1,9 @@
 package visualElements.gui;
 
 public class VisibilitySettings {
+	
+	// BACKGROUND Visibility Settings
+	private int colorBackground = 30;
 
 	// NODE Visibility Settings
 	private String idBuscador;
@@ -58,6 +61,10 @@ public class VisibilitySettings {
 		return idBuscador;
 	}
 
+	public int getColorBackground() {
+		return colorBackground;
+	}
+
 	public void setUmbralGrados(float umbralGrados) {
 		this.umbralOutDegree = umbralGrados;
 	}
@@ -88,6 +95,11 @@ public class VisibilitySettings {
 	
 	public void resetIdBuscador(){
 		idBuscador = null;
+	}
+
+	public void setColorBackground(int colorValue) {
+		colorBackground = colorValue;
+		
 	}
 
 }

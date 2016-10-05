@@ -49,10 +49,10 @@ public class Logica {
 		//
 		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
 
-		boolean colorBlindSave = true;
-		ColorBrewer[] sequentialPalettes = ColorBrewer.getSequentialColorPalettes(colorBlindSave);
-		ColorBrewer myBrewer = sequentialPalettes[3];
-		// System.out.println( "Name of this color brewer: " + myBrewer);
+		boolean colorBlindSave = false;
+		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSave);
+		ColorBrewer myBrewer = qualitativePalettes[2];
+		 System.out.println( "Name of this color brewer: " + myBrewer);
 		// Color[] myGradient =
 		// myBrewer.Spectral.getColorPalette(communityNames.size());
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
