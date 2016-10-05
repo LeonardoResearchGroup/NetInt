@@ -38,44 +38,16 @@ public class ControlPanel extends PApplet {
 
 	public void gui() {
 		cp5 = new ControlP5(this);
-
-		// Archivo
 		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150);
-		cp5.addButton("Abrir").plugTo(parent).setPosition(5, 7).setSize(170, 18).moveTo(g1);
-		cp5.addButton("Guardar").plugTo(parent).setPosition(5, 27).setSize(170, 18).moveTo(g1);
-		cp5.addButton("Importar").plugTo(parent).setPosition(5, 47).setSize(170, 18).moveTo(g1);
-		String[] formatos = { "PNG", "PDF", "JPEG" };
-		cp5.addScrollableList("Exportar").setPosition(5, 67).setSize(170, 40).setBarHeight(13).setItemHeight(13)
-				.addItems(formatos).setType(ScrollableList.LIST).moveTo(g1).close();
-
-		cp5.addButton("Salir").plugTo(parent)
-				.setPosition(5, 67 + cp5.getGroup("Archivo").getController("Exportar").getHeight()).setSize(170, 18)
-				.moveTo(g1);
-
-		// Nodos / Clientes
 		Group g2 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		// Buscador por ID de nodo
-		cp5.addTextfield("Buscar ID Nodo").setPosition(5, 7).setSize(100, 15).setAutoClear(false).moveTo(g2);
-		cp5.addBang("Clear").setPosition(115, 7).setSize(30, 15).moveTo(g2).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		cp5.addSlider("Umbral OutDegree").setPosition(5, 43).setSize(100, 10).setRange(0, 35).moveTo(g2);
-		cp5.addButton("Mostrar Nombre").setPosition(5, 56).setSize(100, 10).moveTo(g2);
-		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
-		cp5.addScrollableList("Diametro Nodo").setPosition(5, 69).setSize(100, 100).setBarHeight(13).setItemHeight(13)
-				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g2).close();
-
-		// Vinculos / Transacciones
 		Group g3 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
-				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(g3);
-
-		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(100, 10).setRange(1, 10).moveTo(g3);
-		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
-				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g3).close();
-
-		// Riesgo y Rentabilidad
 		Group g4 = cp5.addGroup("Riesgo / Rentabilidad").setBackgroundColor(color(0, 64)).setBackgroundHeight(150);
+		guiArchivo(g1);
+		guiNodos(g2);
+		guiVinculos(g3);
+		guiRiesgo(g4);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion = cp5.addAccordion("acc").setPosition(10, 15).setWidth(180).addItem(g1).addItem(g2).addItem(g3)
@@ -86,6 +58,46 @@ public class ControlPanel extends PApplet {
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
+	}
+
+	private void guiArchivo(Group g1) {
+		cp5.addButton("Abrir").plugTo(parent).setPosition(5, 7).setSize(170, 18).moveTo(g1);
+		cp5.addButton("Guardar").plugTo(parent).setPosition(5, 27).setSize(170, 18).moveTo(g1);
+		cp5.addButton("Importar").plugTo(parent).setPosition(5, 47).setSize(170, 18).moveTo(g1);
+		String[] formatos = { "PNG", "PDF", "JPEG" };
+		cp5.addScrollableList("Exportar").setPosition(5, 67).setSize(170, 40).setBarHeight(13).setItemHeight(13)
+				.addItems(formatos).setType(ScrollableList.LIST).moveTo(g1).close();
+		cp5.addButton("Salir").plugTo(parent)
+				.setPosition(5, 67 + cp5.getGroup("Archivo").getController("Exportar").getHeight()).setSize(170, 18)
+				.moveTo(g1);
+	}
+
+	// Nodos / Clientes
+	private void guiNodos(Group g2) {
+		// Buscador por ID de nodo
+		cp5.addTextfield("Buscar ID Nodo").setPosition(5, 7).setSize(100, 15).setAutoClear(false).moveTo(g2);
+		cp5.addBang("Clear").setPosition(115, 7).setSize(30, 15).moveTo(g2).getCaptionLabel().align(ControlP5.CENTER,
+				ControlP5.CENTER);
+		cp5.addSlider("Umbral OutDegree").setPosition(5, 43).setSize(100, 10).setRange(0, 35).moveTo(g2);
+		cp5.addButton("Mostrar Nombre").setPosition(5, 56).setSize(100, 10).moveTo(g2);
+		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
+		cp5.addScrollableList("Diametro Nodo").setPosition(5, 69).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g2).close();
+	}
+
+	// Vinculos / Transacciones
+	private void guiVinculos(Group g3) {
+		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
+				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(g3);
+		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
+		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(100, 10).setRange(1, 10).moveTo(g3);
+		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(g3).close();
+	}
+
+	// Riesgo y Rentabilidad
+	private void guiRiesgo(Group g4) {
+
 	}
 
 	public void draw() {
@@ -111,12 +123,12 @@ public class ControlPanel extends PApplet {
 			case "Buscar ID Nodo":
 				VisibilitySettings.getInstance().setIdBuscador(theEvent.getStringValue());
 				break;
-				
+
 			case "Clear":
-				cp5.get(Textfield.class,"Buscar ID Nodo").clear();
+				cp5.get(Textfield.class, "Buscar ID Nodo").clear();
 				VisibilitySettings.getInstance().resetIdBuscador();
 				break;
-				
+
 			case "Umbral OutDegree":
 				VisibilitySettings.getInstance().setUmbralGrados(theEvent.getValue());
 				break;

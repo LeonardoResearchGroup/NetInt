@@ -1,7 +1,7 @@
 OUR AWESOME GRAPH VISUALIZATION SOFTWARE
 
 Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
-License: Not defined Check this link https://opensource.org/licenses/lgpl-2.1.php
+License: Not defined Check this link https://opensource.org/licenses/lgpl-2.1.php and https://www.gnu.org/licenses/gpl-faq.html#AllCompatibility
 Authors: Juan Salamanca, Cesar Loaiza & Luis Felipe Rivera
 Acknowledgement: Javier Diaz
 Date: October 3, 2016
@@ -30,7 +30,7 @@ Authors:
 
 CONTROLP5
 Source: http://www.sojamo.de/libraries/controlP5/
-License: LGPL https://github.com/sojamo/controlp5/blob/master/LICENSE.md
+License: LGPL 2.1 https://github.com/sojamo/controlp5/blob/master/LICENSE.md
 Authors: Andreas Schlegel 
 
 JCOLORBREWER

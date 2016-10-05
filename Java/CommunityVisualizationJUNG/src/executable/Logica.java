@@ -103,9 +103,8 @@ public class Logica {
 			 * initializer
 			 */
 		}
-
 		// make a Container
-		SubContainer subContainer = new SubContainer(graphTemp, layout, new Dimension(600, 600));
+		SubContainer subContainer = new SubContainer(graphTemp, layout, new Dimension(1900, 1900));
 		subContainer.setName(communityName);
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
@@ -126,7 +125,7 @@ public class Logica {
 			for (int j = i + 1; j < communities.size(); j++) {
 				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
 						communities.get(i).container.getName(), communities.get(j).container.getName());
-				// This condition decides wich edges are created
+				// This condition decides which edges are created
 				if (graphInter.getEdgeCount() >= 1) {
 					graphElements.Edge e = new graphElements.Edge(communities.get(i).getNode(),
 							communities.get(j).getNode(), true);

@@ -303,13 +303,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (k.getAction() == KeyEvent.PRESS) {
 			if (k.getKey() == 'c' || k.getKey() == 'C') {
 				enableClosing = true;
-				System.out.println("VCommunity > kPressed:" + enableClosing);
 			}
 		} else {
 			if (k.getAction() == KeyEvent.RELEASE) {
 				if (k.getKey() == 'c' || k.getKey() == 'C') {
 					enableClosing = false;
-					System.out.println("VCommunity > kPressed:" + enableClosing);
 				}
 			}
 
