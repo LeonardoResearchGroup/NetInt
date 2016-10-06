@@ -21,7 +21,6 @@ public class VNode extends VisualAtom {
 	public int propagationSteps;
 	private String currentMapper;
 
-
 	public VNode(Node node, float x, float y) {
 		super(x, y, 0);
 		this.node = node;
@@ -171,7 +170,9 @@ public class VNode extends VisualAtom {
 		if (communityOpen) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {
-				setAlpha(175);
+				setAlpha(195);
+				canvas.app.fill(getColorRGB());
+				canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
 				if (VisibilitySettings.getInstance().isMostrarNombre()) {
 					canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 					canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
@@ -182,7 +183,9 @@ public class VNode extends VisualAtom {
 				// VisibilitySettings contains all the visibility settings
 				// defined by the user in the control panel
 				if (VisibilitySettings.getInstance().isMostrarNombre()) {
-					canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+					if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+						canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+					}
 				}
 				setAlpha(150);
 			}
@@ -208,6 +211,7 @@ public class VNode extends VisualAtom {
 			if (isMouseOver) {
 				// canvas.app.fill(setColor(200, 0, 0, 120));
 				// canvas.app.noFill();
+				canvas.app.strokeWeight(1);
 				canvas.app.fill(brighter());
 				canvas.app.stroke(225, 0, 0);
 				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
@@ -216,14 +220,16 @@ public class VNode extends VisualAtom {
 			} else {
 				canvas.app.noStroke();
 			}
-			
-			if(node.isFound()){
-				canvas.app.fill(255,0,0);
+
+			if (node.isFound()) {
+				canvas.app.fill(255, 0, 0);
 				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
 			}
 
-			canvas.app.fill(getColorRGB());
-			canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+				canvas.app.fill(getColorRGB());
+				canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			}
 		}
 
 	}

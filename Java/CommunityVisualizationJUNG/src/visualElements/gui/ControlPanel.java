@@ -95,8 +95,7 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiBackground(Group group) {
-		cp = cp5.addColorPicker("Selector Color").plugTo(parent).setPosition(5, 10).setWidth(100)
-				.setColorValue(color(30, 30, 30, 255)).moveTo(group);
+		cp = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setColorValue(color(30, 30, 30, 255)).moveTo(group);
 	}
 
 	/**
@@ -106,6 +105,7 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiNodos(Group group) {
+		// Control de visibilidad
 		cp5.addButton("Nodo").setPosition(5, 5).setSize(45, 10).moveTo(group);
 		cp5.addButton("Nombre").setPosition(60, 5).setSize(45, 10).moveTo(group);
 		// Buscador por ID de nodo
@@ -116,6 +116,7 @@ public class ControlPanel extends PApplet {
 				ControlP5.CENTER);
 		cp5.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36)
 				.snapToTickMarks(true).moveTo(group);
+		//Diametro Nodo
 		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
 		cp5.addScrollableList("Diametro Nodo").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
@@ -128,11 +129,18 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiVinculos(Group group) {
+		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
 				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(group);
-		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
-		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(100, 10).setRange(1, 10).setNumberOfTickMarks(10)
+		//Propagacion
+		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
+		cp5.getController("Propagacion").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
+		.setPaddingX(35);
+		cp5.addToggle("Solo").setPosition(77, 20).setSize(28, 10).moveTo(group).getCaptionLabel().align(ControlP5.CENTER,
+				ControlP5.CENTER);
+		//Espesor Vinculo
+		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
 		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
@@ -157,9 +165,8 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
-		// System.out.println("ControlPanel> Event at: " +
-		// theEvent.getController());
 		if (theEvent.isGroup()) {
+			// **** BACKGROUND ****
 			if (theEvent.isFrom(cp)) {
 				VisibilitySettings.getInstance().setColorBackground(cp.getColorValue());
 			}
@@ -170,18 +177,14 @@ public class ControlPanel extends PApplet {
 				ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
 				break;
 
-			// **** BACKGROUND ****
-
 			// **** NODES ****
 			case "Buscar ID Nodo":
 				VisibilitySettings.getInstance().setIdBuscador(theEvent.getStringValue());
 				break;
-
 			case "Clear":
 				cp5.get(Textfield.class, "Buscar ID Nodo").clear();
 				VisibilitySettings.getInstance().resetIdBuscador();
 				break;
-
 			case "Min OutDegree":
 				VisibilitySettings.getInstance().setUmbralGrados(theEvent.getValue());
 				break;
@@ -199,6 +202,10 @@ public class ControlPanel extends PApplet {
 				break;
 			case "Propagacion":
 				VisibilitySettings.getInstance().setPropagacion(theEvent.getValue());
+				break;
+			case "Solo":
+				Toggle solo = (Toggle) theEvent.getController();
+				VisibilitySettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
 				break;
 			case "Espesor Vinculo":
 				VisibilitySettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
