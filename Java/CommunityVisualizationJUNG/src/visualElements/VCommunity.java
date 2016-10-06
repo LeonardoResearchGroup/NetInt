@@ -1,13 +1,16 @@
 package visualElements;
 
 import processing.core.PVector;
+import processing.event.KeyEvent;
 import utilities.mapping.Mapper;
+import visualElements.Canvas.RemindTask;
 import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import containers.Container;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -36,6 +39,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	boolean vNodesCentered = false;
 	// public boolean despuesOpens = false;
 	public boolean communityIsOpen = false;
+	private boolean enableClosing = false;
 	// Controls nodes visibility
 	// public float nodeVisibilityThreshold = 0;
 	// public float edgeVisibilityThreshold = 0;
@@ -43,6 +47,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private int i, increment, count, containerIterations;
 	public Container container;
 	private PVector lastPosition;
+
+	// Search tool
+	protected boolean hasFoundNode = false;
+	protected Node nodeFound;
+	protected VCommunity nodeFoundInSuperCommunity;
+	private String idSearch = null;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
@@ -80,9 +90,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		maxCommunityDiam = 200;
 		minCommunitySize = 1;
 		maxCommunitySize = 5000;
-		setDiameter(PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
-		//diam = Mapper.getInstance().radial(container.size())*100;
+		setDiameter(
+				PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
+		// diam = Mapper.getInstance().radial(container.size())*100;
 	}
+
+	boolean arrangementIterationsDone = false;
 
 	public void show(Canvas canvas) {
 		// Visualize nodes & edges in container
@@ -95,8 +108,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		detectMouseOver(canvas.getCanvasMouse());
 		// *CESAR
 		itOpens = false;
-		// mouse interaction
-		unlocked = leftClicked;
+		// if community not opened
+		if (!unlocked) {
+			// listen to the mouse
+			unlocked = leftClicked;
+			// ask if the C key is pressed
+		} else if (enableClosing) {
+			// listen to the mouse
+			unlocked = leftClicked;
+		}
 		// Move vCommunity to mouse position
 		if (rightPressed) {
 			setCommunityCenter(new PVector(canvas.getCanvasMouse().x, canvas.getCanvasMouse().y));
@@ -113,10 +133,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// container.initialize(communityIsOpen);
 		// Layout iterations
 		if (communityIsOpen && container.isCurrentLayoutIterative()) {
-			if (count < containerIterations) {
-				container.stepIterativeLayout(pos);
+			// if (count < containerIterations) {
+
+			if (!arrangementIterationsDone) {
+				arrangementIterationsDone = container.stepIterativeLayout(pos);
+				// container.stepIterativeLayout(pos);
 				visualizeEdges = false;
-				count++;
+				// count++;
 			} else {
 				visualizeEdges = unlocked && communityIsOpen;
 			}
@@ -141,9 +164,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (isMouseOver) {
 			canvas.app.fill(darker());
 		}
-		if(isSought){
-			canvas.app.fill(255,0,0);
-			canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+		if (hasFoundNode && !communityIsOpen) {
+			// canvas.app.fill(255, 0, 0);
+			// canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter()
+			// + 2);
+			canvas.app.fill(255, 0, 0, 100);
+			canvas.app.arc(pos.x, pos.y, getDiameter()-10, getDiameter()-10,-PConstants.PI, PConstants.PI);
 		}
 		// Logics
 		boolean open = false;
@@ -153,7 +179,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					i += increment;
 				} else {
 					open = true;
+					
 				}
+				canvas.app.stroke(255,20);
+				canvas.app.strokeWeight(10);
+				canvas.app.fill(255,10);
+				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(),-PConstants.PI, PConstants.PI);
 			}
 		} else {
 			if (i > 0) {
@@ -162,8 +193,19 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (i == 0) {
 				open = false;
 			}
+			
+			// Highlight the community cover if contains a found node
+//			if (nodeFound != null) {
+//				canvas.app.fill(255, 0, 0, 50);
+//				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), -PConstants.PI, PConstants.PI);
+//			} else {
+//				canvas.app.noFill();
+//			}
 		}
 		// *** DRAWS RIGHT HALF INVOLUTE
+		canvas.app.stroke(getColorRGB());
+		canvas.app.strokeWeight(10);
+		canvas.app.noFill();
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc right half
@@ -172,6 +214,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc left half
+		
 		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), PConstants.HALF_PI, angle2);
 		return open;
 	}
@@ -197,46 +240,36 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						 * 1 is the degree in tier 1 community, and so on.
 						 */
 						if (vN.isVisible()) {
-							//vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
+							// vN.setDiam(vN.getNode().getOutDegree(1) + 5); //
 							vN.show(canvas, communityIsOpen);
 							// This is to rearrange the vNodes once the
 							// community is opened
-							if ( itOpens ) {
+							if (itOpens) {
 								// reset vNode coordinates to the coordinates
 								// assigned in the container's layout
 								PVector newOrigin = new PVector(container.dimension.width / 2,
 										container.dimension.height / 2);
 								container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
-//								vNodesCentered = true;
+								// vNodesCentered = true;
 							}
 						}
 					}
 				}
-//				vNodesCentered = false;
+				// vNodesCentered = false;
 			}
 			if (showEdges && !canvas.isCanvasInTransformation() && !rightPressed && !canvas.canvasBeingZoomed) {
-				for (VEdge vE : container.getVEdges()) {				
+				for (VEdge vE : container.getVEdges()) {
 					vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					vE.show(canvas.app);
 				}
 				for (VEdge vEE : container.getVExtEdges()) {
 					vEE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
-					//vEE.setVisibility(1); // this is the edge minimal weight to be visible
+					// vEE.setVisibility(1); // this is the edge minimal weight
+					// to be visible
 					vEE.show(canvas.app);
 				}
 			}
-		} // If network not visible
-//		else {
-			// If network never opened
-//			if (!notOpened && !vNodesCentered) {
-				// Center all the VNodes in this community to the coordinates of
-				// the vNode of this community when the cover is closed
-//				for (VisualAtom vA : container.getVNodes()) {
-//					vA.pos.set(pos);
-//				}
-//				vNodesCentered = true;
-//			}
-//		}
+		}
 	}
 
 	public void updateContainer(boolean update) {
@@ -276,6 +309,27 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
+		theApp.registerMethod("keyEvent", this);
+	}
+
+	public void keyEvent(KeyEvent k) {
+		kPressed(k);
+	}
+
+	private void kPressed(KeyEvent k) {
+		// Control closing communities
+		if (k.getAction() == KeyEvent.PRESS) {
+			if (k.getKey() == 'c' || k.getKey() == 'C') {
+				enableClosing = true;
+			}
+		} else {
+			if (k.getAction() == KeyEvent.RELEASE) {
+				if (k.getKey() == 'c' || k.getKey() == 'C') {
+					enableClosing = false;
+				}
+			}
+
+		}
 	}
 
 	/**
@@ -313,36 +367,99 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 		}
 	}
-	
-	// ***** Search Methods
+
+	// ***** Search Methods *******
 	/**
-	 * Search a vNode through his id and change the value of his isSought variable
-	 * @param id
+	 * This method must be invoked ONLY by VCommunities that contain other
+	 * VCommunities
 	 */
-	public void searchVnodeIntoCommunity(String id){
-		for (VisualAtom vA : container.getVNodes() ) {
-			VNode vN = (VNode) vA;
-			if(vN.getNode().getId().equals( id )){
-				vA.setSought(true);
+	public void searchNode() {
+		// Is the search tool is not null
+		if (VisibilitySettings.getInstance().getIdBuscador() != null) {
+			// If the search tool is looking for something new
+			if (idSearch != VisibilitySettings.getInstance().getIdBuscador()) {
+				idSearch = VisibilitySettings.getInstance().getIdBuscador();
+				boolean rtn = searchNodeSuperCommunity(idSearch);
+				System.out.println("VCommunity> searchNode: Cadena de busqueda encontro: " + rtn);
 			}
-		}		
+		} else {
+			// if the search tool is cleared
+			if (idSearch != null) {
+				resetNodeFoundSuperCommunity();
+				idSearch = null;
+				System.out.println("VCommunity> searchNode: Cadena de busqueda NULL: ");
+			}
+		}
 	}
-	
+
 	/**
-	 * Search a vCommunity through the id of some node of his community and change the value of his isSought variable
+	 * Search for a Node using the ID parameter
+	 * 
 	 * @param id
+	 * @return true if found
 	 */
-	public void searchVnodeIntoSuperCommunity(String id){
-		for (VisualAtom vA : container.getVNodes() ) {
+	public boolean searchNodeID(String id) {
+		boolean rtn = false;
+		for (Node node : container.getGraph().getVertices()) {
+			if (node.getId().equals(id)) {
+				node.setFound(true);
+				hasSoughtNode(true);
+				nodeFound = node;
+				rtn = true;
+				break;
+			}
+		}
+		return rtn;
+	}
+
+	/**
+	 * Search a vCommunity through the id of some node of his community and
+	 * change the value of his hasFoundNode variable
+	 * 
+	 * @param id
+	 * @return true if found
+	 */
+	public boolean searchNodeSuperCommunity(String id) {
+		boolean rtn = false;
+		for (VisualAtom vA : container.getVNodes()) {
 			// If vA is a VCommunity
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
-				for (Node node : vC.container.getGraph().getVertices()) {
-					if(node.getId().equals( id ) ){
-						vA.setSought(true);
-					}
-				}
+				rtn = vC.searchNodeID(id);
+				nodeFoundInSuperCommunity = vC;
+				if (rtn)
+					break;
 			}
-		}		
+		}
+		return rtn;
+	}
+
+	public boolean containsFoundNode() {
+		return hasFoundNode;
+	}
+
+	public void hasSoughtNode(boolean isSought) {
+		this.hasFoundNode = isSought;
+	}
+
+	/**
+	 * Reset the visual attributes of a Node that contains the node found by the
+	 * search tool
+	 */
+	public void resetNodeFound() {
+		if (nodeFound != null) {
+			nodeFound.setFound(false);
+			hasFoundNode = false;
+		}
+	}
+
+	/**
+	 * Reset the visual attributes of a SubSubCommunity that contains a node
+	 * found by the search tool
+	 */
+	public void resetNodeFoundSuperCommunity() {
+		if (nodeFoundInSuperCommunity != null) {
+			nodeFoundInSuperCommunity.resetNodeFound();
+		}
 	}
 }

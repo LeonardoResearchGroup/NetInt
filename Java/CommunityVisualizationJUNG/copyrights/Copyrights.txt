@@ -1,7 +1,7 @@
 OUR AWESOME GRAPH VISUALIZATION SOFTWARE
 
 Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
-License: Not defined
+License: Not defined Check this link https://opensource.org/licenses/lgpl-2.1.php and https://www.gnu.org/licenses/gpl-faq.html#AllCompatibility
 Authors: Juan Salamanca, Cesar Loaiza & Luis Felipe Rivera
 Acknowledgement: Javier Diaz
 Date: October 3, 2016
@@ -10,37 +10,31 @@ The following libraries are being used in this application
 
 BLUEPRINTS TINKERPOP
 Source: https://github.com/tinkerpop/blueprints
-License: BSD 3 clause. Copyright granted to TinkerPop. TinkerPop license is Apache 2. http://www.apache.org/licenses/LICENSE-2.0
-Authors: http://tinkerpop.apache.org
-Date:
+License: Copyright granted to TinkerPop. TinkerPop license is Apache 2. http://www.apache.org/licenses/LICENSE-2.0
+Authors: http://tinkerpop.apache.org/
 
 JUNG 2.0.1
 Source: http://jung.sourceforge.net/index.html
 License: BDS Berkeley Software Distribution
 Authors: http://jung.sourceforge.net/acknowledge.html
-Date:
 
 PROCESSING 3 CORE
 Source: https://processing.org/
 License: LGPL license
 Authors: https://processing.org/people/
-Date:
 
 JOGL
 Source: http://jogamp.org/jogl/www/
 License: New BSD 2-Clause License http://jogamp.org/git/?p=jogl.git;a=blob;f=LICENSE.txt
-Authors:
-Date:
+Authors: 
 
 CONTROLP5
 Source: http://www.sojamo.de/libraries/controlP5/
-License: LGPL https://github.com/sojamo/controlp5/blob/master/LICENSE.md
-Authors: Andreas Schlegel
-Date:
+License: LGPL 2.1 https://github.com/sojamo/controlp5/blob/master/LICENSE.md
+Authors: Andreas Schlegel 
 
 JCOLORBREWER
 Source: https://github.com/rcsb/colorbrewer
 License: LGPL 2.1 https://github.com/rcsb/colorbrewer/blob/master/LICENSE
 Authors: Andreas Prlic https://github.com/andreasprlic
 Acknowledgments: Cynthia Brewer, Mark Harrower and The Pennsylvania State University http://colorbrewer2.org/
-Date:

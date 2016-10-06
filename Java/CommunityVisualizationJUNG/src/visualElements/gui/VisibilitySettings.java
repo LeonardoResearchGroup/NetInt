@@ -1,6 +1,9 @@
 package visualElements.gui;
 
 public class VisibilitySettings {
+	
+	// BACKGROUND Visibility Settings
+	private int colorBackground = 30;
 
 	// NODE Visibility Settings
 	private String idBuscador;
@@ -11,6 +14,7 @@ public class VisibilitySettings {
 	// EDGE Visibility Settings
 	private float volTransaccion;
 	private float propagacion;
+	private boolean soloPropagacion;
 	private String filtrosVinculo;
 	
 	// RISK & PROFIT Visibility Settings
@@ -58,6 +62,14 @@ public class VisibilitySettings {
 		return idBuscador;
 	}
 
+	public int getColorBackground() {
+		return colorBackground;
+	}
+
+	public boolean getOnlyPropagation() {
+		return soloPropagacion;
+	}
+
 	public void setUmbralGrados(float umbralGrados) {
 		this.umbralOutDegree = umbralGrados;
 	}
@@ -88,6 +100,16 @@ public class VisibilitySettings {
 	
 	public void resetIdBuscador(){
 		idBuscador = null;
+	}
+
+	public void setColorBackground(int colorValue) {
+		colorBackground = colorValue;
+		
+	}
+
+	public void setSoloPropagacion(boolean booleanValue) {
+		soloPropagacion = booleanValue;
+		
 	}
 
 }

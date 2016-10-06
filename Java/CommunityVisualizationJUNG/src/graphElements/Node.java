@@ -15,6 +15,9 @@ public class Node implements Comparable<Node>, Serializable{
 	private String label;
 	private String sector;
 	private HashMap<Integer, NodeMetadata> metadata;
+	private boolean isFound = false; 
+
+	
 
 	public Node() {
 
@@ -99,6 +102,13 @@ public class Node implements Comparable<Node>, Serializable{
 		return metadata.keySet();
 	}
 	
+	public boolean isFound() {
+		return isFound;
+	}
+
+	public void setFound(boolean isFound) {
+		this.isFound = isFound;
+	}
 
 	public void setId(String id) {
 		this.id = id;

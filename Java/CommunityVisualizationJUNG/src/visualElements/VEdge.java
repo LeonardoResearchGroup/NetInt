@@ -19,7 +19,8 @@ public class VEdge {
 	public VEdge(Edge edge) {
 		this.edge = edge;
 		aboveArc = true;
-		thickness = 1; //(int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 1, Mapper.EDGE_WEIGHT));
+		thickness = 1; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
+						// edge.getWeight(), 1, Mapper.EDGE_WEIGHT));
 		if (thickness < 1) {
 			thickness = 1;
 		}
@@ -45,7 +46,8 @@ public class VEdge {
 
 	public void makeBezier() {
 		bezier = new Bezier(aboveArc);
-		int alpha = 100; //(int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
+		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
+							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
 	}
 
@@ -66,12 +68,25 @@ public class VEdge {
 				}
 				// bezier.brighter();
 				// Update source and target
-				bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
-				bezier.setControl((source.pos.x - target.pos.x) / 2);
-				// Edge mode: normal, head, tail or both
-				bezier.drawBezier2D(app, 1f);
-				int alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
-				bezier.drawHeadBezier2D(app, thickness, alpha);
+				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+					bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
+					bezier.setControl((source.pos.x - target.pos.x) / 2);
+					// Edge mode: normal, head, tail or both
+					bezier.drawBezier2D(app, 1f);
+					int alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255,
+							Mapper.EDGE_WEIGHT));
+					bezier.drawHeadBezier2D(app, thickness, alpha);
+				} else {
+					if (source.isPropagated()) {
+						bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
+						bezier.setControl((source.pos.x - target.pos.x) / 2);
+						// Edge mode: normal, head, tail or both
+						bezier.drawBezier2D(app, 1f);
+						int alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255,
+								Mapper.EDGE_WEIGHT));
+						bezier.drawHeadBezier2D(app, thickness, alpha);
+					}
+				}
 			}
 		}
 		// **** Thickness mapping
@@ -79,19 +94,24 @@ public class VEdge {
 			int maxThickness = 6;
 			switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
 			case "Radial":
-				thickness = Mapper.getInstance().convert(Mapper.RADIAL, edge.getWeight(), maxThickness, Mapper.EDGE_WEIGHT);
+				thickness = Mapper.getInstance().convert(Mapper.RADIAL, edge.getWeight(), maxThickness,
+						Mapper.EDGE_WEIGHT);
 				break;
 			case "Lineal":
-				thickness = Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), maxThickness, Mapper.EDGE_WEIGHT);
+				thickness = Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), maxThickness,
+						Mapper.EDGE_WEIGHT);
 				break;
 			case "Logarithmic":
-				thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, edge.getWeight(), maxThickness, Mapper.EDGE_WEIGHT);
+				thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, edge.getWeight(), maxThickness,
+						Mapper.EDGE_WEIGHT);
 				break;
 			case "Sinusoidal":
-				thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, edge.getWeight(), maxThickness, Mapper.EDGE_WEIGHT);
+				thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, edge.getWeight(), maxThickness,
+						Mapper.EDGE_WEIGHT);
 				break;
 			case "Sigmoid":
-				thickness = Mapper.getInstance().convert(Mapper.SIGMOID, edge.getWeight(), maxThickness, Mapper.EDGE_WEIGHT);
+				thickness = Mapper.getInstance().convert(Mapper.SIGMOID, edge.getWeight(), maxThickness,
+						Mapper.EDGE_WEIGHT);
 			}
 		}
 	}

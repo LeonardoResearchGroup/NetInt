@@ -141,8 +141,9 @@ public abstract class Container {
 	 * step
 	 * 
 	 */
-	public void stepIterativeLayout(PVector vCommunityCenter) {
+	public boolean stepIterativeLayout(PVector vCommunityCenter) {
 		// Step iteration as many times as parameterized
+		boolean rtn = false;
 		if (isCurrentLayoutIterative()) {
 			IterativeContext itrContext = (IterativeContext) layout;
 			itrContext.step();
@@ -159,7 +160,9 @@ public abstract class Container {
 					}
 				}
 			}
+			rtn = itrContext.done();
 		}
+		return rtn;
 	}
 
 	/**
@@ -371,7 +374,7 @@ public abstract class Container {
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two communities and loop
 		// over them.
-		Graph filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
+		Graph <Node,Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
 			Node sourceOfComplete = edgeBetweenCommunities.getSource();
@@ -418,19 +421,5 @@ public abstract class Container {
 		}
 		return nodo;
 	}
-	/*
-	 * /** Visual External Edges factory (For rootGraph)
-	 * 
-	 * @return
-	 * 
-	 * public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge>
-	 * completeGraph, String externalCommunity, Container externalContainer ) {
-	 * ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
-	 * vNodesBothCommunities.addAll(this.vNodes);
-	 * vNodesBothCommunities.addAll(externalContainer.getVNodes()); for( Edge e
-	 * : this.getExternalEdges(completeGraph, externalCommunity,
-	 * externalContainer) ){ VEdge vEdge = new VEdge(e);
-	 * vEdge.setSourceAndTarget(vNodesBothCommunities); vEdge.makeBezier();
-	 * vExtEdges.add(vEdge); } }
-	 */
+
 }
