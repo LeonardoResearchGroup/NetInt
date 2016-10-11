@@ -59,7 +59,9 @@ public class Logica {
 
 		int i = 0;
 		Mapper.getInstance().setMinCommunitySize(graph.getVertexCount());
+
 		for (String communityName : communityNames) {
+			System.out.println("Logica > Generating DirectedSparseMultigraph for community:" + communityName + " out of "+ communityNames.size());
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
@@ -93,6 +95,7 @@ public class Logica {
 			int layout) {
 		// Make a temporary graph
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
+		System.out.println("Logica > createCommunityOfvCommunities for community: "+ communityName );
 		for (VNode vN : communities) {
 			VCommunity vC = (VCommunity) vN;
 			// add Nodes
@@ -106,6 +109,7 @@ public class Logica {
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, new Dimension(1900, 1900));
 		subContainer.setName(communityName);
+		System.out.println("Logica > createCommunityOfvCommunities.  SubContainer: "+ communityName + " created");
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
 		// CommunityCover
