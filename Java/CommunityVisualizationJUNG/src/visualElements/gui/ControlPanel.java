@@ -95,7 +95,7 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiBackground(Group group) {
-		cp = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setColorValue(color(30, 30, 30, 255)).moveTo(group);
+		cp = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setColorValue(color(200, 200, 200, 255)).moveTo(group);
 	}
 
 	/**
