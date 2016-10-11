@@ -182,7 +182,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					
 				}
 				canvas.app.stroke(255,20);
-				canvas.app.strokeWeight(10);
+				canvas.app.strokeWeight(1);
 				canvas.app.fill(255,10);
 				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(),-PConstants.PI, PConstants.PI);
 			}
@@ -204,7 +204,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 		// *** DRAWS RIGHT HALF INVOLUTE
 		canvas.app.stroke(getColorRGB());
-		canvas.app.strokeWeight(10);
+		canvas.app.strokeWeight(1);
 		canvas.app.noFill();
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
@@ -298,6 +298,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// canvas.app.rect(0, 0, container.dimension.width,
 		// container.dimension.height);
 		canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
+		canvas.app.text("Edges: " + container.getGraph().getEdgeCount() , pos.x, pos.y + 35);
 	}
 
 	// ***** Setters
