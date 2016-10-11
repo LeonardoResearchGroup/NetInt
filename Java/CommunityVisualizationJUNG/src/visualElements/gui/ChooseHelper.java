@@ -42,7 +42,9 @@ public class ChooseHelper {
 		modalW.open();
 		Object[] data = modalW.getData();
 		if (data != null) {
-			applet.getApp().loadGraph(file, (String) data[0], (String) data[1], (String) data[2], (String) data[3], (Integer) data[2]);
+			System.out.println("0: "+ data[0] +"1: "+ data[1]+"2: "+ data[2]);
+			//applet.getApp().loadGraph(file, (String) data[0], (String) data[1], (String) data[2], (String) data[3], (Integer) data[2]);
+			applet.getApp().loadGraph(file, (String) data[0], (String) data[1], " ", " ", (Integer) data[2]);
 			applet.setActiveGraph(true);
 		}
 	}
