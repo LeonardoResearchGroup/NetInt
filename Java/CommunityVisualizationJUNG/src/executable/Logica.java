@@ -167,9 +167,9 @@ public class Logica {
 		System.out.println("Logica > loadGraph() Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		System.out.println("Logica > loadGraph() Creating edges between communities");
-		//createEdgesBetweenSubcommunities(vSubCommunities);
+		createEdgesBetweenSubcommunities(vSubCommunities);
 		System.out.println("Logica > loadGraph() Running edge factory");
-		//vSubSubCommunity.container.runEdgeFactory();
+		vSubSubCommunity.container.runEdgeFactory();
 
 	}
 
