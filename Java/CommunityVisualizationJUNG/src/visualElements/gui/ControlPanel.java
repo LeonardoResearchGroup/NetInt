@@ -64,7 +64,7 @@ public class ControlPanel extends PApplet {
 				.addItem(g4).addItem(g5);
 
 		// open close sections
-		accordion.open(0, 2, 3);
+		//accordion.open(0, 2, 3);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);

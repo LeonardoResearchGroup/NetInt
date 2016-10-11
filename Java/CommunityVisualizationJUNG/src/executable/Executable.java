@@ -33,10 +33,10 @@ public class Executable extends PApplet {
 		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
 		// "label", "sector", "weight",
 		// Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
+		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
 				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		//app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
+			//	"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// Container.FRUCHTERMAN_REINGOLD);
@@ -92,7 +92,7 @@ public class Executable extends PApplet {
 
 	public void settings() {
 		// size(995, 600, P2D);
-		size(displayWidth - 201, displayHeight - 200, P2D);
+		size(displayWidth - 201, displayHeight - 50, P2D);
 	}
 
 	public static void main(String[] args) {

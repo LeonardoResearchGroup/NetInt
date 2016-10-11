@@ -20,27 +20,27 @@ import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
-import visualElements.gui.VisibilitySettings;
 
 public class Logica {
 
 	// Visual Communities
-	private VCommunity vMainCommunity, vSubSubCommunity;
+	//private VCommunity vMainCommunity;
+	private VCommunity vSubSubCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {
 
 	}
 
-	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
-		// Container of rootGraph
-		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(600, 600));
-		mainCommunity.setName("Root");
-		// Root Community
-		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
-		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
-		return vCommunity;
-	}
+//	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
+//		// Container of rootGraph
+//		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(600, 600));
+//		mainCommunity.setName("Root");
+//		// Root Community
+//		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
+//		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
+//		return vCommunity;
+//	}
 
 	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
 			ArrayList<String> communityNames, int layout) {
@@ -52,7 +52,7 @@ public class Logica {
 		boolean colorBlindSave = false;
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSave);
 		ColorBrewer myBrewer = qualitativePalettes[2];
-		 System.out.println( "Name of this color brewer: " + myBrewer);
+		//System.out.println( "Name of this color brewer: " + myBrewer);
 		// Color[] myGradient =
 		// myBrewer.Spectral.getColorPalette(communityNames.size());
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
@@ -95,7 +95,7 @@ public class Logica {
 			int layout) {
 		// Make a temporary graph
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
-		System.out.println("Logica > createCommunityOfvCommunities for community: "+ communityName );
+		System.out.println("Logica > createCommunityOfvCommunities() for community: "+ communityName );
 		for (VNode vN : communities) {
 			VCommunity vC = (VCommunity) vN;
 			// add Nodes
@@ -108,12 +108,14 @@ public class Logica {
 		}
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, new Dimension(1900, 1900));
+		System.out.println("Logica > createCommunityOfvCommunities().  SubContainer: "+ communityName + " created");
 		subContainer.setName(communityName);
-		System.out.println("Logica > createCommunityOfvCommunities.  SubContainer: "+ communityName + " created");
+		System.out.println("Logica > createCommunityOfvCommunities().  Assigning visual elements to nodes");
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
 		// CommunityCover
 		String nodeID = communityName + "_" + String.valueOf(0);
+		System.out.println("Logica > createCommunityOfvCommunities().  Making VCommunity for: " +communityName);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 		return communityTemp;
 	}
@@ -126,6 +128,7 @@ public class Logica {
 	private void createEdgesBetweenSubcommunities(ArrayList<VCommunity> communities) {
 		Graph<Node, Edge> graphInter;
 		for (int i = 0; i < communities.size(); i++) {
+			System.out.println("Logica > createEdgesBetweenSubcommunities().  Making External Edges for community: " +communities.get(i).getNode().getId());
 			for (int j = i + 1; j < communities.size(); j++) {
 				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
 						communities.get(i).container.getName(), communities.get(j).container.getName());
@@ -161,8 +164,11 @@ public class Logica {
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
+		System.out.println("Logica > loadGraph() Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+		System.out.println("Logica > loadGraph() Creating edges between communities");
 		createEdgesBetweenSubcommunities(vSubCommunities);
+		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
 
 	}

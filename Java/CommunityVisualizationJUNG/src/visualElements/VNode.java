@@ -246,17 +246,17 @@ public class VNode extends VisualAtom {
 
 			// Identification Data
 			canvas.app.text("Name: " + node.getName(), pos.x + 5, pos.y - 5);
-			// canvas.app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);
-			canvas.app.text("Sector: " + node.getSector(), pos.x + 5, pos.y - 15);
+		    canvas.app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);
+			canvas.app.text("Sector: " + node.getSector(), pos.x + 5, pos.y - 25);
 			// Communities data
 			Iterator<Integer> itr = node.getMetadataKeys().iterator();
 			int count = 0;
 			while (itr.hasNext()) {
 				int key = itr.next();
 				int shift = count * 35;
-				canvas.app.text("Com: " + node.getCommunity(key), pos.x + 5, pos.y - 45 - shift);
-				canvas.app.text("in: " + node.getInDegree(key), pos.x + 5, pos.y - 35 - shift);
-				canvas.app.text("out: " + node.getOutDegree(key), pos.x + 5, pos.y - 25 - shift);
+				canvas.app.text("Com: " + node.getCommunity(key), pos.x + 5, pos.y - 55 - shift);
+				canvas.app.text("in: " + node.getInDegree(key), pos.x + 5, pos.y - 45 - shift);
+				canvas.app.text("out: " + node.getOutDegree(key), pos.x + 5, pos.y - 35 - shift);
 				count++;
 			}
 		}
