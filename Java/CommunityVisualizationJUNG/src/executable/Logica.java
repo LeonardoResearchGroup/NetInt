@@ -133,6 +133,13 @@ public class Logica {
 			}
 		}
 	}
+	
+	private void createEdgesBetweenSubcommunities2(ArrayList<Edge> edgesBetweenCommunities) {
+		for(Edge e : edgesBetweenCommunities){
+					vSubSubCommunity.container.getGraph().addEdge(e, e.getSource(), e.getTarget());
+		}
+	
+	}
 
 	public void show(Canvas canvas) {
 		// vMainCommunity.show(canvas);
@@ -153,7 +160,7 @@ public class Logica {
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-		createEdgesBetweenSubcommunities(vSubCommunities);
+		createEdgesBetweenSubcommunities2(rootGraph.reader.getEdgesBetweenCommunuties());
 		vSubSubCommunity.container.runEdgeFactory();
 
 	}

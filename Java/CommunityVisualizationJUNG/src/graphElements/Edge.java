@@ -2,6 +2,8 @@ package graphElements;
 
 import java.io.Serializable;
 
+import visualElements.VEdge;
+
 /**
  * @author jsalam
  *
@@ -92,5 +94,13 @@ public class Edge implements Serializable{
 	public int getID() {
 		return ID;
 	}
+	
+	public boolean equals(Object obj) {
+		Edge edge = (Edge) obj;
+		boolean sourceIsEqual = edge.getSource().equals(this.getSource());
+		boolean targetIsEqual = edge.getTarget().equals(this.getTarget());
+		return sourceIsEqual && targetIsEqual;
+	}
+
 
 }

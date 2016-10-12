@@ -9,10 +9,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
 import utilities.mapping.Mapper;
+import visualElements.VCommunity;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -29,8 +31,17 @@ import graphElements.Edge;
 public class GraphmlReader {
 
 	private Graph graph;
-	ArrayList<String> communities;
+	private ArrayList<Edge> edgesBetweenCommunuties;
+	HashMap<String, Node> communityNodes;
 
+	
+
+	ArrayList<String> communities;
+	
+	public GraphmlReader() {
+		communities = new ArrayList<String>();
+	}
+	
 	public GraphmlReader(String xmlFile) {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
@@ -50,7 +61,6 @@ public class GraphmlReader {
 	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey,
 			String sectorKey, String weightKey, String frequencyKey) {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
-		readFromPajek("./data/graphs/muestra.net");
 		System.out.println("GraphmlReader> Building Nodes and Edges");
 		System.out.println("GraphmlReader> Working on it ...");
 
@@ -188,31 +198,64 @@ public class GraphmlReader {
 		return rtnGraph;
 	}
 	
-	public void readFromPajek(String filename){
+	public DirectedSparseMultigraph<Node, Edge> readFromPajek(String filename){
+		
+		edgesBetweenCommunuties = new ArrayList<Edge>();
+		communityNodes = new HashMap<String, Node>();
+		
+		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		try {
 		    File file = new File(filename);
 		    FileReader fr = new FileReader(file);
 		    Scanner br = new Scanner(fr);
 		    
 		    String token;
-		    Node[] nodes = new Node[30000];
+		    br.next();
+		    token = br.next();
+		    int numberOfNodes = Integer.parseInt(token);
+		    Node[] nodes = new Node[numberOfNodes];
 		    
-
-		    while((token = br.next()) != null) {
-		    	int idS = Integer.parseInt(token);
-		    	if(nodes[idS] == null){
-		    		nodes[idS] = new Node(token);
-		    	}
+	    	
+		    
+		    
+		    for(int i=0; i<numberOfNodes; i++){
+		    	token = br.next();
+		    	int idS = Integer.parseInt(token) - 1;
+		    	Node node = new Node(token);
 		    	
-	            System.out.println(token);
-//	            rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
+		    	node.setCommunity("Root", 0);
+				node.setCommunity(br.next(), 1);
+				addCommunity(node.getCommunity(1));
+				nodes[idS] = node;
+		    }
+		    System.out.println(br.next());
+		    while(br.hasNext()) {
+		    	token = br.next();
+//		    	System.out.println(token);
+		    	int idS  = Integer.parseInt(token) - 1;
+		    	token = br.next();
+		    	int idT = Integer.parseInt(token) - 1;
+	            graphElements.Edge e = new graphElements.Edge(nodes[idS], nodes[idT], true);
+	            rtnGraph.addEdge(e, nodes[idS], nodes[idT], EdgeType.DIRECTED);
+	            //For the metagraph
+	            Edge metaE = new Edge(communityNodes.get(nodes[idS].getCommunity(1)),
+	            		communityNodes.get(nodes[idT].getCommunity(1)), true);
+	            if(!edgesBetweenCommunuties.contains(metaE)){
+	            	edgesBetweenCommunuties.add(metaE);
+	            }
+	            
+	            
 	        }
 
 		    br.close();
+		    System.out.println("Cantidad de Vértices");
+		    System.out.println(rtnGraph.getVertexCount());
+
 
 		} catch (Exception e) {
 		   e.printStackTrace();
 		}
+		return rtnGraph;
 		
 	}
 
@@ -257,11 +300,16 @@ public class GraphmlReader {
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
-		}
+			communityNodes.put(string, new Node(string));
+		} 
 	}
 
 	public Set<String> getKeys() {
 		return graph.getVertices().iterator().next().getPropertyKeys();
+	}
+	
+	public ArrayList<Edge> getEdgesBetweenCommunuties() {
+		return edgesBetweenCommunuties;
 	}
 
 	/**
