@@ -71,17 +71,22 @@ public class VEdge {
 				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
 					bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
 					bezier.setControl((source.pos.x - target.pos.x) / 2);
-					// Edge mode: normal, head, tail or both
-					bezier.drawBezier2D(app, 1f);
 					int alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255,
 							Mapper.EDGE_WEIGHT));
-					bezier.drawHeadBezier2D(app, thickness, alpha);
+					// Edge mode: normal, head, tail or both
+					if (source.isPropagated()) {
+						bezier.drawBezier2D(app, 2f);
+						bezier.drawHeadBezier2D(app, 2, alpha);
+					} else {
+						bezier.drawBezier2D(app, 1f);
+						bezier.drawHeadBezier2D(app, thickness, alpha);
+					}
 				} else {
 					if (source.isPropagated()) {
 						bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
 						bezier.setControl((source.pos.x - target.pos.x) / 2);
 						// Edge mode: normal, head, tail or both
-						bezier.drawBezier2D(app, 1f);
+						bezier.drawBezier2D(app, 2f);
 						int alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 255,
 								Mapper.EDGE_WEIGHT));
 						bezier.drawHeadBezier2D(app, thickness, alpha);

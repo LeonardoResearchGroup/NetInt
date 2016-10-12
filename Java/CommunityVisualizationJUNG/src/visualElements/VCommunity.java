@@ -53,6 +53,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected Node nodeFound;
 	protected VCommunity nodeFoundInSuperCommunity;
 	private String idSearch = null;
+	
+	// visibility settings
+	private int strokeThickness = 10;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
@@ -182,7 +185,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					
 				}
 				canvas.app.stroke(255,20);
-				canvas.app.strokeWeight(1);
+				canvas.app.strokeWeight(strokeThickness);
 				canvas.app.fill(255,10);
 				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(),-PConstants.PI, PConstants.PI);
 			}
@@ -204,7 +207,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 		// *** DRAWS RIGHT HALF INVOLUTE
 		canvas.app.stroke(getColorRGB());
-		canvas.app.strokeWeight(1);
+		canvas.app.strokeWeight(strokeThickness);
 		canvas.app.noFill();
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;

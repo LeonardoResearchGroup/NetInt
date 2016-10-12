@@ -3,7 +3,7 @@ package visualElements.gui;
 public class VisibilitySettings {
 	
 	// BACKGROUND Visibility Settings
-	private int colorBackground = 200;
+	private int colorBackground = 70;
 
 	// NODE Visibility Settings
 	private String idBuscador;

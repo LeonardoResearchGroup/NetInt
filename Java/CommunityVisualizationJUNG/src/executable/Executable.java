@@ -33,10 +33,12 @@ public class Executable extends PApplet {
 		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
 		// "label", "sector", "weight",
 		// Container.FRUCHTERMAN_REINGOLD);
-		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
+		// app.loadGraph(new
+		// File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"),
+		// "comunidad", "name", "void sector",
+		// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
 				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-		//app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
-			//	"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// Container.FRUCHTERMAN_REINGOLD);

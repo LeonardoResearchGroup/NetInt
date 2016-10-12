@@ -9,7 +9,7 @@ public class Bezier {
 	public static final int PROPAGATE = 2;
 	private PVector A, B, cA, cB;
 	private int localAlpha;
-	private Color bodyColor = new Color(75,38,93);
+	private Color bodyColor = new Color(147,111,180);
 	private Color currentColor = bodyColor;
 	private Color headColor = new Color(125,125,25);
 	private Color tailColor = new Color(232, 20, 23);
