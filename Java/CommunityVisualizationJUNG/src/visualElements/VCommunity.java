@@ -165,11 +165,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			canvas.app.fill(darker());
 		}
 		if (hasFoundNode && !communityIsOpen) {
-			// canvas.app.fill(255, 0, 0);
-			// canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter()
-			// + 2);
 			canvas.app.fill(255, 0, 0, 100);
-			canvas.app.arc(pos.x, pos.y, getDiameter()-10, getDiameter()-10,-PConstants.PI, PConstants.PI);
+			canvas.app.arc(pos.x, pos.y, getDiameter() - 10, getDiameter() - 10, -PConstants.PI, PConstants.PI);
 		}
 		// Logics
 		boolean open = false;
@@ -179,12 +176,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					i += increment;
 				} else {
 					open = true;
-					
+
 				}
-				canvas.app.stroke(255,20);
-				canvas.app.strokeWeight(1);
-				canvas.app.fill(255,10);
-				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(),-PConstants.PI, PConstants.PI);
+				canvas.app.stroke(255, 20);
+				canvas.app.strokeWeight(2);
+				canvas.app.fill(255, 10);
+				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), -PConstants.PI, PConstants.PI);
 			}
 		} else {
 			if (i > 0) {
@@ -193,28 +190,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (i == 0) {
 				open = false;
 			}
-			
-			// Highlight the community cover if contains a found node
-//			if (nodeFound != null) {
-//				canvas.app.fill(255, 0, 0, 50);
-//				canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), -PConstants.PI, PConstants.PI);
-//			} else {
-//				canvas.app.noFill();
-//			}
 		}
-		// *** DRAWS RIGHT HALF INVOLUTE
+		// *** DRAWS RIGHT HALF ARC
 		canvas.app.stroke(getColorRGB());
-		canvas.app.strokeWeight(1);
+		canvas.app.strokeWeight(2);
 		canvas.app.noFill();
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc right half
 		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
-		// *** DRAWS LEFT HALF INVOLUTE
+		// *** DRAWS LEFT HALF ARC
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc left half
-		
+
 		canvas.app.arc(pos.x, pos.y, getDiameter(), getDiameter(), PConstants.HALF_PI, angle2);
 		return open;
 	}
@@ -298,7 +287,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// canvas.app.rect(0, 0, container.dimension.width,
 		// container.dimension.height);
 		canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), pos.x, pos.y + 20);
-		canvas.app.text("Edges: " + container.getGraph().getEdgeCount() , pos.x, pos.y + 35);
+		canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), pos.x, pos.y + 35);
 	}
 
 	// ***** Setters
