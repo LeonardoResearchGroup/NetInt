@@ -224,7 +224,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void showCommunity(Canvas canvas, boolean showNodes, boolean showEdges) {
 		if (communityIsOpen) {
-			if (showNodes) {
+			if (showNodes && VisibilitySettings.getInstance().mostrarNodos()) {
 				for (VisualAtom vA : container.getVNodes()) {
 					// If vA is a VCommunity
 					if (vA instanceof VCommunity) {
@@ -260,7 +260,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 				// vNodesCentered = false;
 			}
-			if (showEdges && !canvas.isCanvasInTransformation() && !rightPressed && !canvas.canvasBeingZoomed) {
+			if (showEdges && !canvas.isCanvasInTransformation() && !rightPressed && !canvas.canvasBeingZoomed
+					&& VisibilitySettings.getInstance().mostrarVinculos()) {
 				for (VEdge vE : container.getVEdges()) {
 					vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					vE.show(canvas.app);
