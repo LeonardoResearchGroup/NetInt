@@ -18,6 +18,7 @@ public class ControlPanel extends PApplet {
 	CheckBox cBox;
 	Accordion accordion;
 	PFont font;
+	PImage logo;
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -27,14 +28,17 @@ public class ControlPanel extends PApplet {
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
+	
 	public void setup() {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(180, 45);
 		this.surface.setAlwaysOnTop(true);
+		logo = loadImage("../data/images/Logo_Bancolombia.png");
 		gui();
 		// Font
 		font = createFont("Arial", 11, false);
 		textFont(font);
+
 	}
 
 	/**
@@ -60,7 +64,7 @@ public class ControlPanel extends PApplet {
 		guiEstadisticasDescriptivas(g5);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion = cp5.addAccordion("acc").setPosition(10, 15).setWidth(180).addItem(g1).addItem(g2).addItem(g3)
+		accordion = cp5.addAccordion("acc").setPosition(10, 55).setWidth(180).addItem(g1).addItem(g2).addItem(g3)
 				.addItem(g4).addItem(g5);
 
 		// open close sections
@@ -168,6 +172,10 @@ public class ControlPanel extends PApplet {
 
 	public void draw() {
 		background(70);
+		// logo
+		fill(255);
+		rect(10,2,180,48);
+		image(logo,15,5);
 		// This line updates the controller position. It can be controlled by
 		// the event controller for performance improvement.
 		cp5.getGroup("Archivo").getController("Salir").setPosition(5,
