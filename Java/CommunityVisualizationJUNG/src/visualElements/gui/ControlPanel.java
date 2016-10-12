@@ -64,7 +64,7 @@ public class ControlPanel extends PApplet {
 				.addItem(g4).addItem(g5);
 
 		// open close sections
-		// accordion.open(0, 2, 3);
+		//accordion.open(0, 2, 3);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
@@ -95,8 +95,7 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiBackground(Group group) {
-		cp = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10)
-				.setColorValue(color(30, 30, 30, 255)).moveTo(group);
+		cp = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setColorValue(color(200, 200, 200, 255)).moveTo(group);
 	}
 
 	/**
@@ -117,7 +116,7 @@ public class ControlPanel extends PApplet {
 				ControlP5.CENTER);
 		cp5.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36)
 				.snapToTickMarks(true).moveTo(group);
-		// Diametro Nodo
+		//Diametro Nodo
 		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
 		cp5.addScrollableList("Diametro Nodo").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
@@ -133,14 +132,14 @@ public class ControlPanel extends PApplet {
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
 				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(group);
-		// Propagacion
+		//Propagacion
 		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
 		cp5.getController("Propagacion").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
-				.setPaddingX(35);
-		cp5.addToggle("Solo").setPosition(77, 20).setSize(28, 10).moveTo(group).getCaptionLabel()
-				.align(ControlP5.CENTER, ControlP5.CENTER);
-		// Espesor Vinculo
+		.setPaddingX(35);
+		cp5.addToggle("Solo").setPosition(77, 20).setSize(28, 10).moveTo(group).getCaptionLabel().align(ControlP5.CENTER,
+				ControlP5.CENTER);
+		//Espesor Vinculo
 		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
 		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
