@@ -20,6 +20,7 @@ public class VNode extends VisualAtom {
 	private ArrayList<Integer> propIndex;
 	public int propagationSteps;
 	private String currentMapper;
+	private VNodeDescription description;
 
 	public VNode(Node node, float x, float y) {
 		super(x, y, 0);
@@ -27,6 +28,7 @@ public class VNode extends VisualAtom {
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
+		description = new VNodeDescription(this);
 	}
 
 	public VNode(VNode vNode) {
@@ -35,6 +37,7 @@ public class VNode extends VisualAtom {
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
+		description = new VNodeDescription(this);
 	}
 
 	// *** PROPAGATION
@@ -173,7 +176,7 @@ public class VNode extends VisualAtom {
 				setAlpha(195);
 				canvas.app.fill(getColorRGB());
 				canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-				if (VisibilitySettings.getInstance().isMostrarNombre()) {
+				if (VisibilitySettings.getInstance().mostrarNombre()) {
 					canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 					canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
 				}
@@ -182,7 +185,7 @@ public class VNode extends VisualAtom {
 				// canvas.app.fill(getColorRGB());
 				// VisibilitySettings contains all the visibility settings
 				// defined by the user in the control panel
-				if (VisibilitySettings.getInstance().isMostrarNombre()) {
+				if (VisibilitySettings.getInstance().mostrarNombre()) {
 					if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
 						canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 					}
@@ -216,7 +219,7 @@ public class VNode extends VisualAtom {
 				canvas.app.stroke(225, 0, 0);
 				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
 				// Show comments
-				verbose(canvas);
+				description.show(canvas);
 			} else {
 				canvas.app.noStroke();
 			}
@@ -232,35 +235,6 @@ public class VNode extends VisualAtom {
 			}
 		}
 
-	}
-
-	private void verbose(Canvas canvas) {
-		canvas.app.textAlign(PConstants.LEFT);
-		if (isMouseOver) {
-			canvas.app.noStroke();
-			// canvas.app.fill(setColor(50, 150));
-			canvas.app.fill(new Color(50, 50, 50, 150).getRGB());
-			canvas.app.rect(pos.x - 5, pos.y - 3, 160, -103);
-			// canvas.app.fill(setColor(200, 170));
-			canvas.app.fill(new Color(200, 200, 200, 170).getRGB());
-
-			// Identification Data
-			canvas.app.text("Name: " + node.getName(), pos.x + 5, pos.y - 5);
-		    canvas.app.text("ID: " + node.getId(), pos.x + 5, pos.y - 15);
-			canvas.app.text("Sector: " + node.getSector(), pos.x + 5, pos.y - 25);
-			// Communities data
-			Iterator<Integer> itr = node.getMetadataKeys().iterator();
-			int count = 0;
-			while (itr.hasNext()) {
-				int key = itr.next();
-				int shift = count * 35;
-				canvas.app.text("Com: " + node.getCommunity(key), pos.x + 5, pos.y - 55 - shift);
-				canvas.app.text("in: " + node.getInDegree(key), pos.x + 5, pos.y - 45 - shift);
-				canvas.app.text("out: " + node.getOutDegree(key), pos.x + 5, pos.y - 35 - shift);
-				count++;
-			}
-		}
-		canvas.app.textAlign(PConstants.CENTER, PConstants.TOP);
 	}
 
 	public boolean hasNode(Node node) {

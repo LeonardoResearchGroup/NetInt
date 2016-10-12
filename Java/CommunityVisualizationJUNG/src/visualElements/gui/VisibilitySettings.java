@@ -1,24 +1,39 @@
 package visualElements.gui;
 
+import java.util.HashMap;
+
 public class VisibilitySettings {
-	
+
 	// BACKGROUND Visibility Settings
 	private int colorBackground = 200;
 
 	// NODE Visibility Settings
 	private String idBuscador;
 	private float umbralOutDegree;
+	private boolean mostrarNodos;
 	private boolean mostrarNombre;
 	private String filtrosNodo;
 
 	// EDGE Visibility Settings
+	private boolean mostrarVinculos;
 	private float volTransaccion;
 	private float propagacion;
 	private boolean soloPropagacion;
 	private String filtrosVinculo;
-	
-	// RISK & PROFIT Visibility Settings
-	// *** place here the user selections from 
+
+	// DESCRIPTIVE STATISTICS Visibility Settings
+	private boolean WKActivo;
+	private boolean tamano;
+	private boolean flujoCajaPasivo;
+	private boolean razonCorriente;
+	private boolean tangibilidad;
+	private boolean pasivoActivo;
+	private boolean EBITDAIntereses;
+	private boolean EBITDAVentas;
+	private boolean roa;
+	private boolean roe;
+	private boolean crecimientoVentas;
+	private HashMap<String, Boolean> descriptiveStatistics = new HashMap<String, Boolean>();
 
 	private static VisibilitySettings vSettingsInstance = null;
 
@@ -32,14 +47,22 @@ public class VisibilitySettings {
 	protected VisibilitySettings() {
 	}
 
-	// ******* Getters & Setters *******
+	// ******* GETTERS *******
 
 	public float getUmbralGrados() {
 		return umbralOutDegree;
 	}
 
-	public boolean isMostrarNombre() {
+	public boolean mostrarNombre() {
 		return mostrarNombre;
+	}
+
+	public boolean mostrarNodos() {
+		return mostrarNodos;
+	}
+
+	public boolean mostrarVinculos() {
+		return mostrarVinculos;
 	}
 
 	public String getFiltrosNodo() {
@@ -70,6 +93,55 @@ public class VisibilitySettings {
 		return soloPropagacion;
 	}
 
+	public HashMap<String, Boolean> getDescriptiveStatistics() {
+		return descriptiveStatistics;
+	}
+
+	public boolean WKActivo() {
+		return WKActivo;
+	}
+
+	public boolean tamano() {
+		return tamano;
+	}
+
+	public boolean flujoCajaPasivo() {
+		return flujoCajaPasivo;
+	}
+
+	public boolean razonCorriente() {
+		return razonCorriente;
+	}
+
+	public boolean tangibilidad() {
+		return tangibilidad;
+	}
+
+	public boolean pasivoActivo() {
+		return pasivoActivo;
+	}
+
+	public boolean isEBITDAIntereses() {
+		return EBITDAIntereses;
+	}
+
+	public boolean isEBITDAVentas() {
+		return EBITDAVentas;
+	}
+
+	public boolean isRoa() {
+		return roa;
+	}
+
+	public boolean isRoe() {
+		return roe;
+	}
+
+	public boolean crecimientoVentas() {
+		return crecimientoVentas;
+	}
+
+	// ***** SETTERS ******
 	public void setUmbralGrados(float umbralGrados) {
 		this.umbralOutDegree = umbralGrados;
 	}
@@ -97,19 +169,73 @@ public class VisibilitySettings {
 	public void setIdBuscador(String stringValue) {
 		idBuscador = stringValue;
 	}
-	
-	public void resetIdBuscador(){
+
+	public void resetIdBuscador() {
 		idBuscador = null;
 	}
 
 	public void setColorBackground(int colorValue) {
 		colorBackground = colorValue;
-		
+
 	}
 
 	public void setSoloPropagacion(boolean booleanValue) {
 		soloPropagacion = booleanValue;
-		
+
+	}
+
+	public void setWKActivo(boolean state) {
+		descriptiveStatistics.put("WK/Activo", state);
+	}
+
+	public void setTamano(boolean state) {
+		descriptiveStatistics.put("Tamano", state);
+	}
+
+	public void setFlujoCajaPasivo(boolean state) {
+		descriptiveStatistics.put("Flujo de caja / Pasivo", state);
+	}
+
+	public void setRazonCorriente(boolean state) {
+
+		descriptiveStatistics.put("Razon Corriente", state);
+	}
+
+	public void setTangibilidad(boolean state) {
+		descriptiveStatistics.put("Tangibilidad", state);
+	}
+
+	public void setPasivoActivo(boolean state) {
+		descriptiveStatistics.put("Pasivo / Activo", state);
+	}
+
+	public void setEBITDAIntereses(boolean state) {
+		descriptiveStatistics.put("EBITDA/Intereses", state);
+	}
+
+	public void setEBITDAVentas(boolean state) {
+		descriptiveStatistics.put("EBITDA/Ventas", state);
+	}
+
+	public void setROA(boolean state) {
+		descriptiveStatistics.put("ROA", state);
+	}
+
+	public void setROE(boolean state) {
+		descriptiveStatistics.put("ROE", state);
+	}
+
+	public void setCrecimientoVentas(boolean state) {
+		descriptiveStatistics.put("Crecimiento ventas", state);
+	}
+
+	public void setMostrarNodos(boolean booleanValue) {
+		mostrarNodos = booleanValue;
+
+	}
+
+	public void setMostrarVinculos(boolean booleanValue) {
+		mostrarVinculos = booleanValue;
 	}
 
 }

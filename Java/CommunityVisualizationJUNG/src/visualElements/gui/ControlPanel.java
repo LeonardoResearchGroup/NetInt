@@ -3,7 +3,6 @@ package visualElements.gui;
 import processing.core.*;
 import utilities.mapping.Mapper;
 import controlP5.*;
-import executable.Executable;
 import visualElements.gui.VisibilitySettings;
 
 /**
@@ -15,7 +14,8 @@ public class ControlPanel extends PApplet {
 	int w, h;
 	PApplet parent;
 	ControlP5 cp5;
-	ColorPicker cp;
+	ColorPicker cPicker;
+	CheckBox cBox;
 	Accordion accordion;
 	PFont font;
 
@@ -50,21 +50,21 @@ public class ControlPanel extends PApplet {
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g4 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		Group g5 = cp5.addGroup("Riesgo / Rentabilidad").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
+		Group g5 = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 
 		guiArchivo(g1);
 		guiBackground(g2);
 		guiNodos(g3);
 		guiVinculos(g4);
-		guiRiesgo(g5);
+		guiEstadisticasDescriptivas(g5);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion = cp5.addAccordion("acc").setPosition(10, 15).setWidth(180).addItem(g1).addItem(g2).addItem(g3)
 				.addItem(g4).addItem(g5);
 
 		// open close sections
-		//accordion.open(0, 2, 3);
+		accordion.open(0, 2, 3, 4);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
@@ -95,7 +95,8 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiBackground(Group group) {
-		cp = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setColorValue(color(200, 200, 200, 255)).moveTo(group);
+		cPicker = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10)
+				.setColorValue(color(200, 200, 200, 255)).moveTo(group);
 	}
 
 	/**
@@ -106,8 +107,10 @@ public class ControlPanel extends PApplet {
 	 */
 	private void guiNodos(Group group) {
 		// Control de visibilidad
-		cp5.addButton("Nodo").setPosition(5, 5).setSize(45, 10).moveTo(group);
-		cp5.addButton("Nombre").setPosition(60, 5).setSize(45, 10).moveTo(group);
+		cp5.addToggle("Nodos").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group);
+		cp5.getController("Nodos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		cp5.addToggle("Nombre").setPosition(60, 5).setSize(45, 10).moveTo(group);
+		cp5.getController("Nombre").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Buscador por ID de nodo
 		cp5.addTextfield("Buscar ID Nodo").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group);
 		cp5.getController("Buscar ID Nodo").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
@@ -116,7 +119,7 @@ public class ControlPanel extends PApplet {
 				ControlP5.CENTER);
 		cp5.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36)
 				.snapToTickMarks(true).moveTo(group);
-		//Diametro Nodo
+		// Diametro Nodo
 		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
 		cp5.addScrollableList("Diametro Nodo").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
@@ -129,30 +132,38 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiVinculos(Group group) {
+		// Control de visibilidad
+		cp5.addToggle("Vinculos").setPosition(5, 7).setSize(45, 10).moveTo(group);
+		cp5.getController("Vinculos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
-		cp5.addSlider("Vol. Transaccion").setPosition(5, 7).setSize(100, 10)
+		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
 				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(group);
-		//Propagacion
-		cp5.addSlider("Propagacion").setPosition(5, 20).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
+		// Propagacion
+		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
 		cp5.getController("Propagacion").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
-		.setPaddingX(35);
-		cp5.addToggle("Solo").setPosition(77, 20).setSize(28, 10).moveTo(group).getCaptionLabel().align(ControlP5.CENTER,
-				ControlP5.CENTER);
-		//Espesor Vinculo
+				.setPaddingX(35);
+		cp5.addToggle("Solo").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+		// Espesor Vinculo
 		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
-		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 33).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
 	/**
-	 * GUI component related to Risk and profit Operations
+	 * GUI component related to descriptive statistics of clients
 	 * 
 	 * @param g4
 	 *            The Group of GUI elements
 	 */
-	private void guiRiesgo(Group group) {
-
+	private void guiEstadisticasDescriptivas(Group group) {
+		// Estadisticas descriptivas
+		cBox = cp5.addCheckBox("Estadisticas Descriptivas").setPosition(5, 7).addItem("WK/Activo Total", 1)
+				.addItem("Tamano", 1).addItem("Flujo de Caja/Pasivo Total", 1).addItem("Razon Corriente", 1)
+				.addItem("Tangibilidad", 1).addItem("Pasivo Total / Activo Total", 1).addItem("EBITDA/Intereses", 1)
+				.addItem("EBITDA/Ventas", 1).addItem("ROA", 1).addItem("ROE", 1).addItem("Crecimiento en Ventas", 1)
+				.moveTo(group);
 	}
 
 	public void draw() {
@@ -167,54 +178,119 @@ public class ControlPanel extends PApplet {
 	public void controlEvent(ControlEvent theEvent) {
 		if (theEvent.isGroup()) {
 			// **** BACKGROUND ****
-			if (theEvent.isFrom(cp)) {
-				VisibilitySettings.getInstance().setColorBackground(cp.getColorValue());
+			if (theEvent.isFrom(cPicker)) {
+				switchCaseCPicker();
+			}
+			// **** DESCRIPTIVE STATISTICS ****
+			if (theEvent.isFrom(cBox)) {
+				switchCaseCBox();
 			}
 		} else {
-			System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
-			switch (theEvent.getController().getName()) {
-			case "Importar":
-				ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
-				break;
+			// **** All OTHER CONTROLLERS****
+			switchCaseCP5(theEvent);
+		}
+	}
 
-			// **** NODES ****
-			case "Buscar ID Nodo":
-				VisibilitySettings.getInstance().setIdBuscador(theEvent.getStringValue());
+	private void switchCaseCBox() {
+		System.out.println("Control Panel> SwitchCaseCBox: ");
+		for (int i = 0; i < cBox.getArrayValue().length; i++) {
+			// get its Caption label
+			System.out.println("  " + cBox.getItem(i).getCaptionLabel().getText());
+			switch (cBox.getItem(i).getCaptionLabel().getText()) {
+			case "WK/Activo Total":
+				VisibilitySettings.getInstance().setWKActivo(cBox.getItem(i).getState());
 				break;
-			case "Clear":
-				cp5.get(Textfield.class, "Buscar ID Nodo").clear();
-				VisibilitySettings.getInstance().resetIdBuscador();
+			case "Tamano":
+				VisibilitySettings.getInstance().setTamano(cBox.getItem(i).getState());
 				break;
-			case "Min OutDegree":
-				VisibilitySettings.getInstance().setUmbralGrados(theEvent.getValue());
+			case "Flujo de Caja/Pasivo Total":
+				VisibilitySettings.getInstance().setFlujoCajaPasivo(cBox.getItem(i).getState());
 				break;
-			case "Nombre":
-				Button b = (Button) theEvent.getController();
-				VisibilitySettings.getInstance().setMostrarNombre(b.getBooleanValue());
+			case "Razon Corriente":
+				VisibilitySettings.getInstance().setRazonCorriente(cBox.getItem(i).getState());
 				break;
-			case "Diametro Nodo":
-				VisibilitySettings.getInstance().setFiltrosNodo(theEvent.getController().getLabel());
+			case "Tangibilidad":
+				VisibilitySettings.getInstance().setTangibilidad(cBox.getItem(i).getState());
 				break;
-
-			// **** EDGES ****
-			case "Vol. Transaccion":
-				VisibilitySettings.getInstance().setVolTransaccion(theEvent.getValue());
+			case "Pasivo Total / Activo Total":
+				VisibilitySettings.getInstance().setPasivoActivo(cBox.getItem(i).getState());
 				break;
-			case "Propagacion":
-				VisibilitySettings.getInstance().setPropagacion(theEvent.getValue());
+			case "EBITDA/Intereses":
+				VisibilitySettings.getInstance().setEBITDAIntereses(cBox.getItem(i).getState());
 				break;
-			case "Solo":
-				Toggle solo = (Toggle) theEvent.getController();
-				VisibilitySettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
+			case "EBITDA/Ventas":
+				VisibilitySettings.getInstance().setEBITDAVentas(cBox.getItem(i).getState());
 				break;
-			case "Espesor Vinculo":
-				VisibilitySettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
+			case "ROA":
+				VisibilitySettings.getInstance().setROA(cBox.getItem(i).getState());
 				break;
-
-			default:
-				// Executable.retrieveControlPanelEvent(theEvent);
+			case "ROE":
+				VisibilitySettings.getInstance().setROE(cBox.getItem(i).getState());
+				break;
+			case "Crecimiento en Ventas":
+				VisibilitySettings.getInstance().setCrecimientoVentas(cBox.getItem(i).getState());
 				break;
 			}
+		}
+	}
+
+	private void switchCaseCPicker() {
+		VisibilitySettings.getInstance().setColorBackground(cPicker.getColorValue());
+
+	}
+
+	private void switchCaseCP5(ControlEvent theEvent) {
+		System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
+		switch (theEvent.getController().getName()) {
+		case "Importar":
+			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
+			break;
+
+		// **** NODES ****
+		case "Buscar ID Nodo":
+			VisibilitySettings.getInstance().setIdBuscador(theEvent.getStringValue());
+			break;
+		case "Clear":
+			cp5.get(Textfield.class, "Buscar ID Nodo").clear();
+			VisibilitySettings.getInstance().resetIdBuscador();
+			break;
+		case "Min OutDegree":
+			VisibilitySettings.getInstance().setUmbralGrados(theEvent.getValue());
+			break;
+		case "Nodos":
+			Toggle nodo = (Toggle) theEvent.getController();
+			VisibilitySettings.getInstance().setMostrarNodos(nodo.getBooleanValue());
+			break;
+		case "Nombre":
+			Toggle nombre = (Toggle) theEvent.getController();
+			VisibilitySettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
+			break;
+		case "Diametro Nodo":
+			VisibilitySettings.getInstance().setFiltrosNodo(theEvent.getController().getLabel());
+			break;
+
+		// **** EDGES ****
+		case "Vinculos":
+			Toggle vinculo = (Toggle) theEvent.getController();
+			VisibilitySettings.getInstance().setMostrarVinculos(vinculo.getBooleanValue());
+			break;
+		case "Vol. Transaccion":
+			VisibilitySettings.getInstance().setVolTransaccion(theEvent.getValue());
+			break;
+		case "Propagacion":
+			VisibilitySettings.getInstance().setPropagacion(theEvent.getValue());
+			break;
+		case "Solo":
+			Toggle solo = (Toggle) theEvent.getController();
+			VisibilitySettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
+			break;
+		case "Espesor Vinculo":
+			VisibilitySettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
+			break;
+		default:
+			// Executable.retrieveControlPanelEvent(theEvent);
+			break;
+
 		}
 	}
 }
