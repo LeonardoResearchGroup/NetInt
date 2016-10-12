@@ -1,11 +1,8 @@
 package visualElements;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
-import org.jcolorbrewer.ColorBrewer;
 
 import graphElements.Node;
 import processing.core.*;
