@@ -118,19 +118,20 @@ public class Canvas {
 		// **** Legends
 		app.fill(255, 90);
 		app.textAlign(PConstants.RIGHT);
-		app.text("Canvas mouse: " + canvasMouse, pos.x, pos.y + 10);
-		app.text("Zoom: " + zoom, pos.x, pos.y + 20);
-		app.text("Offset: " + offset, pos.x, pos.y + 30);
-		app.text("startOffset: " + startOffset, pos.x, pos.y + 40);
-		app.text("endOffset: " + endOffset, pos.x, pos.y + 50);
+		app.text("Canvas mouse: " + canvasMouse, pos.x, pos.y + 15);
+		app.text("Zoom: " + zoom, pos.x, pos.y + 25);
+		app.text("Offset: " + offset, pos.x, pos.y + 35);
+		app.text("startOffset: " + startOffset, pos.x, pos.y + 45);
+		app.text("endOffset: " + endOffset, pos.x, pos.y + 55);
 		app.textAlign(PConstants.CENTER);
 	}
 
 	public void showLegend(PVector pos) {
 		app.fill(255, 90);
 		app.textAlign(PConstants.RIGHT);
-		app.text("Hold SHIFT and the left mouse button to zoom and pan", pos.x, pos.y);
-		app.text("Press r to restore zoom and pan to default values", pos.x, pos.y + 10);
+		app.text("Hold SHIFT and right mouse button to pan", pos.x, pos.y);
+		app.text("use 'a' to zoom in, 'z' to zoom  out, and 'c' to close a community", pos.x, pos.y+ 10);
+		app.text("Press r to restore zoom and pan to default values", pos.x, pos.y + 20);
 		app.textAlign(PConstants.CENTER);
 	}
 
