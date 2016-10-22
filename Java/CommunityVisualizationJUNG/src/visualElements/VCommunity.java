@@ -106,9 +106,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		boolean visualizeEdges = false;
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
-		registerEvents(canvas);
+		if (!eventsRegistered) {
+			registerEvents(canvas);
+		}
 		// retrieve mouse coordinates
-		detectMouseOver(canvas.getCanvasMouse());
+		//detectMouseOver(canvas.getCanvasMouse());
 		// *CESAR
 		itOpens = false;
 		// if community not opened
@@ -122,7 +124,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 		// Move vCommunity to mouse position
 		if (rightPressed) {
-			setCommunityCenter(new PVector(canvas.getCanvasMouse().x, canvas.getCanvasMouse().y));
+			setCommunityCenter(new PVector(Canvas.getCanvasMouse().x, Canvas.getCanvasMouse().y));
 		}
 		// Open or close the community
 		communityIsOpen = showCommunityCover(canvas);
@@ -234,6 +236,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					} else {
 						// If vA is a VNode
 						VNode vN = (VNode) vA;
+						canvas.app.strokeWeight(2);
+						canvas.app.fill(200);
+						canvas.app.line(0, 0, Canvas.getCanvasMouse().x, Canvas.getCanvasMouse().y);
+						canvas.app.line(vN.pos.x, vN.pos.y, Canvas.getCanvasMouse().x, Canvas.getCanvasMouse().y);
 						vN.setVisibility(VisibilitySettings.getInstance().getUmbralGrados());
 						/*
 						 * The integer parameter for getOutDegree(int) is the

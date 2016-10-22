@@ -3,7 +3,6 @@ package visualElements;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 import graphElements.Node;
 import processing.core.*;
 import utilities.mapping.Mapper;
@@ -132,9 +131,11 @@ public class VNode extends VisualAtom {
 	public void show(Canvas canvas, boolean communityOpen) {
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
-		registerEvents(canvas);
-		// retrieve mouse coordinates
-		detectMouseOver(canvas.getCanvasMouse());
+		if (!eventsRegistered) {
+			registerEvents(canvas);
+		}
+		
+
 
 		// **** Diameter mapping
 		if (VisibilitySettings.getInstance().getFiltrosNodo() != null

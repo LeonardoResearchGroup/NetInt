@@ -19,7 +19,7 @@ public class Canvas {
 	// The previous offset
 	private PVector endOffset;
 	// A vector for the mouse position
-	private PVector canvasMouse;
+	private static PVector canvasMouse;
 	// A Vector for the canvas center
 	private PVector newCenter;
 	// Transformation control
@@ -106,7 +106,7 @@ public class Canvas {
 	 * 
 	 * @return
 	 */
-	public PVector getCanvasMouse() {
+	public static PVector getCanvasMouse() {
 		return canvasMouse;
 	}
 

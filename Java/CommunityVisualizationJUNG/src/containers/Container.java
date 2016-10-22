@@ -205,8 +205,8 @@ public abstract class Container {
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
 		for (VNode tmp : vNodes) {
-			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
-			tmp.setVNodeSuccessors(getVNodes(nodes));
+			Collection<Node> succesorNodes = graph.getSuccessors(tmp.getNode());
+			tmp.setVNodeSuccessors(getVNodes(succesorNodes));
 		}
 	}
 
