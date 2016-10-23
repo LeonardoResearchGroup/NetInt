@@ -38,7 +38,6 @@ public class ControlPanel extends PApplet {
 		// Font
 		font = createFont("Arial", 11, false);
 		textFont(font);
-
 	}
 
 	/**
@@ -180,7 +179,6 @@ public class ControlPanel extends PApplet {
 		// the event controller for performance improvement.
 		cp5.getGroup("Archivo").getController("Salir").setPosition(5,
 				69 + cp5.getGroup("Archivo").getController("Exportar").getHeight());
-
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -197,6 +195,8 @@ public class ControlPanel extends PApplet {
 			// **** All OTHER CONTROLLERS****
 			switchCaseCP5(theEvent);
 		}
+		// At any event notify VisibilitySettings class
+		VisibilitySettings.getInstance().setEventOnVSettings(true);
 	}
 
 	private void switchCaseCBox() {

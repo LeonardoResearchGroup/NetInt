@@ -1,9 +1,11 @@
 package utilities.mapping;
 
+
 import processing.core.PApplet;
 
+
 /**
- * @author juansalamanca
+ * @author jsalam
  *
  */
 public class Mapper {
@@ -21,10 +23,7 @@ public class Mapper {
 	public static final String LOGARITMIC = "logarithmic";
 	public static final String RADIAL = "radial";
 	public static final String SIGMOID = "sigmoid";
-
 	// MAXs & MINs
-	// private float minWeight;
-	// private float maxWeight;
 	private int minCommunitySize;
 	private int maxCommunitySize;
 	private float minEdgeWeight;
@@ -37,7 +36,6 @@ public class Mapper {
 	private int maxOutDegree;
 	private float minBetweeness;
 	private float maxBetweeness;
-
 	// Other attributes
 	private float alpha = 1;
 	private float beta = 1;
@@ -60,7 +58,7 @@ public class Mapper {
 	 * @param val
 	 *            the number to be mapped
 	 * @param factor
-	 *            the max output value
+	 *            the desired max output value
 	 * @param graphAttribute
 	 * @return the value mapped equals to a number between 0 and 1 X factor
 	 */
@@ -84,9 +82,11 @@ public class Mapper {
 			break;
 		}
 		rtn = rtn * factor;
-		
-		if (rtn == -1) {
-			System.out.println("   *** Error en filtro " + filter + " con valor" + val);
+
+		if (rtn < 0) {
+			System.out.println(this.getClass().getName() + "   *** Error in " + filter + " filter trying to map : " + val
+					+ ", ussing the graph atttribute: " + graphAttribute + ". Value mapped to 0");
+			rtn = 0;
 		}
 		return rtn;
 	}
@@ -129,6 +129,13 @@ public class Mapper {
 			rtn[0] = minBetweeness;
 			rtn[1] = maxBetweeness;
 			break;
+		}
+
+		if (rtn[0] == rtn[1]) {
+			System.out.println(this.getClass().getName() + "> getMaxMin: graphAttribute '" + graphAttribute
+					+ "' not implemented. MinMax set to [0,5]");
+			rtn[0] = 0;
+			rtn[1] = 5;
 		}
 		return rtn;
 	}

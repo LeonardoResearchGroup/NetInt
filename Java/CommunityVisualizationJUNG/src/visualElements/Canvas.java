@@ -22,15 +22,17 @@ public class Canvas {
 	private static PVector canvasMouse;
 	// A Vector for the canvas center
 	private PVector newCenter;
+	// An Event to inform if there was an event on the canvas
+	public static boolean eventOnCanvas;
 	// Transformation control
 	private boolean shiftDown;
-	private boolean canvasBeingTransformed;
-	public boolean canvasBeingZoomed = false;
+	public static boolean canvasBeingTransformed = false;
+	public static boolean canvasBeingZoomed = false;
 
-	public PApplet app;
+	public static PApplet app;
 
 	public Canvas(PApplet app) {
-		this.app = app;
+		Canvas.app = app;
 		zoom = 1;
 		offset = new PVector(0, 0);
 		startOffset = new PVector(0, 0);
@@ -130,7 +132,7 @@ public class Canvas {
 		app.fill(255, 90);
 		app.textAlign(PConstants.RIGHT);
 		app.text("Hold SHIFT and right mouse button to pan", pos.x, pos.y);
-		app.text("use 'a' to zoom in, 'z' to zoom  out, and 'c' to close a community", pos.x, pos.y+ 10);
+		app.text("use 'a' to zoom in, 'z' to zoom  out, and 'c' to close a community", pos.x, pos.y + 10);
 		app.text("Press r to restore zoom and pan to default values", pos.x, pos.y + 20);
 		app.textAlign(PConstants.CENTER);
 	}
@@ -152,7 +154,7 @@ public class Canvas {
 		app.line(-app.width, 0, app.width, 0);
 	}
 
-	public boolean isCanvasInTransformation() {
+	public static boolean isCanvasInTransformation() {
 		return canvasBeingTransformed;
 	}
 
@@ -165,17 +167,22 @@ public class Canvas {
 	public void keyEvent(KeyEvent k) {
 		kPressed(k);
 		kReleased(k);
+		setEventOnCanvas(true);
 	}
 
 	public void mouseEvent(MouseEvent e) {
 		if (e.getAction() == MouseEvent.RELEASE) {
 			mReleased(e);
+			setEventOnCanvas(true);
 		} else if (e.getAction() == MouseEvent.PRESS) {
 			mPressed(e);
+			setEventOnCanvas(true);
 		}
 		if (e.getAction() == MouseEvent.DRAG) {
 			mDragged(e);
+			setEventOnCanvas(true);
 		}
+
 	}
 
 	// *** Event related methods
@@ -224,13 +231,23 @@ public class Canvas {
 				reset();
 			} else if (k.getKeyCode() == 16) {
 				shiftDown = k.isShiftDown();
-				System.out.println("Pressed " + shiftDown);
 			}
 		}
 	}
 
+	private void kReleased(KeyEvent k) {
+		if (k.getKeyCode() == 16 && k.getAction() == KeyEvent.RELEASE) {
+			shiftDown = false;
+			canvasBeingTransformed = false;
+		}
+	}
+
+	public static void setEventOnCanvas(boolean eventOnCanvas) {
+		Canvas.eventOnCanvas = eventOnCanvas;
+	}
+	// *** Complementary classes
 	/**
-	 * It indicates when the canvas will not being zoomed anymore.
+	 * It indicates when the canvas is not being zoomed anymore.
 	 * 
 	 * @author Loaiza Quintana
 	 *
@@ -244,16 +261,9 @@ public class Canvas {
 
 		public void run() {
 			c.canvasBeingZoomed = false;
-			System.out.println("Time's up!");
+			System.out.println("Canvas> RemindTask> Time's up!");
 			// timer.cancel(); //Terminate the timer thread
 		}
 	}
 
-	private void kReleased(KeyEvent k) {
-		if (k.getKeyCode() == 16 && k.getAction() == KeyEvent.RELEASE) {
-			shiftDown = false;
-			System.out.println("Released " + shiftDown);
-			canvasBeingTransformed = false;
-		}
-	}
 }

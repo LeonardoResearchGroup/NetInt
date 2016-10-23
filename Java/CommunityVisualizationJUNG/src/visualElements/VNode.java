@@ -19,21 +19,25 @@ public class VNode extends VisualAtom {
 	private VNodeDescription description;
 
 	public VNode(Node node, float x, float y) {
-		super(x, y, 0);
+		super(x, y);
 		this.node = node;
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
-		description = new VNodeDescription(this);
+		description = new VNodeDescription();
+		// Register mouse, touch or key events triggered on this object in the
+		// context of the canvas
+		registerEvents();
 	}
 
 	public VNode(VNode vNode) {
-		super(vNode.getX(), vNode.getY(), vNode.getDiameter());
+		super(vNode.getX(), vNode.getY());
 		this.node = vNode.getNode();
 		successors = new ArrayList<VNode>();
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
-		description = new VNodeDescription(this);
+		description = new VNodeDescription();
+		registerEvents();
 	}
 
 	// *** PROPAGATION
@@ -119,120 +123,108 @@ public class VNode extends VisualAtom {
 	}
 
 	// *** SHOW METHODS ***
-
-	public void show(Canvas canvas) {
-		canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-	}
-
 	/**
 	 * @param canvas
 	 * @param communityOpen
 	 */
-	public void show(Canvas canvas, boolean communityOpen) {
-		// Register mouse, touch or key events triggered on this object in the
-		// context of the canvas
-		if (!eventsRegistered) {
-			registerEvents(canvas);
-		}
-		
+	public void show() {
+		// If there is an event in the control panel update the diameter 
+		VisibilitySettings.getInstance();
+		if (VisibilitySettings.eventOnVSettings) {
+			// **** Diameter mapping
+			if (VisibilitySettings.getInstance().getFiltrosNodo() != null
+					&& VisibilitySettings.getInstance().getFiltrosNodo() != currentMapper) {
+				switch (VisibilitySettings.getInstance().getFiltrosNodo()) {
+				case "Radial":
+					setDiameter(Mapper.getInstance().convert(Mapper.RADIAL, node.getOutDegree(1), 150,
+							Mapper.COMUNITY_SIZE));
+					break;
+				case "Lineal":
+					setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, node.getOutDegree(1), 150,
+							Mapper.COMUNITY_SIZE));
+					break;
+				case "Logarithmic":
+					setDiameter(Mapper.getInstance().convert(Mapper.LOGARITMIC, node.getOutDegree(1), 150,
+							Mapper.COMUNITY_SIZE));
+					break;
+				case "Sinusoidal":
+					setDiameter(Mapper.getInstance().convert(Mapper.SINUSOIDAL, node.getOutDegree(1), 150,
+							Mapper.COMUNITY_SIZE));
+					break;
+				case "Sigmoid":
+					setDiameter(Mapper.getInstance().convert(Mapper.SIGMOID, node.getOutDegree(1), 150,
+							Mapper.COMUNITY_SIZE));
+					break;
 
-
-		// **** Diameter mapping
-		if (VisibilitySettings.getInstance().getFiltrosNodo() != null
-				&& VisibilitySettings.getInstance().getFiltrosNodo() != currentMapper) {
-			switch (VisibilitySettings.getInstance().getFiltrosNodo()) {
-			case "Radial":
-				setDiameter(
-						Mapper.getInstance().convert(Mapper.RADIAL, node.getOutDegree(1), 150, Mapper.COMUNITY_SIZE));
-				break;
-			case "Lineal":
-				setDiameter(
-						Mapper.getInstance().convert(Mapper.LINEAR, node.getOutDegree(1), 150, Mapper.COMUNITY_SIZE));
-				break;
-			case "Logarithmic":
-				setDiameter(Mapper.getInstance().convert(Mapper.LOGARITMIC, node.getOutDegree(1), 150,
-						Mapper.COMUNITY_SIZE));
-				break;
-			case "Sinusoidal":
-				setDiameter(Mapper.getInstance().convert(Mapper.SINUSOIDAL, node.getOutDegree(1), 150,
-						Mapper.COMUNITY_SIZE));
-				break;
-			case "Sigmoid":
-				setDiameter(
-						Mapper.getInstance().convert(Mapper.SIGMOID, node.getOutDegree(1), 150, Mapper.COMUNITY_SIZE));
-				break;
-
-			}
-			// give a minimal interaction area to every vNode
-			setDiameter(getDiameter() + 5);
-			currentMapper = VisibilitySettings.getInstance().getFiltrosNodo();
-		}
-
-		if (communityOpen) {
-			// if this node is in the propagation chain
-			if (inPropagationChain) {
-				setAlpha(195);
-				canvas.app.fill(getColorRGB());
-				canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-				if (VisibilitySettings.getInstance().mostrarNombre()) {
-					canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-					canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
 				}
-			} else {
-				// regular color
-				// canvas.app.fill(getColorRGB());
-				// VisibilitySettings contains all the visibility settings
-				// defined by the user in the control panel
-				if (VisibilitySettings.getInstance().mostrarNombre()) {
-					if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
-						canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-					}
-				}
-				setAlpha(150);
-			}
-			// Show propagation and source halo permanently
-			if (leftClicked) {
-				propagationSource = true;
-				// Show propagation
-				propagate((int) VisibilitySettings.getInstance().getPropagacion());
-				// propagate(propagationSteps);
-				canvas.app.stroke(225, 0, 0);
-				canvas.app.strokeWeight(1.5f);
-				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
-				canvas.app.fill(255, 0, 0);
-				canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-
-			} else {
-				if (propagationSource) {
-					reclaim();
-					propagationSource = false;
-				}
-			}
-
-			if (isMouseOver) {
-				// canvas.app.fill(setColor(200, 0, 0, 120));
-				// canvas.app.noFill();
-				canvas.app.strokeWeight(1);
-				canvas.app.fill(brighter());
-				canvas.app.stroke(225, 0, 0);
-				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-				// Show comments
-				description.show(canvas);
-			} else {
-				canvas.app.noStroke();
-			}
-
-			if (node.isFound()) {
-				canvas.app.fill(255, 0, 0);
-				canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-			}
-
-			if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
-				canvas.app.fill(getColorRGB());
-				canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+				// give a minimal interaction area to every vNode
+				setDiameter(getDiameter() + 5);
+				currentMapper = VisibilitySettings.getInstance().getFiltrosNodo();
 			}
 		}
 
+		// if this node is in the propagation chain
+		if (inPropagationChain) {
+			setAlpha(195);
+			Canvas.app.fill(getColorRGB());
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			if (VisibilitySettings.getInstance().mostrarNombre()) {
+				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+				Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
+			}
+		} else {
+			// regular color
+			// canvas.app.fill(getColorRGB());
+			// VisibilitySettings contains all the visibility settings
+			// defined by the user in the control panel
+			if (VisibilitySettings.getInstance().mostrarNombre()) {
+				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+					Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+				}
+			}
+			setAlpha(150);
+		}
+		// Show propagation and source halo permanently
+		if (leftClicked) {
+			propagationSource = true;
+			// Show propagation
+			propagate((int) VisibilitySettings.getInstance().getPropagacion());
+			// propagate(propagationSteps);
+			Canvas.app.stroke(225, 0, 0);
+			Canvas.app.strokeWeight(1.5f);
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
+			Canvas.app.fill(255, 0, 0);
+			Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+
+		} else {
+			if (propagationSource) {
+				reclaim();
+				propagationSource = false;
+			}
+		}
+
+		if (isMouseOver) {
+			// canvas.app.fill(setColor(200, 0, 0, 120));
+			// canvas.app.noFill();
+			Canvas.app.strokeWeight(1);
+			Canvas.app.fill(brighter());
+			Canvas.app.stroke(225, 0, 0);
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+			// Show comments
+			description.show(this);
+		} else {
+			Canvas.app.noStroke();
+		}
+
+		if (node.isFound()) {
+			Canvas.app.fill(255, 0, 0);
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+		}
+
+		if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+			Canvas.app.fill(getColorRGB());
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+		}
 	}
 
 	public boolean hasNode(Node node) {

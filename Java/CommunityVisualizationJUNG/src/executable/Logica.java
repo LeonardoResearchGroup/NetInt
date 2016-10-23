@@ -17,7 +17,6 @@ import graphElements.Edge;
 import graphElements.Node;
 import utilities.GraphLoader;
 import utilities.mapping.Mapper;
-import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
 
@@ -32,15 +31,20 @@ public class Logica {
 
 	}
 
-//	private VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
-//		// Container of rootGraph
-//		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(600, 600));
-//		mainCommunity.setName("Root");
-//		// Root Community
-//		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
-//		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
-//		return vCommunity;
-//	}
+	/**
+	 * Creates a single VCommunity of the graph with no subCommunities yet contains all the VNodes
+	 * @param graph
+	 * @return
+	 */
+	public VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
+		// Container of rootGraph
+		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, new Dimension(600, 600));
+		mainCommunity.setName("Root");
+		// Root Community
+		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
+		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
+		return vCommunity;
+	}
 
 	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
 			ArrayList<String> communityNames, int layout) {
@@ -122,7 +126,6 @@ public class Logica {
 
 	/**
 	 * It creates the edges between communities before they are opened.
-	 * 
 	 * @param communities
 	 */
 	private void createEdgesBetweenSubcommunities(ArrayList<VCommunity> communities) {
@@ -145,9 +148,9 @@ public class Logica {
 
 
 
-	public void show(Canvas canvas) {
-		// vMainCommunity.show(canvas);
-		vSubSubCommunity.show(canvas);
+	public void show() {
+		//vMainCommunity.show();
+		vSubSubCommunity.show();
 		vSubSubCommunity.searchNode();
 	}
 

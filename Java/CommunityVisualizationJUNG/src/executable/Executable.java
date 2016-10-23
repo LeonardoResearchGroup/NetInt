@@ -15,12 +15,12 @@ import visualElements.gui.VisibilitySettings;
 import controlP5.ControlEvent;
 
 public class Executable extends PApplet {
-	static Logica app;
-	Canvas canvas;
-	TestPerformance performance;
+	public static Logica app;
+	private Canvas canvas;
+	private TestPerformance performance;
 	// GUIHelper guiHelper;
-	boolean activeGraph;
-	ControlPanel cFrame;
+	private boolean activeGraph;
+	private ControlPanel cFrame;
 
 	public void setup() {
 		textSize(10);
@@ -30,14 +30,24 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "size", "weight",
-		 Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/MuestraLouvainNombresRealesPesos.graphml"), "comunidad", "name", "sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);	
+		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
+		// "label", "size", "weight",
+		// Container.FRUCHTERMAN_REINGOLD);
+		//
+		// app.loadGraph(new
+		// File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"),
+		// "comunidad", "name", "void sector",
+		// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		//
+		// app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"),
+		// "comunidad", "name", "void sector",
+		// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		//
+		 app.loadGraph(new
+		 File("./data/graphs/MuestraLouvainNombresRealesPesos.graphml"),
+		 "comunidad", "name", "sector",
+		 "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		//
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// Container.FRUCHTERMAN_REINGOLD);
@@ -51,6 +61,8 @@ public class Executable extends PApplet {
 		System.out.println(
 				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
 						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
+		this.surface.setLocation(150, 0);
+		this.surface.setTitle("PropaGraph");
 	}
 
 	public void draw() {
@@ -60,7 +72,7 @@ public class Executable extends PApplet {
 			canvas.translateCenter(width / 2, height / 2);
 			canvas.transform();
 			// canvas.originCrossHair();
-			app.show(canvas);
+			app.show();
 			popMatrix();
 			//
 			canvas.showLegend(new PVector(width - 20, 20));
@@ -69,8 +81,12 @@ public class Executable extends PApplet {
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
 			// this.noLoop();
 		}
+		// Signature Message :)
 		textAlign(PConstants.LEFT);
-		text("Built with Processing 3", 20, height - 10);
+		text("Built with Processing 3 | I2T & Leonardo Research Group, U. Icesi", 20, height - 10);
+		// Sets any event on the canvas to false. MUST be at the end of draw()
+		Canvas.setEventOnCanvas(false);
+		VisibilitySettings.getInstance().setEventOnVSettings(false);
 	}
 
 	public Logica getApp() {
@@ -92,7 +108,6 @@ public class Executable extends PApplet {
 	}
 
 	public void settings() {
-		// size(995, 600, P2D);
 		size(displayWidth - 201, displayHeight - 150, P2D);
 	}
 

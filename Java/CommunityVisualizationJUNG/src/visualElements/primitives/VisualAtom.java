@@ -10,8 +10,14 @@ import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
 
+/**
+ * Default values: diameter = 5, color = Color(255, 255, 255, 90), visible =
+ * true;
+ * 
+ * @author jsalam
+ *
+ */
 public abstract class VisualAtom {
-	public Canvas canvas;
 	public PVector mouse;
 	private int wdth, hght;
 	private float diameter;
@@ -25,45 +31,41 @@ public abstract class VisualAtom {
 	// Events
 	protected boolean eventsRegistered;
 
-	public VisualAtom(float x, float y, float diam) {
-		// this.canvas = canvas;
-		this.diameter = diam;
+	public VisualAtom(float x, float y) {
+		setDiameter(5);
 		pos = new PVector(x, y);
 		leftClicked = false;
-		canvas = null;
 		color = new Color(255, 255, 255, 90);
 		visible = true;
 	}
 
 	public VisualAtom(float x, float y, int wdth, int hght) {
-		// this.canvas = canvas;
+		diameter = 5;
 		this.wdth = wdth;
 		this.hght = hght;
 		pos = new PVector(x, y);
 		leftClicked = false;
-		canvas = null;
-		color = new Color(0, 100, 100, 90);
+		color = new Color(255, 255, 255, 90);
 		visible = true;
 	}
 
-	public abstract void show(Canvas canvas);
+	public void show() {
+		Canvas.app.strokeWeight(0);
+		if (detectMouseOver(Canvas.getCanvasMouse())) {
+			Canvas.app.fill(255, 125, 255);
+		} else {
+			Canvas.app.fill(255);
+		}
+		Canvas.app.ellipse(pos.x, pos.y, diameter, diameter);
+	}
 
 	/**
-	 * WARNING: Every instance of this class MUST invoke this method within
-	 * show()
+	 * Register mouse, touch or key events triggered on this object in the
+	 * context of the canvas' PApplet
 	 * 
-	 * @param canvas
 	 */
-	protected boolean registerEvents(Canvas canvas) {
-		if (this.canvas == null) {
-			this.canvas = canvas;
-			eventRegister(this.canvas.app);
-		} else if (!this.canvas.equals(canvas)) {
-			this.canvas = canvas;
-			eventRegister(this.canvas.app);
-			// System.out.println("VAtom> registerCanvas: Atom registered");
-		}
-		return (this.canvas != null);
+	protected void registerEvents() {
+		eventRegister(Canvas.app);
 	}
 
 	/**
@@ -86,7 +88,8 @@ public abstract class VisualAtom {
 		}
 		// if the button is an ellipse
 		else {
-			if (PApplet.dist(mouse.x, mouse.y, pos.x, pos.y) <= diameter / 2) {
+			float dist = PApplet.dist(mouse.x, mouse.y, pos.x, pos.y);
+			if (dist <= diameter / 2) {
 				isMouseOver = true;
 			}
 		}
@@ -104,7 +107,7 @@ public abstract class VisualAtom {
 	}
 
 	public void setDiameter(float d) {
-		diameter = d;
+		this.diameter = d;
 	}
 
 	public float getDiameter() {
@@ -218,9 +221,10 @@ public abstract class VisualAtom {
 	public void mouseEvent(MouseEvent e) {
 		VCommunity tmpCommunity = null;
 		VNode tmpNode = null;
-		if (detectMouseOver(Canvas.getCanvasMouse())) {
-			System.out.println("VAtom. mouseOver: " + " " + e.toString());
-		}
+		detectMouseOver(Canvas.getCanvasMouse());
+		// if (detectMouseOver(Canvas.getCanvasMouse())) {
+		// System.out.println("VAtom. mouseOver: " + " " + e.toString());
+		// }
 		try {
 			tmpCommunity = (VCommunity) this;
 		} catch (java.lang.RuntimeException exCommunity) {
