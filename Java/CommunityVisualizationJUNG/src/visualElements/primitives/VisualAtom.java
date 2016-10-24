@@ -1,6 +1,7 @@
 package visualElements.primitives;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -17,7 +18,7 @@ import visualElements.VNode;
  * @author jsalam
  *
  */
-public abstract class VisualAtom {
+public abstract class VisualAtom implements Serializable{
 	public PVector mouse;
 	private int wdth, hght;
 	private float diameter;

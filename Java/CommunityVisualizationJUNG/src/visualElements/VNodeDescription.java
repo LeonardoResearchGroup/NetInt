@@ -1,6 +1,7 @@
 package visualElements;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import visualElements.Canvas;
@@ -8,7 +9,7 @@ import visualElements.VNode;
 import visualElements.gui.VisibilitySettings;
 import processing.core.PConstants;
 
-public class VNodeDescription {
+public class VNodeDescription implements Serializable {
 	private int width = 160;
 	private int height = -113;
 

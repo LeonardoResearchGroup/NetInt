@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.TreeSet;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -40,11 +39,6 @@ public abstract class Container {
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
-
-	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
-		this.vExtEdges = vExtEdges;
-	}
-
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
@@ -59,6 +53,8 @@ public abstract class Container {
 	protected Color color;
 
 	// *** Constructor
+	public Container(){}
+	
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 
@@ -104,7 +100,7 @@ public abstract class Container {
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
 			// Compute and set the diameter
-			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 30, Mapper.OUT_DEGREE);
+			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 10, Mapper.OUT_DEGREE);
 			if (diameter > tmp.getDiameter()) {
 				tmp.setDiameter(diameter);
 			}
@@ -372,7 +368,6 @@ public abstract class Container {
 	 */
 	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity,
 			Container externalContainer) {
-
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
 		vNodesBothCommunities.addAll(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
@@ -408,6 +403,10 @@ public abstract class Container {
 			}
 		}
 
+	}
+	
+	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
+		this.vExtEdges = vExtEdges;
 	}
 
 	/**

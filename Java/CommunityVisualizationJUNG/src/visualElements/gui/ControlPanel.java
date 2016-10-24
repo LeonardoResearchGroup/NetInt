@@ -2,7 +2,18 @@ package visualElements.gui;
 
 import processing.core.*;
 import utilities.mapping.Mapper;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
 import controlP5.*;
+import executable.Logica;
+import visualElements.VCommunity;
 import visualElements.gui.VisibilitySettings;
 
 /**
@@ -28,7 +39,6 @@ public class ControlPanel extends PApplet {
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
-	
 	public void setup() {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(180, 45);
@@ -173,8 +183,8 @@ public class ControlPanel extends PApplet {
 		background(70);
 		// logo
 		fill(255);
-		rect(10,2,180,48);
-		image(logo,15,5);
+		rect(10, 2, 180, 48);
+		image(logo, 15, 5);
 		// This line updates the controller position. It can be controlled by
 		// the event controller for performance improvement.
 		cp5.getGroup("Archivo").getController("Salir").setPosition(5,
@@ -250,6 +260,42 @@ public class ControlPanel extends PApplet {
 	private void switchCaseCP5(ControlEvent theEvent) {
 		System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
 		switch (theEvent.getController().getName()) {
+		case "Abrir":
+
+			ObjectInputStream reader;
+			try {
+				reader = new ObjectInputStream(new FileInputStream("./saved/test.ptg"));
+				ArrayList<VCommunity> readObject = (ArrayList<VCommunity>) reader.readObject();
+				for(VCommunity vC: readObject){
+					System.out.println(vC.getNode().getId());
+				}
+				reader.close();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			break;
+		case "Guardar":
+			try {
+				ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("./saved/test.ptg"));
+				writer.writeObject(Logica.vSubCommunities);
+				writer.flush();
+				writer.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		case "Importar":
 			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
 			break;

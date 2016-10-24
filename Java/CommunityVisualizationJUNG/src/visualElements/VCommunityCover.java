@@ -1,9 +1,11 @@
 package visualElements;
 
+import java.io.Serializable;
+
 import containers.Container;
 import processing.core.PConstants;
 
-public class VCommunityCover {
+public class VCommunityCover implements Serializable{
 	// The community was clicked to be opened
 	private boolean unlocked;
 	// The community was completely open
@@ -29,8 +31,6 @@ public class VCommunityCover {
 	}
 
 	protected void show(Container container, VNode communityNode, boolean hasFoundNode) {
-		// Labels
-		showCoverLable(communityNode, container);
 		// If community not opened
 		if (!unlocked) {
 			// listen to the mouse and open the community
@@ -91,9 +91,10 @@ public class VCommunityCover {
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc left half
-
 		Canvas.app.arc(communityNode.pos.x, communityNode.pos.y, communityNode.getDiameter(),
 				communityNode.getDiameter(), PConstants.HALF_PI, angle2);
+		// Labels
+		showCoverLable(communityNode, container);
 	}
 
 	/**

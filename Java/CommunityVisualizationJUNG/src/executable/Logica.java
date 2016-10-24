@@ -3,6 +3,10 @@ package executable;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.jcolorbrewer.ColorBrewer;
@@ -25,7 +29,7 @@ public class Logica {
 	// Visual Communities
 	//private VCommunity vMainCommunity;
 	private VCommunity vSubSubCommunity;
-	private ArrayList<VCommunity> vSubCommunities;
+	public static ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {
 
@@ -173,7 +177,7 @@ public class Logica {
 		createEdgesBetweenSubcommunities(vSubCommunities);
 		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
-
+		
 	}
 
 	public void loadGraph(String file, String communityFilter, String nodeName, String sector, String edgeWeight) {

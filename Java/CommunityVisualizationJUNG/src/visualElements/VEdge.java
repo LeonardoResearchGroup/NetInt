@@ -4,10 +4,11 @@ import utilities.mapping.Mapper;
 import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import graphElements.Edge;
 
-public class VEdge {
+public class VEdge implements Serializable{
 	private Edge edge;
 	private boolean aboveArc, visibility;
 	private VNode source, target;

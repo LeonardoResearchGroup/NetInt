@@ -1,5 +1,6 @@
 package visualElements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -9,7 +10,7 @@ import utilities.mapping.Mapper;
 import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 
-public class VNode extends VisualAtom {
+public class VNode extends VisualAtom implements Serializable {
 	private Node node;
 	private boolean propagationSource, inPropagationChain, propagated = false;
 	private ArrayList<VNode> successors;
