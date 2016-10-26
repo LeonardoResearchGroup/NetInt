@@ -142,6 +142,17 @@ public class Logica {
 			}
 		}
 	}
+	
+	/**
+	 * It adds the edgesBetweenCommunities to the jungGraph of vSubSubCommunity
+	 * @param edgesBetweenCommunities
+	 */
+	private void addEdgesBetweenSubcommunities(ArrayList<Edge> edgesBetweenCommunities) {
+		for(Edge e : edgesBetweenCommunities){
+					vSubSubCommunity.container.getGraph().addEdge(e, e.getSource(), e.getTarget());
+		}
+	
+	}
 
 
 
@@ -167,7 +178,7 @@ public class Logica {
 		System.out.println("Logica > loadGraph() Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		System.out.println("Logica > loadGraph() Creating edges between communities");
-		createEdgesBetweenSubcommunities(vSubCommunities);
+		addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
 		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
 

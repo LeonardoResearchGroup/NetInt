@@ -15,11 +15,12 @@ import graphElements.Node;
 public class GraphLoader {
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
-	GraphmlReader reader;
+	public GraphmlReader reader;
 	
 	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector, String edgeWeight) {
-		reader = new GraphmlReader(file);
-		jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
+		reader = new GraphmlReader();
+//		jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
+		jungGraph = reader.readFromPajek(file);
 		System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
 		// TODO Improve degree assigning with JUNG library method
 		setNodesDegrees(jungGraph);
