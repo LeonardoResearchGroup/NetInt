@@ -111,8 +111,7 @@ public class VCommunityCover implements Serializable{
 		Canvas.app.stroke(180);
 		// Canvas.app.rect(0, 0, container.dimension.width,
 		// container.dimension.height);
-		Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.pos.x,
-				communityNode.pos.y + 20);
+		Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.pos.x, communityNode.pos.y + 20);
 		Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), communityNode.pos.x, communityNode.pos.y + 35);
 	}
 

@@ -19,7 +19,7 @@ public class Executable extends PApplet {
 	private Canvas canvas;
 	private TestPerformance performance;
 	// GUIHelper guiHelper;
-	private boolean activeGraph;
+	public static boolean activeGraph;
 	private ControlPanel cFrame;
 
 	public void setup() {
@@ -108,7 +108,7 @@ public class Executable extends PApplet {
 	}
 
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 150, P2D);
+		size(displayWidth - 201, displayHeight - 150);
 	}
 
 	public static void main(String[] args) {

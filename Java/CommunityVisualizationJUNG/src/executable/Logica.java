@@ -28,7 +28,7 @@ public class Logica {
 
 	// Visual Communities
 	//private VCommunity vMainCommunity;
-	private VCommunity vSubSubCommunity;
+	public static VCommunity vSubSubCommunity;
 	public static ArrayList<VCommunity> vSubCommunities;
 
 	public Logica() {

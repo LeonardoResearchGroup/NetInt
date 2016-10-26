@@ -1,17 +1,14 @@
 package visualElements.gui;
 
 import processing.core.*;
+import utilities.SerializeHelper;
+import utilities.SerializeWrapper;
 import utilities.mapping.Mapper;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-
 import controlP5.*;
+import executable.Executable;
 import executable.Logica;
 import visualElements.VCommunity;
 import visualElements.gui.VisibilitySettings;
@@ -30,6 +27,7 @@ public class ControlPanel extends PApplet {
 	Accordion accordion;
 	PFont font;
 	PImage logo;
+	private final String EXTENSION = "ptg";
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -260,42 +258,49 @@ public class ControlPanel extends PApplet {
 	private void switchCaseCP5(ControlEvent theEvent) {
 		System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
 		switch (theEvent.getController().getName()) {
+		
 		case "Abrir":
 
-			ObjectInputStream reader;
-			try {
-				reader = new ObjectInputStream(new FileInputStream("./saved/test.ptg"));
-				ArrayList<VCommunity> readObject = (ArrayList<VCommunity>) reader.readObject();
-				for(VCommunity vC: readObject){
-					System.out.println(vC.getNode().getId());
-				}
-				reader.close();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false,EXTENSION);
 
-			break;
-		case "Guardar":
 			try {
-				ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("./saved/test.ptg"));
-				writer.writeObject(Logica.vSubCommunities);
-				writer.flush();
-				writer.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
+				
+				Executable.activeGraph = false;
+				Logica.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
+				Logica.vSubCommunities = deserializedWrapper.getvSubCommunities();
+				Executable.activeGraph = true;
+				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				
+			} catch (IOException e1) {
+				
+				javax.swing.JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 			}
+			
 			break;
+		
+		case "Guardar":
+			
+			
+				String selectedPath = ChooseHelper.getInstance().showJFileChooser(true,EXTENSION);
+				
+				if(selectedPath != null)
+				{
+					SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities);
+					try {
+						SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
+						javax.swing.JOptionPane.showMessageDialog(null, "Archivo guardado en " + selectedPath + "." + EXTENSION, "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+					} catch (FileNotFoundException e) {
+						
+						javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+					
+					}
+					
+				}			
+			
+			break;
+			
 		case "Importar":
 			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
 			break;
