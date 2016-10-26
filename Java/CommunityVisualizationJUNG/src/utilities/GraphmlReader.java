@@ -198,9 +198,16 @@ public class GraphmlReader {
 		return rtnGraph;
 	}
 	
+	/**
+	 * Build a JungGraph from a pajek file. 
+	 * @param filename
+	 * @return
+	 */
 	public DirectedSparseMultigraph<Node, Edge> readFromPajek(String filename){
 		
+		
 		edgesBetweenCommunuties = new ArrayList<Edge>();
+		// <Name of community, Node object of a community>
 		communityNodes = new HashMap<String, Node>();
 		
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
@@ -248,7 +255,7 @@ public class GraphmlReader {
 	        }
 
 		    br.close();
-		    System.out.println("Cantidad de Vértices");
+		    System.out.println("Cantidad de Vï¿½rtices");
 		    System.out.println(rtnGraph.getVertexCount());
 
 
