@@ -63,6 +63,10 @@ public class GraphmlReader {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		System.out.println("GraphmlReader> Building Nodes and Edges");
 		System.out.println("GraphmlReader> Working on it ...");
+		
+		edgesBetweenCommunuties = new ArrayList<Edge>();
+		// <Name of community, Node object of a community>
+		communityNodes = new HashMap<String, Node>();
 
 		Node[] nodes = new Node[30000];
 
@@ -190,6 +194,12 @@ public class GraphmlReader {
 						+ "!!!!!! Check the key String of the frequency");
 			}
 			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
+			//For the metagraph
+            Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
+            		communityNodes.get(nodes[idTarget].getCommunity(1)), true);
+            if(!edgesBetweenCommunuties.contains(metaE)){
+            	edgesBetweenCommunuties.add(metaE);
+            }
 
 		}
 		// Setting limits in static class (Singleton pattern)

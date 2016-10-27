@@ -163,10 +163,10 @@ public class Logica {
 	}
 
 	public void loadGraph(File file, String communityFilter, String nodeName, String sector, String edgeWeight,
-			int layout) {
+			int layout, int format) {
 		String XML_FILE = file.getAbsolutePath();
 		//// *************CORREGIR SECTOR *****************
-		GraphLoader rootGraph = new GraphLoader(XML_FILE, communityFilter, nodeName, sector, edgeWeight);
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, communityFilter, nodeName, sector, edgeWeight, format);
 
 		// Root visual community
 		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
@@ -178,12 +178,16 @@ public class Logica {
 		System.out.println("Logica > loadGraph() Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		System.out.println("Logica > loadGraph() Creating edges between communities");
-		addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+		//if(format == GraphLoader.PAJEK)	
+			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+		//else if(format == GraphLoader.GRAPHML)
+			//createEdgesBetweenSubcommunities(vSubCommunities);
+			
 		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
 
 	}
-
+/*
 	public void loadGraph(String file, String communityFilter, String nodeName, String sector, String edgeWeight) {
 		String XML_FILE = file;
 		//// *************CORREGIR SECTOR *****************
@@ -203,6 +207,7 @@ public class Logica {
 		vSubSubCommunity.container.runEdgeFactory();
 
 	}
+*/
 
 	public ArrayList<VCommunity> getVisualCommunities() {
 		return vSubCommunities;

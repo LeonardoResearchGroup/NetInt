@@ -5,6 +5,7 @@ import java.io.File;
 
 import executable.Executable;
 import processing.core.PApplet;
+import utilities.GraphLoader;
 
 /**
  * 
@@ -44,7 +45,7 @@ public class ChooseHelper {
 		if (data != null) {
 			System.out.println("0: "+ data[0] +"1: "+ data[1]+"2: "+ data[2]);
 			//applet.getApp().loadGraph(file, (String) data[0], (String) data[1], (String) data[2], (String) data[3], (Integer) data[2]);
-			applet.getApp().loadGraph(file, (String) data[0], (String) data[1], " ", " ", (Integer) data[2]);
+			applet.getApp().loadGraph(file, (String) data[0], (String) data[1], " ", " ", (Integer) data[2], GraphLoader.GRAPHML);
 			applet.setActiveGraph(true);
 		}
 	}

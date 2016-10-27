@@ -16,11 +16,20 @@ public class GraphLoader {
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
 	public GraphmlReader reader;
+	public static final int PAJEK = 1;
+	public static final int GRAPHML = 0;
 	
-	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector, String edgeWeight) {
-		reader = new GraphmlReader();
-//		jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
-		jungGraph = reader.readFromPajek(file);
+	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector, String edgeWeight,
+			int format) {
+		
+		if(format == GraphLoader.PAJEK){
+			reader = new GraphmlReader();
+			jungGraph = reader.readFromPajek(file);
+		}else if(format == GraphLoader.GRAPHML){
+			reader = new GraphmlReader(file);
+			jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
+			
+		}
 		System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
 		// TODO Improve degree assigning with JUNG library method
 		setNodesDegrees(jungGraph);
@@ -155,7 +164,7 @@ public class GraphLoader {
 	}
 
 	public static void main(String[] args) {
-		GraphLoader rootGraph = new GraphLoader("./data/graphs/Risk.graphml", "Continent", "label", "Continent", "weight");
+		GraphLoader rootGraph = new GraphLoader("./data/graphs/Risk.graphml", "Continent", "label", "Continent", "weight", GraphLoader.GRAPHML);
 		DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByInterCommunities(rootGraph.jungGraph, "AF",
 				"EU");
 		System.out.println(graphTemp.getEdgeCount());

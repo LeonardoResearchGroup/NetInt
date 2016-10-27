@@ -4,6 +4,7 @@ import java.io.File;
 
 import containers.Container;
 import processing.core.*;
+import utilities.GraphLoader;
 import utilities.TestPerformance;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
@@ -30,41 +31,28 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-<<<<<<< HEAD
 //		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
 //		 Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector",
-				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
+		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
+				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.net"), "comunidad", "name", "void sector",
+//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.PAJEK);
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// Container.FRUCHTERMAN_REINGOLD);
-=======
-//		app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",Container.CIRCULAR);
-//		app.loadGraph(new File("./data/graphs/muestraLouvainPesos.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.CIRCULAR);
-//		app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/muestraComunidades.net"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-//		app.loadGraph(new File("./data/graphs/grafoCompleto2015_07.net"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.net"), "comunidad", "name", "void sector", "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD);
-		
->>>>>>> refs/remotes/origin/Cesar_new_events
+
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setLocation(0, 0);
-<<<<<<< HEAD
+
 		System.out.println(
 				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
 						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
 		System.out.println(
 				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
 						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
-=======
-		
-		System.out.println("Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1] + " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
-		System.out.println("Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1] + " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
->>>>>>> refs/remotes/origin/Cesar_new_events
+
 	}
 
 	public void draw() {
