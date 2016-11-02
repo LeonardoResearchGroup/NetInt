@@ -1,8 +1,15 @@
 package visualElements.gui;
 
 import processing.core.*;
+import utilities.SerializeHelper;
+import utilities.SerializeWrapper;
 import utilities.mapping.Mapper;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import controlP5.*;
+import executable.Executable;
+import executable.Logica;
 import visualElements.gui.VisibilitySettings;
 
 /**
@@ -19,6 +26,7 @@ public class ControlPanel extends PApplet {
 	Accordion accordion;
 	PFont font;
 	PImage logo;
+	private final String EXTENSION = "ptg";
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -28,7 +36,6 @@ public class ControlPanel extends PApplet {
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
-	
 	public void setup() {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(180, 45);
@@ -38,7 +45,6 @@ public class ControlPanel extends PApplet {
 		// Font
 		font = createFont("Arial", 11, false);
 		textFont(font);
-
 	}
 
 	/**
@@ -174,13 +180,12 @@ public class ControlPanel extends PApplet {
 		background(70);
 		// logo
 		fill(255);
-		rect(10,2,180,48);
-		image(logo,15,5);
+		rect(10, 2, 180, 48);
+		image(logo, 15, 5);
 		// This line updates the controller position. It can be controlled by
 		// the event controller for performance improvement.
 		cp5.getGroup("Archivo").getController("Salir").setPosition(5,
 				69 + cp5.getGroup("Archivo").getController("Exportar").getHeight());
-
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -197,6 +202,8 @@ public class ControlPanel extends PApplet {
 			// **** All OTHER CONTROLLERS****
 			switchCaseCP5(theEvent);
 		}
+		// At any event notify VisibilitySettings class
+		VisibilitySettings.getInstance().setEventOnVSettings(true);
 	}
 
 	private void switchCaseCBox() {
@@ -250,8 +257,82 @@ public class ControlPanel extends PApplet {
 	private void switchCaseCP5(ControlEvent theEvent) {
 		System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
 		switch (theEvent.getController().getName()) {
+		
+		case "Abrir":
+
+			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false,EXTENSION);
+
+			try {
+				
+				Executable.activeCursor = Executable.CURSOR_WAIT;
+				
+				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
+				
+				Executable.activeGraph = false;
+				Logica.vSubCommunities = deserializedWrapper.getvSubCommunities();
+				for(visualElements.VCommunity com:Logica.vSubCommunities)
+				{
+					com.eventRegister(parent);
+				}
+				Logica.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
+				Logica.vSubSubCommunity.eventRegister(parent);
+				Logica.vSubSubCommunity.container.runEdgeFactory();
+				VisibilitySettings.reloadInstance(deserializedWrapper.getvSettings());
+				Executable.activeGraph = true;
+				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				
+			} catch (IOException e1) {
+				
+				javax.swing.JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+			} 
+			finally
+			{
+				Executable.activeCursor = Executable.CURSOR_ARROW;
+			}
+			
+			break;
+		
+		case "Guardar":
+			
+			
+				String selectedPath = ChooseHelper.getInstance().showJFileChooser(true,EXTENSION);
+				
+				if(selectedPath != null)
+				{
+					
+					Executable.activeCursor = Executable.CURSOR_WAIT;
+					
+					SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities, VisibilitySettings.getInstance());
+					
+					try {
+						
+						SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
+						javax.swing.JOptionPane.showMessageDialog(null, "Archivo guardado en " + selectedPath + "." + EXTENSION, "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+					
+					} 
+					
+					catch (FileNotFoundException e) {
+						
+						javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+					
+					}
+					
+					finally
+					
+					{
+						Executable.activeCursor = Executable.CURSOR_ARROW;
+					}
+					
+				}			
+			
+			break;
+			
 		case "Importar":
 			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
+			break;
+			
+		case "Salir":
+			System.exit(0);
 			break;
 
 		// **** NODES ****

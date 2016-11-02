@@ -20,6 +20,10 @@ public class SubContainer extends Container implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	Container sourceContainer;
+	
+	public SubContainer(){
+		super();
+	}
 
 	public SubContainer(Graph<Node, Edge> subGraph, Container sourceContainer, int kindOfLayout, Dimension dimension) {
 		super(subGraph);

@@ -36,12 +36,19 @@ public class VisibilitySettings {
 	private HashMap<String, Boolean> descriptiveStatistics = new HashMap<String, Boolean>();
 
 	private static VisibilitySettings vSettingsInstance = null;
+	
+	// An Event to inform if there was an event on the canvas
+	public static boolean eventOnVSettings = false;
 
 	public static VisibilitySettings getInstance() {
 		if (vSettingsInstance == null) {
 			vSettingsInstance = new VisibilitySettings();
 		}
 		return vSettingsInstance;
+	}
+	
+	public static void reloadInstance(VisibilitySettings instance) {
+		vSettingsInstance = instance;
 	}
 
 	protected VisibilitySettings() {
@@ -236,6 +243,10 @@ public class VisibilitySettings {
 
 	public void setMostrarVinculos(boolean booleanValue) {
 		mostrarVinculos = booleanValue;
+	}
+	
+	public void setEventOnVSettings(boolean eventTriggered){
+		eventOnVSettings = eventTriggered;
 	}
 
 }

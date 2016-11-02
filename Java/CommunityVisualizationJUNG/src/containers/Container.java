@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.TreeSet;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -40,11 +39,6 @@ public abstract class Container {
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
-
-	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
-		this.vExtEdges = vExtEdges;
-	}
-
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
@@ -52,13 +46,15 @@ public abstract class Container {
 	public PVector layoutCenter;
 
 	public AbstractLayout<Node, Edge> layout;
-	protected boolean done = false;
+	protected boolean initializationComplete = false;
 	public int kindOfLayout;
 	public Dimension dimension;
 
 	protected Color color;
 
 	// *** Constructor
+	public Container(){}
+	
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 
@@ -75,7 +71,7 @@ public abstract class Container {
 	 * @param initialize
 	 */
 	public void initialize(boolean initialize) {
-		if (initialize && !done) {
+		if (initialize && !initializationComplete) {
 			System.out.println("Container> Initialize: Distributing nodes in: " + getName());
 			distributeNodesInLayout(kindOfLayout, dimension);
 			if (vNodes.size() == 0) {
@@ -89,7 +85,7 @@ public abstract class Container {
 			} else {
 				setVElementCoordinates();
 			}
-			done = true;
+			initializationComplete = true;
 		}
 	}
 
@@ -103,7 +99,11 @@ public abstract class Container {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
-			tmp.setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 150, Mapper.COMUNITY_SIZE) + 5);
+			// Compute and set the diameter
+			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 10, Mapper.OUT_DEGREE);
+			if (diameter > tmp.getDiameter()) {
+				tmp.setDiameter(diameter);
+			}
 			tmp.absoluteToRelative(layoutCenter);
 			tmp.setColor(color);
 			vNodes.add(tmp);
@@ -141,11 +141,12 @@ public abstract class Container {
 	 * step
 	 * 
 	 */
-	public boolean stepIterativeLayout(PVector vCommunityCenter) {
+	public IterativeContext stepIterativeLayout(PVector vCommunityCenter) {
 		// Step iteration as many times as parameterized
-		boolean rtn = false;
-		if (isCurrentLayoutIterative()) {
-			IterativeContext itrContext = (IterativeContext) layout;
+		IterativeContext itrContext = (IterativeContext) layout;
+		// If node distribution not completed
+		if (!itrContext.done()) {
+			// Run one step
 			itrContext.step();
 			// get nodes in layout positions
 			for (Node n : layout.getGraph().getVertices()) {
@@ -160,9 +161,8 @@ public abstract class Container {
 					}
 				}
 			}
-			rtn = itrContext.done();
 		}
-		return rtn;
+		return itrContext;
 	}
 
 	/**
@@ -205,8 +205,8 @@ public abstract class Container {
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
 		for (VNode tmp : vNodes) {
-			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
-			tmp.setVNodeSuccessors(getVNodes(nodes));
+			Collection<Node> succesorNodes = graph.getSuccessors(tmp.getNode());
+			tmp.setVNodeSuccessors(getVNodes(succesorNodes));
 		}
 	}
 
@@ -368,13 +368,13 @@ public abstract class Container {
 	 */
 	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity,
 			Container externalContainer) {
-
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
 		vNodesBothCommunities.addAll(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two communities and loop
 		// over them.
-		Graph <Node,Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(), externalCommunity);
+		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),
+				externalCommunity);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
 			Node sourceOfComplete = edgeBetweenCommunities.getSource();
@@ -390,7 +390,7 @@ public abstract class Container {
 				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
 				newTarget = getEqualNode(this.graph, targetOfComplete);
 			}
-//			VEdge vEdge = new VEdge(new Edge(newSource, newTarget, true));
+			// VEdge vEdge = new VEdge(new Edge(newSource, newTarget, true));
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
 			vEdge.makeBezier();
@@ -403,6 +403,10 @@ public abstract class Container {
 			}
 		}
 
+	}
+	
+	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
+		this.vExtEdges = vExtEdges;
 	}
 
 	/**

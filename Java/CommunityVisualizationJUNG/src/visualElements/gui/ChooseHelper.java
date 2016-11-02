@@ -2,7 +2,6 @@ package visualElements.gui;
 
 import java.awt.Dimension;
 import java.io.File;
-
 import executable.Executable;
 import processing.core.PApplet;
 import utilities.GraphLoader;
@@ -36,6 +35,35 @@ public class ChooseHelper {
 		if (!save) {
 			applet.selectInput("Select a file to process:", "selectImport");
 		}
+	}
+	
+	public String showJFileChooser(boolean save, String extension)
+	{
+		
+		String path = null;
+		javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+		chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
+		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(extension, extension);
+		chooser.setFileFilter(filter);
+		
+		int action;
+		
+		if(save)
+		{
+			action = chooser.showSaveDialog(null);
+		}
+		else
+		{
+			action = chooser.showOpenDialog(null);
+		}
+		
+		if(action == javax.swing.JFileChooser.APPROVE_OPTION)
+		{
+			path = chooser.getSelectedFile().getAbsolutePath();
+		
+		}
+		
+		return path;
 	}
 
 	public void processImport(File file, Executable applet) {
