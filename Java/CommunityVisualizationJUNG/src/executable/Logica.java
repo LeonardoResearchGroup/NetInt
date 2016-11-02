@@ -179,9 +179,9 @@ public class Logica {
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		System.out.println("Logica > loadGraph() Creating edges between communities");
 		//if(format == GraphLoader.PAJEK)	
-			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+		addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
 		//else if(format == GraphLoader.GRAPHML)
-			//createEdgesBetweenSubcommunities(vSubCommunities);
+		//createEdgesBetweenSubcommunities(vSubCommunities);
 			
 		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
