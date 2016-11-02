@@ -21,6 +21,11 @@ public class Executable extends PApplet {
 	// GUIHelper guiHelper;
 	public static boolean activeGraph;
 	private ControlPanel cFrame;
+	
+	public static final int CURSOR_ARROW = ARROW;
+	public static final int CURSOR_WAIT = WAIT;
+	public static int activeCursor = CURSOR_ARROW;
+	
 
 	public void setup() {
 		textSize(10);
@@ -66,6 +71,10 @@ public class Executable extends PApplet {
 	}
 
 	public void draw() {
+		
+		//Set the current cursor.
+		cursor(activeCursor);
+		
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();

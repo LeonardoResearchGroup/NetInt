@@ -10,7 +10,6 @@ import java.io.IOException;
 import controlP5.*;
 import executable.Executable;
 import executable.Logica;
-import visualElements.VCommunity;
 import visualElements.gui.VisibilitySettings;
 
 /**
@@ -265,17 +264,30 @@ public class ControlPanel extends PApplet {
 
 			try {
 				
+				Executable.activeCursor = Executable.CURSOR_WAIT;
+				
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
 				
 				Executable.activeGraph = false;
-				Logica.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
 				Logica.vSubCommunities = deserializedWrapper.getvSubCommunities();
+				for(visualElements.VCommunity com:Logica.vSubCommunities)
+				{
+					com.eventRegister(parent);
+				}
+				Logica.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
+				Logica.vSubSubCommunity.eventRegister(parent);
+				Logica.vSubSubCommunity.container.runEdgeFactory();
+				VisibilitySettings.reloadInstance(deserializedWrapper.getvSettings());
 				Executable.activeGraph = true;
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				
 			} catch (IOException e1) {
 				
 				javax.swing.JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+			} 
+			finally
+			{
+				Executable.activeCursor = Executable.CURSOR_ARROW;
 			}
 			
 			break;
@@ -287,14 +299,28 @@ public class ControlPanel extends PApplet {
 				
 				if(selectedPath != null)
 				{
-					SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities);
+					
+					Executable.activeCursor = Executable.CURSOR_WAIT;
+					
+					SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities, VisibilitySettings.getInstance());
+					
 					try {
+						
 						SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
 						javax.swing.JOptionPane.showMessageDialog(null, "Archivo guardado en " + selectedPath + "." + EXTENSION, "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-					} catch (FileNotFoundException e) {
+					
+					} 
+					
+					catch (FileNotFoundException e) {
 						
 						javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 					
+					}
+					
+					finally
+					
+					{
+						Executable.activeCursor = Executable.CURSOR_ARROW;
 					}
 					
 				}			
@@ -303,6 +329,10 @@ public class ControlPanel extends PApplet {
 			
 		case "Importar":
 			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
+			break;
+			
+		case "Salir":
+			System.exit(0);
 			break;
 
 		// **** NODES ****

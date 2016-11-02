@@ -129,6 +129,7 @@ public class VNode extends VisualAtom implements Serializable {
 	 * @param communityOpen
 	 */
 	public void show() {
+//		System.out.println(">OpenSave> Node: " + node.getName() + " X: " + pos.x + " Y: " + pos.y);
 		// If there is an event in the control panel update the diameter 
 		VisibilitySettings.getInstance();
 		if (VisibilitySettings.eventOnVSettings) {

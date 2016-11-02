@@ -46,6 +46,10 @@ public class VisibilitySettings {
 		}
 		return vSettingsInstance;
 	}
+	
+	public static void reloadInstance(VisibilitySettings instance) {
+		vSettingsInstance = instance;
+	}
 
 	protected VisibilitySettings() {
 	}
