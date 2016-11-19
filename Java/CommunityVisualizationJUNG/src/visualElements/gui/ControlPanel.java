@@ -263,8 +263,8 @@ public class ControlPanel extends PApplet {
 			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false,EXTENSION);
 
 			try {
-				
-				Executable.activeCursor = Executable.CURSOR_WAIT;
+			parent.cursor(WAIT);
+				//Executable.activeCursor = Executable.CURSOR_WAIT;
 				
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
 				
@@ -287,7 +287,8 @@ public class ControlPanel extends PApplet {
 			} 
 			finally
 			{
-				Executable.activeCursor = Executable.CURSOR_ARROW;
+				parent.cursor(ARROW);
+			//	Executable.activeCursor = Executable.CURSOR_ARROW;
 			}
 			
 			break;
@@ -300,7 +301,8 @@ public class ControlPanel extends PApplet {
 				if(selectedPath != null)
 				{
 					
-					Executable.activeCursor = Executable.CURSOR_WAIT;
+					//Executable.activeCursor = Executable.CURSOR_WAIT;
+					parent.cursor(WAIT);
 					
 					SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities, VisibilitySettings.getInstance());
 					
@@ -320,7 +322,8 @@ public class ControlPanel extends PApplet {
 					finally
 					
 					{
-						Executable.activeCursor = Executable.CURSOR_ARROW;
+						//Executable.activeCursor = Executable.CURSOR_ARROW;
+						parent.cursor(ARROW);
 					}
 					
 				}			

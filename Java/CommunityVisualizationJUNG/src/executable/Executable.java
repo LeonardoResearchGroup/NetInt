@@ -19,19 +19,11 @@ public class Executable extends PApplet {
 	public static Logica app;
 	private Canvas canvas;
 	private TestPerformance performance;
-	// GUIHelper guiHelper;
 	public static boolean activeGraph;
-	private ControlPanel cFrame;
-	
-	public static final int CURSOR_ARROW = ARROW;
-	public static final int CURSOR_WAIT = WAIT;
-	public static int activeCursor = CURSOR_ARROW;
-	
+	private ControlPanel cFrame;	
 
 	public void setup() {
 		textSize(10);
-		// guiHelper = new GUIHelper(this);
-		// guiHelper.loadGUI();
 		smooth();
 		canvas = new Canvas(this);
 		app = new Logica();
@@ -58,33 +50,27 @@ public class Executable extends PApplet {
 				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
 						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
 
-//		this.surface.setLocation(150, 0);
-//		this.surface.setTitle("PropaGraph");
+		this.surface.setLocation(150, 0);
+		this.surface.setTitle("Visualizador de transacciones Bancolombia");
 	}
 
 	public void draw() {
-		
-		//Set the current cursor.
-		cursor(activeCursor);
 		
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
 			canvas.translateCenter(width / 2, height / 2);
 			canvas.transform();
-			// canvas.originCrossHair();
 			app.show();
 			popMatrix();
-			//
 			canvas.showLegend(new PVector(width - 20, 20));
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
-			// this.noLoop();
 		}
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
-		text("Built with Processing 3 | I2T & Leonardo Research Group, U. Icesi", 20, height - 10);
+		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2016", 20, height - 10);
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		VisibilitySettings.getInstance().setEventOnVSettings(false);
