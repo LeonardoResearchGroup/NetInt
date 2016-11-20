@@ -20,13 +20,13 @@ public class Executable extends PApplet {
 	private Canvas canvas;
 	private TestPerformance performance;
 	public static boolean activeGraph;
-	private ControlPanel cFrame;	
+	private ControlPanel cFrame;
 
 	public void setup() {
 		textSize(10);
 		smooth();
 		canvas = new Canvas(this);
-		app = new Logica();
+		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
 		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
 		 Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
@@ -37,7 +37,6 @@ public class Executable extends PApplet {
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// Container.FRUCHTERMAN_REINGOLD);
-
 		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
@@ -59,8 +58,9 @@ public class Executable extends PApplet {
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
-			canvas.translateCenter(width / 2, height / 2);
+			canvas.translateCenter((width - app.rootDimension.width)/2, (height - app.rootDimension.height)/2);
 			canvas.transform();
+			canvas.originCrossHair();
 			app.show();
 			popMatrix();
 			canvas.showLegend(new PVector(width - 20, 20));
@@ -85,7 +85,7 @@ public class Executable extends PApplet {
 	}
 
 	public void setActiveGraph(boolean activeGraph) {
-		this.activeGraph = activeGraph;
+		Executable.activeGraph = activeGraph;
 	}
 
 	public void selectImport(File selection) {

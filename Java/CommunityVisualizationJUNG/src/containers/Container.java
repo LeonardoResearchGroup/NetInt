@@ -17,6 +17,7 @@ import graphElements.Node;
 import processing.core.PVector;
 import utilities.GraphLoader;
 import utilities.mapping.Mapper;
+import visualElements.Canvas;
 import visualElements.VEdge;
 import visualElements.VNode;
 
@@ -275,7 +276,6 @@ public abstract class Container {
 		frLayout.setAttractionMultiplier(0.5);
 		frLayout.setRepulsionMultiplier(0.5);
 		frLayout.setMaxIterations(100);
-
 		return frLayout;
 	}
 
@@ -426,4 +426,18 @@ public abstract class Container {
 		return nodo;
 	}
 
+	/**
+	 * Draws the rectangular boundaries of the container starting from the origin. Draws a cross hair at the center of the Dimension rectangle 
+	 * @param origin
+	 */
+	public void showBoundaries(PVector origin){
+		PVector originShifted = new PVector (origin.x - (dimension.width/2), origin.y - (dimension.height/2));
+		Canvas.app.stroke(255,0,0);
+		Canvas.app.strokeWeight(2);
+		Canvas.app.noFill();
+		Canvas.app.rect(originShifted.x ,originShifted.y , dimension.width, dimension.height);
+		Canvas.app.stroke(0,255,0);
+		Canvas.app.line(originShifted.x + (dimension.width/2), originShifted.y, originShifted.x + (dimension.width/2), originShifted.y + dimension.height);
+		Canvas.app.line(originShifted.x, originShifted.y + (dimension.height/2), originShifted.x + + (dimension.width) , originShifted.y + + (dimension.height/2));
+	}
 }
