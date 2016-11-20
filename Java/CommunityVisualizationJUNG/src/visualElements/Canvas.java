@@ -1,7 +1,6 @@
 package visualElements;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import processing.core.*;
 import processing.event.KeyEvent;
@@ -57,7 +56,6 @@ public class Canvas {
 		canvasMouse.sub(offset);
 
 		// **** Transformation of canvas
-		// System.out.println(this);
 		app.translate(newCenter.x, newCenter.y);
 		// Use scale for 2D "zoom"
 		app.scale(zoom);
@@ -158,7 +156,7 @@ public class Canvas {
 		return canvasBeingTransformed;
 	}
 
-	// *** P3
+	// *** Events registration P3
 	public void myRegister() {
 		app.registerMethod("mouseEvent", this);
 		app.registerMethod("keyEvent", this);
@@ -213,18 +211,19 @@ public class Canvas {
 
 		// Control of zoom with keyboard
 		if (k.getAction() == KeyEvent.PRESS) {
+			int n = 1;
 			if (k.getKey() == 'a') {
-				// canvas will being zoomed for 4 minutes
+				// canvas will being zoomed for n minutes
 				if (!canvasBeingZoomed) {
 					canvasBeingZoomed = true;
-					timer.schedule(new RemindTask(this), 4 * 1000);
+					timer.schedule(new RemindTask(), n * 1000);
 				}
 				in(0.1f);
 			} else if (k.getKey() == 'z') {
-				// canvas will being zoomed for 4 minutes
+				// canvas will being zoomed for n minutes
 				if (!canvasBeingZoomed) {
 					canvasBeingZoomed = true;
-					timer.schedule(new RemindTask(this), 4 * 1000);
+					timer.schedule(new RemindTask(), n * 1000);
 				}
 				out(0.1f);
 			} else if (k.getKey() == 'r') {
@@ -245,25 +244,6 @@ public class Canvas {
 	public static void setEventOnCanvas(boolean eventOnCanvas) {
 		Canvas.eventOnCanvas = eventOnCanvas;
 	}
-	// *** Complementary classes
-	/**
-	 * It indicates when the canvas is not being zoomed anymore.
-	 * 
-	 * @author Loaiza Quintana
-	 *
-	 */
-	class RemindTask extends TimerTask {
-		private Canvas c;
-
-		public RemindTask(Canvas c) {
-			this.c = c;
-		}
-
-		public void run() {
-			c.canvasBeingZoomed = false;
-			System.out.println("Canvas> RemindTask> Time's up!");
-			// timer.cancel(); //Terminate the timer thread
-		}
-	}
-
+	
+	// *** Complementary classes	
 }
