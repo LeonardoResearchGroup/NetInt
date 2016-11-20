@@ -95,7 +95,6 @@ public class Executable extends PApplet {
 	}
 
 	public void settings() {
-		// size(995, 600, P2D);
 		size(displayWidth - 201, displayHeight - 150, P2D);
 	}
 
