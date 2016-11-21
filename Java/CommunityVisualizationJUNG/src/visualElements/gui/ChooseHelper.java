@@ -2,6 +2,10 @@ package visualElements.gui;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import controlP5.ControlP5;
 import executable.Executable;
 import processing.core.PApplet;
 import utilities.GraphLoader;
@@ -27,6 +31,7 @@ public class ChooseHelper {
 
 	/**
 	 * Shows the Open File window of the OS
+	 * 
 	 * @param save
 	 * @param extension
 	 * @param applet
@@ -36,45 +41,53 @@ public class ChooseHelper {
 			applet.selectInput("Select a file to process:", "selectImport");
 		}
 	}
-	
-	public String showJFileChooser(boolean save, String extension)
-	{
-		
+
+	public String showJFileChooser(boolean save, String extension) {
 		String path = null;
 		javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
 		chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
-		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(extension, extension);
+		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(
+				extension, extension);
 		chooser.setFileFilter(filter);
-		
+
 		int action;
-		
-		if(save)
-		{
+
+		if (save) {
 			action = chooser.showSaveDialog(null);
-		}
-		else
-		{
+		} else {
 			action = chooser.showOpenDialog(null);
 		}
-		
-		if(action == javax.swing.JFileChooser.APPROVE_OPTION)
-		{
+
+		if (action == javax.swing.JFileChooser.APPROVE_OPTION) {
 			path = chooser.getSelectedFile().getAbsolutePath();
-		
 		}
-		
 		return path;
 	}
 
 	public void processImport(File file, Executable applet) {
-		ModalWindow modalW = new ModalWindow("Loading graph", new Dimension(188, 190), applet);
-		modalW.open();
-		Object[] data = modalW.getData();
-		if (data != null) {
-			System.out.println("0: "+ data[0] +"1: "+ data[1]+"2: "+ data[2]);
-			//applet.getApp().loadGraph(file, (String) data[0], (String) data[1], (String) data[2], (String) data[3], (Integer) data[2]);
-			applet.getApp().loadGraph(file, (String) data[0], (String) data[1], " ", " ", (Integer) data[2], GraphLoader.GRAPHML);
-			applet.setActiveGraph(true);
-		}
+		// ModalWindow modalW = new ModalWindow("Loading graph", new
+		// Dimension(188, 190), applet);
+		// modalW.open();
+		// Object[] data = modalW.getData();
+		// if (data != null) {
+		// System.out.println("0: "+ data[0] +"1: "+ data[1]+"2: "+ data[2]);
+		// //applet.getApp().loadGraph(file, (String) data[0], (String) data[1],
+		// (String) data[2], (String) data[3], (Integer) data[2]);
+		// applet.getApp().loadGraph(file, (String) data[0], (String) data[1], "
+		// ", " ", (Integer) data[2], GraphLoader.GRAPHML);
+		// applet.setActiveGraph(true);
+		// }
+
+		ControlP5 loadingMenu = new ControlP5(applet);
+		List<String> l = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h");
+		loadingMenu.addScrollableList("Community").setPosition(100, 100).setSize(200, 100).setBarHeight(20)
+				.setItemHeight(20).addItems(l);
+		loadingMenu.addScrollableList("SubCommunity").setPosition(310, 100).setSize(200, 100).setBarHeight(20)
+				.setItemHeight(20).addItems(l);
+		loadingMenu.addScrollableList("Label").setPosition(520, 100).setSize(200, 100).setBarHeight(20)
+				.setItemHeight(20).addItems(l);
+		loadingMenu.addScrollableList("Weight").setPosition(730, 100).setSize(200, 100).setBarHeight(20)
+				.setItemHeight(20).addItems(l);
+
 	}
 }

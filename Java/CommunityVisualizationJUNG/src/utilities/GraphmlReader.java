@@ -14,7 +14,6 @@ import java.util.Scanner;
 import java.util.Set;
 
 import utilities.mapping.Mapper;
-import visualElements.VCommunity;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -32,25 +31,38 @@ public class GraphmlReader {
 
 	private Graph graph;
 	private ArrayList<Edge> edgesBetweenCommunuties;
-	HashMap<String, Node> communityNodes;
+	private HashMap<String, Node> communityNodes;
+	private ArrayList<String> communities;
+	private ArrayList<String> graphKeys;
 
-	
-
-	ArrayList<String> communities;
-	
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
+		graphKeys = new ArrayList<String>();
 	}
-	
-	public GraphmlReader(String xmlFile) {
+
+	public GraphmlReader(String file) {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
 		communities = new ArrayList<String>();
+		graphKeys = new ArrayList<String>();
 
 		InputStream input;
+
 		try {
-			input = new BufferedInputStream(new FileInputStream(xmlFile));
+			input = new BufferedInputStream(new FileInputStream(file));
 			reader.inputGraph(input);
+			// *** Read keys
+			String currentLine;
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			System.out.println(this.toString().getClass() + "Reading graphml Keys... ");
+			while ((currentLine = br.readLine()) != null) {
+				if (currentLine.startsWith("<key")) {
+					graphKeys.add(currentLine);
+				}
+			}
+			br.close();
+			// ***
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -63,7 +75,7 @@ public class GraphmlReader {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		System.out.println("GraphmlReader> Building Nodes and Edges");
 		System.out.println("GraphmlReader> Working on it ...");
-		
+
 		edgesBetweenCommunuties = new ArrayList<Edge>();
 		// <Name of community, Node object of a community>
 		communityNodes = new HashMap<String, Node>();
@@ -103,12 +115,12 @@ public class GraphmlReader {
 
 			nodes[id] = node;
 
-//			if (node.getOutDegree(1) > maxOutDegree) {
-//				maxOutDegree = node.getOutDegree(1);
-//			}
-//			if (node.getOutDegree(1) < minOutDegree) {
-//				minOutDegree = node.getOutDegree(1);
-//			}
+			// if (node.getOutDegree(1) > maxOutDegree) {
+			// maxOutDegree = node.getOutDegree(1);
+			// }
+			// if (node.getOutDegree(1) < minOutDegree) {
+			// minOutDegree = node.getOutDegree(1);
+			// }
 		}
 
 		float maxWeight = 0;
@@ -194,12 +206,12 @@ public class GraphmlReader {
 						+ "!!!!!! Check the key String of the frequency");
 			}
 			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
-			//For the metagraph
-            Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
-            		communityNodes.get(nodes[idTarget].getCommunity(1)), true);
-            if(!edgesBetweenCommunuties.contains(metaE)){
-            	edgesBetweenCommunuties.add(metaE);
-            }
+			// For the metagraph
+			Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
+					communityNodes.get(nodes[idTarget].getCommunity(1)), true);
+			if (!edgesBetweenCommunuties.contains(metaE)) {
+				edgesBetweenCommunuties.add(metaE);
+			}
 
 		}
 		// Setting limits in static class (Singleton pattern)
@@ -207,73 +219,68 @@ public class GraphmlReader {
 		Mapper.getInstance().setMinWeight(minWeight);
 		return rtnGraph;
 	}
-	
+
 	/**
-	 * Build a JungGraph from a pajek file. 
+	 * Build a JungGraph from a pajek file.
+	 * 
 	 * @param filename
 	 * @return
 	 */
-	public DirectedSparseMultigraph<Node, Edge> readFromPajek(String filename){
-		
-		
+	public DirectedSparseMultigraph<Node, Edge> readFromPajek(String filename) {
+
 		edgesBetweenCommunuties = new ArrayList<Edge>();
 		// <Name of community, Node object of a community>
 		communityNodes = new HashMap<String, Node>();
-		
+
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		try {
-		    File file = new File(filename);
-		    FileReader fr = new FileReader(file);
-		    Scanner br = new Scanner(fr);
-		    
-		    String token;
-		    br.next();
-		    token = br.next();
-		    int numberOfNodes = Integer.parseInt(token);
-		    Node[] nodes = new Node[numberOfNodes];
-		    
-	    	
-		    
-		    
-		    for(int i=0; i<numberOfNodes; i++){
-		    	token = br.next();
-		    	int idS = Integer.parseInt(token) - 1;
-		    	Node node = new Node(token);
-		    	
-		    	node.setCommunity("Root", 0);
+			File file = new File(filename);
+			FileReader fr = new FileReader(file);
+			Scanner br = new Scanner(fr);
+
+			String token;
+			br.next();
+			token = br.next();
+			int numberOfNodes = Integer.parseInt(token);
+			Node[] nodes = new Node[numberOfNodes];
+
+			for (int i = 0; i < numberOfNodes; i++) {
+				token = br.next();
+				int idS = Integer.parseInt(token) - 1;
+				Node node = new Node(token);
+
+				node.setCommunity("Root", 0);
 				node.setCommunity(br.next(), 1);
 				addCommunity(node.getCommunity(1));
 				nodes[idS] = node;
-		    }
-		    System.out.println(br.next());
-		    while(br.hasNext()) {
-		    	token = br.next();
-//		    	System.out.println(token);
-		    	int idS  = Integer.parseInt(token) - 1;
-		    	token = br.next();
-		    	int idT = Integer.parseInt(token) - 1;
-	            graphElements.Edge e = new graphElements.Edge(nodes[idS], nodes[idT], true);
-	            rtnGraph.addEdge(e, nodes[idS], nodes[idT], EdgeType.DIRECTED);
-	            //For the metagraph
-	            Edge metaE = new Edge(communityNodes.get(nodes[idS].getCommunity(1)),
-	            		communityNodes.get(nodes[idT].getCommunity(1)), true);
-	            if(!edgesBetweenCommunuties.contains(metaE)){
-	            	edgesBetweenCommunuties.add(metaE);
-	            }
-	            
-	            
-	        }
+			}
+			System.out.println(br.next());
+			while (br.hasNext()) {
+				token = br.next();
+				// System.out.println(token);
+				int idS = Integer.parseInt(token) - 1;
+				token = br.next();
+				int idT = Integer.parseInt(token) - 1;
+				graphElements.Edge e = new graphElements.Edge(nodes[idS], nodes[idT], true);
+				rtnGraph.addEdge(e, nodes[idS], nodes[idT], EdgeType.DIRECTED);
+				// For the metagraph
+				Edge metaE = new Edge(communityNodes.get(nodes[idS].getCommunity(1)),
+						communityNodes.get(nodes[idT].getCommunity(1)), true);
+				if (!edgesBetweenCommunuties.contains(metaE)) {
+					edgesBetweenCommunuties.add(metaE);
+				}
 
-		    br.close();
-		    System.out.println("Cantidad de V�rtices");
-		    System.out.println(rtnGraph.getVertexCount());
+			}
 
+			br.close();
+			System.out.println("Cantidad de V�rtices");
+			System.out.println(rtnGraph.getVertexCount());
 
 		} catch (Exception e) {
-		   e.printStackTrace();
+			e.printStackTrace();
 		}
 		return rtnGraph;
-		
+
 	}
 
 	public TinkerGraph getTinkerGraph() {
@@ -318,13 +325,28 @@ public class GraphmlReader {
 		if (!communities.contains(string)) {
 			communities.add(string);
 			communityNodes.put(string, new Node(string));
-		} 
+		}
 	}
 
+	/**
+	 * See getGraphKeys()
+	 * 
+	 * @return
+	 * @deprecated
+	 */
 	public Set<String> getKeys() {
 		return graph.getVertices().iterator().next().getPropertyKeys();
 	}
-	
+
+	/**
+	 * Returns the graphml keys read at the moment of loading
+	 * 
+	 * @return the list of keys
+	 */
+	public ArrayList<String> getGraphKeys() {
+		return graphKeys;
+	}
+
 	public ArrayList<Edge> getEdgesBetweenCommunuties() {
 		return edgesBetweenCommunuties;
 	}

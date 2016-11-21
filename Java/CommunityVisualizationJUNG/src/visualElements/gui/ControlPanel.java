@@ -13,7 +13,7 @@ import executable.Logica;
 import visualElements.gui.VisibilitySettings;
 
 /**
- * @author jsalam Example copied from
+ * @author jsalam Example adapted from
  *         https://github.com/sojamo/controlp5/issues/17
  *
  */
@@ -26,7 +26,8 @@ public class ControlPanel extends PApplet {
 	Accordion accordion;
 	PFont font;
 	PImage logo;
-	private final String EXTENSION = "ptg";
+	// From NetInt: Java Network Interaction Visualization Library.
+	private final String EXTENSION = "nit";
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -38,7 +39,7 @@ public class ControlPanel extends PApplet {
 
 	public void setup() {
 		this.surface.setSize(w, h);
-		this.surface.setLocation(180, 45);
+		this.surface.setLocation(80, 45);
 		this.surface.setAlwaysOnTop(true);
 		logo = loadImage("../data/images/Logo_Bancolombia.png");
 		gui();
@@ -255,23 +256,22 @@ public class ControlPanel extends PApplet {
 	}
 
 	private void switchCaseCP5(ControlEvent theEvent) {
-		System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
+		// System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
 		switch (theEvent.getController().getName()) {
-		
+
 		case "Abrir":
 
-			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false,EXTENSION);
+			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, EXTENSION);
 
 			try {
-			parent.cursor(WAIT);
-				//Executable.activeCursor = Executable.CURSOR_WAIT;
-				
+				parent.cursor(WAIT);
+				// Executable.activeCursor = Executable.CURSOR_WAIT;
+
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
-				
+
 				Executable.activeGraph = false;
 				Logica.vSubCommunities = deserializedWrapper.getvSubCommunities();
-				for(visualElements.VCommunity com:Logica.vSubCommunities)
-				{
+				for (visualElements.VCommunity com : Logica.vSubCommunities) {
 					com.eventRegister(parent);
 				}
 				Logica.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
@@ -279,61 +279,57 @@ public class ControlPanel extends PApplet {
 				Logica.vSubSubCommunity.container.runEdgeFactory();
 				VisibilitySettings.reloadInstance(deserializedWrapper.getvSettings());
 				Executable.activeGraph = true;
-				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-				
+				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
+						javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
 			} catch (IOException e1) {
-				
-				javax.swing.JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-			} 
-			finally
-			{
+
+				javax.swing.JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
+						javax.swing.JOptionPane.ERROR_MESSAGE);
+			} finally {
 				parent.cursor(ARROW);
-			//	Executable.activeCursor = Executable.CURSOR_ARROW;
+				// Executable.activeCursor = Executable.CURSOR_ARROW;
 			}
-			
+
 			break;
-		
+
 		case "Guardar":
-			
-			
-				String selectedPath = ChooseHelper.getInstance().showJFileChooser(true,EXTENSION);
-				
-				if(selectedPath != null)
-				{
-					
-					//Executable.activeCursor = Executable.CURSOR_WAIT;
-					parent.cursor(WAIT);
-					
-					SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities, VisibilitySettings.getInstance());
-					
-					try {
-						
-						SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
-						javax.swing.JOptionPane.showMessageDialog(null, "Archivo guardado en " + selectedPath + "." + EXTENSION, "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-					
-					} 
-					
-					catch (FileNotFoundException e) {
-						
-						javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-					
-					}
-					
-					finally
-					
-					{
-						//Executable.activeCursor = Executable.CURSOR_ARROW;
-						parent.cursor(ARROW);
-					}
-					
-				}			
-			
+
+			String selectedPath = ChooseHelper.getInstance().showJFileChooser(true, EXTENSION);
+
+			if (selectedPath != null) {
+
+				// Executable.activeCursor = Executable.CURSOR_WAIT;
+				parent.cursor(WAIT);
+
+				SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities,
+						VisibilitySettings.getInstance());
+
+				try {
+					SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
+					javax.swing.JOptionPane.showMessageDialog(null,
+							"Archivo guardado en " + selectedPath + "." + EXTENSION, "",
+							javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				}
+
+				catch (FileNotFoundException e) {
+					javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+							javax.swing.JOptionPane.ERROR_MESSAGE);
+				}
+
+				finally {
+					// Executable.activeCursor = Executable.CURSOR_ARROW;
+					parent.cursor(ARROW);
+				}
+
+			}
+
 			break;
-			
+
 		case "Importar":
 			ChooseHelper.getInstance().showFileChooser(false, "graphml", parent);
 			break;
-			
+
 		case "Salir":
 			System.exit(0);
 			break;

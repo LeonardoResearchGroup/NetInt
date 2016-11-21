@@ -1,10 +1,15 @@
 package executable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import containers.Container;
 import processing.core.*;
 import utilities.GraphLoader;
+import utilities.GraphmlKey;
+import utilities.GraphmlKeyReader;
 import utilities.TestPerformance;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
@@ -12,8 +17,9 @@ import visualElements.VCommunity;
 import visualElements.gui.ChooseHelper;
 
 import visualElements.gui.ControlPanel;
+import visualElements.gui.ImportDisplay;
 import visualElements.gui.VisibilitySettings;
-import controlP5.ControlEvent;
+
 
 public class Executable extends PApplet {
 	public static Logica app;
@@ -28,19 +34,26 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
-		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
-		 Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
-//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
-//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.net"), "comunidad", "name", "void sector",
-//				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.PAJEK);
-		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
-		// "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
-		// Container.FRUCHTERMAN_REINGOLD);
-		this.setActiveGraph(true);
+		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
+		// "label", "sector", "weight",
+		// Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+		//// app.loadGraph(new
+		// File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"),
+		// "comunidad", "name", "void sector",
+		//// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD,
+		// GraphLoader.GRAPHML);
+		//// app.loadGraph(new
+		// File("./data/graphs/comunidadesNodosEstadosFinancieros.net"),
+		// "comunidad", "name", "void sector",
+		//// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD,
+		// GraphLoader.PAJEK);
+		// // app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
+		// // "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
+		// // Container.FRUCHTERMAN_REINGOLD);
+		this.setActiveGraph(false);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-//		surface.setLocation(0, 0);
+	    surface.setLocation(0, 0);
 
 		System.out.println(
 				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
@@ -54,11 +67,11 @@ public class Executable extends PApplet {
 	}
 
 	public void draw() {
-		
+
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
-			canvas.translateCenter((width - app.rootDimension.width)/2, (height - app.rootDimension.height)/2);
+			canvas.translateCenter((width - app.rootDimension.width) / 2, (height - app.rootDimension.height) / 2);
 			canvas.transform();
 			canvas.originCrossHair();
 			app.show();
@@ -67,6 +80,8 @@ public class Executable extends PApplet {
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
+		} else {
+			background(100);
 		}
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
@@ -88,9 +103,18 @@ public class Executable extends PApplet {
 		Executable.activeGraph = activeGraph;
 	}
 
+	/**
+	 * This method received the graph file path and triggers an import process.
+	 * The import process consists of user selection of graph keys.
+	 * 
+	 * @param selection
+	 */
 	public void selectImport(File selection) {
 		if (selection != null) {
-			ChooseHelper.getInstance().processImport(selection, this);
+			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
+			// this creates and displays the menu
+			ImportDisplay importMenu = new ImportDisplay(this);
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges());
 		}
 	}
 
