@@ -26,6 +26,7 @@ public class GraphmlKeyReader {
 			System.out.println(this.getClass().getName() + " Reading graphml Keys... ");
 			while ((currentLine = br.readLine()) != null) {
 				currentLine = currentLine.trim();
+				System.out.println(this.getClass().getName() + " current line:"+currentLine);
 				if (currentLine.startsWith("<key")) {
 					splitKeyAttributes(currentLine);
 				}
@@ -57,7 +58,6 @@ public class GraphmlKeyReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(this.getClass().getName() + " Reading graphml completed");
 	}
 
 	/**
@@ -68,26 +68,31 @@ public class GraphmlKeyReader {
 	 * @param key
 	 */
 	public void splitKeyAttributes(String key) {
-		System.out.println(this.getClass().getName() + " " + key);
+	//	System.out.println(this.getClass().getName() + " " + key);
 		try {
-			String[] tokens = key.split(" ");
+			String[] tokens = key.split("\"");
 			GraphmlKey tmp = new GraphmlKey();
-			tmp.setName(tokens[1].substring(11, tokens[1].length() - 1));
-			tmp.setType(tokens[2].substring(11, tokens[2].length() - 1));
-			tmp.setElement(tokens[3].substring(5, tokens[3].length() - 1));
-			tmp.setId(tokens[4].substring(4, tokens[4].length() - 3));
+		
+			for (int i = 0; i < tokens.length-1; i++) {
+				if(tokens[i].endsWith("name=")){
+					tmp.setName(tokens[i+1]);	
+				}
+				if(tokens[i].endsWith("type=")){
+					tmp.setType(tokens[i+1]);	
+				}
+				if(tokens[i].endsWith("for=")){
+					tmp.setElement(tokens[i+1]);	
+				}
+				if(tokens[i].endsWith("id=")){
+					tmp.setId(tokens[i+1]);	
+				}
+			}
+
 			graphKeys.add(tmp);
-		} catch (StringIndexOutOfBoundsException e) {
-			System.out.println(" **** WARNING **** Check key attribute in graphml file. It can't contain blank spaces");
-			GraphmlKey tmp = new GraphmlKey();
-			tmp.setName("missing_Value");
-			tmp.setType("missing_Value");
-			tmp.setElement("missing_Value");
-			tmp.setId("missing_Value");
-			graphKeys.add(tmp);
+			System.out.println(this.getClass().getName() + " name: " + tmp.getName() + ", type: " + tmp.getType()+ ", for:" + tmp.getElement()+ ", id: " + tmp.getId());
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(
-					" **** WARNING **** Check the graphml format. It must follow this structure: <key attr.name='nnn' attr.type='ttt' for='eee' id='nnn'/>");
+					" **** WARNING **** Check the graphml format. It must follow this structure: <key attr.name=\"nnn\" attr.type=\"ttt\" for=\"eee\" id=\"nnn\"/>");
 		}
 	}
 
