@@ -16,6 +16,7 @@ public class Node implements Comparable<Node>, Serializable{
 	private String sector;
 	private HashMap<Integer, NodeMetadata> metadata;
 	private boolean isFound = false; 
+	private HashMap<String, Double> descriptiveStatistics = new HashMap<String, Double>();
 
 	
 
@@ -199,6 +200,10 @@ public class Node implements Comparable<Node>, Serializable{
 	
 	public void setExcentricity(int key, float excentricity) {
 		this.metadata.get(key).setExcentricity(excentricity);
+	}
+	
+	public HashMap<String, Double> getDescriptiveStatistics() {
+		return descriptiveStatistics;
 	}
 
 }

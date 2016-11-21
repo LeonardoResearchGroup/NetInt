@@ -9,12 +9,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
 import utilities.mapping.Mapper;
 import visualElements.VCommunity;
+import visualElements.gui.VisibilitySettings;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -99,6 +101,14 @@ public class GraphmlReader {
 			} else {
 				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + sectorKey
 						+ "!!! Check the key String of the sector");
+			}
+			
+			System.out.println("ALL KEYS");
+			for(String key : vertex.getPropertyKeys()){
+				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
+				if(keyLabel != null){
+					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(sectorKey));
+				}
 			}
 
 			nodes[id] = node;

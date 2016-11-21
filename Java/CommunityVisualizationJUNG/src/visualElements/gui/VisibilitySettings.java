@@ -33,6 +33,8 @@ public class VisibilitySettings {
 	private boolean roa;
 	private boolean roe;
 	private boolean crecimientoVentas;
+	private HashMap<String, String> descriptiveKeys;
+	
 	private HashMap<String, Boolean> descriptiveStatistics = new HashMap<String, Boolean>();
 
 	private static VisibilitySettings vSettingsInstance = null;
@@ -52,6 +54,18 @@ public class VisibilitySettings {
 	}
 
 	protected VisibilitySettings() {
+		descriptiveKeys.put("WKActivo", "1");
+		descriptiveKeys.put("tamano", "1");
+		descriptiveKeys.put("flujoCajaPasivo", "1");
+		descriptiveKeys.put("razonCorriente", "1");
+		descriptiveKeys.put("tangibilidad", "1");
+		descriptiveKeys.put("pasivoActivo", "1");
+		descriptiveKeys.put("EBITDAIntereses", "1");
+		descriptiveKeys.put("EBITDAVentas", "1");
+		descriptiveKeys.put("roa", "1");
+		descriptiveKeys.put("roe", "1");
+		descriptiveKeys.put("crecimientoVentas", "1");
+		
 	}
 
 	// ******* GETTERS *******
@@ -248,5 +262,10 @@ public class VisibilitySettings {
 	public void setEventOnVSettings(boolean eventTriggered){
 		eventOnVSettings = eventTriggered;
 	}
+	
+	public HashMap<String, String> getDescriptiveKeys() {
+		return descriptiveKeys;
+	}
+
 
 }
