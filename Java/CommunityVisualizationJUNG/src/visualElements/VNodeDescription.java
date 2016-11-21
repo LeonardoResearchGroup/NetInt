@@ -49,12 +49,13 @@ public class VNodeDescription implements Serializable {
 
 			// Descriptive Statistics
 			HashMap<String, Boolean> descriptiveStats = VisibilitySettings.getInstance().getDescriptiveStatistics();
+			HashMap<String, String> descriptiveKeys = VisibilitySettings.getInstance().getDescriptiveKeys();
 			count = 0;
 			for (String key : descriptiveStats.keySet()) {
 				// If the map of descriptive stats has any true boolean
 				if (descriptiveStats.get(key)) {
 					shift = count * 12;
-					Canvas.app.text(key + ": ", vNode.pos.x + 5, vNode.pos.y - 125 - shift);
+					Canvas.app.text(descriptiveKeys.get(key) + ": "+vNode.getNode().getDescriptiveStatistics().get(key), vNode.pos.x + 5, vNode.pos.y - 125 - shift);
 					count++;
 				}
 			}

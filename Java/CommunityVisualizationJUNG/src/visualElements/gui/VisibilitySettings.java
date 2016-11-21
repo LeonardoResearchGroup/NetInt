@@ -33,6 +33,7 @@ public class VisibilitySettings {
 	private boolean roa;
 	private boolean roe;
 	private boolean crecimientoVentas;
+	//It has the financial statements keys and their titles to show into VNodeDescriptions
 	private HashMap<String, String> descriptiveKeys;
 	
 	private HashMap<String, Boolean> descriptiveStatistics = new HashMap<String, Boolean>();
@@ -54,17 +55,18 @@ public class VisibilitySettings {
 	}
 
 	protected VisibilitySettings() {
-		descriptiveKeys.put("WKActivo", "1");
-		descriptiveKeys.put("tamano", "1");
-		descriptiveKeys.put("flujoCajaPasivo", "1");
-		descriptiveKeys.put("razonCorriente", "1");
-		descriptiveKeys.put("tangibilidad", "1");
-		descriptiveKeys.put("pasivoActivo", "1");
-		descriptiveKeys.put("EBITDAIntereses", "1");
-		descriptiveKeys.put("EBITDAVentas", "1");
-		descriptiveKeys.put("roa", "1");
-		descriptiveKeys.put("roe", "1");
-		descriptiveKeys.put("crecimientoVentas", "1");
+		descriptiveKeys = new HashMap<String,String>();
+		descriptiveKeys.put("WKActivo", "WK/Activo");
+		descriptiveKeys.put("tamano", "Tamano");
+		descriptiveKeys.put("flujoCajaPasivo", "Flujo de caja / Pasivo");
+		descriptiveKeys.put("razonCorriente", "Razon Corriente");
+		descriptiveKeys.put("tangibilidad", "Tangibilidad");
+		descriptiveKeys.put("pasivoActivo", "Pasivo / Activo");
+		descriptiveKeys.put("EBITDAIntereses", "EBITDA/Intereses");
+		descriptiveKeys.put("EBITDAVentas", "EBITDA/Ventas");
+		descriptiveKeys.put("roa", "ROA");
+		descriptiveKeys.put("roe", "ROE");
+		descriptiveKeys.put("crecimientoVentas", "Crecimiento ventas");
 		
 	}
 
@@ -206,48 +208,48 @@ public class VisibilitySettings {
 	}
 
 	public void setWKActivo(boolean state) {
-		descriptiveStatistics.put("WK/Activo", state);
+		descriptiveStatistics.put("WKActivo", state);
 	}
 
 	public void setTamano(boolean state) {
-		descriptiveStatistics.put("Tamano", state);
+		descriptiveStatistics.put("tamano", state);
 	}
 
 	public void setFlujoCajaPasivo(boolean state) {
-		descriptiveStatistics.put("Flujo de caja / Pasivo", state);
+		descriptiveStatistics.put("flujoCajaPasivo", state);
 	}
 
 	public void setRazonCorriente(boolean state) {
 
-		descriptiveStatistics.put("Razon Corriente", state);
+		descriptiveStatistics.put("razonCorriente", state);
 	}
 
 	public void setTangibilidad(boolean state) {
-		descriptiveStatistics.put("Tangibilidad", state);
+		descriptiveStatistics.put("tangibilidad", state);
 	}
 
 	public void setPasivoActivo(boolean state) {
-		descriptiveStatistics.put("Pasivo / Activo", state);
+		descriptiveStatistics.put("pasivoActivo", state);
 	}
 
 	public void setEBITDAIntereses(boolean state) {
-		descriptiveStatistics.put("EBITDA/Intereses", state);
+		descriptiveStatistics.put("EBITDAIntereses", state);
 	}
 
 	public void setEBITDAVentas(boolean state) {
-		descriptiveStatistics.put("EBITDA/Ventas", state);
+		descriptiveStatistics.put("EBITDAVentas", state);
 	}
 
 	public void setROA(boolean state) {
-		descriptiveStatistics.put("ROA", state);
+		descriptiveStatistics.put("roa", state);
 	}
 
 	public void setROE(boolean state) {
-		descriptiveStatistics.put("ROE", state);
+		descriptiveStatistics.put("roe", state);
 	}
 
 	public void setCrecimientoVentas(boolean state) {
-		descriptiveStatistics.put("Crecimiento ventas", state);
+		descriptiveStatistics.put("crecimientoVentas", state);
 	}
 
 	public void setMostrarNodos(boolean booleanValue) {

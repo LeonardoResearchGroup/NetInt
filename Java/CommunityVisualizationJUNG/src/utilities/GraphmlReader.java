@@ -103,11 +103,11 @@ public class GraphmlReader {
 						+ "!!! Check the key String of the sector");
 			}
 			
-			System.out.println("ALL KEYS");
+			//Check if some graphml key match with some financial stament key
 			for(String key : vertex.getPropertyKeys()){
 				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
 				if(keyLabel != null){
-					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(sectorKey));
+					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
 			}
 
