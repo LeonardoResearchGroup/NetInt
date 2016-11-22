@@ -33,6 +33,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected Node nodeFound;
 	protected VCommunity nodeFoundInSuperCommunity;
 	private String idSearch = null;
+	
+	private boolean vNodesCentered = false;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
@@ -61,8 +63,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		comCover.show(container, this, hasNodeFound);
 
 		// Check if community cover is completely deployed
-		if (comCover.isUnlockedAndDeployed()) {
+		if (comCover.isDeployed()) {
 			// If the layout is iterative
+			//System.out.println(comCover.isUnlockedAndDeployed());
 			if (container.isCurrentLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
 				showCommunityContents(comCover.isUnlocked(), container.stepIterativeLayout(pos).done() || container.isDone());
@@ -101,10 +104,26 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (vN.isVisible()) {
 							vN.show();
 						}
+						if (vNodesCentered) {
+//							System.out.println("centered");
+							// reset vNode coordinates to the coordinates
+							// assigned in the container's layout
+							PVector newOrigin = new PVector(container.dimension.width / 2,
+									container.dimension.height / 2);
+							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+							
+						}
 					}
 				}
+				vNodesCentered = false;
+			}else { 	
+				//System.out.println(this.node.getId()+" centrando");
+				for (VisualAtom vA : container.getVNodes()) {
+					vA.pos.set(pos);
+				}
+				vNodesCentered = true;
 			}
-		}
+		} 
 		// ** Display VEdges
 		// GUI
 		if (VisibilitySettings.getInstance().mostrarVinculos()) {

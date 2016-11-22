@@ -150,7 +150,6 @@ public abstract class Container {
 		// If node distribution not completed
 //		if (!itrContext.done()) {
 		if (!done && !itrContext.done()) {
-			System.out.println("i");
 			// Run one step
 			itrContext.step();
 			// get nodes in layout positions
