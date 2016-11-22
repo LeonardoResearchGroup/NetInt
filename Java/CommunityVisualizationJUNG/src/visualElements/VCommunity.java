@@ -65,7 +65,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// If the layout is iterative
 			if (container.isCurrentLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
-				showCommunityContents(comCover.isUnlocked(), container.stepIterativeLayout(pos).done());
+				showCommunityContents(comCover.isUnlocked(), container.stepIterativeLayout(pos).done() || container.isDone());
 			} else {
 				// If layout not iterative show nodes and edges
 				showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());

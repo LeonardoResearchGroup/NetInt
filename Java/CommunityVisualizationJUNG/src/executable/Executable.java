@@ -28,12 +28,12 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica();
 		performance = new TestPerformance();
-//		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
-//		 Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent", "label", "sector", "weight",
+		 Container.FRUCHTERMAN_REINGOLD , GraphLoader.GRAPHML);
 //		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"), "comunidad", "name", "void sector",
 //				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
-		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancierosYVariables.graphml"), "comunidad", "name", "void sector",
-		"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+//		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancierosYVariables.graphml"), "comunidad", "name", "void sector",
+//		"VALORES_MOVILIZADOS", Container.SPRING, GraphLoader.GRAPHML);
 //		app.loadGraph(new File("./data/graphs/comunidadesNodosEstadosFinancieros.net"), "comunidad", "name", "void sector",
 //				"VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD, GraphLoader.PAJEK);
 		// app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),

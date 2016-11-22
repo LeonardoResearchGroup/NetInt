@@ -51,6 +51,9 @@ public abstract class Container {
 	public Dimension dimension;
 
 	protected Color color;
+	protected int iterations;
+	protected final int MAX_ITERATIONS = 100;
+	protected boolean done = false;
 
 	// *** Constructor
 	public Container(){}
@@ -145,7 +148,9 @@ public abstract class Container {
 		// Step iteration as many times as parameterized
 		IterativeContext itrContext = (IterativeContext) layout;
 		// If node distribution not completed
-		if (!itrContext.done()) {
+//		if (!itrContext.done()) {
+		if (!done && !itrContext.done()) {
+			System.out.println("i");
 			// Run one step
 			itrContext.step();
 			// get nodes in layout positions
@@ -161,6 +166,8 @@ public abstract class Container {
 					}
 				}
 			}
+			iterations++;
+			done = iterations == MAX_ITERATIONS;
 		}
 		return itrContext;
 	}
@@ -424,6 +431,10 @@ public abstract class Container {
 			}
 		}
 		return nodo;
+	}
+	
+	public boolean isDone(){
+		return done;
 	}
 
 }
