@@ -38,7 +38,7 @@ public class ChooseHelper {
 	 */
 	public void showFileChooser(boolean save, String extension, PApplet applet) {
 		if (!save) {
-			applet.selectInput("Select a file to process:", "selectImport");
+			applet.selectInput("Select a graphml file to process:", "selectImport");
 		}
 	}
 
@@ -62,32 +62,5 @@ public class ChooseHelper {
 			path = chooser.getSelectedFile().getAbsolutePath();
 		}
 		return path;
-	}
-
-	public void processImport(File file, Executable applet) {
-		// ModalWindow modalW = new ModalWindow("Loading graph", new
-		// Dimension(188, 190), applet);
-		// modalW.open();
-		// Object[] data = modalW.getData();
-		// if (data != null) {
-		// System.out.println("0: "+ data[0] +"1: "+ data[1]+"2: "+ data[2]);
-		// //applet.getApp().loadGraph(file, (String) data[0], (String) data[1],
-		// (String) data[2], (String) data[3], (Integer) data[2]);
-		// applet.getApp().loadGraph(file, (String) data[0], (String) data[1], "
-		// ", " ", (Integer) data[2], GraphLoader.GRAPHML);
-		// applet.setActiveGraph(true);
-		// }
-
-//		ControlP5 loadingMenu = new ControlP5(applet);
-//		List<String> l = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h");
-//		loadingMenu.addScrollableList("Community").setPosition(100, 100).setSize(200, 100).setBarHeight(20)
-//				.setItemHeight(20).addItems(l);
-//		loadingMenu.addScrollableList("SubCommunity").setPosition(310, 100).setSize(200, 100).setBarHeight(20)
-//				.setItemHeight(20).addItems(l);
-//		loadingMenu.addScrollableList("Label").setPosition(520, 100).setSize(200, 100).setBarHeight(20)
-//				.setItemHeight(20).addItems(l);
-//		loadingMenu.addScrollableList("Weight").setPosition(730, 100).setSize(200, 100).setBarHeight(20)
-//				.setItemHeight(20).addItems(l);
-
 	}
 }

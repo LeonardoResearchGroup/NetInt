@@ -29,9 +29,11 @@ public class Executable extends PApplet {
 	public static boolean activeGraph;
 	private ControlPanel cFrame;
 
+	ImportDisplay importMenu;	
 	public void setup() {
 		textSize(10);
 		smooth();
+		importMenu = new ImportDisplay(this);
 		canvas = new Canvas(this);
 		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
@@ -63,10 +65,10 @@ public class Executable extends PApplet {
 
 		this.surface.setLocation(150, 0);
 		this.surface.setTitle("Visualizador de transacciones Bancolombia");
+		
 	}
 
 	public void draw() {
-
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
@@ -103,23 +105,18 @@ public class Executable extends PApplet {
 	}
 
 	/**
-	 * This method received the graph file path and triggers an import process.
+	 * This method receive the graph file path and triggers an import process.
 	 * The import process consists of user selection of graph keys.
 	 * 
 	 * @param selection
 	 */
+
 	public void selectImport(File selection) {
 		if (selection != null) {
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			ImportDisplay importMenu = new ImportDisplay(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges());
 		}
-	}
-	
-	public void controlEvent(ControlEvent theEvent) {
-		 System.out.println("Executable> Event at: " + theEvent.getController().getName());
-			//switchCaseMenu(theEvent);
 	}
 
 	public void settings() {
