@@ -26,7 +26,7 @@ public class GraphmlKeyReader {
 			System.out.println(this.getClass().getName() + " Reading graphml Keys... ");
 			while ((currentLine = br.readLine()) != null) {
 				currentLine = currentLine.trim();
-				System.out.println(this.getClass().getName() + " current line:"+currentLine);
+				System.out.println(this.getClass().getName() + " current line:" + currentLine);
 				if (currentLine.startsWith("<key")) {
 					splitKeyAttributes(currentLine);
 				}
@@ -66,30 +66,29 @@ public class GraphmlKeyReader {
 	 * 
 	 * 
 	 * @param key
+	 *            the string to be split
 	 */
 	public void splitKeyAttributes(String key) {
-	//	System.out.println(this.getClass().getName() + " " + key);
+		// System.out.println(this.getClass().getName() + " " + key);
 		try {
 			String[] tokens = key.split("\"");
 			GraphmlKey tmp = new GraphmlKey();
-		
-			for (int i = 0; i < tokens.length-1; i++) {
-				if(tokens[i].endsWith("name=")){
-					tmp.setName(tokens[i+1]);	
+
+			for (int i = 0; i < tokens.length - 1; i++) {
+				if (tokens[i].endsWith("name=")) {
+					tmp.setName(tokens[i + 1]);
 				}
-				if(tokens[i].endsWith("type=")){
-					tmp.setType(tokens[i+1]);	
+				if (tokens[i].endsWith("type=")) {
+					tmp.setType(tokens[i + 1]);
 				}
-				if(tokens[i].endsWith("for=")){
-					tmp.setElement(tokens[i+1]);	
+				if (tokens[i].endsWith("for=")) {
+					tmp.setElement(tokens[i + 1]);
 				}
-				if(tokens[i].endsWith("id=")){
-					tmp.setId(tokens[i+1]);	
+				if (tokens[i].endsWith("id=")) {
+					tmp.setId(tokens[i + 1]);
 				}
 			}
-
 			graphKeys.add(tmp);
-			System.out.println(this.getClass().getName() + " name: " + tmp.getName() + ", type: " + tmp.getType()+ ", for:" + tmp.getElement()+ ", id: " + tmp.getId());
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(
 					" **** WARNING **** Check the graphml format. It must follow this structure: <key attr.name=\"nnn\" attr.type=\"ttt\" for=\"eee\" id=\"nnn\"/>");

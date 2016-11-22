@@ -78,16 +78,16 @@ public class ChooseHelper {
 		// applet.setActiveGraph(true);
 		// }
 
-		ControlP5 loadingMenu = new ControlP5(applet);
-		List<String> l = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h");
-		loadingMenu.addScrollableList("Community").setPosition(100, 100).setSize(200, 100).setBarHeight(20)
-				.setItemHeight(20).addItems(l);
-		loadingMenu.addScrollableList("SubCommunity").setPosition(310, 100).setSize(200, 100).setBarHeight(20)
-				.setItemHeight(20).addItems(l);
-		loadingMenu.addScrollableList("Label").setPosition(520, 100).setSize(200, 100).setBarHeight(20)
-				.setItemHeight(20).addItems(l);
-		loadingMenu.addScrollableList("Weight").setPosition(730, 100).setSize(200, 100).setBarHeight(20)
-				.setItemHeight(20).addItems(l);
+//		ControlP5 loadingMenu = new ControlP5(applet);
+//		List<String> l = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h");
+//		loadingMenu.addScrollableList("Community").setPosition(100, 100).setSize(200, 100).setBarHeight(20)
+//				.setItemHeight(20).addItems(l);
+//		loadingMenu.addScrollableList("SubCommunity").setPosition(310, 100).setSize(200, 100).setBarHeight(20)
+//				.setItemHeight(20).addItems(l);
+//		loadingMenu.addScrollableList("Label").setPosition(520, 100).setSize(200, 100).setBarHeight(20)
+//				.setItemHeight(20).addItems(l);
+//		loadingMenu.addScrollableList("Weight").setPosition(730, 100).setSize(200, 100).setBarHeight(20)
+//				.setItemHeight(20).addItems(l);
 
 	}
 }

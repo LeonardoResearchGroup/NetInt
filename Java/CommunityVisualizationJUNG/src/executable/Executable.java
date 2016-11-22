@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import containers.Container;
+import controlP5.ControlEvent;
 import processing.core.*;
 import utilities.GraphLoader;
 import utilities.GraphmlKey;
@@ -34,7 +35,7 @@ public class Executable extends PApplet {
 		canvas = new Canvas(this);
 		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
-		 app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent","label", "sector", "weight", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent","label", "sector", "weight", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
 		//// app.loadGraph(new
 		// File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"),
 		// "comunidad", "name", "void sector",
@@ -48,7 +49,7 @@ public class Executable extends PApplet {
 		// // app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
 		// // "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
 		// // Container.FRUCHTERMAN_REINGOLD);
-		this.setActiveGraph(true);
+		this.setActiveGraph(false);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 	    surface.setLocation(0, 0);
@@ -114,6 +115,11 @@ public class Executable extends PApplet {
 			ImportDisplay importMenu = new ImportDisplay(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges());
 		}
+	}
+	
+	public void controlEvent(ControlEvent theEvent) {
+		 System.out.println("Executable> Event at: " + theEvent.getController().getName());
+			//switchCaseMenu(theEvent);
 	}
 
 	public void settings() {

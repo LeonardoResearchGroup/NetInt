@@ -15,6 +15,7 @@ import controlP5.Toggle;
 import executable.Executable;
 import executable.Logica;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 import utilities.SerializeHelper;
 import utilities.SerializeWrapper;
 
@@ -23,6 +24,7 @@ public class ImportDisplay {
 
 	public ImportDisplay(PApplet app) {
 		menu = new ControlP5(app);
+		//app.registerMethod("controlEvent", this);
 	}
 
 	public void makeLists(ArrayList<String> nodeAttributes, ArrayList<String> edgeAttributes) {
@@ -53,6 +55,8 @@ public class ImportDisplay {
 		.addItems(attributes).setType(ScrollableList.LIST).moveTo(group).close();
 		menu.addScrollableList("Color").setPosition(5, 35).setSize(170, 150).setBarHeight(13).setItemHeight(13)
 		.addItems(attributes).setType(ScrollableList.LIST).moveTo(group).close();
+		menu.addScrollableList("Label").setPosition(5, 50).setSize(170, 150).setBarHeight(13).setItemHeight(13)
+		.addItems(attributes).setType(ScrollableList.LIST).moveTo(group).close();
 	}
 
 	/**
@@ -78,7 +82,7 @@ public class ImportDisplay {
 	}
 	
 	private void switchCaseMenu(ControlEvent theEvent) {
-		 System.out.println("ImportDisplay> Event at: " + theEvent.getController().getName());
+		 System.out.println("ImportDisplay> at switchCaseMenu(): " + theEvent.getController().getName());
 		switch (theEvent.getController().getName()) {
 		case "Abrir":
 			break;
@@ -92,4 +96,5 @@ public class ImportDisplay {
 	public void communitys(int n){
 		System.out.println (menu.get(ScrollableList.class, "communitys").getItem(n).toString());
 	}
+	
 }

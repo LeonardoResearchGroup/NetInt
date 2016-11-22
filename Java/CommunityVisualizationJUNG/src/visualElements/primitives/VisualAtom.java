@@ -223,9 +223,6 @@ public abstract class VisualAtom implements Serializable{
 		VCommunity tmpCommunity = null;
 		VNode tmpNode = null;
 		detectMouseOver(Canvas.getCanvasMouse());
-		// if (detectMouseOver(Canvas.getCanvasMouse())) {
-		// System.out.println("VAtom. mouseOver: " + " " + e.toString());
-		// }
 		try {
 			tmpCommunity = (VCommunity) this;
 		} catch (java.lang.RuntimeException exCommunity) {
@@ -240,7 +237,6 @@ public abstract class VisualAtom implements Serializable{
 		} else if (tmpCommunity != null) {
 			vCommunityEvent(tmpCommunity, e);
 		}
-		// canvas.app.redraw();
 	}
 
 	private void vCommunityEvent(VCommunity vComm, MouseEvent e) {

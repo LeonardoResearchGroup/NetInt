@@ -2,6 +2,7 @@ package utilities;
 
 /**
  * Contains the attributes of a graphmlKey as Strings
+ * 
  * @author jsalam
  *
  */
@@ -54,12 +55,17 @@ public class GraphmlKey {
 			return false;
 		}
 	}
-	
+
 	public boolean isEdgeKey() {
 		if (element.equals("edge")) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public void printKey() {
+		System.out
+				.println(" name: " + getName() + ", type: " + getType() + ", for:" + getElement() + ", id: " + getId());
 	}
 }
