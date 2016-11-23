@@ -53,9 +53,10 @@ public class ControlPanel extends PApplet {
 	 */
 	public void gui() {
 		cp5 = new ControlP5(this);
+		
 		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color(0, 64)).setBackgroundHeight(20)
+		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color(0, 64)).setBackgroundHeight(420)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g3 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
@@ -106,8 +107,9 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiBackground(Group group) {
-		cPicker = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10)
+		cPicker = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setWidth(165)
 				.setColorValue(color(200, 200, 200, 255)).moveTo(group);
+
 	}
 
 	/**
@@ -256,7 +258,8 @@ public class ControlPanel extends PApplet {
 	}
 
 	private void switchCaseCP5(ControlEvent theEvent) {
-		// System.out.println("ControlPanel> Event at: " + theEvent.getController().getName());
+		// System.out.println("ControlPanel> Event at: " +
+		// theEvent.getController().getName());
 		switch (theEvent.getController().getName()) {
 
 		case "Abrir":

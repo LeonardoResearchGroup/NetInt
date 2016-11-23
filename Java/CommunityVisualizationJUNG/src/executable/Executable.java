@@ -1,26 +1,18 @@
 package executable;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import containers.Container;
-import controlP5.ControlEvent;
 import processing.core.*;
 import utilities.GraphLoader;
-import utilities.GraphmlKey;
 import utilities.GraphmlKeyReader;
 import utilities.TestPerformance;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
-import visualElements.VCommunity;
-import visualElements.gui.ChooseHelper;
 
 import visualElements.gui.ControlPanel;
-import visualElements.gui.ImportDisplay;
+import visualElements.gui.ImportMenu;
 import visualElements.gui.VisibilitySettings;
-
 
 public class Executable extends PApplet {
 	public static Logica app;
@@ -28,33 +20,29 @@ public class Executable extends PApplet {
 	private TestPerformance performance;
 	public static boolean activeGraph;
 	private ControlPanel cFrame;
+	public static File file;
 
-	ImportDisplay importMenu;	
+	public static ImportMenu importMenu;
+
 	public void setup() {
 		textSize(10);
 		smooth();
-		importMenu = new ImportDisplay(this);
+		importMenu = new ImportMenu(this);
 		canvas = new Canvas(this);
 		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
-		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent","label", "sector", "weight", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
+		// "label", "sector", "weight",
+		// Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
 		//// app.loadGraph(new
 		// File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"),
 		// "comunidad", "name", "void sector",
 		//// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD,
 		// GraphLoader.GRAPHML);
-		//// app.loadGraph(new
-		// File("./data/graphs/comunidadesNodosEstadosFinancieros.net"),
-		// "comunidad", "name", "void sector",
-		//// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD,
-		// GraphLoader.PAJEK);
-		// // app.loadGraph(new File("./data/graphs/comunidadesEafit.graphml"),
-		// // "comunidad", "name", "void sector", "VALORES_MOVILIZADOS",
-		// // Container.FRUCHTERMAN_REINGOLD);
 		this.setActiveGraph(false);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-	    surface.setLocation(0, 0);
+		surface.setLocation(0, 0);
 
 		System.out.println(
 				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
@@ -65,7 +53,7 @@ public class Executable extends PApplet {
 
 		this.surface.setLocation(150, 0);
 		this.surface.setTitle("Visualizador de transacciones Bancolombia");
-		
+
 	}
 
 	public void draw() {
@@ -113,6 +101,7 @@ public class Executable extends PApplet {
 
 	public void selectImport(File selection) {
 		if (selection != null) {
+			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges());
