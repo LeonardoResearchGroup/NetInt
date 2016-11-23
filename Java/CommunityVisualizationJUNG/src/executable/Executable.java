@@ -27,8 +27,8 @@ public class Executable extends PApplet {
 	public void setup() {
 		textSize(10);
 		smooth();
-		importMenu = new ImportMenu(this);
 		canvas = new Canvas(this);
+		importMenu = new ImportMenu(this);
 		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
 		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
@@ -42,7 +42,6 @@ public class Executable extends PApplet {
 		this.setActiveGraph(false);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-		surface.setLocation(0, 0);
 
 		System.out.println(
 				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
@@ -51,8 +50,8 @@ public class Executable extends PApplet {
 				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
 						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
 
-		this.surface.setLocation(150, 0);
-		this.surface.setTitle("Visualizador de transacciones Bancolombia");
+		this.surface.setLocation(200, 0);
+		this.surface.setTitle("Java Networked Interaction Visualization");
 
 	}
 

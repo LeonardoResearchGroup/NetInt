@@ -39,7 +39,7 @@ public class ControlPanel extends PApplet {
 
 	public void setup() {
 		this.surface.setSize(w, h);
-		this.surface.setLocation(80, 45);
+		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(true);
 		logo = loadImage("../data/images/Logo_Bancolombia.png");
 		gui();
