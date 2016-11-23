@@ -31,14 +31,20 @@ public class ImportMenu implements ControlListener {
 	// thickness", "Body thickness", "Body color" };
 	public boolean loadGraphEnabled = false;
 	private Accordion accordion;
-	public DropDownList nodeAtt;
+	public DropDownList nodeList, edgeList;
 
 	public ImportMenu(PApplet app) {
 		menu = new ControlP5(app);
-		nodeAtt = new DropDownList (app, "Node Attributes");
-		nodeAtt.setPos(100, 300);
-		String [] attributeNames = {"Community", "Label", "Size", "Node", "color"};
-		nodeAtt.setAttributes(attributeNames);
+		// for nodes
+		nodeList = new DropDownList (app, "Node Attributes");
+		nodeList.setPos(100, 300);
+		String [] nodeAttributeNames = {"Community", "Label", "Size", "Node", "color"};
+		nodeList.setAttributes(nodeAttributeNames);
+		// for edges
+		edgeList = new DropDownList (app, "Node Attributes");
+		edgeList.setPos(100, 450);
+		String [] edgeAttributeNames = {"Source thickness", "Target","thickness", "Body thickness", "Body color"};
+		edgeList.setAttributes(edgeAttributeNames);
 	}
 
 	/**
@@ -50,8 +56,9 @@ public class ImportMenu implements ControlListener {
 	 * @param edgeAttributeKeys
 	 */
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys) {
-		nodeAtt.addElementAttributes(nodeAttributeKeys);
-		menu.addBang("bang").setPosition(195, 55).setSize(100, 20).setTriggerEvent(Bang.RELEASE).setLabel("Load graph");
+		nodeList.addElementAttributes(nodeAttributeKeys);
+		edgeList.addElementAttributes(edgeAttributeKeys);
+		menu.addBang("bang").setPosition(195, 55).setSize(100, 280).setTriggerEvent(Bang.RELEASE).setLabel("Load graph");
 		menu.getController("bang").addListener(this);
 	}
 
@@ -72,16 +79,19 @@ public class ImportMenu implements ControlListener {
 		String controllerName = theEvent.getController().getName();
 		if (controllerName.equals("bang")) {
 			loadGraphEnabled = true;
-			for (int i = 0; i < nodeAtt.selection.length; i++) {
-				System.out.print(nodeAtt.selection[i] + ", ");
+			for (int i = 0; i < nodeList.selection.length; i++) {
+				System.out.print(nodeList.selection[i] + ", ");
 			}
+			// ***** stitch selection lists and do the retrieval
+			
 			System.out.println("---");
-			Executable.app.loadGraph(Executable.file, nodeAtt.selection[0], nodeAtt.selection[1], nodeAtt.selection[2],
-					nodeAtt.selection[3], Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+			Executable.app.loadGraph(Executable.file, nodeList.selection[0], nodeList.selection[1], nodeList.selection[2],
+					nodeList.selection[3], Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
 			Executable.activeGraph = true;
 			// *** Ideally this object must be deleted.
 			menu.setVisible(false);
-			nodeAtt.dropMenu.setVisible(false);
+			nodeList.dropMenu.setVisible(false);
+			edgeList.dropMenu.setVisible(false);
 		}
 	}
 
