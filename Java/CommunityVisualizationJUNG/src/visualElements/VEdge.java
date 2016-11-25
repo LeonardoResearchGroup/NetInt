@@ -96,28 +96,29 @@ public class VEdge implements Serializable{
 		// If there is an event in the control panel update the thickness
 		VisibilitySettings.getInstance();
 		if (VisibilitySettings.eventOnVSettings) {
+			float weight = edge.getAttribute("weight", new Float(0));
 			// Set transparency
-			alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), 155, Mapper.EDGE_WEIGHT));
+			alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, weight, 155, Mapper.EDGE_WEIGHT));
 			if (VisibilitySettings.getInstance().getFiltrosVinculo() != null) {
 				switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
 				case "Radial":
-					thickness = Mapper.getInstance().convert(Mapper.RADIAL, edge.getWeight(), maxThickness,
+					thickness = Mapper.getInstance().convert(Mapper.RADIAL, weight, maxThickness,
 							Mapper.EDGE_WEIGHT);
 					break;
 				case "Lineal":
-					thickness = Mapper.getInstance().convert(Mapper.LINEAR, edge.getWeight(), maxThickness,
+					thickness = Mapper.getInstance().convert(Mapper.LINEAR, weight, maxThickness,
 							Mapper.EDGE_WEIGHT);
 					break;
 				case "Logarithmic":
-					thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, edge.getWeight(), maxThickness,
+					thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, weight,  maxThickness,
 							Mapper.EDGE_WEIGHT);
 					break;
 				case "Sinusoidal":
-					thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, edge.getWeight(), maxThickness,
+					thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, weight,  maxThickness,
 							Mapper.EDGE_WEIGHT);
 					break;
 				case "Sigmoid":
-					thickness = Mapper.getInstance().convert(Mapper.SIGMOID, edge.getWeight(), maxThickness,
+					thickness = Mapper.getInstance().convert(Mapper.SIGMOID, weight,  maxThickness,
 							Mapper.EDGE_WEIGHT);
 				}
 			}
@@ -178,7 +179,7 @@ public class VEdge implements Serializable{
 	}
 
 	public void setVisibility(float edgeVisibilityThreshold) {
-		if (edgeVisibilityThreshold > edge.getWeight()) {
+		if (edgeVisibilityThreshold > edge.getAttribute("weight", new Integer(0))) {
 			visibility = false;
 		} else {
 			visibility = true;

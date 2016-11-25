@@ -4,18 +4,13 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import containers.Container;
-import controlP5.Accordion;
 import controlP5.Bang;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
-import controlP5.Group;
-import controlP5.ScrollableList;
 import executable.Executable;
 import processing.core.PApplet;
-import processing.event.MouseEvent;
 import utilities.GraphLoader;
-import visualElements.Canvas;
 
 public class ImportMenu implements ControlListener {
 	public ControlP5 menu;
@@ -23,14 +18,7 @@ public class ImportMenu implements ControlListener {
 	public int barWidth = 170;
 	public int itemHeight = 13;
 	public int gap = 2;
-	public String[] nodeAttributes = { "n1", "n2", "n3" };
-	public String[] edgeAttributes = { "e1", "e2", "e3" };
-	// public String[] nodeAttributes = { "Community", "Label", "Size", "Node
-	// color" };
-	// public String[] edgeAttributes = { "Source thickness", "Target
-	// thickness", "Body thickness", "Body color" };
 	public boolean loadGraphEnabled = false;
-	private Accordion accordion;
 	public DropDownList nodeList, edgeList;
 
 	public ImportMenu(PApplet app) {
@@ -41,7 +29,7 @@ public class ImportMenu implements ControlListener {
 		String [] nodeAttributeNames = {"Community", "Label", "Size", "Node", "color"};
 		nodeList.setAttributes(nodeAttributeNames);
 		// for edges
-		edgeList = new DropDownList (app, "Node Attributes");
+		edgeList = new DropDownList (app, "Edge Attributes");
 		edgeList.setPos(100, 450);
 		String [] edgeAttributeNames = {"Source thickness", "Target","thickness", "Body thickness", "Body color"};
 		edgeList.setAttributes(edgeAttributeNames);

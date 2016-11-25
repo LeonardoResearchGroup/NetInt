@@ -32,7 +32,6 @@ public class VNodeDescription implements Serializable {
 			// Identification Data
 			Canvas.app.text("Name: " + vNode.getNode().getName(), vNode.pos.x + 5, vNode.pos.y - 5);
 			Canvas.app.text("ID: " + vNode.getNode().getId(), vNode.pos.x + 5, vNode.pos.y - 15);
-			Canvas.app.text("Sector: " + vNode.getNode().getSector(), vNode.pos.x + 5, vNode.pos.y - 25);
 
 			// Communities data
 			Iterator<Integer> itr = vNode.getNode().getMetadataKeys().iterator();

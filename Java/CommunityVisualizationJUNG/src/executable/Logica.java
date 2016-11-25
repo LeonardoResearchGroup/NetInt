@@ -27,18 +27,19 @@ import visualElements.VNode;
 public class Logica {
 
 	// Visual Communities
-    // private VCommunity vMainCommunity;
+	// private VCommunity vMainCommunity;
 	public static VCommunity vSubSubCommunity;
 	public static ArrayList<VCommunity> vSubCommunities;
-	// These Dimensions set the RootContainer and top SubContainer boundaries 
+	// These Dimensions set the RootContainer and top SubContainer boundaries
 	public Dimension rootDimension;
-	public static Dimension HD720= new Dimension(1280,720);
-	public static Dimension HD1080= new Dimension(1920,1080);
-	public static Dimension UHD= new Dimension(3840,2160);
+	public static Dimension HD720 = new Dimension(1280, 720);
+	public static Dimension HD1080 = new Dimension(1920, 1080);
+	public static Dimension UHD = new Dimension(3840, 2160);
 
 	public Logica(int width, int height) {
 		rootDimension = new Dimension(width, height);
 	}
+
 	public Logica(Dimension dim) {
 		rootDimension = dim;
 	}
@@ -181,6 +182,16 @@ public class Logica {
 		vSubSubCommunity.searchNode();
 	}
 
+	/**
+	 * @deprecated
+	 * @param file
+	 * @param communityFilter
+	 * @param nodeName
+	 * @param sector
+	 * @param edgeWeight
+	 * @param layout
+	 * @param format
+	 */
 	public void loadGraph(File file, String communityFilter, String nodeName, String sector, String edgeWeight,
 			int layout, int format) {
 		String XML_FILE = file.getAbsolutePath();
@@ -205,30 +216,37 @@ public class Logica {
 
 		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
-
 	}
-	/*
-	 * public void loadGraph(String file, String communityFilter, String
-	 * nodeName, String sector, String edgeWeight) { String XML_FILE = file;
-	 * //// *************CORREGIR SECTOR ***************** GraphLoader rootGraph
-	 * = new GraphLoader(XML_FILE, communityFilter, nodeName, sector,
-	 * edgeWeight);
-	 * 
-	 * // Root visual community // vMainCommunity =
-	 * createRootVisualCommunity(rootGraph.jungGraph);
-	 * 
-	 * // Sub communities vSubCommunities =
-	 * createVisualSubCommunities(rootGraph.jungGraph,
-	 * rootGraph.getCommunityNames(), Container.FRUCHTERMAN_REINGOLD); //
-	 * Community of communities vSubSubCommunity =
-	 * createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities",
-	 * Container.FRUCHTERMAN_REINGOLD);
-	 * vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-	 * createEdgesBetweenSubcommunities(vSubCommunities);
-	 * vSubSubCommunity.container.runEdgeFactory();
-	 * 
-	 * }
-	 */
+
+	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
+			int format) {
+		String XML_FILE = file.getAbsolutePath();
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, layout);
+		// Root visual community. Keep it cancelled!!!!
+		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
+
+		// Sub communities
+		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
+
+		// Community of communities
+		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
+
+		// Setting root Container & Reporting progress
+		System.out.println(
+				this.getClass().getName() + " Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
+		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+
+		// Reporting progress
+		System.out.println(this.getClass().getName() + " Creating edges between communities");
+		// if(format == GraphLoader.PAJEK)
+		addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+		// else if(format == GraphLoader.GRAPHML)
+		// createEdgesBetweenSubcommunities(vSubCommunities);
+
+		// Create edges & reporting progress
+		System.out.println(this.getClass().getName() + " Running edge factory");
+		vSubSubCommunity.container.runEdgeFactory();
+	}
 
 	public ArrayList<VCommunity> getVisualCommunities() {
 		return vSubCommunities;
