@@ -126,8 +126,8 @@ public class GraphmlReader {
 
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.IN);
-			Vertex target = edge.getVertex(Direction.OUT);
+			Vertex source = edge.getVertex(Direction.OUT);
+			Vertex target = edge.getVertex(Direction.IN);
 			// Get their ID
 			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
@@ -291,8 +291,8 @@ public class GraphmlReader {
 
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.IN);
-			Vertex target = edge.getVertex(Direction.OUT);
+			Vertex source = edge.getVertex(Direction.OUT);
+			Vertex target = edge.getVertex(Direction.IN);
 			// Get their ID
 			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
