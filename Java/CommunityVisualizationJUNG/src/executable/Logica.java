@@ -221,7 +221,7 @@ public class Logica {
 	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
 			int format) {
 		String XML_FILE = file.getAbsolutePath();
-		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, layout);
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, format);
 		// Root visual community. Keep it cancelled!!!!
 		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
 

@@ -20,7 +20,7 @@ public class DropDownList implements ControlListener {
 	public int gap = 2;
 	public String menuName;
 	public String[] attributes = { "1", "2", "3", "4" };
-	public String[] selection = new String[attributes.length];
+	private String[] selection = new String[attributes.length];
 
 	public DropDownList(PApplet app, String name) {
 		dropMenu = new ControlP5(app);
@@ -87,6 +87,11 @@ public class DropDownList implements ControlListener {
 
 	public void setAttributes(String[] attributes) {
 		this.attributes = attributes;
+		// re-initilize selection
 		selection = new String[attributes.length];
+	}
+	
+	public String[] getSelection(){
+		return selection;
 	}
 }

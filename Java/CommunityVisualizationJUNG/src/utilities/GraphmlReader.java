@@ -175,8 +175,8 @@ public class GraphmlReader {
 					} else
 						throw new NullPointerException();
 				} catch (NullPointerException exception) {
-					exception.printStackTrace();
-					System.out.println(this.getClass().getName() + " No label matches " + edgeImportAttributes[i]);
+					//exception.printStackTrace();
+					//System.out.println(this.getClass().getName() + " No label matches " + edgeImportAttributes[i]);
 				}
 			}
 			rtnGraph.addEdge(e, nodeSource, nodeTarget, EdgeType.DIRECTED);
@@ -232,8 +232,8 @@ public class GraphmlReader {
 				}
 			}
 		} catch (NullPointerException e) {
-			e.printStackTrace();
-			System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
+			//e.printStackTrace();
+			//System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
 		}
 	}
 
@@ -269,16 +269,16 @@ public class GraphmlReader {
 				node.setCommunity(vertex.getProperty(communityKey).toString(), 1);
 				addCommunity(node.getCommunity(1));
 			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches " + communityKey
-						+ "!!! Check the key String of the community filter");
+//				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches " + communityKey
+//						+ "!!! Check the key String of the community filter");
 			}
 
 			// Check if exist a property matching nameKey
 			if (vertex.getProperty(nameKey) != null) {
 				node.setName(vertex.getProperty(nameKey).toString());
 			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + nameKey
-						+ "!!! Check the key String of the graphML label");
+//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + nameKey
+//						+ "!!! Check the key String of the graphML label");
 			}
 
 			// Check if exist a property matching sectorKey
@@ -317,15 +317,15 @@ public class GraphmlReader {
 				}
 				e.setWeight(weight);
 			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + weightKey
-						+ "!!! Check the key String of the weight");
+//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + weightKey
+//						+ "!!! Check the key String of the weight");
 			}
 			if (edge.getProperty(frequencyKey) != null) {
 				String freq = edge.getProperty(frequencyKey).toString();
 				e.setFrequency(Double.valueOf(freq).intValue());
 			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + frequencyKey
-						+ "!!!!!! Check the key String of the frequency");
+//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + frequencyKey
+//						+ "!!!!!! Check the key String of the frequency");
 			}
 			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
 			// For the metagraph
@@ -395,7 +395,7 @@ public class GraphmlReader {
 			}
 
 			br.close();
-			System.out.println("Cantidad de V�rtices");
+			System.out.println("Cantidad de Vertices");
 			System.out.println(rtnGraph.getVertexCount());
 
 		} catch (Exception e) {

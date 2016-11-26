@@ -46,7 +46,7 @@ public class ImportMenu implements ControlListener {
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys) {
 		nodeList.addElementAttributes(nodeAttributeKeys);
 		edgeList.addElementAttributes(edgeAttributeKeys);
-		menu.addBang("bang").setPosition(195, 55).setSize(100, 280).setTriggerEvent(Bang.RELEASE).setLabel("Load graph");
+		menu.addBang("bang").setPosition(100, 600).setSize(100, 20).setTriggerEvent(Bang.RELEASE).setLabel("Load graph");
 		menu.getController("bang").addListener(this);
 	}
 
@@ -67,14 +67,15 @@ public class ImportMenu implements ControlListener {
 		String controllerName = theEvent.getController().getName();
 		if (controllerName.equals("bang")) {
 			loadGraphEnabled = true;
-			for (int i = 0; i < nodeList.selection.length; i++) {
-				System.out.print(nodeList.selection[i] + ", ");
+			for (int i = 0; i < nodeList.getSelection().length; i++) {
+				System.out.print(nodeList.getSelection()[i] + ", ");
 			}
 			// ***** stitch selection lists and do the retrieval
 			
 			System.out.println("---");
-			Executable.app.loadGraph(Executable.file, nodeList.selection[0], nodeList.selection[1], nodeList.selection[2],
-					nodeList.selection[3], Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+		//	Executable.app.loadGraph(Executable.file, "comunidad", "name", "sector",
+		//			"otro", Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+			Executable.app.loadGraph(Executable.file,nodeList.getSelection(), edgeList.getSelection(), Container.FRUCHTERMAN_REINGOLD, GraphLoader.PAJEK);
 			Executable.activeGraph = true;
 			// *** Ideally this object must be deleted.
 			menu.setVisible(false);

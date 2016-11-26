@@ -55,8 +55,7 @@ public class GraphLoader {
 			reader = new GraphmlReader(file);
 			jungGraph = reader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
 		}
-		 System.out.println("GraphLoader> " + reader.getCommunities().size() +
-		 " communities loaded");
+		 System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
 		 // TODO Improve degree assigning with JUNG library method
 		 setNodesDegrees(jungGraph);
 		 System.out.println("GraphLoader> Graph Created from file:" + file);
@@ -189,14 +188,6 @@ public class GraphLoader {
 				.transform(jungGraph);
 		return problemGraph;
 
-	}
-
-	public static void main(String[] args) {
-		GraphLoader rootGraph = new GraphLoader("./data/graphs/Risk.graphml", "Continent", "label", "Continent",
-				"weight", GraphLoader.GRAPHML);
-		DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByInterCommunities(rootGraph.jungGraph, "AF",
-				"EU");
-		System.out.println(graphTemp.getEdgeCount());
 	}
 
 }
