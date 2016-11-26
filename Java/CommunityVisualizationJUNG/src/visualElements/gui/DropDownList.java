@@ -20,6 +20,7 @@ public class DropDownList implements ControlListener {
 	public int gap = 2;
 	public String menuName;
 	public String[] attributes = { "1", "2", "3", "4" };
+	// The user selection
 	private String[] selection = new String[attributes.length];
 
 	public DropDownList(PApplet app, String name) {
@@ -90,8 +91,24 @@ public class DropDownList implements ControlListener {
 		// re-initilize selection
 		selection = new String[attributes.length];
 	}
-	
-	public String[] getSelection(){
-		return selection;
+
+	public String[] getSelection() {
+		ArrayList<String> tmp = new ArrayList<String>();
+		// If any of the first two positions were not selected by the user
+		if (selection[0] == null || selection[1] == null) {
+			// return a null String
+			return new String[0];
+		}
+		for (int i = 0; i < selection.length; i++) {
+			if (selection[i] != null)
+				tmp.add(selection[i]);
+		}
+		String[] rtn = new String[tmp.size()];
+		for (int i = 0; i < rtn.length; i++) {
+			rtn[i] = tmp.get(i);
+			System.out.println(this.getClass().getName() + " " + rtn[i]);
+		}
+
+		return rtn;
 	}
 }

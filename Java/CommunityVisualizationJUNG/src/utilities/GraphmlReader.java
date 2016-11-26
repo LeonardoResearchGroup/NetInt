@@ -69,11 +69,12 @@ public class GraphmlReader {
 	}
 
 	/**
-	 * @deprecated
+	 * 
 	 * @param nodeImportAttributes
 	 * @return
 	 */
 	private Node[] makeNodes(String[] nodeImportAttributes) {
+		System.out.println(this.getClass().getName() + " Making Nodes...");
 		// Final Array of nodes with attributes
 		Node[] nodes = new Node[30000];
 		// *** Go over graph vertex and set all nodes
@@ -82,39 +83,38 @@ public class GraphmlReader {
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
 			// Make a node with the retrieved ID
 			Node nodeTmp = new Node(String.valueOf(id));
-			for (int i = 0; i < nodeImportAttributes.length; i++) {
+
+			try {
+				// For the first two attributes: node community and node
+				// name
+				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
+					nodeTmp.setCommunity("Root", 0);
+					nodeTmp.setCommunity(vertex.getProperty(nodeImportAttributes[0]).toString(), 1);
+					addCommunity(nodeTmp.getCommunity(1));
+				} else
+					throw new NullPointerException();
+				// Label
+				if (vertex.getProperty(nodeImportAttributes[1]) != null) {
+					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[1]).toString());
+				} else
+					throw new NullPointerException();
+
+			} catch (NullPointerException e) {
+				System.out.println(this.getClass().getName() + " NullPointerException making nodes "
+						+ nodeImportAttributes[0] + " " + nodeImportAttributes[1]);
+			}
+
+			for (int i = 2; i < nodeImportAttributes.length; i++) {
 				try {
-					// For the first two attributes: node community and node
-					// name
-					switch (i) {
-					case 0: // Community key
-						if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-							nodeTmp.setCommunity("Root", 0);
-							nodeTmp.setCommunity(vertex.getProperty(nodeImportAttributes[i]).toString(), 1);
-							addCommunity(nodeTmp.getCommunity(1));
-						} else
-							throw new NullPointerException();
-						break;
-					case 1: // Label key
-						if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-							nodeTmp.setName(vertex.getProperty(nodeImportAttributes[i]).toString());
-							break;
-						} else
-							throw new NullPointerException();
-					}
 					// For the remaining attributes
-					if (i > 1) {
-						// Check if it does exist a property matching other
-						// attributes
-						if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-							nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
-						} else
-							throw new NullPointerException();
-					}
+					// Check if it does exist a property matching other
+					// attributes
+					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
+						nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
+					} else
+						throw new NullPointerException();
 				} catch (NullPointerException e) {
-					e.printStackTrace();
-					System.out.println(this.getClass().getName() + ": No vertex label matches: "
-							+ nodeImportAttributes[i] + "!!! Check the attribute key");
+					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 				}
 			}
 			nodes[id] = nodeTmp;
@@ -143,11 +143,15 @@ public class GraphmlReader {
 		// Hash map <Name of community, Node object of a community>
 		communityNodes = new HashMap<String, Node>();
 
+		// **** MAKE NODES ****
+		Node[] nodes = makeNodes(nodeImportAttributes);
+
 		// **** CREATE EDGES ****
 		float maxWeight = 0;
 		float minWeight = Float.POSITIVE_INFINITY;
 
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
+
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.IN);
 			Vertex target = edge.getVertex(Direction.OUT);
@@ -156,14 +160,14 @@ public class GraphmlReader {
 			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 
 			// **** MAKE SOURCE AND TARGET NODES ****
-			Node nodeSource = new Node(String.valueOf(idSource));
-			Node nodeTarget = new Node(String.valueOf(idTarget));
+			// Node nodeSource = new Node(String.valueOf(idSource));
+			// Node nodeTarget = new Node(String.valueOf(idTarget));
 			// Assign attributes to nodes
-			assignNodeAttributes(source, nodeSource, nodeImportAttributes);
-			assignNodeAttributes(target, nodeTarget, nodeImportAttributes);
+			// assignNodeAttributes(source, nodeSource, nodeImportAttributes);
+			// assignNodeAttributes(target, nodeTarget, nodeImportAttributes);
 
 			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(nodeSource, nodeTarget, true);
+			graphElements.Edge e = new graphElements.Edge(nodes[idSource], nodes[idTarget], true);
 
 			// check if the edge has any of the edge Import attributes
 			for (int i = 0; i < edgeImportAttributes.length; i++) {
@@ -175,14 +179,13 @@ public class GraphmlReader {
 					} else
 						throw new NullPointerException();
 				} catch (NullPointerException exception) {
-					//exception.printStackTrace();
-					//System.out.println(this.getClass().getName() + " No label matches " + edgeImportAttributes[i]);
+					System.out.println(this.getClass().getName() + " NullPointerException making edges ");
 				}
 			}
-			rtnGraph.addEdge(e, nodeSource, nodeTarget, EdgeType.DIRECTED);
+			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
 			// For the metagraph
-			Edge metaE = new Edge(communityNodes.get(nodeSource.getCommunity(1)),
-					communityNodes.get(nodeTarget.getCommunity(1)), true);
+			Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
+					communityNodes.get(nodes[idTarget].getCommunity(1)), true);
 			if (!edgesBetweenCommunities.contains(metaE)) {
 				edgesBetweenCommunities.add(metaE);
 			}
@@ -232,8 +235,9 @@ public class GraphmlReader {
 				}
 			}
 		} catch (NullPointerException e) {
-			//e.printStackTrace();
-			//System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
+			// e.printStackTrace();
+			// System.out.println(this.getClass().getName() + ": No vertex label
+			// match, Check the attribute key");
 		}
 	}
 
@@ -269,16 +273,18 @@ public class GraphmlReader {
 				node.setCommunity(vertex.getProperty(communityKey).toString(), 1);
 				addCommunity(node.getCommunity(1));
 			} else {
-//				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches " + communityKey
-//						+ "!!! Check the key String of the community filter");
+				// System.out.println("GraphmlReader> getJungDirectedGraph(): No
+				// filter matches " + communityKey
+				// + "!!! Check the key String of the community filter");
 			}
 
 			// Check if exist a property matching nameKey
 			if (vertex.getProperty(nameKey) != null) {
 				node.setName(vertex.getProperty(nameKey).toString());
 			} else {
-//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + nameKey
-//						+ "!!! Check the key String of the graphML label");
+				// System.out.println("GraphmlReader> getJungDirectedGraph ():
+				// No label matches " + nameKey
+				// + "!!! Check the key String of the graphML label");
 			}
 
 			// Check if exist a property matching sectorKey
@@ -317,15 +323,17 @@ public class GraphmlReader {
 				}
 				e.setWeight(weight);
 			} else {
-//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + weightKey
-//						+ "!!! Check the key String of the weight");
+				// System.out.println("GraphmlReader> getJungDirectedGraph ():
+				// No label matches " + weightKey
+				// + "!!! Check the key String of the weight");
 			}
 			if (edge.getProperty(frequencyKey) != null) {
 				String freq = edge.getProperty(frequencyKey).toString();
 				e.setFrequency(Double.valueOf(freq).intValue());
 			} else {
-//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + frequencyKey
-//						+ "!!!!!! Check the key String of the frequency");
+				// System.out.println("GraphmlReader> getJungDirectedGraph ():
+				// No label matches " + frequencyKey
+				// + "!!!!!! Check the key String of the frequency");
 			}
 			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
 			// For the metagraph

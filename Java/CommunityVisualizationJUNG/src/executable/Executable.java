@@ -34,11 +34,6 @@ public class Executable extends PApplet {
 		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
 		// "label", "sector", "weight",
 		// Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
-		//// app.loadGraph(new
-		// File("./data/graphs/comunidadesNodosEstadosFinancieros.graphml"),
-		// "comunidad", "name", "void sector",
-		//// "VALORES_MOVILIZADOS", Container.FRUCHTERMAN_REINGOLD,
-		// GraphLoader.GRAPHML);
 		this.setActiveGraph(false);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
@@ -52,7 +47,6 @@ public class Executable extends PApplet {
 
 		this.surface.setLocation(200, 0);
 		this.surface.setTitle("Java Networked Interaction Visualization");
-
 	}
 
 	public void draw() {

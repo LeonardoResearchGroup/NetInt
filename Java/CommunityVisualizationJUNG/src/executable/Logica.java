@@ -21,6 +21,7 @@ import graphElements.Edge;
 import graphElements.Node;
 import utilities.GraphLoader;
 import utilities.mapping.Mapper;
+import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
 
@@ -78,10 +79,12 @@ public class Logica {
 
 		int i = 0;
 		Mapper.getInstance().setMinCommunitySize(graph.getVertexCount());
-
 		for (String communityName : communityNames) {
 			System.out.println("Logica > Generating DirectedSparseMultigraph for community:" + communityName
 					+ " out of " + communityNames.size());
+			Canvas.app.text("Generating DirectedSparseMultigraph for community:" + communityName + " out of "
+					+ communityNames.size(), 50, Canvas.app.height - 50);
+	
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
@@ -232,8 +235,8 @@ public class Logica {
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
 
 		// Setting root Container & Reporting progress
-		System.out.println(
-				this.getClass().getName() + " Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
+		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
+				+ vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 
 		// Reporting progress
