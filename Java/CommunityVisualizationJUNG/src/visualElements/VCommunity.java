@@ -59,6 +59,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	boolean arrangementIterationsDone = false;
 
 	public void show() {
+//		container.showBoundaries(pos);
+		
 		// Display the community cover
 		comCover.show(container, this, hasNodeFound);
 

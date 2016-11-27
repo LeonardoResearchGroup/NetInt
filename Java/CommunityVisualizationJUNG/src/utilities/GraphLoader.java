@@ -18,17 +18,26 @@ public class GraphLoader {
 	public GraphmlReader reader;
 	public static final int PAJEK = 1;
 	public static final int GRAPHML = 0;
-	
+
+	/**
+	 * @deprecated
+	 * @param file
+	 * @param communityFilter
+	 * @param graphmlLabel
+	 * @param sector
+	 * @param edgeWeight
+	 * @param format
+	 */
 	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector, String edgeWeight,
 			int format) {
-		
-		if(format == GraphLoader.PAJEK){
+
+		if (format == GraphLoader.PAJEK) {
 			reader = new GraphmlReader();
 			jungGraph = reader.readFromPajek(file);
-		}else if(format == GraphLoader.GRAPHML){
+		} else if (format == GraphLoader.GRAPHML) {
 			reader = new GraphmlReader(file);
 			jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
-			
+
 		}
 		System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
 		// TODO Improve degree assigning with JUNG library method
@@ -36,6 +45,22 @@ public class GraphLoader {
 		System.out.println("GraphLoader> Graph Created from file:" + file);
 		System.out.println(" Total Nodes: " + jungGraph.getVertexCount());
 		System.out.println(" Total Edges: " + jungGraph.getEdgeCount());
+	}
+
+	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
+		if (format == GraphLoader.PAJEK) {
+			reader = new GraphmlReader();
+			jungGraph = reader.readFromPajek(file);
+		} else if (format == GraphLoader.GRAPHML) {
+			reader = new GraphmlReader(file);
+			jungGraph = reader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
+		}
+		 System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
+		 // TODO Improve degree assigning with JUNG library method
+		 setNodesDegrees(jungGraph);
+		 System.out.println("GraphLoader> Graph Created from file:" + file);
+		 System.out.println(" Total Nodes: " + jungGraph.getVertexCount());
+		 System.out.println(" Total Edges: " + jungGraph.getEdgeCount());
 	}
 
 	public ArrayList<String> getCommunityNames() {
@@ -123,7 +148,8 @@ public class GraphLoader {
 			}
 		};
 		VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(inSubgraph);
-		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter.transform(jungGraph);
+		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+				.transform(jungGraph);
 		// Set In and Out Degree
 		for (Node n : problemGraph.getVertices()) {
 			n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
@@ -138,7 +164,7 @@ public class GraphLoader {
 	 * communities community
 	 * 
 	 * @param jungGraph
-	 * @param comumnity1	
+	 * @param comumnity1
 	 * @param comumnity2
 	 * @return
 	 */
@@ -158,16 +184,10 @@ public class GraphLoader {
 			}
 		};
 		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(inSubgraph);
-		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter.transform(jungGraph);
+		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+				.transform(jungGraph);
 		return problemGraph;
 
-	}
-
-	public static void main(String[] args) {
-		GraphLoader rootGraph = new GraphLoader("./data/graphs/Risk.graphml", "Continent", "label", "Continent", "weight", GraphLoader.GRAPHML);
-		DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByInterCommunities(rootGraph.jungGraph, "AF",
-				"EU");
-		System.out.println(graphTemp.getEdgeCount());
 	}
 
 }
