@@ -120,6 +120,13 @@ public class GraphmlReader {
 					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 				}
 			}
+			//Check if some graphml key match with some financial stament key
+			for(String key : vertex.getPropertyKeys()){
+				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
+				if(keyLabel != null){
+					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
+				}
+			}
 			nodes[id] = nodeTmp;
 		}
 		return nodes;
