@@ -285,6 +285,10 @@ public class VNode extends VisualAtom implements Serializable {
 			setVisibility(true);
 		}
 	}
+	
+	public void setVisibility2(boolean visibility) {
+		super.setVisibility(visibility);
+	}
 
 	// ***** Events
 	@Override

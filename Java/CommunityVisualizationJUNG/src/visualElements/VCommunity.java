@@ -6,6 +6,8 @@ import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.util.ArrayList;
 
 import containers.Container;
@@ -102,10 +104,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						// If vA is a VNode
 						VNode vN = (VNode) vA;
 						vN.setVisibility(VisibilitySettings.getInstance().getUmbralGrados());
-						// If vN is visible
-						if (vN.isVisible()) {
-							vN.show();
-						}
 						if (vNodesCentered) {
 //							System.out.println("centered");
 							// reset vNode coordinates to the coordinates
@@ -113,15 +111,25 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							PVector newOrigin = new PVector(container.dimension.width / 2,
 									container.dimension.height / 2);
 							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
-							
 						}
+						// If vN is visible
+						if (vN.isVisible() && !vNodesCentered) {
+							vN.show();
+						}
+
 					}
 				}
+				
 				vNodesCentered = false;
 			}else { 	
 				//System.out.println(this.node.getId()+" centrando");
 				for (VisualAtom vA : container.getVNodes()) {
 					vA.pos.set(pos);
+					//We have to known which nodes are visible.
+					if (vA instanceof VNode) {
+						VNode vN = (VNode) vA;
+						vN.setVisibility2(false);
+					}	
 				}
 				vNodesCentered = true;
 			}

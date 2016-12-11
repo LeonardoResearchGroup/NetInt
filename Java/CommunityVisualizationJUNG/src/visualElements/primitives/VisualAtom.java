@@ -253,12 +253,14 @@ public abstract class VisualAtom implements Serializable{
 	}
 
 	private void vNodeEvent(VNode vNode, MouseEvent e) {
-		if (e.getAction() == MouseEvent.CLICK) {
-			mouseClicked(e);
-		} else if (e.getAction() == MouseEvent.RELEASE) {
-			mouseReleased(e);
-		} else if (e.getAction() == MouseEvent.PRESS) {
-			mousePressed(e);
+		if(vNode.isVisible()){
+			if (e.getAction() == MouseEvent.CLICK) {
+				mouseClicked(e);
+			} else if (e.getAction() == MouseEvent.RELEASE) {
+				mouseReleased(e);
+			} else if (e.getAction() == MouseEvent.PRESS) {
+				mousePressed(e);
+			}
 		}
 	}
 
