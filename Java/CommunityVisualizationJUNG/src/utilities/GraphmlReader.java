@@ -78,8 +78,21 @@ public class GraphmlReader {
 	 */
 	private Node[] makeNodes(String[] nodeImportAttributes) {
 		System.out.println(this.getClass().getName() + " Making Nodes...");
+		
+		long ini = System.currentTimeMillis();
+		
+		int vertexCount = 0;
+		for (Vertex vertex : graph.getVertices()) {
+			vertexCount++;
+		}
+		
+		long fin = System.currentTimeMillis();
+		long  elapsed = fin - ini;
+		System.out.println(this.getClass().getName() + "Time counting vertex: "+ elapsed );
+
+		
 		// Final Array of nodes with attributes
-		Node[] nodes = new Node[30000];
+		Node[] nodes = new Node[vertexCount];
 		// *** Go over graph vertex and set all nodes
 		for (Vertex vertex : graph.getVertices()) {
 			// Get vertex ID
