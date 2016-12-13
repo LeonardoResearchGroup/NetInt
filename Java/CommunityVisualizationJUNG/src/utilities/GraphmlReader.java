@@ -81,7 +81,7 @@ public class GraphmlReader {
 		
 		long ini = System.currentTimeMillis();
 		
-		int vertexCount = 0;
+		int vertexCount = 1;
 		for (Vertex vertex : graph.getVertices()) {
 			vertexCount++;
 		}
