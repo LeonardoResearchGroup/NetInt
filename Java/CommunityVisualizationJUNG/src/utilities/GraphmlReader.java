@@ -9,13 +9,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 import utilities.mapping.Mapper;
-import visualElements.VCommunity;
 import visualElements.gui.VisibilitySettings;
 
 import com.tinkerpop.blueprints.Graph;
@@ -72,31 +71,39 @@ public class GraphmlReader {
 	}
 
 	/**
+	 * This class was initially designed to return an array of nodes but it
+	 * needed to be changes to a TreeMap because it was not possible to
+	 * determine the final size of the array in advance.
 	 * 
 	 * @param nodeImportAttributes
-	 * @return
+	 * @return The collection of nodes ordered by the Integer version of their
+	 *         Id
 	 */
-	private Node[] makeNodes(String[] nodeImportAttributes) {
+	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes) {
+		// private Node[] makeNodes(String[] nodeImportAttributes) {
 		System.out.println(this.getClass().getName() + " Making Nodes...");
 		// Timer initialization
-		long ini = System.currentTimeMillis();
+		// long ini = System.currentTimeMillis();
 		// Count how many vertices are there in the graph
-		int vertexCount = 0;
-		for (Vertex vertex : graph.getVertices()) {
-			vertexCount++;
-		}
+		// int vertexCount = 1;
+		// for (Vertex vertex : graph.getVertices()) {
+		// vertexCount++;
+		// }
 		// Timer last count
-		long fin = System.currentTimeMillis();
-		long  elapsed = fin - ini;
-		System.out.println(this.getClass().getName() + " Time counting "+ vertexCount+" vertex: "+ elapsed );
+		// long fin = System.currentTimeMillis();
+		// long elapsed = fin - ini;
+		// System.out.println(this.getClass().getName() + " Time counting " +
+		// vertexCount + " vertex: " + elapsed);
+
+		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
 
 		// Final Array of nodes with attributes
-		Node[] nodes = new Node[vertexCount];
+		// Node[] nodes = new Node[vertexCount];
 		// *** Go over graph vertex and set all nodes
+		// int counter = 0;
 		for (Vertex vertex : graph.getVertices()) {
 			// Get vertex ID
-			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""))-1;
-			System.out.println("Node ID: "+id);
+			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
 			// Make a node with the retrieved ID
 			Node nodeTmp = new Node(String.valueOf(id));
 
@@ -133,16 +140,18 @@ public class GraphmlReader {
 					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 				}
 			}
-			//Check if some graphml key match with some financial stament key
-			for(String key : vertex.getPropertyKeys()){
+			// Check if some graphml key match with some financial stament key
+			for (String key : vertex.getPropertyKeys()) {
 				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
-				if(keyLabel != null){
+				if (keyLabel != null) {
 					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
 			}
-			nodes[id] = nodeTmp;
+			// nodes[id] = nodeTmp;
+			theNodes.put(id, nodeTmp);
 		}
-		return nodes;
+		// return nodes;
+		return theNodes;
 	}
 
 	/**
@@ -167,8 +176,8 @@ public class GraphmlReader {
 		communityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
-		Node[] nodes = makeNodes(nodeImportAttributes);
-
+		// Node[] nodes = makeNodes(nodeImportAttributes);
+		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
 		// **** CREATE EDGES ****
 		float maxWeight = 0;
 		float minWeight = Float.POSITIVE_INFINITY;
@@ -179,8 +188,8 @@ public class GraphmlReader {
 			Vertex source = edge.getVertex(Direction.OUT);
 			Vertex target = edge.getVertex(Direction.IN);
 			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""))-1;
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""))-1;
+			Integer idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
+			Integer idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 
 			// **** MAKE SOURCE AND TARGET NODES ****
 			// Node nodeSource = new Node(String.valueOf(idSource));
@@ -190,7 +199,9 @@ public class GraphmlReader {
 			// assignNodeAttributes(target, nodeTarget, nodeImportAttributes);
 
 			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(nodes[idSource], nodes[idTarget], true);
+			// graphElements.Edge e = new graphElements.Edge(nodes[idSource],
+			// nodes[idTarget], true);
+			graphElements.Edge e = new graphElements.Edge(nodes.get(idSource), nodes.get(idTarget), true);
 
 			// check if the edge has any of the edge Import attributes
 			for (int i = 0; i < edgeImportAttributes.length; i++) {
@@ -205,10 +216,15 @@ public class GraphmlReader {
 					System.out.println(this.getClass().getName() + " NullPointerException making edges ");
 				}
 			}
-			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
+			// rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget],
+			// EdgeType.DIRECTED);
+			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 			// For the metagraph
-			Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
-					communityNodes.get(nodes[idTarget].getCommunity(1)), true);
+			// Edge metaE = new
+			// Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
+			// communityNodes.get(nodes[idTarget].getCommunity(1)), true);
+			Edge metaE = new Edge(communityNodes.get(nodes.get(idSource).getCommunity(1)),
+					communityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
 			if (!edgesBetweenCommunities.contains(metaE)) {
 				edgesBetweenCommunities.add(metaE);
 			}
@@ -309,29 +325,30 @@ public class GraphmlReader {
 			}
 
 			// Check if exist a property matching sectorKey
-//			if (vertex.getProperty(sectorKey) != null) {
-//				node.setSector(vertex.getProperty(sectorKey).toString());
-//			} else {
-//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + sectorKey
-//						+ "!!! Check the key String of the sector");
-//			}
-			
-			//Check if some graphml key match with some financial stament key
-			for(String key : vertex.getPropertyKeys()){
+			// if (vertex.getProperty(sectorKey) != null) {
+			// node.setSector(vertex.getProperty(sectorKey).toString());
+			// } else {
+			// System.out.println("GraphmlReader> getJungDirectedGraph (): No
+			// label matches " + sectorKey
+			// + "!!! Check the key String of the sector");
+			// }
+
+			// Check if some graphml key match with some financial stament key
+			for (String key : vertex.getPropertyKeys()) {
 				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
-				if(keyLabel != null){
+				if (keyLabel != null) {
 					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
 			}
 
 			nodes[id] = node;
 
-//			if (node.getOutDegree(1) > maxOutDegree) {
-//				maxOutDegree = node.getOutDegree(1);
-//			}
-//			if (node.getOutDegree(1) < minOutDegree) {
-//				minOutDegree = node.getOutDegree(1);
-//			}
+			// if (node.getOutDegree(1) > maxOutDegree) {
+			// maxOutDegree = node.getOutDegree(1);
+			// }
+			// if (node.getOutDegree(1) < minOutDegree) {
+			// minOutDegree = node.getOutDegree(1);
+			// }
 		}
 
 		float maxWeight = 0;
