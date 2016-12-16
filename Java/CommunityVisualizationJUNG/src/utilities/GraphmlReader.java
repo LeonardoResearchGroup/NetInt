@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 import utilities.mapping.Mapper;
 import visualElements.gui.VisibilitySettings;
@@ -71,15 +72,36 @@ public class GraphmlReader {
 	}
 
 	/**
+	 * This class was initially designed to return an array of nodes but it
+	 * needed to be changes to a TreeMap because it was not possible to
+	 * determine the final size of the array in advance.
 	 * 
 	 * @param nodeImportAttributes
-	 * @return
+	 * @return The collection of nodes ordered by the Integer version of their
+	 *         Id
 	 */
-	private Node[] makeNodes(String[] nodeImportAttributes) {
+	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes) {
+		// private Node[] makeNodes(String[] nodeImportAttributes) {
 		System.out.println(this.getClass().getName() + " Making Nodes...");
+		// Timer initialization
+		// long ini = System.currentTimeMillis();
+		// Count how many vertices are there in the graph
+		// int vertexCount = 1;
+		// for (Vertex vertex : graph.getVertices()) {
+		// vertexCount++;
+		// }
+		// Timer last count
+		// long fin = System.currentTimeMillis();
+		// long elapsed = fin - ini;
+		// System.out.println(this.getClass().getName() + " Time counting " +
+		// vertexCount + " vertex: " + elapsed);
+
+		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
+
 		// Final Array of nodes with attributes
-		Node[] nodes = new Node[30000];
+		// Node[] nodes = new Node[vertexCount];
 		// *** Go over graph vertex and set all nodes
+		// int counter = 0;
 		for (Vertex vertex : graph.getVertices()) {
 			// Get vertex ID
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
@@ -119,9 +141,18 @@ public class GraphmlReader {
 					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 				}
 			}
-			nodes[id] = nodeTmp;
+			// Check if some graphml key match with some financial stament key
+			for (String key : vertex.getPropertyKeys()) {
+				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
+				if (keyLabel != null) {
+					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
+				}
+			}
+			// nodes[id] = nodeTmp;
+			theNodes.put(id, nodeTmp);
 		}
-		return nodes;
+		// return nodes;
+		return theNodes;
 	}
 
 	/**
@@ -146,8 +177,8 @@ public class GraphmlReader {
 		communityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
-		Node[] nodes = makeNodes(nodeImportAttributes);
-
+		// Node[] nodes = makeNodes(nodeImportAttributes);
+		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
 		// **** CREATE EDGES ****
 		float maxWeight = 0;
 		float minWeight = Float.POSITIVE_INFINITY;
@@ -158,8 +189,8 @@ public class GraphmlReader {
 			Vertex source = edge.getVertex(Direction.OUT);
 			Vertex target = edge.getVertex(Direction.IN);
 			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
+			Integer idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
+			Integer idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 
 			// **** MAKE SOURCE AND TARGET NODES ****
 			// Node nodeSource = new Node(String.valueOf(idSource));
@@ -169,7 +200,9 @@ public class GraphmlReader {
 			// assignNodeAttributes(target, nodeTarget, nodeImportAttributes);
 
 			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(nodes[idSource], nodes[idTarget], true);
+			// graphElements.Edge e = new graphElements.Edge(nodes[idSource],
+			// nodes[idTarget], true);
+			graphElements.Edge e = new graphElements.Edge(nodes.get(idSource), nodes.get(idTarget), true);
 
 			// check if the edge has any of the edge Import attributes
 			for (int i = 0; i < edgeImportAttributes.length; i++) {
@@ -185,10 +218,15 @@ public class GraphmlReader {
 							+ " Null Pointer Exception because edges in the source file don't have attributes named: "+edgeImportAttributes[i]);
 				}
 			}
-			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
+			// rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget],
+			// EdgeType.DIRECTED);
+			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 			// For the metagraph
-			Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
-					communityNodes.get(nodes[idTarget].getCommunity(1)), true);
+			// Edge metaE = new
+			// Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
+			// communityNodes.get(nodes[idTarget].getCommunity(1)), true);
+			Edge metaE = new Edge(communityNodes.get(nodes.get(idSource).getCommunity(1)),
+					communityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
 			if (!edgesBetweenCommunities.contains(metaE)) {
 				edgesBetweenCommunities.add(metaE);
 			}
