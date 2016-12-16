@@ -6,6 +6,8 @@ import visualElements.primitives.VisualAtom;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Set;
+
 import graphElements.Edge;
 
 public class VEdge implements Serializable{
@@ -95,11 +97,15 @@ public class VEdge implements Serializable{
 		// **** Thickness mapping
 		// If there is an event in the control panel update the thickness
 		VisibilitySettings.getInstance();
-		if (VisibilitySettings.eventOnVSettings) {
-			float weight = edge.getAttribute("weight", new Float(0));
+		if (VisibilitySettings.eventOnVSettings && edge.getAttributeSize()>0) {
+			Object[] keys = edge.getAttributeKeys();
+			// Set the Visibility with the first Attribute of Edge Import: "Body Thickness"
+			//System.out.println("VEDGE > "+ (String) keys[0]);
+			float weight = edge.getAttribute((String) keys[0], new Float(0));
 			// Set transparency
-			alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, weight, 155, Mapper.EDGE_WEIGHT));
+			alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, weight, 155, Mapper.EDGE_WEIGHT));			
 			if (VisibilitySettings.getInstance().getFiltrosVinculo() != null) {
+				
 				switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
 				case "Radial":
 					thickness = Mapper.getInstance().convert(Mapper.RADIAL, weight, maxThickness,
@@ -179,11 +185,12 @@ public class VEdge implements Serializable{
 	}
 
 	public void setVisibility(float edgeVisibilityThreshold) {
-		if (edgeVisibilityThreshold > edge.getAttribute("weight", new Integer(0))) {
+		Object[] keys = edge.getAttributeKeys();
+		// Set the Visibility with the first Attribute of Edge Import: "Body Thickness"
+		if (edgeVisibilityThreshold > edge.getAttribute((String) keys[0], new Integer(0))) {
 			visibility = false;
 		} else {
 			visibility = true;
 		}
-
 	}
 }

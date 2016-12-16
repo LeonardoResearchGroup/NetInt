@@ -1,6 +1,5 @@
 package visualElements.gui;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -20,7 +19,7 @@ public class ImportMenu implements ControlListener {
 	public int barWidth = 170;
 	public int itemHeight = 13;
 	public int gap = 2;
-	public boolean loadGraphEnabled = false;
+	private boolean loadGraphEnabled = false;
 	public DropDownList nodeList, edgeList;
 	public PApplet app;
 
@@ -28,13 +27,13 @@ public class ImportMenu implements ControlListener {
 		menu = new ControlP5(app);
 		// for nodes
 		nodeList = new DropDownList(app, "Node Attributes");
-		nodeList.setPos(100, 300);
+		nodeList.setPos(100, 100);
 		String[] nodeAttributeNames = { "Community", "Label", "Size", "Node", "color" };
 		nodeList.setAttributes(nodeAttributeNames);
 		// for edges
 		edgeList = new DropDownList(app, "Edge Attributes");
-		edgeList.setPos(100, 450);
-		String[] edgeAttributeNames = { "Source thickness", "Target", "thickness", "Body thickness", "Body color" };
+		edgeList.setPos(100, 250);
+		String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
 		edgeList.setAttributes(edgeAttributeNames);
 		this.app = app;
 	}
@@ -50,9 +49,9 @@ public class ImportMenu implements ControlListener {
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys) {
 		nodeList.addElementAttributes(nodeAttributeKeys);
 		edgeList.addElementAttributes(edgeAttributeKeys);
-		menu.addBang("bang").setPosition(100, 600).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
+		menu.addBang("loadGraph").setPosition(100, 600).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
-		menu.getController("bang").addListener(this);
+		menu.getController("loadGraph").addListener(this);
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -66,27 +65,35 @@ public class ImportMenu implements ControlListener {
 	 * @param theEvent
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
-		System.out.println("ImportDisplay> at switchCaseMenu(): " + theEvent.getController().getName());
+		// System.out.println("ImportMenu> at choiceCatcher(): " +
+		// theEvent.getController().getName());
 
 		String controllerName = theEvent.getController().getName();
-		if (controllerName.equals("bang")) {
+		if (controllerName.equals("loadGraph")) {
 			loadGraphEnabled = true;
+			System.out.println("Node import selection:");
 			for (int i = 0; i < nodeList.getSelection().length; i++) {
-				System.out.print(nodeList.getSelection()[i] + ", ");
+				System.out.println("..." + nodeList.getSelection()[i] + ", ");
 			}
-			// ***** stitch selection lists and do the retrieval
+			System.out.println("Edge import selection:");
+			for (int i = 0; i < edgeList.getSelection().length; i++) {
+				System.out.println("..." + edgeList.getSelection()[i] + ", ");
+			}
 
-			System.out.println("---");
 			// If the user selected at least the first two attributes from the
 			// menu
-			if (nodeList.getSelection().length >= 2) {
+
+			if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
 				Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
 						Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
 				Executable.activeGraph = true;
-				// *** Ideally this object must be deleted.
+				// *** Ideally this object must be deleted instead of turning it
+				// invisible. I should be created again if the user wants to
+				// import a new file
 				menu.setVisible(false);
 				nodeList.dropMenu.setVisible(false);
 				edgeList.dropMenu.setVisible(false);
+
 			} else {
 				JOptionPane.showMessageDialog(app.frame, "Must select at least \"community\" and \"label\" attributes",
 						"Import warning", JOptionPane.WARNING_MESSAGE);

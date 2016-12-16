@@ -7,7 +7,6 @@ import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.ScrollableList;
 import processing.core.PApplet;
-import visualElements.Canvas;
 
 public class DropDownList implements ControlListener {
 	public ControlP5 dropMenu;
@@ -64,7 +63,7 @@ public class DropDownList implements ControlListener {
 	 * @param theEvent
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
-		System.out.println("ImportDisplay> at switchCaseMenu(): " + theEvent.getController().getName());
+		System.out.println("DropDownList>choiceCatcher(): " + theEvent.getController().getName());
 
 		String controllerName = theEvent.getController().getName();
 
@@ -94,11 +93,6 @@ public class DropDownList implements ControlListener {
 
 	public String[] getSelection() {
 		ArrayList<String> tmp = new ArrayList<String>();
-		// If any of the first two positions were not selected by the user
-		if (selection[0] == null || selection[1] == null) {
-			// return a null String
-			return new String[0];
-		}
 		for (int i = 0; i < selection.length; i++) {
 			if (selection[i] != null)
 				tmp.add(selection[i]);
@@ -106,9 +100,7 @@ public class DropDownList implements ControlListener {
 		String[] rtn = new String[tmp.size()];
 		for (int i = 0; i < rtn.length; i++) {
 			rtn[i] = tmp.get(i);
-			System.out.println(this.getClass().getName() + " " + rtn[i]);
 		}
-
 		return rtn;
 	}
 }

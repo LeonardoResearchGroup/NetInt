@@ -9,13 +9,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
 import utilities.mapping.Mapper;
-import visualElements.VCommunity;
 import visualElements.gui.VisibilitySettings;
 
 import com.tinkerpop.blueprints.Graph;
@@ -28,6 +26,7 @@ import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Node;
+import processing.core.PApplet;
 import graphElements.Edge;
 
 public class GraphmlReader {
@@ -139,8 +138,8 @@ public class GraphmlReader {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
-		System.out.println("GraphmlReader> Building Nodes and Edges");
-		System.out.println("GraphmlReader> Working on it ...");
+		System.out.println(this.getClass().getName() + " Building Nodes and Edges");
+		System.out.println(this.getClass().getName() + " Working on it ...");
 		// The collection of synthetic edges between communities
 		edgesBetweenCommunities = new ArrayList<Edge>();
 		// Hash map <Name of community, Node object of a community>
@@ -182,7 +181,8 @@ public class GraphmlReader {
 					} else
 						throw new NullPointerException();
 				} catch (NullPointerException exception) {
-					System.out.println(this.getClass().getName() + " NullPointerException making edges ");
+					System.out.println(this.getClass().getName()
+							+ " Null Pointer Exception because edges in the source file don't have attributes named: "+edgeImportAttributes[i]);
 				}
 			}
 			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
@@ -239,8 +239,7 @@ public class GraphmlReader {
 			}
 		} catch (NullPointerException e) {
 			// e.printStackTrace();
-			// System.out.println(this.getClass().getName() + ": No vertex label
-			// match, Check the attribute key");
+			 System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
 		}
 	}
 
@@ -289,29 +288,30 @@ public class GraphmlReader {
 			}
 
 			// Check if exist a property matching sectorKey
-//			if (vertex.getProperty(sectorKey) != null) {
-//				node.setSector(vertex.getProperty(sectorKey).toString());
-//			} else {
-//				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + sectorKey
-//						+ "!!! Check the key String of the sector");
-//			}
-			
-			//Check if some graphml key match with some financial stament key
-			for(String key : vertex.getPropertyKeys()){
+			// if (vertex.getProperty(sectorKey) != null) {
+			// node.setSector(vertex.getProperty(sectorKey).toString());
+			// } else {
+			// System.out.println("GraphmlReader> getJungDirectedGraph (): No
+			// label matches " + sectorKey
+			// + "!!! Check the key String of the sector");
+			// }
+
+			// Check if some graphml key match with some financial stament key
+			for (String key : vertex.getPropertyKeys()) {
 				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
-				if(keyLabel != null){
+				if (keyLabel != null) {
 					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
 			}
 
 			nodes[id] = node;
 
-//			if (node.getOutDegree(1) > maxOutDegree) {
-//				maxOutDegree = node.getOutDegree(1);
-//			}
-//			if (node.getOutDegree(1) < minOutDegree) {
-//				minOutDegree = node.getOutDegree(1);
-//			}
+			// if (node.getOutDegree(1) > maxOutDegree) {
+			// maxOutDegree = node.getOutDegree(1);
+			// }
+			// if (node.getOutDegree(1) < minOutDegree) {
+			// minOutDegree = node.getOutDegree(1);
+			// }
 		}
 
 		float maxWeight = 0;
@@ -426,34 +426,37 @@ public class GraphmlReader {
 
 	}
 
-	public TinkerGraph getTinkerGraph() {
-		TinkerGraph rtnGraph = new TinkerGraph();
-
-		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
-			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.OUT);
-			Vertex target = edge.getVertex(Direction.IN);
-			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
-			// Instantiate Nodes
-			Node sourceNode = new Node(String.valueOf(idSource));
-			Node targetNode = new Node(String.valueOf(idTarget));
-			// Add Attributes
-			sourceNode.setName((String) source.getProperty("label"));
-			sourceNode.setCommunity((String) source.getProperty("Continent"));
-			targetNode.setName((String) target.getProperty("label"));
-			targetNode.setCommunity((String) target.getProperty("Continent"));
-
-			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
-			String val = String.valueOf((Double) edge.getProperty("weight"));
-			// e.setWeight(Float.valueOf(val));
-			e.setAttribute("weight", val);
-			rtnGraph.addEdge(e, source, target, "directed");
-		}
-		return rtnGraph;
-	}
+	// private TinkerGraph getTinkerGraph() {
+	// TinkerGraph rtnGraph = new TinkerGraph();
+	//
+	// for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
+	// // From each edge retrieve the source and target vertex
+	// Vertex source = edge.getVertex(Direction.OUT);
+	// Vertex target = edge.getVertex(Direction.IN);
+	// // Get their ID
+	// int idSource = Integer.parseInt(source.getId().toString().replace("n",
+	// ""));
+	// int idTarget = Integer.parseInt(target.getId().toString().replace("n",
+	// ""));
+	// // Instantiate Nodes
+	// Node sourceNode = new Node(String.valueOf(idSource));
+	// Node targetNode = new Node(String.valueOf(idTarget));
+	// // Add Attributes
+	// sourceNode.setName((String) source.getProperty("label"));
+	// sourceNode.setCommunity((String) source.getProperty("Continent"));
+	// targetNode.setName((String) target.getProperty("label"));
+	// targetNode.setCommunity((String) target.getProperty("Continent"));
+	//
+	// // Add graphElements to collection
+	// graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode,
+	// true);
+	// String val = String.valueOf((Double) edge.getProperty("weight"));
+	// // e.setWeight(Float.valueOf(val));
+	// e.setAttribute("weight", val);
+	// rtnGraph.addEdge(e, source, target, "directed");
+	// }
+	// return rtnGraph;
+	// }
 
 	/**
 	 * ArrayList of community values obtained from the graphML file

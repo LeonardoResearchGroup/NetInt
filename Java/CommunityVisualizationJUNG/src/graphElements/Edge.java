@@ -2,6 +2,7 @@ package graphElements;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Set;
 
 import visualElements.VEdge;
 
@@ -43,6 +44,7 @@ public class Edge implements Serializable {
 		this.directed = directed;
 		if (source.equals(target))
 			loop = true;
+		attributes = new HashMap<String, Object>();
 	}
 
 	public Edge() {
@@ -73,31 +75,52 @@ public class Edge implements Serializable {
 		try {
 			rtn = (String) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted att");
+			System.out.println("Edge Attribute named:" + key+ " couldn't be casted as String");
 		}
 		return rtn;
 	}
 
 	public float getAttribute(String key, Float rtn) {
 		try {
-			rtn = (Float) attributes.get(key);
+			Double tmp = (Double) attributes.get(key);
+			rtn = tmp.floatValue();
 		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted att");
+			System.out.println("EDGE > Edge Attribute named:" + key+ " couldn't be casted as float. Attribute size:" + attributes.size());
+			System.out.println("     > source: " + source.getName() + " target: "+ target.getName());
 		}
 		return rtn;
 	}
 
 	public int getAttribute(String key, Integer rtn) {
 		try {
-			rtn = (Integer) attributes.get(key);
+			Double rtnObj = (Double) attributes.get(key);
+			rtn = rtnObj.intValue();
 		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted att");
+			System.out.println("EDGE > Edge Attribute named:" + key+ " couldn't be casted as int. Attribute size:" + attributes.size());
+			System.out.println("     > source: " + source.getName() + " target: "+ target.getName());
 		}
 		return rtn;
 	}
 
 	public String getName() {
 		return (String) attributes.get("label");
+	}
+	
+	public int getAttributeSize(){
+		return attributes.size();
+	}
+	
+	public Object[] getAttributeKeys(){
+		Set <String> keys = attributes.keySet();
+		return keys.toArray();
+	}
+	
+	public void printAttributes(){
+		System.out.println("EDGE> printAttributes():");
+		Set <String> s = attributes.keySet();
+		for (String keyName : s){
+			System.out.println("   Key: "+ keyName + ", Value: "+attributes.get(keyName));
+		}
 	}
 
 	// *** Setters
