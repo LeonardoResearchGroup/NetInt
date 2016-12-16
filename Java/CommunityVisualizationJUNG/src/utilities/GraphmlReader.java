@@ -78,25 +78,25 @@ public class GraphmlReader {
 	 */
 	private Node[] makeNodes(String[] nodeImportAttributes) {
 		System.out.println(this.getClass().getName() + " Making Nodes...");
-		
+		// Timer initialization
 		long ini = System.currentTimeMillis();
-		
+		// Count how many vertices are there in the graph
 		int vertexCount = 0;
 		for (Vertex vertex : graph.getVertices()) {
 			vertexCount++;
 		}
-		
+		// Timer last count
 		long fin = System.currentTimeMillis();
 		long  elapsed = fin - ini;
-		System.out.println(this.getClass().getName() + "Time counting vertex: "+ elapsed );
+		System.out.println(this.getClass().getName() + " Time counting "+ vertexCount+" vertex: "+ elapsed );
 
-		
 		// Final Array of nodes with attributes
 		Node[] nodes = new Node[vertexCount];
 		// *** Go over graph vertex and set all nodes
 		for (Vertex vertex : graph.getVertices()) {
 			// Get vertex ID
-			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
+			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""))-1;
+			System.out.println("Node ID: "+id);
 			// Make a node with the retrieved ID
 			Node nodeTmp = new Node(String.valueOf(id));
 
@@ -179,8 +179,8 @@ public class GraphmlReader {
 			Vertex source = edge.getVertex(Direction.OUT);
 			Vertex target = edge.getVertex(Direction.IN);
 			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
+			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""))-1;
+			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""))-1;
 
 			// **** MAKE SOURCE AND TARGET NODES ****
 			// Node nodeSource = new Node(String.valueOf(idSource));
