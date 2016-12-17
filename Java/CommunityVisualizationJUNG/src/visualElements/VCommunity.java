@@ -112,12 +112,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							PVector newOrigin = new PVector(container.dimension.width / 2,
 									container.dimension.height / 2);
 							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
-							// <<<<<<< HEAD
-							//
-							// =======
-							// >>>>>>> refs/heads/master
 						}
-						// If vN is visible
+						// If vN is visible and not centered
 						if (vN.isVisible() && !vNodesCentered) {
 							vN.show();
 						}
@@ -144,9 +140,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
 				// Show internal edges
-				// System.out.println("VCOMMUNITY > The community " +
-				// container.getName() + " has "
-				// + container.getVEdges().size() + " edges");
 				for (VEdge vE : container.getVEdges()) {
 					// If the edge has any attribute
 					if (vE.getEdge().getAttributeSize() > 0) {

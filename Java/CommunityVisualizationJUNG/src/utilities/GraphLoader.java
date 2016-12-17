@@ -161,7 +161,7 @@ public class GraphLoader {
 
 	/**
 	 * Returns a subgraph of jungGraph whose edges connect the specified
-	 * communities community
+	 * communities in either direction. 
 	 * 
 	 * @param jungGraph
 	 * @param comumnity1
@@ -169,16 +169,15 @@ public class GraphLoader {
 	 * @return
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
-			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String community1,
-			final String community2) {
+			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,
+			final String communityNameB) {
 
 		Predicate<Edge> inSubgraph = new Predicate<Edge>() {
-			@Override
 			public boolean evaluate(Edge edge) {
-				boolean connectsOneWay = edge.getSource().belongsTo(community1)
-						&& edge.getTarget().belongsTo(community2);
-				boolean connectsOtherWay = edge.getSource().belongsTo(community2)
-						&& edge.getTarget().belongsTo(community1);
+				boolean connectsOneWay = edge.getSource().belongsTo(communityNameA)
+						&& edge.getTarget().belongsTo(communityNameB);
+				boolean connectsOtherWay = edge.getSource().belongsTo(communityNameB)
+						&& edge.getTarget().belongsTo(communityNameA);
 				boolean connectsCommunities = connectsOneWay || connectsOtherWay;
 				return connectsCommunities;
 			}
