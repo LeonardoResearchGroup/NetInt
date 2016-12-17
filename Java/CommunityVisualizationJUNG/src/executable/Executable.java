@@ -4,6 +4,7 @@ import java.io.File;
 
 import containers.Container;
 import processing.core.*;
+import utilities.Assembler;
 import utilities.GraphLoader;
 import utilities.GraphmlKeyReader;
 import utilities.TestPerformance;

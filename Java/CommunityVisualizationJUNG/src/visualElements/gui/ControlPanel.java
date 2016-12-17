@@ -1,6 +1,7 @@
 package visualElements.gui;
 
 import processing.core.*;
+import utilities.Assembler;
 import utilities.SerializeHelper;
 import utilities.SerializeWrapper;
 import utilities.mapping.Mapper;
@@ -9,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import controlP5.*;
 import executable.Executable;
-import executable.Assembler;
 import visualElements.gui.VisibilitySettings;
 
 /**

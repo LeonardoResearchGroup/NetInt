@@ -1,4 +1,4 @@
-package executable;
+package utilities;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,7 +21,6 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
 import processing.core.PApplet;
-import utilities.GraphLoader;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
