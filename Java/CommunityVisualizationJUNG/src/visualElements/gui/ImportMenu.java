@@ -49,7 +49,7 @@ public class ImportMenu implements ControlListener {
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys) {
 		nodeList.addElementAttributes(nodeAttributeKeys);
 		edgeList.addElementAttributes(edgeAttributeKeys);
-		menu.addBang("loadGraph").setPosition(100, 600).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
+		menu.addBang("loadGraph").setPosition(100, 400).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
 		menu.getController("loadGraph").addListener(this);
 	}
@@ -65,21 +65,18 @@ public class ImportMenu implements ControlListener {
 	 * @param theEvent
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
-		// System.out.println("ImportMenu> at choiceCatcher(): " +
-		// theEvent.getController().getName());
-
 		String controllerName = theEvent.getController().getName();
 		if (controllerName.equals("loadGraph")) {
 			loadGraphEnabled = true;
 			System.out.println("Node import selection:");
 			for (int i = 0; i < nodeList.getSelection().length; i++) {
-				System.out.println("..." + nodeList.getSelection()[i] + ", ");
+				System.out.println("..." + nodeList.attributes[i] + ": "+nodeList.getSelection()[i] + ", ");
 			}
 			System.out.println("Edge import selection:");
 			for (int i = 0; i < edgeList.getSelection().length; i++) {
-				System.out.println("..." + edgeList.getSelection()[i] + ", ");
+				System.out.println("..." + edgeList.attributes[i] + ": "+edgeList.getSelection()[i] + ", ");
 			}
-
+			System.out.println("_ _ _");
 			// If the user selected at least the first two attributes from the
 			// menu
 

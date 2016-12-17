@@ -75,29 +75,39 @@ public class Edge implements Serializable {
 		try {
 			rtn = (String) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println("Edge Attribute named:" + key+ " couldn't be casted as String");
+			System.out.println("Edge Attribute named:" + key + " couldn't be casted as String");
 		}
 		return rtn;
 	}
 
 	public float getAttribute(String key, Float rtn) {
 		try {
-			Double tmp = (Double) attributes.get(key);
-			rtn = tmp.floatValue();
+			if (attributes.get(key) instanceof Double) {
+				Double rtnObj = (Double) attributes.get(key);
+				rtn = rtnObj.floatValue();
+			} else {
+				rtn = (Float) attributes.get(key);
+			}
 		} catch (Exception e) {
-			System.out.println("EDGE > Edge Attribute named:" + key+ " couldn't be casted as float. Attribute size:" + attributes.size());
-			System.out.println("     > source: " + source.getName() + " target: "+ target.getName());
+			System.out.println("EDGE > Edge Attribute named:" + key + " couldn't be casted as float. Attribute size:"
+					+ attributes.size());
+			System.out.println("     > source: " + source.getName() + " target: " + target.getName());
 		}
 		return rtn;
 	}
 
 	public int getAttribute(String key, Integer rtn) {
 		try {
-			Double rtnObj = (Double) attributes.get(key);
-			rtn = rtnObj.intValue();
+			if (attributes.get(key) instanceof Double) {
+				Double rtnObj = (Double) attributes.get(key);
+				rtn = rtnObj.intValue();
+			} else {
+				rtn = (Integer) attributes.get(key);
+			}
 		} catch (Exception e) {
-			System.out.println("EDGE > Edge Attribute named:" + key+ " couldn't be casted as int. Attribute size:" + attributes.size());
-			System.out.println("     > source: " + source.getName() + " target: "+ target.getName());
+			System.out.println("EDGE > Edge Attribute named:" + key + " couldn't be casted as int. Attribute size:"
+					+ attributes.size());
+			System.out.println("     > source: " + source.getName() + " target: " + target.getName());
 		}
 		return rtn;
 	}
@@ -105,21 +115,21 @@ public class Edge implements Serializable {
 	public String getName() {
 		return (String) attributes.get("label");
 	}
-	
-	public int getAttributeSize(){
+
+	public int getAttributeSize() {
 		return attributes.size();
 	}
-	
-	public Object[] getAttributeKeys(){
-		Set <String> keys = attributes.keySet();
+
+	public Object[] getAttributeKeys() {
+		Set<String> keys = attributes.keySet();
 		return keys.toArray();
 	}
-	
-	public void printAttributes(){
+
+	public void printAttributes() {
 		System.out.println("EDGE> printAttributes():");
-		Set <String> s = attributes.keySet();
-		for (String keyName : s){
-			System.out.println("   Key: "+ keyName + ", Value: "+attributes.get(keyName));
+		Set<String> s = attributes.keySet();
+		for (String keyName : s) {
+			System.out.println("   Key: " + keyName + ", Value: " + attributes.get(keyName));
 		}
 	}
 

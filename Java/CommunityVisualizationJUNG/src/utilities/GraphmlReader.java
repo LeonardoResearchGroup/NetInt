@@ -55,7 +55,7 @@ public class GraphmlReader {
 			// *** Read keys
 			String currentLine;
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			System.out.println(this.toString().getClass() + "Reading graphml Keys... ");
+			System.out.println(this.getClass().getName() + " Reading graphml keys... ");
 			while ((currentLine = br.readLine()) != null) {
 				if (currentLine.startsWith("<key")) {
 					graphKeys.add(currentLine);

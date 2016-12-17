@@ -28,6 +28,7 @@ public class GraphLoader {
 	 * @param edgeWeight
 	 * @param format
 	 */
+	
 	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector, String edgeWeight,
 			int format) {
 
@@ -39,12 +40,11 @@ public class GraphLoader {
 			jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
 
 		}
-		System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
-		// TODO Improve degree assigning with JUNG library method
+		System.out.println(this.getClass().getName() + " "+ reader.getCommunities().size() + " communities loaded");
 		setNodesDegrees(jungGraph);
-		System.out.println("GraphLoader> Graph Created from file:" + file);
-		System.out.println(" Total Nodes: " + jungGraph.getVertexCount());
-		System.out.println(" Total Edges: " + jungGraph.getEdgeCount());
+		System.out.println(this.getClass().getName() + " Graph Created from file:" + file);
+		System.out.println(" Total Nodes in the graph: " + jungGraph.getVertexCount());
+		System.out.println(" Total Edges in the graph: " + jungGraph.getEdgeCount());
 	}
 
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
@@ -55,12 +55,11 @@ public class GraphLoader {
 			reader = new GraphmlReader(file);
 			jungGraph = reader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
 		}
-		 System.out.println("GraphLoader> " + reader.getCommunities().size() + " communities loaded");
-		 // TODO Improve degree assigning with JUNG library method
-		 setNodesDegrees(jungGraph);
-		 System.out.println("GraphLoader> Graph Created from file:" + file);
-		 System.out.println(" Total Nodes: " + jungGraph.getVertexCount());
-		 System.out.println(" Total Edges: " + jungGraph.getEdgeCount());
+		System.out.println(this.getClass().getName() + " "+ reader.getCommunities().size() + " communities loaded");
+		setNodesDegrees(jungGraph);
+		System.out.println(this.getClass().getName() + " Graph Created from file:" + file);
+		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
+		System.out.println("   Total Edges in the graph: " + jungGraph.getEdgeCount());
 	}
 
 	public ArrayList<String> getCommunityNames() {
@@ -80,7 +79,7 @@ public class GraphLoader {
 			n.setInDegree(0, graph.getPredecessorCount(n));
 		}
 
-		System.out.println("GraphLoader> degrees assigned to " + graph.getVertices().size() + " nodes");
+		//System.out.println("GraphLoader> degrees assigned to " + graph.getVertices().size() + " nodes");
 	}
 
 	/**

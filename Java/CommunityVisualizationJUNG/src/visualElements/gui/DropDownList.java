@@ -63,8 +63,6 @@ public class DropDownList implements ControlListener {
 	 * @param theEvent
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
-		System.out.println("DropDownList>choiceCatcher(): " + theEvent.getController().getName());
-
 		String controllerName = theEvent.getController().getName();
 
 		// First it goes over the node attributes
@@ -74,7 +72,7 @@ public class DropDownList implements ControlListener {
 				int value = (int) dropMenu.get(ScrollableList.class, controllerName).getValue();
 				// The value extracted from the map at that index item
 				selection[i] = (String) dropMenu.get(ScrollableList.class, controllerName).getItem(value).get("name");
-				System.out.println(controllerName + ": " + selection[i]);
+				//System.out.println(controllerName + ": " + selection[i]);
 			}
 		}
 	}

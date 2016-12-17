@@ -27,7 +27,7 @@ import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
 
-public class Logica {
+public class Assembler {
 
 	// Visual Communities
 	// private VCommunity vMainCommunity;
@@ -39,11 +39,11 @@ public class Logica {
 	public static Dimension HD1080 = new Dimension(1920, 1080);
 	public static Dimension UHD = new Dimension(3840, 2160);
 
-	public Logica(int width, int height) {
+	public Assembler(int width, int height) {
 		rootDimension = new Dimension(width, height);
 	}
 
-	public Logica(Dimension dim) {
+	public Assembler(Dimension dim) {
 		rootDimension = dim;
 	}
 
@@ -78,9 +78,8 @@ public class Logica {
 
 		int i = 0;
 		Mapper.getInstance().setMinCommunitySize(graph.getVertexCount());
+		System.out.println(this.getClass().getName()+" Generating DirectedSparseMultigraph for " + communityNames.size() + " communities ...");
 		for (String communityName : communityNames) {
-			System.out.println("Logica > Generating DirectedSparseMultigraph for community:" + communityName
-					+ " out of " + communityNames.size());
 			Canvas.app.text("Generating DirectedSparseMultigraph for community:" + communityName + " out of "
 					+ communityNames.size(), 50, Canvas.app.height - 50);
 
@@ -131,14 +130,14 @@ public class Logica {
 		}
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
-		System.out.println("Logica > createCommunityOfvCommunities().  SubContainer: " + communityName + " created");
+		System.out.println(this.getClass().getName() + " SubContainer: " + communityName + " created");
 		subContainer.setName(communityName);
-		System.out.println("Logica > createCommunityOfvCommunities().  Assigning visual elements to nodes");
+		System.out.println(this.getClass().getName() +" Assigning visual elements to nodes");
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
 		// CommunityCover
 		String nodeID = communityName + "_" + String.valueOf(0);
-		System.out.println("Logica > createCommunityOfvCommunities().  Making VCommunity for: " + communityName);
+		System.out.println(this.getClass().getName() + " Making VCommunity for: " + communityName);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 		return communityTemp;
 	}
@@ -152,19 +151,11 @@ public class Logica {
 		Graph<Node, Edge> graphInter;
 		// Pick each element of the community collection
 		for (int i = 0; i < communities.size(); i++) {
-			System.out.println(this.getClass().getName()
-					+ " > createEdgesBetweenSubcommunities().  Making External Edges for community: "
-					+ communities.get(i).getNode().getId());
 			// Compare with other members of the community collection
 			for (int j = i + 1; j < communities.size(); j++) {
 				// get a temporary graph
 				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
 						communities.get(i).container.getName(), communities.get(j).container.getName());
-				// This condition decides which new edges are created between
-				// communities
-				System.out.println("graphInter between " + communities.get(i).container.getName() + " and "
-						+ communities.get(j).container.getName() + " has " + graphInter.getEdgeCount() + " edges");
-
 				if (graphInter.getEdgeCount() >= 1) {
 					// Create a new edge
 					graphElements.Edge e = new graphElements.Edge(communities.get(i).getNode(),
@@ -222,10 +213,10 @@ public class Logica {
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
-		System.out.println(
-				"Logica > loadGraph() Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
+		System.out.println(this.getClass().getName() +
+				" Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-		System.out.println("Logica > loadGraph() Creating edges between communities");
+		System.out.println(this.getClass().getName() +" Creating edges between communities");
 		// if(format == GraphLoader.PAJEK)
 		addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
 		// else if(format == GraphLoader.GRAPHML)
@@ -234,8 +225,6 @@ public class Logica {
 		System.out.println("Logica > loadGraph() Running edge factory");
 		vSubSubCommunity.container.runEdgeFactory();
 	}
-
-	int cnt = 0;
 
 	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
 			int format) {
@@ -256,15 +245,13 @@ public class Logica {
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 
 		// Reporting progress
-		System.out.println(this.getClass().getName() + " Creating edges between communities");
+		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
 		if (format == GraphLoader.PAJEK)
 			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
 		else if (format == GraphLoader.GRAPHML)
 			createEdgesBetweenSubcommunities(vSubCommunities);
-		cnt++;
-		System.out.println("Logica load graph counter " + cnt);
 		// Create edges & reporting progress
-		System.out.println(this.getClass().getName() + " Running edge factory");
+		System.out.println(this.getClass().getName() + " Running edge factory ...");
 		vSubSubCommunity.container.runEdgeFactory();
 	}
 

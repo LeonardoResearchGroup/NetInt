@@ -15,7 +15,7 @@ import visualElements.gui.ImportMenu;
 import visualElements.gui.VisibilitySettings;
 
 public class Executable extends PApplet {
-	public static Logica app;
+	public static Assembler app;
 	private Canvas canvas;
 	private TestPerformance performance;
 	public static boolean activeGraph;
@@ -28,7 +28,7 @@ public class Executable extends PApplet {
 		smooth();
 		canvas = new Canvas(this);
 		importMenu = new ImportMenu(this);
-		app = new Logica(Logica.HD1080);
+		app = new Assembler(Assembler.HD1080);
 		performance = new TestPerformance();
 		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
 		// "label", "sector", "weight",
@@ -72,7 +72,7 @@ public class Executable extends PApplet {
 		VisibilitySettings.getInstance().setEventOnVSettings(false);
 	}
 
-	public Logica getApp() {
+	public Assembler getApp() {
 		return app;
 	}
 
