@@ -27,24 +27,25 @@ public class Executable extends PApplet {
 	public void setup() {
 		textSize(10);
 		smooth();
+		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
+		System.out.println("Instantiating Import Menu");
 		importMenu = new ImportMenu(this);
+		System.out.println("Instantiating Network Assembler");
 		app = new Assembler(Assembler.HD1080);
 		performance = new TestPerformance();
-		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
-		// "label", "sector", "weight",
-		// Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
 		this.setActiveGraph(false);
 		// Control Frame
+		System.out.println("Building Control Panel");
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-
-		System.out.println(
-				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
-						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
-		System.out.println(
-				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
-						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
-
+//
+//		System.out.println(this.getClass().getName()+
+//				" Weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
+//						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
+//		System.out.println(this.getClass().getName()+
+//				" OutDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
+//						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
+//
 		this.surface.setLocation(200, 0);
 		this.surface.setTitle("Java Networked Interaction Visualization. NetInt");
 	}
@@ -102,7 +103,7 @@ public class Executable extends PApplet {
 	}
 
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 150, P2D);
+		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
 	public static void main(String[] args) {

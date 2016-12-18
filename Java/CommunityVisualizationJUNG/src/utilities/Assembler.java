@@ -116,7 +116,7 @@ public class Assembler {
 		// Make a temporary graph
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 		System.out.println(
-				this.getClass().getName() + " > createCommunityOfvCommunities() for community: " + communityName);
+				this.getClass().getName() + " Creating Community of vCommunities for community: " + communityName);
 		for (VNode vN : communities) {
 			VCommunity vC = (VCommunity) vN;
 			// add Nodes

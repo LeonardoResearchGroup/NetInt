@@ -12,9 +12,6 @@ import visualElements.VEdge;
  */
 public class Edge implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Node source;
 	private Node target;
@@ -75,45 +72,51 @@ public class Edge implements Serializable {
 		try {
 			rtn = (String) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println("Edge Attribute named:" + key + " couldn't be casted as String");
+			System.out.println(this.getClass().getName()+" Edge Attribute named: " + key + " couldn't be casted as String");
 		}
 		return rtn;
 	}
 
 	public float getAttribute(String key, Float rtn) {
 		try {
+			// If Double
 			if (attributes.get(key) instanceof Double) {
 				Double rtnObj = (Double) attributes.get(key);
 				rtn = rtnObj.floatValue();
+				// If Integer
+			} else if (attributes.get(key) instanceof Integer) {
+				Integer rtnObj = (Integer) attributes.get(key);
+				rtn = rtnObj.floatValue();
+				// If float
 			} else {
-				rtn = (Float) attributes.get(key);
+				rtn = (float) attributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println("EDGE > Edge Attribute named:" + key + " couldn't be casted as float. Attribute size:"
+			System.out.println(this.getClass().getName()+" Edge Attribute named: " + key + " couldn't be casted as float. Attribute size:"
 					+ attributes.size());
-			System.out.println("     > source: " + source.getName() + " target: " + target.getName());
 		}
 		return rtn;
 	}
 
 	public int getAttribute(String key, Integer rtn) {
 		try {
+			// If Double
 			if (attributes.get(key) instanceof Double) {
 				Double rtnObj = (Double) attributes.get(key);
 				rtn = rtnObj.intValue();
+				// If Float
+			} else if (attributes.get(key) instanceof Float) {
+				Float rtnObj = (Float) attributes.get(key);
+				rtn = rtnObj.intValue();
+				// If Integer
 			} else {
 				rtn = (Integer) attributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println("EDGE > Edge Attribute named:" + key + " couldn't be casted as int. Attribute size:"
+			System.out.println(this.getClass().getName()+" Edge Attribute named: " + key + " couldn't be casted as int. Attribute size:"
 					+ attributes.size());
-			System.out.println("     > source: " + source.getName() + " target: " + target.getName());
 		}
 		return rtn;
-	}
-
-	public String getName() {
-		return (String) attributes.get("label");
 	}
 
 	public int getAttributeSize() {

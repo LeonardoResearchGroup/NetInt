@@ -85,7 +85,7 @@ public class Mapper {
 
 		if (rtn < 0) {
 			System.out.println(this.getClass().getName() + "   *** Error in " + filter + " filter trying to map : " + val
-					+ ", ussing the graph atttribute: " + graphAttribute + ". Value mapped to 0");
+					+ ", using the graph atttribute: " + graphAttribute + ". Value mapped to 0");
 			rtn = 0;
 		}
 		return rtn;
@@ -333,19 +333,16 @@ public class Mapper {
 		this.maxEdgeWeight = maxIn;
 	}
 
-	public void setSigmoidAlphaBeta(float alpha, float beta) {
-		this.alpha = alpha;
-		this.beta = beta;
-	}
-
 	public void setMinCommunitySize(int val) {
 		this.minCommunitySize = val;
-
 	}
 
 	public void setMaxCommunitySize(int val) {
 		this.maxCommunitySize = val;
-
 	}
 
+	public void setSigmoidAlphaBeta(float alpha, float beta) {
+		this.alpha = alpha;
+		this.beta = beta;
+	}
 }
