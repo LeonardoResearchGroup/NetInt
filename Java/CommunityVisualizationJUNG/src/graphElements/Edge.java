@@ -10,12 +10,12 @@ import visualElements.VEdge;
  * @author jsalam
  *
  */
-public class Edge implements Serializable {
+public class Edge extends GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Node source;
 	private Node target;
-	private HashMap<String, Object> attributes;
+	//private HashMap<String, Object> attributes;
 	private boolean directed;
 	private boolean loop;
 	/**
@@ -36,12 +36,12 @@ public class Edge implements Serializable {
 	private int frequency;
 
 	public Edge(Node source, Node target, boolean directed) {
+		super();
 		this.source = source;
 		this.target = target;
 		this.directed = directed;
 		if (source.equals(target))
 			loop = true;
-		attributes = new HashMap<String, Object>();
 	}
 
 	public Edge() {
@@ -62,80 +62,6 @@ public class Edge implements Serializable {
 		return directed;
 	}
 
-	// *** Getters
-
-	public Object getAttribute(String key) {
-		return attributes.get(key);
-	}
-
-	public String getAttribute(String key, String rtn) {
-		try {
-			rtn = (String) attributes.get(key);
-		} catch (Exception e) {
-			System.out.println(this.getClass().getName()+" Edge Attribute named: " + key + " couldn't be casted as String");
-		}
-		return rtn;
-	}
-
-	public float getAttribute(String key, Float rtn) {
-		try {
-			// If Double
-			if (attributes.get(key) instanceof Double) {
-				Double rtnObj = (Double) attributes.get(key);
-				rtn = rtnObj.floatValue();
-				// If Integer
-			} else if (attributes.get(key) instanceof Integer) {
-				Integer rtnObj = (Integer) attributes.get(key);
-				rtn = rtnObj.floatValue();
-				// If float
-			} else {
-				rtn = (float) attributes.get(key);
-			}
-		} catch (Exception e) {
-			System.out.println(this.getClass().getName()+" Edge Attribute named: " + key + " couldn't be casted as float. Attribute size:"
-					+ attributes.size());
-		}
-		return rtn;
-	}
-
-	public int getAttribute(String key, Integer rtn) {
-		try {
-			// If Double
-			if (attributes.get(key) instanceof Double) {
-				Double rtnObj = (Double) attributes.get(key);
-				rtn = rtnObj.intValue();
-				// If Float
-			} else if (attributes.get(key) instanceof Float) {
-				Float rtnObj = (Float) attributes.get(key);
-				rtn = rtnObj.intValue();
-				// If Integer
-			} else {
-				rtn = (Integer) attributes.get(key);
-			}
-		} catch (Exception e) {
-			System.out.println(this.getClass().getName()+" Edge Attribute named: " + key + " couldn't be casted as int. Attribute size:"
-					+ attributes.size());
-		}
-		return rtn;
-	}
-
-	public int getAttributeSize() {
-		return attributes.size();
-	}
-
-	public Object[] getAttributeKeys() {
-		Set<String> keys = attributes.keySet();
-		return keys.toArray();
-	}
-
-	public void printAttributes() {
-		System.out.println("EDGE> printAttributes():");
-		Set<String> s = attributes.keySet();
-		for (String keyName : s) {
-			System.out.println("   Key: " + keyName + ", Value: " + attributes.get(keyName));
-		}
-	}
-
 	// *** Setters
 	public void setSource(Node source) {
 		this.source = source;
@@ -149,9 +75,6 @@ public class Edge implements Serializable {
 		this.directed = directed;
 	}
 
-	public void setAttribute(String key, Object value) {
-		attributes.put(key, value);
-	}
 
 	/**
 	 * @deprecated

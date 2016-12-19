@@ -6,19 +6,16 @@ import java.util.Set;
 
 /**
  * This class has three predefined attributes stored in the hashMap that use
- * these keys: id (String), label (String) and size(float). Any other attribute
- * is stored with the key retrieved from the graph source file, usually a
- * graphml. *** IMPORTANT*** the attribute id defines the node identity
- * therefore it must be a unique identifier
+ * these keys: id (String) (label (String) and size(float) these are
+ * deprecated). Any other attribute is stored with the key retrieved from the
+ * graph source file, usually a graphml. *** IMPORTANT*** the attribute id
+ * defines the node identity therefore it must be a unique identifier
  * 
  * @author jsalam
  * @date Nov 2016
  */
-public class Node implements Comparable<Node>, Serializable {
+public class Node extends GraphElement implements Comparable<Node>, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private HashMap<String, Object> attributes;
 	private HashMap<Integer, NodeMetadata> metadata;
@@ -26,11 +23,11 @@ public class Node implements Comparable<Node>, Serializable {
 	private HashMap<String, Double> descriptiveStatistics = new HashMap<String, Double>();
 
 	public Node() {
-
+		super();
 	}
 
 	public Node(String id) {
-		// this.id = id;
+		super();
 		attributes = new HashMap<String, Object>();
 		metadata = new HashMap<Integer, NodeMetadata>();
 		NodeMetadata comData = new NodeMetadata();
@@ -98,37 +95,6 @@ public class Node implements Comparable<Node>, Serializable {
 		return (Float) attributes.get("size");
 	}
 
-	public Object getAttribute(String key) {
-		return attributes.get(key);
-	}
-
-	public String getAttribute(String key, String rtn) {
-		try {
-			rtn = (String) attributes.get(key);
-		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted as String");
-		}
-		return rtn;
-	}
-
-	public float getAttribute(String key, Float rtn) {
-		try {
-			rtn = (Float) attributes.get(key);
-		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted aa float");
-		}
-		return rtn;
-	}
-
-	public int getAttribute(String key, Integer rtn) {
-		try {
-			rtn = (Integer) attributes.get(key);
-		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted as integer");
-		}
-		return rtn;
-	}
-
 	public String getCommunity(int key) {
 		return metadata.get(key).getCommunity();
 	}
@@ -159,13 +125,9 @@ public class Node implements Comparable<Node>, Serializable {
 	}
 
 	public void setSize(float size) {
-		attributes.put("label", size);
+		attributes.put("size", size);
 	}
-	
-	public void setAttribute(String key, Object value){
-		attributes.put(key, value);
-	}
-	
+
 	public void setCommunity(String community) {
 		NodeMetadata comData = metadata.get(0);
 		comData.setCommunity(community);
@@ -256,7 +218,7 @@ public class Node implements Comparable<Node>, Serializable {
 	public void setExcentricity(int key, float excentricity) {
 		this.metadata.get(key).setExcentricity(excentricity);
 	}
-	
+
 	public HashMap<String, Double> getDescriptiveStatistics() {
 		return descriptiveStatistics;
 	}
