@@ -73,7 +73,7 @@ public class Edge implements Serializable {
 		try {
 			rtn = (String) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted att");
+//			System.out.println("Node Attribute couldn't be casted att");
 		}
 		return rtn;
 	}
@@ -82,7 +82,7 @@ public class Edge implements Serializable {
 		try {
 			rtn = (Float) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted att");
+//			System.out.println("Node Attribute couldn't be casted att");
 		}
 		return rtn;
 	}
@@ -91,7 +91,7 @@ public class Edge implements Serializable {
 		try {
 			rtn = (Integer) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println("Node Attribute couldn't be casted att");
+//			System.out.println("Node Attribute couldn't be casted att");
 		}
 		return rtn;
 	}

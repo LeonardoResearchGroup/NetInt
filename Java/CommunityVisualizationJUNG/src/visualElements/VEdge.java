@@ -10,7 +10,7 @@ import graphElements.Edge;
 
 public class VEdge implements Serializable{
 	private Edge edge;
-	private boolean aboveArc, visibility;
+	private boolean aboveArc, visibility, hided;
 	private VNode source, target;
 	private Bezier bezier;
 	// Visual Attributes
@@ -179,11 +179,18 @@ public class VEdge implements Serializable{
 	}
 
 	public void setVisibility(float edgeVisibilityThreshold) {
-		if (edgeVisibilityThreshold > edge.getAttribute("weight", new Integer(0))) {
+		if (edgeVisibilityThreshold > edge.getAttribute("weight", new Integer(0)) || hided) {
 			visibility = false;
 		} else {
 			visibility = true;
 		}
+
+	}
+	
+	public void setHided(boolean hided) {
+		
+			this.hided = hided;
+
 
 	}
 }

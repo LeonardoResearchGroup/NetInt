@@ -435,6 +435,24 @@ public abstract class Container {
 	public boolean isDone(){
 		return done;
 	}
+	
+	/**
+	 * Hide or show the incident VEdges of a node.
+	 * @param node
+	 * @param visibility
+	 */
+	public void setIncidentEdgesVisibility(Node node, boolean visibility){
+		Collection<Edge> incidentEdges = this.graph.getIncidentEdges(node);
+		for(VEdge vE : this.vEdges){
+			for(Edge e : incidentEdges){
+				if(vE.getEdge().equals(e)){
+					System.out.println(this.getClass() + ": Visibilidad: " +visibility );
+					vE.setHided(!visibility);
+				}
+			}
+		}
+		
+	}
 
 	/**
 	 * Draws the rectangular boundaries of the container starting from the origin. Draws a cross hair at the center of the Dimension rectangle 
