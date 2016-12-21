@@ -16,7 +16,7 @@ public class VNode extends VisualAtom implements Serializable {
 	private ArrayList<VNode> successors;
 	private ArrayList<Integer> propIndex;
 	public int propagationSteps;
-	private String currentMapper;
+	private String currentMapper = "Logartimico";
 	private VNodeDescription description;
 
 	public VNode(Node node, float x, float y) {
@@ -129,41 +129,41 @@ public class VNode extends VisualAtom implements Serializable {
 	 * @param communityOpen
 	 */
 	public void show() {
-//		System.out.println(">OpenSave> Node: " + node.getName() + " X: " + pos.x + " Y: " + pos.y);
+		
+		setDiameter(PApplet.map(node.getOutDegree(1), 1, 3000, 5, 100));
+		
 		// If there is an event in the control panel update the diameter 
-		VisibilitySettings.getInstance();
-		if (VisibilitySettings.eventOnVSettings) {
-			// **** Diameter mapping
-			if (VisibilitySettings.getInstance().getFiltrosNodo() != null
-					&& VisibilitySettings.getInstance().getFiltrosNodo() != currentMapper) {
-				switch (VisibilitySettings.getInstance().getFiltrosNodo()) {
-				case "Radial":
-					setDiameter(Mapper.getInstance().convert(Mapper.RADIAL, node.getOutDegree(1), 150,
-							Mapper.COMUNITY_SIZE));
-					break;
-				case "Lineal":
-					setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, node.getOutDegree(1), 150,
-							Mapper.COMUNITY_SIZE));
-					break;
-				case "Logarithmic":
-					setDiameter(Mapper.getInstance().convert(Mapper.LOGARITMIC, node.getOutDegree(1), 150,
-							Mapper.COMUNITY_SIZE));
-					break;
-				case "Sinusoidal":
-					setDiameter(Mapper.getInstance().convert(Mapper.SINUSOIDAL, node.getOutDegree(1), 150,
-							Mapper.COMUNITY_SIZE));
-					break;
-				case "Sigmoid":
-					setDiameter(Mapper.getInstance().convert(Mapper.SIGMOID, node.getOutDegree(1), 150,
-							Mapper.COMUNITY_SIZE));
-					break;
-
-				}
-				// give a minimal interaction area to every vNode
-				setDiameter(getDiameter() + 5);
-				currentMapper = VisibilitySettings.getInstance().getFiltrosNodo();
-			}
-		}
+//		if (VisibilitySettings.eventOnVSettings) {
+//			// **** Diameter mapping
+//			if (VisibilitySettings.getInstance().getFiltrosNodo() != null) {
+//				switch (VisibilitySettings.getInstance().getFiltrosNodo()) {
+//				case "Radial":
+//					setDiameter(Mapper.getInstance().convert(Mapper.RADIAL, node.getOutDegree(1), 150,
+//							Mapper.COMUNITY_SIZE));
+//					break;
+//				case "Lineal":
+//					setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, node.getOutDegree(1), 150,
+//							Mapper.COMUNITY_SIZE));
+//					break;
+//				case "Logarithmic":
+//					setDiameter(Mapper.getInstance().convert(Mapper.LOGARITMIC, node.getOutDegree(1), 150,
+//							Mapper.COMUNITY_SIZE));
+//					break;
+//				case "Sinusoidal":
+//					setDiameter(Mapper.getInstance().convert(Mapper.SINUSOIDAL, node.getOutDegree(1), 150,
+//							Mapper.COMUNITY_SIZE));
+//					break;
+//				case "Sigmoid":
+//					setDiameter(Mapper.getInstance().convert(Mapper.SIGMOID, node.getOutDegree(1), 150,
+//							Mapper.COMUNITY_SIZE));
+//					break;
+//
+//				}
+//				// give a minimal interaction area to every vNode
+//				setDiameter(getDiameter() + 5);
+//				currentMapper = VisibilitySettings.getInstance().getFiltrosNodo();
+//			}
+//		}
 
 		// if this node is in the propagation chain
 		if (inPropagationChain) {

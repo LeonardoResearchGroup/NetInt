@@ -17,7 +17,7 @@ import java.util.Set;
 public class Node extends GraphElement implements Comparable<Node>, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private HashMap<String, Object> attributes;
+	//private HashMap<String, Object> attributes;
 	private HashMap<Integer, NodeMetadata> metadata;
 	private boolean isFound = false;
 	private HashMap<String, Double> descriptiveStatistics = new HashMap<String, Double>();
@@ -28,13 +28,13 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 
 	public Node(String id) {
 		super();
-		attributes = new HashMap<String, Object>();
+		//attributes = new HashMap<String, Object>();
 		metadata = new HashMap<Integer, NodeMetadata>();
 		NodeMetadata comData = new NodeMetadata();
 		// Initialize basic attributes
 		attributes.put("id", id);
-		attributes.put("size", null);
-		attributes.put("label", null);
+		attributes.put("size", 0);
+		attributes.put("label", "void");
 		metadata.put(0, comData);
 	}
 

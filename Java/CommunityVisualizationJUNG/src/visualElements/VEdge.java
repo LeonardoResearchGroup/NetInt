@@ -10,7 +10,7 @@ import java.util.Set;
 
 import graphElements.Edge;
 
-public class VEdge implements Serializable{
+public class VEdge implements Serializable {
 	private Edge edge;
 	private boolean aboveArc, visibility;
 	private VNode source, target;
@@ -97,36 +97,41 @@ public class VEdge implements Serializable{
 		// **** Thickness mapping
 		// If there is an event in the control panel update the thickness
 		VisibilitySettings.getInstance();
-		if (VisibilitySettings.eventOnVSettings && edge.getAttributeSize()>0) {
+		if (VisibilitySettings.eventOnVSettings && edge.getAttributeSize() > 0) {
 			Object[] keys = edge.getAttributeKeys();
-			// Set the Visibility with the first Attribute of Edge Import: "Body Thickness"
-			//System.out.println("VEDGE > "+ (String) keys[0]);
-			float weight = edge.getAttribute((String) keys[0], new Float(0));
-			// Set transparency
-			alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, weight, 155, Mapper.EDGE_WEIGHT));			
-			if (VisibilitySettings.getInstance().getFiltrosVinculo() != null) {
-				
-				switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
-				case "Radial":
-					thickness = Mapper.getInstance().convert(Mapper.RADIAL, weight, maxThickness,
-							Mapper.EDGE_WEIGHT);
-					break;
-				case "Lineal":
-					thickness = Mapper.getInstance().convert(Mapper.LINEAR, weight, maxThickness,
-							Mapper.EDGE_WEIGHT);
-					break;
-				case "Logarithmic":
-					thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, weight,  maxThickness,
-							Mapper.EDGE_WEIGHT);
-					break;
-				case "Sinusoidal":
-					thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, weight,  maxThickness,
-							Mapper.EDGE_WEIGHT);
-					break;
-				case "Sigmoid":
-					thickness = Mapper.getInstance().convert(Mapper.SIGMOID, weight,  maxThickness,
-							Mapper.EDGE_WEIGHT);
+			// Set the Visibility with the first Attribute of Edge Import: "Body
+			// Thickness"
+			// System.out.println("VEDGE > "+ (String) keys[0]);
+			try {
+				float weight = edge.getFloatAttribute((String) keys[0]);
+				// Set transparency
+				alpha = (int) (Mapper.getInstance().convert(Mapper.LINEAR, weight, 155, Mapper.EDGE_WEIGHT));
+				if (VisibilitySettings.getInstance().getFiltrosVinculo() != null) {
+
+					switch (VisibilitySettings.getInstance().getFiltrosVinculo()) {
+					case "Radial":
+						thickness = Mapper.getInstance().convert(Mapper.RADIAL, weight, maxThickness,
+								Mapper.EDGE_WEIGHT);
+						break;
+					case "Lineal":
+						thickness = Mapper.getInstance().convert(Mapper.LINEAR, weight, maxThickness,
+								Mapper.EDGE_WEIGHT);
+						break;
+					case "Logarithmic":
+						thickness = Mapper.getInstance().convert(Mapper.LOGARITMIC, weight, maxThickness,
+								Mapper.EDGE_WEIGHT);
+						break;
+					case "Sinusoidal":
+						thickness = Mapper.getInstance().convert(Mapper.SINUSOIDAL, weight, maxThickness,
+								Mapper.EDGE_WEIGHT);
+						break;
+					case "Sigmoid":
+						thickness = Mapper.getInstance().convert(Mapper.SIGMOID, weight, maxThickness,
+								Mapper.EDGE_WEIGHT);
+					}
 				}
+			} catch (NullPointerException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -186,11 +191,17 @@ public class VEdge implements Serializable{
 
 	public void setVisibility(float edgeVisibilityThreshold) {
 		Object[] keys = edge.getAttributeKeys();
-		// Set the Visibility with the first Attribute of Edge Import: "Body Thickness"
-		if (edgeVisibilityThreshold > edge.getAttribute((String) keys[0], new Integer(0))) {
+		// Set the Visibility with the first Attribute of Edge Import: "Body
+		// Thickness"
+		try{
+			
+		if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0])) {
 			visibility = false;
 		} else {
 			visibility = true;
+		}
+		}catch (NullPointerException e){
+			e.printStackTrace();
 		}
 	}
 }

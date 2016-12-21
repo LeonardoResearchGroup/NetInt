@@ -1,10 +1,7 @@
 package utilities.mapping;
 
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import graphElements.Edge;
+import graphElements.GraphElement;
 import graphElements.Node;
 import processing.core.PApplet;
 
@@ -29,11 +26,11 @@ public class Mapper {
 	public static final String RADIAL = "radial";
 	public static final String SIGMOID = "sigmoid";
 	// MAXs & MINs edges
-	private NumericalCollection edgeAttributesMin, edgeAttributesMax;
-	private CategoricalCollection edgeCategoricalAttributes;
+	public NumericalCollection edgeAttributesMin, edgeAttributesMax;
+	public CategoricalCollection edgeCategoricalAttributes;
 	// MAXs & MINs nodes
-	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
-	private CategoricalCollection nodeCategoricalAttributes;
+	public NumericalCollection nodeAttributesMin, nodeAttributesMax;
+	public CategoricalCollection nodeCategoricalAttributes;
 
 	private int minCommunitySize;
 	private int maxCommunitySize;
@@ -43,7 +40,7 @@ public class Mapper {
 	private int minEdgeDensity;
 	private int maxEdgeDensity;
 	private int minInDegree;
-	private int maxInDEgree;
+	private int maxInDegree;
 	private int minOutDegree;
 	private int maxOutDegree;
 	private float minBetweeness;
@@ -131,7 +128,7 @@ public class Mapper {
 		// IN_DEGREE = 4;
 		case 4:
 			rtn[0] = minInDegree;
-			rtn[1] = maxInDEgree;
+			rtn[1] = maxInDegree;
 			break;
 		// OUT_DEGREE = 5;
 		case 5:
@@ -352,6 +349,7 @@ public class Mapper {
 			nodeAttributesMax.initialize(node);
 			// categorical values
 			nodeCategoricalAttributes = new CategoricalCollection();
+			nodeCategoricalAttributes.initialize(node);
 		} else {
 			// Go over all the attributes of this node
 			for (int i = 0; i < node.getAttributeKeys().length; i++) {
@@ -367,7 +365,7 @@ public class Mapper {
 						// Add min value
 						nodeAttributesMin.addLowerValue(key, attrFloat);
 						// Add max value
-						nodeAttributesMax.addLowerValue(key, attrFloat);
+						nodeAttributesMax.addHigherValue(key, attrFloat);
 					} else if (value instanceof Integer) {
 						// If Integer
 						Integer attrInteger = (Integer) value;
@@ -375,14 +373,14 @@ public class Mapper {
 						// Add min value
 						nodeAttributesMin.addLowerValue(key, attrFloat);
 						// Add max value
-						nodeAttributesMax.addLowerValue(key, attrFloat);
+						nodeAttributesMax.addHigherValue(key, attrFloat);
 					} else if (value instanceof Float) {
 						// If Float
 						Float attrFloat = (Float) value;
 						// Add min value
 						nodeAttributesMin.addLowerValue(key, attrFloat);
 						// Add max value
-						nodeAttributesMax.addLowerValue(key, attrFloat);
+						nodeAttributesMax.addHigherValue(key, attrFloat);
 					} else if (value instanceof String) {
 						// If String
 						String attrString = (String) value;
@@ -420,6 +418,7 @@ public class Mapper {
 			edgeAttributesMax.initialize(edge);
 			// categorical values
 			edgeCategoricalAttributes = new CategoricalCollection();
+			edgeCategoricalAttributes.initialize(edge);
 		} else {
 			// Go over all the attributes of this edge
 			for (int i = 0; i < edge.getAttributeKeys().length; i++) {
@@ -435,7 +434,7 @@ public class Mapper {
 						// Add min value
 						edgeAttributesMin.addLowerValue(key, attrFloat);
 						// Add max value
-						edgeAttributesMax.addLowerValue(key, attrFloat);
+						edgeAttributesMax.addHigherValue(key, attrFloat);
 					} else if (value instanceof Integer) {
 						// If Integer
 						Integer attrInteger = (Integer) value;
@@ -443,14 +442,14 @@ public class Mapper {
 						// Add min value
 						edgeAttributesMin.addLowerValue(key, attrFloat);
 						// Add max value
-						edgeAttributesMax.addLowerValue(key, attrFloat);
+						edgeAttributesMax.addHigherValue(key, attrFloat);
 					} else if (value instanceof Float) {
 						// If Float
 						Float attrFloat = (Float) value;
 						// Add min value
 						edgeAttributesMin.addLowerValue(key, attrFloat);
 						// Add max value
-						edgeAttributesMax.addLowerValue(key, attrFloat);
+						edgeAttributesMax.addHigherValue(key, attrFloat);
 					} else if (value instanceof String) {
 						// If String
 						String attrString = (String) value;
@@ -458,14 +457,53 @@ public class Mapper {
 						// for that attribute/key
 						edgeCategoricalAttributes.addValue(key, attrString);
 					} else {
-						throw new Exception();
+						throw new NumberFormatException();
 					}
-				} catch (Exception e) {
+				} catch (NumberFormatException e) {
 					System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
 							+ " does not match the available Mapper data type: Double,Float,Integer,String");
 				}
 			}
 		}
+	}
+
+	/**
+	 * Sets the min and max value stored in a collection of attributes related
+	 * to either Edges or Nodes. It initializes the collection if attributes in case it is equal
+	 * to null
+	 * 
+	 * @param edge
+	 */
+	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
+		if (gElem instanceof Node) {
+			setMaxMinNodeAttributes((Node) gElem);
+		} else if (gElem instanceof Edge) {
+			setMaxMinEdgeAttributes((Edge) gElem);
+		}
+	}
+
+	public void setMinOutDegree(int val) {
+		minOutDegree = val;
+	}
+
+	public void setMaxOutDegree(int val) {
+		maxOutDegree = val;
+	}
+
+	public void setMinEdgeWeight(int val) {
+		minEdgeWeight = val;
+	}
+
+	public void setMaxEdgeWeight(int val) {
+		maxEdgeWeight = val;
+	}
+
+	public void setMinInDegree(int val) {
+		minInDegree = val;
+	}
+
+	public void setMaxInDegree(int val) {
+		maxInDegree = val;
 	}
 
 	public void setMinCommunitySize(int val) {

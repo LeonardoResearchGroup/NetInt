@@ -11,6 +11,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
+import utilities.mapping.Mapper;
 
 public class GraphLoader {
 
@@ -18,34 +19,6 @@ public class GraphLoader {
 	public GraphmlReader reader;
 	public static final int PAJEK = 1;
 	public static final int GRAPHML = 0;
-
-	/**
-	 * @deprecated
-	 * @param file
-	 * @param communityFilter
-	 * @param graphmlLabel
-	 * @param sector
-	 * @param edgeWeight
-	 * @param format
-	 */
-	
-	public GraphLoader(String file, String communityFilter, String graphmlLabel, String sector, String edgeWeight,
-			int format) {
-
-		if (format == GraphLoader.PAJEK) {
-			reader = new GraphmlReader();
-			jungGraph = reader.readFromPajek(file);
-		} else if (format == GraphLoader.GRAPHML) {
-			reader = new GraphmlReader(file);
-			jungGraph = reader.getJungDirectedGraph(communityFilter, graphmlLabel, sector, edgeWeight, "CANTIDAD_TRNS");
-
-		}
-		System.out.println(this.getClass().getName() + " "+ reader.getCommunities().size() + " communities loaded");
-		setNodesDegrees(jungGraph);
-		System.out.println(this.getClass().getName() + " Graph Created from file:" + file);
-		System.out.println(" Total Nodes in the graph: " + jungGraph.getVertexCount());
-		System.out.println(" Total Edges in the graph: " + jungGraph.getEdgeCount());
-	}
 
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
 		if (format == GraphLoader.PAJEK) {
@@ -55,8 +28,26 @@ public class GraphLoader {
 			reader = new GraphmlReader(file);
 			jungGraph = reader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
 		}
-		System.out.println(this.getClass().getName() + " "+ reader.getCommunities().size() + " communities loaded");
-		setNodesDegrees(jungGraph);
+		System.out.println(this.getClass().getName() + " " + reader.getCommunities().size() + " communities loaded");
+		// Iterate over elements to set attributes of nodes in the
+		// GraphElements and Mapping
+		for (Node n : jungGraph.getVertices()) {
+			setNodesDegrees(jungGraph, n);
+			Mapper.getInstance().setMaxMinGraphElementAttributes(n);
+		}
+		// EDGES
+		Mapper.getInstance().edgeCategoricalAttributes.printAttributes();
+		Mapper.getInstance().edgeAttributesMax.printAttributes();
+		Mapper.getInstance().edgeAttributesMin.printAttributes();
+		// NODES
+//		Mapper.getInstance().nodeCategoricalAttributes.printAttributes();
+//		Mapper.getInstance().nodeAttributesMax.printAttributes();
+//		Mapper.getInstance().nodeAttributesMin.printAttributes();
+		
+		System.out.println(this.getClass().getName() + " Degrees assigned to nodes and attributes to Mapper Class");
+		System.out.println(this.getClass().getName() + " Assigning Edge attributes to edges and to Mapper Class ...");
+		// ***** EDGE ATRIBUTES ADDED IN LINE 183 OF GRAPHMLREADER CLASS
+		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
 		System.out.println(this.getClass().getName() + " Graph Created from file:" + file);
 		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
 		System.out.println("   Total Edges in the graph: " + jungGraph.getEdgeCount());
@@ -71,39 +62,14 @@ public class GraphLoader {
 	 * 
 	 * @param graph
 	 */
-	public static void setNodesDegrees(Graph<Node, Edge> graph) {
+	public static void setNodesDegrees(Graph<Node, Edge> graph, Node n) {
 		// Degree. 0 because it is the root community
-		for (Node n : graph.getVertices()) {
-			n.setDegree(0, graph.degree(n));
-			n.setOutDegree(0, graph.getSuccessorCount(n));
-			n.setInDegree(0, graph.getPredecessorCount(n));
-		}
-
-		//System.out.println("GraphLoader> degrees assigned to " + graph.getVertices().size() + " nodes");
-	}
-
-	/**
-	 * Uses 0 as index because this method is only used for root Graphs
-	 * 
-	 * @param graph
-	 */
-	public static void setNodesOutDegree(Graph<Node, Edge> graph) {
 		// Degree
-		for (Node n : graph.getVertices()) {
-			n.setOutDegree(0, graph.getSuccessorCount(n));
-		}
-	}
-
-	/**
-	 * Uses 0 as index because this method is only used for root Graphs
-	 * 
-	 * @param graph
-	 */
-	public static void setNodesInDegree(Graph<Node, Edge> graph) {
-		// Degree, 0 because it is the root community
-		for (Node n : graph.getVertices()) {
-			n.setInDegree(0, graph.getPredecessorCount(n));
-		}
+		n.setDegree(0, graph.degree(n));
+		// Out degree
+		n.setOutDegree(0, graph.getSuccessorCount(n));
+		// In Degree
+		n.setInDegree(0, graph.getPredecessorCount(n));
 	}
 
 	public void printJungGraph(boolean printDetails) {
@@ -160,7 +126,7 @@ public class GraphLoader {
 
 	/**
 	 * Returns a subgraph of jungGraph whose edges connect the specified
-	 * communities in either direction. 
+	 * communities in either direction.
 	 * 
 	 * @param jungGraph
 	 * @param comumnity1

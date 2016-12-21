@@ -6,11 +6,12 @@ import java.util.Set;
 
 /**
  * Abstract class that handles the attribute collections of nodes and edges
+ * 
  * @author jsalam
  *
  */
-abstract class GraphElement implements Serializable {
-	private HashMap<String, Object> attributes;
+public abstract class GraphElement implements Serializable {
+	protected HashMap<String, Object> attributes;
 
 	public GraphElement() {
 		attributes = new HashMap<String, Object>();
@@ -25,17 +26,19 @@ abstract class GraphElement implements Serializable {
 		return attributes.get(key);
 	}
 
-	public String getAttribute(String key, String rtn) {
+	public String getStringAttribute(String key) {
+		String rtn = "void";
 		try {
 			rtn = (String) attributes.get(key);
 		} catch (Exception e) {
-			System.out.println(
-					this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as String");
+			System.out
+					.println(this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as String");
 		}
 		return rtn;
 	}
 
-	public float getAttribute(String key, Float rtn) {
+	public float getFloatAttribute(String key) {
+		Float rtn = Float.NEGATIVE_INFINITY;
 		try {
 			// If Double
 			if (attributes.get(key) instanceof Double) {
@@ -50,13 +53,14 @@ abstract class GraphElement implements Serializable {
 				rtn = (float) attributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println(this.getClass().getName() + " Attribute named: " + key
-					+ " couldn't be casted as float. Attribute size:" + attributes.size());
+			System.out.println(this.getClass().getName() + " Attribute key: " + key + " value: "
+					+ attributes.get(key).toString() + " couldn't be casted as Float");
 		}
 		return rtn;
 	}
 
-	public int getAttribute(String key, Integer rtn) {
+	public int getIntegerAttribute(String key) {
+		Integer rtn = Integer.MIN_VALUE;
 		try {
 			// If Double
 			if (attributes.get(key) instanceof Double) {
@@ -71,8 +75,7 @@ abstract class GraphElement implements Serializable {
 				rtn = (Integer) attributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println(this.getClass().getName() + " Attribute named: " + key
-					+ " couldn't be casted as int. Attribute size:" + attributes.size());
+			System.out.println(this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as int");
 		}
 		return rtn;
 	}
@@ -94,7 +97,7 @@ abstract class GraphElement implements Serializable {
 		}
 	}
 
-	// *** Setters	
+	// *** Setters
 	public void setAttribute(String key, Object value) {
 		attributes.put(key, value);
 	}

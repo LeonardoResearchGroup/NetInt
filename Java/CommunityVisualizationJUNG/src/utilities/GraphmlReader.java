@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 
 import utilities.mapping.Mapper;
@@ -27,7 +26,6 @@ import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Node;
-import processing.core.PApplet;
 import graphElements.Edge;
 
 public class GraphmlReader {
@@ -72,7 +70,7 @@ public class GraphmlReader {
 	}
 
 	/**
-	 * This class was initially designed to return an array of nodes but it
+	 * This method was initially designed to return an array of nodes but it
 	 * needed to be changes to a TreeMap because it is not possible to determine
 	 * the final size of the array in advance.
 	 * 
@@ -122,18 +120,16 @@ public class GraphmlReader {
 						throw new NullPointerException();
 				} catch (NullPointerException e) {
 					System.out.println(this.getClass().getName()
-							+ " Null Pointer Exception making nodes. MIsmatch assigning attributes ");
+							+ " Null Pointer Exception making nodes. Mismatch assigning attributes ");
 				}
 			}
-			// Check if some graphml key match with some financial stament key
+			// Check if some graphml key match with some financial statement key
 			for (String key : vertex.getPropertyKeys()) {
 				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
 				if (keyLabel != null) {
 					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
 			}
-			// Setting max min limits in Mapper class (Singleton pattern)
-			Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
 			theNodes.put(id, nodeTmp);
 		}
 		return theNodes;
@@ -177,191 +173,28 @@ public class GraphmlReader {
 			// Check if the edge has any of the edge Import attributes
 			for (int i = 0; i < edgeImportAttributes.length; i++) {
 				try {
-					// Retrieve the attribute value
-					Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
-					if (tmpProperty != null) {
+					// Retrieve the attribute value and check if it is null
+					if (edge.getProperty(edgeImportAttributes[i]) != null) {
+						Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
 						// Add the attribute value to the temporal edge;
 						e.setAttribute(edgeImportAttributes[i], tmpProperty);
-						// Setting max min limits in Mapper class (Singleton pattern)
-						Mapper.getInstance().setMaxMinEdgeAttributes(e);
 					} else
 						throw new NullPointerException();
 				} catch (NullPointerException exception) {
 					System.out.println(this.getClass().getName()
-							+ " Null Pointer Exception because edges in the source file don't have attributes named: "
+							+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
 							+ edgeImportAttributes[i]);
 				}
 			}
+			// Setting max min limits in Mapper class (Singleton
+			// pattern)
+			Mapper.getInstance().setMaxMinGraphElementAttributes(e);
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 			Edge metaE = new Edge(communityNodes.get(nodes.get(idSource).getCommunity(1)),
 					communityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
 			if (!edgesBetweenCommunities.contains(metaE)) {
 				edgesBetweenCommunities.add(metaE);
 			}
-		}
-		return rtnGraph;
-	}
-
-	/**
-	 * @deprecated
-	 * Assigns attributes retrieved from a vertex of a JUNG graph to a node. The
-	 * attribute names come from a list obtained from the source file, usually a
-	 * graphml
-	 * 
-	 * @param vertex
-	 * @param node
-	 * @param nodeImportAttributes
-	 */
-	private void assignAttributesToNode(Vertex vertex, Node node, String[] nodeImportAttributes) {
-		// For the first two attributes: node community and node name
-		try {
-			// Community key
-			if (vertex.getProperty(nodeImportAttributes[0]) != null) {
-				node.setCommunity("Root", 0);
-				node.setCommunity(vertex.getProperty(nodeImportAttributes[0]).toString(), 1);
-				addCommunity(node.getCommunity(1));
-			} else
-				throw new NullPointerException();
-			// Label key
-			if (vertex.getProperty(nodeImportAttributes[1]) != null) {
-				node.setName(vertex.getProperty(nodeImportAttributes[1]).toString());
-
-			} else
-				throw new NullPointerException();
-
-			for (int i = 2; i < nodeImportAttributes.length; i++) {
-
-				// For the remaining attributes
-				if (i > 1) {
-					// Check if it does exist a property matching other
-					// attributes
-					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-						node.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
-					} else
-						throw new NullPointerException();
-				}
-			}
-		} catch (NullPointerException e) {
-			// e.printStackTrace();
-			System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
-		}
-	}
-
-	/**
-	 * @deprecated
-	 * @param communityKey
-	 * @param nameKey
-	 * @param sectorKey
-	 * @param weightKey
-	 * @param frequencyKey
-	 * @return
-	 */
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey,
-			String sectorKey, String weightKey, String frequencyKey) {
-		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
-		System.out.println("GraphmlReader> Building Nodes and Edges");
-		System.out.println("GraphmlReader> Working on it ...");
-
-		edgesBetweenCommunities = new ArrayList<Edge>();
-		// <Name of community, Node object of a community>
-		communityNodes = new HashMap<String, Node>();
-
-		Node[] nodes = new Node[30000];
-
-		for (Vertex vertex : graph.getVertices()) {
-
-			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
-
-			Node node = new Node(String.valueOf(id));
-
-			if (vertex.getProperty(communityKey) != null) {
-				node.setCommunity("Root", 0);
-				node.setCommunity(vertex.getProperty(communityKey).toString(), 1);
-				addCommunity(node.getCommunity(1));
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches " + communityKey
-						+ "!!! Check the key String of the community filter");
-			}
-
-			// Check if exist a property matching nameKey
-			if (vertex.getProperty(nameKey) != null) {
-				node.setName(vertex.getProperty(nameKey).toString());
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + nameKey
-						+ "!!! Check the key String of the graphML label");
-			}
-
-			// Check if exist a property matching sectorKey
-			// if (vertex.getProperty(sectorKey) != null) {
-			// node.setSector(vertex.getProperty(sectorKey).toString());
-			// } else {
-			// System.out.println("GraphmlReader> getJungDirectedGraph (): No
-			// label matches " + sectorKey
-			// + "!!! Check the key String of the sector");
-			// }
-
-			// Check if some graphml key match with some financial stament key
-			for (String key : vertex.getPropertyKeys()) {
-				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
-				if (keyLabel != null) {
-					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
-				}
-			}
-
-			nodes[id] = node;
-
-			// if (node.getOutDegree(1) > maxOutDegree) {
-			// maxOutDegree = node.getOutDegree(1);
-			// }
-			// if (node.getOutDegree(1) < minOutDegree) {
-			// minOutDegree = node.getOutDegree(1);
-			// }
-		}
-
-		float maxWeight = 0;
-		float minWeight = Float.POSITIVE_INFINITY;
-
-		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
-			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.OUT);
-			Vertex target = edge.getVertex(Direction.IN);
-			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
-
-			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(nodes[idSource], nodes[idTarget], true);
-			if (edge.getProperty(weightKey) != null) {
-				String val = edge.getProperty(weightKey).toString();
-				float weight = Float.valueOf(val);
-				if (weight > maxWeight) {
-					maxWeight = weight;
-				}
-				if (weight < minWeight) {
-					minWeight = weight;
-				}
-				e.setWeight(weight);
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + weightKey
-						+ "!!! Check the key String of the weight");
-			}
-			if (edge.getProperty(frequencyKey) != null) {
-				String freq = edge.getProperty(frequencyKey).toString();
-				e.setFrequency(Double.valueOf(freq).intValue());
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + frequencyKey
-						+ "!!!!!! Check the key String of the frequency");
-			}
-			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
-			// Setting limits in Mapper class (Singleton pattern)
-			Mapper.getInstance().setMaxMinEdgeAttributes(e);
-			// For the metagraph
-			Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
-					communityNodes.get(nodes[idTarget].getCommunity(1)), true);
-			if (!edgesBetweenCommunities.contains(metaE)) {
-				edgesBetweenCommunities.add(metaE);
-			}
-
 		}
 		return rtnGraph;
 	}
@@ -440,25 +273,6 @@ public class GraphmlReader {
 			communities.add(string);
 			communityNodes.put(string, new Node(string));
 		}
-	}
-
-	/**
-	 * See getGraphKeys()
-	 * 
-	 * @return
-	 * @deprecated
-	 */
-	public Set<String> getKeys() {
-		return graph.getVertices().iterator().next().getPropertyKeys();
-	}
-
-	/**
-	 * Returns the graphml keys read at the moment of loading
-	 * 
-	 * @return the list of keys
-	 */
-	public ArrayList<String> getGraphKeys() {
-		return graphKeys;
 	}
 
 	public ArrayList<Edge> getEdgesBetweenCommunuties() {

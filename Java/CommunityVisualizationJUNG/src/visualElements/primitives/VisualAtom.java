@@ -18,7 +18,7 @@ import visualElements.VNode;
  * @author jsalam
  *
  */
-public abstract class VisualAtom implements Serializable{
+public abstract class VisualAtom implements Serializable {
 	public PVector mouse;
 	private int wdth, hght;
 	private float diameter;
@@ -112,7 +112,7 @@ public abstract class VisualAtom implements Serializable{
 	}
 
 	public float getDiameter() {
-		return diameter;
+			return diameter;
 	}
 	// *** Color Methods ***
 

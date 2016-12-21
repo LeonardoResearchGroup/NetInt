@@ -47,6 +47,51 @@ public class Assembler {
 	}
 
 	/**
+	 * Loads and builds a graph from a given graph-formated file (graphml or
+	 * pajek) using the import attributes selected by the user
+	 * 
+	 * @param file
+	 *            The path to the source file
+	 * @param nodeImportAttributes
+	 *            User selection from Import Menu
+	 * @param edgeImportAttributes
+	 *            User selection from Import Menu
+	 * @param layout
+	 *            The node distribution layout
+	 * @param format
+	 *            Graphml or Pajek. Graphml by default.
+	 */
+	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
+			int format) {
+		String XML_FILE = file.getAbsolutePath();
+		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, format);
+		// Root visual community. Keep it commented!!!!
+		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
+
+		// Sub communities
+		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
+
+		// Community of communities
+		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
+
+		// Setting root Container & Reporting progress
+		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
+				+ vSubSubCommunity.getNode().getId());
+		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+
+		// Reporting progress
+		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
+		if (format == GraphLoader.PAJEK)
+			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+		else if (format == GraphLoader.GRAPHML)
+			createEdgesBetweenSubcommunities(vSubCommunities);
+
+		// Create edges & reporting progress
+		System.out.println(this.getClass().getName() + " Running edge factory ...");
+		vSubSubCommunity.container.runEdgeFactory();
+	}
+
+	/**
 	 * Creates a single VCommunity of the graph with no subCommunities yet
 	 * contains all the VNodes
 	 * 
@@ -77,7 +122,8 @@ public class Assembler {
 
 		int i = 0;
 		Mapper.getInstance().setMinCommunitySize(graph.getVertexCount());
-		System.out.println(this.getClass().getName()+" Generating DirectedSparseMultigraph for " + communityNames.size() + " communities ...");
+		System.out.println(this.getClass().getName() + " Generating DirectedSparseMultigraph for "
+				+ communityNames.size() + " communities ...");
 		for (String communityName : communityNames) {
 			Canvas.app.text("Generating DirectedSparseMultigraph for community:" + communityName + " out of "
 					+ communityNames.size(), 50, Canvas.app.height - 50);
@@ -131,7 +177,7 @@ public class Assembler {
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
 		System.out.println(this.getClass().getName() + " SubContainer: " + communityName + " created");
 		subContainer.setName(communityName);
-		System.out.println(this.getClass().getName() +" Assigning visual elements to nodes");
+		System.out.println(this.getClass().getName() + " Assigning visual elements to nodes");
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
 		// CommunityCover
@@ -187,71 +233,6 @@ public class Assembler {
 		// vMainCommunity.show();
 		vSubSubCommunity.show();
 		vSubSubCommunity.searchNode();
-	}
-
-	/**
-	 * @deprecated
-	 * @param file
-	 * @param communityFilter
-	 * @param nodeName
-	 * @param sector
-	 * @param edgeWeight
-	 * @param layout
-	 * @param format
-	 */
-	public void loadGraph(File file, String communityFilter, String nodeName, String sector, String edgeWeight,
-			int layout, int format) {
-		String XML_FILE = file.getAbsolutePath();
-		//// *************CORREGIR SECTOR *****************
-		GraphLoader rootGraph = new GraphLoader(XML_FILE, communityFilter, nodeName, sector, edgeWeight, format);
-
-		// Root visual community
-		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
-
-		// Sub communities
-		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
-		// Community of communities
-		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
-		System.out.println(this.getClass().getName() +
-				" Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
-		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-		System.out.println(this.getClass().getName() +" Creating edges between communities");
-		// if(format == GraphLoader.PAJEK)
-		addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
-		// else if(format == GraphLoader.GRAPHML)
-		// createEdgesBetweenSubcommunities(vSubCommunities);
-
-		System.out.println("Logica > loadGraph() Running edge factory");
-		vSubSubCommunity.container.runEdgeFactory();
-	}
-
-	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
-			int format) {
-		String XML_FILE = file.getAbsolutePath();
-		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, format);
-		// Root visual community. Keep it cancelled!!!!
-		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
-
-		// Sub communities
-		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
-
-		// Community of communities
-		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
-
-		// Setting root Container & Reporting progress
-		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
-				+ vSubSubCommunity.getNode().getId());
-		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-
-		// Reporting progress
-		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
-		if (format == GraphLoader.PAJEK)
-			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
-		else if (format == GraphLoader.GRAPHML)
-			createEdgesBetweenSubcommunities(vSubCommunities);
-		// Create edges & reporting progress
-		System.out.println(this.getClass().getName() + " Running edge factory ...");
-		vSubSubCommunity.container.runEdgeFactory();
 	}
 
 	public ArrayList<VCommunity> getVisualCommunities() {
