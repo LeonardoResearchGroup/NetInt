@@ -1,7 +1,7 @@
-OUR AWESOME GRAPH VISUALIZATION SOFTWARE
+NETIN JAVA NETWORKED INTERACTION VISUALIZATION
 
 Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
-License: Not defined Check this link https://opensource.org/licenses/lgpl-2.1.php and https://www.gnu.org/licenses/gpl-faq.html#AllCompatibility
+License: LGPL 2.1
 Authors: Juan Salamanca, Cesar Loaiza & Luis Felipe Rivera
 Acknowledgement: Javier Diaz
 Date: October 3, 2016

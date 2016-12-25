@@ -10,7 +10,7 @@ import utilities.GraphmlKeyReader;
 import utilities.TestPerformance;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
-
+import visualElements.gui.ConsoleOutputCapturer;
 import visualElements.gui.ControlPanel;
 import visualElements.gui.ImportMenu;
 import visualElements.gui.VisibilitySettings;
@@ -23,10 +23,13 @@ public class Executable extends PApplet {
 	private ControlPanel cFrame;
 	public static File file;
 	public static ImportMenu importMenu;
+	private ConsoleOutputCapturer consoleCatcher;
 
 	public void setup() {
 		textSize(10);
 		smooth();
+		consoleCatcher = new ConsoleOutputCapturer();
+		
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
 		System.out.println("Instantiating Import Menu");
@@ -38,19 +41,13 @@ public class Executable extends PApplet {
 		// Control Frame
 		System.out.println("Building Control Panel");
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-//
-//		System.out.println(this.getClass().getName()+
-//				" Weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
-//						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
-//		System.out.println(this.getClass().getName()+
-//				" OutDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
-//						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
-//
 		this.surface.setLocation(200, 0);
 		this.surface.setTitle("Java Networked Interaction Visualization. NetInt");
+		
 	}
 
 	public void draw() {
+		consoleCatcher.start();
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
@@ -66,6 +63,7 @@ public class Executable extends PApplet {
 		} else {
 			background(100);
 		}
+		text(consoleCatcher.stop(),10, 200);
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
 		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2016", 20, height - 10);

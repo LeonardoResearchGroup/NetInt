@@ -84,18 +84,23 @@ public class ImportMenu implements ControlListener {
 			System.out.println("_ _ _");
 			// If the user selected at least the first two attributes from the
 			// menu
+			if (nodeList.getSelection().length >=2) {
+				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
+					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
+							Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+					Executable.activeGraph = true;
+					// *** Ideally this object must be deleted instead of
+					// turning it
+					// invisible. I should be created again if the user wants to
+					// import a new file
+					menu.setVisible(false);
+					nodeList.dropMenu.setVisible(false);
+					edgeList.dropMenu.setVisible(false);
 
-			if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-				Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
-						Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
-				Executable.activeGraph = true;
-				// *** Ideally this object must be deleted instead of turning it
-				// invisible. I should be created again if the user wants to
-				// import a new file
-				menu.setVisible(false);
-				nodeList.dropMenu.setVisible(false);
-				edgeList.dropMenu.setVisible(false);
-
+				} else {
+					JOptionPane.showMessageDialog(app.frame, "Missing either \"community\" or \"label\" attributes",
+							"Import warning", JOptionPane.WARNING_MESSAGE);
+				}
 			} else {
 				JOptionPane.showMessageDialog(app.frame, "Must select at least \"community\" and \"label\" attributes",
 						"Import warning", JOptionPane.WARNING_MESSAGE);
