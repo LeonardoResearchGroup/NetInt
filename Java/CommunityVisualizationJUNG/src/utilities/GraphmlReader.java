@@ -171,20 +171,25 @@ public class GraphmlReader {
 			// **** MAKE EDGE FROM SOURCE AND TARGET NODES ****
 			graphElements.Edge e = new graphElements.Edge(nodes.get(idSource), nodes.get(idTarget), true);
 			// Check if the edge has any of the edge Import attributes
-			for (int i = 0; i < edgeImportAttributes.length; i++) {
-				try {
-					// Retrieve the attribute value and check if it is null
-					if (edge.getProperty(edgeImportAttributes[i]) != null) {
-						Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
-						// Add the attribute value to the temporal edge;
-						e.setAttribute(edgeImportAttributes[i], tmpProperty);
-					} else
-						throw new NullPointerException();
-				} catch (NullPointerException exception) {
-					System.out.println(this.getClass().getName()
-							+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
-							+ edgeImportAttributes[i]);
+			if (edgeImportAttributes.length > 0) {
+				for (int i = 0; i < edgeImportAttributes.length; i++) {
+					try {
+						// Retrieve the attribute value and check if it is null
+						if (edge.getProperty(edgeImportAttributes[i]) != null) {
+							Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
+							// Add the attribute value to the temporal edge;
+							e.setAttribute(edgeImportAttributes[i], tmpProperty);
+						} else
+							throw new NullPointerException();
+					} catch (NullPointerException exception) {
+						System.out.println(this.getClass().getName()
+								+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
+								+ edgeImportAttributes[i]);
+					}
 				}
+			} else {
+				// if no attributes selected set the weight to 1
+				e.setAttribute("weight", 1);
 			}
 			// Setting max min limits in Mapper class (Singleton
 			// pattern)
