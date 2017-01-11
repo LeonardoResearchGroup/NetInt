@@ -15,6 +15,7 @@ public class BezierBeta {
 	private Color tailColor = new Color(232, 20, 23);
 	private Color propagated = new Color(250, 0, 0);
 	private double inclination = Math.PI / 2;
+	private float sagitta = 20;
 	private boolean aboveArc;
 
 	// Constructors
@@ -32,8 +33,22 @@ public class BezierBeta {
 	public BezierBeta(PVector source, PVector target, float sagitta) {
 		A = source;
 		B = target;
-		if (sagitta > getChord() / 2)
+		if (sagitta > getChord() / 2) {
 			sagitta = getChord() / 2;
+		} else {
+			this.sagitta = sagitta;
+		}
+		localAlpha = 255;
+	}
+
+	/**
+	 * A Bezier with source and target at the same origin
+	 *
+	 * @param aboveArc
+	 */
+	public BezierBeta() {
+		A = new PVector(0, 0);
+		B = new PVector(0, 0);
 		localAlpha = 255;
 	}
 
@@ -90,7 +105,7 @@ public class BezierBeta {
 		return angle;
 	}
 
-	private PVector getControlPoint(PVector origin, double angle, float sagitta) {
+	private PVector getControlPoint(PVector origin, double angle) {
 		PVector rtn = null;
 		double X = Math.cos(angle - inclination);
 		double Y = Math.sin(angle - inclination);
@@ -103,15 +118,6 @@ public class BezierBeta {
 		return rtn.add(origin);
 	}
 
-	private PVector getControlPoint(PVector origin, double angle) {
-		double X = Math.cos(angle - inclination);
-		double Y = Math.sin(angle - inclination);
-		X = X * getChord() / 2;
-		Y = Y * getChord() / 2;
-		PVector rtn = new PVector((float) X, (float) Y);
-		return rtn.add(origin);
-	}
-
 	// Display Methods
 	/**
 	 * To be used after the source and target PVectors were set after
@@ -121,7 +127,6 @@ public class BezierBeta {
 	 */
 	public void drawBezierAndControls(PApplet app, float thickness) {
 		app.noFill();
-		app.stroke(currentColor.getRGB(), localAlpha);
 		app.strokeWeight(thickness);
 		cA = getControlPoint(A, getDirectionB(app));
 		cB = getControlPoint(B, getDirectionB(app));
@@ -132,33 +137,31 @@ public class BezierBeta {
 		app.ellipse(B.x, B.y, 3, 3);
 		app.stroke(0, 255, 0, 50);
 		app.line(A.x, A.y, B.x, B.y);
-		app.stroke(0, 0, 255);
+		app.stroke(currentColor.getRGB(), localAlpha);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
 	/**
-	 * To be used after the source and target PVectors were set after
-	 * instantiation. See setSourceAndTarget()
 	 * 
 	 * @param app
 	 * @param thickness
 	 */
 	public void drawBezier2D(PApplet app, float thickness) {
-		// updateControlPoints(A, B);
+		cA = getControlPoint(A, getDirectionB(app));
+		cB = getControlPoint(B, getDirectionB(app));
 		app.noFill();
 		app.stroke(currentColor.getRGB(), localAlpha);
-		// System.out.println("Bezier> drawBezier2D A: "+ localAlpha);
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
+
 	/**
-	 * To be used after the source and target PVectors were set after
-	 * instantiation. See setSourceAndTarget()
-	 * 
+	 * Used to draw edge's tails and heads
 	 * @param app
-	 * @param source
-	 * @param target
+	 * @param color
+	 * @param thickness
+	 * @param alpha
 	 */
 	private void drawBezier2D(PApplet app, Color color, float thickness, int alpha) {
 		app.noFill();
@@ -224,6 +227,11 @@ public class BezierBeta {
 	}
 
 	// Getters and setters
+	public void setSourceAndTarget(PVector source, PVector target) {
+		A.set(source);
+		B.set(target);
+	}
+
 	private PVector getThird(PVector a, PVector b) {
 		float tempX = a.x - ((a.x - b.x) / 3);
 		float tempY = a.y - ((a.y - b.y) / 3);
@@ -245,6 +253,10 @@ public class BezierBeta {
 
 	public void setTailColor(Color tailColor) {
 		this.tailColor = tailColor;
+	}
+
+	public void setSagitta(float sagitta) {
+		this.sagitta = sagitta;
 	}
 
 	public Color getPropagated() {

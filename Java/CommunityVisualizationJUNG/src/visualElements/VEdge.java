@@ -14,7 +14,7 @@ public class VEdge implements Serializable {
 	private Edge edge;
 	private boolean aboveArc, visibility;
 	private VNode source, target;
-	private Bezier bezier;
+	private BezierBeta bezier;
 	// Visual Attributes
 	private float thickness;
 	private int maxThickness = 3;
@@ -48,7 +48,7 @@ public class VEdge implements Serializable {
 	}
 
 	public void makeBezier() {
-		bezier = new Bezier(aboveArc);
+		bezier = new BezierBeta();
 		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
@@ -70,11 +70,9 @@ public class VEdge implements Serializable {
 					// bezier.setAlpha((int)alpha);
 					// setAlpha(40);
 				}
-				// bezier.brighter();
 				// Update source and target
 				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
-					bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
-					bezier.setControl((source.pos.x - target.pos.x) / 2);
+					bezier.setSourceAndTarget(source.pos, target.pos);
 					// Edge mode: normal, head, tail or both
 					if (source.isPropagated()) {
 						bezier.drawBezier2D(Canvas.app, 2f);
@@ -85,8 +83,7 @@ public class VEdge implements Serializable {
 					}
 				} else {
 					if (source.isPropagated()) {
-						bezier.setAndUpdateSourceAndTarget(source.pos, target.pos);
-						bezier.setControl((source.pos.x - target.pos.x) / 2);
+						bezier.setSourceAndTarget(source.pos, target.pos);
 						// Edge mode: normal, head, tail or both
 						bezier.drawBezier2D(Canvas.app, 2f);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
@@ -193,14 +190,14 @@ public class VEdge implements Serializable {
 		Object[] keys = edge.getAttributeKeys();
 		// Set the Visibility with the first Attribute of Edge Import: "Body
 		// Thickness"
-		try{
-			
-		if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0])) {
-			visibility = false;
-		} else {
-			visibility = true;
-		}
-		}catch (NullPointerException e){
+		try {
+
+			if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0])) {
+				visibility = false;
+			} else {
+				visibility = true;
+			}
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 	}
