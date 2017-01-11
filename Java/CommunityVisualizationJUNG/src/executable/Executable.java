@@ -1,7 +1,10 @@
 package executable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import containers.Container;
 import processing.core.*;
 import utilities.Assembler;
 import utilities.GraphmlKeyReader;
@@ -93,7 +96,9 @@ public class Executable extends PApplet {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges());
+			String[] layoutKeys = {"Fruchterman_Reingold","Spring", "Circular"};
+			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(),layoutAttributes);
 		}
 	}
 

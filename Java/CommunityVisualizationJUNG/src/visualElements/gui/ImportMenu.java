@@ -26,10 +26,15 @@ public class ImportMenu implements ControlListener {
 	public int barWidth = 170;
 	public int itemHeight = 13;
 	public int gap = 2;
-	public DropDownList nodeList, edgeList;
+	public DropDownList nodeList, edgeList, layoutList;
 	public PApplet app;
 
 	public ImportMenu(PApplet app) {
+		this.app = app;
+		 init();
+	}
+
+	public void init() {
 		menu = new ControlP5(app);
 		// for nodes
 		nodeList = new DropDownList(app, "Node Attributes");
@@ -41,7 +46,11 @@ public class ImportMenu implements ControlListener {
 		edgeList.setPos(100, 250);
 		String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
 		edgeList.setAttributes(edgeAttributeNames);
-		this.app = app;
+		// for layout
+		layoutList = new DropDownList(app, "Visualization Layout");
+		layoutList.setPos(100, 400);
+		String[] layoutAttributeNames = { "Choose one" };
+		layoutList.setAttributes(layoutAttributeNames);
 	}
 
 	/**
@@ -52,10 +61,18 @@ public class ImportMenu implements ControlListener {
 	 * @param nodeAttributeKeys
 	 * @param edgeAttributeKeys
 	 */
-	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys) {
+	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys,
+			ArrayList<String> layoutAttributeKeys) {
+		init();
+		menu.setVisible(true);
+		nodeList.dropMenu.setVisible(true);
+		edgeList.dropMenu.setVisible(true);
+		layoutList.dropMenu.setVisible(true);
+		//
 		nodeList.addElementAttributes(nodeAttributeKeys);
 		edgeList.addElementAttributes(edgeAttributeKeys);
-		menu.addBang("loadGraph").setPosition(100, 400).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
+		layoutList.addElementAttributes(layoutAttributeKeys);
+		menu.addBang("loadGraph").setPosition(100, 500).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
 		menu.getController("loadGraph").addListener(this);
 	}
@@ -84,18 +101,17 @@ public class ImportMenu implements ControlListener {
 			System.out.println("_ _ _");
 			// If the user selected at least the first two attributes from the
 			// menu
-			if (nodeList.getSelection().length >=2) {
+			if (nodeList.getSelection().length >= 2) {
+				int layoutSelection = Container.FRUCHTERMAN_REINGOLD;
+				try {
+					layoutSelection = layoutSelectionConverter(layoutList.getSelection()[0]);
+				} catch (ArrayIndexOutOfBoundsException e) {
+
+				}
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
 					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
-							Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+							layoutSelection, GraphLoader.GRAPHML);
 					Executable.activeGraph = true;
-					// *** Ideally this object must be deleted instead of
-					// turning it
-					// invisible. I should be created again if the user wants to
-					// import a new file
-					menu.setVisible(false);
-					nodeList.dropMenu.setVisible(false);
-					edgeList.dropMenu.setVisible(false);
 
 				} else {
 					JOptionPane.showMessageDialog(app.frame, "Missing either \"community\" or \"label\" attributes",
@@ -106,6 +122,27 @@ public class ImportMenu implements ControlListener {
 						"Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		menu.setVisible(false);
+		nodeList.dropMenu.setVisible(false);
+		edgeList.dropMenu.setVisible(false);
+		layoutList.dropMenu.setVisible(false);
+	}
+
+	private int layoutSelectionConverter(String selection) {
+		// Default selection fruchterman_reingold
+		int rtn = 2;
+		switch (selection) {
+		case "Fruchterman_Reingold":
+			rtn = 2;
+			break;
+		case "Spring":
+			rtn = 1;
+			break;
+		case "Circular":
+			rtn = 0;
+			break;
+		}
+		return rtn;
 	}
 
 }

@@ -45,7 +45,7 @@ public class ConsoleCatcher extends PApplet {
 		cp5.enableShortcuts();
 		textArea = cp5.addTextarea("console").setPosition(10, 10).setSize(width - 20, height - 20).setScrollActive(1);
 		this.surface.setSize(width, height);
-		this.surface.setLocation(0, 45);
+		this.surface.setLocation(750, 500);
 		this.surface.setAlwaysOnTop(true);
 		// Font
 		font = createFont("Arial", 11, false);
