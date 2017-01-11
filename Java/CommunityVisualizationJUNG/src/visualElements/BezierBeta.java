@@ -4,83 +4,36 @@ import processing.core.*;
 
 import java.awt.Color;
 
-public class Bezier {
+public class BezierBeta {
 	public static final int NORMAL = 1;
 	public static final int PROPAGATE = 2;
 	private PVector A, B, cA, cB;
 	private int localAlpha;
-	private Color bodyColor = new Color(147,111,180);
+	private Color bodyColor = new Color(147, 111, 180);
 	private Color currentColor = bodyColor;
-	private Color headColor = new Color(125,125,25);
+	private Color headColor = new Color(125, 125, 25);
 	private Color tailColor = new Color(232, 20, 23);
-	private Color propagated = new Color(250,0,0);
-	private float control;
+	private Color propagated = new Color(250, 0, 0);
+	private double inclination = Math.PI / 2;
 	private boolean aboveArc;
 
 	// Constructors
-	
-	/**
-	 * Bezier 2D
-	 */
-	public Bezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
-		A = new PVector(x1, y1);
-		cA = new PVector(x2, y2);
-		cB = new PVector(x3, y3);
-		B = new PVector(x4, y4);
-		control = Math.abs(y1 - y2);
-		aboveArc = false;
-		localAlpha = 255;
-	}
-
 	/**
 	 * The Beziers are instantiated defining the control points of origin and
-	 * destination PVectors that are passed later in the show method.
+	 * destination PVectors and a distance.
 	 * 
 	 * @param source
 	 *            Start PVector
 	 * @param target
 	 *            End PVector
-	 * @param distanceControlPoint
+	 * @param sagitta
 	 *            The displacement of the control point
-	 * @param isLoop
 	 */
-	public Bezier(PVector source, PVector target, float distanceControlPoint, boolean aboveArc) {
+	public BezierBeta(PVector source, PVector target, float sagitta) {
 		A = source;
 		B = target;
-		control = distanceControlPoint;
-		this.aboveArc = aboveArc;
-		updateControlPoints(source, target);
-		localAlpha = 255;
-	}
-
-	/**
-	 * The Beziers are instantiated defining the control points for PVectors at
-	 * (0,0).
-	 *
-	 * @param distanceControlPoint
-	 *            The displacement of the control point
-	 * @param isLoop
-	 */
-	public Bezier(float distanceControlPoint, boolean aboveArc) {
-		A = new PVector(0, 0);
-		B = new PVector(0, 0);
-		control = distanceControlPoint;
-		this.aboveArc = aboveArc;
-		updateControlPoints(A, B);
-		localAlpha = 255;
-	}
-
-	/**
-	 * A Bezier is instantiated defining just its convexity
-	 *
-	 * @param aboveArc
-	 */
-	public Bezier(boolean aboveArc) {
-		A = new PVector(0, 0);
-		B = new PVector(0, 0);
-		control = 0;
-		this.aboveArc = aboveArc;
-		updateControlPoints(A, B);
+		if (sagitta > getChord() / 2)
+			sagitta = getChord() / 2;
 		localAlpha = 255;
 	}
 
@@ -95,7 +48,7 @@ public class Bezier {
 	 * @param oB
 	 *            Origin B
 	 */
-	public Bezier(PVector oA, PVector cA, PVector cB, PVector oB) {
+	public BezierBeta(PVector oA, PVector cA, PVector cB, PVector oB) {
 		this.A = oA;
 		this.cA = cA;
 		this.cB = cB;
@@ -103,26 +56,60 @@ public class Bezier {
 		localAlpha = 255;
 	}
 
-	private void updateControlPoints(PVector source, PVector target) {
-		float modifier = Math.abs(control);
-		// if directed graph
-		if (!aboveArc) {
-			modifier = -modifier;
-		}
-		// if loop
-		if (A.equals(B)) {
-			cA = new PVector(A.x - 20, A.y - 20);
-			cB = new PVector(B.x + 20, B.y - 20);
-		} else {
-			cA = new PVector(A.x, A.y - modifier);
-			cB = new PVector(B.x, B.y - modifier);
-		}
+	private float getChord() {
+		double deltaX = Math.pow((A.x - B.x), 2);
+		double deltaY = Math.pow((A.y - B.y), 2);
+		return (float) Math.sqrt(deltaX + deltaY);
 	}
 
-	public void setAndUpdateSourceAndTarget(PVector source, PVector target) {
-		A.set(source);
-		B.set(target);
-		updateControlPoints(A, B);
+	private double getDirection() {
+		double angle = 0;
+		float deltaX = A.x - B.x;
+		// If target is at the left of source
+		if (deltaX < 0) {
+			angle = Math.PI;
+		}
+		float chord = getChord();
+		double deltaY = A.y - B.y;
+		if (A.y != B.y) {
+			angle = (deltaY / chord);
+		}
+		// Validate in which quadrant falls the angle and make the correction
+		return Math.asin(angle);
+	}
+
+	private double getDirectionB(PApplet app) {
+		double angle = 0;
+		app.pushMatrix();
+		app.translate(A.x, A.y);
+		angle = PApplet.atan2(B.y - A.y, B.x - A.x);
+		app.popMatrix();
+		if (angle < 0) {
+			angle = PApplet.TWO_PI + angle;
+		}
+		return angle;
+	}
+
+	private PVector getControlPoint(PVector origin, double angle, float sagitta) {
+		PVector rtn = null;
+		double X = Math.cos(angle - inclination);
+		double Y = Math.sin(angle - inclination);
+		if (sagitta > getChord() / 2) {
+			sagitta = getChord() / 2;
+		}
+		X = X * sagitta;
+		Y = Y * sagitta;
+		rtn = new PVector((float) X, (float) Y);
+		return rtn.add(origin);
+	}
+
+	private PVector getControlPoint(PVector origin, double angle) {
+		double X = Math.cos(angle - inclination);
+		double Y = Math.sin(angle - inclination);
+		X = X * getChord() / 2;
+		Y = Y * getChord() / 2;
+		PVector rtn = new PVector((float) X, (float) Y);
+		return rtn.add(origin);
 	}
 
 	// Display Methods
@@ -132,15 +119,23 @@ public class Bezier {
 	 * 
 	 * @param app
 	 */
-	public void drawBezier(PApplet app, float thickness) {
-		updateControlPoints(A, B);
+	public void drawBezierAndControls(PApplet app, float thickness) {
 		app.noFill();
 		app.stroke(currentColor.getRGB(), localAlpha);
 		app.strokeWeight(thickness);
+		cA = getControlPoint(A, getDirectionB(app));
+		cB = getControlPoint(B, getDirectionB(app));
+		app.stroke(255, 0, 0, 50);
+		app.line(A.x, A.y, cA.x, cA.y);
+		app.ellipse(A.x, A.y, 3, 3);
+		app.line(B.x, B.y, cB.x, cB.y);
+		app.ellipse(B.x, B.y, 3, 3);
+		app.stroke(0, 255, 0, 50);
+		app.line(A.x, A.y, B.x, B.y);
+		app.stroke(0, 0, 255);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
-	
-	
+
 	/**
 	 * To be used after the source and target PVectors were set after
 	 * instantiation. See setSourceAndTarget()
@@ -149,10 +144,10 @@ public class Bezier {
 	 * @param thickness
 	 */
 	public void drawBezier2D(PApplet app, float thickness) {
-		updateControlPoints(A, B);
+		// updateControlPoints(A, B);
 		app.noFill();
 		app.stroke(currentColor.getRGB(), localAlpha);
-		//System.out.println("Bezier> drawBezier2D A: "+ localAlpha);
+		// System.out.println("Bezier> drawBezier2D A: "+ localAlpha);
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
@@ -162,25 +157,24 @@ public class Bezier {
 	 * instantiation. See setSourceAndTarget()
 	 * 
 	 * @param app
-	 * @param color
-	 * @param thickness
-	 * @param alpha
+	 * @param source
+	 * @param target
 	 */
 	private void drawBezier2D(PApplet app, Color color, float thickness, int alpha) {
 		app.noFill();
 		app.stroke(color.getRGB(), alpha);
-		//System.out.println("Bezier> drawBezier2D B:"+ alpha);
+		// System.out.println("Bezier> drawBezier2D B:"+ alpha);
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
 
 	public void drawHeadBezier2D(PApplet app, float thickness, int alpha) {
 		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thickness, alpha);
-		//System.out.println("Bezier> drawHeadBezier2D:"+ alpha);
+		// System.out.println("Bezier> drawHeadBezier2D:"+ alpha);
 	}
 
 	public void drawTailBezier2D(PApplet app, float thickness, int alpha) {
-		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thickness,alpha);
+		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thickness, alpha);
 	}
 
 	public void drawHeadAndTailBezier2D(PApplet app, float thicknessHead, float thicknessTail, int alpha) {
@@ -206,7 +200,7 @@ public class Bezier {
 	 *            The opposite end of the bezier curve
 	 * @return
 	 */
-	public Bezier getBezierThird(PVector A, PVector cA, PVector cB, PVector B) {
+	public BezierBeta getBezierThird(PVector A, PVector cA, PVector cB, PVector B) {
 
 		// Find C that is the first third along the straight line [A cA]
 		PVector C = getThird(A, cA);
@@ -226,7 +220,7 @@ public class Bezier {
 		// Finally, find H that is the first third along the straight line
 		// FG.
 		PVector H = getThird(F, G);
-		return new Bezier(A, C, F, H);
+		return new BezierBeta(A, C, F, H);
 	}
 
 	// Getters and setters
@@ -261,17 +255,17 @@ public class Bezier {
 		this.propagated = propagated;
 	}
 
-	public float getControl() {
-		return control;
-	}
+	// public float getControl() {
+	// return control;
+	// }
 
 	public boolean isAboveArc() {
 		return aboveArc;
 	}
 
-	public void setControl(float control) {
-		this.control = control;
-	}
+	// public void setControl(float control) {
+	// this.control = control;
+	// }
 
 	public void setAboveArc(boolean aboveArc) {
 		this.aboveArc = aboveArc;
