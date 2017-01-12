@@ -14,7 +14,7 @@ public class VEdge implements Serializable {
 	private Edge edge;
 	private boolean aboveArc, visibility;
 	private VNode source, target;
-	private BezierBeta bezier;
+	private Bezier bezier;
 	// Visual Attributes
 	private float thickness;
 	private int maxThickness = 3;
@@ -48,7 +48,7 @@ public class VEdge implements Serializable {
 	}
 
 	public void makeBezier() {
-		bezier = new BezierBeta();
+		bezier = new Bezier();
 		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
