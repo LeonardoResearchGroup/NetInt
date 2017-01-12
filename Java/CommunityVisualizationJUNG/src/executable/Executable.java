@@ -21,15 +21,15 @@ public class Executable extends PApplet {
 	private TestPerformance performance;
 	public static boolean activeGraph;
 	private ControlPanel cFrame;
-	private ConsoleCatcher consoleCatcher;
+	//private ConsoleCatcher consoleCatcher;
 	public static File file;
 	public static ImportMenu importMenu;
 
 	public void setup() {
 		textSize(10);
 		smooth();
-		consoleCatcher = new ConsoleCatcher();
-		consoleCatcher.startCapture();
+		//consoleCatcher = new ConsoleCatcher();
+		//consoleCatcher.startCapture();
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
 		System.out.println("Instantiating Import Menu");
@@ -43,11 +43,11 @@ public class Executable extends PApplet {
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 		this.surface.setLocation(200, 0);
 		this.surface.setTitle("Java Networked Interaction Visualization. NetInt");
-		consoleCatcher.stopCapture();
+		//consoleCatcher.stopCapture();
 	}
 
 	public void draw() {
-		consoleCatcher.startCapture();
+		//consoleCatcher.startCapture();
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
@@ -69,7 +69,7 @@ public class Executable extends PApplet {
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		VisibilitySettings.getInstance().setEventOnVSettings(false);
-		consoleCatcher.stopCapture();
+		//consoleCatcher.stopCapture();
 	}
 
 	public Assembler getApp() {

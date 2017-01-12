@@ -4,6 +4,16 @@ import processing.core.*;
 
 import java.awt.Color;
 
+/**
+ * This class draws bezier curves from two nodes. The source node is the origin
+ * of the curve and target node is the end. The curve may be drawn in three
+ * parts: the first third is the head that goes attached to the source. The last
+ * third is the tail attached to the target. Head and tail are drawn on top of
+ * the curve body, leaving exposed the middle part.
+ * 
+ * @author jsalam
+ *
+ */
 public class Bezier {
 	public static final int NORMAL = 1;
 	public static final int PROPAGATE = 2;
