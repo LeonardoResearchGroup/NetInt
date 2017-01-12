@@ -28,7 +28,7 @@ public class VNode extends VisualAtom implements Serializable {
 		description = new VNodeDescription();
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
-		registerEvents();
+//		registerEvents();
 	}
 
 	public VNode(VNode vNode) {
@@ -38,7 +38,7 @@ public class VNode extends VisualAtom implements Serializable {
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
 		description = new VNodeDescription();
-		registerEvents();
+//		registerEvents();
 	}
 
 	// *** PROPAGATION

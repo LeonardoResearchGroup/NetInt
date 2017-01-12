@@ -208,6 +208,7 @@ public class Logica {
 		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
+		vSubSubCommunity.registerEvents();
 		System.out.println(
 				"Logica > loadGraph() Setting RootGraph to container of: " + vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
@@ -233,7 +234,8 @@ public class Logica {
 
 		// Community of communities
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
-
+		vSubSubCommunity.registerEvents();
+		
 		// Setting root Container & Reporting progress
 		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
 				+ vSubSubCommunity.getNode().getId());

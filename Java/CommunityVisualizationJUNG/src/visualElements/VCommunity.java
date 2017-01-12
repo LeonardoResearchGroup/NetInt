@@ -2,6 +2,7 @@ package visualElements;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 import visualElements.gui.VisibilitySettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
@@ -205,22 +206,31 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	/**
 	 * Build all the external edges of a clicked community
 	 */
-	public void buildExternalEdges() {
+	public void buildExternalEdges(MouseEvent e) {
 		this.container.initialize(true);
 		for (VisualAtom vA : container.getVNodes()) {
+			System.out.println(this.getClass() + "... Recorre VCommunities"  );
+			vA.detectMouseOver(Canvas.getCanvasMouse());
+			
+				
+			
+				
+			
 			// If vA is a VCommunity
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
+				vC.vCommunityEvent( e);
 				if (vC.isMouseOver && !vC.comCover.isDeployed()) {
 					// It clears the edges between communities of the opened
 					// community
 //					container.getGraph().removeVertex(vC.getNode());
 //					container.getVEdges().clear();
 //					container.runEdgeFactory();
-					container.setIncidentEdgesVisibility(vC.getNode(), false);
+					//container.setIncidentEdgesVisibility(vC.getNode(), false);
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
+						System.out.println(this.getClass() + "... Recorre las demás VCommunities"  );
 						// If vA is a VCommunity
 						if (internalVA instanceof VCommunity) {
 							VCommunity internalVC = (VCommunity) internalVA;
@@ -232,10 +242,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							}
 						}
 					}
-				} else if (vC.isMouseOver && vC.comCover.isDeployed()) {
+					for (VisualAtom vN : vC.container.getVNodes()){
+						System.out.println(this.getClass() + "... Recorre VNodes"  );
+						vN.vNodeEvent(e);
+					}
+				} //else if (vC.isMouseOver && vC.comCover.isDeployed()) {
 					//vC.container.setvExtEdges(new ArrayList<VEdge>());
-					container.setIncidentEdgesVisibility(vC.getNode(), true);
-				}
+//					container.setIncidentEdgesVisibility(vC.getNode(), true);
+				//}
 			}
 		}
 	}

@@ -65,7 +65,7 @@ public abstract class VisualAtom implements Serializable{
 	 * context of the canvas' PApplet
 	 * 
 	 */
-	protected void registerEvents() {
+	public void registerEvents() {
 		eventRegister(Canvas.app);
 	}
 
@@ -75,7 +75,7 @@ public abstract class VisualAtom implements Serializable{
 	 * 
 	 * @param mouse
 	 */
-	private boolean detectMouseOver(PVector mouse) {
+	public boolean detectMouseOver(PVector mouse) {
 		isMouseOver = false;
 		// If the button is a rectangle
 		if (wdth != 0) {
@@ -219,12 +219,16 @@ public abstract class VisualAtom implements Serializable{
 	// P3
 	public abstract void eventRegister(PApplet theApp);
 
+	
 	public void mouseEvent(MouseEvent e) {
+		//System.out.println("Class handling events: "+ this.getClass());
 		VCommunity tmpCommunity = null;
 		VNode tmpNode = null;
 		detectMouseOver(Canvas.getCanvasMouse());
 		try {
 			tmpCommunity = (VCommunity) this;
+			System.out.println("Object invoking buildExternalEdges: "+ tmpCommunity.container.getName());
+			tmpCommunity.buildExternalEdges(e);
 		} catch (java.lang.RuntimeException exCommunity) {
 			try {
 				tmpNode = (VNode) this;
@@ -233,17 +237,17 @@ public abstract class VisualAtom implements Serializable{
 			}
 		}
 		if (tmpNode != null) {
-			vNodeEvent(tmpNode, e);
+			vNodeEvent(e);
 		} else if (tmpCommunity != null) {
-			vCommunityEvent(tmpCommunity, e);
+			vCommunityEvent(e);
 		}
 	}
 
-	private void vCommunityEvent(VCommunity vComm, MouseEvent e) {
+	public void vCommunityEvent( MouseEvent e) {
 		if (e.getAction() == MouseEvent.CLICK) {
-			if (vComm.container.getName().equals("SubSubcommunities")) {
-				vComm.buildExternalEdges();
-			}
+//			if (vComm.container.getName().equals("SubSubcommunities")) {
+//				vComm.buildExternalEdges();
+//			}
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {
 			mouseReleased(e);
@@ -252,8 +256,8 @@ public abstract class VisualAtom implements Serializable{
 		}
 	}
 
-	private void vNodeEvent(VNode vNode, MouseEvent e) {
-		if(vNode.isVisible()){
+	public void vNodeEvent( MouseEvent e) {
+		if(isVisible()){
 			if (e.getAction() == MouseEvent.CLICK) {
 				mouseClicked(e);
 			} else if (e.getAction() == MouseEvent.RELEASE) {
