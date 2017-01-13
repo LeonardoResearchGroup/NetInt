@@ -81,7 +81,7 @@ public class ImportMenu implements ControlListener {
 			// menu
 			if (nodeList.getSelection().length >= 2) {
 				Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
-						Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+						Container.CIRCULAR, GraphLoader.GRAPHML);
 				Executable.activeGraph = true;
 				// *** Ideally this object must be deleted.
 				menu.setVisible(false);

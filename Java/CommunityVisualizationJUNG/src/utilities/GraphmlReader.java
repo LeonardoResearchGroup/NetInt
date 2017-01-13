@@ -82,18 +82,6 @@ public class GraphmlReader {
 	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes) {
 		// private Node[] makeNodes(String[] nodeImportAttributes) {
 		System.out.println(this.getClass().getName() + " Making Nodes...");
-		// Timer initialization
-		// long ini = System.currentTimeMillis();
-		// Count how many vertices are there in the graph
-		// int vertexCount = 1;
-		// for (Vertex vertex : graph.getVertices()) {
-		// vertexCount++;
-		// }
-		// Timer last count
-		// long fin = System.currentTimeMillis();
-		// long elapsed = fin - ini;
-		// System.out.println(this.getClass().getName() + " Time counting " +
-		// vertexCount + " vertex: " + elapsed);
 
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
 

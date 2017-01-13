@@ -9,6 +9,7 @@ import processing.core.PApplet;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import containers.Container;
 import graphElements.Node;
@@ -36,7 +37,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected VCommunity nodeFoundInSuperCommunity;
 	private String idSearch = null;
 	
-	private boolean vNodesCentered = false;
+	private boolean vNodesCentered = true;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
@@ -111,6 +112,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							PVector newOrigin = new PVector(container.dimension.width / 2,
 									container.dimension.height / 2);
 							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+							vNodesCentered = true;
 						}
 						// If vN is visible
 						if (vN.isVisible() && !vNodesCentered) {
@@ -213,9 +215,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				if (vC.isMouseOver && !vC.comCover.isDeployed()) {
 					// It clears the edges between communities of the opened
 					// community
-					container.getGraph().removeVertex(vC.getNode());
-					container.getVEdges().clear();
-					container.runEdgeFactory();
+//					container.getGraph().removeVertex(vC.getNode());
+//					container.getVEdges().clear();
+//					container.runEdgeFactory();
+					container.setIncidentEdgesVisibility(vC.getNode(), false);
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
@@ -231,7 +234,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						}
 					}
 				} else if (vC.isMouseOver && vC.comCover.isDeployed()) {
-					vC.container.setvExtEdges(new ArrayList<VEdge>());
+					//vC.container.setvExtEdges(new ArrayList<VEdge>());
+					container.setIncidentEdgesVisibility(vC.getNode(), true);
 				}
 			}
 		}
