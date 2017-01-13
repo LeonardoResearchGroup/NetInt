@@ -37,7 +37,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected VCommunity nodeFoundInSuperCommunity;
 	private String idSearch = null;
 	
-	private boolean vNodesCentered = false;
+	private boolean vNodesCentered = true;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
@@ -112,6 +112,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							PVector newOrigin = new PVector(container.dimension.width / 2,
 									container.dimension.height / 2);
 							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+							vNodesCentered = true;
 						}
 						// If vN is visible
 						if (vN.isVisible() && !vNodesCentered) {
