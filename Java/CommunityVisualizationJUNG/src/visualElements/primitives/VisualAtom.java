@@ -18,7 +18,7 @@ import visualElements.VNode;
  * @author jsalam
  *
  */
-public abstract class VisualAtom implements Serializable{
+public abstract class VisualAtom implements Serializable {
 	public PVector mouse;
 	private int wdth, hght;
 	private float diameter;
@@ -112,7 +112,7 @@ public abstract class VisualAtom implements Serializable{
 	}
 
 	public float getDiameter() {
-		return diameter;
+			return diameter;
 	}
 	// *** Color Methods ***
 
@@ -253,14 +253,12 @@ public abstract class VisualAtom implements Serializable{
 	}
 
 	private void vNodeEvent(VNode vNode, MouseEvent e) {
-		if(vNode.isVisible()){
-			if (e.getAction() == MouseEvent.CLICK) {
-				mouseClicked(e);
-			} else if (e.getAction() == MouseEvent.RELEASE) {
-				mouseReleased(e);
-			} else if (e.getAction() == MouseEvent.PRESS) {
-				mousePressed(e);
-			}
+		if (e.getAction() == MouseEvent.CLICK) {
+			mouseClicked(e);
+		} else if (e.getAction() == MouseEvent.RELEASE) {
+			mouseReleased(e);
+		} else if (e.getAction() == MouseEvent.PRESS) {
+			mousePressed(e);
 		}
 	}
 

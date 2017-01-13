@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 
 import utilities.mapping.Mapper;
@@ -167,11 +166,8 @@ public class GraphmlReader {
 		// Node[] nodes = makeNodes(nodeImportAttributes);
 		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
 		// **** CREATE EDGES ****
-		float maxWeight = 0;
-		float minWeight = Float.POSITIVE_INFINITY;
 
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
-
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.OUT);
 			Vertex target = edge.getVertex(Direction.IN);
@@ -179,47 +175,39 @@ public class GraphmlReader {
 			Integer idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			Integer idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
 
-			// **** MAKE SOURCE AND TARGET NODES ****
-			// Node nodeSource = new Node(String.valueOf(idSource));
-			// Node nodeTarget = new Node(String.valueOf(idTarget));
-			// Assign attributes to nodes
-			// assignNodeAttributes(source, nodeSource, nodeImportAttributes);
-			// assignNodeAttributes(target, nodeTarget, nodeImportAttributes);
-
-			// Add graphElements to collection
-			// graphElements.Edge e = new graphElements.Edge(nodes[idSource],
-			// nodes[idTarget], true);
+			// **** MAKE EDGE FROM SOURCE AND TARGET NODES ****
 			graphElements.Edge e = new graphElements.Edge(nodes.get(idSource), nodes.get(idTarget), true);
-
-			// check if the edge has any of the edge Import attributes
-			for (int i = 0; i < edgeImportAttributes.length; i++) {
-				try {
-					Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
-					if (tmpProperty != null) {
-						// Add the attribute to the temporal edge;
-						e.setAttribute(edgeImportAttributes[i], tmpProperty);
-					} else
-						throw new NullPointerException();
-				} catch (NullPointerException exception) {
-					System.out.println(this.getClass().getName() + " NullPointerException making edges ");
+			// Check if the edge has any of the edge Import attributes
+			if (edgeImportAttributes.length > 0) {
+				for (int i = 0; i < edgeImportAttributes.length; i++) {
+					try {
+						// Retrieve the attribute value and check if it is null
+						if (edge.getProperty(edgeImportAttributes[i]) != null) {
+							Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
+							// Add the attribute value to the temporal edge;
+							e.setAttribute(edgeImportAttributes[i], tmpProperty);
+						} else
+							throw new NullPointerException();
+					} catch (NullPointerException exception) {
+						System.out.println(this.getClass().getName()
+								+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
+								+ edgeImportAttributes[i]);
+					}
 				}
+			} else {
+				// if no attributes selected set the weight to 1
+				e.setAttribute("weight", 1);
 			}
-			// rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget],
-			// EdgeType.DIRECTED);
+			// Setting max min limits in Mapper class (Singleton
+			// pattern)
+			Mapper.getInstance().setMaxMinGraphElementAttributes(e);
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
-			// For the metagraph
-			// Edge metaE = new
-			// Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
-			// communityNodes.get(nodes[idTarget].getCommunity(1)), true);
 			Edge metaE = new Edge(communityNodes.get(nodes.get(idSource).getCommunity(1)),
 					communityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
 			if (!edgesBetweenCommunities.contains(metaE)) {
 				edgesBetweenCommunities.add(metaE);
 			}
 		}
-		// Setting limits in static class (Singleton pattern)
-		Mapper.getInstance().setMaxWeight(maxWeight);
-		Mapper.getInstance().setMinWeight(minWeight);
 		return rtnGraph;
 	}
 
@@ -269,126 +257,6 @@ public class GraphmlReader {
 	}
 
 	/**
-	 * @deprecated
-	 * @param communityKey
-	 * @param nameKey
-	 * @param sectorKey
-	 * @param weightKey
-	 * @param frequencyKey
-	 * @return
-	 */
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String communityKey, String nameKey,
-			String sectorKey, String weightKey, String frequencyKey) {
-		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
-		System.out.println("GraphmlReader> Building Nodes and Edges");
-		System.out.println("GraphmlReader> Working on it ...");
-
-		edgesBetweenCommunities = new ArrayList<Edge>();
-		// <Name of community, Node object of a community>
-		communityNodes = new HashMap<String, Node>();
-
-		Node[] nodes = new Node[30000];
-
-		for (Vertex vertex : graph.getVertices()) {
-
-			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
-
-			Node node = new Node(String.valueOf(id));
-
-			if (vertex.getProperty(communityKey) != null) {
-				node.setCommunity("Root", 0);
-				node.setCommunity(vertex.getProperty(communityKey).toString(), 1);
-				addCommunity(node.getCommunity(1));
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph(): No filter matches " + communityKey
-						+ "!!! Check the key String of the community filter");
-			}
-
-			// Check if exist a property matching nameKey
-			if (vertex.getProperty(nameKey) != null) {
-				node.setName(vertex.getProperty(nameKey).toString());
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + nameKey
-						+ "!!! Check the key String of the graphML label");
-			}
-
-			// Check if exist a property matching sectorKey
-			// if (vertex.getProperty(sectorKey) != null) {
-			// node.setSector(vertex.getProperty(sectorKey).toString());
-			// } else {
-			// System.out.println("GraphmlReader> getJungDirectedGraph (): No
-			// label matches " + sectorKey
-			// + "!!! Check the key String of the sector");
-			// }
-
-			// Check if some graphml key match with some financial stament key
-			for (String key : vertex.getPropertyKeys()) {
-				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
-				if (keyLabel != null) {
-					node.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
-				}
-			}
-
-			nodes[id] = node;
-
-			// if (node.getOutDegree(1) > maxOutDegree) {
-			// maxOutDegree = node.getOutDegree(1);
-			// }
-			// if (node.getOutDegree(1) < minOutDegree) {
-			// minOutDegree = node.getOutDegree(1);
-			// }
-		}
-
-		float maxWeight = 0;
-		float minWeight = Float.POSITIVE_INFINITY;
-
-		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
-			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.OUT);
-			Vertex target = edge.getVertex(Direction.IN);
-			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
-
-			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(nodes[idSource], nodes[idTarget], true);
-			if (edge.getProperty(weightKey) != null) {
-				String val = edge.getProperty(weightKey).toString();
-				float weight = Float.valueOf(val);
-				if (weight > maxWeight) {
-					maxWeight = weight;
-				}
-				if (weight < minWeight) {
-					minWeight = weight;
-				}
-				e.setWeight(weight);
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + weightKey
-						+ "!!! Check the key String of the weight");
-			}
-			if (edge.getProperty(frequencyKey) != null) {
-				String freq = edge.getProperty(frequencyKey).toString();
-				e.setFrequency(Double.valueOf(freq).intValue());
-			} else {
-				System.out.println("GraphmlReader> getJungDirectedGraph (): No label matches " + frequencyKey
-						+ "!!!!!! Check the key String of the frequency");
-			}
-			rtnGraph.addEdge(e, nodes[idSource], nodes[idTarget], EdgeType.DIRECTED);
-			// For the metagraph
-			Edge metaE = new Edge(communityNodes.get(nodes[idSource].getCommunity(1)),
-					communityNodes.get(nodes[idTarget].getCommunity(1)), true);
-			if (!edgesBetweenCommunities.contains(metaE)) {
-				edgesBetweenCommunities.add(metaE);
-			}
-
-		}
-		// Setting limits in static class (Singleton pattern)
-		Mapper.getInstance().setMaxWeight(maxWeight);
-		Mapper.getInstance().setMinWeight(minWeight);
-		return rtnGraph;
-	}
-
-	/**
 	 * Build a JungGraph from a pajek file.
 	 * 
 	 * @param filename
@@ -416,7 +284,6 @@ public class GraphmlReader {
 				token = br.next();
 				int idS = Integer.parseInt(token) - 1;
 				Node node = new Node(token);
-
 				node.setCommunity("Root", 0);
 				node.setCommunity(br.next(), 1);
 				addCommunity(node.getCommunity(1));
@@ -437,9 +304,7 @@ public class GraphmlReader {
 				if (!edgesBetweenCommunities.contains(metaE)) {
 					edgesBetweenCommunities.add(metaE);
 				}
-
 			}
-
 			br.close();
 			System.out.println("Cantidad de Vertices");
 			System.out.println(rtnGraph.getVertexCount());
@@ -448,40 +313,10 @@ public class GraphmlReader {
 			e.printStackTrace();
 		}
 		return rtnGraph;
-
-	}
-
-	public TinkerGraph getTinkerGraph() {
-		TinkerGraph rtnGraph = new TinkerGraph();
-
-		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
-			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.OUT);
-			Vertex target = edge.getVertex(Direction.IN);
-			// Get their ID
-			int idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			int idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
-			// Instantiate Nodes
-			Node sourceNode = new Node(String.valueOf(idSource));
-			Node targetNode = new Node(String.valueOf(idTarget));
-			// Add Attributes
-			sourceNode.setName((String) source.getProperty("label"));
-			sourceNode.setCommunity((String) source.getProperty("Continent"));
-			targetNode.setName((String) target.getProperty("label"));
-			targetNode.setCommunity((String) target.getProperty("Continent"));
-
-			// Add graphElements to collection
-			graphElements.Edge e = new graphElements.Edge(sourceNode, targetNode, true);
-			String val = String.valueOf((Double) edge.getProperty("weight"));
-			// e.setWeight(Float.valueOf(val));
-			e.setAttribute("weight", val);
-			rtnGraph.addEdge(e, source, target, "directed");
-		}
-		return rtnGraph;
 	}
 
 	/**
-	 * ArrayList of community values obtained from the graphML file
+	 * ArrayList of community values obtained from the import file
 	 * 
 	 * @return
 	 */
@@ -495,25 +330,6 @@ public class GraphmlReader {
 			communities.add(string);
 			communityNodes.put(string, new Node(string));
 		}
-	}
-
-	/**
-	 * See getGraphKeys()
-	 * 
-	 * @return
-	 * @deprecated
-	 */
-	public Set<String> getKeys() {
-		return graph.getVertices().iterator().next().getPropertyKeys();
-	}
-
-	/**
-	 * Returns the graphml keys read at the moment of loading
-	 * 
-	 * @return the list of keys
-	 */
-	public ArrayList<String> getGraphKeys() {
-		return graphKeys;
 	}
 
 	public ArrayList<Edge> getEdgesBetweenCommunuties() {

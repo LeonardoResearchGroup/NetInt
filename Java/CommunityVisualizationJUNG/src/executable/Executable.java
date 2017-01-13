@@ -1,54 +1,53 @@
 package executable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import containers.Container;
 import processing.core.*;
-import utilities.GraphLoader;
+import utilities.Assembler;
 import utilities.GraphmlKeyReader;
 import utilities.TestPerformance;
-import utilities.mapping.Mapper;
+import utilities.console.ConsoleCatcher;
 import visualElements.Canvas;
-
 import visualElements.gui.ControlPanel;
 import visualElements.gui.ImportMenu;
 import visualElements.gui.VisibilitySettings;
 
 public class Executable extends PApplet {
-	public static Logica app;
+	public static Assembler app;
 	private Canvas canvas;
 	private TestPerformance performance;
 	public static boolean activeGraph;
 	private ControlPanel cFrame;
+	//private ConsoleCatcher consoleCatcher;
 	public static File file;
 	public static ImportMenu importMenu;
 
 	public void setup() {
 		textSize(10);
 		smooth();
+		//consoleCatcher = new ConsoleCatcher();
+		//consoleCatcher.startCapture();
+		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
+		System.out.println("Instantiating Import Menu");
 		importMenu = new ImportMenu(this);
-		app = new Logica(Logica.HD1080);
+		System.out.println("Instantiating Network Assembler");
+		app = new Assembler(Assembler.HD1080);
 		performance = new TestPerformance();
-		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
-		// "label", "sector", "weight",
-		// Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
 		this.setActiveGraph(false);
 		// Control Frame
+		System.out.println("Building Control Panel");
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-
-		System.out.println(
-				"Executable > setup Mapper weight: MAX: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]
-						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[0]);
-		System.out.println(
-				"Executable > setup Mapper outDegree: MAX: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]
-						+ " MIN: " + Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]);
-
 		this.surface.setLocation(200, 0);
 		this.surface.setTitle("Java Networked Interaction Visualization. NetInt");
+		//consoleCatcher.stopCapture();
 	}
 
 	public void draw() {
+		//consoleCatcher.startCapture();
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
@@ -70,9 +69,10 @@ public class Executable extends PApplet {
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		VisibilitySettings.getInstance().setEventOnVSettings(false);
+		//consoleCatcher.stopCapture();
 	}
 
-	public Logica getApp() {
+	public Assembler getApp() {
 		return app;
 	}
 
@@ -96,12 +96,14 @@ public class Executable extends PApplet {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges());
+			String[] layoutKeys = {"Fruchterman_Reingold","Spring", "Circular"};
+			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(),layoutAttributes);
 		}
 	}
 
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 150, P2D);
+		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
 	public static void main(String[] args) {

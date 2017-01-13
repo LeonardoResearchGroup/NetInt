@@ -36,7 +36,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected Node nodeFound;
 	protected VCommunity nodeFoundInSuperCommunity;
 	private String idSearch = null;
-	
+
 	private boolean vNodesCentered = true;
 
 	public VCommunity(Node node, Container container) {
@@ -62,18 +62,19 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	boolean arrangementIterationsDone = false;
 
 	public void show() {
-//		container.showBoundaries(pos);
-		
+		// container.showBoundaries(pos);
+
 		// Display the community cover
 		comCover.show(container, this, hasNodeFound);
 
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			// If the layout is iterative
-			//System.out.println(comCover.isUnlockedAndDeployed());
+			// System.out.println(comCover.isUnlockedAndDeployed());
 			if (container.isCurrentLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
-				showCommunityContents(comCover.isUnlocked(), container.stepIterativeLayout(pos).done() || container.isDone());
+				showCommunityContents(comCover.isUnlocked(),
+						container.stepIterativeLayout(pos).done() || container.isDone());
 			} else {
 				// If layout not iterative show nodes and edges
 				showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
@@ -106,7 +107,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						VNode vN = (VNode) vA;
 						vN.setVisibility(VisibilitySettings.getInstance().getUmbralGrados());
 						if (vNodesCentered) {
-//							System.out.println("centered");
+							// System.out.println("centered");
 							// reset vNode coordinates to the coordinates
 							// assigned in the container's layout
 							PVector newOrigin = new PVector(container.dimension.width / 2,
@@ -114,28 +115,27 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
 							vNodesCentered = true;
 						}
-						// If vN is visible
+						// If vN is visible and not centered
 						if (vN.isVisible() && !vNodesCentered) {
 							vN.show();
 						}
 
 					}
 				}
-				
+
 				vNodesCentered = false;
-			}else { 	
-				//System.out.println(this.node.getId()+" centrando");
+			} else {
 				for (VisualAtom vA : container.getVNodes()) {
 					vA.pos.set(pos);
-					//We have to known which nodes are visible.
+					// We have to known which nodes are visible.
 					if (vA instanceof VNode) {
 						VNode vN = (VNode) vA;
 						vN.setVisibility2(false);
-					}	
+					}
 				}
 				vNodesCentered = true;
 			}
-		} 
+		}
 		// ** Display VEdges
 		// GUI
 		if (VisibilitySettings.getInstance().mostrarVinculos()) {
@@ -143,12 +143,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
 				// Show internal edges
 				for (VEdge vE : container.getVEdges()) {
-					vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
+					// If the edge has any attribute
+					if (vE.getEdge().getAttributeSize() > 0) {
+						vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
+					}
 					vE.show();
 				}
 				// Show external edges
 				for (VEdge vEE : container.getVExtEdges()) {
-					vEE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
+					// If the edge has any attribute
+					// These edges have no attributes and no source or target.
+					// It needs to be solved
+					if (vEE.getEdge().getAttributeSize() > 0) {
+						vEE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
+					}
 					vEE.show();
 				}
 			}

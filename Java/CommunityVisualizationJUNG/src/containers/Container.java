@@ -57,8 +57,9 @@ public abstract class Container {
 	protected boolean done = false;
 
 	// *** Constructor
-	public Container(){}
-	
+	public Container() {
+	}
+
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 
@@ -76,15 +77,15 @@ public abstract class Container {
 	 */
 	public void initialize(boolean initialize) {
 		if (initialize && !initializationComplete) {
-			System.out.println("Container> Initialize: Distributing nodes in: " + getName());
+			System.out.println(this.getClass().getName() +" Initializing nodes in: " + getName());
 			distributeNodesInLayout(kindOfLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
-				System.out.println("Container> Building visual nodes");
+				System.out.println(this.getClass().getName() +" Building visual nodes");
 				runNodeFactory();
-				System.out.println("Container> Building visual edges");
+				System.out.println(this.getClass().getName() +" Building visual edges");
 				runEdgeFactory();
-				System.out.println("Container> Retrieving VNode successors");
+				System.out.println(this.getClass().getName() +" Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
 				setVElementCoordinates();
@@ -149,7 +150,7 @@ public abstract class Container {
 		// Step iteration as many times as parameterized
 		IterativeContext itrContext = (IterativeContext) layout;
 		// If node distribution not completed
-//		if (!itrContext.done()) {
+		// if (!itrContext.done()) {
 		if (!done && !itrContext.done()) {
 			// Run one step
 			itrContext.step();
@@ -365,7 +366,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Build the vEdges between this and another community.
+	 * Build the vEdges between the nodes of this container and the container
+	 * from another community.
 	 * 
 	 * @param completeGraph
 	 * @param externalCommunity
@@ -374,35 +376,28 @@ public abstract class Container {
 	 */
 	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity,
 			Container externalContainer) {
+		// Put all the VNodes from this container and the external container in
+		// a single collection
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
 		vNodesBothCommunities.addAll(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
-		// Here, we get a copy of all edges between the two communities and loop
-		// over them.
+		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),
 				externalCommunity);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
+		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
-			Node sourceOfComplete = edgeBetweenCommunities.getSource();
-			Node targetOfComplete = edgeBetweenCommunities.getTarget();
-			Node newSource = getEqualNode(this.graph, sourceOfComplete);
-			Node newTarget;
-			// Determines whether the edge gets out this community
-			boolean out = false;
-			if (newSource != null) {
-				newTarget = getEqualNode(externalContainer.graph, targetOfComplete);
-				out = true;
-			} else {
-				newSource = getEqualNode(externalContainer.graph, sourceOfComplete);
-				newTarget = getEqualNode(this.graph, targetOfComplete);
-			}
-			// VEdge vEdge = new VEdge(new Edge(newSource, newTarget, true));
+			// Make a VEdge
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
+			// Set source and target nodes
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
+			// Make the curve
 			vEdge.makeBezier();
-			if (out) {
+			// Add vEdge to externalEdges of this container if the source node belongs to this container
+			if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {
 				vExtEdges.add(vEdge);
 			} else {
+				// Otherwise, add it to externalEdges of the external container
 				if (!externalContainer.vExtEdges.contains(vEdge)) {
 					externalContainer.vExtEdges.add(vEdge);
 				}
@@ -410,7 +405,7 @@ public abstract class Container {
 		}
 
 	}
-	
+
 	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
 		this.vExtEdges = vExtEdges;
 	}
@@ -418,21 +413,21 @@ public abstract class Container {
 	/**
 	 * 
 	 * @param graph
-	 * @param lookingForNode
+	 * @param seekNode
 	 * @return
 	 */
-	protected Node getEqualNode(Graph<Node, Edge> graph, Node lookingForNode) {
+	protected Node getEqualNode(Graph<Node, Edge> graph, Node seekNode) {
 		Node nodo = null;
 		for (Node node : graph.getVertices()) {
-			if (lookingForNode.equals(node)) {
+			if (seekNode.equals(node)) {
 				nodo = node;
 				return nodo;
 			}
 		}
 		return nodo;
 	}
-	
-	public boolean isDone(){
+
+	public boolean isDone() {
 		return done;
 	}
 	
@@ -455,17 +450,21 @@ public abstract class Container {
 	}
 
 	/**
-	 * Draws the rectangular boundaries of the container starting from the origin. Draws a cross hair at the center of the Dimension rectangle 
+	 * Draws the rectangular boundaries of the container starting from the
+	 * origin. Draws a cross hair at the center of the Dimension rectangle
+	 * 
 	 * @param origin
 	 */
-	public void showBoundaries(PVector origin){
-		PVector originShifted = new PVector (origin.x - (dimension.width/2), origin.y - (dimension.height/2));
-		Canvas.app.stroke(255,0,0);
+	public void showBoundaries(PVector origin) {
+		PVector originShifted = new PVector(origin.x - (dimension.width / 2), origin.y - (dimension.height / 2));
+		Canvas.app.stroke(255, 0, 0);
 		Canvas.app.strokeWeight(2);
 		Canvas.app.noFill();
-		Canvas.app.rect(originShifted.x ,originShifted.y , dimension.width, dimension.height);
-		Canvas.app.stroke(0,255,0);
-		Canvas.app.line(originShifted.x + (dimension.width/2), originShifted.y, originShifted.x + (dimension.width/2), originShifted.y + dimension.height);
-		Canvas.app.line(originShifted.x, originShifted.y + (dimension.height/2), originShifted.x + + (dimension.width) , originShifted.y + + (dimension.height/2));
+		Canvas.app.rect(originShifted.x, originShifted.y, dimension.width, dimension.height);
+		Canvas.app.stroke(0, 255, 0);
+		Canvas.app.line(originShifted.x + (dimension.width / 2), originShifted.y,
+				originShifted.x + (dimension.width / 2), originShifted.y + dimension.height);
+		Canvas.app.line(originShifted.x, originShifted.y + (dimension.height / 2), originShifted.x + +(dimension.width),
+				originShifted.y + +(dimension.height / 2));
 	}
 }

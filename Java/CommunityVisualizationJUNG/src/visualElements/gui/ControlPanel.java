@@ -1,6 +1,7 @@
 package visualElements.gui;
 
 import processing.core.*;
+import utilities.Assembler;
 import utilities.SerializeHelper;
 import utilities.SerializeWrapper;
 import utilities.mapping.Mapper;
@@ -9,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import controlP5.*;
 import executable.Executable;
-import executable.Logica;
 import visualElements.gui.VisibilitySettings;
 
 /**
@@ -40,7 +40,7 @@ public class ControlPanel extends PApplet {
 	public void setup() {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
-		this.surface.setAlwaysOnTop(true);
+		this.surface.setAlwaysOnTop(false);
 		logo = loadImage("../data/images/Logo_Bancolombia.png");
 		gui();
 		// Font
@@ -273,13 +273,13 @@ public class ControlPanel extends PApplet {
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
 
 				Executable.activeGraph = false;
-				Logica.vSubCommunities = deserializedWrapper.getvSubCommunities();
-				for (visualElements.VCommunity com : Logica.vSubCommunities) {
+				Assembler.vSubCommunities = deserializedWrapper.getvSubCommunities();
+				for (visualElements.VCommunity com : Assembler.vSubCommunities) {
 					com.eventRegister(parent);
 				}
-				Logica.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
-				Logica.vSubSubCommunity.eventRegister(parent);
-				Logica.vSubSubCommunity.container.runEdgeFactory();
+				Assembler.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
+				Assembler.vSubSubCommunity.eventRegister(parent);
+				Assembler.vSubSubCommunity.container.runEdgeFactory();
 				VisibilitySettings.reloadInstance(deserializedWrapper.getvSettings());
 				Executable.activeGraph = true;
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
@@ -305,7 +305,7 @@ public class ControlPanel extends PApplet {
 				// Executable.activeCursor = Executable.CURSOR_WAIT;
 				parent.cursor(WAIT);
 
-				SerializeWrapper wrapper = new SerializeWrapper(Logica.vSubSubCommunity, Logica.vSubCommunities,
+				SerializeWrapper wrapper = new SerializeWrapper(Assembler.vSubSubCommunity, Assembler.vSubCommunities,
 						VisibilitySettings.getInstance());
 
 				try {

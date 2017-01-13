@@ -2,6 +2,7 @@ package graphElements;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Set;
 
 import visualElements.VEdge;
 
@@ -9,7 +10,7 @@ import visualElements.VEdge;
  * @author jsalam
  *
  */
-public class Edge implements Serializable {
+public class Edge extends GraphElement implements Serializable {
 
 	/**
 	 * 
@@ -17,7 +18,7 @@ public class Edge implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Node source;
 	private Node target;
-	private HashMap<String, Object> attributes;
+	//private HashMap<String, Object> attributes;
 	private boolean directed;
 	private boolean loop;
 	/**
@@ -38,6 +39,7 @@ public class Edge implements Serializable {
 	private int frequency;
 
 	public Edge(Node source, Node target, boolean directed) {
+		super();
 		this.source = source;
 		this.target = target;
 		this.directed = directed;
@@ -113,9 +115,6 @@ public class Edge implements Serializable {
 		this.directed = directed;
 	}
 
-	public void setAttribute(String key, Object value) {
-		attributes.put(key, value);
-	}
 
 	/**
 	 * @deprecated
