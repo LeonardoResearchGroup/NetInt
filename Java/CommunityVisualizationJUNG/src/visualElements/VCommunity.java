@@ -40,7 +40,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private boolean vNodesCentered = true;
 
 	public VCommunity(Node node, Container container) {
-		super(node, (float) container.dimension.width / 2, (float) container.dimension.height / 2);
+		super(node, (float) container.getDimension().width / 2, (float) container.getDimension().height / 2);
 		this.container = container;
 		setLayoutParameters();
 		lastPosition = pos;
@@ -110,8 +110,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							// System.out.println("centered");
 							// reset vNode coordinates to the coordinates
 							// assigned in the container's layout
-							PVector newOrigin = new PVector(container.dimension.width / 2,
-									container.dimension.height / 2);
+							PVector newOrigin = new PVector(container.getDimension().width / 2,
+									container.getDimension().height / 2);
 							container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
 							vNodesCentered = true;
 						}

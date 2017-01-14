@@ -49,7 +49,7 @@ public abstract class Container {
 	public AbstractLayout<Node, Edge> layout;
 	protected boolean initializationComplete = false;
 	public int kindOfLayout;
-	public Dimension dimension;
+	private Dimension dimension;
 
 	protected Color color;
 	protected int iterations;
@@ -77,15 +77,15 @@ public abstract class Container {
 	 */
 	public void initialize(boolean initialize) {
 		if (initialize && !initializationComplete) {
-			System.out.println(this.getClass().getName() +" Initializing nodes in: " + getName());
+			System.out.println(this.getClass().getName() + " Initializing nodes in: " + getName());
 			distributeNodesInLayout(kindOfLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
-				System.out.println(this.getClass().getName() +" Building visual nodes");
+				System.out.println(this.getClass().getName() + " Building visual nodes");
 				runNodeFactory();
-				System.out.println(this.getClass().getName() +" Building visual edges");
+				System.out.println(this.getClass().getName() + " Building visual edges");
 				runEdgeFactory();
-				System.out.println(this.getClass().getName() +" Retrieving VNode successors");
+				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
 				setVElementCoordinates();
@@ -124,7 +124,11 @@ public abstract class Container {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
-			vEdge.makeBezier();
+			if (kindOfLayout == Container.CIRCULAR) {
+				vEdge.makeBezier(dimension.width);
+			} else {
+				vEdge.makeBezier(0);
+			}
 			vEdges.add(vEdge);
 		}
 	}
@@ -323,6 +327,14 @@ public abstract class Container {
 		return vExtEdges;
 	}
 
+	public Dimension getDimension() {
+		return dimension;
+	}
+
+	public void setDimension(Dimension dimension) {
+		this.dimension = dimension;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -391,9 +403,15 @@ public abstract class Container {
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			// Set source and target nodes
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
-			// Make the curve
-			vEdge.makeBezier();
-			// Add vEdge to externalEdges of this container if the source node belongs to this container
+			// Make the curve. The dimension is to calculate the inclination of
+			// the control point
+			if (kindOfLayout == Container.CIRCULAR) {
+				vEdge.makeBezier(dimension.width);
+			} else {
+				vEdge.makeBezier(0);
+			}
+			// Add vEdge to externalEdges of this container if the source node
+			// belongs to this container
 			if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {
 				vExtEdges.add(vEdge);
 			} else {
@@ -430,23 +448,24 @@ public abstract class Container {
 	public boolean isDone() {
 		return done;
 	}
-	
+
 	/**
 	 * Hide or show the incident VEdges of a node.
+	 * 
 	 * @param node
 	 * @param visibility
 	 */
-	public void setIncidentEdgesVisibility(Node node, boolean visibility){
+	public void setIncidentEdgesVisibility(Node node, boolean visibility) {
 		Collection<Edge> incidentEdges = this.graph.getIncidentEdges(node);
-		for(VEdge vE : this.vEdges){
-			for(Edge e : incidentEdges){
-				if(vE.getEdge().equals(e)){
-					System.out.println(this.getClass() + ": Visibilidad: " +visibility );
-					vE.setHided(!visibility);
+		for (VEdge vE : this.vEdges) {
+			for (Edge e : incidentEdges) {
+				if (vE.getEdge().equals(e)) {
+					System.out.println(this.getClass() + ": Visibilidad: " + visibility);
+					vE.setHidden(!visibility);
 				}
 			}
 		}
-		
+
 	}
 
 	/**

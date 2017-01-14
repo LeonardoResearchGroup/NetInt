@@ -22,6 +22,6 @@ public class RootContainer extends Container {
 	public RootContainer(Graph<Node, Edge> graph, int kindOfLayout, Dimension dimension) {
 		super(graph);
 		this.kindOfLayout = kindOfLayout;
-		this.dimension = dimension;
+		setDimension(dimension);
 	}
 }

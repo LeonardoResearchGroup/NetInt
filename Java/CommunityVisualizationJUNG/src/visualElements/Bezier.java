@@ -17,6 +17,7 @@ import java.awt.Color;
 public class Bezier {
 	public static final int NORMAL = 1;
 	public static final int PROPAGATE = 2;
+	// The source, target, source's control point, and target's control point
 	private PVector A, B, cA, cB;
 	private int localAlpha;
 	// The bezier body color.
@@ -29,7 +30,7 @@ public class Bezier {
 	// The default angle of control points
 	private double inclination = Math.PI / 2;
 	// The default length of control points
-	private float sagitta = 20;
+	private float sagitta = 140;
 
 	// Constructors
 	/**
@@ -111,9 +112,22 @@ public class Bezier {
 		angle = PApplet.atan2(B.y - A.y, B.x - A.x);
 		app.popMatrix();
 		if (angle < 0) {
+			// This is to complete TWO_PI radians over because after PI it
+			// diminishes its value
 			angle = PApplet.TWO_PI + angle;
 		}
 		return angle;
+	}
+
+	public void setControlInclination(float radius) {
+		double angle;
+		if (radius == 0) {
+			angle = Math.PI/2;
+		} else {
+			angle = Math.asin((getChord() / 2) / radius);
+		}
+		System.out.println(this.getClass().getName() +  " ANGLE: " + angle + ", RADIUS "+ radius + ", Chord:"+ (getChord() / 2) );
+		this.inclination = angle;
 	}
 
 	/**
@@ -127,10 +141,10 @@ public class Bezier {
 	 * @param angle
 	 * @return
 	 */
-	private PVector getControlPoint(PVector origin, double angle) {
+	private PVector getControlPoint(PVector origin, double angle, double inc) {
 		PVector rtn = null;
-		double X = Math.cos(angle - inclination);
-		double Y = Math.sin(angle - inclination);
+		double X = Math.cos(angle + inc);
+		double Y = Math.sin(angle + inc);
 		if (sagitta > getChord() / 2) {
 			sagitta = getChord() / 2;
 		}
@@ -149,8 +163,8 @@ public class Bezier {
 	public void drawBezierAndControls(PApplet app, float thickness) {
 		app.noFill();
 		app.strokeWeight(thickness);
-		cA = getControlPoint(A, getDirection(app));
-		cB = getControlPoint(B, getDirection(app));
+		cA = getControlPoint(A, getDirection(app), inclination);
+		cB = getControlPoint(B, getDirection(app), 2*inclination);
 		app.stroke(255, 0, 0, 50);
 		app.line(A.x, A.y, cA.x, cA.y);
 		app.ellipse(A.x, A.y, 3, 3);
@@ -158,6 +172,7 @@ public class Bezier {
 		app.ellipse(B.x, B.y, 3, 3);
 		app.stroke(0, 255, 0, 50);
 		app.line(A.x, A.y, B.x, B.y);
+		app.text((float)inclination,cA.x, cA.y);
 		app.stroke(currentColor.getRGB(), localAlpha);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
@@ -172,8 +187,8 @@ public class Bezier {
 	 *            less that 1 it is set to 1.
 	 */
 	public void drawBezier2D(PApplet app, float thickness) {
-		cA = getControlPoint(A, getDirection(app));
-		cB = getControlPoint(B, getDirection(app));
+//		cA = getControlPoint(A, getDirection(app), inclination + Math.PI / 2);
+//		cB = getControlPoint(B, getDirection(app), inclination - Math.PI / 2);
 		app.noFill();
 		app.stroke(currentColor.getRGB(), localAlpha);
 		if (thickness < 1)

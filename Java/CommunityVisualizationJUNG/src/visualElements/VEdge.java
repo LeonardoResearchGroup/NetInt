@@ -12,7 +12,7 @@ import graphElements.Edge;
 
 public class VEdge implements Serializable {
 	private Edge edge;
-	private boolean aboveArc, visibility, hided;
+	private boolean aboveArc, visibility, hidden;
 	private VNode source, target;
 	private Bezier bezier;
 	// Visual Attributes
@@ -47,11 +47,12 @@ public class VEdge implements Serializable {
 		}
 	}
 
-	public void makeBezier() {
+	public void makeBezier(float containerRadius) {
 		bezier = new Bezier();
 		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
+		bezier.setControlInclination(containerRadius);
 	}
 
 	public void show() {
@@ -63,14 +64,10 @@ public class VEdge implements Serializable {
 				// Set color
 				if (source.isPropagated()) {
 					bezier.color(Bezier.PROPAGATE);
-					// bezier.setAlpha((int)alpha);
-					// setAlpha(90);
 				} else {
 					bezier.color(Bezier.NORMAL);
-					// bezier.setAlpha((int)alpha);
-					// setAlpha(40);
 				}
-				// Update source and target
+				// If visualize the nodes and edges
 				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
 					bezier.setSourceAndTarget(source.pos, target.pos);
 					// Edge mode: normal, head, tail or both
@@ -78,7 +75,9 @@ public class VEdge implements Serializable {
 						bezier.drawBezier2D(Canvas.app, 2f);
 						bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
 					} else {
-						bezier.drawBezier2D(Canvas.app, 1f);
+						// ******
+						bezier.drawBezierAndControls(Canvas.app, thickness);
+						//bezier.drawBezier2D(Canvas.app, 1f);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 					}
 				} else {
@@ -192,7 +191,7 @@ public class VEdge implements Serializable {
 		// Thickness"
 		try {
 
-			if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0]) || hided) {
+			if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0]) || hidden) {
 				visibility = false;
 			} else {
 				visibility = true;
@@ -202,9 +201,8 @@ public class VEdge implements Serializable {
 		}
 	}
 	
-	public void setHided(boolean hided) {
-		
-			this.hided = hided;
+	public void setHidden(boolean hidden) {
+			this.hidden = hidden;
 
 
 	}
