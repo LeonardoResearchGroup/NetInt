@@ -45,7 +45,7 @@ public class Bezier {
 	 * @param sagitta
 	 *            The displacement of the control point. Set to 20 by default
 	 */
-	public Bezier(PVector source, PVector target, float sagitta) {
+	public Bezier(PVector source, PVector target) {
 		A = source;
 		B = target;
 		localAlpha = 255;

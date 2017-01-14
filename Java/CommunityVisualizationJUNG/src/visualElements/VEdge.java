@@ -48,7 +48,7 @@ public class VEdge implements Serializable {
 	}
 
 	public void makeBezier(float containerRadius) {
-		bezier = new Bezier();
+		bezier = new Bezier(source.pos, target.pos);
 		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
