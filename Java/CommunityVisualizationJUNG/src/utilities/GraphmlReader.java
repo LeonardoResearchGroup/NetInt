@@ -53,7 +53,7 @@ public class GraphmlReader {
 			// *** Read keys
 			String currentLine;
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			System.out.println(this.toString().getClass() + "Reading graphml Keys... ");
+			System.out.println(this.getClass().getName() + " Reading graphml Keys... ");
 			while ((currentLine = br.readLine()) != null) {
 				if (currentLine.startsWith("<key")) {
 					graphKeys.add(currentLine);
@@ -155,8 +155,7 @@ public class GraphmlReader {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
-		System.out.println("GraphmlReader> Building Nodes and Edges");
-		System.out.println("GraphmlReader> Working on it ...");
+		System.out.println(this.getClass().getName() + " GraphmlReader> Building Nodes and Edges...");
 		// The collection of synthetic edges between communities
 		edgesBetweenCommunities = new ArrayList<Edge>();
 		// Hash map <Name of community, Node object of a community>

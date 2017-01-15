@@ -198,20 +198,23 @@ public class Assembler {
 		for (int i = 0; i < communities.size(); i++) {
 			// Compare with other members of the community collection
 			for (int j = i + 1; j < communities.size(); j++) {
+				VCommunity communityA = communities.get(i);
+				VCommunity communityB = communities.get(j);
+				System.out.println(this.getClass().getName() + " Creating edges between community: "
+						+ communityA.container.getName() + " and " + communityB.container.getName());
 				// get a temporary graph
 				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
-						communities.get(i).container.getName(), communities.get(j).container.getName());
+						communityA.container.getName(), communityB.container.getName());
 				if (graphInter.getEdgeCount() >= 1) {
 					// Create a new edge
-					graphElements.Edge e = new graphElements.Edge(communities.get(i).getNode(),
-							communities.get(j).getNode(), true);
+					graphElements.Edge e = new graphElements.Edge(communityA.getNode(), communityB.getNode(), true);
 					// Add edge attributes. The attribute is named "TotalEdges"
 					// and includes the total amount of edges linking both
 					// communities
 					e.setAttribute("TotalEdges", graphInter.getEdgeCount());
 					// Add the edge to the container
-					vSubSubCommunity.container.getGraph().addEdge(e, communities.get(i).getNode(),
-							communities.get(j).getNode(), EdgeType.DIRECTED);
+					vSubSubCommunity.container.getGraph().addEdge(e, communityA.getNode(), communityB.getNode(),
+							EdgeType.DIRECTED);
 				}
 			}
 		}

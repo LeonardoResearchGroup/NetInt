@@ -1,6 +1,8 @@
 package executable;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,33 +23,41 @@ public class Executable extends PApplet {
 	private TestPerformance performance;
 	public static boolean activeGraph;
 	private ControlPanel cFrame;
-	//private ConsoleCatcher consoleCatcher;
+	private ConsoleCatcher consoleCatcher;
 	public static File file;
 	public static ImportMenu importMenu;
 
+	///
+	ByteArrayOutputStream baos;
+
 	public void setup() {
 		textSize(10);
+		surface.setLocation(200, -300);
 		smooth();
-		//consoleCatcher = new ConsoleCatcher();
-		//consoleCatcher.startCapture();
+		/*
+		 * Output Console. Uncomment these two lines to get a console Catcher.
+		 * CAUTION, it has conflicts with File Open.
+		 */
+		 initSystemOutToConsole();
+		 consoleCatcher = new ConsoleCatcher(baos);
+		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
+		// Import Menu
 		System.out.println("Instantiating Import Menu");
 		importMenu = new ImportMenu(this);
+		// Assembling network
 		System.out.println("Instantiating Network Assembler");
 		app = new Assembler(Assembler.HD1080);
 		performance = new TestPerformance();
 		this.setActiveGraph(false);
-		// Control Frame
+		// Control Panel Frame
 		System.out.println("Building Control Panel");
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
-		this.surface.setLocation(200, 0);
-		this.surface.setTitle("Java Networked Interaction Visualization. NetInt");
-		//consoleCatcher.stopCapture();
+		surface.setTitle("Java Networked Interaction Visualization. NetInt");
 	}
 
 	public void draw() {
-		//consoleCatcher.startCapture();
 		if (activeGraph) {
 			background(VisibilitySettings.getInstance().getColorBackground());
 			pushMatrix();
@@ -69,7 +79,6 @@ public class Executable extends PApplet {
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		VisibilitySettings.getInstance().setEventOnVSettings(false);
-		//consoleCatcher.stopCapture();
 	}
 
 	public Assembler getApp() {
@@ -96,14 +105,28 @@ public class Executable extends PApplet {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = {"Fruchterman_Reingold","Spring", "Circular"};
+			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
-			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(),layoutAttributes);
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
 		}
 	}
 
 	public void settings() {
 		size(displayWidth - 201, displayHeight - 100, P2D);
+	}
+
+	/**
+	 * Initialized a console visible on runtime. It disables the printing of
+	 * messages on the IDE console.
+	 */
+	private void initSystemOutToConsole() {
+		// Create a stream to hold the output
+		baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		// // IMPORTANT: Save the old System.out!
+		PrintStream old = System.out;
+		// // Tell Java to use your special stream
+		System.setOut(ps);
 	}
 
 	public static void main(String[] args) {

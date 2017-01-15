@@ -6,6 +6,7 @@ import graphElements.Node;
 import processing.core.PApplet;
 
 /**
+ * Singleton pattern
  * @author jsalam
  *
  */
@@ -46,8 +47,7 @@ public class Mapper {
 	private float minBetweeness;
 	private float maxBetweeness;
 
-	// Other attributes
-
+	// Other attributes for sigmoid filter
 	private float alpha = 1;
 	private float beta = 1;
 

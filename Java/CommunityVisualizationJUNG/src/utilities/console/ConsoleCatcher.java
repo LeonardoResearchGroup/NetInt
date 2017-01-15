@@ -25,18 +25,16 @@ import processing.core.PFont;
 public class ConsoleCatcher extends PApplet {
 	private PFont font;
 	private ByteArrayOutputStream baos;
-	private PrintStream previous;
-	private boolean capturing;
-	private String capturedValue = "..\n";
 	private Textarea textArea;
 	private ControlP5 cp5;
 
-	public ConsoleCatcher() {
+	public ConsoleCatcher(ByteArrayOutputStream baos) {
 		super();
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		this.baos = baos;
 	}
-	
-	public void settings(){
+
+	public void settings() {
 		size(500, 80);
 	}
 
@@ -44,8 +42,9 @@ public class ConsoleCatcher extends PApplet {
 		cp5 = new ControlP5(this);
 		cp5.enableShortcuts();
 		textArea = cp5.addTextarea("console").setPosition(10, 10).setSize(width - 20, height - 20).setScrollActive(1);
+		textArea.hideScrollbar();
 		this.surface.setSize(width, height);
-		this.surface.setLocation(750, 500);
+		this.surface.setLocation(displayWidth - width, displayHeight - 300);
 		this.surface.setAlwaysOnTop(true);
 		// Font
 		font = createFont("Arial", 11, false);
@@ -54,67 +53,7 @@ public class ConsoleCatcher extends PApplet {
 
 	public void draw() {
 		background(100);
-	}
-
-	public void startCapture() {
-		if (capturing) {
-			return;
-		}
-
-		capturing = true;
-		previous = System.out;
-		baos = new ByteArrayOutputStream();
-
-		OutputStream outputStreamCombiner = new OutputStreamCombiner(Arrays.asList(previous, baos));
-		PrintStream custom = new PrintStream(outputStreamCombiner);
-
-		System.setOut(custom);
-	}
-
-	public void stopCapture() {
-		if (!capturing) {
-			return;
-		}
-
-		System.setOut(previous);
-
-		if (!baos.toString().isEmpty()) {
-			capturedValue += baos.toString();
-			textArea.setText(capturedValue);
-		}
-
-		baos = null;
-		previous = null;
-		capturing = false;
-	}
-
-	public String getCapturedValue() {
-		return capturedValue;
-	}
-
-	private static class OutputStreamCombiner extends OutputStream {
-		private List<OutputStream> outputStreams;
-
-		public OutputStreamCombiner(List<OutputStream> outputStreams) {
-			this.outputStreams = outputStreams;
-		}
-
-		public void write(int b) throws IOException {
-			for (OutputStream os : outputStreams) {
-				os.write(b);
-			}
-		}
-
-		public void flush() throws IOException {
-			for (OutputStream os : outputStreams) {
-				os.flush();
-			}
-		}
-
-		public void close() throws IOException {
-			for (OutputStream os : outputStreams) {
-				os.close();
-			}
-		}
+		textArea.setText(baos.toString());
+		textArea.scroll(1);
 	}
 }

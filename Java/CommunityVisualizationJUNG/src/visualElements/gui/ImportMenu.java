@@ -26,12 +26,12 @@ public class ImportMenu implements ControlListener {
 	public int barWidth = 170;
 	public int itemHeight = 13;
 	public int gap = 2;
-	public DropDownList nodeList, edgeList, layoutList;
+	public DropDownList nodeList, edgeList, layoutList, graphImportFormat;
 	public PApplet app;
 
 	public ImportMenu(PApplet app) {
 		this.app = app;
-		 init();
+		init();
 	}
 
 	public void init() {
@@ -56,13 +56,17 @@ public class ImportMenu implements ControlListener {
 	/**
 	 * Creates two ContorlP5.Group, one for nodes and one for edges. Both groups
 	 * are attached to an instance of ControlP5 that draws them in the PApplet
-	 * using an internal ControlP5.autoDraw() method.
+	 * using an internal ControlP5.autoDraw() method. It initializes the
+	 * ControlP5 variables every time it is invoked. Albeit is is done in the
+	 * constructor, it is necessary to do here in order to have fresh variables
+	 * every time the user loads new files without restarting the application
 	 * 
 	 * @param nodeAttributeKeys
 	 * @param edgeAttributeKeys
 	 */
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys,
 			ArrayList<String> layoutAttributeKeys) {
+		// Initialize variables
 		init();
 		menu.setVisible(true);
 		nodeList.dropMenu.setVisible(true);
@@ -83,7 +87,9 @@ public class ImportMenu implements ControlListener {
 
 	/**
 	 * This method initiates the importing process based on the user defined
-	 * parameters from the import menu
+	 * parameters from the import menu.
+	 * 
+	 * NOTE: It is set to import graphml files only. Jan 15 2017
 	 * 
 	 * @param theEvent
 	 */
@@ -102,19 +108,16 @@ public class ImportMenu implements ControlListener {
 			// If the user selected at least the first two attributes from the
 			// menu
 			if (nodeList.getSelection().length >= 2) {
-				Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
-						Container.CIRCULAR, GraphLoader.GRAPHML);
 				Executable.activeGraph = true;
-				// *** Ideally this object must be deleted.
-				menu.setVisible(false);
-				nodeList.dropMenu.setVisible(false);
-				edgeList.dropMenu.setVisible(false);
-				int layoutSelection = Container.FRUCHTERMAN_REINGOLD;
+				// If the used does not select a layout, Fruchterman_Reingold is
+				// assigned by default
+				int layoutSelection;
 				try {
-					layoutSelection = layoutSelectionConverter(layoutList.getSelection()[0]);
+					layoutSelection = layoutSelection(layoutList.getSelection()[0]);
 				} catch (ArrayIndexOutOfBoundsException e) {
-
+					layoutSelection = Container.FRUCHTERMAN_REINGOLD;
 				}
+				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
 					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
 							layoutSelection, GraphLoader.GRAPHML);
@@ -135,21 +138,17 @@ public class ImportMenu implements ControlListener {
 		layoutList.dropMenu.setVisible(false);
 	}
 
-	private int layoutSelectionConverter(String selection) {
+	private int layoutSelection(String value) {
 		// Default selection fruchterman_reingold
-		int rtn = 2;
-		switch (selection) {
-		case "Fruchterman_Reingold":
-			rtn = 2;
-			break;
+		int selection = Container.FRUCHTERMAN_REINGOLD;
+		switch (value) {
 		case "Spring":
-			rtn = 1;
+			selection = Container.SPRING;
 			break;
 		case "Circular":
-			rtn = 0;
+			selection = Container.CIRCULAR;
 			break;
 		}
-		return rtn;
+		return selection;
 	}
-
 }

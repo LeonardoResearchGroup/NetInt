@@ -21,6 +21,7 @@ public class GraphLoader {
 	public static final int GRAPHML = 0;
 
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
+		System.out.println(this.getClass().getName() + " Paso por aqui");
 		if (format == GraphLoader.PAJEK) {
 			reader = new GraphmlReader();
 			jungGraph = reader.readFromPajek(file);

@@ -452,7 +452,7 @@ public abstract class Container {
 		for (VEdge vE : this.vEdges) {
 			for (Edge e : incidentEdges) {
 				if (vE.getEdge().equals(e)) {
-					System.out.println(this.getClass() + ": Visibilidad: " + visibility);
+					//System.out.println(this.getClass() + ": Visibilidad: " + visibility);
 					vE.setHidden(!visibility);
 				}
 			}
