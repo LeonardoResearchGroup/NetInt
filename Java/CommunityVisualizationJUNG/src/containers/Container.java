@@ -48,7 +48,7 @@ public abstract class Container {
 
 	public AbstractLayout<Node, Edge> layout;
 	protected boolean initializationComplete = false;
-	public int kindOfLayout;
+	public int currentLayout;
 	private Dimension dimension;
 
 	protected Color color;
@@ -78,7 +78,7 @@ public abstract class Container {
 	public void initialize(boolean initialize) {
 		if (initialize && !initializationComplete) {
 			System.out.println(this.getClass().getName() + " Initializing nodes in: " + getName());
-			distributeNodesInLayout(kindOfLayout, dimension);
+			distributeNodesInLayout(currentLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
 				System.out.println(this.getClass().getName() + " Building visual nodes");
@@ -124,11 +124,7 @@ public abstract class Container {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
-			if (kindOfLayout == Container.CIRCULAR) {
-				vEdge.makeBezier(dimension.width);
-			} else {
-				vEdge.makeBezier(0);
-			}
+			vEdge.makeBezier();
 			vEdges.add(vEdge);
 		}
 	}
@@ -405,11 +401,7 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
 			// Make the curve. The dimension is to calculate the inclination of
 			// the control point
-			if (kindOfLayout == Container.CIRCULAR) {
-				vEdge.makeBezier(dimension.width);
-			} else {
-				vEdge.makeBezier(0);
-			}
+			vEdge.makeBezier();
 			// Add vEdge to externalEdges of this container if the source node
 			// belongs to this container
 			if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {

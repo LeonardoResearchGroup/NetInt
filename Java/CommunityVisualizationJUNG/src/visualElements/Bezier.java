@@ -4,6 +4,8 @@ import processing.core.*;
 
 import java.awt.Color;
 
+import containers.Container;
+
 /**
  * This class draws bezier curves from two nodes. The source node is the origin
  * of the curve and target node is the end. The curve may be drawn in three
@@ -28,9 +30,12 @@ public class Bezier {
 	private Color tailColor = new Color(232, 20, 23);
 	private Color propagated = new Color(250, 0, 0);
 	// The default angle of control points
-	private double inclination = Math.PI / 2;
+	private double direction, chord = Double.NEGATIVE_INFINITY;
+	private double controlInclination = Math.PI / 2;
+	private PVector containerCenter;
+	private int containerLayout = -1;
 	// The default length of control points
-	private float sagitta = 140;
+	private float sagitta = 40;
 
 	// Constructors
 	/**
@@ -49,6 +54,7 @@ public class Bezier {
 		A = source;
 		B = target;
 		localAlpha = 255;
+		// initialize();
 	}
 
 	/**
@@ -60,6 +66,7 @@ public class Bezier {
 		A = new PVector(0, 0);
 		B = new PVector(0, 0);
 		localAlpha = 255;
+		// initialize();
 	}
 
 	/**
@@ -105,29 +112,18 @@ public class Bezier {
 	 * @param app
 	 * @return
 	 */
-	private double getDirection(PApplet app) {
+	private double getDirection(PVector center, PVector vNode) {
 		double angle = 0;
-		app.pushMatrix();
-		app.translate(A.x, A.y);
-		angle = PApplet.atan2(B.y - A.y, B.x - A.x);
-		app.popMatrix();
+		Canvas.app.pushMatrix();
+		Canvas.app.translate(center.x, center.y);
+		angle = PApplet.atan2(vNode.y - center.y, vNode.x - center.x);
+		Canvas.app.popMatrix();
+		// This is to complete TWO_PI because atan2 limits are +/- PI
 		if (angle < 0) {
-			// This is to complete TWO_PI radians over because after PI it
-			// diminishes its value
+
 			angle = PApplet.TWO_PI + angle;
 		}
 		return angle;
-	}
-
-	public void setControlInclination(float radius) {
-		double angle;
-		if (radius == 0) {
-			angle = Math.PI/2;
-		} else {
-			angle = Math.asin((getChord() / 2) / radius);
-		}
-		System.out.println(this.getClass().getName() +  " ANGLE: " + angle + ", RADIUS "+ radius + ", Chord:"+ (getChord() / 2) );
-		this.inclination = angle;
 	}
 
 	/**
@@ -142,29 +138,57 @@ public class Bezier {
 	 * @return
 	 */
 	private PVector getControlPoint(PVector origin, double angle, double inc) {
-		PVector rtn = null;
-		double X = Math.cos(angle + inc);
-		double Y = Math.sin(angle + inc);
+		// Calculate the current direction
+		direction = getDirection(A, B);
+		double X = (Math.cos(angle + inc)) * sagitta;
+		double Y = (Math.sin(angle + inc)) * sagitta;
+		PVector rtn = new PVector((float) X, (float) Y);
+		// System.out.println("angle: " + angle + " inclination: " + inc + "
+		// sagitta:" + sagitta);
+		return rtn.add(origin);
+	}
+
+	private PVector getControlPointCircularLayout(PVector origin, PVector center) {
+		// Calculate the current angle between center and node
+		double angle = getDirection(center, origin);
+		double X = sagitta * Math.cos(angle + Math.PI);
+		double Y = sagitta * Math.sin(angle + Math.PI);
+		PVector rtn = new PVector((float) X, (float) Y);
+		// System.out.println("angle: " + angle + " center:" + center);
+		return rtn.add(origin);
+	}
+
+	/**
+	 * Calculates and assigns the bezier parameters
+	 */
+	public void recalculateParameters() {
+		// Control point offset
 		if (sagitta > getChord() / 2) {
 			sagitta = getChord() / 2;
 		}
-		X = X * sagitta;
-		Y = Y * sagitta;
-		rtn = new PVector((float) X, (float) Y);
-		return rtn.add(origin);
+		// Get control points
+		if (containerLayout != Container.CIRCULAR) {
+			cA = getControlPoint(A, direction, controlInclination);
+			cB = getControlPoint(B, direction, controlInclination);
+		} else {
+			cA = getControlPointCircularLayout(A, containerCenter);
+			cB = getControlPointCircularLayout(B, containerCenter);
+		}
 	}
 
 	// Display Methods
 	/**
-	 * Draws all the components of the bezier. It is useful to draft new shapes
+	 * Draws all the components of the bezier. It is useful to draft check the
+	 * structure of the curve
 	 * 
 	 * @param app
 	 */
 	public void drawBezierAndControls(PApplet app, float thickness) {
+		// This need to be controlled with an event Controller because it is not
+		// necessary to recalculate the coords all the time
+		recalculateParameters();
 		app.noFill();
 		app.strokeWeight(thickness);
-		cA = getControlPoint(A, getDirection(app), inclination);
-		cB = getControlPoint(B, getDirection(app), 2*inclination);
 		app.stroke(255, 0, 0, 50);
 		app.line(A.x, A.y, cA.x, cA.y);
 		app.ellipse(A.x, A.y, 3, 3);
@@ -172,7 +196,7 @@ public class Bezier {
 		app.ellipse(B.x, B.y, 3, 3);
 		app.stroke(0, 255, 0, 50);
 		app.line(A.x, A.y, B.x, B.y);
-		app.text((float)inclination,cA.x, cA.y);
+		app.text((float) controlInclination, cA.x, cA.y);
 		app.stroke(currentColor.getRGB(), localAlpha);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
@@ -187,8 +211,7 @@ public class Bezier {
 	 *            less that 1 it is set to 1.
 	 */
 	public void drawBezier2D(PApplet app, float thickness) {
-//		cA = getControlPoint(A, getDirection(app), inclination + Math.PI / 2);
-//		cB = getControlPoint(B, getDirection(app), inclination - Math.PI / 2);
+		recalculateParameters();
 		app.noFill();
 		app.stroke(currentColor.getRGB(), localAlpha);
 		if (thickness < 1)
@@ -330,6 +353,11 @@ public class Bezier {
 
 	public void setSagitta(float sagitta) {
 		this.sagitta = sagitta;
+	}
+
+	public void setLayoutAndCenter(int layout, PVector containerCenter) {
+		this.containerCenter = containerCenter;
+		this.containerLayout = layout;
 	}
 
 	public Color getPropagated() {

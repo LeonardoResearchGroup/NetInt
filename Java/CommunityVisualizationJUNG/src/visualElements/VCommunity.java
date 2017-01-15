@@ -147,6 +147,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					if (vE.getEdge().getAttributeSize() > 0) {
 						vE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
 					}
+					if (container.currentLayout == Container.CIRCULAR) {
+						vE.setLayoutAndCenter(container.currentLayout, this.pos);
+					}
 					vE.show();
 				}
 				// Show external edges
@@ -156,6 +159,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					// It needs to be solved
 					if (vEE.getEdge().getAttributeSize() > 0) {
 						vEE.setVisibility(VisibilitySettings.getInstance().getVolTransaccion());
+					}
+					if (container.currentLayout == Container.CIRCULAR) {
+						vEE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
 					vEE.show();
 				}
@@ -223,9 +229,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				if (vC.isMouseOver && !vC.comCover.isDeployed()) {
 					// It clears the edges between communities of the opened
 					// community
-//					container.getGraph().removeVertex(vC.getNode());
-//					container.getVEdges().clear();
-//					container.runEdgeFactory();
+					// container.getGraph().removeVertex(vC.getNode());
+					// container.getVEdges().clear();
+					// container.runEdgeFactory();
 					container.setIncidentEdgesVisibility(vC.getNode(), false);
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
@@ -242,7 +248,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						}
 					}
 				} else if (vC.isMouseOver && vC.comCover.isDeployed()) {
-					//vC.container.setvExtEdges(new ArrayList<VEdge>());
+					// vC.container.setvExtEdges(new ArrayList<VEdge>());
 					container.setIncidentEdgesVisibility(vC.getNode(), true);
 				}
 			}

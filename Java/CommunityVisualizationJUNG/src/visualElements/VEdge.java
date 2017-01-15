@@ -9,11 +9,23 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import graphElements.Edge;
+import processing.core.PVector;
 
+/**
+ * The visual representation of a grahElements.Edge. Each VEdge has a source and
+ * target VNodes corresponding to the visual representation of the instances of
+ * grahElements.Node associated to the grahElements.Edge
+ * 
+ * @author jsalam
+ *
+ */
 public class VEdge implements Serializable {
 	private Edge edge;
-	private boolean aboveArc, visibility, hidden;
+	// Visibility attributes
+	private boolean visibility, hidden;
+	// Source and target nodes
 	private VNode source, target;
+	// The curve linking the nodes
 	private Bezier bezier;
 	// Visual Attributes
 	private float thickness;
@@ -21,7 +33,6 @@ public class VEdge implements Serializable {
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
-		aboveArc = true;
 		thickness = 1; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 						// edge.getWeight(), 1, Mapper.EDGE_WEIGHT));
 		if (thickness < 1) {
@@ -29,6 +40,12 @@ public class VEdge implements Serializable {
 		}
 	}
 
+	/**
+	 * Retrieves the vNodes that are the visual representation of the source and
+	 * target nodes associated to the edge.
+	 * 
+	 * @param visualNodes
+	 */
 	public void setSourceAndTarget(ArrayList<VNode> visualNodes) {
 		int cont = 0;
 		for (VNode atm : visualNodes) {
@@ -42,19 +59,22 @@ public class VEdge implements Serializable {
 			}
 			cont++;
 		}
-		if (source != null && target != null) {
-			setDirection(source.pos.x, target.pos.x);
-		}
 	}
 
-	public void makeBezier(float containerRadius) {
+	public void makeBezier() {
 		bezier = new Bezier(source.pos, target.pos);
 		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
-		bezier.setControlInclination(containerRadius);
 	}
 
+	public void setLayoutAndCenter(int layout, PVector center) {
+		bezier.setLayoutAndCenter(layout, center);
+	}
+
+	/**
+	 * Visualize the VEdge on the Canvas
+	 */
 	public void show() {
 		int alpha = 150;
 		if (source.isVisible() && target.isVisible()) {
@@ -76,8 +96,8 @@ public class VEdge implements Serializable {
 						bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
 					} else {
 						// ******
-						bezier.drawBezierAndControls(Canvas.app, thickness);
-						//bezier.drawBezier2D(Canvas.app, 1f);
+						// bezier.drawBezierAndControls(Canvas.app, thickness);
+						bezier.drawBezier2D(Canvas.app, 1f);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 					}
 				} else {
@@ -132,19 +152,7 @@ public class VEdge implements Serializable {
 		}
 	}
 
-	private void setDirection(float posXOrg, float posXDes) {
-		if (edge.isDirected()) {
-			if (posXOrg - posXDes < 0)
-				aboveArc = true;
-			else
-				aboveArc = false;
-		}
-	}
-
 	// getters and setters
-	public boolean isAboveArc() {
-		return aboveArc;
-	}
 
 	public void setColor(int color) {
 		bezier.setColor(color);
@@ -200,10 +208,9 @@ public class VEdge implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
-	public void setHidden(boolean hidden) {
-			this.hidden = hidden;
 
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 
 	}
 }

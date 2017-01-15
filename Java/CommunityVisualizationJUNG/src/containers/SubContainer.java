@@ -28,19 +28,19 @@ public class SubContainer extends Container implements Serializable{
 	public SubContainer(Graph<Node, Edge> subGraph, Container sourceContainer, int kindOfLayout, Dimension dimension) {
 		super(subGraph);
 		this.sourceContainer = sourceContainer;
-		this.kindOfLayout = kindOfLayout;
+		this.currentLayout = kindOfLayout;
 		setDimension(dimension);
 	}
 	
 	public SubContainer(Graph<Node, Edge> subGraph, int kindOfLayout, Dimension dimension) {
 		super(subGraph);
-		this.kindOfLayout = kindOfLayout;
+		this.currentLayout = kindOfLayout;
 		setDimension(dimension);
 	}
 
 	public SubContainer(Graph<Node, Edge> subGraph, int kindOfLayout, Dimension dimension, Color color) {
 		super(subGraph);
-		this.kindOfLayout = kindOfLayout;
+		this.currentLayout = kindOfLayout;
 		setDimension(dimension);
 		this.color = color;
 	}
