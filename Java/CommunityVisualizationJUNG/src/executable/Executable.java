@@ -30,10 +30,12 @@ public class Executable extends PApplet {
 		importMenu = new ImportMenu(this);
 		app = new Logica(Logica.HD1080);
 		performance = new TestPerformance();
-		// app.loadGraph(new File("./data/graphs/Risk.graphml"), "Continent",
+		// app.loadGraph(, "Continent",
 		// "label", "sector", "weight",
 		// Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
-		this.setActiveGraph(false);
+		app.loadGraph(new File("./data/graphs/Risk.graphml"), new String[]{"Continent","label"},new String[]{},
+				Container.FRUCHTERMAN_REINGOLD, GraphLoader.GRAPHML);
+		this.setActiveGraph(true);
 		// Control Frame
 		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
 

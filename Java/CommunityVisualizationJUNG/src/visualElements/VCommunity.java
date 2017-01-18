@@ -206,11 +206,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	/**
 	 * Build all the external edges of a clicked community
 	 */
-	public void buildExternalEdges(MouseEvent e) {
+	public void buildExternalEdges() {
 		this.container.initialize(true);
 		for (VisualAtom vA : container.getVNodes()) {
-			System.out.println(this.getClass() + "... Recorre VCommunities"  );
-			vA.detectMouseOver(Canvas.getCanvasMouse());
+//			System.out.println(this.getClass() + "... Recorre VCommunities"  );
+//			vA.detectMouseOver(Canvas.getCanvasMouse());
 			
 				
 			
@@ -219,7 +219,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// If vA is a VCommunity
 			if (vA instanceof VCommunity) {
 				VCommunity vC = (VCommunity) vA;
-				vC.vCommunityEvent( e);
+//				vC.vCommunityEvent( e);
 				if (vC.isMouseOver && !vC.comCover.isDeployed()) {
 					// It clears the edges between communities of the opened
 					// community
@@ -230,7 +230,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vC.container.initialize(true);
 					// Builds vEdges for all open communities
 					for (VisualAtom internalVA : container.getVNodes()) {
-						System.out.println(this.getClass() + "... Recorre las demás VCommunities"  );
+//						System.out.println(this.getClass() + "... Recorre las demás VCommunities"  );
 						// If vA is a VCommunity
 						if (internalVA instanceof VCommunity) {
 							VCommunity internalVC = (VCommunity) internalVA;
@@ -242,16 +242,33 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							}
 						}
 					}
-					for (VisualAtom vN : vC.container.getVNodes()){
-						System.out.println(this.getClass() + "... Recorre VNodes"  );
-						vN.vNodeEvent(e);
-					}
-				} //else if (vC.isMouseOver && vC.comCover.isDeployed()) {
-					//vC.container.setvExtEdges(new ArrayList<VEdge>());
-//					container.setIncidentEdgesVisibility(vC.getNode(), true);
-				//}
+//					for (VisualAtom vN : vC.container.getVNodes()){
+//						System.out.println(this.getClass() + "... Recorre VNodes"  );
+//						vN.vNodeEvent(e);
+//					}
+				} else if (vC.isMouseOver && vC.comCover.isDeployed()) {
+					vC.container.setvExtEdges(new ArrayList<VEdge>());
+					container.setIncidentEdgesVisibility(vC.getNode(), true);
+				}
 			}
 		}
+	}
+	
+	public void handleEvents(MouseEvent e){
+		for (VisualAtom vA : container.getVNodes()) {
+//			System.out.println(this.getClass() + "... Recorre VCommunities"  );
+			vA.detectMouseOver(Canvas.getCanvasMouse());
+			if (vA instanceof VCommunity) {
+				VCommunity vC = (VCommunity) vA;
+				vC.vCommunityEvent( e);
+				for (VisualAtom vN : vC.container.getVNodes()){
+//					System.out.println(this.getClass() + "... Recorre VNodes"  );
+					vN.detectMouseOver(Canvas.getCanvasMouse());
+					vN.vNodeEvent(e);
+				}
+			}
+		}
+		
 	}
 
 	// ***** Search Methods *******

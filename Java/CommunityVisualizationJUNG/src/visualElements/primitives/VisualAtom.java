@@ -227,8 +227,13 @@ public abstract class VisualAtom implements Serializable{
 		detectMouseOver(Canvas.getCanvasMouse());
 		try {
 			tmpCommunity = (VCommunity) this;
-			System.out.println("Object invoking buildExternalEdges: "+ tmpCommunity.container.getName());
-			tmpCommunity.buildExternalEdges(e);
+			
+			tmpCommunity.handleEvents(e);
+			if (e.getAction() == MouseEvent.CLICK) {
+				System.out.println("Object invoking bEE: "+ tmpCommunity.container.getName());
+				tmpCommunity.buildExternalEdges();
+			}
+			
 		} catch (java.lang.RuntimeException exCommunity) {
 			try {
 				tmpNode = (VNode) this;
