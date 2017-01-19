@@ -225,7 +225,15 @@ public class VNode extends VisualAtom implements Serializable {
 
 		if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
 			Canvas.app.fill(getColorRGB());
+			
+			long ini = System.nanoTime();
 			Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			long fin = System.nanoTime();
+			Canvas.app.noLoop();
+			throw new Exception(); 
+			//System.out.println(fin);
+			long  elapsed = fin - ini;
+			System.out.println(this.getClass().getName() + "Time painting a single node: "+ elapsed );
 		}
 	}
 

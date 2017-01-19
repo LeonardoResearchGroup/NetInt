@@ -24,6 +24,7 @@ import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
+import visualElements.primitives.VisualAtom;
 
 public class Logica {
 
@@ -181,8 +182,17 @@ public class Logica {
 
 	public void show() {
 		// vMainCommunity.show();
+		//long ini = System.currentTimeMillis();
 		vSubSubCommunity.show();
+//		long fin = System.currentTimeMillis();
+//		//System.out.println(fin);
+//		long  elapsed = fin - ini;
+//		System.out.println(this.getClass().getName() + "Time showing vElements: "+ elapsed );
+		
 		vSubSubCommunity.searchNode();
+		
+		
+		
 	}
 
 	/**

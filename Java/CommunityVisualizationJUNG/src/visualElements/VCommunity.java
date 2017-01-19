@@ -255,6 +255,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 	
 	public void handleEvents(MouseEvent e){
+		long ini = System.nanoTime();
+		//System.out.println(ini);
 		for (VisualAtom vA : container.getVNodes()) {
 //			System.out.println(this.getClass() + "... Recorre VCommunities"  );
 			vA.detectMouseOver(Canvas.getCanvasMouse());
@@ -268,6 +270,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
+		long fin = System.nanoTime();
+		//System.out.println(fin);
+		long  elapsed = fin - ini;
+		System.out.println(this.getClass().getName() + "Time handling events: "+ elapsed );
 		
 	}
 
