@@ -84,7 +84,8 @@ public class Assembler {
 		if (format == GraphLoader.PAJEK)
 			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
 		else if (format == GraphLoader.GRAPHML)
-			createEdgesBetweenSubcommunities(vSubCommunities);
+			//********* EDGES BETWEEN COMMUNITIES
+			//createEdgesBetweenSubcommunities(vSubCommunities);
 
 		// Create edges & reporting progress
 		System.out.println(this.getClass().getName() + " Running edge factory ...");
@@ -142,15 +143,15 @@ public class Assembler {
 			communityTemp.setColor(myGradient[i - 1]);
 			vCommunities.add(communityTemp);
 
-			// SET MAX & MIN COMMUNITY SIZE
-			if (communityTemp.container.getGraph()
-					.getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
-				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
-			}
-			if (communityTemp.container.getGraph()
-					.getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
-				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
-			}
+//			// SET MAX & MIN COMMUNITY SIZE
+//			if (communityTemp.container.getGraph()
+//					.getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
+//				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
+//			}
+//			if (communityTemp.container.getGraph()
+//					.getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
+//				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
+//			}
 		}
 		subGraphs = null;
 		containers = null;

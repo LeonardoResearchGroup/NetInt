@@ -119,10 +119,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (vN.isVisible() && !vNodesCentered) {
 							vN.show();
 						}
-
 					}
 				}
-
 				vNodesCentered = false;
 			} else {
 				for (VisualAtom vA : container.getVNodes()) {

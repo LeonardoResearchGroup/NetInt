@@ -28,19 +28,32 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Node;
 import graphElements.Edge;
 
+/**
+ * 
+ * @author jsalam
+ *
+ */
 public class GraphmlReader {
-
 	private Graph graph;
 	private ArrayList<Edge> edgesBetweenCommunities;
 	private HashMap<String, Node> communityNodes;
 	private ArrayList<String> communities;
 	private ArrayList<String> graphKeys;
 
+	/**
+	 * Reader usually used to load pajek format files
+	 */
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
 		graphKeys = new ArrayList<String>();
 	}
 
+	/**
+	 * Reader used to read graphml file formats
+	 * 
+	 * @param file
+	 *            The url to the source file
+	 */
 	public GraphmlReader(String file) {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
@@ -49,6 +62,8 @@ public class GraphmlReader {
 		InputStream input;
 		try {
 			input = new BufferedInputStream(new FileInputStream(file));
+			// This line reads the attributes from the source file and loads
+			// them into the graph object
 			reader.inputGraph(input);
 			// *** Read keys
 			String currentLine;
@@ -79,15 +94,11 @@ public class GraphmlReader {
 	 *         Id
 	 */
 	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes) {
-		// private Node[] makeNodes(String[] nodeImportAttributes) {
 		System.out.println(this.getClass().getName() + " Making Nodes...");
 
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
 
-		// Final Array of nodes with attributes
-		// Node[] nodes = new Node[vertexCount];
 		// *** Go over graph vertex and set all nodes
-		// int counter = 0;
 		for (Vertex vertex : graph.getVertices()) {
 			// Get vertex ID
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
@@ -134,10 +145,8 @@ public class GraphmlReader {
 					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
 			}
-			// nodes[id] = nodeTmp;
 			theNodes.put(id, nodeTmp);
 		}
-		// return nodes;
 		return theNodes;
 	}
 
@@ -155,17 +164,17 @@ public class GraphmlReader {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
-		System.out.println(this.getClass().getName() + " GraphmlReader> Building Nodes and Edges...");
+		System.out.println(this.getClass().getName() + " Getting Jung Directed Graph...");
 		// The collection of synthetic edges between communities
 		edgesBetweenCommunities = new ArrayList<Edge>();
 		// Hash map <Name of community, Node object of a community>
 		communityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
-		// Node[] nodes = makeNodes(nodeImportAttributes);
 		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
-		// **** CREATE EDGES ****
 
+		// **** CREATE EDGES ****
+		System.out.println(this.getClass().getName() + " Making Edges...");
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.OUT);

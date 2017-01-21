@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns">
 <key attr.name="label" attr.type="string" for="node" id="label"/>
-<key attr.name="Edge Label" attr.type="string" for="edge" id="edgelabel"/>
 <key attr.name="weight" attr.type="double" for="edge" id="weight"/>
-<key attr.name="Edge Id" attr.type="string" for="edge" id="edgeid"/>
 <key attr.name="r" attr.type="int" for="node" id="r"/>
 <key attr.name="g" attr.type="int" for="node" id="g"/>
 <key attr.name="b" attr.type="int" for="node" id="b"/>

@@ -131,39 +131,6 @@ public class VNode extends VisualAtom implements Serializable {
 	public void show() {
 		
 		setDiameter(PApplet.map(node.getOutDegree(1), 1, 3000, 5, 100));
-		
-		// If there is an event in the control panel update the diameter 
-//		if (VisibilitySettings.eventOnVSettings) {
-//			// **** Diameter mapping
-//			if (VisibilitySettings.getInstance().getFiltrosNodo() != null) {
-//				switch (VisibilitySettings.getInstance().getFiltrosNodo()) {
-//				case "Radial":
-//					setDiameter(Mapper.getInstance().convert(Mapper.RADIAL, node.getOutDegree(1), 150,
-//							Mapper.COMUNITY_SIZE));
-//					break;
-//				case "Lineal":
-//					setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, node.getOutDegree(1), 150,
-//							Mapper.COMUNITY_SIZE));
-//					break;
-//				case "Logarithmic":
-//					setDiameter(Mapper.getInstance().convert(Mapper.LOGARITMIC, node.getOutDegree(1), 150,
-//							Mapper.COMUNITY_SIZE));
-//					break;
-//				case "Sinusoidal":
-//					setDiameter(Mapper.getInstance().convert(Mapper.SINUSOIDAL, node.getOutDegree(1), 150,
-//							Mapper.COMUNITY_SIZE));
-//					break;
-//				case "Sigmoid":
-//					setDiameter(Mapper.getInstance().convert(Mapper.SIGMOID, node.getOutDegree(1), 150,
-//							Mapper.COMUNITY_SIZE));
-//					break;
-//
-//				}
-//				// give a minimal interaction area to every vNode
-//				setDiameter(getDiameter() + 5);
-//				currentMapper = VisibilitySettings.getInstance().getFiltrosNodo();
-//			}
-//		}
 
 		// if this node is in the propagation chain
 		if (inPropagationChain) {

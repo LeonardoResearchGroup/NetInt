@@ -33,7 +33,7 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 		NodeMetadata comData = new NodeMetadata();
 		// Initialize basic attributes
 		attributes.put("id", id);
-		attributes.put("size", 0);
+		//attributes.put("size", 0);
 		attributes.put("label", "void");
 		metadata.put(0, comData);
 	}

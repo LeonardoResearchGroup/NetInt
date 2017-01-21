@@ -20,8 +20,16 @@ public class GraphLoader {
 	public static final int PAJEK = 1;
 	public static final int GRAPHML = 0;
 
+	/**
+	 * @param file
+	 *            The path to the source file
+	 * @param nodeImportAttributes
+	 *            List of node attributes to be retrieved from the source file
+	 * @param edgeImportAttributes
+	 *            List of edge attributes to be retrieved from the source file
+	 * @param format
+	 */
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
-		System.out.println(this.getClass().getName() + " Paso por aqui");
 		if (format == GraphLoader.PAJEK) {
 			reader = new GraphmlReader();
 			jungGraph = reader.readFromPajek(file);
@@ -29,6 +37,9 @@ public class GraphLoader {
 			reader = new GraphmlReader(file);
 			jungGraph = reader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
 		}
+		System.out.println(this.getClass().getName() + " Jung Graph Created from file:" + file);
+		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
+		System.out.println("   Total Edges in the graph: " + jungGraph.getEdgeCount());
 		System.out.println(this.getClass().getName() + " " + reader.getCommunities().size() + " communities loaded");
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
@@ -36,22 +47,11 @@ public class GraphLoader {
 			setNodesDegrees(jungGraph, n);
 			Mapper.getInstance().setMaxMinGraphElementAttributes(n);
 		}
-		// EDGES
-		 Mapper.getInstance().edgeCategoricalAttributes.printAttributes();
-		 Mapper.getInstance().edgeAttributesMax.printAttributes();
-		 Mapper.getInstance().edgeAttributesMin.printAttributes();
-		// NODES
-		// Mapper.getInstance().nodeCategoricalAttributes.printAttributes();
-		// Mapper.getInstance().nodeAttributesMax.printAttributes();
-		// Mapper.getInstance().nodeAttributesMin.printAttributes();
-
 		System.out.println(this.getClass().getName() + " Degrees assigned to nodes and attributes to Mapper Class");
-		System.out.println(this.getClass().getName() + " Assigning Edge attributes to edges and to Mapper Class ...");
-		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE 183 OF GRAPHMLREADER CLASS
+		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
+		// 183 OF GRAPHMLREADER CLASS
 		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
-		System.out.println(this.getClass().getName() + " Graph Created from file:" + file);
-		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
-		System.out.println("   Total Edges in the graph: " + jungGraph.getEdgeCount());
+
 	}
 
 	public ArrayList<String> getCommunityNames() {

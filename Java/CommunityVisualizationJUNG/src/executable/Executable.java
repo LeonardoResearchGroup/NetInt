@@ -27,19 +27,15 @@ public class Executable extends PApplet {
 	public static File file;
 	public static ImportMenu importMenu;
 
-	///
-	ByteArrayOutputStream baos;
-
 	public void setup() {
 		textSize(10);
 		surface.setLocation(200, -300);
 		smooth();
 		/*
-		 * Output Console. Uncomment these two lines to get a console Catcher.
-		 * CAUTION, it has conflicts with File Open.
+		 * Output Console. Uncomment this line to enable a console Catcher.
+		 * CAUTION, it has conflicts with Menu's File Open.
 		 */
-		 initSystemOutToConsole();
-		 consoleCatcher = new ConsoleCatcher(baos);
+		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
@@ -47,7 +43,7 @@ public class Executable extends PApplet {
 		System.out.println("Instantiating Import Menu");
 		importMenu = new ImportMenu(this);
 		// Assembling network
-		System.out.println("Instantiating Network Assembler");
+		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD1080);
 		performance = new TestPerformance();
 		this.setActiveGraph(false);
@@ -118,15 +114,18 @@ public class Executable extends PApplet {
 	/**
 	 * Initialized a console visible on runtime. It disables the printing of
 	 * messages on the IDE console.
+	 * 
+	 * @return A "siphon" that collects all the output messages from the System
 	 */
-	private void initSystemOutToConsole() {
+	private ByteArrayOutputStream initSystemOutToConsole() {
 		// Create a stream to hold the output
-		baos = new ByteArrayOutputStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps = new PrintStream(baos);
 		// // IMPORTANT: Save the old System.out!
-		PrintStream old = System.out;
-		// // Tell Java to use your special stream
+		// PrintStream old = System.out;
+		// Tell java.System to use the special stream
 		System.setOut(ps);
+		return baos;
 	}
 
 	public static void main(String[] args) {
