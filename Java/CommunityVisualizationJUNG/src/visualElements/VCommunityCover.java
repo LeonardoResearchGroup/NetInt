@@ -30,7 +30,7 @@ public class VCommunityCover implements Serializable{
 		enableClosing = false;
 	}
 
-	protected void show(Container container, VNode communityNode, boolean hasFoundNode) {
+	protected void show(Container container, VNode communityNode, boolean containsSearchedNode) {
 		// If community not opened
 		if (!unlocked) {
 			// listen to the mouse and open the community
@@ -52,7 +52,7 @@ public class VCommunityCover implements Serializable{
 
 		// highlights itself if it contains a searched node and it has not been
 		// deployed
-		if (hasFoundNode && !coverDeployed) {
+		if (containsSearchedNode && !coverDeployed) {
 			Canvas.app.fill(255, 0, 0, 100);
 			Canvas.app.arc(communityNode.pos.x, communityNode.pos.y, communityNode.getDiameter() - 10,
 					communityNode.getDiameter() - 10, -PConstants.PI, PConstants.PI);

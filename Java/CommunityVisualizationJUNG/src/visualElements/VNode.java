@@ -6,17 +6,25 @@ import java.util.Collection;
 
 import graphElements.Node;
 import processing.core.*;
-import utilities.mapping.Mapper;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 
 public class VNode extends VisualAtom implements Serializable {
 	private Node node;
+	// This variable is used to control if a given attribute is below or above a
+	// visibility threshold
+	private boolean visible;
+	// This variable is used to control that the vElement is displayed only
+	// once. It is useful to prevent that edges with the same source or target
+	// vNode display the nodes more than once
+	private boolean displayed;
+	// propagation attributes
 	private boolean propagationSource, inPropagationChain, propagated = false;
 	private ArrayList<VNode> successors;
+	// The collection of propagation indexes. Each index represents the position
+	// of this VNode in a propagation chain
 	private ArrayList<Integer> propIndex;
 	public int propagationSteps;
-	private String currentMapper = "Logartimico";
 	private VNodeDescription description;
 
 	public VNode(Node node, float x, float y) {
@@ -26,6 +34,8 @@ public class VNode extends VisualAtom implements Serializable {
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
 		description = new VNodeDescription();
+		visible = false;
+		setDisplayed(false);
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
 		registerEvents();
@@ -38,6 +48,8 @@ public class VNode extends VisualAtom implements Serializable {
 		propIndex = new ArrayList<Integer>();
 		propagationSteps = 0;
 		description = new VNodeDescription();
+		visible = false;
+		setDisplayed(false);
 		registerEvents();
 	}
 
@@ -58,17 +70,20 @@ public class VNode extends VisualAtom implements Serializable {
 			int next = propagationCount(sequence);
 			for (VNode vN : successors) {
 				vN.propagateSuccessor(next);
-				// System.out.println("1: " + vN.getNode().getName() + ": " +
-				// vN.propIndex.toString());
+				// Mark the next vNode as part of the propagation chain. This is
+				// important because vEdges are displayed as part of the
+				// propagation chain only if source and target nodes are marked
+				// as propagated
+				vN.inPropagationChain = true;
 			}
 			propagated = true;
 		}
 		// this logic gate serves to update the propagation visualization
 		// every time the user changes the propagation setting in the control
 		// panel
-		if (propagationSteps != (int) VisibilitySettings.getInstance().getPropagacion()) {
+		if (propagationSteps != (int) UserSettings.getInstance().getPropagacion()) {
 			reclaim();
-			propagationSteps = (int) VisibilitySettings.getInstance().getPropagacion();
+			propagationSteps = (int) UserSettings.getInstance().getPropagacion();
 		}
 	}
 
@@ -87,6 +102,7 @@ public class VNode extends VisualAtom implements Serializable {
 				vN.propagateSuccessor(next);
 				// System.out.println(" 2: " + getNode().getName() + ": " +
 				// prompted + ": " + vN.propIndex.toString());
+				vN.inPropagationChain = true;
 			}
 			propagated = true;
 		}
@@ -102,7 +118,7 @@ public class VNode extends VisualAtom implements Serializable {
 	public int propagationCount(int sequence) {
 		// this creates an arrayList indicating the position of this node in all
 		// propagation chains
-		propIndex.add((int) VisibilitySettings.getInstance().getPropagacion() - sequence);
+		propIndex.add((int) UserSettings.getInstance().getPropagacion() - sequence);
 		if (sequence - 1 >= 0) {
 			inPropagationChain = true;
 		}
@@ -110,89 +126,96 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	public void reclaim() {
-		if (propagated && inPropagationChain) {
+		if (inPropagationChain) {
 			inPropagationChain = false;
-			for (VNode vN : successors) {
-				vN.reclaim();
-				vN.propIndex.clear();
-				vN.propagated = false;
-			}
 			propIndex.clear();
 			propagated = false;
+			for (VNode vN : successors) {
+				vN.reclaim();
+			}
 		}
-
 	}
 
 	// *** SHOW METHODS ***
+
+	public void show() {
+
+	}
+
 	/**
 	 * @param canvas
 	 * @param communityOpen
 	 */
-	public void show() {
-		
-		setDiameter(PApplet.map(node.getOutDegree(1), 1, 3000, 5, 100));
-
-		// if this node is in the propagation chain
-		if (inPropagationChain) {
-			setAlpha(195);
-			Canvas.app.fill(getColorRGB());
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-			if (VisibilitySettings.getInstance().mostrarNombre()) {
-				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-				Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
-			}
-		} else {
-			// regular color
-			// canvas.app.fill(getColorRGB());
-			// VisibilitySettings contains all the visibility settings
-			// defined by the user in the control panel
-			if (VisibilitySettings.getInstance().mostrarNombre()) {
-				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+	public void show(boolean displayed) {
+		setVisibility(UserSettings.getInstance().getUmbralGrados());
+		// setDiameter(PApplet.map(node.getOutDegree(1), 1, 3000, 5, 100));
+		// setDiameter(PApplet.map(1000, 1, 3000, 5, 100));
+		if (displayed && visible) {
+			// if this node is in the propagation chain
+			if (inPropagationChain) {
+				setAlpha(195);
+				Canvas.app.fill(getColorRGB());
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+				if (UserSettings.getInstance().mostrarNombre()) {
 					Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+					Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
+				}
+			} else {
+				// regular color
+				// canvas.app.fill(getColorRGB());
+				// UserSettings contains all the visibility settings
+				// defined by the user in the control panel
+				if (UserSettings.getInstance().mostrarNombre()) {
+					if (!UserSettings.getInstance().getOnlyPropagation()) {
+						Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+					}
+				}
+				setAlpha(150);
+			}
+			// Show propagation and source halo permanently
+			if (leftClicked) {
+				propagationSource = true;
+				// Show propagation
+				propagate((int) UserSettings.getInstance().getPropagacion());
+				// propagate(propagationSteps);
+				Canvas.app.stroke(225, 0, 0);
+				Canvas.app.strokeWeight(1.5f);
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
+				Canvas.app.fill(255, 0, 0);
+				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+
+			} else {
+				if (propagationSource) {
+					reclaim();
+					propagationSource = false;
 				}
 			}
-			setAlpha(150);
-		}
-		// Show propagation and source halo permanently
-		if (leftClicked) {
-			propagationSource = true;
-			// Show propagation
-			propagate((int) VisibilitySettings.getInstance().getPropagacion());
-			// propagate(propagationSteps);
-			Canvas.app.stroke(225, 0, 0);
-			Canvas.app.strokeWeight(1.5f);
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
-			Canvas.app.fill(255, 0, 0);
-			Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 
-		} else {
-			if (propagationSource) {
-				reclaim();
-				propagationSource = false;
+			if (isMouseOver) {
+				// canvas.app.fill(setColor(200, 0, 0, 120));
+				// canvas.app.noFill();
+				Canvas.app.strokeWeight(1);
+				Canvas.app.fill(brighter());
+				Canvas.app.stroke(225, 0, 0);
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+				// Show comments
+				description.show(this);
+			} else {
+				Canvas.app.noStroke();
+			}
+
+			if (node.isFound()) {
+				Canvas.app.fill(255, 0, 0);
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+			}
+
+			if (!UserSettings.getInstance().getOnlyPropagation()) {
+				Canvas.app.fill(getColorRGB());
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
 			}
 		}
-
-		if (isMouseOver) {
-			// canvas.app.fill(setColor(200, 0, 0, 120));
-			// canvas.app.noFill();
-			Canvas.app.strokeWeight(1);
-			Canvas.app.fill(brighter());
-			Canvas.app.stroke(225, 0, 0);
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-			// Show comments
-			description.show(this);
-		} else {
-			Canvas.app.noStroke();
-		}
-
-		if (node.isFound()) {
-			Canvas.app.fill(255, 0, 0);
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-		}
-
-		if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
-			Canvas.app.fill(getColorRGB());
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+		if (!displayed) {
+			setDisplayed(true);
 		}
 	}
 
@@ -237,6 +260,30 @@ public class VNode extends VisualAtom implements Serializable {
 		return propagated;
 	}
 
+	public boolean isInPropagationChain() {
+		return inPropagationChain;
+	}
+
+	public int getPropagationSteps() {
+		return propagationSteps;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public boolean isDisplayed() {
+		return displayed;
+	}
+
+	public void setDisplayed(boolean displayed) {
+		this.displayed = displayed;
+	}
+
+	public void setVisibility(boolean visible) {
+		this.visible = visible;
+	}
+
 	public void setNode(Node node) {
 		this.node = node;
 	}
@@ -251,10 +298,6 @@ public class VNode extends VisualAtom implements Serializable {
 		} else {
 			setVisibility(true);
 		}
-	}
-	
-	public void setVisibility2(boolean visibility) {
-		super.setVisibility(visibility);
 	}
 
 	// ***** Events

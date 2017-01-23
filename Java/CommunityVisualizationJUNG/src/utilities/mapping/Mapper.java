@@ -143,8 +143,8 @@ public class Mapper {
 		}
 
 		if (rtn[0] == rtn[1]) {
-			System.out.println(this.getClass().getName() + "> getMaxMin(): graphAttribute '" + graphAttribute
-					+ "' not implemented. MinMax set to [0,5]");
+//			System.out.println(this.getClass().getName() + "> getMaxMin(): graphAttribute '" + graphAttribute
+//					+ "' not implemented. MinMax set to [0,5]");
 			rtn[0] = 0;
 			rtn[1] = 5;
 		}

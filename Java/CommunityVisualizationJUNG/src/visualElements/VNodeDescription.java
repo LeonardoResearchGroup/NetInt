@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import visualElements.Canvas;
 import visualElements.VNode;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 import processing.core.PConstants;
 
 public class VNodeDescription implements Serializable {
@@ -47,8 +47,8 @@ public class VNodeDescription implements Serializable {
 			}
 
 			// Descriptive Statistics
-			HashMap<String, Boolean> descriptiveStats = VisibilitySettings.getInstance().getDescriptiveStatistics();
-			HashMap<String, String> descriptiveKeys = VisibilitySettings.getInstance().getDescriptiveKeys();
+			HashMap<String, Boolean> descriptiveStats = UserSettings.getInstance().getDescriptiveStatistics();
+			HashMap<String, String> descriptiveKeys = UserSettings.getInstance().getDescriptiveKeys();
 			count = 0;
 			for (String key : descriptiveStats.keySet()) {
 				// If the map of descriptive stats has any true boolean

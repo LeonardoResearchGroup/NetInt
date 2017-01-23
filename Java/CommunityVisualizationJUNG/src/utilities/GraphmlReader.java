@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 import utilities.mapping.Mapper;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -36,6 +36,7 @@ import graphElements.Edge;
 public class GraphmlReader {
 	private Graph graph;
 	private ArrayList<Edge> edgesBetweenCommunities;
+	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> communityNodes;
 	private ArrayList<String> communities;
 	private ArrayList<String> graphKeys;
@@ -109,9 +110,11 @@ public class GraphmlReader {
 				// For the first two attributes: node community and node
 				// name
 				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
+					// set root community
 					nodeTmp.setCommunity("Root", 0);
+					// set next community
 					nodeTmp.setCommunity(vertex.getProperty(nodeImportAttributes[0]).toString(), 1);
-					addCommunity(nodeTmp.getCommunity(1));
+					addCommunity(vertex.getProperty(nodeImportAttributes[0]).toString());
 				} else
 					throw new NullPointerException();
 				// Label
@@ -138,9 +141,9 @@ public class GraphmlReader {
 					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 				}
 			}
-			// Check if some graphml key match with some financial stament key
+			// Check if some graphml key match with some financial statement key
 			for (String key : vertex.getPropertyKeys()) {
-				String keyLabel = VisibilitySettings.getInstance().getDescriptiveKeys().get(key);
+				String keyLabel = UserSettings.getInstance().getDescriptiveKeys().get(key);
 				if (keyLabel != null) {
 					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
 				}
@@ -259,8 +262,7 @@ public class GraphmlReader {
 			}
 		} catch (NullPointerException e) {
 			// e.printStackTrace();
-			// System.out.println(this.getClass().getName() + ": No vertex label
-			// match, Check the attribute key");
+			System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
 		}
 	}
 

@@ -15,7 +15,7 @@ import utilities.console.ConsoleCatcher;
 import visualElements.Canvas;
 import visualElements.gui.ControlPanel;
 import visualElements.gui.ImportMenu;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 
 public class Executable extends PApplet {
 	public static Assembler app;
@@ -35,7 +35,7 @@ public class Executable extends PApplet {
 		 * Output Console. Uncomment this line to enable a console Catcher.
 		 * CAUTION, it has conflicts with Menu's File Open.
 		 */
-		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		//consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
@@ -44,7 +44,7 @@ public class Executable extends PApplet {
 		importMenu = new ImportMenu(this);
 		// Assembling network
 		System.out.println("Instantiating Graph Assembler");
-		app = new Assembler(Assembler.HD1080);
+		app = new Assembler(Assembler.HD720);
 		performance = new TestPerformance();
 		this.setActiveGraph(false);
 		// Control Panel Frame
@@ -55,7 +55,7 @@ public class Executable extends PApplet {
 
 	public void draw() {
 		if (activeGraph) {
-			background(VisibilitySettings.getInstance().getColorBackground());
+			background(UserSettings.getInstance().getColorBackground());
 			pushMatrix();
 			canvas.translateCenter((width - app.rootDimension.width) / 2, (height - app.rootDimension.height) / 2);
 			canvas.transform();
@@ -74,7 +74,7 @@ public class Executable extends PApplet {
 		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2016", 20, height - 10);
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
-		VisibilitySettings.getInstance().setEventOnVSettings(false);
+		UserSettings.getInstance().setEventOnVSettings(false);
 	}
 
 	public Assembler getApp() {
@@ -108,7 +108,8 @@ public class Executable extends PApplet {
 	}
 
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
+		//size(displayWidth - 201, displayHeight - 100, P2D);
+		size(1280,768, P2D);
 	}
 
 	/**

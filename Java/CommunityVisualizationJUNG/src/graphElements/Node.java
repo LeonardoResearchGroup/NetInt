@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * This class has three predefined attributes stored in the hashMap that use
- * these keys: id (String) (label (String) and size(float) these are
- * deprecated). Any other attribute is stored with the key retrieved from the
- * graph source file, usually a graphml. *** IMPORTANT*** the attribute id
- * defines the node identity therefore it must be a unique identifier
+ * This class has two predefined attributes stored in the hashMap that use these
+ * keys: id (String) and (label (String). Any other attribute is stored with the
+ * key retrieved from the graph source file, usually a graphml. *** IMPORTANT***
+ * the attribute "id" defines the node identity therefore it must be a unique
+ * identifier
  * 
  * @author jsalam
  * @date Nov 2016
@@ -17,10 +17,15 @@ import java.util.Set;
 public class Node extends GraphElement implements Comparable<Node>, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	//private HashMap<String, Object> attributes;
-	private HashMap<Integer, NodeMetadata> metadata;
-	private boolean isFound = false;
+	/*
+	 * Collection for community meta-data. The integer parameter identifies the
+	 * community (0 reserved for root graph)
+	 */
+	private HashMap<Integer, NodeMetadata> communityMetaData;
+	// Collection of special statistics retrieved from the source file.
 	private HashMap<String, Double> descriptiveStatistics = new HashMap<String, Double>();
+	// True if the node searcher query matches any of this node's attributes
+	private boolean isFound = false;
 
 	public Node() {
 		super();
@@ -28,14 +33,12 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 
 	public Node(String id) {
 		super();
-		//attributes = new HashMap<String, Object>();
-		metadata = new HashMap<Integer, NodeMetadata>();
-		NodeMetadata comData = new NodeMetadata();
+		communityMetaData = new HashMap<Integer, NodeMetadata>();
+		NodeMetadata metaData = new NodeMetadata();
 		// Initialize basic attributes
 		attributes.put("id", id);
-		//attributes.put("size", 0);
-		attributes.put("label", "void");
-		metadata.put(0, comData);
+		attributes.put("label", "no name");
+		communityMetaData.put(0, metaData);
 	}
 
 	public int compareTo(Node node) {
@@ -46,8 +49,8 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 
 	public boolean belongsTo(String community) {
 		boolean rtn = false;
-		for (NodeMetadata mD : metadata.values()) {
-			if (mD.getCommunity().equals(community)) {
+		for (NodeMetadata mD : communityMetaData.values()) {
+			if (mD.getCommunityName().equals(community)) {
 				rtn = true;
 				break;
 			} else
@@ -59,9 +62,9 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	public String getCommunityNames() {
 		String communities = "";
 		int cont = 0;
-		for (NodeMetadata mD : metadata.values()) {
-			communities = communities + mD.getCommunity();
-			if (cont < metadata.size() - 1) {
+		for (NodeMetadata mD : communityMetaData.values()) {
+			communities = communities + mD.getCommunityName();
+			if (cont < communityMetaData.size() - 1) {
 				communities = communities + ",";
 			}
 			cont++;
@@ -96,15 +99,15 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	}
 
 	public String getCommunity(int key) {
-		return metadata.get(key).getCommunity();
+		return communityMetaData.get(key).getCommunityName();
 	}
 
 	public int getMetadataSize() {
-		return metadata.size();
+		return communityMetaData.size();
 	}
 
 	public Set<Integer> getMetadataKeys() {
-		return metadata.keySet();
+		return communityMetaData.keySet();
 	}
 
 	public boolean isFound() {
@@ -128,12 +131,6 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 		attributes.put("size", size);
 	}
 
-	public void setCommunity(String community) {
-		NodeMetadata comData = metadata.get(0);
-		comData.setCommunity(community);
-		metadata.put(0, comData);
-	}
-
 	/**
 	 * @param community
 	 *            the community to which the node belongs
@@ -146,9 +143,12 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	 *            reserved for the root community
 	 */
 	public void setCommunity(String community, int key) {
-		NodeMetadata comData = new NodeMetadata();
-		comData.setCommunity(community);
-		metadata.put(key, comData);
+		// create meta-datum
+		NodeMetadata metaData = new NodeMetadata();
+		// assign name
+		metaData.setCommunityName(community);
+		// add meta-datum to collection of meta-data
+		communityMetaData.put(key, metaData);
 	}
 
 	// *****Get & set metrics
@@ -159,7 +159,7 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	 * @return
 	 */
 	public int getInDegree(int key) {
-		return metadata.get(key).getInDegree();
+		return communityMetaData.get(key).getCommunityInDegree();
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	 * @return
 	 */
 	public int getOutDegree(int key) {
-		return metadata.get(key).getOutDegree();
+		return communityMetaData.get(key).getCommunityOutDegree();
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	 * @return
 	 */
 	public int getDegree(int key) {
-		return metadata.get(key).getDegree();
+		return communityMetaData.get(key).getCommunityDegree();
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	 * @return
 	 */
 	public float getBetweeness(int key) {
-		return metadata.get(key).getBetweeness();
+		return communityMetaData.get(key).getBetweeness();
 	}
 
 	/**
@@ -195,28 +195,28 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 	 * @return
 	 */
 	public float getExcentricity(int key) {
-		return metadata.get(key).getExcentricity();
+		return communityMetaData.get(key).getExcentricity();
 	}
 
 	// Setters metrics
 	public void setInDegree(int key, int inDegree) {
-		this.metadata.get(key).setInDegree(inDegree);
+		this.communityMetaData.get(key).setCommunityInDegree(inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
-		this.metadata.get(key).setOutDegree(outDegree);
+		this.communityMetaData.get(key).setCommunityOutDegree(outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
-		this.metadata.get(key).setDegree(degree);
+		this.communityMetaData.get(key).setCommunityDegree(degree);
 	}
 
 	public void setBetweeness(int key, float betweeness) {
-		this.metadata.get(key).setBetweeness(betweeness);
+		this.communityMetaData.get(key).setBetweeness(betweeness);
 	}
 
 	public void setExcentricity(int key, float excentricity) {
-		this.metadata.get(key).setExcentricity(excentricity);
+		this.communityMetaData.get(key).setExcentricity(excentricity);
 	}
 
 	public HashMap<String, Double> getDescriptiveStatistics() {

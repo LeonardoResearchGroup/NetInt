@@ -108,7 +108,6 @@ public class GraphLoader {
 			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String community) {
 
 		Predicate<Node> inSubgraph = new Predicate<Node>() {
-			@Override
 			public boolean evaluate(Node nodo) {
 				return nodo.belongsTo(community);
 			}
@@ -134,9 +133,7 @@ public class GraphLoader {
 	 * @param comumnity2
 	 * @return
 	 */
-	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
-			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,
-			final String communityNameB) {
+	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities( DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,final String communityNameB) {
 
 		Predicate<Edge> inSubgraph = new Predicate<Edge>() {
 			public boolean evaluate(Edge edge) {

@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import controlP5.*;
 import executable.Executable;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 
 /**
  * @author jsalam Example adapted from
@@ -146,7 +146,7 @@ public class ControlPanel extends PApplet {
 	 */
 	private void guiVinculos(Group group) {
 		// Control de visibilidad
-		cp5.addToggle("Vinculos").setPosition(5, 7).setSize(45, 10).moveTo(group);
+		cp5.addToggle("Vinculos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Vinculos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
@@ -206,7 +206,7 @@ public class ControlPanel extends PApplet {
 			switchCaseCP5(theEvent);
 		}
 		// At any event notify VisibilitySettings class
-		VisibilitySettings.getInstance().setEventOnVSettings(true);
+		UserSettings.getInstance().setEventOnVSettings(true);
 	}
 
 	private void switchCaseCBox() {
@@ -216,44 +216,44 @@ public class ControlPanel extends PApplet {
 			System.out.println("  " + cBox.getItem(i).getCaptionLabel().getText());
 			switch (cBox.getItem(i).getCaptionLabel().getText()) {
 			case "WK/Activo Total":
-				VisibilitySettings.getInstance().setWKActivo(cBox.getItem(i).getState());
+				UserSettings.getInstance().setWKActivo(cBox.getItem(i).getState());
 				break;
 			case "Tamano":
-				VisibilitySettings.getInstance().setTamano(cBox.getItem(i).getState());
+				UserSettings.getInstance().setTamano(cBox.getItem(i).getState());
 				break;
 			case "Flujo de Caja/Pasivo Total":
-				VisibilitySettings.getInstance().setFlujoCajaPasivo(cBox.getItem(i).getState());
+				UserSettings.getInstance().setFlujoCajaPasivo(cBox.getItem(i).getState());
 				break;
 			case "Razon Corriente":
-				VisibilitySettings.getInstance().setRazonCorriente(cBox.getItem(i).getState());
+				UserSettings.getInstance().setRazonCorriente(cBox.getItem(i).getState());
 				break;
 			case "Tangibilidad":
-				VisibilitySettings.getInstance().setTangibilidad(cBox.getItem(i).getState());
+				UserSettings.getInstance().setTangibilidad(cBox.getItem(i).getState());
 				break;
 			case "Pasivo Total / Activo Total":
-				VisibilitySettings.getInstance().setPasivoActivo(cBox.getItem(i).getState());
+				UserSettings.getInstance().setPasivoActivo(cBox.getItem(i).getState());
 				break;
 			case "EBITDA/Intereses":
-				VisibilitySettings.getInstance().setEBITDAIntereses(cBox.getItem(i).getState());
+				UserSettings.getInstance().setEBITDAIntereses(cBox.getItem(i).getState());
 				break;
 			case "EBITDA/Ventas":
-				VisibilitySettings.getInstance().setEBITDAVentas(cBox.getItem(i).getState());
+				UserSettings.getInstance().setEBITDAVentas(cBox.getItem(i).getState());
 				break;
 			case "ROA":
-				VisibilitySettings.getInstance().setROA(cBox.getItem(i).getState());
+				UserSettings.getInstance().setROA(cBox.getItem(i).getState());
 				break;
 			case "ROE":
-				VisibilitySettings.getInstance().setROE(cBox.getItem(i).getState());
+				UserSettings.getInstance().setROE(cBox.getItem(i).getState());
 				break;
 			case "Crecimiento en Ventas":
-				VisibilitySettings.getInstance().setCrecimientoVentas(cBox.getItem(i).getState());
+				UserSettings.getInstance().setCrecimientoVentas(cBox.getItem(i).getState());
 				break;
 			}
 		}
 	}
 
 	private void switchCaseCPicker() {
-		VisibilitySettings.getInstance().setColorBackground(cPicker.getColorValue());
+		UserSettings.getInstance().setColorBackground(cPicker.getColorValue());
 
 	}
 
@@ -280,7 +280,7 @@ public class ControlPanel extends PApplet {
 				Assembler.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
 				Assembler.vSubSubCommunity.eventRegister(parent);
 				Assembler.vSubSubCommunity.container.runEdgeFactory();
-				VisibilitySettings.reloadInstance(deserializedWrapper.getvSettings());
+				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
 				Executable.activeGraph = true;
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -306,7 +306,7 @@ public class ControlPanel extends PApplet {
 				parent.cursor(WAIT);
 
 				SerializeWrapper wrapper = new SerializeWrapper(Assembler.vSubSubCommunity, Assembler.vSubCommunities,
-						VisibilitySettings.getInstance());
+						UserSettings.getInstance());
 
 				try {
 					SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
@@ -339,44 +339,44 @@ public class ControlPanel extends PApplet {
 
 		// **** NODES ****
 		case "Buscar ID Nodo":
-			VisibilitySettings.getInstance().setIdBuscador(theEvent.getStringValue());
+			UserSettings.getInstance().setIdBuscador(theEvent.getStringValue());
 			break;
 		case "Clear":
 			cp5.get(Textfield.class, "Buscar ID Nodo").clear();
-			VisibilitySettings.getInstance().resetIdBuscador();
+			UserSettings.getInstance().resetIdBuscador();
 			break;
 		case "Min OutDegree":
-			VisibilitySettings.getInstance().setUmbralGrados(theEvent.getValue());
+			UserSettings.getInstance().setUmbralGrados(theEvent.getValue());
 			break;
 		case "Nodos":
 			Toggle nodo = (Toggle) theEvent.getController();
-			VisibilitySettings.getInstance().setMostrarNodos(nodo.getBooleanValue());
+			UserSettings.getInstance().setMostrarNodos(nodo.getBooleanValue());
 			break;
 		case "Nombre":
 			Toggle nombre = (Toggle) theEvent.getController();
-			VisibilitySettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
+			UserSettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
 			break;
 		case "Diametro Nodo":
-			VisibilitySettings.getInstance().setFiltrosNodo(theEvent.getController().getLabel());
+			UserSettings.getInstance().setFiltrosNodo(theEvent.getController().getLabel());
 			break;
 
 		// **** EDGES ****
 		case "Vinculos":
 			Toggle vinculo = (Toggle) theEvent.getController();
-			VisibilitySettings.getInstance().setMostrarVinculos(vinculo.getBooleanValue());
+			UserSettings.getInstance().setMostrarVinculos(vinculo.getBooleanValue());
 			break;
 		case "Vol. Transaccion":
-			VisibilitySettings.getInstance().setVolTransaccion(theEvent.getValue());
+			UserSettings.getInstance().setVolTransaccion(theEvent.getValue());
 			break;
 		case "Propagacion":
-			VisibilitySettings.getInstance().setPropagacion(theEvent.getValue());
+			UserSettings.getInstance().setPropagacion(theEvent.getValue());
 			break;
 		case "Solo":
 			Toggle solo = (Toggle) theEvent.getController();
-			VisibilitySettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
+			UserSettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
 			break;
 		case "Espesor Vinculo":
-			VisibilitySettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
+			UserSettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
 			break;
 		default:
 			// Executable.retrieveControlPanelEvent(theEvent);

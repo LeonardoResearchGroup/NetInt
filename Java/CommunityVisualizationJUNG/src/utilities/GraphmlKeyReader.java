@@ -26,7 +26,6 @@ public class GraphmlKeyReader {
 			System.out.println(this.getClass().getName() + " Reading graphml Keys... ");
 			while ((currentLine = br.readLine()) != null) {
 				currentLine = currentLine.trim();
-				System.out.println(this.getClass().getName() + " current line:" + currentLine);
 				if (currentLine.startsWith("<key")) {
 					splitKeyAttributes(currentLine);
 				}

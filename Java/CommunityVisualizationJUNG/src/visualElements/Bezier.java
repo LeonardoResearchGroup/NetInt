@@ -344,7 +344,7 @@ public class Bezier {
 	}
 
 	public void setColor(int color) {
-		this.currentColor = new Color(color);
+		this.bodyColor = new Color(color);
 	}
 
 	public void setTailColor(Color tailColor) {

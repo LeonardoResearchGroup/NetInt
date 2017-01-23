@@ -1,12 +1,10 @@
 package visualElements;
 
-import utilities.mapping.Mapper;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Set;
 
 import graphElements.Edge;
 import processing.core.PVector;
@@ -30,14 +28,15 @@ public class VEdge implements Serializable {
 	// Visual Attributes
 	private float thickness;
 
-
 	public VEdge(Edge edge) {
 		this.edge = edge;
-		thickness = 1; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
-						// edge.getWeight(), 1, Mapper.EDGE_WEIGHT));
-		if (thickness < 1) {
-			thickness = 1;
-		}
+		thickness = 1;
+	}
+	
+	public VEdge(VNode source, VNode target){
+		this.edge = new Edge(source.getNode(), target.getNode(), true);
+		this.source = source;
+		this.target = target;
 	}
 
 	/**
@@ -45,20 +44,26 @@ public class VEdge implements Serializable {
 	 * target nodes associated to the edge.
 	 * 
 	 * @param visualNodes
+	 *            The collection of visual nodes that contain edge's source and
+	 *            target
+	 * @return false if source and target are not found in the given collection
 	 */
-	public void setSourceAndTarget(ArrayList<VNode> visualNodes) {
-		int cont = 0;
+	public boolean setSourceAndTarget(ArrayList<VNode> visualNodes) {
+		boolean sourceDone = false;
+		boolean targetDone = false;
 		for (VNode atm : visualNodes) {
 			// Source
 			if (atm.hasNode(edge.getSource())) {
-				source = visualNodes.get(cont);
+				source = atm;
+				sourceDone = true;
 			}
 			// Target
 			if (atm.hasNode(edge.getTarget())) {
-				target = visualNodes.get(cont);
+				target = atm;
+				targetDone = true;
 			}
-			cont++;
 		}
+		return sourceDone && targetDone;
 	}
 
 	public void makeBezier() {
@@ -77,7 +82,12 @@ public class VEdge implements Serializable {
 	 */
 	public void show() {
 		int alpha = 150;
+		// If both source and target are above a visibility threshold
 		if (source.isVisible() && target.isVisible()) {
+			// source.show(source.isDisplayed());
+			// target.show(target.isDisplayed());
+			// This visibility is determined by a threshold parameter set at the
+			// Control Panel
 			if (visibility) {
 				// Set thickness
 				Canvas.app.strokeWeight(thickness);
@@ -87,20 +97,20 @@ public class VEdge implements Serializable {
 				} else {
 					bezier.color(Bezier.NORMAL);
 				}
-				// If visualize the nodes and edges
-				if (!VisibilitySettings.getInstance().getOnlyPropagation()) {
+				// If visualize the nodes and edges if not in propagation
+				if (!UserSettings.getInstance().getOnlyPropagation()) {
 					bezier.setSourceAndTarget(source.pos, target.pos);
+					// If source and target nodes are in propagation
 					// Edge mode: normal, head, tail or both
 					if (source.isPropagated()) {
 						bezier.drawBezier2D(Canvas.app, 2f);
 						bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
 					} else {
-						// ******
-						// bezier.drawBezierAndControls(Canvas.app, thickness);
 						bezier.drawBezier2D(Canvas.app, 1f);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 					}
 				} else {
+					// If solo propagation
 					if (source.isPropagated()) {
 						bezier.setSourceAndTarget(source.pos, target.pos);
 						// Edge mode: normal, head, tail or both
@@ -158,7 +168,6 @@ public class VEdge implements Serializable {
 		// Set the Visibility with the first Attribute of Edge Import: "Body
 		// Thickness"
 		try {
-
 			if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0]) || hidden) {
 				visibility = false;
 			} else {

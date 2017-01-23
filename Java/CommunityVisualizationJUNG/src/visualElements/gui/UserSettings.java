@@ -2,7 +2,7 @@ package visualElements.gui;
 
 import java.util.HashMap;
 
-public class VisibilitySettings {
+public class UserSettings {
 
 	// BACKGROUND Visibility Settings
 	private int colorBackground = 70;
@@ -38,23 +38,23 @@ public class VisibilitySettings {
 	
 	private HashMap<String, Boolean> descriptiveStatistics = new HashMap<String, Boolean>();
 
-	private static VisibilitySettings vSettingsInstance = null;
+	private static UserSettings vSettingsInstance = null;
 	
 	// An Event to inform if there was an event on the canvas
 	public static boolean eventOnVSettings = false;
 
-	public static VisibilitySettings getInstance() {
+	public static UserSettings getInstance() {
 		if (vSettingsInstance == null) {
-			vSettingsInstance = new VisibilitySettings();
+			vSettingsInstance = new UserSettings();
 		}
 		return vSettingsInstance;
 	}
 	
-	public static void reloadInstance(VisibilitySettings instance) {
+	public static void reloadInstance(UserSettings instance) {
 		vSettingsInstance = instance;
 	}
 
-	protected VisibilitySettings() {
+	protected UserSettings() {
 		descriptiveKeys = new HashMap<String,String>();
 		descriptiveKeys.put("WKActivo", "WK/Activo");
 		descriptiveKeys.put("tamano", "Tamano");

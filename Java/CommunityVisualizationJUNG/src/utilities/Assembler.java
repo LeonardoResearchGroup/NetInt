@@ -65,7 +65,8 @@ public class Assembler {
 			int format) {
 		String XML_FILE = file.getAbsolutePath();
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, format);
-		// Root visual community. Keep it commented!!!!
+		// Root visual community. Keep it commented unless you want to visualize
+		// the graph with no partitions!!!!
 		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
 
 		// Sub communities
@@ -78,16 +79,17 @@ public class Assembler {
 		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
 				+ vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-
-		// Reporting progress
-		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
+		
+		// ********* EDGES BETWEEN COMMUNITIES
 		if (format == GraphLoader.PAJEK)
 			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
-		else if (format == GraphLoader.GRAPHML)
-			//********* EDGES BETWEEN COMMUNITIES
-			//createEdgesBetweenSubcommunities(vSubCommunities);
+		else if (format == GraphLoader.GRAPHML) {
+			createEdgesBetweenSubcommunities(vSubCommunities);
+		}
+		System.out.println(this.getClass().getName() + " All edges between communities created");
 
 		// Create edges & reporting progress
+		// Reporting progress
 		System.out.println(this.getClass().getName() + " Running edge factory ...");
 		vSubSubCommunity.container.runEdgeFactory();
 	}
@@ -137,21 +139,23 @@ public class Assembler {
 			containerTemp.setName(communityName);
 			// CommunityCover
 			String nodeID = communityName;
-			VCommunity communityTemp = new VCommunity(new Node(nodeID), containerTemp);
+			Node tmpNode = new Node(nodeID);
+			tmpNode.setName(communityName);
+			VCommunity communityTemp = new VCommunity(tmpNode, containerTemp);
 			subGraphs.add(graphTemp);
 			containers.add(containerTemp);
 			communityTemp.setColor(myGradient[i - 1]);
 			vCommunities.add(communityTemp);
 
-//			// SET MAX & MIN COMMUNITY SIZE
-//			if (communityTemp.container.getGraph()
-//					.getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
-//				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
-//			}
-//			if (communityTemp.container.getGraph()
-//					.getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
-//				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
-//			}
+			// // SET MAX & MIN COMMUNITY SIZE
+			if (communityTemp.container.getGraph()
+					.getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
+				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
+			}
+			if (communityTemp.container.getGraph()
+					.getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
+				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
+			}
 		}
 		subGraphs = null;
 		containers = null;
@@ -201,8 +205,6 @@ public class Assembler {
 			for (int j = i + 1; j < communities.size(); j++) {
 				VCommunity communityA = communities.get(i);
 				VCommunity communityB = communities.get(j);
-				System.out.println(this.getClass().getName() + " Creating edges between community: "
-						+ communityA.container.getName() + " and " + communityB.container.getName());
 				// get a temporary graph
 				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
 						communityA.container.getName(), communityB.container.getName());
@@ -218,6 +220,15 @@ public class Assembler {
 							EdgeType.DIRECTED);
 				}
 			}
+		}
+		// Update attributes of the community nodes
+		for (int i = 0; i < communities.size(); i++) {
+			Node n = communities.get(i).getNode();
+			int successors = vSubSubCommunity.container.getGraph().getSuccessorCount(n);
+			int predecessors = vSubSubCommunity.container.getGraph().getPredecessorCount(n);
+			n.setCommunity("CommunityLink", 1);
+			n.setOutDegree(1, successors);
+			n.setInDegree(1, predecessors);
 		}
 	}
 

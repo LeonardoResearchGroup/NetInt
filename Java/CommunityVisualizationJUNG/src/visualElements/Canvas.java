@@ -6,7 +6,7 @@ import java.util.TimerTask;
 import processing.core.*;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 
 public class Canvas {
 
@@ -144,8 +144,8 @@ public class Canvas {
 	public void showControlPanelMessages(PVector pos) {
 		app.fill(255, 90);
 		app.textAlign(PConstants.LEFT);
-		if (VisibilitySettings.getInstance().getIdBuscador() != null) {
-			app.text("Searching for node: " + VisibilitySettings.getInstance().getIdBuscador(), pos.x, pos.y);
+		if (UserSettings.getInstance().getIdBuscador() != null) {
+			app.text("Searching for node: " + UserSettings.getInstance().getIdBuscador(), pos.x, pos.y);
 		}
 
 		app.textAlign(PConstants.CENTER);

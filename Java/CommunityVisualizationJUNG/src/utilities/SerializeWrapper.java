@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import visualElements.VCommunity;
-import visualElements.gui.VisibilitySettings;
+import visualElements.gui.UserSettings;
 
 @SuppressWarnings("serial")
 public class SerializeWrapper implements Serializable{
 
 	private VCommunity vSubSubCommunity;
 	private ArrayList<VCommunity> vSubCommunities;
-	private VisibilitySettings  vSettings;
+	private UserSettings  vSettings;
 	
 
-	public SerializeWrapper(VCommunity vSubSubCommunity, ArrayList<VCommunity> vSubCommunities, VisibilitySettings  vSettings) {
+	public SerializeWrapper(VCommunity vSubSubCommunity, ArrayList<VCommunity> vSubCommunities, UserSettings  vSettings) {
 		super();
 		this.vSubSubCommunity = vSubSubCommunity;
 		this.vSubCommunities = vSubCommunities;
@@ -42,12 +42,12 @@ public class SerializeWrapper implements Serializable{
 	}
 
 
-	public VisibilitySettings getvSettings() {
+	public UserSettings getvSettings() {
 		return vSettings;
 	}
 
 
-	public void setvSettings(VisibilitySettings vSettings) {
+	public void setvSettings(UserSettings vSettings) {
 		this.vSettings = vSettings;
 	}
 

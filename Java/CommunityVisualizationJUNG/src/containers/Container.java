@@ -18,8 +18,10 @@ import processing.core.PVector;
 import utilities.GraphLoader;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
+import visualElements.VCommunity;
 import visualElements.VEdge;
 import visualElements.VNode;
+import visualElements.primitives.VisualAtom;
 
 /**
  * This abstract class contains two collections, one for the visualNodes and one
@@ -40,6 +42,8 @@ public abstract class Container {
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
+	protected ArrayList<VCommunity> vCommunities;
+	protected ArrayList<VNode> justVNodes;
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
 	protected String name = "no name";
@@ -47,7 +51,7 @@ public abstract class Container {
 	public PVector layoutCenter;
 
 	public AbstractLayout<Node, Edge> layout;
-	protected boolean initializationComplete = false;
+	private boolean initializationComplete = false;
 	public int currentLayout;
 	private Dimension dimension;
 
@@ -67,6 +71,8 @@ public abstract class Container {
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
 		vExtEdges = new ArrayList<VEdge>();
+		vCommunities = new ArrayList<VCommunity>();
+		justVNodes = new ArrayList<VNode>();
 	}
 
 	/**
@@ -75,8 +81,8 @@ public abstract class Container {
 	 * 
 	 * @param initialize
 	 */
-	public void initialize(boolean initialize) {
-		if (initialize && !initializationComplete) {
+	public void initialize() {
+		if (!initializationComplete) {
 			System.out.println(this.getClass().getName() + " Initializing nodes in: " + getName());
 			distributeNodesInLayout(currentLayout, dimension);
 			if (vNodes.size() == 0) {
@@ -175,7 +181,7 @@ public abstract class Container {
 
 	/**
 	 * True if the container's layout implements IterativeContext. This means
-	 * that the layout need to iterate over several times to achieve the
+	 * that the layout needs to iterate over several times to achieve the
 	 * distribution of vNodes
 	 * 
 	 * @return
@@ -200,6 +206,8 @@ public abstract class Container {
 	public void remakeVisualElements() {
 		vNodes.clear();
 		vEdges.clear();
+		vCommunities.clear();
+		justVNodes.clear();
 		runNodeFactory();
 		runEdgeFactory();
 	}
@@ -295,8 +303,47 @@ public abstract class Container {
 		return graph.getVertexCount();
 	}
 
+	/**
+	 * Returns a the entire set of this cvollection's VNodes containing both
+	 * VNodes and VCommunity instances
+	 * 
+	 * @return
+	 */
 	public ArrayList<VNode> getVNodes() {
 		return vNodes;
+	}
+
+	/**
+	 * Returns a subset of this cvollection's VNodes that are also VCommunity
+	 * instances
+	 * 
+	 * @return
+	 */
+	public ArrayList<VCommunity> getVCommunities() {
+		// This process is made one once
+		if (vCommunities.size() == 0) {
+			for (VNode vN : vNodes) {
+				if (vN instanceof VCommunity) {
+					vCommunities.add((VCommunity) vN);
+				}
+			}
+		}
+		return vCommunities;
+	}
+
+	/**
+	 * Returns a subset of this cvollection's VNodes that are not VCommunity
+	 * instances
+	 * 
+	 * @return
+	 */
+	public ArrayList<VNode> getJustVNodes() {
+		// This process is made one once
+		if (justVNodes.size() == 0) {
+			justVNodes = new ArrayList<VNode>(getVNodes());
+			justVNodes.removeAll(getVCommunities());
+		}
+		return justVNodes;
 	}
 
 	/**
@@ -378,20 +425,19 @@ public abstract class Container {
 	 * from another community.
 	 * 
 	 * @param completeGraph
-	 * @param externalCommunity
+	 * @param externalCommunityName
 	 * @param externalContainer
 	 * @return
 	 */
-	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunity,
+	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunityName,
 			Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
-		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>();
-		vNodesBothCommunities.addAll(this.vNodes);
+		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),
-				externalCommunity);
+				externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
@@ -399,8 +445,7 @@ public abstract class Container {
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			// Set source and target nodes
 			vEdge.setSourceAndTarget(vNodesBothCommunities);
-			// Make the curve. The dimension is to calculate the inclination of
-			// the control point
+			// Make the linking curve
 			vEdge.makeBezier();
 			// Add vEdge to externalEdges of this container if the source node
 			// belongs to this container
@@ -413,7 +458,6 @@ public abstract class Container {
 				}
 			}
 		}
-
 	}
 
 	public void setvExtEdges(ArrayList<VEdge> vExtEdges) {
@@ -448,16 +492,13 @@ public abstract class Container {
 	 * @param visibility
 	 */
 	public void setIncidentEdgesVisibility(Node node, boolean visibility) {
-		Collection<Edge> incidentEdges = this.graph.getIncidentEdges(node);
-		for (VEdge vE : this.vEdges) {
-			for (Edge e : incidentEdges) {
+		for (Edge e : graph.getIncidentEdges(node)) {
+			for (VEdge vE : this.vEdges) {
 				if (vE.getEdge().equals(e)) {
-					//System.out.println(this.getClass() + ": Visibilidad: " + visibility);
 					vE.setHidden(!visibility);
 				}
 			}
 		}
-
 	}
 
 	/**

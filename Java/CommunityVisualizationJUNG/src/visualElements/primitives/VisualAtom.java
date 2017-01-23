@@ -8,12 +8,9 @@ import processing.core.PConstants;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 import visualElements.Canvas;
-import visualElements.VCommunity;
-import visualElements.VNode;
 
 /**
- * Default values: diameter = 5, color = Color(255, 255, 255, 90), visible =
- * true;
+ * Default values: diameter = 5, color = Color(255, 255, 255, 90)
  * 
  * @author jsalam
  *
@@ -27,7 +24,7 @@ public abstract class VisualAtom implements Serializable {
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
-	private boolean visible;
+
 	protected Color color;
 	// Events
 	protected boolean eventsRegistered;
@@ -37,28 +34,18 @@ public abstract class VisualAtom implements Serializable {
 		pos = new PVector(x, y);
 		leftClicked = false;
 		color = new Color(255, 255, 255, 90);
-		visible = true;
 	}
 
 	public VisualAtom(float x, float y, int wdth, int hght) {
-		diameter = 5;
+		setDiameter(5);
 		this.wdth = wdth;
 		this.hght = hght;
 		pos = new PVector(x, y);
 		leftClicked = false;
 		color = new Color(255, 255, 255, 90);
-		visible = true;
 	}
 
-	public void show() {
-		Canvas.app.strokeWeight(0);
-		if (detectMouseOver(Canvas.getCanvasMouse())) {
-			Canvas.app.fill(255, 125, 255);
-		} else {
-			Canvas.app.fill(255);
-		}
-		Canvas.app.ellipse(pos.x, pos.y, diameter, diameter);
-	}
+	public abstract void show();
 
 	/**
 	 * Register mouse, touch or key events triggered on this object in the
@@ -112,7 +99,7 @@ public abstract class VisualAtom implements Serializable {
 	}
 
 	public float getDiameter() {
-			return diameter;
+		return diameter;
 	}
 	// *** Color Methods ***
 
@@ -130,10 +117,6 @@ public abstract class VisualAtom implements Serializable {
 
 	public int getColorRGB() {
 		return color.getRGB();
-	}
-
-	public boolean isVisible() {
-		return visible;
 	}
 
 	public int setColor(Color color) {
@@ -162,10 +145,6 @@ public abstract class VisualAtom implements Serializable {
 
 	public int brighter() {
 		return this.color.brighter().getRGB();
-	}
-
-	protected void setVisibility(boolean visible) {
-		this.visible = visible;
 	}
 
 	// ---------------- MouseEvent methods ----------------
@@ -220,39 +199,7 @@ public abstract class VisualAtom implements Serializable {
 	public abstract void eventRegister(PApplet theApp);
 
 	public void mouseEvent(MouseEvent e) {
-		VCommunity tmpCommunity = null;
-		VNode tmpNode = null;
 		detectMouseOver(Canvas.getCanvasMouse());
-		try {
-			tmpCommunity = (VCommunity) this;
-		} catch (java.lang.RuntimeException exCommunity) {
-			try {
-				tmpNode = (VNode) this;
-			} catch (java.lang.RuntimeException exNode) {
-				exNode.printStackTrace();
-			}
-		}
-		if (tmpNode != null) {
-			vNodeEvent(tmpNode, e);
-		} else if (tmpCommunity != null) {
-			vCommunityEvent(tmpCommunity, e);
-		}
-	}
-
-	private void vCommunityEvent(VCommunity vComm, MouseEvent e) {
-		if (e.getAction() == MouseEvent.CLICK) {
-			if (vComm.container.getName().equals("SubSubcommunities")) {
-				vComm.buildExternalEdges();
-			}
-			mouseClicked(e);
-		} else if (e.getAction() == MouseEvent.RELEASE) {
-			mouseReleased(e);
-		} else if (e.getAction() == MouseEvent.PRESS) {
-			mousePressed(e);
-		}
-	}
-
-	private void vNodeEvent(VNode vNode, MouseEvent e) {
 		if (e.getAction() == MouseEvent.CLICK) {
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {
@@ -261,5 +208,4 @@ public abstract class VisualAtom implements Serializable {
 			mousePressed(e);
 		}
 	}
-
 }

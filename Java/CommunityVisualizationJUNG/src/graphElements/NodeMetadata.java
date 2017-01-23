@@ -7,67 +7,69 @@ public class NodeMetadata implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int inDegree, outDegree, Degree;
+	private int inDegree, outDegree, degree;
 	private float Excentricity, Betweeness, size;
 	private String communityName;
 	
 	public NodeMetadata(){
-		
+//		inDegree = 0;
+//		outDegree = 0;
+//		degree = 0;
 	}
 	
-	int getInDegree() {
+	public int getCommunityInDegree() {
 		return inDegree;
 	}
 
-	void setInDegree(int inDegree) {
+	public void setCommunityInDegree(int inDegree) {
 		this.inDegree = inDegree;
 	}
 
-	int getOutDegree() {
+	public int getCommunityOutDegree() {
 		return outDegree;
 	}
 
-	void setOutDegree(int outDegree) {
+	public void setCommunityOutDegree(int outDegree) {
 		this.outDegree = outDegree;
 	}
 
-	int getDegree() {
-		return Degree;
+	public int getCommunityDegree() {
+		return degree;
 	}
 
-	void setDegree(int degree) {
-		Degree = degree;
+	public void setCommunityDegree(int degree) {
+		this.degree = degree;
 	}
 
-	float getExcentricity() {
+	public float getExcentricity() {
 		return Excentricity;
 	}
 
-	void setExcentricity(float excentricity) {
+	public void setExcentricity(float excentricity) {
 		Excentricity = excentricity;
 	}
 
-	float getBetweeness() {
+	public float getBetweeness() {
 		return Betweeness;
 	}
 
-	void setBetweeness(float betweeness) {
+	public void setBetweeness(float betweeness) {
 		Betweeness = betweeness;
 	}
 
-	float getSize() {
+	public float getSize() {
 		return size;
 	}
 
-	void setSize(float size) {
+	public void setSize(float size) {
 		this.size = size;
 	}
 
-	String getCommunity() {
+	public String getCommunityName() {
 		return communityName;
 	}
 
-	void setCommunity(String community) {
+	public void setCommunityName(String community) {
 		this.communityName = community;
 	}
 
