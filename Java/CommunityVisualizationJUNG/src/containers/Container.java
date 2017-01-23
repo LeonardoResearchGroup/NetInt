@@ -136,6 +136,34 @@ public abstract class Container {
 	}
 
 	// *** Other methods
+
+	/**
+	 * Build all the external edges of vCommunities contained in a deployed
+	 * community
+	 */
+	public void buildExternalEdges() {
+		VCommunity A = null;
+		VCommunity B = null;
+		// gel all VisualAtoms inside the container
+		for (int i = 0; i < this.getVCommunities().size(); i++) {
+			A = this.getVCommunities().get(i);
+			A.container.initialize();
+			for (int j = i + 1; j < this.getVCommunities().size(); j++) {
+				B = this.getVCommunities().get(j);
+				B.container.initialize();
+				if (A != null && B != null) {
+					if (!B.equals(A)) {
+						System.out.println(this.getClass().getName() + " Building External Edges for Vnodes of : "
+								+ A.getNode().getId() + " and " + B.getNode().getId());
+						A.container.runExternalEdgeFactory(this.rootGraph, B.container.getName(), B.container);
+						A.container.retrieveExternalVNodeSuccessors(this.rootGraph, B.container);
+						B.container.retrieveExternalVNodeSuccessors(this.rootGraph, A.container);
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Update Visual Nodes relative to a given position
 	 * 

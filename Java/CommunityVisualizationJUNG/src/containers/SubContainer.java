@@ -14,6 +14,10 @@ import visualElements.VEdge;
 import visualElements.VNode;
 import visualElements.primitives.VisualAtom;
 
+/**
+ * @author juansalamanca
+ * @deprecated
+ */
 public class SubContainer extends Container implements Serializable{
 	/**
 	 * 

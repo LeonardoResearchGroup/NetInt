@@ -31,7 +31,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public Container container;
 	private VCommunityCover comCover;
 	private PVector lastPosition;
-	// This lock is used to control iterative behavior in showCommunityContents()
+	// This lock is used to control iterative behavior in
+	// showCommunityContents()
 	private boolean lock = false;
 
 	// Search tool
@@ -68,14 +69,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		comCover.show(container, this, containsSearchedNode);
 		// Set once coordinates for all elements inside the container
 		this.container.initialize();
-		// Create edges that connect VNodes of this community with those of
-		// other communities
-		if (!externalEdgesBuilt) {
-			buildExternalEdges();
-			externalEdgesBuilt = true;
-		}
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
+			// Create edges that connect VNodes of this community with those of
+			// other communities
+			if (!externalEdgesBuilt) {
+				container.buildExternalEdges();
+				externalEdgesBuilt = true;
+			}
 			// If the layout is iterative
 			if (container.isCurrentLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
@@ -111,20 +112,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// VCommunity open
 			if (showNodes) {
 				// VCommunities
-				for(VCommunity vC: container.getVCommunities()){
+				for (VCommunity vC : container.getVCommunities()) {
 					vC.setVisibility(true);
 					vC.show();
 					if (vC.comCover.isUnlocked() && !vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), false);
 						vC.lock = true;
 					}
-					if (!vC.comCover.isUnlocked() && vC.lock){
+					if (!vC.comCover.isUnlocked() && vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), true);
 						vC.lock = false;
 					}
 				}
 				// VNodes
-				for(VNode vN: container.getJustVNodes()){
+				for (VNode vN : container.getJustVNodes()) {
 					vN.setVisibility(true);
 					if (vNodesCentered) {
 						// reset vNode coordinates to the coordinates
@@ -137,7 +138,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					// If vN is visible and not centered
 					if (!vNodesCentered) {
 						vN.show(vN.isDisplayed());
-					}	
+					}
 				}
 				vNodesCentered = false;
 			} else {
@@ -233,35 +234,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 
-		}
-	}
-
-	/**
-	 * Build all the external edges of vCommunities contained in a deployed
-	 * community
-	 */
-	public void buildExternalEdges() {
-		VCommunity A = null;
-		VCommunity B = null;
-		// gel all VisualAtoms inside the container
-		for (int i = 0; i < container.getVNodes().size(); i++) {
-			if (container.getVNodes().get(i) instanceof VCommunity) {
-				A = (VCommunity) container.getVNodes().get(i);
-				A.container.initialize();
-			}
-			for (int j = i + 1; j < container.getVNodes().size(); j++) {
-				if (container.getVNodes().get(i) instanceof VCommunity) {
-					B = (VCommunity) container.getVNodes().get(j);
-					B.container.initialize();
-				}
-				if (A != null && B != null) {
-					if (!B.equals(A)) {
-						A.container.runExternalEdgeFactory(container.rootGraph, B.container.getName(), B.container);
-						A.container.retrieveExternalVNodeSuccessors(container.rootGraph, B.container);
-						B.container.retrieveExternalVNodeSuccessors(container.rootGraph, A.container);
-					}
-				}
-			}
 		}
 	}
 

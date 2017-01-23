@@ -128,8 +128,6 @@ public class Assembler {
 		System.out.println(this.getClass().getName() + " Generating DirectedSparseMultigraph for "
 				+ communityNames.size() + " communities ...");
 		for (String communityName : communityNames) {
-			Canvas.app.text("Generating DirectedSparseMultigraph for community:" + communityName + " out of "
-					+ communityNames.size(), 50, Canvas.app.height - 50);
 
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
