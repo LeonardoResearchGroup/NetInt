@@ -21,7 +21,6 @@ public class GraphLoader {
 	public static final int GRAPHML = 0;
 
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
-		System.out.println(this.getClass().getName() + " Paso por aqui");
 		if (format == GraphLoader.PAJEK) {
 			reader = new GraphmlReader();
 			jungGraph = reader.readFromPajek(file);
@@ -37,9 +36,9 @@ public class GraphLoader {
 			Mapper.getInstance().setMaxMinGraphElementAttributes(n);
 		}
 		// EDGES
-		 Mapper.getInstance().edgeCategoricalAttributes.printAttributes();
-		 Mapper.getInstance().edgeAttributesMax.printAttributes();
-		 Mapper.getInstance().edgeAttributesMin.printAttributes();
+		// Mapper.getInstance().edgeCategoricalAttributes.printAttributes();
+		// Mapper.getInstance().edgeAttributesMax.printAttributes();
+		// Mapper.getInstance().edgeAttributesMin.printAttributes();
 		// NODES
 		// Mapper.getInstance().nodeCategoricalAttributes.printAttributes();
 		// Mapper.getInstance().nodeAttributesMax.printAttributes();
@@ -47,7 +46,8 @@ public class GraphLoader {
 
 		System.out.println(this.getClass().getName() + " Degrees assigned to nodes and attributes to Mapper Class");
 		System.out.println(this.getClass().getName() + " Assigning Edge attributes to edges and to Mapper Class ...");
-		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE 183 OF GRAPHMLREADER CLASS
+		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
+		// 183 OF GRAPHMLREADER CLASS
 		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
 		System.out.println(this.getClass().getName() + " Graph Created from file:" + file);
 		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
