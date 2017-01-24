@@ -3,16 +3,10 @@ package utilities;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.jcolorbrewer.ColorBrewer;
 
-import containers.Container;
 import containers.RootContainer;
 import containers.SubContainer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
@@ -20,9 +14,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
-import processing.core.PApplet;
 import utilities.mapping.Mapper;
-import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VNode;
 
@@ -76,11 +68,11 @@ public class Assembler {
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
 
 		// Setting root Container & Reporting progress
-		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
-				+ vSubSubCommunity.getNode().getId());
+		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "+ vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
 		
 		// ********* EDGES BETWEEN COMMUNITIES
+		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
 		if (format == GraphLoader.PAJEK)
 			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
 		else if (format == GraphLoader.GRAPHML) {

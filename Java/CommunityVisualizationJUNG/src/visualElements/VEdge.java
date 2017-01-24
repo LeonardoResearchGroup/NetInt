@@ -10,10 +10,9 @@ import graphElements.Edge;
 import processing.core.PVector;
 
 /**
- * The visual representation of a grahElements.Edge. Each VEdge has a source and
- * target VNodes corresponding to the visual representation of the instances of
- * grahElements.Node associated to the grahElements.Edge
- * 
+ * The visual representation of a grahElement.Edge. Each VEdge has a source and
+ * target instances of VNodes
+ *  
  * @author jsalam
  *
  */

@@ -146,8 +146,7 @@ public class GraphLoader {
 			}
 		};
 		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(inSubgraph);
-		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-				.transform(jungGraph);
+		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter.transform(jungGraph);
 		return problemGraph;
 
 	}

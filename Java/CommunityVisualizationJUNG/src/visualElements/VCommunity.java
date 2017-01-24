@@ -71,12 +71,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		this.container.initialize();
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
-			// Create edges that connect VNodes of this community with those of
-			// other communities
-			if (!externalEdgesBuilt) {
-				container.buildExternalEdges();
-				externalEdgesBuilt = true;
-			}
 			// If the layout is iterative
 			if (container.isCurrentLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
@@ -117,6 +111,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vC.show();
 					if (vC.comCover.isUnlocked() && !vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), false);
+						// Create edges that connect VNodes of this community with those of
+						// other communities
+						if (!vC.externalEdgesBuilt) {
+							vC.container.buildExternalEdges(this.container.getVCommunities());
+							vC.externalEdgesBuilt = true;
+						}
 						vC.lock = true;
 					}
 					if (!vC.comCover.isUnlocked() && vC.lock) {
