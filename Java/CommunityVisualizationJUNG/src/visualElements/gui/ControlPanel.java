@@ -146,8 +146,10 @@ public class ControlPanel extends PApplet {
 	 */
 	private void guiVinculos(Group group) {
 		// Control de visibilidad
-		cp5.addToggle("Vinculos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Vinculos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		cp5.addToggle("Vinculos int").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
+		cp5.getController("Vinculos int").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		cp5.addToggle("Vinculos ext").setPosition(5, 50).setSize(45, 10).setValue(true).moveTo(group);
+		cp5.getController("Vinculos ext").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
 				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(group);
@@ -361,9 +363,13 @@ public class ControlPanel extends PApplet {
 			break;
 
 		// **** EDGES ****
-		case "Vinculos":
-			Toggle vinculo = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setMostrarVinculos(vinculo.getBooleanValue());
+		case "Vinculos int":
+			Toggle vinculoInt = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setMostrarVinculosInt(vinculoInt.getBooleanValue());
+			break;
+		case "Vinculos ext":
+			Toggle vinculoExt = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setMostrarVinculosExt(vinculoExt.getBooleanValue());
 			break;
 		case "Vol. Transaccion":
 			UserSettings.getInstance().setVolTransaccion(theEvent.getValue());

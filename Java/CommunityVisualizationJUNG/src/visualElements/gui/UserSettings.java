@@ -15,7 +15,8 @@ public class UserSettings {
 	private String filtrosNodo;
 
 	// EDGE Visibility Settings
-	private boolean mostrarVinculos;
+	private boolean mostrarVinculosInt;
+	private boolean mostrarVinculosExt;
 	private float volTransaccion;
 	private float propagacion;
 	private boolean soloPropagacion;
@@ -84,8 +85,12 @@ public class UserSettings {
 		return mostrarNodos;
 	}
 
-	public boolean mostrarVinculos() {
-		return mostrarVinculos;
+	public boolean mostrarVinculosInt() {
+		return mostrarVinculosInt;
+	}
+	
+	public boolean mostrarVinculosExt() {
+		return mostrarVinculosExt;
 	}
 
 	public String getFiltrosNodo() {
@@ -257,8 +262,12 @@ public class UserSettings {
 
 	}
 
-	public void setMostrarVinculos(boolean booleanValue) {
-		mostrarVinculos = booleanValue;
+	public void setMostrarVinculosInt(boolean booleanValue) {
+		mostrarVinculosInt = booleanValue;
+	}
+	
+	public void setMostrarVinculosExt(boolean booleanValue) {
+		mostrarVinculosExt = booleanValue;
 	}
 	
 	public void setEventOnVSettings(boolean eventTriggered){

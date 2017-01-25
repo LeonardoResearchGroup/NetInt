@@ -148,7 +148,7 @@ public class VNode extends VisualAtom implements Serializable {
 	 */
 	public void show(boolean displayed) {
 		setVisibility(UserSettings.getInstance().getUmbralGrados());
-		// setDiameter(PApplet.map(node.getOutDegree(1), 1, 3000, 5, 100));
+		 setDiameter(PApplet.map(node.getOutDegree(1), 1, 3000, 5, 100));
 		// setDiameter(PApplet.map(1000, 1, 3000, 5, 100));
 		if (displayed && visible) {
 			// if this node is in the propagation chain

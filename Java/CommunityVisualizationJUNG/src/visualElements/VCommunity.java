@@ -113,9 +113,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						container.setIncidentEdgesVisibility(vC.getNode(), false);
 						// Create edges that connect VNodes of this community with those of
 						// other communities
-						if (!vC.externalEdgesBuilt) {
-							vC.container.buildExternalEdges(this.container.getVCommunities());
-							vC.externalEdgesBuilt = true;
+						if (!externalEdgesBuilt) {
+							container.buildExternalEdges();
+							//vC.container.buildExternalEdges(this.container.getVCommunities());
+							externalEdgesBuilt = true;
 						}
 						vC.lock = true;
 					}
@@ -155,7 +156,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 		// ** Display VEdges
 		// GUI
-		if (UserSettings.getInstance().mostrarVinculos()) {
+		// Internal Edges
+		if (UserSettings.getInstance().mostrarVinculosInt()) {
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
 				// Show internal edges
@@ -169,6 +171,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					}
 					vE.show();
 				}
+			}
+		}
+		// External edges
+		if (UserSettings.getInstance().mostrarVinculosExt()) {
+			// VCommunity open and it is not being modified by the user
+			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
 				// Show external edges
 				for (VEdge vEE : container.getVExtEdges()) {
 					// If the edge has any attribute
@@ -186,6 +194,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vEE.show();
 				}
 			}
+			
 		}
 	}
 
