@@ -141,7 +141,7 @@ public abstract class Container {
 	 * Build all the external edges of vCommunities contained in a deployed
 	 * community
 	 */
-	public void buildExternalEdges() {
+	public void buildExternalEdges( ArrayList <VCommunity> otherVCommunities) {
 		
 //		for (VCommunity vC : otherCommunities){
 //			Container externalContainer = vC.container;
@@ -152,26 +152,45 @@ public abstract class Container {
 //				externalContainer.retrieveExternalVNodeSuccessors(this.rootGraph, this);
 //			}
 //		}
-		VCommunity A = null;
-		VCommunity B = null;
+//		VCommunity A = null;
+//		VCommunity B = null;
+//		// gel all VisualAtoms inside the container
+//		for (int i = 0; i < this.getVCommunities().size(); i++) {
+//			A = this.getVCommunities().get(i);
+//			A.container.initialize();
+//			for (int j = i + 1; j < this.getVCommunities().size(); j++) {
+//				B = this.getVCommunities().get(j);
+//				B.container.initialize();
+//				if (A != null && B != null) {
+//					if (!B.equals(A)) {
+//						System.out.println(this.getClass().getName() + this.getName() +" Building External Edges for Vnodes of : "
+//								+ A.getNode().getId() + " and " + B.getNode().getId());
+//						A.container.runExternalEdgeFactory(this.rootGraph, B.container.getName(), B.container);
+//						A.container.retrieveExternalVNodeSuccessors(this.rootGraph, B.container);
+//						B.container.retrieveExternalVNodeSuccessors(this.rootGraph, A.container);
+//					}
+//				}
+//			}
+//		}
+		
+		Container B = null;
 		// gel all VisualAtoms inside the container
-		for (int i = 0; i < this.getVCommunities().size(); i++) {
-			A = this.getVCommunities().get(i);
-			A.container.initialize();
-			for (int j = i + 1; j < this.getVCommunities().size(); j++) {
-				B = this.getVCommunities().get(j);
-				B.container.initialize();
-				if (A != null && B != null) {
-					if (!B.equals(A)) {
-						System.out.println(this.getClass().getName() + " Building External Edges for Vnodes of : "
-								+ A.getNode().getId() + " and " + B.getNode().getId());
-						A.container.runExternalEdgeFactory(this.rootGraph, B.container.getName(), B.container);
-						A.container.retrieveExternalVNodeSuccessors(this.rootGraph, B.container);
-						B.container.retrieveExternalVNodeSuccessors(this.rootGraph, A.container);
+		//for (int i = 0; i < this.getVCommunities().size(); i++) {
+			//A = this.getVCommunities().get(i);
+			initialize();
+			for (int j = 0; j < otherVCommunities.size(); j++) {
+				B = otherVCommunities.get(j).container;
+				B.initialize();
+				if (B != null) {
+					if (!B.equals(this)) {
+						System.out.println(this.getClass().getName() + " "+this.getName() +" is building External Edges for Vnodes with:" + B.getName());
+						this.runExternalEdgeFactory(this.rootGraph, B.getName(), B);
+						this.retrieveExternalVNodeSuccessors(this.rootGraph, B);
+						B.retrieveExternalVNodeSuccessors(this.rootGraph, this);
 					}
 				}
 			}
-		}
+		//}
 	}
 
 	/**
@@ -474,8 +493,7 @@ public abstract class Container {
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),
-				externalCommunityName);
+		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {

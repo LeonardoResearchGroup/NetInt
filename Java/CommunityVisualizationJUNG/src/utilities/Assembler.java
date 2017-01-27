@@ -103,8 +103,7 @@ public class Assembler {
 		return vCommunity;
 	}
 
-	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
-			ArrayList<String> communityNames, int layout) {
+	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph, ArrayList<String> communityNames, int layout) {
 		ArrayList<SubContainer> containers = new ArrayList<SubContainer>();
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		//
@@ -127,6 +126,7 @@ public class Assembler {
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
 			i++;
 			containerTemp.setName(communityName);
+			containerTemp.setRootGraph(graph);
 			// CommunityCover
 			String nodeID = communityName;
 			Node tmpNode = new Node(nodeID);

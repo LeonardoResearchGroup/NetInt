@@ -41,7 +41,8 @@ public class ControlPanel extends PApplet {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		logo = loadImage("../data/images/Logo_Bancolombia.png");
+		//logo = loadImage("../data/images/Logo_Bancolombia.png");
+		logo = loadImage("../data/images/Bank.png");
 		gui();
 		// Font
 		font = createFont("Arial", 11, false);
@@ -146,10 +147,10 @@ public class ControlPanel extends PApplet {
 	 */
 	private void guiVinculos(Group group) {
 		// Control de visibilidad
-		cp5.addToggle("Vinculos int").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Vinculos int").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		cp5.addToggle("Vinculos ext").setPosition(5, 50).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Vinculos ext").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		cp5.addToggle("Internos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
+		cp5.getController("Internos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(false).moveTo(group);
+		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
 				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(group);
@@ -184,7 +185,7 @@ public class ControlPanel extends PApplet {
 	public void draw() {
 		background(70);
 		// logo
-		fill(255);
+		fill(170);
 		rect(10, 2, 180, 48);
 		image(logo, 15, 5);
 		// This line updates the controller position. It can be controlled by
@@ -363,11 +364,11 @@ public class ControlPanel extends PApplet {
 			break;
 
 		// **** EDGES ****
-		case "Vinculos int":
+		case "Internos":
 			Toggle vinculoInt = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setMostrarVinculosInt(vinculoInt.getBooleanValue());
 			break;
-		case "Vinculos ext":
+		case "Externos":
 			Toggle vinculoExt = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setMostrarVinculosExt(vinculoExt.getBooleanValue());
 			break;

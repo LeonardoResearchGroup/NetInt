@@ -12,7 +12,7 @@ import processing.core.PVector;
 /**
  * The visual representation of a grahElement.Edge. Each VEdge has a source and
  * target instances of VNodes
- *  
+ * 
  * @author jsalam
  *
  */
@@ -31,8 +31,8 @@ public class VEdge implements Serializable {
 		this.edge = edge;
 		thickness = 1;
 	}
-	
-	public VEdge(VNode source, VNode target){
+
+	public VEdge(VNode source, VNode target) {
 		this.edge = new Edge(source.getNode(), target.getNode(), true);
 		this.source = source;
 		this.target = target;
@@ -82,9 +82,10 @@ public class VEdge implements Serializable {
 	public void show() {
 		int alpha = 150;
 		// If both source and target are above a visibility threshold
+//		 source.show(source.isDisplayed());
+//		 target.show(target.isDisplayed());
 		if (source.isVisible() && target.isVisible()) {
-			// source.show(source.isDisplayed());
-			// target.show(target.isDisplayed());
+
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
 			if (visibility) {

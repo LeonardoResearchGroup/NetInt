@@ -101,59 +101,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 */
 
 	public void showCommunityContents(boolean showNodes, boolean showEdges) {
-		// ** Display VNodes
-		if (UserSettings.getInstance().mostrarNodos()) {
-			// VCommunity open
-			if (showNodes) {
-				// VCommunities
-				for (VCommunity vC : container.getVCommunities()) {
-					vC.setVisibility(true);
-					vC.show();
-					if (vC.comCover.isUnlocked() && !vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), false);
-						// Create edges that connect VNodes of this community with those of
-						// other communities
-						if (!externalEdgesBuilt) {
-							container.buildExternalEdges();
-							//vC.container.buildExternalEdges(this.container.getVCommunities());
-							externalEdgesBuilt = true;
-						}
-						vC.lock = true;
-					}
-					if (!vC.comCover.isUnlocked() && vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), true);
-						vC.lock = false;
-					}
-				}
-				// VNodes
-				for (VNode vN : container.getJustVNodes()) {
-					vN.setVisibility(true);
-					if (vNodesCentered) {
-						// reset vNode coordinates to the coordinates
-						// assigned in the container's layout
-						PVector newOrigin = new PVector(container.getDimension().width / 2,
-								container.getDimension().height / 2);
-						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
-						vNodesCentered = true;
-					}
-					// If vN is visible and not centered
-					if (!vNodesCentered) {
-						vN.show(vN.isDisplayed());
-					}
-				}
-				vNodesCentered = false;
-			} else {
-				for (VisualAtom vA : container.getVNodes()) {
-					vA.pos.set(pos);
-					// We have to known which nodes are visible.
-					if (vA instanceof VNode) {
-						VNode vN = (VNode) vA;
-						vN.setDisplayed(false);
-					}
-				}
-				vNodesCentered = true;
-			}
-		}
 		// ** Display VEdges
 		// GUI
 		// Internal Edges
@@ -194,7 +141,61 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vEE.show();
 				}
 			}
-			
+
+		}
+		// ** Display VNodes
+		if (UserSettings.getInstance().mostrarNodos()) {
+			// VCommunity open
+			if (showNodes) {
+				// VCommunities
+				for (VCommunity vC : container.getVCommunities()) {
+					vC.setVisibility(true);
+					vC.show();
+					if (vC.comCover.isUnlocked() && !vC.lock) {
+						container.setIncidentEdgesVisibility(vC.getNode(), false);
+						// Create edges that connect VNodes of this community
+						// with those of
+						// other communities
+						if (!vC.externalEdgesBuilt) {
+							vC.container.buildExternalEdges(container.getVCommunities());
+							// vC.container.buildExternalEdges(this.container.getVCommunities());
+							vC.externalEdgesBuilt = true;
+						}
+						vC.lock = true;
+					}
+					if (!vC.comCover.isUnlocked() && vC.lock) {
+						container.setIncidentEdgesVisibility(vC.getNode(), true);
+						vC.lock = false;
+					}
+				}
+				// VNodes
+				for (VNode vN : container.getJustVNodes()) {
+					vN.setVisibility(true);
+					if (vNodesCentered) {
+						// reset vNode coordinates to the coordinates
+						// assigned in the container's layout
+						PVector newOrigin = new PVector(container.getDimension().width / 2,
+								container.getDimension().height / 2);
+						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+						vNodesCentered = true;
+					}
+					// If vN is visible and not centered
+					if (!vNodesCentered) {
+						vN.show(vN.isDisplayed());
+					}
+				}
+				vNodesCentered = false;
+			} else {
+				for (VisualAtom vA : container.getVNodes()) {
+					vA.pos.set(pos);
+					// We have to known which nodes are visible.
+					if (vA instanceof VNode) {
+						VNode vN = (VNode) vA;
+						vN.setDisplayed(false);
+					}
+				}
+				vNodesCentered = true;
+			}
 		}
 	}
 
