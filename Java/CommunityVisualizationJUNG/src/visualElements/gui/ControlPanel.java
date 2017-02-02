@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import controlP5.*;
 import executable.Executable;
+import graphElements.Edge;
 import visualElements.gui.UserSettings;
 
 /**
@@ -41,8 +42,8 @@ public class ControlPanel extends PApplet {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		//logo = loadImage("../data/images/Logo_Bancolombia.png");
-		logo = loadImage("../data/images/Bank.png");
+		logo = loadImage("../data/images/Logo_Bancolombia.png");
+		//logo = loadImage("../data/images/Bank.png");
 		gui();
 		// Font
 		font = createFont("Arial", 11, false);
@@ -152,8 +153,7 @@ public class ControlPanel extends PApplet {
 		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(false).moveTo(group);
 		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
-		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
-				.setRange(0, Mapper.getInstance().getMaxMin(Mapper.EDGE_WEIGHT)[1]).moveTo(group);
+		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, Mapper.getInstance().getMaxMin("Edge", "EdgeWeight")[1]).moveTo(group);
 		// Propagacion
 		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);

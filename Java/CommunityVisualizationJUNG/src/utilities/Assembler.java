@@ -138,12 +138,12 @@ public class Assembler {
 			vCommunities.add(communityTemp);
 
 			// // SET MAX & MIN COMMUNITY SIZE
-			if (communityTemp.container.getGraph()
-					.getVertexCount() > Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[1]) {
+			float[] maxMinCommunitySize = Mapper.getInstance().getMaxMin("Node", "CommunitySize");
+			
+			if (communityTemp.container.getGraph().getVertexCount() > maxMinCommunitySize[1]) {
 				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
 			}
-			if (communityTemp.container.getGraph()
-					.getVertexCount() < Mapper.getInstance().getMaxMin(Mapper.COMUNITY_SIZE)[0]) {
+			if (communityTemp.container.getGraph().getVertexCount() < maxMinCommunitySize[0]) {
 				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
 			}
 		}

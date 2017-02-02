@@ -1,5 +1,6 @@
 package utilities.mapping;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -18,6 +19,8 @@ import graphElements.Node;
  */
 public class CategoricalCollection {
 	private TreeMap<String, TreeSet<String>> attributes;
+	public static final String NODE = "Node";
+	public static final String EDGE = "Edge";
 
 	public CategoricalCollection() {
 		attributes = new TreeMap<String, TreeSet<String>>();
@@ -49,10 +52,28 @@ public class CategoricalCollection {
 		return false;
 	}
 
+	public void addCategoryAndValue(String key, String value) {
+		boolean categoryExists = false;
+		for (String k : attributes.keySet()) {
+			if (k.equals(key)) {
+				categoryExists = true;
+			}
+		}
+		if (!categoryExists) {
+			TreeSet<String> valueSet = new TreeSet<String>();
+			valueSet.add(value);
+			attributes.put(key, valueSet);
+		}
+	}
+
 	public void addValue(String key, String value) {
 		if (isCategorical(value)) {
 			// Get the corresponding treeSet
-			attributes.get(key).add(value);
+			try {
+				attributes.get(key).add(value);
+			} catch (NullPointerException np) {
+				addCategoryAndValue(key, value);
+			}
 		}
 	}
 
@@ -62,6 +83,27 @@ public class CategoricalCollection {
 
 	public Object[] getAttributeKeys() {
 		return attributes.keySet().toArray();
+	}
+
+	/**
+	 * Get the list of graph element attributes stores in this
+	 * NumericalCollection
+	 * 
+	 * @param GraphElementClassName
+	 *            The name of the graph element class. It must be either "Node"
+	 *            or "Edge"
+	 * @return
+	 */
+	public ArrayList<String> getAttributeKeys(String GraphElementClassName) {
+		ArrayList<String> classElementAttributes = new ArrayList<String>();
+		Object[] attributes = getAttributeKeys();
+		for (int i = 0; i < attributes.length; i++) {
+			String tmp = (String) attributes[i];
+			if (tmp.startsWith(GraphElementClassName))
+				classElementAttributes.add(tmp);
+
+		}
+		return classElementAttributes;
 	}
 
 	public boolean collectionInitialized() {

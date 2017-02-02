@@ -1,12 +1,11 @@
 package utilities.mapping;
 
-import graphElements.Edge;
 import graphElements.GraphElement;
-import graphElements.Node;
 import processing.core.PApplet;
 
 /**
  * Singleton pattern
+ * 
  * @author jsalam
  *
  */
@@ -14,38 +13,19 @@ import processing.core.PApplet;
 public class Mapper {
 
 	// ATTRIBUTE
-	public static final int COMUNITY_SIZE = 1;
-	public static final int EDGE_WEIGHT = 2;
-	public static final int EDGE_DENSITY = 3;
-	public static final int IN_DEGREE = 4;
-	public static final int OUT_DEGREE = 5;
-	public static final int BETWENESS = 6;
+	private int minCommunitySize;
+	private int maxCommunitySize;
+	public static final String NODE = "Node";
+	public static final String EDGE = "Edge";
 	// FILTER
 	public static final String LINEAR = "linear";
 	public static final String SINUSOIDAL = "sinusoidal";
 	public static final String LOGARITMIC = "logarithmic";
 	public static final String RADIAL = "radial";
 	public static final String SIGMOID = "sigmoid";
-	// MAXs & MINs edges
-	public NumericalCollection edgeAttributesMin, edgeAttributesMax;
-	public CategoricalCollection edgeCategoricalAttributes;
-	// MAXs & MINs nodes
-	public NumericalCollection nodeAttributesMin, nodeAttributesMax;
-	public CategoricalCollection nodeCategoricalAttributes;
-
-	private int minCommunitySize;
-	private int maxCommunitySize;
-
-	private float minEdgeWeight;
-	private float maxEdgeWeight;
-	private int minEdgeDensity;
-	private int maxEdgeDensity;
-	private int minInDegree;
-	private int maxInDegree;
-	private int minOutDegree;
-	private int maxOutDegree;
-	private float minBetweeness;
-	private float maxBetweeness;
+	// MAXs & MINs nodes and edges
+	public NumericalCollection attributesMin, attributesMax;
+	public CategoricalCollection categoricalAttributes;
 
 	// Other attributes for sigmoid filter
 	private float alpha = 1;
@@ -64,6 +44,8 @@ public class Mapper {
 	}
 
 	/**
+	 * @param element
+	 *            any instance of Node or Edge
 	 * @param filter
 	 *            filter name
 	 * @param val
@@ -73,23 +55,23 @@ public class Mapper {
 	 * @param graphAttribute
 	 * @return the value mapped equals to a number between 0 and 1 X factor
 	 */
-	public float convert(String filter, float val, float factor, int graphAttribute) {
+	public float convert(String filter, float val, float factor, String graphElementClassName, String graphAttribute) {
 		float rtn = -1;
 		switch (filter) {
 		case "linear":
-			rtn = linear(val, getMaxMin(graphAttribute));
+			rtn = linear(val, getMaxMin(graphElementClassName, graphAttribute));
 			break;
 		case "sinusoidal":
-			rtn = sinusoidal(val, getMaxMin(graphAttribute));
+			rtn = sinusoidal(val, getMaxMin(graphElementClassName, graphAttribute));
 			break;
 		case "logarithmic":
 			rtn = log(val);
 			break;
 		case "radial":
-			rtn = radial(val, getMaxMin(graphAttribute));
+			rtn = radial(val, getMaxMin(graphElementClassName, graphAttribute));
 			break;
 		case "sigmoid":
-			rtn = sigmoid(val, getMaxMin(graphAttribute));
+			rtn = sigmoid(val, getMaxMin(graphElementClassName, graphAttribute));
 			break;
 		}
 		rtn = rtn * factor;
@@ -103,48 +85,33 @@ public class Mapper {
 	}
 
 	/**
-	 * @param graphAttribute
-	 *            Static attribute of the class
+	 * Returns the min and max value of a graph element. The attribute is
+	 * retrieved from a NumericalCollection that stores attributes in a TreeMap.
+	 * The keys of the TreeMap are the concatenation of two Strings:
+	 * graphElementClassName + AttributeName. For example the weight of an edge
+	 * is stored with the key EdgeWeight
+	 * 
+	 * @param graphElementClassName
+	 *            Either "Node" or "Edge". Note: Always Capitalize the parameter
+	 * @param attributeName
+	 *            The attribute of either a node or edge. Example "Weight",
+	 *            "Degree", "InDegree". Note: Always Capitalize the parameter
 	 * @return Array of floats [0] min, [1] max
 	 */
-	public float[] getMaxMin(int graphAttribute) {
+	public float[] getMaxMin(String graphElementClassName, String attributeName) {
 		float[] rtn = new float[2];
-		switch (graphAttribute) {
-		// COMUNITY_SIZE = 1;
-		case 1:
-			rtn[0] = minCommunitySize;
-			rtn[1] = maxCommunitySize;
-			break;
-		// EDGE_WEIGHT = 2;
-		case 2:
-			rtn[0] = minEdgeWeight;
-			rtn[1] = maxEdgeWeight;
-			break;
-		// EDGE_DENSITY = 3;
-		case 3:
-			rtn[0] = minEdgeDensity;
-			rtn[1] = maxEdgeDensity;
-			break;
-		// IN_DEGREE = 4;
-		case 4:
-			rtn[0] = minInDegree;
-			rtn[1] = maxInDegree;
-			break;
-		// OUT_DEGREE = 5;
-		case 5:
-			rtn[0] = minOutDegree;
-			rtn[1] = maxOutDegree;
-			break;
-		// BETWENESS = 6;
-		case 6:
-			rtn[0] = minBetweeness;
-			rtn[1] = maxBetweeness;
-			break;
+		String elementAttribute = null;
+		try {
+			 elementAttribute = graphElementClassName.concat(attributeName);
+			rtn[0] = attributesMin.getValueofAttribute(elementAttribute);
+			rtn[1] = attributesMax.getValueofAttribute(elementAttribute);
+		} catch (NullPointerException e) {
+			System.out.println(this.getClass().getName() + "> wrong attribute name: " + elementAttribute + " at getMaxMin()");
 		}
-
 		if (rtn[0] == rtn[1]) {
-//			System.out.println(this.getClass().getName() + "> getMaxMin(): graphAttribute '" + graphAttribute
-//					+ "' not implemented. MinMax set to [0,5]");
+			// System.out.println(this.getClass().getName() + ">
+			// getMaxMin():graphAttribute '" + attributeName
+			// + "' not implemented. MinMax set to [0,5]");
 			rtn[0] = 0;
 			rtn[1] = 5;
 		}
@@ -331,75 +298,196 @@ public class Mapper {
 	}
 
 	// ***** Setters
-	/**
-	 * Sets the min and max value stored in a collection of attributes related
-	 * to nodes. It initializes the collection if attributes in case it is equal
-	 * to null
-	 * 
-	 * @param node
-	 */
-	public void setMaxMinNodeAttributes(Node node) {
-		// if the min and max collections are not initialized
-		if (nodeAttributesMin == null) {
-			// min values
-			nodeAttributesMin = new NumericalCollection();
-			nodeAttributesMin.initialize(node);
-			// max values
-			nodeAttributesMax = new NumericalCollection();
-			nodeAttributesMax.initialize(node);
-			// categorical values
-			nodeCategoricalAttributes = new CategoricalCollection();
-			nodeCategoricalAttributes.initialize(node);
-		} else {
-			// Go over all the attributes of this node
-			for (int i = 0; i < node.getAttributeKeys().length; i++) {
-				// For each attribute key get its value
-				String key = (String) node.getAttributeKeys()[i];
-				Object value = node.getAttribute(key);
-				// Determine the data type of value
-				try {
-					if (value instanceof Double) {
-						// If Double convert to float
-						Double rtnObj = (Double) value;
-						Float attrFloat = rtnObj.floatValue();
-						// Add min value
-						nodeAttributesMin.addLowerValue(key, attrFloat);
-						// Add max value
-						nodeAttributesMax.addHigherValue(key, attrFloat);
-					} else if (value instanceof Integer) {
-						// If Integer
-						Integer attrInteger = (Integer) value;
-						Float attrFloat = attrInteger.floatValue();
-						// Add min value
-						nodeAttributesMin.addLowerValue(key, attrFloat);
-						// Add max value
-						nodeAttributesMax.addHigherValue(key, attrFloat);
-					} else if (value instanceof Float) {
-						// If Float
-						Float attrFloat = (Float) value;
-						// Add min value
-						nodeAttributesMin.addLowerValue(key, attrFloat);
-						// Add max value
-						nodeAttributesMax.addHigherValue(key, attrFloat);
-					} else if (value instanceof String) {
-						// If String
-						String attrString = (String) value;
-						// Store the value in a TreeSet of categorical values
-						// for that attribute/key
-						nodeCategoricalAttributes.addValue(key, attrString);
-					} else {
-						throw new Exception();
-					}
-				} catch (Exception e) {
-					System.out.println(this.getClass().getName() + " Node Attribute named: " + key
-							+ " does not match the available Mapper data type: Double,Float,Integer,String, or is null");
-				}
-			}
-
-		}
-
-	}
-
+//	/**
+//	 * Sets the min and max value stored in a collection of attributes related
+//	 * to nodes. It initializes the collection if attributes in case it is equal
+//	 * to null
+//	 * 
+//	 * @param node
+//	 */
+//	public void setMaxMinNodeAttributes(Node node) {
+//		// if the min and max collections are not initialized
+//		if (nodeAttributesMin == null) {
+//			// min values
+//			nodeAttributesMin = new NumericalCollection();
+//			nodeAttributesMin.initialize(node);
+//			// max values
+//			nodeAttributesMax = new NumericalCollection();
+//			nodeAttributesMax.initialize(node);
+//			// categorical values
+//			nodeCategoricalAttributes = new CategoricalCollection();
+//			nodeCategoricalAttributes.initialize(node);
+//		} else {
+//			// Go over all the attributes of this node
+//			for (int i = 0; i < node.getAttributeKeys().length; i++) {
+//				// For each attribute key get its value
+//				String key = (String) node.getAttributeKeys()[i];
+//				Object value = node.getAttribute(key);
+//				// Determine the data type of value
+//				try {
+//					if (value instanceof Double) {
+//						// If Double convert to float
+//						Double rtnObj = (Double) value;
+//						Float attrFloat = rtnObj.floatValue();
+//						// for the first time add the value in both main and max
+//						// collections
+//						if (nodeAttributesMin.getSize() == 0) {
+//							nodeAttributesMin.addLowerValue(key, attrFloat);
+//							nodeAttributesMax.addHigherValue(key, attrFloat);
+//						} else {
+//							// Add min value
+//							if (!nodeAttributesMin.addLowerValue(key, attrFloat)) {
+//								// if not added as min value then add it to max
+//								// value
+//								nodeAttributesMax.addHigherValue(key, attrFloat);
+//							}
+//						}
+//					} else if (value instanceof Integer) {
+//						// If Integer
+//						Integer attrInteger = (Integer) value;
+//						Float attrFloat = attrInteger.floatValue();
+//						// for the first time add the value in both main and max
+//						// collections
+//						if (nodeAttributesMin.getSize() == 0) {
+//							nodeAttributesMin.addLowerValue(key, attrFloat);
+//							nodeAttributesMax.addHigherValue(key, attrFloat);
+//						} else {
+//							// Add min value
+//							if (!nodeAttributesMin.addLowerValue(key, attrFloat)) {
+//								// if not added as min value then add it to max
+//								// value
+//								nodeAttributesMax.addHigherValue(key, attrFloat);
+//							}
+//						}
+//					} else if (value instanceof Float) {
+//						// If Float
+//						Float attrFloat = (Float) value;
+//						// for the first time add the value in both main and max
+//						// collections
+//						if (nodeAttributesMin.getSize() == 0) {
+//							nodeAttributesMin.addLowerValue(key, attrFloat);
+//							nodeAttributesMax.addHigherValue(key, attrFloat);
+//						} else {
+//							// Add min value
+//							if (!nodeAttributesMin.addLowerValue(key, attrFloat)) {
+//								// if not added as min value then add it to max
+//								// value
+//								nodeAttributesMax.addHigherValue(key, attrFloat);
+//							}
+//						}
+//					} else if (value instanceof String) {
+//						// If String
+//						String attrString = (String) value;
+//						// Store the value in a TreeSet of categorical values
+//						// for that attribute/key
+//						nodeCategoricalAttributes.addValue(key, attrString);
+//					} else {
+//						throw new Exception();
+//					}
+//				} catch (Exception e) {
+//					System.out.println(this.getClass().getName() + " Node Attribute named: " + key
+//							+ " does not match the available Mapper data type: Double,Float,Integer,String, or is null");
+//				}
+//			}
+//
+//		}
+//
+//	}
+//
+//	/**
+//	 * Sets the min and max value stored in a collection of attributes related
+//	 * to edges. It initializes the collection if attributes in case it is equal
+//	 * to null
+//	 * 
+//	 * @param edge
+//	 */
+//	public void setMaxMinEdgeAttributes(Edge edge) {
+//		// if the min and max collections are not initialized
+//		if (edgeAttributesMin == null) {
+//			// min values
+//			edgeAttributesMin = new NumericalCollection();
+//			edgeAttributesMin.initialize(edge);
+//			// max values
+//			edgeAttributesMax = new NumericalCollection();
+//			edgeAttributesMax.initialize(edge);
+//			// categorical values
+//			edgeCategoricalAttributes = new CategoricalCollection();
+//			edgeCategoricalAttributes.initialize(edge);
+//		} else {
+//			// Go over all the attributes of this edge
+//			for (int i = 0; i < edge.getAttributeKeys().length; i++) {
+//				// For each attribute key get its value
+//				String key = (String) edge.getAttributeKeys()[i];
+//				Object value = edge.getAttribute(key);
+//				// Determine the data type of value
+//				try {
+//					if (value instanceof Double) {
+//						// If Double convert to float
+//						Double rtnObj = (Double) value;
+//						Float attrFloat = rtnObj.floatValue();
+//						// for the first time add the value in both main and max
+//						// collections
+//						if (edgeAttributesMin.getSize() == 0) {
+//							edgeAttributesMin.addLowerValue(key, attrFloat);
+//							edgeAttributesMax.addHigherValue(key, attrFloat);
+//						} else {
+//							// Add min value
+//							if (!edgeAttributesMin.addLowerValue(key, attrFloat)) {
+//								// if not added as min value then add it to max
+//								// value
+//								edgeAttributesMax.addHigherValue(key, attrFloat);
+//							}
+//						}
+//					} else if (value instanceof Integer) {
+//						// If Integer
+//						Integer attrInteger = (Integer) value;
+//						Float attrFloat = attrInteger.floatValue();
+//						// for the first time add the value in both main and max
+//						// collections
+//						if (edgeAttributesMin.getSize() == 0) {
+//							edgeAttributesMin.addLowerValue(key, attrFloat);
+//							edgeAttributesMax.addHigherValue(key, attrFloat);
+//						} else {
+//							// Add min value
+//							if (!edgeAttributesMin.addLowerValue(key, attrFloat)) {
+//								// if not added as min value then add it to max
+//								// value
+//								edgeAttributesMax.addHigherValue(key, attrFloat);
+//							}
+//						}
+//					} else if (value instanceof Float) {
+//						// If Float
+//						Float attrFloat = (Float) value;
+//						// for the first time add the value in both main and max
+//						// collections
+//						if (edgeAttributesMin.getSize() == 0) {
+//							edgeAttributesMin.addLowerValue(key, attrFloat);
+//							edgeAttributesMax.addHigherValue(key, attrFloat);
+//						} else {
+//							// Add min value
+//							if (!edgeAttributesMin.addLowerValue(key, attrFloat)) {
+//								// if not added as min value then add it to max
+//								// value
+//								edgeAttributesMax.addHigherValue(key, attrFloat);
+//							}
+//						}
+//					} else if (value instanceof String) {
+//						// If String
+//						String attrString = (String) value;
+//						// Store the value in a TreeSet of categorical values
+//						// for that attribute/key
+//						edgeCategoricalAttributes.addValue(key, attrString);
+//					} else {
+//						throw new NumberFormatException();
+//					}
+//				} catch (NumberFormatException e) {
+//					System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
+//							+ " does not match the available Mapper data type: Double,Float,Integer,String");
+//				}
+//			}
+//		}
+//	}
+	
 	/**
 	 * Sets the min and max value stored in a collection of attributes related
 	 * to edges. It initializes the collection if attributes in case it is equal
@@ -407,55 +495,82 @@ public class Mapper {
 	 * 
 	 * @param edge
 	 */
-	public void setMaxMinEdgeAttributes(Edge edge) {
+	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
 		// if the min and max collections are not initialized
-		if (edgeAttributesMin == null) {
+		if (attributesMin == null) {
 			// min values
-			edgeAttributesMin = new NumericalCollection();
-			edgeAttributesMin.initialize(edge);
+			attributesMin = new NumericalCollection();
+			attributesMin.initialize(gElem);
 			// max values
-			edgeAttributesMax = new NumericalCollection();
-			edgeAttributesMax.initialize(edge);
+			attributesMax = new NumericalCollection();
+			attributesMax.initialize(gElem);
 			// categorical values
-			edgeCategoricalAttributes = new CategoricalCollection();
-			edgeCategoricalAttributes.initialize(edge);
+			categoricalAttributes = new CategoricalCollection();
+			categoricalAttributes.initialize(gElem);
 		} else {
-			// Go over all the attributes of this edge
-			for (int i = 0; i < edge.getAttributeKeys().length; i++) {
+			// Go over all the attributes of this GraphElement
+			for (int i = 0; i < gElem.getAttributeKeys().length; i++) {
 				// For each attribute key get its value
-				String key = (String) edge.getAttributeKeys()[i];
-				Object value = edge.getAttribute(key);
+				String key = (String) gElem.getAttributeKeys()[i];
+				Object value = gElem.getAttribute(key);
 				// Determine the data type of value
 				try {
 					if (value instanceof Double) {
 						// If Double convert to float
 						Double rtnObj = (Double) value;
 						Float attrFloat = rtnObj.floatValue();
-						// Add min value
-						edgeAttributesMin.addLowerValue(key, attrFloat);
-						// Add max value
-						edgeAttributesMax.addHigherValue(key, attrFloat);
+						// for the first time add the value in both main and max
+						// collections
+						if (attributesMin.getSize() == 0) {
+							attributesMin.addLowerValue(key, attrFloat);
+							attributesMax.addHigherValue(key, attrFloat);
+						} else {
+							// Add min value
+							if (!attributesMin.addLowerValue(key, attrFloat)) {
+								// if not added as min value then add it to max
+								// value
+								attributesMax.addHigherValue(key, attrFloat);
+							}
+						}
 					} else if (value instanceof Integer) {
 						// If Integer
 						Integer attrInteger = (Integer) value;
 						Float attrFloat = attrInteger.floatValue();
-						// Add min value
-						edgeAttributesMin.addLowerValue(key, attrFloat);
-						// Add max value
-						edgeAttributesMax.addHigherValue(key, attrFloat);
+						// for the first time add the value in both main and max
+						// collections
+						if (attributesMin.getSize() == 0) {
+							attributesMin.addLowerValue(key, attrFloat);
+							attributesMax.addHigherValue(key, attrFloat);
+						} else {
+							// Add min value
+							if (!attributesMin.addLowerValue(key, attrFloat)) {
+								// if not added as min value then add it to max
+								// value
+								attributesMax.addHigherValue(key, attrFloat);
+							}
+						}
 					} else if (value instanceof Float) {
 						// If Float
 						Float attrFloat = (Float) value;
-						// Add min value
-						edgeAttributesMin.addLowerValue(key, attrFloat);
-						// Add max value
-						edgeAttributesMax.addHigherValue(key, attrFloat);
+						// for the first time add the value in both main and max
+						// collections
+						if (attributesMin.getSize() == 0) {
+							attributesMin.addLowerValue(key, attrFloat);
+							attributesMax.addHigherValue(key, attrFloat);
+						} else {
+							// Add min value
+							if (!attributesMin.addLowerValue(key, attrFloat)) {
+								// if not added as min value then add it to max
+								// value
+								attributesMax.addHigherValue(key, attrFloat);
+							}
+						}
 					} else if (value instanceof String) {
 						// If String
 						String attrString = (String) value;
 						// Store the value in a TreeSet of categorical values
 						// for that attribute/key
-						edgeCategoricalAttributes.addValue(key, attrString);
+						categoricalAttributes.addValue(key, attrString);
 					} else {
 						throw new NumberFormatException();
 					}
@@ -467,44 +582,20 @@ public class Mapper {
 		}
 	}
 
-	/**
-	 * Sets the min and max value stored in a collection of attributes related
-	 * to either Edges or Nodes. It initializes the collection if attributes in case it is equal
-	 * to null
-	 * 
-	 * @param edge
-	 */
-	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
-		if (gElem instanceof Node) {
-			setMaxMinNodeAttributes((Node) gElem);
-		} else if (gElem instanceof Edge) {
-			setMaxMinEdgeAttributes((Edge) gElem);
-		}
-	}
-
-	public void setMinOutDegree(int val) {
-		minOutDegree = val;
-	}
-
-	public void setMaxOutDegree(int val) {
-		maxOutDegree = val;
-	}
-
-	public void setMinEdgeWeight(int val) {
-		minEdgeWeight = val;
-	}
-
-	public void setMaxEdgeWeight(int val) {
-		maxEdgeWeight = val;
-	}
-
-	public void setMinInDegree(int val) {
-		minInDegree = val;
-	}
-
-	public void setMaxInDegree(int val) {
-		maxInDegree = val;
-	}
+//	/**
+//	 * Sets the min and max value stored in a collection of attributes related
+//	 * to either Edges or Nodes. It initializes the collection if attributes in
+//	 * case it is equal to null
+//	 * 
+//	 * @param edge
+//	 */
+//	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
+//		if (gElem instanceof Node) {
+//			setMaxMinNodeAttributes((Node) gElem);
+//		} else if (gElem instanceof Edge) {
+//			setMaxMinEdgeAttributes((Edge) gElem);
+//		}
+//	}
 
 	public void setMinCommunitySize(int val) {
 		this.minCommunitySize = val;
@@ -512,11 +603,6 @@ public class Mapper {
 
 	public void setMaxCommunitySize(int val) {
 		this.maxCommunitySize = val;
-	}
-
-	public void setSigmoidAlphaBeta(float alpha, float beta) {
-		this.alpha = alpha;
-		this.beta = beta;
 	}
 
 }

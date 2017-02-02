@@ -1,5 +1,6 @@
 package utilities.mapping;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -14,6 +15,8 @@ import graphElements.GraphElement;
  */
 public class NumericalCollection {
 	private TreeMap<String, Float> attributes;
+	public static final String NODE = "Node";
+	public static final String EDGE = "Edge";
 
 	public NumericalCollection() {
 		attributes = new TreeMap<String, Float>();
@@ -46,16 +49,22 @@ public class NumericalCollection {
 		return false;
 	}
 
-	public void addLowerValue(String key, Float value) {
+	public boolean addLowerValue(String key, Float value) {
+		boolean rtn = false;
 		if (attributes.get(key) > value && isNumerical(value)) {
 			attributes.put(key, value);
+			rtn = true;
 		}
+		return rtn;
 	}
 
-	public void addHigherValue(String key, Float value) {
+	public boolean addHigherValue(String key, Float value) {
+		boolean rtn = false;
 		if (attributes.get(key) < value && isNumerical(value)) {
 			attributes.put(key, value);
+			rtn = true;
 		}
+		return rtn;
 	}
 
 	public Float getValueofAttribute(String key) {
@@ -64,6 +73,27 @@ public class NumericalCollection {
 
 	public Object[] getAttributeKeys() {
 		return attributes.keySet().toArray();
+	}
+
+	/**
+	 * Get the list of graph element attributes stores in this
+	 * NumericalCollection
+	 * 
+	 * @param GraphElementClassName
+	 *            The name of the graph element class. It must be either "Node"
+	 *            or "Edge"
+	 * @return
+	 */
+	public ArrayList<String> getAttributeKeys(String GraphElementClassName) {
+		ArrayList<String> classElementAttributes = new ArrayList<String>();
+		Object[] attributes = getAttributeKeys();
+		for (int i = 0; i < attributes.length; i++) {
+			String tmp = (String) attributes[i];
+			if (tmp.startsWith(GraphElementClassName))
+				classElementAttributes.add(tmp);
+
+		}
+		return classElementAttributes;
 	}
 
 	public boolean collectionInitialized() {

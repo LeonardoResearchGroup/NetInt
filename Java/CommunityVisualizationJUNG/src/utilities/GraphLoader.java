@@ -51,7 +51,6 @@ public class GraphLoader {
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
-
 	}
 
 	public ArrayList<String> getCommunityNames() {
@@ -63,7 +62,7 @@ public class GraphLoader {
 	 * 
 	 * @param graph
 	 */
-	public static void setNodesDegrees(Graph<Node, Edge> graph, Node n) {
+	private static void setNodesDegrees(Graph<Node, Edge> graph, Node n) {
 		// Degree. 0 because it is the root community
 		// Degree
 		n.setDegree(0, graph.degree(n));

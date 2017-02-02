@@ -111,7 +111,7 @@ public abstract class Container {
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
 			// Compute and set the diameter
-			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 10, Mapper.OUT_DEGREE);
+			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 10, "Node", "OutDegree");
 			if (diameter > tmp.getDiameter()) {
 				tmp.setDiameter(diameter);
 			}
