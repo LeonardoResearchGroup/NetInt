@@ -2,19 +2,17 @@ package graphElements;
 
 import java.io.Serializable;
 
-public class NodeMetadata implements Serializable{
+public class RelativeAttributes implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int inDegree, outDegree, degree;
-	private float Excentricity, Betweeness, size;
+	// The name of the community to which this set of attributes is associated with
 	private String communityName;
+	// Degrees
+	private int inDegree, outDegree, degree;
 	
-	public NodeMetadata(){
-//		inDegree = 0;
-//		outDegree = 0;
-//		degree = 0;
+	public RelativeAttributes(){
 	}
 	
 	public int getCommunityInDegree() {
@@ -41,29 +39,6 @@ public class NodeMetadata implements Serializable{
 		this.degree = degree;
 	}
 
-	public float getExcentricity() {
-		return Excentricity;
-	}
-
-	public void setExcentricity(float excentricity) {
-		Excentricity = excentricity;
-	}
-
-	public float getBetweeness() {
-		return Betweeness;
-	}
-
-	public void setBetweeness(float betweeness) {
-		Betweeness = betweeness;
-	}
-
-	public float getSize() {
-		return size;
-	}
-
-	public void setSize(float size) {
-		this.size = size;
-	}
 
 	public String getCommunityName() {
 		return communityName;

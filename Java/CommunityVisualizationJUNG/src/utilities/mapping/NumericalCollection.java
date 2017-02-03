@@ -15,8 +15,8 @@ import graphElements.GraphElement;
  */
 public class NumericalCollection {
 	private TreeMap<String, Float> attributes;
-	public static final String NODE = "Node";
-	public static final String EDGE = "Edge";
+	// public static final String NODE = "Node";
+	// public static final String EDGE = "Edge";
 
 	public NumericalCollection() {
 		attributes = new TreeMap<String, Float>();
@@ -49,18 +49,46 @@ public class NumericalCollection {
 		return false;
 	}
 
+	/**
+	 * Add a value to the HashMap if the key does not exists or if its current
+	 * associated value is higher to the passed parameter
+	 * 
+	 * @param key
+	 * @param value
+	 * @return true if the value is added
+	 */
 	public boolean addLowerValue(String key, Float value) {
 		boolean rtn = false;
-		if (attributes.get(key) > value && isNumerical(value)) {
+		if (attributes.containsKey(key)) {
+			if (attributes.get(key) > value && isNumerical(value)) {
+				attributes.put(key, value);
+				rtn = true;
+			}
+		} else {
 			attributes.put(key, value);
 			rtn = true;
 		}
+
 		return rtn;
 	}
 
+	/**
+	 * Add a value to the HashMap if the key does not exists or if its current
+	 * associated value is lower to the passed parameter
+	 * 
+	 * @param key
+	 * @param value
+	 * @return true if the value is added
+	 */
+
 	public boolean addHigherValue(String key, Float value) {
 		boolean rtn = false;
-		if (attributes.get(key) < value && isNumerical(value)) {
+		if (attributes.containsKey(key)) {
+			if (attributes.get(key) < value && isNumerical(value)) {
+				attributes.put(key, value);
+				rtn = true;
+			}
+		} else {
 			attributes.put(key, value);
 			rtn = true;
 		}

@@ -104,22 +104,18 @@ public class Assembler {
 	}
 
 	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph, ArrayList<String> communityNames, int layout) {
-		ArrayList<SubContainer> containers = new ArrayList<SubContainer>();
-		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
-		//
-		ArrayList<DirectedSparseMultigraph<Node, Edge>> subGraphs = new ArrayList<DirectedSparseMultigraph<Node, Edge>>();
 
-		boolean colorBlindSave = false;
-		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSave);
+		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+
+		boolean colorBlindSafe = false;
+		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
 
 		int i = 0;
-		Mapper.getInstance().setMinCommunitySize(graph.getVertexCount());
 		System.out.println(this.getClass().getName() + " Generating DirectedSparseMultigraph for "
 				+ communityNames.size() + " communities ...");
 		for (String communityName : communityNames) {
-
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
 			// SubContainers
@@ -132,23 +128,10 @@ public class Assembler {
 			Node tmpNode = new Node(nodeID);
 			tmpNode.setName(communityName);
 			VCommunity communityTemp = new VCommunity(tmpNode, containerTemp);
-			subGraphs.add(graphTemp);
-			containers.add(containerTemp);
 			communityTemp.setColor(myGradient[i - 1]);
 			vCommunities.add(communityTemp);
-
-			// // SET MAX & MIN COMMUNITY SIZE
-			float[] maxMinCommunitySize = Mapper.getInstance().getMaxMin("Node", "CommunitySize");
-			
-			if (communityTemp.container.getGraph().getVertexCount() > maxMinCommunitySize[1]) {
-				Mapper.getInstance().setMaxCommunitySize(communityTemp.container.getGraph().getVertexCount());
-			}
-			if (communityTemp.container.getGraph().getVertexCount() < maxMinCommunitySize[0]) {
-				Mapper.getInstance().setMinCommunitySize(communityTemp.container.getGraph().getVertexCount());
-			}
 		}
-		subGraphs = null;
-		containers = null;
+
 		return vCommunities;
 	}
 
@@ -162,11 +145,6 @@ public class Assembler {
 			VCommunity vC = (VCommunity) vN;
 			// add Nodes
 			graphTemp.addVertex(vC.getNode());
-			// add edges
-			/*
-			 * Edge compression will come here or inside the community
-			 * initializer
-			 */
 		}
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);

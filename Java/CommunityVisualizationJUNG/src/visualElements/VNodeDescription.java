@@ -54,7 +54,7 @@ public class VNodeDescription implements Serializable {
 				// If the map of descriptive stats has any true boolean
 				if (descriptiveStats.get(key)) {
 					shift = count * 12;
-					Canvas.app.text(descriptiveKeys.get(key) + ": "+vNode.getNode().getDescriptiveStatistics().get(key), vNode.pos.x + 5, vNode.pos.y - 125 - shift);
+					Canvas.app.text(descriptiveKeys.get(key) + ": "+vNode.getNode().getStringAttribute(key), vNode.pos.x + 5, vNode.pos.y - 125 - shift);
 					count++;
 				}
 			}

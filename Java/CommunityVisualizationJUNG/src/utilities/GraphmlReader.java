@@ -145,7 +145,7 @@ public class GraphmlReader {
 			for (String key : vertex.getPropertyKeys()) {
 				String keyLabel = UserSettings.getInstance().getDescriptiveKeys().get(key);
 				if (keyLabel != null) {
-					nodeTmp.getDescriptiveStatistics().put(key, (double) vertex.getProperty(key));
+					nodeTmp.setAttribute(key, (double) vertex.getProperty(key));
 				}
 			}
 			theNodes.put(id, nodeTmp);

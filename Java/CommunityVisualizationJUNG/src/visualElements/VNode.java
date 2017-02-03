@@ -186,6 +186,8 @@ public class VNode extends VisualAtom implements Serializable {
 				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
 				Canvas.app.fill(255, 0, 0);
 				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+				//***********
+				node.printAttributes();
 
 			} else {
 				if (propagationSource) {
@@ -220,6 +222,7 @@ public class VNode extends VisualAtom implements Serializable {
 		if (!displayed) {
 			setDisplayed(true);
 		}
+		
 	}
 
 	public boolean hasNode(Node node) {

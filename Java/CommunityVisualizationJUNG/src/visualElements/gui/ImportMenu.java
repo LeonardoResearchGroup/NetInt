@@ -22,9 +22,6 @@ import utilities.GraphLoader;
  */
 public class ImportMenu implements ControlListener {
 	public ControlP5 menu;
-	public int barHeight = 13;
-	public int barWidth = 170;
-	public int itemHeight = 13;
 	public int gap = 2;
 	public DropDownList nodeList, edgeList, layoutList, graphImportFormat;
 	public PApplet app;
