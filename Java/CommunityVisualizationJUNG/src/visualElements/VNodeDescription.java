@@ -10,6 +10,10 @@ import visualElements.gui.UserSettings;
 import processing.core.PConstants;
 
 public class VNodeDescription implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int width = 160;
 	private int height = -113;
 
@@ -32,6 +36,8 @@ public class VNodeDescription implements Serializable {
 			// Identification Data
 			Canvas.app.text("Name: " + vNode.getNode().getName(), vNode.pos.x + 5, vNode.pos.y - 5);
 			Canvas.app.text("ID: " + vNode.getNode().getId(), vNode.pos.x + 5, vNode.pos.y - 15);
+			Canvas.app.stroke(180,50);
+			Canvas.app.line(vNode.pos.x + 5, vNode.pos.y - 30, vNode.pos.x + 150, vNode.pos.y - 30);
 
 			// Communities data
 			Iterator<Integer> itr = vNode.getNode().getMetadataKeys().iterator();
@@ -40,26 +46,27 @@ public class VNodeDescription implements Serializable {
 			while (itr.hasNext()) {
 				int key = itr.next();
 				shift = count * 35;
-				Canvas.app.text("Com: " + vNode.getNode().getCommunity(key), vNode.pos.x + 5, vNode.pos.y - 65 - shift);
-				Canvas.app.text("in: " + vNode.getNode().getInDegree(key), vNode.pos.x + 5, vNode.pos.y - 55 - shift);
-				Canvas.app.text("out: " + vNode.getNode().getOutDegree(key), vNode.pos.x + 5, vNode.pos.y - 45 - shift);
+				Canvas.app.text("Com: " + vNode.getNode().getCommunity(key), vNode.pos.x + 5, vNode.pos.y - 60 - shift);
+				Canvas.app.text("in: " + vNode.getNode().getInDegree(key), vNode.pos.x + 5, vNode.pos.y - 50 - shift);
+				Canvas.app.text("out: " + vNode.getNode().getOutDegree(key), vNode.pos.x + 5, vNode.pos.y - 40 - shift);
 				count++;
 			}
 
+			Canvas.app.line(vNode.pos.x + 5, vNode.pos.y - 80 - shift, vNode.pos.x + 150, vNode.pos.y - 80 - shift);
+			
 			// Descriptive Statistics
 			HashMap<String, Boolean> descriptiveStats = UserSettings.getInstance().getDescriptiveStatistics();
-			HashMap<String, String> descriptiveKeys = UserSettings.getInstance().getDescriptiveKeys();
 			count = 0;
 			for (String key : descriptiveStats.keySet()) {
 				// If the map of descriptive stats has any true boolean
 				if (descriptiveStats.get(key)) {
 					shift = count * 12;
-					Canvas.app.text(descriptiveKeys.get(key) + ": "+vNode.getNode().getStringAttribute(key), vNode.pos.x + 5, vNode.pos.y - 125 - shift);
+					Canvas.app.text(key + ": "+vNode.getNode().getStringAttribute(key), vNode.pos.x + 5, vNode.pos.y - 125 - shift);
 					count++;
 				}
 			}
 			heightComplement = shift +20;
 		}
-		Canvas.app.textAlign(PConstants.CENTER, PConstants.TOP);
+		Canvas.app.textAlign(PConstants.CENTER,PConstants.CENTER);
 	}
 }

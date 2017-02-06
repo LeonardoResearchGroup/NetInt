@@ -26,7 +26,6 @@ public class UserSettings {
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
 
-
 	private HashMap<String, String> descriptiveKeys;
 	// It has the financial statements keys and their titles to show into
 	// VNodeDescriptions
@@ -54,8 +53,6 @@ public class UserSettings {
 	}
 
 	// ******* GETTERS *******
-	
-
 	public float getUmbralGrados() {
 		return umbralOutDegree;
 	}
