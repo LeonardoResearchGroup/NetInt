@@ -14,7 +14,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
-import utilities.mapping.Mapper;
 import visualElements.VCommunity;
 import visualElements.VNode;
 
@@ -68,13 +67,15 @@ public class Assembler {
 		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
 
 		// Setting root Container & Reporting progress
-		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "+ vSubSubCommunity.getNode().getId());
+		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
+				+ vSubSubCommunity.getNode().getId());
 		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
-		
+
 		// ********* EDGES BETWEEN COMMUNITIES
 		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
 		if (format == GraphLoader.PAJEK)
-			addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+			// addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
+			createEdgesBetweenSubcommunities(vSubCommunities);
 		else if (format == GraphLoader.GRAPHML) {
 			createEdgesBetweenSubcommunities(vSubCommunities);
 		}
@@ -103,7 +104,8 @@ public class Assembler {
 		return vCommunity;
 	}
 
-	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph, ArrayList<String> communityNames, int layout) {
+	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
+			ArrayList<String> communityNames, int layout) {
 
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 

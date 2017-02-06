@@ -49,7 +49,7 @@ public abstract class GraphElement implements Serializable {
 	public String getStringAttribute(String key) {
 		String rtn = "void";
 		try {
-			rtn = (String) absoluetAttributes.get(key);
+			rtn = absoluetAttributes.get(key).toString();
 		} catch (Exception e) {
 			System.out
 					.println(this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as String");

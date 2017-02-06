@@ -1,25 +1,19 @@
 package utilities;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.TreeMap;
 
 import utilities.mapping.Mapper;
-import visualElements.gui.UserSettings;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.Direction;
-//import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 
@@ -35,22 +29,20 @@ import graphElements.Edge;
  */
 public class GraphmlReader {
 	private Graph graph;
-	private ArrayList<Edge> edgesBetweenCommunities;
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> communityNodes;
 	private ArrayList<String> communities;
-	private ArrayList<String> graphKeys;
 
 	/**
 	 * Reader usually used to load pajek format files
 	 */
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
-		graphKeys = new ArrayList<String>();
 	}
 
 	/**
-	 * Reader used to read graphml file formats
+	 * Reader used to read graphml file formats. It receives the path to the
+	 * file, reads its contents and generates a Jung Graph
 	 * 
 	 * @param file
 	 *            The url to the source file
@@ -59,25 +51,10 @@ public class GraphmlReader {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
 		communities = new ArrayList<String>();
-		graphKeys = new ArrayList<String>();
 		InputStream input;
 		try {
 			input = new BufferedInputStream(new FileInputStream(file));
-			// This line reads the attributes from the source file and loads
-			// them into the graph object
 			reader.inputGraph(input);
-			// *** Read keys
-			String currentLine;
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			System.out.println(this.getClass().getName() + " Reading graphml Keys... ");
-			while ((currentLine = br.readLine()) != null) {
-				if (currentLine.startsWith("<key")) {
-					graphKeys.add(currentLine);
-				}
-			}
-			br.close();
-			// ***
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -141,12 +118,13 @@ public class GraphmlReader {
 					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 				}
 			}
-			// Check if some graphml key match with some financial statement key
+			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
-				String keyLabel = UserSettings.getInstance().getDescriptiveKeys().get(key);
-				if (keyLabel != null) {
-					nodeTmp.setAttribute(key, (double) vertex.getProperty(key));
-				}
+				// String keyLabel =
+				// UserSettings.getInstance().getDescriptiveKeys().get(key);
+				// if (keyLabel != null) {
+				nodeTmp.setAttribute(key, vertex.getProperty(key));
+				// }
 			}
 			theNodes.put(id, nodeTmp);
 		}
@@ -168,8 +146,6 @@ public class GraphmlReader {
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
 		System.out.println(this.getClass().getName() + " Getting Jung Directed Graph...");
-		// The collection of synthetic edges between communities
-		edgesBetweenCommunities = new ArrayList<Edge>();
 		// Hash map <Name of community, Node object of a community>
 		communityNodes = new HashMap<String, Node>();
 
@@ -212,12 +188,8 @@ public class GraphmlReader {
 			// Setting max min limits in Mapper class (Singleton
 			// pattern)
 			Mapper.getInstance().setMaxMinGraphElementAttributes(e);
+			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
-			Edge metaE = new Edge(communityNodes.get(nodes.get(idSource).getCommunity(1)),
-					communityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
-			if (!edgesBetweenCommunities.contains(metaE)) {
-				edgesBetweenCommunities.add(metaE);
-			}
 		}
 		return rtnGraph;
 	}
@@ -231,7 +203,7 @@ public class GraphmlReader {
 	 * @param node
 	 * @param nodeImportAttributes
 	 */
-	private void assignNodeAttributes(Vertex vertex, Node node, String[] nodeImportAttributes) {
+	public void assignNodeAttributes(Vertex vertex, Node node, String[] nodeImportAttributes) {
 		// For the first two attributes: node community and node name
 		try {
 			// Community key
@@ -267,65 +239,6 @@ public class GraphmlReader {
 	}
 
 	/**
-	 * Build a JungGraph from a pajek file.
-	 * 
-	 * @param filename
-	 * @return
-	 */
-	public DirectedSparseMultigraph<Node, Edge> readFromPajek(String filename) {
-
-		edgesBetweenCommunities = new ArrayList<Edge>();
-		// <Name of community, Node object of a community>
-		communityNodes = new HashMap<String, Node>();
-
-		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
-		try {
-			File file = new File(filename);
-			FileReader fr = new FileReader(file);
-			Scanner br = new Scanner(fr);
-
-			String token;
-			br.next();
-			token = br.next();
-			int numberOfNodes = Integer.parseInt(token);
-			Node[] nodes = new Node[numberOfNodes];
-
-			for (int i = 0; i < numberOfNodes; i++) {
-				token = br.next();
-				int idS = Integer.parseInt(token) - 1;
-				Node node = new Node(token);
-				node.setCommunity("Root", 0);
-				node.setCommunity(br.next(), 1);
-				addCommunity(node.getCommunity(1));
-				nodes[idS] = node;
-			}
-			System.out.println(br.next());
-			while (br.hasNext()) {
-				token = br.next();
-				// System.out.println(token);
-				int idS = Integer.parseInt(token) - 1;
-				token = br.next();
-				int idT = Integer.parseInt(token) - 1;
-				graphElements.Edge e = new graphElements.Edge(nodes[idS], nodes[idT], true);
-				rtnGraph.addEdge(e, nodes[idS], nodes[idT], EdgeType.DIRECTED);
-				// For the metagraph
-				Edge metaE = new Edge(communityNodes.get(nodes[idS].getCommunity(1)),
-						communityNodes.get(nodes[idT].getCommunity(1)), true);
-				if (!edgesBetweenCommunities.contains(metaE)) {
-					edgesBetweenCommunities.add(metaE);
-				}
-			}
-			br.close();
-			System.out.println("Cantidad de Vertices");
-			System.out.println(rtnGraph.getVertexCount());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return rtnGraph;
-	}
-
-	/**
 	 * ArrayList of community values obtained from the import file
 	 * 
 	 * @return
@@ -342,25 +255,47 @@ public class GraphmlReader {
 		}
 	}
 
-	public ArrayList<Edge> getEdgesBetweenCommunuties() {
-		return edgesBetweenCommunities;
+	/**
+	 * Looks for the equal node in the graph
+	 * 
+	 * @param graph
+	 * @param searchedNode
+	 * @return
+	 */
+	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node searchedNode) {
+		Node rtn = null;
+		for (Node node : graph.getVertices()) {
+			if (searchedNode.equals(node)) {
+				rtn = node;
+				return rtn;
+			}
+		}
+		return rtn;
 	}
 
 	/**
-	 * 
-	 * @param graph
-	 * @param lookingForNode
+	 * Return the list of all keys associated to vertex read from the graphml file
 	 * @return
 	 */
-	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node lookingForNode) {
-		Node nodo = null;
-		for (Node node : graph.getVertices()) {
-			if (lookingForNode.equals(node)) {
-				nodo = node;
-				return nodo;
-			}
+	public String[] getNodeGraphmlKeys() {
+		String[] rtn = null;
+		for (Vertex v : graph.getVertices()) {
+			v.getPropertyKeys().toArray(rtn);
+			return rtn;
 		}
-		return nodo;
+		return rtn;
 	}
-
+	
+	/**
+	 * Return the list of all keys associated to edges read from the graphml file
+	 * @return
+	 */
+	public String[] getEdgeGraphmlKeys() {
+		String[] rtn = null;
+		for (com.tinkerpop.blueprints.Edge e : graph.getEdges()) {
+			e.getPropertyKeys().toArray(rtn);
+			return rtn;
+		}
+		return rtn;
+	}
 }

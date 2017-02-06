@@ -1,14 +1,7 @@
 package visualElements.gui;
 
-import java.awt.Dimension;
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import controlP5.ControlP5;
-import executable.Executable;
 import processing.core.PApplet;
-import utilities.GraphLoader;
+
 
 /**
  * 

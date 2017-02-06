@@ -8,6 +8,8 @@ import utilities.mapping.Mapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import controlP5.*;
 import executable.Executable;
 import graphElements.Edge;
@@ -29,6 +31,12 @@ public class ControlPanel extends PApplet {
 	PImage logo;
 	// From NetInt: Java Network Interaction Visualization Library.
 	private final String EXTENSION = "nit";
+	// List of graphElements attribute names
+	ArrayList<String> keyNamesForNodes = new ArrayList<String>();
+	ArrayList<String> keyNamesForEdges = new ArrayList<String>();
+	// Groups
+	Group nodeKeys;
+	Group edgeKeys;
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -43,19 +51,22 @@ public class ControlPanel extends PApplet {
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
 		logo = loadImage("../data/images/Logo_Bancolombia.png");
-		//logo = loadImage("../data/images/Bank.png");
+		keyNamesForNodes.add("empty list");
+		keyNamesForEdges.add("empty list");
+		// logo = loadImage("../data/images/Bank.png");
 		gui();
 		// Font
 		font = createFont("Arial", 11, false);
 		textFont(font);
 	}
 
+
 	/**
 	 * Main GUI method that assembles all the GUI components
 	 */
 	public void gui() {
 		cp5 = new ControlP5(this);
-		
+
 		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color(0, 64)).setBackgroundHeight(420)
@@ -64,18 +75,18 @@ public class ControlPanel extends PApplet {
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g4 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		Group g5 = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
+		nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 
 		guiArchivo(g1);
 		guiBackground(g2);
 		guiNodos(g3);
 		guiVinculos(g4);
-		guiEstadisticasDescriptivas(g5);
+		guiEstadisticasDescriptivas(nodeKeys);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion = cp5.addAccordion("acc").setPosition(10, 55).setWidth(180).addItem(g1).addItem(g2).addItem(g3)
-				.addItem(g4).addItem(g5);
+				.addItem(g4).addItem(nodeKeys);
 
 		// open close sections
 		accordion.open(0, 2, 3, 4);
@@ -153,7 +164,8 @@ public class ControlPanel extends PApplet {
 		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(false).moveTo(group);
 		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
-		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, Mapper.getInstance().getMaxMin("Edge", "EdgeWeight")[1]).moveTo(group);
+		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
+				.setRange(0, Mapper.getInstance().getMaxMin("Edge", "EdgeWeight")[1]).moveTo(group);
 		// Propagacion
 		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
@@ -170,16 +182,15 @@ public class ControlPanel extends PApplet {
 	/**
 	 * GUI component related to descriptive statistics of clients
 	 * 
-	 * @param g4
+	 * @param group
 	 *            The Group of GUI elements
 	 */
 	private void guiEstadisticasDescriptivas(Group group) {
-		// Estadisticas descriptivas
-		cBox = cp5.addCheckBox("Estadisticas Descriptivas").setPosition(5, 7).addItem("WK/Activo Total", 1)
-				.addItem("Tamano", 1).addItem("Flujo de Caja/Pasivo Total", 1).addItem("Razon Corriente", 1)
-				.addItem("Tangibilidad", 1).addItem("Pasivo Total / Activo Total", 1).addItem("EBITDA/Intereses", 1)
-				.addItem("EBITDA/Ventas", 1).addItem("ROA", 1).addItem("ROE", 1).addItem("Crecimiento en Ventas", 1)
-				.moveTo(group);
+		cBox = cp5.addCheckBox("Estadisticas Nodos").setPosition(5, 7);
+		for (int i = 0; i < keyNamesForNodes.size(); i++) {
+			cBox.addItem(keyNamesForNodes.get(i), 1);
+		}
+		cBox.moveTo(group);
 	}
 
 	public void draw() {
@@ -202,7 +213,7 @@ public class ControlPanel extends PApplet {
 			}
 			// **** DESCRIPTIVE STATISTICS ****
 			if (theEvent.isFrom(cBox)) {
-				switchCaseCBox();
+				switchBooleans();
 			}
 		} else {
 			// **** All OTHER CONTROLLERS****
@@ -212,46 +223,14 @@ public class ControlPanel extends PApplet {
 		UserSettings.getInstance().setEventOnVSettings(true);
 	}
 
-	private void switchCaseCBox() {
+	private void switchBooleans() {
 		System.out.println("Control Panel> SwitchCaseCBox: ");
 		for (int i = 0; i < cBox.getArrayValue().length; i++) {
 			// get its Caption label
 			System.out.println("  " + cBox.getItem(i).getCaptionLabel().getText());
-			switch (cBox.getItem(i).getCaptionLabel().getText()) {
-			case "WK/Activo Total":
-				UserSettings.getInstance().setWKActivo(cBox.getItem(i).getState());
-				break;
-			case "Tamano":
-				UserSettings.getInstance().setTamano(cBox.getItem(i).getState());
-				break;
-			case "Flujo de Caja/Pasivo Total":
-				UserSettings.getInstance().setFlujoCajaPasivo(cBox.getItem(i).getState());
-				break;
-			case "Razon Corriente":
-				UserSettings.getInstance().setRazonCorriente(cBox.getItem(i).getState());
-				break;
-			case "Tangibilidad":
-				UserSettings.getInstance().setTangibilidad(cBox.getItem(i).getState());
-				break;
-			case "Pasivo Total / Activo Total":
-				UserSettings.getInstance().setPasivoActivo(cBox.getItem(i).getState());
-				break;
-			case "EBITDA/Intereses":
-				UserSettings.getInstance().setEBITDAIntereses(cBox.getItem(i).getState());
-				break;
-			case "EBITDA/Ventas":
-				UserSettings.getInstance().setEBITDAVentas(cBox.getItem(i).getState());
-				break;
-			case "ROA":
-				UserSettings.getInstance().setROA(cBox.getItem(i).getState());
-				break;
-			case "ROE":
-				UserSettings.getInstance().setROE(cBox.getItem(i).getState());
-				break;
-			case "Crecimiento en Ventas":
-				UserSettings.getInstance().setCrecimientoVentas(cBox.getItem(i).getState());
-				break;
-			}
+			String itemLabel = cBox.getItem(i).getCaptionLabel().getText();
+			boolean value = cBox.getItem(i).getState();
+			UserSettings.getInstance().setStatisticVisibility(itemLabel, value);
 		}
 	}
 
@@ -390,5 +369,14 @@ public class ControlPanel extends PApplet {
 			break;
 
 		}
+	}
+
+	public void setKeyNamesForNodes(ArrayList<String> keyNames) {
+		this.keyNamesForNodes = keyNames;
+		guiEstadisticasDescriptivas(nodeKeys);
+	}
+
+	public void setKeyNamesForEdges(ArrayList<String> keyNames) {
+		this.keyNamesForEdges = keyNames;
 	}
 }

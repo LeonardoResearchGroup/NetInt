@@ -15,8 +15,8 @@ import graphElements.GraphElement;
  */
 public class NumericalCollection {
 	private TreeMap<String, Float> attributes;
-	// public static final String NODE = "Node";
-	// public static final String EDGE = "Edge";
+	public static final String NODE = "Node";
+	public static final String EDGE = "Edge";
 
 	public NumericalCollection() {
 		attributes = new TreeMap<String, Float>();

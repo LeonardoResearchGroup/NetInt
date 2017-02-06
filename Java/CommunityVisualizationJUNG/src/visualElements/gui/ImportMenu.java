@@ -116,8 +116,7 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
-							layoutSelection, GraphLoader.GRAPHML);
+					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),layoutSelection, GraphLoader.GRAPHML);
 					Executable.activeGraph = true;
 
 				} else {

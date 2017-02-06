@@ -3,6 +3,7 @@ package executable;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -90,8 +91,10 @@ public class Executable extends PApplet {
 	}
 
 	/**
-	 * This method receive the graph file path and triggers an import process.
-	 * The import process consists of user selection of graph keys.
+	 * This method receives the graph file path and triggers an import process.
+	 * The import process follows the parameters chosen by the user from the import menu.
+	 * 
+	 * The method is invoked by showFileChooser() at the ChooseHelper class
 	 * 
 	 * @param selection
 	 */
@@ -100,6 +103,9 @@ public class Executable extends PApplet {
 		if (selection != null) {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
+			cFrame.setKeyNamesForNodes(reader.getKeyNamesForNodes());
+			//cFrame.setKeyNamesForEdges(reader.getKeyNamesForEdges());
+			UserSettings.getInstance().setDescriptiveStatisticKeys(reader.getKeyNamesForNodes());
 			// this creates and displays the menu
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));

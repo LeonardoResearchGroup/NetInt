@@ -36,7 +36,7 @@ public class GraphmlKeyReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(this.getClass().getName() + " Reading graphml completed");
+		System.out.println(this.getClass().getName() + " Reading graphml keys completed");
 	}
 
 	public GraphmlKeyReader(File file) {
@@ -57,6 +57,7 @@ public class GraphmlKeyReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println(this.getClass().getName() + " Reading graphml keys completed");
 	}
 
 	/**

@@ -13,12 +13,21 @@ import graphElements.Edge;
 import graphElements.Node;
 import utilities.mapping.Mapper;
 
-public class GraphLoader {
+/**
+ * PAJEK import changes made on feb 3. It has not ben tested.
+ * 
+ * @author jsalam
+ *
+ */
+public class GraphLoader{
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
-	public GraphmlReader reader;
+	public GraphmlReader GMLreader;
+	public PajekReader PJKreader;
 	public static final int PAJEK = 1;
 	public static final int GRAPHML = 0;
+	private int totalCommunities = 0;
+	private int fileFormat;
 
 	/**
 	 * @param file
@@ -30,17 +39,20 @@ public class GraphLoader {
 	 * @param format
 	 */
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
+		fileFormat = format;
 		if (format == GraphLoader.PAJEK) {
-			reader = new GraphmlReader();
-			jungGraph = reader.readFromPajek(file);
+			PJKreader = new PajekReader();
+			jungGraph = PJKreader.getGraph();
+			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
-			reader = new GraphmlReader(file);
-			jungGraph = reader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
+			GMLreader = new GraphmlReader(file);
+			jungGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
+			totalCommunities = GMLreader.getCommunities().size();
 		}
 		System.out.println(this.getClass().getName() + " Jung Graph Created from file:" + file);
 		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
 		System.out.println("   Total Edges in the graph: " + jungGraph.getEdgeCount());
-		System.out.println(this.getClass().getName() + " " + reader.getCommunities().size() + " communities loaded");
+		System.out.println(this.getClass().getName() + " " + totalCommunities + " communities loaded");
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
 		for (Node n : jungGraph.getVertices()) {
@@ -54,7 +66,13 @@ public class GraphLoader {
 	}
 
 	public ArrayList<String> getCommunityNames() {
-		return reader.getCommunities();
+		if (fileFormat == GraphLoader.PAJEK) {
+			return PJKreader.getCommunities();
+		} else if (fileFormat == GraphLoader.GRAPHML) {
+			return GMLreader.getCommunities();
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -132,7 +150,9 @@ public class GraphLoader {
 	 * @param comumnity2
 	 * @return
 	 */
-	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities( DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,final String communityNameB) {
+	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
+			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,
+			final String communityNameB) {
 
 		Predicate<Edge> inSubgraph = new Predicate<Edge>() {
 			public boolean evaluate(Edge edge) {
@@ -145,7 +165,8 @@ public class GraphLoader {
 			}
 		};
 		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(inSubgraph);
-		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter.transform(jungGraph);
+		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+				.transform(jungGraph);
 		return problemGraph;
 
 	}
