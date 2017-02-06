@@ -17,6 +17,7 @@ import processing.core.PVector;
  *
  */
 public class VEdge implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Edge edge;
 	// Visibility attributes
 	private boolean visibility, hidden;

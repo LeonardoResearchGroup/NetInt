@@ -6,11 +6,7 @@ import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 
-import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Robot;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import containers.Container;
 import graphElements.Node;

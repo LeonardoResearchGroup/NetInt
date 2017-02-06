@@ -157,6 +157,7 @@ public class Mapper {
 		return y;
 	}
 
+	// Sigmoid mapping
 	/**
 	 * The interval [minOut,maxOut] determines the target range of the new
 	 * values. \alpha defines the width of the input intensity range, and \beta
@@ -197,6 +198,7 @@ public class Mapper {
 		return p;
 	}
 
+	// Logarithmic mapping
 	/**
 	 * Logarithm base 10
 	 * 
@@ -209,9 +211,9 @@ public class Mapper {
 	}
 
 	/**
-	 * This method serves to convert a number between 0 and 1 to a given scale
-	 * defined by it lower and higher boundaries. It is mainly used to draw
-	 * widgets of the mapping filter
+	 * This method serves to normalize a number to a given scale defined by its
+	 * lower and higher boundaries. It is mainly used to draw widgets of the
+	 * mapping filter
 	 * 
 	 * @param val
 	 *            the value to be converted between 0 and 1
@@ -304,57 +306,64 @@ public class Mapper {
 	 * @param edge
 	 */
 	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
+
 		// if the min and max collections are not initialized
 		if (attributesMin == null) {
 			// min values
 			attributesMin = new NumericalCollection();
 			attributesMin.initialize(gElem);
+		}
+		if (attributesMax == null) {
 			// max values
 			attributesMax = new NumericalCollection();
 			attributesMax.initialize(gElem);
+		}
+		if (categoricalAttributes == null) {
 			// categorical values
 			categoricalAttributes = new CategoricalCollection();
 			categoricalAttributes.initialize(gElem);
-		} else {
+		}
+		// If all collections are initialized
+		if (attributesMin.getSize() > 0 && attributesMax.getSize() > 0 && categoricalAttributes.getSize() > 0) {
 			// Go over all the attributes of this GraphElement
 			for (int i = 0; i < gElem.getAttributeKeys().length; i++) {
 				// For each attribute key get its value
 				String key = (String) gElem.getAttributeKeys()[i];
 				Object value = gElem.getAttribute(key);
 				// Determine the data type of value
-				try {
-					if (value instanceof Double) {
-						// If Double convert to float
-						Double rtnObj = (Double) value;
-						Float attrFloat = rtnObj.floatValue();
-						attributesMin.addLowerValue(key, attrFloat);
-						attributesMax.addHigherValue(key, attrFloat);
-
-					} else if (value instanceof Integer) {
-						// If Integer
-						Integer attrInteger = (Integer) value;
-						Float attrFloat = attrInteger.floatValue();
-							attributesMin.addLowerValue(key, attrFloat);
-							attributesMax.addHigherValue(key, attrFloat);
-							
-					} else if (value instanceof Float) {
-						// If Float
-						Float attrFloat = (Float) value;
+				if (NumericalCollection.isNumerical(value)) {
+					try {
+						if (value instanceof Double) {
+							// If Double convert to float
+							Double rtnObj = (Double) value;
+							Float attrFloat = rtnObj.floatValue();
 							attributesMin.addLowerValue(key, attrFloat);
 							attributesMax.addHigherValue(key, attrFloat);
 
-					} else if (value instanceof String) {
-						// If String
-						String attrString = (String) value;
-						// Store the value in a TreeSet of categorical values
-						// for that attribute/key
-						categoricalAttributes.addValue(key, attrString);
-					} else {
-						throw new NumberFormatException();
+						} else if (value instanceof Integer) {
+							// If Integer
+							Integer attrInteger = (Integer) value;
+							Float attrFloat = attrInteger.floatValue();
+							attributesMin.addLowerValue(key, attrFloat);
+							attributesMax.addHigherValue(key, attrFloat);
+
+						} else if (value instanceof Float) {
+							// If Float
+							Float attrFloat = (Float) value;
+							attributesMin.addLowerValue(key, attrFloat);
+							attributesMax.addHigherValue(key, attrFloat);
+
+						} else {
+							throw new NumberFormatException();
+						}
+					} catch (NumberFormatException e) {
+						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
+								+ " does not match the available Mapper data type: Double,Float,Integer");
 					}
-				} catch (NumberFormatException e) {
-					System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
-							+ " does not match the available Mapper data type: Double,Float,Integer,String");
+				} else if (value instanceof String) {
+					// If String store the value in a TreeSet of categorical
+					// values for that attribute/key
+					categoricalAttributes.addValue(key, value.toString());
 				}
 			}
 		}

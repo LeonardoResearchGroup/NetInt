@@ -38,7 +38,7 @@ public class NumericalCollection {
 		}
 	}
 
-	private boolean isNumerical(Object value) {
+	public static boolean isNumerical(Object value) {
 		if (value instanceof Double) {
 			return true;
 		} else if (value instanceof Integer) {

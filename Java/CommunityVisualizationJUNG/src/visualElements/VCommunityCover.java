@@ -6,6 +6,8 @@ import containers.Container;
 import processing.core.PConstants;
 
 public class VCommunityCover implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	// The community was clicked to be opened
 	private boolean unlocked;
 	// The community was completely open

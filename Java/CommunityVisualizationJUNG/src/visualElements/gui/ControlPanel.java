@@ -60,7 +60,6 @@ public class ControlPanel extends PApplet {
 		textFont(font);
 	}
 
-
 	/**
 	 * Main GUI method that assembles all the GUI components
 	 */
@@ -224,10 +223,8 @@ public class ControlPanel extends PApplet {
 	}
 
 	private void switchBooleans() {
-		System.out.println("Control Panel> SwitchCaseCBox: ");
 		for (int i = 0; i < cBox.getArrayValue().length; i++) {
 			// get its Caption label
-			System.out.println("  " + cBox.getItem(i).getCaptionLabel().getText());
 			String itemLabel = cBox.getItem(i).getCaptionLabel().getText();
 			boolean value = cBox.getItem(i).getState();
 			UserSettings.getInstance().setStatisticVisibility(itemLabel, value);
@@ -245,7 +242,6 @@ public class ControlPanel extends PApplet {
 		switch (theEvent.getController().getName()) {
 
 		case "Abrir":
-
 			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, EXTENSION);
 
 			try {

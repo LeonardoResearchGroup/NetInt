@@ -10,6 +10,8 @@ import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 
 public class VNode extends VisualAtom implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private Node node;
 	// This variable is used to control if a given attribute is below or above a
 	// visibility threshold
@@ -152,7 +154,6 @@ public class VNode extends VisualAtom implements Serializable {
 		 if (getDiameter() > 50){
 			 setDiameter(60);
 		 }
-		// setDiameter(PApplet.map(1000, 1, 3000, 5, 100));
 		if (displayed && visible) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {
@@ -164,8 +165,6 @@ public class VNode extends VisualAtom implements Serializable {
 					Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
 				}
 			} else {
-				// regular color
-				// canvas.app.fill(getColorRGB());
 				// UserSettings contains all the visibility settings
 				// defined by the user in the control panel
 				if (UserSettings.getInstance().mostrarNombre()) {

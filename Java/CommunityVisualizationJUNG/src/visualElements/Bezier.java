@@ -30,7 +30,7 @@ public class Bezier {
 	private Color tailColor = new Color(232, 20, 23);
 	private Color propagated = new Color(250, 0, 0);
 	// The default angle of control points
-	private double direction, chord = Double.NEGATIVE_INFINITY;
+	private double direction = Double.NEGATIVE_INFINITY;
 	private double controlInclination = Math.PI / 2;
 	private PVector containerCenter;
 	private int containerLayout = -1;
@@ -143,8 +143,6 @@ public class Bezier {
 		double X = (Math.cos(angle + inc)) * sagitta;
 		double Y = (Math.sin(angle + inc)) * sagitta;
 		PVector rtn = new PVector((float) X, (float) Y);
-		// System.out.println("angle: " + angle + " inclination: " + inc + "
-		// sagitta:" + sagitta);
 		return rtn.add(origin);
 	}
 
@@ -154,7 +152,6 @@ public class Bezier {
 		double X = sagitta * Math.cos(angle + Math.PI);
 		double Y = sagitta * Math.sin(angle + Math.PI);
 		PVector rtn = new PVector((float) X, (float) Y);
-		// System.out.println("angle: " + angle + " center:" + center);
 		return rtn.add(origin);
 	}
 
