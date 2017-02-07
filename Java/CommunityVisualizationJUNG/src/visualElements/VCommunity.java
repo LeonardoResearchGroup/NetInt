@@ -38,7 +38,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected boolean containsSearchedNode = false;
 
 	private boolean vNodesCentered = true;
-	private boolean externalEdgesBuilt = false;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.getDimension().width / 2, (float) container.getDimension().height / 2);
@@ -66,19 +65,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			setDisplayed(true);
-			// Set once coordinates for all elements inside the container
-			container.initialize();
-			// Build external Edges of VCommunities included in this
-			// VCommunity's container
-			if (!externalEdgesBuilt) {
+			// if coordinates for all elements inside the container are set
+			if (container.initialize()) {
+				// Build external Edges of VCommunities included in this
+				// VCommunity's container
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
+						// build external edges
 						vC.container.buildExternalEdges(container.getVCommunities());
-						/******************
-						 * The problem here is that this is a matrix of
-						 * booleans. it needs to control repetition of external
-						 * edge creation.
-						 ******************/
 					}
 				}
 			}
@@ -167,14 +161,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vC.show();
 					if (vC.comCover.isUnlocked() && !vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), false);
-						// Create edges that connect VNodes of this community
-						// with those of
-						// other communities
-						// if (!vC.externalEdgesBuilt) {
-						// //vC.container.buildExternalEdges(vC);
-						// vC.container.buildExternalEdges(container.getVCommunities());
-						// vC.externalEdgesBuilt = true;
-						// }
 						vC.lock = true;
 					}
 					if (!vC.comCover.isUnlocked() && vC.lock) {

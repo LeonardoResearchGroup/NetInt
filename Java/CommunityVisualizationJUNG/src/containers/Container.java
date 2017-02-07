@@ -43,24 +43,22 @@ public abstract class Container {
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
-	protected ArrayList<VCommunity> vCommunities;
-	// a subset of this collection's VNodes that are not VCommunity
-	protected ArrayList<VNode> justVNodes;
-	// Custom Layouts
-	public ArrayList<Arrangement> customLayouts;
-	protected String name = "no name";
-	// public Canvas canvas;
-	public PVector layoutCenter;
 
+	// Custom Layouts
+	protected String name = "no name";
+	public PVector layoutCenter;
 	public AbstractLayout<Node, Edge> layout;
-	private boolean initializationComplete = false;
 	public int currentLayout;
 	private Dimension dimension;
+
+	// Iteration gate control
+	private boolean initializationComplete = false;
+	public ArrayList<Container> betweenEdgeGates;
+	protected boolean done = false;
 
 	protected Color color;
 	protected int iterations;
 	protected final int MAX_ITERATIONS = 100;
-	protected boolean done = false;
 
 	// *** Constructor
 	public Container() {
@@ -73,8 +71,7 @@ public abstract class Container {
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
 		vExtEdges = new ArrayList<VEdge>();
-		vCommunities = new ArrayList<VCommunity>();
-		justVNodes = new ArrayList<VNode>();
+		betweenEdgeGates = new ArrayList<Container>();
 	}
 
 	/**
@@ -82,7 +79,7 @@ public abstract class Container {
 	 * user clicks (opens) on the vCommunity cover
 	 * 
 	 */
-	public void initialize() {
+	public boolean initialize() {
 		if (!initializationComplete) {
 			System.out.println(this.getClass().getName() + " Initializing nodes in: " + getName());
 			distributeNodesInLayout(currentLayout, dimension);
@@ -99,6 +96,7 @@ public abstract class Container {
 			}
 			initializationComplete = true;
 		}
+		return initializationComplete;
 	}
 
 	// *** Factories
@@ -143,15 +141,28 @@ public abstract class Container {
 	 * community
 	 */
 	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
-		Container B = null;
-		for (int j = 0; j < otherVCommunities.size(); j++) {
-			B = otherVCommunities.get(j).container;
-			if (!B.equals(this) && B.initializationComplete) {
-				System.out.println(this.getClass().getName() + " " + this.getName()
-						+ " is building External Edges for Vnodes with:" + B.getName());
-				this.runExternalEdgeFactory(this.rootGraph, B.getName(), B);
-				this.retrieveExternalVNodeSuccessors(this.rootGraph, B);
-				B.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+		// For all otherCommunities
+		for (VCommunity vC : otherVCommunities) {
+			// See if this community's container has created betweenEdges with
+			// any of them
+			if (!betweenEdgeGates.contains(vC.container)) {
+				Container otherContainer = vC.container;
+				// See if otherCommunity's container has created betweenEdges
+				// with this container
+				if (!otherContainer.betweenEdgeGates.contains(this)) {
+					// If the containers are not the same and are initialized
+					if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
+						System.out.println(this.getClass().getName() + " " + this.getName()
+								+ " is building External Edges for Vnodes with:" + otherContainer.getName());
+						this.runExternalEdgeFactory(this.rootGraph, otherContainer.getName(), otherContainer);
+						this.retrieveExternalVNodeSuccessors(this.rootGraph, otherContainer);
+						otherContainer.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+						// Mark gates as closed for this community
+						betweenEdgeGates.add(otherContainer);
+						// Mark gates as closed for otherCommunity
+						otherContainer.betweenEdgeGates.add(this);
+					}
+				}
 			}
 		}
 	}
@@ -160,15 +171,24 @@ public abstract class Container {
 	 * Build all the external edges of this container with the one of a deployed
 	 * community community
 	 */
-	public void buildExternalEdges(VCommunity otherVCommunity) {
-		Container B = otherVCommunity.container;
-		if (B.initializationComplete) {
-			if (!B.equals(this)) {
-				System.out.println(this.getClass().getName() + " " + this.getName()
-						+ " is building External Edges for Vnodes with:" + B.getName());
-				this.runExternalEdgeFactory(this.rootGraph, B.getName(), B);
-				this.retrieveExternalVNodeSuccessors(this.rootGraph, B);
-				B.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+	public void buildExternalEdges(VCommunity otherVCommunity) {	
+		if (!betweenEdgeGates.contains(otherVCommunity.container)) {
+			Container otherContainer = otherVCommunity.container;
+			// See if otherCommunity's container has created betweenEdges
+			// with this container
+			if (!otherContainer.betweenEdgeGates.contains(this)) {
+				// If the containers are not the same and are initialized
+				if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
+					System.out.println(this.getClass().getName() + " " + this.getName()
+							+ " is building External Edges for Vnodes with:" + otherContainer.getName());
+					this.runExternalEdgeFactory(this.rootGraph, otherContainer.getName(), otherContainer);
+					this.retrieveExternalVNodeSuccessors(this.rootGraph, otherContainer);
+					otherContainer.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+					// Mark gates as closed for this community
+					betweenEdgeGates.add(otherContainer);
+					// Mark gates as closed for otherCommunity
+					otherContainer.betweenEdgeGates.add(this);
+				}
 			}
 		}
 	}
@@ -243,8 +263,7 @@ public abstract class Container {
 	public void remakeVisualElements() {
 		vNodes.clear();
 		vEdges.clear();
-		vCommunities.clear();
-		justVNodes.clear();
+		betweenEdgeGates.clear();
 		runNodeFactory();
 		runEdgeFactory();
 	}
@@ -275,10 +294,6 @@ public abstract class Container {
 			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
 			tmp.setVNodeSuccessors(extContainer.getVNodes(nodes));
 		}
-	}
-
-	public void setArrangement(Arrangement arg) {
-		customLayouts.add(arg);
 	}
 
 	// *** Layouts
@@ -361,6 +376,7 @@ public abstract class Container {
 	 * @return
 	 */
 	public ArrayList<VCommunity> getVCommunities() {
+		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		// This process is made one once
 		if (vCommunities.size() == 0) {
 			for (VNode vN : vNodes) {
@@ -379,6 +395,7 @@ public abstract class Container {
 	 * @return
 	 */
 	public ArrayList<VNode> getJustVNodes() {
+		ArrayList<VNode> justVNodes = new ArrayList<VNode>();
 		// This process is made one once
 		if (justVNodes.size() == 0) {
 			justVNodes = new ArrayList<VNode>(getVNodes());
