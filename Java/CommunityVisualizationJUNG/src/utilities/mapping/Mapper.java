@@ -1,5 +1,6 @@
 package utilities.mapping;
 
+
 import graphElements.GraphElement;
 import processing.core.PApplet;
 
@@ -85,27 +86,26 @@ public class Mapper {
 	/**
 	 * Returns the min and max value of a graph element. The attribute is
 	 * retrieved from a NumericalCollection that stores attributes in a TreeMap.
-	 * The keys of the TreeMap are the concatenation of two Strings:
-	 * graphElementClassName + AttributeName. For example the weight of an edge
+	 * The keys of the TreeMap are the concatenation of the following Strings:
+	 * graphElementClassName + "_" + AttributeName. For example the weight of an edge
 	 * is stored with the key EdgeWeight
 	 * 
-	 * @param graphElementClassName
+	 * @param eitherNodeOrEdge
 	 *            Either "Node" or "Edge". Note: Always Capitalize the parameter
 	 * @param attributeName
-	 *            The attribute of either a node or edge. Example "Weight",
-	 *            "Degree", "InDegree". Note: Always Capitalize the parameter
+	 *            The attribute of either a node or edge. Example "weight",
+	 *            "degree", "inDegree"
 	 * @return Array of floats [0] min, [1] max
 	 */
 	public float[] getMaxMin(String graphElementClassName, String attributeName) {
 		float[] rtn = new float[2];
 		String elementAttribute = null;
 		try {
-			elementAttribute = graphElementClassName.concat(attributeName);
+			elementAttribute = graphElementClassName + "_" +attributeName;
 			rtn[0] = attributesMin.getValueofAttribute(elementAttribute);
 			rtn[1] = attributesMax.getValueofAttribute(elementAttribute);
 		} catch (NullPointerException e) {
-			System.out.println(
-					this.getClass().getName() + "> wrong attribute name: " + elementAttribute + " at getMaxMin()");
+			System.out.println(this.getClass().getName() + "> wrong attribute name: " + elementAttribute + " at getMaxMin()");
 		}
 		if (rtn[0] == rtn[1]) {
 			// System.out.println(this.getClass().getName() + ">
@@ -306,31 +306,28 @@ public class Mapper {
 	 * @param edge
 	 */
 	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
-
 		// if the min and max collections are not initialized
 		if (attributesMin == null) {
 			// min values
 			attributesMin = new NumericalCollection();
-			attributesMin.initialize(gElem);
 		}
 		if (attributesMax == null) {
 			// max values
 			attributesMax = new NumericalCollection();
-			attributesMax.initialize(gElem);
 		}
 		if (categoricalAttributes == null) {
 			// categorical values
 			categoricalAttributes = new CategoricalCollection();
-			categoricalAttributes.initialize(gElem);
 		}
 		// If all collections are initialized
-		if (attributesMin.getSize() > 0 && attributesMax.getSize() > 0 && categoricalAttributes.getSize() > 0) {
+		if (attributesMin.getSize() >= 0 && attributesMax.getSize() >= 0 && categoricalAttributes.getSize() >= 0) {
 			// Go over all the attributes of this GraphElement
 			for (int i = 0; i < gElem.getAttributeKeys().length; i++) {
 				// For each attribute key get its value
 				String key = (String) gElem.getAttributeKeys()[i];
 				Object value = gElem.getAttribute(key);
 				// Determine the data type of value
+				key = gElem.getClass().getSimpleName() + "_" +key;
 				if (NumericalCollection.isNumerical(value)) {
 					try {
 						if (value instanceof Double) {
@@ -357,8 +354,7 @@ public class Mapper {
 							throw new NumberFormatException();
 						}
 					} catch (NumberFormatException e) {
-						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
-								+ " does not match the available Mapper data type: Double,Float,Integer");
+						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key + " does not match the available Mapper data type: Double,Float,Integer");
 					}
 				} else if (value instanceof String) {
 					// If String store the value in a TreeSet of categorical

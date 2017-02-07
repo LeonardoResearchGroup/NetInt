@@ -20,9 +20,9 @@ import visualElements.VNode;
 public class Assembler {
 
 	// Visual Communities
-	// private VCommunity vMainCommunity;
-	public static VCommunity vSubSubCommunity;
-	public static ArrayList<VCommunity> vSubCommunities;
+    // private VCommunity rootVCommunity;
+	public static VCommunity firstOrderVCommunity;
+	public static ArrayList<VCommunity> secondOrderVCommunities;
 	// These Dimensions set the RootContainer and top SubContainer boundaries
 	public Dimension rootDimension;
 	public static Dimension HD720 = new Dimension(1280, 720);
@@ -58,33 +58,34 @@ public class Assembler {
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, format);
 		// Root visual community. Keep it commented unless you want to visualize
 		// the graph with no partitions!!!!
-		// vMainCommunity = createRootVisualCommunity(rootGraph.jungGraph);
+		// rootVCommunity = createRootVCommunity(rootGraph.jungGraph);
 
-		// Sub communities
-		vSubCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
+		// List of Sub Communities
+		System.out.println(this.getClass().getName() + " Retrieving the list of second order VCommunities ");
+		secondOrderVCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
 
 		// Community of communities
-		vSubSubCommunity = createCommunityOfvCommunities(vSubCommunities, "SubSubcommunities", layout);
+		System.out.println(this.getClass().getName() + " Adding second order VCommunities to first order  VCommunity ");
+		firstOrderVCommunity = createCommunityOfvCommunities(secondOrderVCommunities, "FirstOrderCommunity", layout);
 
 		// Setting root Container & Reporting progress
-		System.out.println(this.getClass().getName() + " Setting RootGraph to container of: "
-				+ vSubSubCommunity.getNode().getId());
-		vSubSubCommunity.container.setRootGraph(rootGraph.jungGraph);
+		//System.out.println(this.getClass().getName() + " Setting RootGraph to container of: " + firstOrderVCommunity.getNode().getId());
+		firstOrderVCommunity.container.setRootGraph(rootGraph.jungGraph);
 
 		// ********* EDGES BETWEEN COMMUNITIES
 		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
 		if (format == GraphLoader.PAJEK)
 			// addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
-			createEdgesBetweenSubcommunities(vSubCommunities);
+			createEdgesBetweenSubcommunities(secondOrderVCommunities);
 		else if (format == GraphLoader.GRAPHML) {
-			createEdgesBetweenSubcommunities(vSubCommunities);
+			createEdgesBetweenSubcommunities(secondOrderVCommunities);
 		}
 		System.out.println(this.getClass().getName() + " All edges between communities created");
 
 		// Create edges & reporting progress
 		// Reporting progress
 		System.out.println(this.getClass().getName() + " Running edge factory ...");
-		vSubSubCommunity.container.runEdgeFactory();
+		firstOrderVCommunity.container.runEdgeFactory();
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class Assembler {
 	 * @param graph
 	 * @return
 	 */
-	public VCommunity createRootVisualCommunity(Graph<Node, Edge> graph) {
+	public VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, rootDimension);
 		mainCommunity.setName("Root");
@@ -104,19 +105,14 @@ public class Assembler {
 		return vCommunity;
 	}
 
-	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,
-			ArrayList<String> communityNames, int layout) {
-
+	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,ArrayList<String> communityNames, int layout) {
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
-
 		boolean colorBlindSafe = false;
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
-
 		int i = 0;
-		System.out.println(this.getClass().getName() + " Generating DirectedSparseMultigraph for "
-				+ communityNames.size() + " communities ...");
+		System.out.println(this.getClass().getName() + "  Generating DirectedSparseMultigraph for "+ communityNames.size() + " communities ...");
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
@@ -133,16 +129,14 @@ public class Assembler {
 			communityTemp.setColor(myGradient[i - 1]);
 			vCommunities.add(communityTemp);
 		}
-
 		return vCommunities;
 	}
 
-	private VCommunity createCommunityOfvCommunities(ArrayList<VCommunity> communities, String communityName,
-			int layout) {
+	private VCommunity createCommunityOfvCommunities(ArrayList<VCommunity> communities, String communityName, int layout) {
 		// Make a temporary graph
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 		System.out.println(
-				this.getClass().getName() + " Creating Community of vCommunities for community: " + communityName);
+				this.getClass().getName() + "  Creating Community of vCommunities for community: " + communityName);
 		for (VNode vN : communities) {
 			VCommunity vC = (VCommunity) vN;
 			// add Nodes
@@ -150,14 +144,14 @@ public class Assembler {
 		}
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
-		System.out.println(this.getClass().getName() + " SubContainer: " + communityName + " created");
+		System.out.println(this.getClass().getName() + "  SubContainer: " + communityName + " created");
 		subContainer.setName(communityName);
-		System.out.println(this.getClass().getName() + " Assigning visual elements to nodes");
+		System.out.println(this.getClass().getName() + "  Assigning visual elements to nodes");
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
 		// CommunityCover
 		String nodeID = communityName + "_" + String.valueOf(0);
-		System.out.println(this.getClass().getName() + " Making VCommunity for: " + communityName);
+		System.out.println(this.getClass().getName() + "  Making VCommunity for: " + communityName);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 		return communityTemp;
 	}
@@ -172,11 +166,12 @@ public class Assembler {
 		// Pick each element of the community collection
 		for (int i = 0; i < communities.size(); i++) {
 			// Compare with other members of the community collection
+			VCommunity communityA = communities.get(i);
+			System.out.println(this.getClass().getName() + "  Creating between edges for community: " + communityA.getNode().getName());
 			for (int j = i + 1; j < communities.size(); j++) {
-				VCommunity communityA = communities.get(i);
 				VCommunity communityB = communities.get(j);
 				// get a temporary graph
-				graphInter = GraphLoader.filterByInterCommunities(vSubSubCommunity.container.rootGraph,
+				graphInter = GraphLoader.filterByInterCommunities(firstOrderVCommunity.container.rootGraph,
 						communityA.container.getName(), communityB.container.getName());
 				if (graphInter.getEdgeCount() >= 1) {
 					// Create a new edge
@@ -186,7 +181,7 @@ public class Assembler {
 					// communities
 					e.setAttribute("TotalEdges", graphInter.getEdgeCount());
 					// Add the edge to the container
-					vSubSubCommunity.container.getGraph().addEdge(e, communityA.getNode(), communityB.getNode(),
+					firstOrderVCommunity.container.getGraph().addEdge(e, communityA.getNode(), communityB.getNode(),
 							EdgeType.DIRECTED);
 				}
 			}
@@ -194,8 +189,8 @@ public class Assembler {
 		// Update attributes of the community nodes
 		for (int i = 0; i < communities.size(); i++) {
 			Node n = communities.get(i).getNode();
-			int successors = vSubSubCommunity.container.getGraph().getSuccessorCount(n);
-			int predecessors = vSubSubCommunity.container.getGraph().getPredecessorCount(n);
+			int successors = firstOrderVCommunity.container.getGraph().getSuccessorCount(n);
+			int predecessors = firstOrderVCommunity.container.getGraph().getPredecessorCount(n);
 			n.setCommunity("CommunityLink", 1);
 			n.setOutDegree(1, successors);
 			n.setInDegree(1, predecessors);
@@ -209,19 +204,19 @@ public class Assembler {
 	 */
 	private void addEdgesBetweenSubcommunities(ArrayList<Edge> edgesBetweenCommunities) {
 		for (Edge e : edgesBetweenCommunities) {
-			vSubSubCommunity.container.getGraph().addEdge(e, e.getSource(), e.getTarget());
+			firstOrderVCommunity.container.getGraph().addEdge(e, e.getSource(), e.getTarget());
 		}
 
 	}
 
 	public void show() {
-		// vMainCommunity.show();
-		vSubSubCommunity.show();
-		vSubSubCommunity.searchNode();
+		//rootVCommunity.show();
+		firstOrderVCommunity.show();
+		firstOrderVCommunity.searchNode();
 	}
 
 	public ArrayList<VCommunity> getVisualCommunities() {
-		return vSubCommunities;
+		return secondOrderVCommunities;
 	}
 
 }

@@ -63,10 +63,26 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void show() {
 		// Display the community cover
 		comCover.show(container, this, containsSearchedNode);
-		// Set once coordinates for all elements inside the container
-		this.container.initialize();
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
+			setDisplayed(true);
+			// Set once coordinates for all elements inside the container
+			container.initialize();
+			// Build external Edges of VCommunities included in this
+			// VCommunity's container
+			if (!externalEdgesBuilt) {
+				for (VCommunity vC : container.getVCommunities()) {
+					if (vC.comCover.isDeployed()) {
+						vC.container.buildExternalEdges(container.getVCommunities());
+						/******************
+						 * The problem here is that this is a matrix of
+						 * booleans. it needs to control repetition of external
+						 * edge creation.
+						 ******************/
+					}
+				}
+			}
+
 			// If the layout is iterative
 			if (container.isCurrentLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
@@ -76,6 +92,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				// If layout not iterative show nodes and edges
 				showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
 			}
+		} else {
+			setDisplayed(false);
 		}
 		// Move vCommunity to mouse position if right button is pressed
 		if (isMouseOver && rightPressed) {
@@ -152,11 +170,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						// Create edges that connect VNodes of this community
 						// with those of
 						// other communities
-						if (!vC.externalEdgesBuilt) {
-							vC.container.buildExternalEdges(container.getVCommunities());
-							// vC.container.buildExternalEdges(this.container.getVCommunities());
-							vC.externalEdgesBuilt = true;
-						}
+						// if (!vC.externalEdgesBuilt) {
+						// //vC.container.buildExternalEdges(vC);
+						// vC.container.buildExternalEdges(container.getVCommunities());
+						// vC.externalEdgesBuilt = true;
+						// }
 						vC.lock = true;
 					}
 					if (!vC.comCover.isUnlocked() && vC.lock) {

@@ -126,6 +126,8 @@ public class GraphmlReader {
 				nodeTmp.setAttribute(key, vertex.getProperty(key));
 				// }
 			}
+			// Setting max min limits in Mapper class (Singleton pattern)
+		//	Mapper.getInstance().setMaxMinGraphElementAttributes(nodeTmp);
 			theNodes.put(id, nodeTmp);
 		}
 		return theNodes;
@@ -176,9 +178,7 @@ public class GraphmlReader {
 						} else
 							throw new NullPointerException();
 					} catch (NullPointerException exception) {
-						System.out.println(this.getClass().getName()
-								+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
-								+ edgeImportAttributes[i]);
+						System.out.println(this.getClass().getName() + " Null Pointer Exception. Edges in the source file don't have attributes named: " + edgeImportAttributes[i]);
 					}
 				}
 			} else {

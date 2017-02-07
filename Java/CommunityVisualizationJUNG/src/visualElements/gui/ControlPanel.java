@@ -163,8 +163,7 @@ public class ControlPanel extends PApplet {
 		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(false).moveTo(group);
 		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
-		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10)
-				.setRange(0, Mapper.getInstance().getMaxMin("Edge", "EdgeWeight")[1]).moveTo(group);
+		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
 		// Propagacion
 		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
@@ -251,13 +250,13 @@ public class ControlPanel extends PApplet {
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
 
 				Executable.activeGraph = false;
-				Assembler.vSubCommunities = deserializedWrapper.getvSubCommunities();
-				for (visualElements.VCommunity com : Assembler.vSubCommunities) {
+				Assembler.secondOrderVCommunities = deserializedWrapper.getvSubCommunities();
+				for (visualElements.VCommunity com : Assembler.secondOrderVCommunities) {
 					com.eventRegister(parent);
 				}
-				Assembler.vSubSubCommunity = deserializedWrapper.getvSubSubCommunity();
-				Assembler.vSubSubCommunity.eventRegister(parent);
-				Assembler.vSubSubCommunity.container.runEdgeFactory();
+				Assembler.firstOrderVCommunity = deserializedWrapper.getvSubSubCommunity();
+				Assembler.firstOrderVCommunity.eventRegister(parent);
+				Assembler.firstOrderVCommunity.container.runEdgeFactory();
 				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
 				Executable.activeGraph = true;
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
@@ -283,7 +282,7 @@ public class ControlPanel extends PApplet {
 				// Executable.activeCursor = Executable.CURSOR_WAIT;
 				parent.cursor(WAIT);
 
-				SerializeWrapper wrapper = new SerializeWrapper(Assembler.vSubSubCommunity, Assembler.vSubCommunities,
+				SerializeWrapper wrapper = new SerializeWrapper(Assembler.firstOrderVCommunity, Assembler.secondOrderVCommunities,
 						UserSettings.getInstance());
 
 				try {

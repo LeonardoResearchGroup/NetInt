@@ -39,10 +39,12 @@ public abstract class Container {
 	protected Graph<Node, Edge> graph;
 	public DirectedSparseMultigraph<Node, Edge> rootGraph;
 	// Visual Elements
+	// All VNodes including VCommunities
 	protected ArrayList<VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
 	protected ArrayList<VCommunity> vCommunities;
+	// a subset of this collection's VNodes that are not VCommunity
 	protected ArrayList<VNode> justVNodes;
 	// Custom Layouts
 	public ArrayList<Arrangement> customLayouts;
@@ -79,7 +81,6 @@ public abstract class Container {
 	 * This method is used to distribute nodes in layout only once after the
 	 * user clicks (opens) on the vCommunity cover
 	 * 
-	 * @param initialize
 	 */
 	public void initialize() {
 		if (!initializationComplete) {
@@ -111,7 +112,7 @@ public abstract class Container {
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
 			// Compute and set the diameter
-			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 10, "Node", "OutDegree");
+			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), 10, "Node", "outDegree");
 			if (diameter > tmp.getDiameter()) {
 				tmp.setDiameter(diameter);
 			}
@@ -141,56 +142,35 @@ public abstract class Container {
 	 * Build all the external edges of vCommunities contained in a deployed
 	 * community
 	 */
-	public void buildExternalEdges( ArrayList <VCommunity> otherVCommunities) {
-		
-//		for (VCommunity vC : otherCommunities){
-//			Container externalContainer = vC.container;
-//			if(!externalContainer.equals(this)){
-//				System.out.println(this.getClass().getName() + " Building External Edges for Vnodes of container: " + name + " and " + externalContainer.name);
-//				runExternalEdgeFactory(this.rootGraph, externalContainer.getName(), externalContainer);
-//				retrieveExternalVNodeSuccessors(this.rootGraph, externalContainer);
-//				externalContainer.retrieveExternalVNodeSuccessors(this.rootGraph, this);
-//			}
-//		}
-//		VCommunity A = null;
-//		VCommunity B = null;
-//		// gel all VisualAtoms inside the container
-//		for (int i = 0; i < this.getVCommunities().size(); i++) {
-//			A = this.getVCommunities().get(i);
-//			A.container.initialize();
-//			for (int j = i + 1; j < this.getVCommunities().size(); j++) {
-//				B = this.getVCommunities().get(j);
-//				B.container.initialize();
-//				if (A != null && B != null) {
-//					if (!B.equals(A)) {
-//						System.out.println(this.getClass().getName() + this.getName() +" Building External Edges for Vnodes of : "
-//								+ A.getNode().getId() + " and " + B.getNode().getId());
-//						A.container.runExternalEdgeFactory(this.rootGraph, B.container.getName(), B.container);
-//						A.container.retrieveExternalVNodeSuccessors(this.rootGraph, B.container);
-//						B.container.retrieveExternalVNodeSuccessors(this.rootGraph, A.container);
-//					}
-//				}
-//			}
-//		}
-		
+	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
 		Container B = null;
-		// gel all VisualAtoms inside the container
-		//for (int i = 0; i < this.getVCommunities().size(); i++) {
-			//A = this.getVCommunities().get(i);
-			initialize();
-			for (int j = 0; j < otherVCommunities.size(); j++) {
-				B = otherVCommunities.get(j).container;
-				B.initialize();
-				if (B != null) {
-					if (!B.equals(this)) {
-						System.out.println(this.getClass().getName() + " "+this.getName() +" is building External Edges for Vnodes with:" + B.getName());
-						this.runExternalEdgeFactory(this.rootGraph, B.getName(), B);
-						this.retrieveExternalVNodeSuccessors(this.rootGraph, B);
-						B.retrieveExternalVNodeSuccessors(this.rootGraph, this);
-					}
-				}
+		for (int j = 0; j < otherVCommunities.size(); j++) {
+			B = otherVCommunities.get(j).container;
+			if (!B.equals(this) && B.initializationComplete) {
+				System.out.println(this.getClass().getName() + " " + this.getName()
+						+ " is building External Edges for Vnodes with:" + B.getName());
+				this.runExternalEdgeFactory(this.rootGraph, B.getName(), B);
+				this.retrieveExternalVNodeSuccessors(this.rootGraph, B);
+				B.retrieveExternalVNodeSuccessors(this.rootGraph, this);
 			}
-		//}
+		}
+	}
+
+	/**
+	 * Build all the external edges of this container with the one of a deployed
+	 * community community
+	 */
+	public void buildExternalEdges(VCommunity otherVCommunity) {
+		Container B = otherVCommunity.container;
+		if (B.initializationComplete) {
+			if (!B.equals(this)) {
+				System.out.println(this.getClass().getName() + " " + this.getName()
+						+ " is building External Edges for Vnodes with:" + B.getName());
+				this.runExternalEdgeFactory(this.rootGraph, B.getName(), B);
+				this.retrieveExternalVNodeSuccessors(this.rootGraph, B);
+				B.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+			}
+		}
 	}
 
 	/**
@@ -351,6 +331,10 @@ public abstract class Container {
 		return frLayout;
 	}
 
+	public boolean isInitializationComplete() {
+		return initializationComplete;
+	}
+
 	// *** Getters and setters
 	public Graph<Node, Edge> getGraph() {
 		return graph;
@@ -389,7 +373,7 @@ public abstract class Container {
 	}
 
 	/**
-	 * Returns a subset of this cvollection's VNodes that are not VCommunity
+	 * Returns a subset of this collection's VNodes that are not VCommunity
 	 * instances
 	 * 
 	 * @return
@@ -493,7 +477,8 @@ public abstract class Container {
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),externalCommunityName);
+		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),
+				externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {

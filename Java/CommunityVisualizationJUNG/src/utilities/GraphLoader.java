@@ -63,6 +63,10 @@ public class GraphLoader{
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
+		
+		Mapper.getInstance().attributesMax.printAttributes();
+		Mapper.getInstance().attributesMin.printAttributes();
+		//Mapper.getInstance().categoricalAttributes.printAttributes();
 	}
 
 	public ArrayList<String> getCommunityNames() {

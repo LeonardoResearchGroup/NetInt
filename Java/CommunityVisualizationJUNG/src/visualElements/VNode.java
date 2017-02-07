@@ -150,7 +150,6 @@ public class VNode extends VisualAtom implements Serializable {
 	 */
 	public void show(boolean displayed) {
 		setVisibility(UserSettings.getInstance().getUmbralGrados());
-		 setDiameter(PApplet.map(node.getOutDegree(1), 1, 300, 5, 50));
 		 if (getDiameter() > 50){
 			 setDiameter(60);
 		 }

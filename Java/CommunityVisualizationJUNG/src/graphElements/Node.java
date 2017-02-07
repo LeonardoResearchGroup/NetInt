@@ -154,14 +154,20 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 
 	// Setters metrics
 	public void setInDegree(int key, int inDegree) {
+		if (key == 0)
+			this.absoluetAttributes.put("inDegree", inDegree);
 		this.relativeAttributes.get(key).setCommunityInDegree(inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
+		if (key == 0)
+			this.absoluetAttributes.put("outDegree", outDegree);
 		this.relativeAttributes.get(key).setCommunityOutDegree(outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
+		if (key == 0)
+			this.absoluetAttributes.put("degree", degree);
 		this.relativeAttributes.get(key).setCommunityDegree(degree);
 	}
 
