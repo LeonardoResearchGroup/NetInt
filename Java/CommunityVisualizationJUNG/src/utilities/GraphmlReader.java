@@ -72,7 +72,7 @@ public class GraphmlReader {
 	 *         Id
 	 */
 	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes) {
-		System.out.println(this.getClass().getName() + " Making Nodes...");
+		System.out.println(this.getClass().getName() + " Instantiating Nodes...");
 
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
 
@@ -150,7 +150,7 @@ public class GraphmlReader {
 		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
 
 		// **** CREATE EDGES ****
-		System.out.println(this.getClass().getName() + " Making Edges...");
+		System.out.println(this.getClass().getName() + " Instantiating Edges...");
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.OUT);

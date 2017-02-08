@@ -65,7 +65,7 @@ public abstract class Container {
 
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
-
+System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 		// Instantiate empty collections
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
@@ -125,7 +125,9 @@ public abstract class Container {
 	 * @return
 	 */
 	public void runVEdgeFactory() {
+		System.out.println("VEdge factory: edle list size: " + graph.getEdges().size());
 		for (Edge e : graph.getEdges()) {
+			System.out.println("VEdge factory, source id: " + e.getSource().getId());
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
@@ -136,7 +138,7 @@ public abstract class Container {
 	// *** Other methods
 
 	/**
-	 * Build all the external edges of vCommunities contained in a deployed
+	 * Builds all the external edges of vCommunities contained in a deployed
 	 * community
 	 */
 	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
@@ -167,7 +169,7 @@ public abstract class Container {
 	}
 
 	/**
-	 * Build all the external edges of this container with the one of a deployed
+	 * Builds all the external edges of this container with the one of a deployed
 	 * community community
 	 */
 	public void buildExternalEdges(VCommunity otherVCommunity) {	

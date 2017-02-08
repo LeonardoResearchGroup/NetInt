@@ -20,7 +20,7 @@ import visualElements.VNode;
 public class Assembler {
 
 	// Visual Communities
-    // private VCommunity rootVCommunity;
+	// private VCommunity rootVCommunity;
 	public static VCommunity firstOrderVCommunity;
 	public static ArrayList<VCommunity> secondOrderVCommunities;
 	// These Dimensions set the RootContainer and top SubContainer boundaries
@@ -54,6 +54,7 @@ public class Assembler {
 	 */
 	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
 			int format) {
+		System.out.println(this.getClass().getName() + " loadGraph");
 		String XML_FILE = file.getAbsolutePath();
 		GraphLoader rootGraph = new GraphLoader(XML_FILE, nodeImportAttributes, edgeImportAttributes, format);
 		// Root visual community. Keep it commented unless you want to visualize
@@ -61,31 +62,26 @@ public class Assembler {
 		// rootVCommunity = createRootVCommunity(rootGraph.jungGraph);
 
 		// List of Sub Communities
-		System.out.println(this.getClass().getName() + " Retrieving the list of second order VCommunities ");
-		secondOrderVCommunities = createVisualSubCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(), layout);
+		System.out.println("     Retrieving the list of second order VCommunities ");
+		secondOrderVCommunities = createSecondOrderVisualCommunities(rootGraph.jungGraph, rootGraph.getCommunityNames(),
+				layout);
 
 		// Community of communities
-		System.out.println(this.getClass().getName() + " Adding second order VCommunities to first order  VCommunity ");
-		firstOrderVCommunity = createCommunityOfvCommunities(secondOrderVCommunities, "FirstOrderCommunity", layout);
+		System.out.println("     Adding " + secondOrderVCommunities.size()
+				+ " second order VCommunities to First Order VCommunity ");
+		firstOrderVCommunity = createFirstOrderVisualCommunities(secondOrderVCommunities, "FirstOrderCommunity",
+				layout);
 
 		// Setting root Container & Reporting progress
-		//System.out.println(this.getClass().getName() + " Setting RootGraph to container of: " + firstOrderVCommunity.getNode().getId());
+		// System.out.println(this.getClass().getName() + " Setting RootGraph to
+		// container of: " + firstOrderVCommunity.getNode().getId());
 		firstOrderVCommunity.container.setRootGraph(rootGraph.jungGraph);
-
-		// ********* EDGES BETWEEN COMMUNITIES
-		System.out.println(this.getClass().getName() + " Creating edges between communities ...");
-		if (format == GraphLoader.PAJEK)
-			// addEdgesBetweenSubcommunities(rootGraph.reader.getEdgesBetweenCommunuties());
-			createEdgesBetweenSubcommunities(secondOrderVCommunities);
-		else if (format == GraphLoader.GRAPHML) {
-			createEdgesBetweenSubcommunities(secondOrderVCommunities);
-		}
-		System.out.println(this.getClass().getName() + " All edges between communities created");
 
 		// Create edges & reporting progress
 		// Reporting progress
-		System.out.println(this.getClass().getName() + " Running VEdge factory ...");
+		System.out.println("     Running VEdge factory ...");
 		firstOrderVCommunity.container.runVEdgeFactory();
+		firstOrderVCommunity.initialize();
 	}
 
 	/**
@@ -105,14 +101,17 @@ public class Assembler {
 		return vCommunity;
 	}
 
-	private ArrayList<VCommunity> createVisualSubCommunities(DirectedSparseMultigraph<Node, Edge> graph,ArrayList<String> communityNames, int layout) {
+	private ArrayList<VCommunity> createSecondOrderVisualCommunities(DirectedSparseMultigraph<Node, Edge> graph,
+			ArrayList<String> communityNames, int layout) {
+		System.out.println(this.getClass().getName() + " createVisualSubCommunities");
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		boolean colorBlindSafe = false;
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
 		int i = 0;
-		System.out.println(this.getClass().getName() + "  Generating DirectedSparseMultigraph for "+ communityNames.size() + " communities ...");
+		System.out
+				.println("     Generating DirectedSparseMultigraph for " + communityNames.size() + " communities ...");
 		for (String communityName : communityNames) {
 			// SubGraphs
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.filterByCommunity(graph, communityName);
@@ -132,72 +131,48 @@ public class Assembler {
 		return vCommunities;
 	}
 
-	private VCommunity createCommunityOfvCommunities(ArrayList<VCommunity> communities, String communityName, int layout) {
+	private VCommunity createFirstOrderVisualCommunities(ArrayList<VCommunity> communities, String communityName,
+			int layout) {
+		System.out.println(this.getClass().getName() + " createCommunityOfvCommunities");
 		// Make a temporary graph
 		DirectedSparseMultigraph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 		System.out.println(
-				this.getClass().getName() + "  Creating Community of vCommunities for community: " + communityName);
-		for (VNode vN : communities) {
-			VCommunity vC = (VCommunity) vN;
-			// add Nodes
-			graphTemp.addVertex(vC.getNode());
+				"     Creating Community of " + communities.size() + " vCommunities for community: " + communityName);
+//		 for (VNode vN : communities) {
+//		 VCommunity vC = (VCommunity) vN;
+//		 // add Nodes
+//		 graphTemp.addVertex(vC.getNode());
+//		 }
+
+		// Detect linked communities and build edges
+		for (int i = 0; i < communities.size(); i++) {
+			VCommunity vCA = communities.get(i);
+			for (int j = i + 1; i < communities.size(); i++) {
+				VCommunity vCB = communities.get(j);
+				if (vCA.detectLinkedCommunities(vCB)) {
+					Edge tempEdge = new Edge(vCA.getNode(), vCB.getNode(), false);
+					graphTemp.addEdge(tempEdge, vCA.getNode(), vCB.getNode());
+				}
+			}
 		}
+
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
-		System.out.println(this.getClass().getName() + "  SubContainer: " + communityName + " created");
+
+		// Create VEdges
+		subContainer.runVEdgeFactory();
+
+		// Name the community
+		System.out.println("     SubContainer: " + communityName + " created");
 		subContainer.setName(communityName);
-		System.out.println(this.getClass().getName() + "  Assigning visual elements to nodes");
+		System.out.println("     Assigning CommunityCover to: " + communityName);
 		// Assign each vCommunity cover to this subContainer
 		subContainer.assignVisualElements(communities);
 		// CommunityCover
 		String nodeID = communityName + "_" + String.valueOf(0);
-		System.out.println(this.getClass().getName() + "  Making VCommunity for: " + communityName);
+		System.out.println("     Making VCommunity for: " + communityName);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 		return communityTemp;
-	}
-
-	/**
-	 * It creates the edges between communities before they are opened.
-	 * 
-	 * @param communities
-	 */
-	private void createEdgesBetweenSubcommunities(ArrayList<VCommunity> communities) {
-		//Graph<Node, Edge> graphInter;
-		// Pick each element of the community collection
-		for (int i = 0; i < communities.size(); i++) {
-			// Compare with other members of the community collection
-			VCommunity communityA = communities.get(i);
-			System.out.println(this.getClass().getName() + "  Creating between edges for community: " + communityA.getNode().getName() + "edges: " +communityA.container.getGraph().getEdgeCount() + " VEdges: " + communityA.container.getVEdges().size() );
-			for (int j = i + 1; j < communities.size(); j++) {
-				VCommunity communityB = communities.get(j);
-				
-				// get a temporary graph
-				//graphInter = GraphLoader.filterByInterCommunities(firstOrderVCommunity.container.rootGraph, communityA.container.getName(), communityB.container.getName());
-				
-				//if (graphInter.getEdgeCount() >= 1) {
-				if (communityA.detectLinkedCommunities(communityB)){
-					// Create a new edge
-					graphElements.Edge e = new graphElements.Edge(communityA.getNode(), communityB.getNode(), true);
-					// Add edge attributes. The attribute is named "TotalEdges"
-					// and includes the total amount of edges linking both
-					// communities
-					//e.setAttribute("TotalEdges", graphInter.getEdgeCount());
-					e.setAttribute("TotalEdges", 1);
-					// Add the edge to the container
-					firstOrderVCommunity.container.getGraph().addEdge(e, communityA.getNode(), communityB.getNode(),
-							EdgeType.DIRECTED);
-				}
-			}
-		}
-		// Update attributes of the community nodes
-		for (int i = 0; i < communities.size(); i++) {
-			Node n = communities.get(i).getNode();
-			int successors = firstOrderVCommunity.container.getGraph().getSuccessorCount(n);
-			int predecessors = firstOrderVCommunity.container.getGraph().getPredecessorCount(n);
-			n.setCommunity("CommunityLink", 1);
-			n.setOutDegree(1, successors);
-			n.setInDegree(1, predecessors);
-		}
 	}
 
 	/**
@@ -213,7 +188,7 @@ public class Assembler {
 	}
 
 	public void show() {
-		//rootVCommunity.show();
+		// rootVCommunity.show();
 		firstOrderVCommunity.show();
 		firstOrderVCommunity.searchNode();
 	}

@@ -39,6 +39,7 @@ public class GraphLoader {
 	 * @param format
 	 */
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
+		System.out.println(this.getClass().getName() + "GraphLoader");
 		fileFormat = format;
 		if (format == GraphLoader.PAJEK) {
 			PJKreader = new PajekReader();
@@ -49,24 +50,20 @@ public class GraphLoader {
 			jungGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
 			totalCommunities = GMLreader.getCommunities().size();
 		}
-		System.out.println(this.getClass().getName() + " Jung Graph Created from file:" + file);
-		System.out.println("   Total Nodes in the graph: " + jungGraph.getVertexCount());
-		System.out.println("   Total Edges in the graph: " + jungGraph.getEdgeCount());
-		System.out.println(this.getClass().getName() + " " + totalCommunities + " communities loaded");
+		System.out.println("     Jung Graph Created from file:" + file);
+		System.out.println("        Total Nodes in the graph: " + jungGraph.getVertexCount());
+		System.out.println("        Total Edges in the graph: " + jungGraph.getEdgeCount());
+		System.out.println("     " + totalCommunities + " communities loaded");
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
 		for (Node n : jungGraph.getVertices()) {
 			setNodesDegrees(jungGraph, n);
 			Mapper.getInstance().setMaxMinGraphElementAttributes(n);
 		}
-		System.out.println(this.getClass().getName() + " Degrees assigned to nodes and attributes to Mapper Class");
+		System.out.println("     Degrees assigned to nodes and attributes to Mapper Class");
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
-		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
-
-		Mapper.getInstance().attributesMax.printAttributes();
-		Mapper.getInstance().attributesMin.printAttributes();
-		// Mapper.getInstance().categoricalAttributes.printAttributes();
+		System.out.println("     Edge attributes assigned to edges and to Mapper Class");
 	}
 
 	public ArrayList<String> getCommunityNames() {

@@ -2,6 +2,7 @@ package visualElements;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
+import utilities.GraphLoader;
 import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
@@ -14,6 +15,7 @@ import org.apache.commons.collections15.Predicate;
 import containers.Container;
 import edu.uci.ics.jung.algorithms.filters.EdgePredicateFilter;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
 
@@ -65,14 +67,22 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
 	}
 
+	public void initialize() {
+		container.initialize();
+		createEdgesBetweenInternalCommunities();
+	}
+
 	public void show() {
 		// Display the community cover
 		comCover.show(container, this, containsSearchedNode);
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			setDisplayed(true);
-			// if coordinates for all elements inside the container are set
-			if (container.initialize()) {
+			// if coordinates for all elements inside the container are set.
+			// container.initialize() is a boolean gate that controls looping
+			// over
+			if (container.isInitializationComplete()) {
+
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
 				for (VCommunity vC : container.getVCommunities()) {
@@ -348,23 +358,62 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 	}
 
- // ***** Between communities operations *****
+	// ***** Between communities operations *****
 	public boolean detectLinkedCommunities(final VCommunity otherCommunity) {
-		System.out.println(container.getName() + " " +container.getVEdges().size());
-		ArrayList<VEdge> mergedCollection = new ArrayList <VEdge> (container.getVEdges());
-		mergedCollection.addAll(otherCommunity.container.getVEdges());
-		for(VEdge vE: mergedCollection){
-			Node source = vE.getEdge().getSource();
-			Node target = vE.getEdge().getTarget();
+		DirectedSparseMultigraph<Node,Edge> tmpGraph = GraphLoader.filterByInterCommunities(container.rootGraph, container.getName(), otherCommunity.container.getName());
+		// First check for the nodes of this community
+		for (Edge e : tmpGraph.getEdges()) {
+			Node source = e.getSource();
+			Node target = e.getTarget();
 			if (source.belongsTo(container.getName()) && target.belongsTo(otherCommunity.container.getName())) {
+				System.out.println(e.getSource().getName() + " and " + target.getName() + " are connected");
 				return true;
-			} else if (source.belongsTo(otherCommunity.container.getName()) && target.belongsTo(container.getName())) {
+			}
+
+			if (source.belongsTo(otherCommunity.container.getName()) && target.belongsTo(container.getName())) {
+				System.out.println(e.getSource().getName() + " and " + target.getName() + " are connected");
 				return true;
-			} else {
-				return false;
 			}
 		}
-		mergedCollection = null;
 		return false;
+	}
+
+	/**
+	 * It creates the edges between communities.
+	 * 
+	 * @param communities
+	 */
+	public void createEdgesBetweenInternalCommunities() {
+		// Graph<Node, Edge> graphInter;
+		// Pick each element of the community collection
+		for (int i = 0; i < container.getVCommunities().size(); i++) {
+			// Compare with other members of the community collection
+			VCommunity communityA = container.getVCommunities().get(i);
+			System.out.println(this.getClass().getName() + "  Creating between edges for community: "
+					+ communityA.getNode().getName() + ",  edges: " + communityA.container.getGraph().getEdgeCount()
+					+ ", VEdges: " + communityA.container.getVEdges().size());
+			for (int j = i + 1; j < container.getVCommunities().size(); j++) {
+				VCommunity communityB = container.getVCommunities().get(j);
+				if (communityA.detectLinkedCommunities(communityB)) {
+					// Create a new edge
+					graphElements.Edge e = new graphElements.Edge(communityA.getNode(), communityB.getNode(), true);
+					// Add edge attributes. The attribute is named "TotalEdges"
+					// and includes the total amount of edges linking both
+					// communities
+					e.setAttribute("TotalEdges", 1);
+					// Add the edge to the container
+					container.getGraph().addEdge(e, communityA.getNode(), communityB.getNode(), EdgeType.DIRECTED);
+				}
+			}
+		}
+		// Update attributes of the community nodes
+		for (int i = 0; i < container.getVCommunities().size(); i++) {
+			Node n = container.getVCommunities().get(i).getNode();
+			int successors = container.getGraph().getSuccessorCount(n);
+			int predecessors = container.getGraph().getPredecessorCount(n);
+			n.setCommunity("CommunityLink", 1);
+			n.setOutDegree(1, successors);
+			n.setInDegree(1, predecessors);
+		}
 	}
 }
