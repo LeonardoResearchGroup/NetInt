@@ -120,14 +120,9 @@ public class GraphmlReader {
 			}
 			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
-				// String keyLabel =
-				// UserSettings.getInstance().getDescriptiveKeys().get(key);
-				// if (keyLabel != null) {
 				nodeTmp.setAttribute(key, vertex.getProperty(key));
 				// }
 			}
-			// Setting max min limits in Mapper class (Singleton pattern)
-		//	Mapper.getInstance().setMaxMinGraphElementAttributes(nodeTmp);
 			theNodes.put(id, nodeTmp);
 		}
 		return theNodes;
@@ -178,7 +173,9 @@ public class GraphmlReader {
 						} else
 							throw new NullPointerException();
 					} catch (NullPointerException exception) {
-						System.out.println(this.getClass().getName() + " Null Pointer Exception. Edges in the source file don't have attributes named: " + edgeImportAttributes[i]);
+						System.out.println(this.getClass().getName()
+								+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
+								+ edgeImportAttributes[i]);
 					}
 				}
 			} else {
@@ -274,7 +271,9 @@ public class GraphmlReader {
 	}
 
 	/**
-	 * Return the list of all keys associated to vertex read from the graphml file
+	 * Return the list of all keys associated to vertex read from the graphml
+	 * file
+	 * 
 	 * @return
 	 */
 	public String[] getNodeGraphmlKeys() {
@@ -285,9 +284,11 @@ public class GraphmlReader {
 		}
 		return rtn;
 	}
-	
+
 	/**
-	 * Return the list of all keys associated to edges read from the graphml file
+	 * Return the list of all keys associated to edges read from the graphml
+	 * file
+	 * 
 	 * @return
 	 */
 	public String[] getEdgeGraphmlKeys() {

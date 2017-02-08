@@ -19,7 +19,7 @@ import utilities.mapping.Mapper;
  * @author jsalam
  *
  */
-public class GraphLoader{
+public class GraphLoader {
 
 	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
 	public GraphmlReader GMLreader;
@@ -63,10 +63,10 @@ public class GraphLoader{
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println(this.getClass().getName() + " Edge attributes assigned to edges and to Mapper Class");
-		
+
 		Mapper.getInstance().attributesMax.printAttributes();
 		Mapper.getInstance().attributesMin.printAttributes();
-		//Mapper.getInstance().categoricalAttributes.printAttributes();
+		// Mapper.getInstance().categoricalAttributes.printAttributes();
 	}
 
 	public ArrayList<String> getCommunityNames() {
@@ -127,7 +127,6 @@ public class GraphLoader{
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterByCommunity(
 			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String community) {
-
 		Predicate<Node> inSubgraph = new Predicate<Node>() {
 			public boolean evaluate(Node nodo) {
 				return nodo.belongsTo(community);
@@ -142,7 +141,6 @@ public class GraphLoader{
 			n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
 		}
 		return problemGraph;
-
 	}
 
 	/**
@@ -157,15 +155,17 @@ public class GraphLoader{
 	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
 			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,
 			final String communityNameB) {
-
 		Predicate<Edge> inSubgraph = new Predicate<Edge>() {
 			public boolean evaluate(Edge edge) {
-				boolean connectsOneWay = edge.getSource().belongsTo(communityNameA)
-						&& edge.getTarget().belongsTo(communityNameB);
-				boolean connectsOtherWay = edge.getSource().belongsTo(communityNameB)
-						&& edge.getTarget().belongsTo(communityNameA);
-				boolean connectsCommunities = connectsOneWay || connectsOtherWay;
-				return connectsCommunities;
+				Node source = edge.getSource();
+				Node target = edge.getTarget();
+				if (source.belongsTo(communityNameA) && target.belongsTo(communityNameB)) {
+					return true;
+				} else if (source.belongsTo(communityNameB) && target.belongsTo(communityNameA)) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		};
 		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(inSubgraph);
@@ -174,5 +174,4 @@ public class GraphLoader{
 		return problemGraph;
 
 	}
-
 }

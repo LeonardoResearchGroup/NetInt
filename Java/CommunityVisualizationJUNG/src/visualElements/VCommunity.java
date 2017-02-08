@@ -7,8 +7,14 @@ import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 
 import java.awt.Color;
+import java.util.ArrayList;
+
+import org.apache.commons.collections15.Predicate;
 
 import containers.Container;
+import edu.uci.ics.jung.algorithms.filters.EdgePredicateFilter;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import graphElements.Edge;
 import graphElements.Node;
 
 /**
@@ -340,5 +346,25 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (nodeFoundInSuperCommunity != null) {
 			nodeFoundInSuperCommunity.resetNodeFound();
 		}
+	}
+
+ // ***** Between communities operations *****
+	public boolean detectLinkedCommunities(final VCommunity otherCommunity) {
+		System.out.println(container.getName() + " " +container.getVEdges().size());
+		ArrayList<VEdge> mergedCollection = new ArrayList <VEdge> (container.getVEdges());
+		mergedCollection.addAll(otherCommunity.container.getVEdges());
+		for(VEdge vE: mergedCollection){
+			Node source = vE.getEdge().getSource();
+			Node target = vE.getEdge().getTarget();
+			if (source.belongsTo(container.getName()) && target.belongsTo(otherCommunity.container.getName())) {
+				return true;
+			} else if (source.belongsTo(otherCommunity.container.getName()) && target.belongsTo(container.getName())) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		mergedCollection = null;
+		return false;
 	}
 }

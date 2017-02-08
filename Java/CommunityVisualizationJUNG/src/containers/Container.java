@@ -21,7 +21,6 @@ import visualElements.Canvas;
 import visualElements.VCommunity;
 import visualElements.VEdge;
 import visualElements.VNode;
-import visualElements.primitives.VisualAtom;
 
 /**
  * This abstract class contains two collections, one for the visualNodes and one
@@ -86,9 +85,9 @@ public abstract class Container {
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
 				System.out.println(this.getClass().getName() + " Building visual nodes");
-				runNodeFactory();
+				runVNodeFactory();
 				System.out.println(this.getClass().getName() + " Building visual edges");
-				runEdgeFactory();
+				runVEdgeFactory();
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
@@ -105,7 +104,7 @@ public abstract class Container {
 	 * 
 	 * @return
 	 */
-	protected void runNodeFactory() {
+	protected void runVNodeFactory() {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
@@ -125,7 +124,7 @@ public abstract class Container {
 	 * 
 	 * @return
 	 */
-	public void runEdgeFactory() {
+	public void runVEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
@@ -264,8 +263,8 @@ public abstract class Container {
 		vNodes.clear();
 		vEdges.clear();
 		betweenEdgeGates.clear();
-		runNodeFactory();
-		runEdgeFactory();
+		runVNodeFactory();
+		runVEdgeFactory();
 	}
 
 	/**

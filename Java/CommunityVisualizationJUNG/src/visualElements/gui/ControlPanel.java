@@ -256,7 +256,7 @@ public class ControlPanel extends PApplet {
 				}
 				Assembler.firstOrderVCommunity = deserializedWrapper.getvSubSubCommunity();
 				Assembler.firstOrderVCommunity.eventRegister(parent);
-				Assembler.firstOrderVCommunity.container.runEdgeFactory();
+				Assembler.firstOrderVCommunity.container.runVEdgeFactory();
 				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
 				Executable.activeGraph = true;
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",

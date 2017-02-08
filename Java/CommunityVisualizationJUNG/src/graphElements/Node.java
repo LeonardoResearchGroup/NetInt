@@ -41,8 +41,8 @@ public class Node extends GraphElement implements Comparable<Node>, Serializable
 
 	public boolean belongsTo(String community) {
 		boolean rtn = false;
-		for (RelativeAttributes mD : relativeAttributes.values()) {
-			if (mD.getCommunityName().equals(community)) {
+		for (RelativeAttributes rA : relativeAttributes.values()) {
+			if (rA.getCommunityName().equals(community)) {
 				rtn = true;
 				break;
 			} else

@@ -84,8 +84,8 @@ public class Assembler {
 
 		// Create edges & reporting progress
 		// Reporting progress
-		System.out.println(this.getClass().getName() + " Running edge factory ...");
-		firstOrderVCommunity.container.runEdgeFactory();
+		System.out.println(this.getClass().getName() + " Running VEdge factory ...");
+		firstOrderVCommunity.container.runVEdgeFactory();
 	}
 
 	/**
@@ -162,24 +162,27 @@ public class Assembler {
 	 * @param communities
 	 */
 	private void createEdgesBetweenSubcommunities(ArrayList<VCommunity> communities) {
-		Graph<Node, Edge> graphInter;
+		//Graph<Node, Edge> graphInter;
 		// Pick each element of the community collection
 		for (int i = 0; i < communities.size(); i++) {
 			// Compare with other members of the community collection
 			VCommunity communityA = communities.get(i);
-			System.out.println(this.getClass().getName() + "  Creating between edges for community: " + communityA.getNode().getName());
+			System.out.println(this.getClass().getName() + "  Creating between edges for community: " + communityA.getNode().getName() + "edges: " +communityA.container.getGraph().getEdgeCount() + " VEdges: " + communityA.container.getVEdges().size() );
 			for (int j = i + 1; j < communities.size(); j++) {
 				VCommunity communityB = communities.get(j);
+				
 				// get a temporary graph
-				graphInter = GraphLoader.filterByInterCommunities(firstOrderVCommunity.container.rootGraph,
-						communityA.container.getName(), communityB.container.getName());
-				if (graphInter.getEdgeCount() >= 1) {
+				//graphInter = GraphLoader.filterByInterCommunities(firstOrderVCommunity.container.rootGraph, communityA.container.getName(), communityB.container.getName());
+				
+				//if (graphInter.getEdgeCount() >= 1) {
+				if (communityA.detectLinkedCommunities(communityB)){
 					// Create a new edge
 					graphElements.Edge e = new graphElements.Edge(communityA.getNode(), communityB.getNode(), true);
 					// Add edge attributes. The attribute is named "TotalEdges"
 					// and includes the total amount of edges linking both
 					// communities
-					e.setAttribute("TotalEdges", graphInter.getEdgeCount());
+					//e.setAttribute("TotalEdges", graphInter.getEdgeCount());
+					e.setAttribute("TotalEdges", 1);
 					// Add the edge to the container
 					firstOrderVCommunity.container.getGraph().addEdge(e, communityA.getNode(), communityB.getNode(),
 							EdgeType.DIRECTED);
