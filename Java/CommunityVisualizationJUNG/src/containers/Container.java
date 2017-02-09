@@ -10,7 +10,6 @@ import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
@@ -60,12 +59,8 @@ public abstract class Container {
 	protected final int MAX_ITERATIONS = 100;
 
 	// *** Constructor
-	public Container() {
-	}
-
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
-System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 		// Instantiate empty collections
 		vNodes = new ArrayList<VNode>();
 		vEdges = new ArrayList<VEdge>();
@@ -80,7 +75,7 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	 */
 	public boolean initialize() {
 		if (!initializationComplete) {
-			System.out.println(this.getClass().getName() + " Initializing nodes in: " + getName());
+			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 			distributeNodesInLayout(currentLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
@@ -91,6 +86,8 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
+				System.out.println(this.getClass().getName() + " Building visual edges");
+				runVEdgeFactory();
 				setVElementCoordinates();
 			}
 			initializationComplete = true;
@@ -125,9 +122,7 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	 * @return
 	 */
 	public void runVEdgeFactory() {
-		System.out.println("VEdge factory: edle list size: " + graph.getEdges().size());
 		for (Edge e : graph.getEdges()) {
-			System.out.println("VEdge factory, source id: " + e.getSource().getId());
 			VEdge vEdge = new VEdge(e);
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
@@ -136,6 +131,30 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	}
 
 	// *** Other methods
+	/**
+	 * Builds all the internal edges between vCommunities contained in this
+	 * container
+	 */
+	public void createEdgesBetweenInternalCommunities() {
+		System.out.println(this.getClass().getName() + " Building Edges between communities for: " + getVCommunities().size() + " communities");
+		ArrayList<VCommunity> internalCommunities = getVCommunities();
+		// Detect linked communities and build edges
+		for (int i = 0; i < internalCommunities.size(); i++) {
+			VCommunity vCA = internalCommunities.get(i);
+			System.out.println("     Building vEdges between community: " + vCA.getNode().getName());
+			for (int j = i + 1; j < internalCommunities.size(); j++) {
+				VCommunity vCB = internalCommunities.get(j);
+				// Detect if linked
+				if (vCA.detectLinkedCommunities(vCB)) {
+					// Build edge
+					Edge tempEdge = new Edge(vCA.getNode(), vCB.getNode(), false);
+					tempEdge.setAttribute("weight", 1);
+					// Add edge
+					this.getGraph().addEdge(tempEdge, vCA.getNode(), vCB.getNode());
+				}
+			}
+		}
+	}
 
 	/**
 	 * Builds all the external edges of vCommunities contained in a deployed
@@ -169,10 +188,10 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	}
 
 	/**
-	 * Builds all the external edges of this container with the one of a deployed
-	 * community community
+	 * Builds all the external edges of this container with the one of a
+	 * deployed community community
 	 */
-	public void buildExternalEdges(DirectedSparseMultigraph<Node, Edge> rootGraph, VCommunity otherVCommunity) {	
+	public void buildExternalEdges(DirectedSparseMultigraph<Node, Edge> rootGraph, VCommunity otherVCommunity) {
 		if (!betweenEdgeGates.contains(otherVCommunity.container)) {
 			Container otherContainer = otherVCommunity.container;
 			// See if otherCommunity's container has created betweenEdges
@@ -439,6 +458,18 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void addVNode(VNode vN) {
+		vNodes.add(vN);
+	}
+
+	public void setVCommunities(ArrayList<VCommunity> otherVNodes) {
+		vNodes.addAll(otherVNodes);
+	}
+
+	public void setVNodes(ArrayList<VCommunity> communities) {
+		vNodes.addAll(communities);
 	}
 
 	/**

@@ -37,8 +37,9 @@ import edu.uci.ics.jung.graph.Graph;
  * @author Joshua O'Madadhain
  * @author Juan Salamanca (2017)
  */
-public class EdgePredicateFilterAndExtractor<V, E> implements Filter<V, E> {
-	protected Predicate<E> edge_pred;
+public class FilterAndExtractorEdges<V, E> implements Filter<V, E> {
+	protected Predicate<E> betweenCommunity_pred;
+	protected Predicate<E> withinCommunity_pred;
 
 	/**
 	 * Creates an instance based on the specified edge <code>Predicate</code>.
@@ -47,14 +48,17 @@ public class EdgePredicateFilterAndExtractor<V, E> implements Filter<V, E> {
 	 *            the predicate that specifies which edges to add to the
 	 *            filtered graph
 	 */
-	public EdgePredicateFilterAndExtractor(Predicate<E> edge_pred) {
-		this.edge_pred = edge_pred;
+	public FilterAndExtractorEdges(Predicate<E> betweenCommunity_pred, Predicate<E> withinCommunity_pred) {
+		this.betweenCommunity_pred = betweenCommunity_pred;
+		this.withinCommunity_pred = withinCommunity_pred;
 	}
 
 	public Graph<V, E> transform(Graph<V, E> g) {
 		Graph<V, E> filtered;
+		Graph<V, E> community;
 		try {
 			filtered = g.getClass().newInstance();
+			community = g.getClass().newInstance();
 		} catch (InstantiationException e) {
 			throw new RuntimeException("Unable to create copy of existing graph: ", e);
 		} catch (IllegalAccessException e) {
@@ -65,13 +69,22 @@ public class EdgePredicateFilterAndExtractor<V, E> implements Filter<V, E> {
 			filtered.addVertex(v);
 
 		for (E e : g.getEdges()) {
-			if (edge_pred.evaluate(e))
+			if (betweenCommunity_pred.evaluate(e))
 				filtered.addEdge(e, g.getIncidentVertices(e));
 		}
-		
+		for (E e : g.getEdges()){
+			if(withinCommunity_pred.evaluate(e)){
+				community.addEdge(e, g.getIncidentVertices(e));
+			}
+		}
 		for (E e : filtered.getEdges()){
 			g.removeEdge(e);
 		}
+		for (E e : community.getEdges()){
+			g.removeEdge(e);
+		}
+		
+		//System.out.println("    Remaining edges in Filters: " + Filters.getInstance().getRemainingGraph().getEdgeCount() + ", rtnGraph : "+ filtered.getEdgeCount());
 		return filtered;
 	}
 

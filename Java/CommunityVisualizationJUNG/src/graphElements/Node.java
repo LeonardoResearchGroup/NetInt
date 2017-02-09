@@ -14,7 +14,7 @@ import java.util.Set;
  * @author jsalam
  * @date Nov 2016
  */
-public class Node extends GraphElement implements Comparable<Node>, Serializable {
+public class Node extends GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	// True if the node searcher query matches any of this node's attributes

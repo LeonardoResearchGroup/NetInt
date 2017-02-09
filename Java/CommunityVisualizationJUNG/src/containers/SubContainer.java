@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.TreeSet;
 
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
@@ -23,10 +25,6 @@ public class SubContainer extends Container implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	Container sourceContainer;
-	
-	public SubContainer(){
-		super();
-	}
 
 	public SubContainer(Graph<Node, Edge> subGraph, Container sourceContainer, int kindOfLayout, Dimension dimension) {
 		super(subGraph);
@@ -96,9 +94,9 @@ public class SubContainer extends Container implements Serializable{
 	public void retrieveVisualElements2(Container sourceContainer) {
 		// For each node of Graph
 		for (Node n : graph.getVertices()) {
-
 			// Look for the corresponding VNode in the collection of VAtoms
-			ListIterator<VNode> iterator = sourceContainer.getVNodes().listIterator();
+			
+			Iterator<VNode> iterator = sourceContainer.getVNodes().iterator();
 			while (iterator.hasNext()) {
 				// Get each visual Nodes
 				VNode vN = (VNode) iterator.next();

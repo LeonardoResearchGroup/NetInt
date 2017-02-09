@@ -53,7 +53,7 @@ public abstract class Predicates {
 	 * @param communityNameB
 	 * @return
 	 */
-	public static Predicate<Edge> edgeLinkingGraphs(final String communityNameA, final String communityNameB) {
+	public static Predicate<Edge> edgeLinkingCommunities(final String communityNameA, final String communityNameB) {
 		Predicate<Edge> rtnPredicate = new Predicate<Edge>() {
 			public boolean evaluate(Edge edge) {
 				Node source = edge.getSource();

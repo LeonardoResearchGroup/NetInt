@@ -150,9 +150,9 @@ public class VNode extends VisualAtom implements Serializable {
 	 */
 	public void show(boolean displayed) {
 		setVisibility(UserSettings.getInstance().getUmbralGrados());
-		 if (getDiameter() > 50){
-			 setDiameter(60);
-		 }
+		if (getDiameter() > 50) {
+			setDiameter(60);
+		}
 		if (displayed && visible) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {
@@ -218,7 +218,7 @@ public class VNode extends VisualAtom implements Serializable {
 		if (!displayed) {
 			setDisplayed(true);
 		}
-		
+
 	}
 
 	public boolean hasNode(Node node) {
@@ -303,7 +303,7 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	// ***** Events
-	@Override
+
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 	}

@@ -16,6 +16,8 @@ import visualElements.Canvas;
  *
  */
 public abstract class VisualAtom implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	public PVector mouse;
 	private int wdth, hght;
 	private float diameter;
