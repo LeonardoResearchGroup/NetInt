@@ -22,9 +22,9 @@ public class Executable extends PApplet {
 	private TestPerformance performance;
 	private static boolean activeGraph;
 	private ControlPanel controlPanel;
-	private ConsoleCatcher consoleCatcher;
+	protected ConsoleCatcher consoleCatcher;
 	public static File file;
-	private static ImportMenu importMenu;
+	protected static ImportMenu importMenu;
 
 	public void setup() {
 		textSize(10);
@@ -45,7 +45,7 @@ public class Executable extends PApplet {
 		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD720);
 		performance = new TestPerformance();
-		this.setActiveGraph(false);
+		setActiveGraph(false);
 		// Control Panel Frame
 		System.out.println("Building Control Panel");
 		controlPanel = new ControlPanel(this, 200, this.height - 25, "Controls");
@@ -122,7 +122,7 @@ public class Executable extends PApplet {
 	 * 
 	 * @return A "siphon" that collects all the output messages from the System
 	 */
-	private ByteArrayOutputStream initSystemOutToConsole() {
+	protected ByteArrayOutputStream initSystemOutToConsole() {
 		// Create a stream to hold the output
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps = new PrintStream(baos);

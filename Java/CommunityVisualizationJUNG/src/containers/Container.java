@@ -47,6 +47,7 @@ public abstract class Container {
 	public PVector layoutCenter;
 	public AbstractLayout<Node, Edge> layout;
 	public int currentLayout;
+	private boolean iterativeLayout;
 	private Dimension dimension;
 
 	// Iteration gate control
@@ -86,10 +87,13 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
+				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
+				distributeNodesInLayout(currentLayout, dimension);
 				System.out.println(this.getClass().getName() + " Building visual edges");
 				runVEdgeFactory();
 				setVElementCoordinates();
 			}
+			iterativeLayout = isCurrentLayoutIterative();
 			initializationComplete = true;
 		}
 		return initializationComplete;
@@ -133,28 +137,33 @@ public abstract class Container {
 	// *** Other methods
 	/**
 	 * Builds all the internal edges between vCommunities contained in this
-	 * container and adds both edges and nodes (source & target ) to the graph
+	 * container and adds both edges and nodes (source & target ) to the
+	 * container's graph. Each edge has a weight equals to the number of edges
+	 * linking both communities
 	 */
-	public void createEdgesBetweenInternalCommunities() {
-		System.out.println(this.getClass().getName() + " Building Edges between communities for: " + getVCommunities().size() + " communities");
-		
-		ArrayList<VCommunity> intVComm = getVCommunities();
-		
+	public void populateGraph(ArrayList<VCommunity> intVComm) {
+		System.out.println(this.getClass().getName() + " Building Edges between for communities: "
+				+ getVCommunities().size() + " communities");
+
 		// Detect linked communities and build edges
 		for (int i = 0; i < intVComm.size(); i++) {
 			VCommunity vCA = intVComm.get(i);
-			System.out.println("     Building vEdges between community: " + vCA.getNode().getName());
-			
+			System.out.println("     Building vEdges linking : " + vCA.getNode().getName());
+
 			for (int j = i + 1; j < intVComm.size(); j++) {
 				VCommunity vCB = intVComm.get(j);
-			
-				// Detect if linked
-				if (vCA.detectLinkedCommunities(vCB)) {
-				
+
+				// Detect linking edges
+				DirectedSparseMultigraph<Node, Edge> linkingEdges = vCA.detectLinkedCommunities(vCB);
+
+				// If communities are linked
+				if (linkingEdges.getEdgeCount() > 0) {
+					System.out.println("           ...  with: " + vCB.getNode().getName());
+
 					// Build edge
 					Edge tempEdge = new Edge(vCA.getNode(), vCB.getNode(), false);
-					tempEdge.setAttribute("weight", 1);
-					
+					tempEdge.setAttribute("weight", linkingEdges.getEdgeCount());
+
 					// Add edge
 					this.getGraph().addEdge(tempEdge, vCA.getNode(), vCB.getNode());
 				}
@@ -269,7 +278,7 @@ public abstract class Container {
 	 * 
 	 * @return
 	 */
-	public boolean isCurrentLayoutIterative() {
+	private boolean isCurrentLayoutIterative() {
 		boolean currentLayoutIsIterativeInterface = false;
 		// check if the layout implements IterativeContext
 		for (int i = 0; i < layout.getClass().getGenericInterfaces().length; i++) {
@@ -374,6 +383,10 @@ public abstract class Container {
 
 	public boolean isInitializationComplete() {
 		return initializationComplete;
+	}
+
+	public boolean isLayoutIterative() {
+		return iterativeLayout;
 	}
 
 	// *** Getters and setters

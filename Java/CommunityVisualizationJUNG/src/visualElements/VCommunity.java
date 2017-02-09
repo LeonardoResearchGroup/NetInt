@@ -9,12 +9,9 @@ import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import containers.Container;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
 
@@ -93,7 +90,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 
 			// If the layout is iterative
-			if (container.isCurrentLayoutIterative()) {
+			if (container.isLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
 				showCommunityContents(comCover.isUnlocked(),
 						container.stepIterativeLayout(pos).done() || container.isDone());
@@ -264,8 +261,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	// ***** Search Methods *******
 	/**
-	 * This method must be invoked ONLY by VCommunities that contain other
-	 * VCommunities
+	 * This method must be invoked ONLY by Higher Order Communities that contain
+	 * Lower Order VCommunities
 	 */
 	public void searchNode() {
 		// Is the search tool is not null
@@ -358,14 +355,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	// ***** Between communities operations *****
-	public boolean detectLinkedCommunities(final VCommunity otherCommunity) {
+	public DirectedSparseMultigraph<Node, Edge> detectLinkedCommunities(final VCommunity otherCommunity) {
+		DirectedSparseMultigraph<Node, Edge> tmpGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// If not the same VCommunity
 		if (!this.getNode().equals(otherCommunity.getNode())) {
-			DirectedSparseMultigraph<Node, Edge> tmpGraph = Filters.filterAndRemoveCommunityLinks(container.getName(),otherCommunity.container.getName());
-			if (tmpGraph.getEdgeCount() > 0) {
-				return true;
-			}
+			tmpGraph = Filters.filterAndRemoveCommunityLinks(container.getName(), otherCommunity.container.getName());
+
 		}
-		return false;
+		return tmpGraph;
 	}
 }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.TreeSet;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -16,7 +15,6 @@ import graphElements.Edge;
 import graphElements.Node;
 import utilities.filters.Filters;
 import visualElements.VCommunity;
-import visualElements.VEdge;
 
 public class Assembler {
 
@@ -44,38 +42,36 @@ public class Assembler {
 	 * 
 	 * @param file
 	 *            The path to the source file
-	 * @param nodeImportAttributes
+	 * @param nodeImportAtts
 	 *            User selection from Import Menu
-	 * @param edgeImportAttributes
+	 * @param edgeImportAtts
 	 *            User selection from Import Menu
 	 * @param layout
 	 *            The node distribution layout
 	 * @param format
 	 *            Graphml or Pajek. Graphml by default.
 	 */
-	public void loadGraph(File file, String[] nodeImportAttributes, String[] edgeImportAttributes, int layout,
-			int format) {
+	public void loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout,int format) {
+		// Progress repoort on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 
 		// Instantiate a graphLoader
-		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAttributes, edgeImportAttributes,
+		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts,
 				format);
 		// Set rootGraph to Assembler and Filters
 
 		Filters.getInstance().setGraph(GraphLoader.theGraph);
 
 		// Root visual community.
-		// Keep it commented unless you want to visualize the graph with no
+		// Keep it commented unless you want to visualize the root graph with no
 		// communities!!!!
 		// rootVCommunity = createRootVCommunity(rootGraph.jungGraph);
 
 		// List of Second Order Communities: sub communities
-		secondOrderVComm = createSecondOrderVisualCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(),
-				layout);
+		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
 
 		// First order community: Community of communities
-		firstOrderVComm = createFirstOrderVisualCommunity(GraphLoader.theGraph, secondOrderVComm, "FirstOrderCommunity",
-				layout);
+		firstOrderVComm = createFirstOrderVCommunity(secondOrderVComm, "FirstOrderCommunity", layout);
 	}
 
 	/**
@@ -95,63 +91,77 @@ public class Assembler {
 		return vCommunity;
 	}
 
-	private VCommunity createFirstOrderVisualCommunity(Graph<Node, Edge> graph, ArrayList<VCommunity> communities, String communityName, int layout) {
+	private VCommunity createFirstOrderVCommunity(ArrayList<VCommunity> communities, String comName, int layout) {
+		// Progress repoort on console
 		System.out.println(this.getClass().getName() + " Create First Order Visual Community");
-		System.out.println(
-				"     Adding " + secondOrderVComm.size() + " Second Order VCommunities to First Order VCommunity ");
+		System.out.println("     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order");
 		// Make a temporary graph
 		Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
-		
+
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
-	
-		
-		// Add VCommunities to container 
-		subContainer.setVNodes(communities);
-	
-		// make edges between internal communities and add them to the graph
-		subContainer.createEdgesBetweenInternalCommunities();
-		
+
+		// make graph from communities
+		subContainer.populateGraph(communities);
+
 		// Name the community
-		subContainer.setName(communityName);
-		
+		subContainer.setName(comName);
+
 		subContainer.assignVisualElements(communities);
-		
+
 		// Initialize container
 		subContainer.initialize();
 
-		String nodeID = communityName + "_" + String.valueOf(0);
+		String nodeID = comName + "_" + String.valueOf(0);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 		return communityTemp;
 	}
 
-	private ArrayList<VCommunity> createSecondOrderVisualCommunities(Graph<Node, Edge> graph,
-			ArrayList<String> communityNames, int layout) {
-		System.out.println(this.getClass().getName() + " Creating Second Order Visual Communities");
+	private ArrayList<VCommunity> createSecondOrderVCommunities(Graph<Node, Edge> graph, ArrayList<String> comNames, int layout) {
+		System.out.println(this.getClass().getName() + " Creating Second Order VCommunities");
+
+		// Make a list of VCommunities
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
-		//Color
+
+		// Color
 		boolean colorBlindSafe = false;
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
-		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
+		Color[] myGradient = myBrewer.getColorPalette(comNames.size());
 		//
-		int i = 0;
-		System.out
-				.println("     Generating DirectedSparseMultigraph for " + communityNames.size() + " communities ...");
-		for (String communityName : communityNames) {
-			// SubGraphs
+
+		System.out.println("     Generating Graphs for " + comNames.size() + " communities ...");
+
+		for (int i = 0; i < comNames.size(); i++) {
+			String communityName = comNames.get(i);
+			
+			// SubGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterByCommunity(graph, communityName);
-			// SubContainers
+			
+			// SubContainers for each VCommunity
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
-			i++;
+
+			// Name container
 			containerTemp.setName(communityName);
-			// CommunityCover
-			String nodeID = communityName;
-			Node tmpNode = new Node(nodeID);
+			
+			// Initialize container
+			containerTemp.initialize();
+			
+			// Make Node for CommunityCover
+			Node tmpNode = new Node(communityName);
+			
+			// Name Node
 			tmpNode.setName(communityName);
+			
+			// Create temporal community
 			VCommunity communityTemp = new VCommunity(tmpNode, containerTemp);
-			communityTemp.setColor(myGradient[i - 1]);
+			
+			// Set VCommunity color
+			communityTemp.setColor(myGradient[i]);
+			
+			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
+
 		}
 		return vCommunities;
 	}

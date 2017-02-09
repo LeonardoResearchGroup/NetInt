@@ -98,7 +98,6 @@ public class Filters {
 	public static DirectedSparseMultigraph<Node, Edge> filterAndRemoveCommunityLinks(final String communityNameA,
 			final String communityNameB) {
 		// Filter and extractor
-		System.out.println("           ...  and community: " + communityNameB);
 		FilterAndExtractorEdges<Node, Edge> filter = new FilterAndExtractorEdges<Node, Edge>(
 				Predicates.edgeLinkingCommunities(communityNameA, communityNameB),
 				Predicates.edgeInCommunity(communityNameA));
