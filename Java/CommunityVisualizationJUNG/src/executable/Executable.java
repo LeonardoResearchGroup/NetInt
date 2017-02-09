@@ -3,11 +3,9 @@ package executable;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import containers.Container;
 import processing.core.*;
 import utilities.Assembler;
 import utilities.GraphmlKeyReader;
@@ -22,11 +20,11 @@ public class Executable extends PApplet {
 	public static Assembler app;
 	private Canvas canvas;
 	private TestPerformance performance;
-	public static boolean activeGraph;
-	private ControlPanel cFrame;
+	private static boolean activeGraph;
+	private ControlPanel controlPanel;
 	private ConsoleCatcher consoleCatcher;
 	public static File file;
-	public static ImportMenu importMenu;
+	private static ImportMenu importMenu;
 
 	public void setup() {
 		textSize(10);
@@ -50,7 +48,7 @@ public class Executable extends PApplet {
 		this.setActiveGraph(false);
 		// Control Panel Frame
 		System.out.println("Building Control Panel");
-		cFrame = new ControlPanel(this, 200, this.height - 25, "Controls");
+		controlPanel = new ControlPanel(this, 200, this.height - 25, "Controls");
 		surface.setTitle("Java Networked Interaction Visualization. NetInt");
 	}
 
@@ -82,11 +80,11 @@ public class Executable extends PApplet {
 		return app;
 	}
 
-	public boolean isActiveGraph() {
+	public boolean isActiveGraphA() {
 		return activeGraph;
 	}
 
-	public void setActiveGraph(boolean activeGraph) {
+	public static void setActiveGraph(boolean activeGraph) {
 		Executable.activeGraph = activeGraph;
 	}
 
@@ -103,7 +101,7 @@ public class Executable extends PApplet {
 		if (selection != null) {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
-			cFrame.setKeyNamesForNodes(reader.getKeyNamesForNodes());
+			controlPanel.setKeyNamesForNodes(reader.getKeyNamesForNodes());
 			//cFrame.setKeyNamesForEdges(reader.getKeyNamesForEdges());
 			UserSettings.getInstance().setDescriptiveStatisticKeys(reader.getKeyNamesForNodes());
 			// this creates and displays the menu

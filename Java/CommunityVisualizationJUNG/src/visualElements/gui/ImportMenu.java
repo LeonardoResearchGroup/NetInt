@@ -105,7 +105,7 @@ public class ImportMenu implements ControlListener {
 			// If the user selected at least the first two attributes from the
 			// menu
 			if (nodeList.getSelection().length >= 2) {
-				Executable.activeGraph = true;
+				Executable.setActiveGraph(true);
 				// If the used does not select a layout, Fruchterman_Reingold is
 				// assigned by default
 				int layoutSelection;
@@ -117,7 +117,7 @@ public class ImportMenu implements ControlListener {
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
 					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),layoutSelection, GraphLoader.GRAPHML);
-					Executable.activeGraph = true;
+					Executable.setActiveGraph(true);
 
 				} else {
 					JOptionPane.showMessageDialog(app.frame, "Missing either \"community\" or \"label\" attributes",

@@ -249,16 +249,16 @@ public class ControlPanel extends PApplet {
 
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
 
-				Executable.activeGraph = false;
-				Assembler.secondOrderVCommunities = deserializedWrapper.getvSubCommunities();
-				for (visualElements.VCommunity com : Assembler.secondOrderVCommunities) {
+				Executable.setActiveGraph(false);
+				Assembler.secondOrderVComm = deserializedWrapper.getvSubCommunities();
+				for (visualElements.VCommunity com : Assembler.secondOrderVComm) {
 					com.eventRegister(parent);
 				}
-				Assembler.firstOrderVCommunity = deserializedWrapper.getvSubSubCommunity();
-				Assembler.firstOrderVCommunity.eventRegister(parent);
-				Assembler.firstOrderVCommunity.container.runVEdgeFactory();
+				Assembler.firstOrderVComm = deserializedWrapper.getvSubSubCommunity();
+				Assembler.firstOrderVComm.eventRegister(parent);
+				Assembler.firstOrderVComm.container.runVEdgeFactory();
 				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
-				Executable.activeGraph = true;
+				Executable.setActiveGraph(true);
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
@@ -282,7 +282,7 @@ public class ControlPanel extends PApplet {
 				// Executable.activeCursor = Executable.CURSOR_WAIT;
 				parent.cursor(WAIT);
 
-				SerializeWrapper wrapper = new SerializeWrapper(Assembler.firstOrderVCommunity, Assembler.secondOrderVCommunities,
+				SerializeWrapper wrapper = new SerializeWrapper(Assembler.firstOrderVComm, Assembler.secondOrderVComm,
 						UserSettings.getInstance());
 
 				try {

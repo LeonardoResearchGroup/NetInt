@@ -3,18 +3,16 @@ package visualElements;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import utilities.GraphLoader;
+import utilities.filters.Filters;
 import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 
 import java.awt.Color;
-import java.util.ArrayList;
-
-import org.apache.commons.collections15.Predicate;
 
 import containers.Container;
-import edu.uci.ics.jung.algorithms.filters.EdgePredicateFilter;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import graphElements.Edge;
 import graphElements.Node;
@@ -68,8 +66,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void initialize() {
-		container.initialize();
 		createEdgesBetweenInternalCommunities();
+		container.initialize();
 	}
 
 	public void show() {
@@ -88,7 +86,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
 						// build external edges
-						vC.container.buildExternalEdges(container.getVCommunities());
+						vC.container.buildExternalEdges(GraphLoader.theGraph, container.getVCommunities());
 					}
 				}
 			}
@@ -360,7 +358,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	// ***** Between communities operations *****
 	public boolean detectLinkedCommunities(final VCommunity otherCommunity) {
-		DirectedSparseMultigraph<Node,Edge> tmpGraph = GraphLoader.filterByInterCommunities(container.rootGraph, container.getName(), otherCommunity.container.getName());
+		DirectedSparseMultigraph<Node,Edge> tmpGraph = Filters.filterAndRemoveCommunityLinks (container.getName(), otherCommunity.container.getName());
 		// First check for the nodes of this community
 		for (Edge e : tmpGraph.getEdges()) {
 			Node source = e.getSource();

@@ -3,15 +3,13 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.collections15.Predicate;
 
-import edu.uci.ics.jung.algorithms.filters.EdgePredicateFilter;
-import edu.uci.ics.jung.algorithms.filters.VertexPredicateFilter;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import utilities.mapping.Mapper;
+
 
 /**
  * PAJEK import changes made on feb 3. It has not ben tested.
@@ -20,8 +18,7 @@ import utilities.mapping.Mapper;
  *
  */
 public class GraphLoader {
-
-	public DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph;
+	public static Graph<Node, Edge> theGraph;
 	public GraphmlReader GMLreader;
 	public PajekReader PJKreader;
 	public static final int PAJEK = 1;
@@ -43,21 +40,22 @@ public class GraphLoader {
 		fileFormat = format;
 		if (format == GraphLoader.PAJEK) {
 			PJKreader = new PajekReader();
-			jungGraph = PJKreader.getGraph();
+			theGraph = PJKreader.getGraph();
+			//jungGraph = PJKreader.getGraph();
 			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
-			jungGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
+			theGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
 			totalCommunities = GMLreader.getCommunities().size();
 		}
 		System.out.println("     Jung Graph Created from file:" + file);
-		System.out.println("        Total Nodes in the graph: " + jungGraph.getVertexCount());
-		System.out.println("        Total Edges in the graph: " + jungGraph.getEdgeCount());
+		System.out.println("        Total Nodes in the graph: " + theGraph.getVertexCount());
+		System.out.println("        Total Edges in the graph: " + theGraph.getEdgeCount());
 		System.out.println("     " + totalCommunities + " communities loaded");
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
-		for (Node n : jungGraph.getVertices()) {
-			setNodesDegrees(jungGraph, n);
+		for (Node n : theGraph.getVertices()) {
+			setNodesDegrees(theGraph, n);
 			Mapper.getInstance().setMaxMinGraphElementAttributes(n);
 		}
 		System.out.println("     Degrees assigned to nodes and attributes to Mapper Class");
@@ -92,83 +90,27 @@ public class GraphLoader {
 	}
 
 	public void printJungGraph(boolean printDetails) {
-		System.out.println("Nodes: " + jungGraph.getVertexCount());
-		System.out.println("Edges: " + jungGraph.getEdgeCount());
+		System.out.println("Nodes: " + theGraph.getVertexCount());
+		System.out.println("Edges: " + theGraph.getEdgeCount());
 		if (printDetails) {
-			Collection<graphElements.Edge> edges = jungGraph.getEdges();
+			Collection<graphElements.Edge> edges = theGraph.getEdges();
 			for (graphElements.Edge e : edges) {
 				System.out.println("from: " + e.getSource().getName() + " " + e.getSource().getId() + " to: "
 						+ e.getTarget().getName() + " " + e.getTarget().getId());
 			}
 
-			Collection<Node> nodes = jungGraph.getVertices();
+			Collection<Node> nodes = theGraph.getVertices();
 			for (Node n : nodes) {
 				System.out.print(n.getName() + " has ID: " + n.getId());
-				System.out.println("  Predecessors count: " + jungGraph.getPredecessorCount(n));
+				System.out.println("  Predecessors count: " + theGraph.getPredecessorCount(n));
 			}
 
-			for (Object ob : jungGraph.getVertices()) {
+			for (Object ob : theGraph.getVertices()) {
 				Node n = (Node) ob;
 				System.out.println(n.getName() + " has ID: " + n.getId());
 			}
 		}
 	}
 
-	/**
-	 * Returns a subgraph of jungGraph whose nodes belong to the specified
-	 * community
-	 * 
-	 * @param jungGraph
-	 * @param comunidad
-	 * @return
-	 */
-	public static DirectedSparseMultigraph<Node, Edge> filterByCommunity(
-			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String community) {
-		Predicate<Node> inSubgraph = new Predicate<Node>() {
-			public boolean evaluate(Node nodo) {
-				return nodo.belongsTo(community);
-			}
-		};
-		VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(inSubgraph);
-		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-				.transform(jungGraph);
-		// Set In and Out Degree
-		for (Node n : problemGraph.getVertices()) {
-			n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
-			n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
-		}
-		return problemGraph;
-	}
-
-	/**
-	 * Returns a subgraph of jungGraph whose edges connect the specified
-	 * communities in either direction.
-	 * 
-	 * @param jungGraph
-	 * @param comumnity1
-	 * @param comumnity2
-	 * @return
-	 */
-	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
-			DirectedSparseMultigraph<Node, graphElements.Edge> jungGraph, final String communityNameA,
-			final String communityNameB) {
-		Predicate<Edge> inSubgraph = new Predicate<Edge>() {
-			public boolean evaluate(Edge edge) {
-				Node source = edge.getSource();
-				Node target = edge.getTarget();
-				if (source.belongsTo(communityNameA) && target.belongsTo(communityNameB)) {
-					return true;
-				} else if (source.belongsTo(communityNameB) && target.belongsTo(communityNameA)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		};
-		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(inSubgraph);
-		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-				.transform(jungGraph);
-		return problemGraph;
-
-	}
+	
 }

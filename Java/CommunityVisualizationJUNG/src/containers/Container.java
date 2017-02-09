@@ -10,12 +10,13 @@ import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import processing.core.PVector;
-import utilities.GraphLoader;
+import utilities.filters.Filters;
 import utilities.mapping.Mapper;
 import visualElements.Canvas;
 import visualElements.VCommunity;
@@ -36,7 +37,6 @@ public abstract class Container {
 	public static final int FRUCHTERMAN_REINGOLD = 2;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
-	public DirectedSparseMultigraph<Node, Edge> rootGraph;
 	// Visual Elements
 	// All VNodes including VCommunities
 	protected ArrayList<VNode> vNodes;
@@ -141,7 +141,7 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	 * Builds all the external edges of vCommunities contained in a deployed
 	 * community
 	 */
-	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
+	public void buildExternalEdges(Graph<Node, Edge> rootGraph, ArrayList<VCommunity> otherVCommunities) {
 		// For all otherCommunities
 		for (VCommunity vC : otherVCommunities) {
 			// See if this community's container has created betweenEdges with
@@ -155,9 +155,9 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 					if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
 						System.out.println(this.getClass().getName() + " " + this.getName()
 								+ " is building External Edges for Vnodes with:" + otherContainer.getName());
-						this.runExternalEdgeFactory(this.rootGraph, otherContainer.getName(), otherContainer);
-						this.retrieveExternalVNodeSuccessors(this.rootGraph, otherContainer);
-						otherContainer.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+						this.runExternalEdgeFactory(rootGraph, otherContainer.getName(), otherContainer);
+						this.retrieveExternalVNodeSuccessors(rootGraph, otherContainer);
+						otherContainer.retrieveExternalVNodeSuccessors(rootGraph, this);
 						// Mark gates as closed for this community
 						betweenEdgeGates.add(otherContainer);
 						// Mark gates as closed for otherCommunity
@@ -172,7 +172,7 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	 * Builds all the external edges of this container with the one of a deployed
 	 * community community
 	 */
-	public void buildExternalEdges(VCommunity otherVCommunity) {	
+	public void buildExternalEdges(DirectedSparseMultigraph<Node, Edge> rootGraph, VCommunity otherVCommunity) {	
 		if (!betweenEdgeGates.contains(otherVCommunity.container)) {
 			Container otherContainer = otherVCommunity.container;
 			// See if otherCommunity's container has created betweenEdges
@@ -182,9 +182,9 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 				if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
 					System.out.println(this.getClass().getName() + " " + this.getName()
 							+ " is building External Edges for Vnodes with:" + otherContainer.getName());
-					this.runExternalEdgeFactory(this.rootGraph, otherContainer.getName(), otherContainer);
-					this.retrieveExternalVNodeSuccessors(this.rootGraph, otherContainer);
-					otherContainer.retrieveExternalVNodeSuccessors(this.rootGraph, this);
+					this.runExternalEdgeFactory(rootGraph, otherContainer.getName(), otherContainer);
+					this.retrieveExternalVNodeSuccessors(rootGraph, otherContainer);
+					otherContainer.retrieveExternalVNodeSuccessors(rootGraph, this);
 					// Mark gates as closed for this community
 					betweenEdgeGates.add(otherContainer);
 					// Mark gates as closed for otherCommunity
@@ -462,10 +462,6 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 		vN.pos.set(coordX, coordY);
 	}
 
-	public void setRootGraph(DirectedSparseMultigraph<Node, Edge> rootGraph) {
-		this.rootGraph = rootGraph;
-	}
-
 	// *** Show
 	public String getName() {
 		return name;
@@ -488,14 +484,14 @@ System.out.println("Container constructor / edges: "+graph.getEdgeCount());
 	 * @param externalContainer
 	 * @return
 	 */
-	public void runExternalEdgeFactory(DirectedSparseMultigraph<Node, Edge> completeGraph, String externalCommunityName,
+	public void runExternalEdgeFactory(Graph<Node, Edge> completeGraph, String externalCommunityName,
 			Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = GraphLoader.filterByInterCommunities(completeGraph, this.getName(),
+		Graph<Node, Edge> filteredGraph = Filters.filterByInterCommunities(completeGraph, this.getName(),
 				externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
