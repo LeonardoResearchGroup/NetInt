@@ -133,22 +133,28 @@ public abstract class Container {
 	// *** Other methods
 	/**
 	 * Builds all the internal edges between vCommunities contained in this
-	 * container
+	 * container and adds both edges and nodes (source & target ) to the graph
 	 */
 	public void createEdgesBetweenInternalCommunities() {
 		System.out.println(this.getClass().getName() + " Building Edges between communities for: " + getVCommunities().size() + " communities");
-		ArrayList<VCommunity> internalCommunities = getVCommunities();
+		
+		ArrayList<VCommunity> intVComm = getVCommunities();
+		
 		// Detect linked communities and build edges
-		for (int i = 0; i < internalCommunities.size(); i++) {
-			VCommunity vCA = internalCommunities.get(i);
+		for (int i = 0; i < intVComm.size(); i++) {
+			VCommunity vCA = intVComm.get(i);
 			System.out.println("     Building vEdges between community: " + vCA.getNode().getName());
-			for (int j = i + 1; j < internalCommunities.size(); j++) {
-				VCommunity vCB = internalCommunities.get(j);
+			
+			for (int j = i + 1; j < intVComm.size(); j++) {
+				VCommunity vCB = intVComm.get(j);
+			
 				// Detect if linked
 				if (vCA.detectLinkedCommunities(vCB)) {
+				
 					// Build edge
 					Edge tempEdge = new Edge(vCA.getNode(), vCB.getNode(), false);
 					tempEdge.setAttribute("weight", 1);
+					
 					// Add edge
 					this.getGraph().addEdge(tempEdge, vCA.getNode(), vCB.getNode());
 				}

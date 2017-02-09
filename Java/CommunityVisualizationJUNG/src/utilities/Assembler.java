@@ -105,10 +105,11 @@ public class Assembler {
 		// make a Container
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
 	
-		// Add VCommunities
+		
+		// Add VCommunities to container 
 		subContainer.setVNodes(communities);
 	
-		// make edges between internal communities
+		// make edges between internal communities and add them to the graph
 		subContainer.createEdgesBetweenInternalCommunities();
 		
 		// Name the community
@@ -126,13 +127,14 @@ public class Assembler {
 
 	private ArrayList<VCommunity> createSecondOrderVisualCommunities(Graph<Node, Edge> graph,
 			ArrayList<String> communityNames, int layout) {
-		System.out.println(this.getClass().getName() + " createVisualSubCommunities");
-		System.out.println("     Retrieving the list of second order VCommunities ");
+		System.out.println(this.getClass().getName() + " Creating Second Order Visual Communities");
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+		//Color
 		boolean colorBlindSafe = false;
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(communityNames.size());
+		//
 		int i = 0;
 		System.out
 				.println("     Generating DirectedSparseMultigraph for " + communityNames.size() + " communities ...");
