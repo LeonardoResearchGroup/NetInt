@@ -81,16 +81,16 @@ public abstract class Container {
 			distributeNodesInLayout(currentLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
-				System.out.println(this.getClass().getName() + " Building visual nodes");
+				System.out.println(this.getClass().getName() + " Building " + graph.getVertices().size() +"visual nodes");
 				runVNodeFactory();
-				System.out.println(this.getClass().getName() + " Building visual edges");
+				System.out.println(this.getClass().getName() + " Building " + graph.getEdges().size() +" visual edges");
 				runVEdgeFactory();
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
 				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 				distributeNodesInLayout(currentLayout, dimension);
-				System.out.println(this.getClass().getName() + " Building visual edges");
+				System.out.println(this.getClass().getName()  + " Building " + graph.getEdges().size() +" visual edges");
 				runVEdgeFactory();
 				setVElementCoordinates();
 			}
