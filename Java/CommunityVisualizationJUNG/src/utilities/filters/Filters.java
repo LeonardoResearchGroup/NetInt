@@ -8,6 +8,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
+import utilities.GraphLoader;
 import utilities.predicates.Predicates;
 
 public class Filters {
@@ -33,13 +34,13 @@ public class Filters {
 		return remainingGraph;
 	}
 
-	public void setGraph(Graph<Node, Edge> rootGraph) {
+	public void setRootGraph() {
 		remainingGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Copying the graph
-		for (Node n : rootGraph.getVertices())
+		for (Node n : GraphLoader.theGraph.getVertices())
 			remainingGraph.addVertex(n);
-		for (Edge e : rootGraph.getEdges())
-			remainingGraph.addEdge(e, rootGraph.getIncidentVertices(e));
+		for (Edge e : GraphLoader.theGraph.getEdges())
+			remainingGraph.addEdge(e, GraphLoader.theGraph.getIncidentVertices(e));
 		System.out.println(getInstance().getClass().getName() + " Total edges in Filters' remainingGraph: "
 				+ remainingGraph.getEdgeCount());
 	}
@@ -48,16 +49,14 @@ public class Filters {
 	 * Returns a subgraph of jungGraph whose nodes belong to the specified
 	 * community
 	 * 
-	 * @param jungGraph
 	 * @param comunidad
 	 * @return
 	 */
-	public static DirectedSparseMultigraph<Node, Edge> filterByCommunity(Graph<Node, graphElements.Edge> jungGraph,
-			final String community) {
+	public static DirectedSparseMultigraph<Node, Edge> filterByCommunity(final String community) {
 		VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(
 				Predicates.nodeInCommunity(community));
 		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-				.transform(jungGraph);
+				.transform(GraphLoader.theGraph);
 		// Set In and Out Degree
 		for (Node n : problemGraph.getVertices()) {
 			n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
@@ -68,20 +67,19 @@ public class Filters {
 
 	/**
 	 * Returns a subgraph of jungGraph whose edges connect the specified
-	 * communities in either direction jungGraph
+	 * communities in either direction
 	 * 
-	 * @param jungGraph
 	 * @param comumnity1
 	 * @param comumnity2
 	 * @return
 	 */
-	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(
-			Graph<Node, graphElements.Edge> jungGraph, final String communityNameA, final String communityNameB) {
+	public static DirectedSparseMultigraph<Node, Edge> filterByInterCommunities(final String communityNameA,
+			final String communityNameB) {
 		// Filter and extractor
 		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
 				Predicates.edgeLinkingCommunities(communityNameA, communityNameB));
 		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-				.transform(jungGraph);
+				.transform(GraphLoader.theGraph);
 		return problemGraph;
 
 	}
@@ -106,12 +104,11 @@ public class Filters {
 		return problemGraph;
 	}
 
-	public static DirectedSparseMultigraph<Node, Edge> filterByEdgesBelonging(
-			DirectedSparseMultigraph<Node, Edge> jungGraph, final String community) {
+	public static DirectedSparseMultigraph<Node, Edge> filterByEdgesBelonging(final String community) {
 		EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
 				Predicates.edgeInCommunity(community));
 		DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-				.transform(jungGraph);
+				.transform(GraphLoader.theGraph);
 		// Set In and Out Degree
 		for (Node n : problemGraph.getVertices()) {
 			n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));

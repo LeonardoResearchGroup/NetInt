@@ -59,8 +59,7 @@ public class Assembler {
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts,
 				format);
 		// Set rootGraph to Assembler and Filters
-
-		Filters.getInstance().setGraph(GraphLoader.theGraph);
+		Filters.getInstance().setRootGraph();
 
 		// Root visual community.
 		// Keep it commented unless you want to visualize the root graph with no
@@ -136,7 +135,7 @@ public class Assembler {
 			String communityName = comNames.get(i);
 			
 			// SubGraph of each community
-			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterByCommunity(graph, communityName);
+			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterByCommunity(communityName);
 			
 			// SubContainers for each VCommunity
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);

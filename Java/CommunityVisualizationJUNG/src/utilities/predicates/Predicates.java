@@ -45,9 +45,9 @@ public abstract class Predicates {
 	}
 
 	/**
-	 * Evaluates if a given edge links two communities. It checks if either
-	 * source and target belong to one of the two communities but both cannot
-	 * belong to the same community
+	 * Evaluates if a given edge links nodes from two communities. It checks if
+	 * either source and target belong to one of the two communities but both
+	 * cannot belong to the same community
 	 * 
 	 * @param communityNameA
 	 * @param communityNameB

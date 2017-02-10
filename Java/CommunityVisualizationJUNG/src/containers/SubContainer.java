@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.TreeSet;
 
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;

@@ -134,7 +134,7 @@ public class ControlPanel extends PApplet {
 		// Control de visibilidad
 		cp5.addToggle("Nodos").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Nodos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		cp5.addToggle("Nombre").setPosition(60, 5).setSize(45, 10).moveTo(group);
+		cp5.addToggle("Nombre").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Nombre").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Buscador por ID de nodo
 		cp5.addTextfield("Buscar ID Nodo").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group);
@@ -160,7 +160,7 @@ public class ControlPanel extends PApplet {
 		// Control de visibilidad
 		cp5.addToggle("Internos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Internos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(false).moveTo(group);
+		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
