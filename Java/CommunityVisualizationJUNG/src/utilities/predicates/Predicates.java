@@ -5,6 +5,13 @@ import org.apache.commons.collections15.Predicate;
 import graphElements.Edge;
 import graphElements.Node;
 
+/**
+ * A series of predicates used in boolean operations performed over community's
+ * graphElements
+ * 
+ * @author jsalam
+ *
+ */
 public abstract class Predicates {
 
 	/**

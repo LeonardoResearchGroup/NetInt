@@ -34,7 +34,7 @@ public class Executable extends PApplet {
 		 * Output Console. Uncomment this line to enable a console Catcher.
 		 * CAUTION, it has conflicts with Menu's File Open.
 		 */
-		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		//consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);

@@ -359,7 +359,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		DirectedSparseMultigraph<Node, Edge> tmpGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// If not the same VCommunity
 		if (!this.getNode().equals(otherCommunity.getNode())) {
-			tmpGraph = Filters.filterAndRemoveCommunityLinks(container.getName(), otherCommunity.container.getName());
+			tmpGraph = Filters.filterAndRemoveEdgeLinkingCommunity(container.getName(), otherCommunity.container.getName());
 
 		}
 		return tmpGraph;

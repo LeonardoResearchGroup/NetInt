@@ -81,7 +81,7 @@ public abstract class Container {
 			distributeNodesInLayout(currentLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
-				System.out.println(this.getClass().getName() + " Building " + graph.getVertices().size() +"visual nodes");
+				System.out.println(this.getClass().getName() + " Building " + graph.getVertices().size() +" visual nodes");
 				runVNodeFactory();
 				System.out.println(this.getClass().getName() + " Building " + graph.getEdges().size() +" visual edges");
 				runVEdgeFactory();
@@ -545,7 +545,7 @@ public abstract class Container {
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = Filters.filterByInterCommunities(this.getName(), externalCommunityName);
+		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
