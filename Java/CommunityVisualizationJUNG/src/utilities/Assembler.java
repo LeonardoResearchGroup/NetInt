@@ -91,9 +91,9 @@ public class Assembler {
 	}
 
 	private VCommunity createFirstOrderVCommunity(ArrayList<VCommunity> communities, String comName, int layout) {
-		// Progress repoort on console
+		// Progress report on console
 		System.out.println(this.getClass().getName() + " Create First Order Visual Community");
-		System.out.println("     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order");
+		System.out.println("     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order container");
 		// Make a temporary graph
 		Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 
@@ -109,7 +109,7 @@ public class Assembler {
 		subContainer.assignVisualElements(communities);
 
 		// Initialize container
-		subContainer.initialize();
+		// subContainer.initialize();
 
 		String nodeID = comName + "_" + String.valueOf(0);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
@@ -144,7 +144,7 @@ public class Assembler {
 			containerTemp.setName(communityName);
 			
 			// Initialize container
-			containerTemp.initialize();
+			//containerTemp.initialize();
 			
 			// Make Node for CommunityCover
 			Node tmpNode = new Node(communityName);
