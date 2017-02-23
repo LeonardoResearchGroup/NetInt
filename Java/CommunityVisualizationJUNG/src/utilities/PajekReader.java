@@ -21,12 +21,15 @@ public class PajekReader {
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> communityNodes;
 	private ArrayList<String> communities;
+	// Edges between communities
+	private ArrayList<Edge> edgesBetweenCommunities;
 
 	/**
 	 * Reader usually used to load pajek format files
 	 */
 	public PajekReader() {
 		communities = new ArrayList<String>();
+		edgesBetweenCommunities = new ArrayList<Edge>();
 	}
 
 	/**
@@ -39,6 +42,7 @@ public class PajekReader {
 	public PajekReader(String file) {
 		graph = readPajek(file);
 		communities = new ArrayList<String>();
+		edgesBetweenCommunities = new ArrayList<Edge>();
 	}
 
 	/**
@@ -173,5 +177,9 @@ public class PajekReader {
 			}
 		}
 		return rtn;
+	}
+	
+	public ArrayList<Edge> getEdgesBetweenCommunities() {
+		return edgesBetweenCommunities;
 	}
 }

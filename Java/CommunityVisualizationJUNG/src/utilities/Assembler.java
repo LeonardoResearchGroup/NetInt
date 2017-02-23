@@ -51,13 +51,12 @@ public class Assembler {
 	 * @param format
 	 *            Graphml or Pajek. Graphml by default.
 	 */
-	public void loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout,int format) {
+	public void loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
 		// Progress repoort on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 
 		// Instantiate a graphLoader
-		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts,
-				format);
+		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
 
@@ -70,7 +69,8 @@ public class Assembler {
 		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
 
 		// First order community: Community of communities
-		firstOrderVComm = createFirstOrderVCommunity(secondOrderVComm, "FirstOrderCommunity", layout);
+		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
+				"FirstOrderCommunity", layout);
 	}
 
 	/**
@@ -90,10 +90,12 @@ public class Assembler {
 		return vCommunity;
 	}
 
-	private VCommunity createFirstOrderVCommunity(ArrayList<VCommunity> communities, String comName, int layout) {
+	private VCommunity createFirstOrderVCommunity(ArrayList<Edge> firstOrderEdgeList, ArrayList<VCommunity> communities,
+			String comName, int layout) {
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Create First Order Visual Community");
-		System.out.println("     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order container");
+		System.out.println(
+				"     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order container");
 		// Make a temporary graph
 		Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 
@@ -101,14 +103,19 @@ public class Assembler {
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
 
 		// make graph from communities
-		subContainer.populateGraph(communities);
+		// subContainer.populateGraphfromVCommunities(communities);
+
+		// make graph from first order edge list
+		subContainer.populateGraphfromEdgeList(firstOrderEdgeList);
 
 		// Name the community
 		subContainer.setName(comName);
 
 		subContainer.assignVisualElements(communities);
 
-		// Initialize container
+		// Initialize container NOTE: SEE VCommunity.show(). The container is
+		// only initialized if it going to be shown, That's is why this method
+		// is invoked inside VCommunity.show()
 		// subContainer.initialize();
 
 		String nodeID = comName + "_" + String.valueOf(0);
@@ -116,7 +123,8 @@ public class Assembler {
 		return communityTemp;
 	}
 
-	private ArrayList<VCommunity> createSecondOrderVCommunities(Graph<Node, Edge> graph, ArrayList<String> comNames, int layout) {
+	private ArrayList<VCommunity> createSecondOrderVCommunities(Graph<Node, Edge> graph, ArrayList<String> comNames,
+			int layout) {
 		System.out.println(this.getClass().getName() + " Creating Second Order VCommunities");
 
 		// Make a list of VCommunities
@@ -133,31 +141,33 @@ public class Assembler {
 
 		for (int i = 0; i < comNames.size(); i++) {
 			String communityName = comNames.get(i);
-			
+
+			System.out.println("     Working on community " + communityName);
+
 			// SubGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName);
-			
+
 			// SubContainers for each VCommunity
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
 
 			// Name container
 			containerTemp.setName(communityName);
-			
+
 			// Initialize container
-			//containerTemp.initialize();
-			
+			// containerTemp.initialize();
+
 			// Make Node for CommunityCover
 			Node tmpNode = new Node(communityName);
-			
+
 			// Name Node
 			tmpNode.setName(communityName);
-			
+
 			// Create temporal community
 			VCommunity communityTemp = new VCommunity(tmpNode, containerTemp);
-			
+
 			// Set VCommunity color
 			communityTemp.setColor(myGradient[i]);
-			
+
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
 

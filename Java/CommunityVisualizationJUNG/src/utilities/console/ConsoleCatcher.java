@@ -35,7 +35,7 @@ public class ConsoleCatcher extends PApplet {
 	}
 
 	public void settings() {
-		size(500, 80);
+		size(500, 180);
 	}
 
 	public void setup() {

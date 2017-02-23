@@ -141,8 +141,8 @@ public abstract class Container {
 	// *** Other methods
 	/**
 	 * This method is intended to populate a container's empty graph with
-	 * GraphElements from the non-empty subGraphs of edges between nodes
-	 * marked a members of this community and those marked as members of other
+	 * GraphElements from the non-empty subGraphs of edges between nodes marked
+	 * a members of this community and those marked as members of other
 	 * communities.
 	 * 
 	 * It creates an edge between the VCommunity to which this container belongs
@@ -152,14 +152,35 @@ public abstract class Container {
 	 * Each edge has a weight equals to the number of edges linking both
 	 * communities
 	 */
-	public void populateGraph(ArrayList<VCommunity> intVComm) {
+	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList) {
+		for (Edge e : edgeList) {
+			// Add edge
+			this.getGraph().addEdge(e, e.getSource(), e.getTarget());
+		}
+		System.out.println(this.getClass().getName() + " Graph Population Completed");
+	}
+
+	/**
+	 * This method is intended to populate a container's empty graph with
+	 * GraphElements from the non-empty subGraphs of edges between nodes marked
+	 * a members of this community and those marked as members of other
+	 * communities.
+	 * 
+	 * It creates an edge between the VCommunity to which this container belongs
+	 * and VCommunities received as parameter if there is an actual edge whose
+	 * source or target are marked as members of either communities.
+	 * 
+	 * Each edge has a weight equals to the number of edges linking both
+	 * communities
+	 */
+	public void populateGraphfromVCommunities(ArrayList<VCommunity> intVComm) {
 		System.out.println(this.getClass().getName() + " Building between edges for: " + getVCommunities().size()
 				+ " communities");
 
 		// Detect linked communities and build edges
 		for (int i = 0; i < intVComm.size(); i++) {
 			VCommunity vCA = intVComm.get(i);
-			System.out.println("     Building vEdges linking : " + vCA.getNode().getName());
+			System.out.println("     Building edges linking : " + vCA.getNode().getName());
 
 			for (int j = i + 1; j < intVComm.size(); j++) {
 				VCommunity vCB = intVComm.get(j);
