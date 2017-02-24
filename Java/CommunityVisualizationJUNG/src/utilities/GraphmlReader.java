@@ -30,14 +30,17 @@ import graphElements.Edge;
 public class GraphmlReader {
 	private Graph graph;
 	// Hash map <Name of community, Node object of a community>
-	private HashMap<String, Node> communityNodes;
+	private HashMap<String, Node> vCommunityNodes;
 	private ArrayList<String> communities;
+	// Edges between communities
+	private ArrayList<Edge> edgesBetweenCommunities;
 
 	/**
 	 * Reader usually used to load pajek format files
 	 */
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
+		edgesBetweenCommunities = new ArrayList<Edge>();
 	}
 
 	/**
@@ -51,6 +54,7 @@ public class GraphmlReader {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
 		communities = new ArrayList<String>();
+		edgesBetweenCommunities = new ArrayList<Edge>();
 		InputStream input;
 		try {
 			input = new BufferedInputStream(new FileInputStream(file));
@@ -64,7 +68,7 @@ public class GraphmlReader {
 
 	/**
 	 * This class was initially designed to return an array of nodes but it
-	 * needed to be changes to a TreeMap because it was not possible to
+	 * needed to be changed to a TreeMap because it was not possible to
 	 * determine the final size of the array in advance.
 	 * 
 	 * @param nodeImportAttributes
@@ -144,7 +148,7 @@ public class GraphmlReader {
 		// Notify progress on console
 		System.out.println(this.getClass().getName() + " Getting Jung Directed Graph...");
 		// Hash map <Name of community, Node object of a community>
-		communityNodes = new HashMap<String, Node>();
+		vCommunityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
 		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
@@ -185,6 +189,17 @@ public class GraphmlReader {
 			// Setting max min limits in Mapper class (Singleton
 			// pattern)
 			Mapper.getInstance().setMaxMinGraphElementAttributes(e);
+			
+			// For the first order community graph
+						Edge metaE = new Edge(vCommunityNodes.get(nodes.get(idSource).getCommunity(1)),
+								vCommunityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
+						// if no attributes selected set the weight to 1
+						metaE.setAttribute("weight", 1);
+						
+						if (!edgesBetweenCommunities.contains(metaE)) {
+							edgesBetweenCommunities.add(metaE);
+						}
+			
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
@@ -248,7 +263,7 @@ public class GraphmlReader {
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
-			communityNodes.put(string, new Node(string));
+			vCommunityNodes.put(string, new Node(string));
 		}
 	}
 
@@ -298,5 +313,9 @@ public class GraphmlReader {
 			return rtn;
 		}
 		return rtn;
+	}
+
+	public ArrayList<Edge> getEdgesBetweenCommunities() {
+		return edgesBetweenCommunities;
 	}
 }

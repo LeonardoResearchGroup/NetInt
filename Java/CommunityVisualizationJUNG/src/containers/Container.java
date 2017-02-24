@@ -81,16 +81,19 @@ public abstract class Container {
 			distributeNodesInLayout(currentLayout, dimension);
 			if (vNodes.size() == 0) {
 				// Generate Visual Elements
-				System.out.println(this.getClass().getName() + " Building " + graph.getVertices().size() +" visual nodes");
+				System.out.println(
+						this.getClass().getName() + " Building " + graph.getVertices().size() + " visual nodes");
 				runVNodeFactory();
-				System.out.println(this.getClass().getName() + " Building " + graph.getEdges().size() +" visual edges");
+				System.out
+						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 				runVEdgeFactory();
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
 				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 				distributeNodesInLayout(currentLayout, dimension);
-				System.out.println(this.getClass().getName()  + " Building " + graph.getEdges().size() +" visual edges");
+				System.out
+						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 				runVEdgeFactory();
 				setVElementCoordinates();
 			}
@@ -137,19 +140,47 @@ public abstract class Container {
 
 	// *** Other methods
 	/**
-	 * Builds all the internal edges between vCommunities contained in this
-	 * container and adds both edges and nodes (source & target ) to the
-	 * container's graph. Each edge has a weight equals to the number of edges
-	 * linking both communities
+	 * This method is intended to populate a container's empty graph with
+	 * GraphElements from the non-empty subGraphs of edges between nodes marked
+	 * a members of this community and those marked as members of other
+	 * communities.
+	 * 
+	 * It creates an edge between the VCommunity to which this container belongs
+	 * and VCommunities received as parameter if there is an actual edge whose
+	 * source or target are marked as members of either communities.
+	 * 
+	 * Each edge has a weight equals to the number of edges linking both
+	 * communities
 	 */
-	public void populateGraph(ArrayList<VCommunity> intVComm) {
-		System.out.println(this.getClass().getName() + " Building Edges between for communities: "
-				+ getVCommunities().size() + " communities");
+	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList) {
+		for (Edge e : edgeList) {
+			// Add edge
+			this.getGraph().addEdge(e, e.getSource(), e.getTarget());
+		}
+		System.out.println(this.getClass().getName() + " Graph Population Completed");
+	}
+
+	/**
+	 * This method is intended to populate a container's empty graph with
+	 * GraphElements from the non-empty subGraphs of edges between nodes marked
+	 * a members of this community and those marked as members of other
+	 * communities.
+	 * 
+	 * It creates an edge between the VCommunity to which this container belongs
+	 * and VCommunities received as parameter if there is an actual edge whose
+	 * source or target are marked as members of either communities.
+	 * 
+	 * Each edge has a weight equals to the number of edges linking both
+	 * communities
+	 */
+	public void populateGraphfromVCommunities(ArrayList<VCommunity> intVComm) {
+		System.out.println(this.getClass().getName() + " Building between edges for: " + getVCommunities().size()
+				+ " communities");
 
 		// Detect linked communities and build edges
 		for (int i = 0; i < intVComm.size(); i++) {
 			VCommunity vCA = intVComm.get(i);
-			System.out.println("     Building vEdges linking : " + vCA.getNode().getName());
+			System.out.println("     Building edges linking : " + vCA.getNode().getName());
 
 			for (int j = i + 1; j < intVComm.size(); j++) {
 				VCommunity vCB = intVComm.get(j);
@@ -179,16 +210,16 @@ public abstract class Container {
 	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
 		// For all otherCommunities
 		for (VCommunity vC : otherVCommunities) {
-			
+
 			// See if this community's container has created betweenEdges with
 			// any of them
-			if (!betweenEdgeGates.contains(vC.container)) {
+			if (!betweenEdgeGates.contains(vC.container) && vC.getComCover().isDeployed()) {
 				Container otherContainer = vC.container;
-			
+
 				// See if otherCommunity's container has created betweenEdges
 				// with this container
 				if (!otherContainer.betweenEdgeGates.contains(this)) {
-				
+
 					// If the containers are not the same and are initialized
 					if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
 						System.out.println(this.getClass().getName() + " " + this.getName()
@@ -196,7 +227,7 @@ public abstract class Container {
 						this.runExternalEdgeFactory(otherContainer.getName(), otherContainer);
 						this.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, otherContainer);
 						otherContainer.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, this);
-					
+
 						// Mark gates as closed for this community
 						betweenEdgeGates.add(otherContainer);
 						// Mark gates as closed for otherCommunity
@@ -538,8 +569,7 @@ public abstract class Container {
 	 * @param externalContainer
 	 * @return
 	 */
-	public void runExternalEdgeFactory(String externalCommunityName,
-			Container externalContainer) {
+	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);

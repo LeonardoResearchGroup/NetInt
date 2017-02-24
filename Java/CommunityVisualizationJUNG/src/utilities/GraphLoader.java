@@ -3,13 +3,11 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import utilities.mapping.Mapper;
-
 
 /**
  * PAJEK import changes made on feb 3. It has not ben tested.
@@ -19,11 +17,11 @@ import utilities.mapping.Mapper;
  */
 public class GraphLoader {
 	public static Graph<Node, Edge> theGraph;
-	public GraphmlReader GMLreader;
-	public PajekReader PJKreader;
+	private GraphmlReader GMLreader;
+	private PajekReader PJKreader;
 	public static final int PAJEK = 1;
 	public static final int GRAPHML = 0;
-	private int totalCommunities = 0;
+
 	private int fileFormat;
 
 	/**
@@ -36,12 +34,13 @@ public class GraphLoader {
 	 * @param format
 	 */
 	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
+		int totalCommunities = 0;
 		System.out.println(this.getClass().getName() + "GraphLoader");
 		fileFormat = format;
 		if (format == GraphLoader.PAJEK) {
 			PJKreader = new PajekReader();
 			theGraph = PJKreader.getGraph();
-			//jungGraph = PJKreader.getGraph();
+			// jungGraph = PJKreader.getGraph();
 			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
@@ -112,5 +111,13 @@ public class GraphLoader {
 		}
 	}
 
-	
+	public ArrayList<Edge> getFirstOrderEdgeList() {
+		if (fileFormat == GraphLoader.GRAPHML)
+			return GMLreader.getEdgesBetweenCommunities();
+		else if (fileFormat == GraphLoader.PAJEK)
+			return PJKreader.getEdgesBetweenCommunities();
+		else
+			return null;
+	}
+
 }

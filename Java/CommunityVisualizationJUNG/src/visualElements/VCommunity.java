@@ -63,10 +63,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
 	}
 
-	public void initialize() {
-		container.initialize();
-		// createEdgesBetweenInternalCommunities();
-	}
+//	public void initializeA() {
+//		container.initialize();
+//		// createEdgesBetweenInternalCommunities();
+//	}
 
 	public void show() {
 		// Display the community cover
@@ -87,6 +87,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vC.container.buildExternalEdges(container.getVCommunities());
 					}
 				}
+			} else{
+				container.initialize();
 			}
 
 			// If the layout is iterative
@@ -234,6 +236,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	// ***** Events
 
+	public VCommunityCover getComCover() {
+		return comCover;
+	}
+
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 		theApp.registerMethod("keyEvent", this);
@@ -360,7 +366,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// If not the same VCommunity
 		if (!this.getNode().equals(otherCommunity.getNode())) {
 			tmpGraph = Filters.filterAndRemoveEdgeLinkingCommunity(container.getName(), otherCommunity.container.getName());
-
 		}
 		return tmpGraph;
 	}

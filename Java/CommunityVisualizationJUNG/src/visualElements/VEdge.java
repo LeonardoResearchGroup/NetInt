@@ -38,6 +38,7 @@ public class VEdge implements Serializable {
 		this.edge = new Edge(source.getNode(), target.getNode(), true);
 		this.vSource = source;
 		this.vTarget = target;
+		thickness = 1;
 	}
 
 	/**
@@ -52,15 +53,15 @@ public class VEdge implements Serializable {
 	public boolean setSourceAndTarget(ArrayList<VNode> visualNodes) {
 		boolean sourceDone = false;
 		boolean targetDone = false;
-		for (VNode atm : visualNodes) {
+		for (VNode vNode : visualNodes) {
 			// Source
-			if (atm.hasNode(edge.getSource())) {
-				vSource = atm;
+			if (vNode.hasNode(edge.getSource())) {
+				vSource = vNode;
 				sourceDone = true;
 			}
 			// Target
-			if (atm.hasNode(edge.getTarget())) {
-				vTarget = atm;
+			if (vNode.hasNode(edge.getTarget())) {
+				vTarget = vNode;
 				targetDone = true;
 			}
 		}
@@ -87,7 +88,6 @@ public class VEdge implements Serializable {
 //		 source.show(source.isDisplayed());
 //		 target.show(target.isDisplayed());
 		if (vSource.isVisible() && vTarget.isVisible()) {
-
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
 			if (visibility) {
