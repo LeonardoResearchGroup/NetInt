@@ -59,6 +59,10 @@ public class ControlPanel extends PApplet {
 		font = createFont("Arial", 11, false);
 		textFont(font);
 	}
+	
+	public void exit() {
+	  println("not exiting");
+	}
 
 	/**
 	 * Main GUI method that assembles all the GUI components
