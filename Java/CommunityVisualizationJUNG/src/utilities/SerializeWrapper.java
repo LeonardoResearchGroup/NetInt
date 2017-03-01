@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import edu.uci.ics.jung.graph.Graph;
+import graphElements.Edge;
+import graphElements.Node;
 import visualElements.VCommunity;
 import visualElements.gui.UserSettings;
 
@@ -13,18 +16,24 @@ public class SerializeWrapper implements Serializable{
 	private VCommunity secondOrderCommunities;
 	private ArrayList<VCommunity> firstOrderCommunities;
 	private UserSettings  vSettings;
+	private Graph<Node, Edge> theGraph;
 	
 
-	public SerializeWrapper(VCommunity vSubSubCommunity, ArrayList<VCommunity> vSubCommunities, UserSettings  vSettings) {
+	public SerializeWrapper(VCommunity vSubSubCommunity, ArrayList<VCommunity> vSubCommunities, UserSettings  vSettings, Graph<Node,Edge> theGraph) {
 		super();
 		this.secondOrderCommunities = vSubSubCommunity;
 		this.firstOrderCommunities = vSubCommunities;
 		this.vSettings = vSettings;
+		this.theGraph = theGraph;
 	}
 
 
 	public VCommunity getvSubSubCommunity() {
 		return secondOrderCommunities;
+	}
+	
+	public Graph <Node,Edge> getTheGraph(){
+		return theGraph;
 	}
 
 

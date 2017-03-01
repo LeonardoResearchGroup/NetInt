@@ -2,6 +2,7 @@ package visualElements.gui;
 
 import processing.core.*;
 import utilities.Assembler;
+import utilities.GraphLoader;
 import utilities.SerializeHelper;
 import utilities.SerializeWrapper;
 import utilities.mapping.Mapper;
@@ -61,7 +62,7 @@ public class ControlPanel extends PApplet {
 	}
 	
 	public void exit() {
-	  println("not exiting");
+	  println("Control Panel Closed");
 	}
 
 	/**
@@ -262,6 +263,7 @@ public class ControlPanel extends PApplet {
 				Assembler.firstOrderVComm.eventRegister(parent);
 				Assembler.firstOrderVComm.container.runVEdgeFactory();
 				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
+				GraphLoader.theGraph = deserializedWrapper.getTheGraph();
 				Executable.setActiveGraph(true);
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -287,7 +289,7 @@ public class ControlPanel extends PApplet {
 				parent.cursor(WAIT);
 
 				SerializeWrapper wrapper = new SerializeWrapper(Assembler.firstOrderVComm, Assembler.secondOrderVComm,
-						UserSettings.getInstance());
+						UserSettings.getInstance(), GraphLoader.theGraph);
 
 				try {
 					SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
