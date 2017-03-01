@@ -51,6 +51,10 @@ public class ConsoleCatcher extends PApplet {
 		textFont(font);
 	}
 
+	public void exit() {
+		  println("Console catcher closed");
+		}
+	
 	public void draw() {
 		background(100);
 		textArea.setText(baos.toString());
