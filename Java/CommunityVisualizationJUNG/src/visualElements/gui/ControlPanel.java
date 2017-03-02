@@ -7,6 +7,9 @@ import utilities.mapping.Mapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import javax.swing.JFrame;
+
 import controlP5.*;
 import executable.Executable;
 import executable.Logica;
@@ -38,6 +41,7 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void setup() {
+		((JFrame)frame).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(true);
