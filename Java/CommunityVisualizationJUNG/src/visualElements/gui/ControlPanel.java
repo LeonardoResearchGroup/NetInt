@@ -42,6 +42,7 @@ public class ControlPanel extends PApplet {
 
 	public void setup() {
 		((JFrame)frame).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+//		((JFrame)frame).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(true);
