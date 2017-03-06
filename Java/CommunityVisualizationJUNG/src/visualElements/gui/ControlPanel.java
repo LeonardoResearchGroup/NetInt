@@ -25,7 +25,7 @@ public class ControlPanel extends PApplet {
 	int w, h;
 	PApplet parent;
 	ControlP5 cp5;
-	ColorPicker cPicker;
+	Slider cPicker;
 	CheckBox cBox;
 	Accordion accordion;
 	PFont font;
@@ -54,15 +54,14 @@ public class ControlPanel extends PApplet {
 		logo = loadImage("../data/images/Logo_Bancolombia.png");
 		keyNamesForNodes.add("empty list");
 		keyNamesForEdges.add("empty list");
-		// logo = loadImage("../data/images/Bank.png");
 		gui();
 		// Font
 		font = createFont("Arial", 11, false);
 		textFont(font);
 	}
-	
+
 	public void exit() {
-	  println("Control Panel Closed");
+		println("Control Panel Closed");
 	}
 
 	/**
@@ -73,7 +72,7 @@ public class ControlPanel extends PApplet {
 
 		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color(0, 64)).setBackgroundHeight(420)
+		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color(0, 64)).setBackgroundHeight(30)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g3 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
@@ -93,7 +92,7 @@ public class ControlPanel extends PApplet {
 				.addItem(g4).addItem(nodeKeys);
 
 		// open close sections
-		accordion.open(0, 2, 3, 4);
+		accordion.open(0, 1, 2, 3, 4);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
@@ -124,15 +123,18 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void guiBackground(Group group) {
-		cPicker = cp5.addColorPicker("Color Selector").plugTo(parent).setPosition(5, 10).setWidth(165)
-				.setColorValue(color(200, 200, 200, 255)).moveTo(group);
 
+		cPicker = cp5.addSlider("Lumiosidad_Fondo").setPosition(5, 10).setWidth(165).setRange(0, 255).setValue(70)
+				.moveTo(group);
+
+		cp5.getController("Lumiosidad_Fondo").getCaptionLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE)
+				.setPaddingX(0);
 	}
 
 	/**
 	 * GUI component related to Node Operations
 	 * 
-	 * @param g2
+	 * @param group
 	 *            The Group of GUI elements
 	 */
 	private void guiNodos(Group group) {
@@ -236,7 +238,7 @@ public class ControlPanel extends PApplet {
 	}
 
 	private void switchCaseCPicker() {
-		UserSettings.getInstance().setColorBackground(cPicker.getColorValue());
+		UserSettings.getInstance().setColorBackground((int) cPicker.getValue());
 
 	}
 
@@ -318,6 +320,12 @@ public class ControlPanel extends PApplet {
 
 		case "Salir":
 			System.exit(0);
+			break;
+
+		// **** FONDO ****
+		case "Lumiosidad_Fondo":
+			UserSettings.getInstance().setColorBackground((int) theEvent.getController().getValue());
+			// System.out.println(theEvent.getController().getValue());
 			break;
 
 		// **** NODES ****

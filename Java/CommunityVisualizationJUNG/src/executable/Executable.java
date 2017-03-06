@@ -53,8 +53,8 @@ public class Executable extends PApplet {
 	}
 
 	public void draw() {
+		background(UserSettings.getInstance().getColorBackground());
 		if (activeGraph) {
-			background(UserSettings.getInstance().getColorBackground());
 			pushMatrix();
 			canvas.translateCenter((width - app.rootDimension.width) / 2, (height - app.rootDimension.height) / 2);
 			canvas.transform();
@@ -65,9 +65,7 @@ public class Executable extends PApplet {
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
-		} else {
-			background(100);
-		}
+		} 
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
 		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2016", 20, height - 10);
