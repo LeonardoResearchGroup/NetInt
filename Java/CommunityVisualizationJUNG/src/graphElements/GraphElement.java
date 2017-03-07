@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Abstract class that handles two attribute collections of nodes and edges. The
- * first set contains absolute attributes, i.e., attributes independent of any
- * graph processing result. The second set are relative attributes, i.e.,
- * attributes that get values depending of graph processing. An example of the
- * latter is node degree after clustering. A node has a relative degree inside
- * each cluster to which it belongs.
+ * Abstract class that handles two collections for storage of graphElements'
+ * attributes (either nodes or edges). The first collection contains absolute
+ * attributes, i.e., raw attributes independent of any graph processing, e.g,
+ * the amount sent by one payer to one beneficiary is the weight of an edge
+ * linking their nodes. The second set are relative attributes, i.e., attributes
+ * that get values from graph processing. An example of the latter is node
+ * degree after clustering. A node has a relative degree inside each cluster to
+ * which it belongs.
  * 
  * For convenience, node and edge graph metrics (inDegree, outDegree, degree)
  * are stored in the collection of relative attributes in numbered sequence,

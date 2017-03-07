@@ -1,6 +1,7 @@
 package visualElements.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -93,6 +94,9 @@ public class ImportMenu implements ControlListener {
 	private void choiceCatcher(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
 		if (controllerName.equals("loadGraph")) {
+			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeList.attributes));
+			ControlPanel.initGroups(temp);
+			UserSettings.getInstance().setDescriptiveStatisticKeys(temp);
 			System.out.println("Node import selection:");
 			for (int i = 0; i < nodeList.getSelection().length; i++) {
 				System.out.println("..." + nodeList.attributes[i] + ": " + nodeList.getSelection()[i] + ", ");
@@ -106,7 +110,7 @@ public class ImportMenu implements ControlListener {
 			// menu
 			if (nodeList.getSelection().length >= 2) {
 				Executable.setActiveGraph(true);
-				// If the used does not select a layout, Fruchterman_Reingold is
+				// If the user does not select a layout, Fruchterman_Reingold is
 				// assigned by default
 				int layoutSelection;
 				try {

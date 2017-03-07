@@ -4,7 +4,6 @@ import java.awt.Dimension;
 
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.*;
-import visualElements.Canvas;
 
 public class RootContainer extends Container {
 

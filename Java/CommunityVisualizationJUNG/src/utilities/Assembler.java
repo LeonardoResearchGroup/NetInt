@@ -14,6 +14,7 @@ import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
 import utilities.filters.Filters;
+import utilities.mapping.Mapper;
 import visualElements.VCommunity;
 
 public class Assembler {
@@ -57,12 +58,13 @@ public class Assembler {
 
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
+		
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
 
 		// Root visual community.
 		// Keep it commented unless you want to visualize the root graph with no
-		// communities!!!!
+		// communities
 		// rootVCommunity = createRootVCommunity(rootGraph.jungGraph);
 
 		// List of Second Order Communities: sub communities

@@ -8,7 +8,8 @@ import graphElements.GraphElement;
 
 /**
  * This collection stores pairs of attribute names and associated float values.
- * The structure is a TreeMap whose key is a String and value is a Float.
+ * The storage structure is a TreeMap with instances of String as keys, and of
+ * Float as values.
  * 
  * @author jsalam
  *
@@ -134,9 +135,13 @@ public class NumericalCollection {
 
 	public void printAttributes() {
 		System.out.println(this.getClass().getName() + " printAttributes():");
-		Set<String> s = attributes.keySet();
-		for (String keyName : s) {
-			System.out.println("   Key: " + keyName + ", Value: " + attributes.get(keyName));
+		if (attributes != null) {
+			Set<String> s = attributes.keySet();
+			for (String keyName : s) {
+				System.out.println("   Key: " + keyName + ", Value: " + attributes.get(keyName));
+			}
+		} else {
+			System.out.println("Collection of Numerical Attributes not initialized");
 		}
 	}
 }

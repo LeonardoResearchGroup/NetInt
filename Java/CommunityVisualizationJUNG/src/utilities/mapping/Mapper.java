@@ -1,6 +1,5 @@
 package utilities.mapping;
 
-
 import graphElements.GraphElement;
 import processing.core.PApplet;
 
@@ -23,8 +22,8 @@ public class Mapper {
 	public static final String RADIAL = "radial";
 	public static final String SIGMOID = "sigmoid";
 	// MAXs & MINs nodes and edges
-	public NumericalCollection attributesMin, attributesMax;
-	public CategoricalCollection categoricalAttributes;
+	private NumericalCollection attributesMin, attributesMax;
+	private CategoricalCollection categoricalAttributes;
 
 	// Other attributes for sigmoid filter
 	private float alpha = 1;
@@ -43,14 +42,13 @@ public class Mapper {
 	}
 
 	/**
-	 * @param element
-	 *            any instance of Node or Edge
 	 * @param filter
 	 *            filter name
 	 * @param val
 	 *            the number to be mapped
 	 * @param factor
 	 *            the desired max output value
+	 * @param graphElementClassName
 	 * @param graphAttribute
 	 * @return the value mapped equals to a number between 0 and 1 X factor
 	 */
@@ -87,11 +85,11 @@ public class Mapper {
 	 * Returns the min and max value of a graph element. The attribute is
 	 * retrieved from a NumericalCollection that stores attributes in a TreeMap.
 	 * The keys of the TreeMap are the concatenation of the following Strings:
-	 * graphElementClassName + "_" + AttributeName. For example the weight of an edge
-	 * is stored with the key EdgeWeight
+	 * graphElementClassName + "_" + AttributeName. For example the weight of an
+	 * edge is stored with the key EdgeWeight
 	 * 
-	 * @param eitherNodeOrEdge
-	 *            Either "Node" or "Edge". Note: Always Capitalize the parameter
+	 * @param graphElementClassName
+	 * 
 	 * @param attributeName
 	 *            The attribute of either a node or edge. Example "weight",
 	 *            "degree", "inDegree"
@@ -101,11 +99,12 @@ public class Mapper {
 		float[] rtn = new float[2];
 		String elementAttribute = null;
 		try {
-			elementAttribute = graphElementClassName + "_" +attributeName;
+			elementAttribute = graphElementClassName + "_" + attributeName;
 			rtn[0] = attributesMin.getValueofAttribute(elementAttribute);
 			rtn[1] = attributesMax.getValueofAttribute(elementAttribute);
 		} catch (NullPointerException e) {
-			System.out.println(this.getClass().getName() + "> wrong attribute name: " + elementAttribute + " at getMaxMin()");
+			System.out.println(
+					this.getClass().getName() + "> wrong attribute name: " + elementAttribute + " at getMaxMin()");
 		}
 		if (rtn[0] == rtn[1]) {
 			// System.out.println(this.getClass().getName() + ">
@@ -299,11 +298,10 @@ public class Mapper {
 	}
 
 	/**
-	 * Sets the min and max value stored in a collection of attributes related
-	 * to edges. It initializes the collection if attributes in case it is equal
-	 * to null
+	 * Sets the min and max value stored in a collection of attributes. It
+	 * initializes the collection if attributes in case it is equal to null
 	 * 
-	 * @param edge
+	 * @param gElem
 	 */
 	public void setMaxMinGraphElementAttributes(GraphElement gElem) {
 		// if the min and max collections are not initialized
@@ -315,53 +313,97 @@ public class Mapper {
 			// max values
 			attributesMax = new NumericalCollection();
 		}
-		if (categoricalAttributes == null) {
-			// categorical values
-			categoricalAttributes = new CategoricalCollection();
-		}
 		// If all collections are initialized
-		if (attributesMin.getSize() >= 0 && attributesMax.getSize() >= 0 && categoricalAttributes.getSize() >= 0) {
+		if (attributesMin.getSize() >= 0 && attributesMax.getSize() >= 0) {
 			// Go over all the attributes of this GraphElement
 			for (int i = 0; i < gElem.getAttributeKeys().length; i++) {
 				// For each attribute key get its value
 				String key = (String) gElem.getAttributeKeys()[i];
 				Object value = gElem.getAttribute(key);
 				// Determine the data type of value
-				key = gElem.getClass().getSimpleName() + "_" +key;
+				key = gElem.getClass().getSimpleName() + "_" + key;
 				if (NumericalCollection.isNumerical(value)) {
 					try {
 						if (value instanceof Double) {
 							// If Double convert to float
 							Double rtnObj = (Double) value;
 							Float attrFloat = rtnObj.floatValue();
-							attributesMin.addLowerValue(key, attrFloat);
-							attributesMax.addHigherValue(key, attrFloat);
+							// add to collection of min attributes else to
+							// collection of max Attributes
+							if (!attributesMin.addLowerValue(key, attrFloat)) {
+								attributesMax.addHigherValue(key, attrFloat);
+							}
 
 						} else if (value instanceof Integer) {
 							// If Integer
 							Integer attrInteger = (Integer) value;
 							Float attrFloat = attrInteger.floatValue();
-							attributesMin.addLowerValue(key, attrFloat);
-							attributesMax.addHigherValue(key, attrFloat);
+							// add to collection of min attributes else to
+							// collection of max Attributes
+							if (!attributesMin.addLowerValue(key, attrFloat)) {
+								attributesMax.addHigherValue(key, attrFloat);
+							}
 
 						} else if (value instanceof Float) {
 							// If Float
 							Float attrFloat = (Float) value;
-							attributesMin.addLowerValue(key, attrFloat);
-							attributesMax.addHigherValue(key, attrFloat);
+							// add to collection of min attributes else to
+							// collection of max Attributes
+							if (!attributesMin.addLowerValue(key, attrFloat)) {
+								attributesMax.addHigherValue(key, attrFloat);
+							}
 
 						} else {
 							throw new NumberFormatException();
 						}
 					} catch (NumberFormatException e) {
-						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key + " does not match the available Mapper data type: Double,Float,Integer");
+						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
+								+ " does not match the available Mapper data type: Double,Float,Integer");
 					}
-				} else if (value instanceof String) {
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sets the min and max value stored in a collection of attributes. It
+	 * initializes the collection if attributes in case it is equal to null
+	 * 
+	 * @param gElem
+	 */
+	public void setCategoricalGraphElementAttributes(GraphElement gElem) {
+		// if the categorical collection is not initialized
+		if (categoricalAttributes == null) {
+			// categorical values
+			categoricalAttributes = new CategoricalCollection();
+		}
+		// If all collections are initialized
+		if (categoricalAttributes.getSize() >= 0) {
+			// Go over all the attributes of this GraphElement
+			for (int i = 0; i < gElem.getAttributeKeys().length; i++) {
+				// For each attribute key get its value
+				String key = (String) gElem.getAttributeKeys()[i];
+				Object value = gElem.getAttribute(key);
+				// Determine the data type of value
+				key = gElem.getClass().getSimpleName() + "_" + key;
+				if (CategoricalCollection.isCategorical(value)) {
 					// If String store the value in a TreeSet of categorical
 					// values for that attribute/key
 					categoricalAttributes.addValue(key, value.toString());
 				}
 			}
 		}
+	}
+
+	public NumericalCollection getAttributesMin() throws NullPointerException {
+		return attributesMin;
+	}
+
+	public CategoricalCollection getCategoricalAttributes() throws NullPointerException {
+		return categoricalAttributes;
+	}
+
+	public NumericalCollection getAttributesMax() throws NullPointerException {
+		return attributesMax;
 	}
 }

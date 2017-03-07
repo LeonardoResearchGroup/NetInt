@@ -70,6 +70,7 @@ public class FilterAndExtractorEdges<V, E> implements Filter<V, E> {
 	 * org.apache.commons.collections15.Transformer#transform(java.lang.Object)
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public Graph<V, E> transform(Graph<V, E> g) {
 		Graph<V, E> filtered;
 		Graph<V, E> community;

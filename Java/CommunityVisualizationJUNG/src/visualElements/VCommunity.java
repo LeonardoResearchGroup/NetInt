@@ -2,7 +2,6 @@ package visualElements;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import utilities.GraphLoader;
 import utilities.filters.Filters;
 import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;

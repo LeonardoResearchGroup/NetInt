@@ -5,9 +5,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import graphElements.Edge;
 import graphElements.GraphElement;
-import graphElements.Node;
 
 /**
  * This collection stores subsets of categorical values as strings. The
@@ -45,7 +43,7 @@ public class CategoricalCollection {
 		}
 	}
 
-	private boolean isCategorical(Object value) {
+	public static boolean isCategorical(Object value) {
 		if (value instanceof String) {
 			return true;
 		}
@@ -116,9 +114,13 @@ public class CategoricalCollection {
 
 	public void printAttributes() {
 		System.out.println(this.getClass().getName() + " printAttributes():");
-		Set<String> s = attributes.keySet();
-		for (String keyName : s) {
-			System.out.println("   Key: " + keyName + ", Value: " + attributes.get(keyName));
+		if (attributes != null) {
+			Set<String> s = attributes.keySet();
+			for (String keyName : s) {
+				System.out.println("   Key: " + keyName + ", Value: " + attributes.get(keyName));
+			}
+		} else {
+			System.out.println("Collection of Categorical Attributes not initialized");
 		}
 	}
 }

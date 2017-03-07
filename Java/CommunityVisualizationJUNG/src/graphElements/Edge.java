@@ -1,10 +1,6 @@
 package graphElements;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Set;
-
-import visualElements.VEdge;
 
 /**
  * @author jsalam
@@ -21,22 +17,6 @@ public class Edge extends GraphElement implements Serializable {
 	//private HashMap<String, Object> attributes;
 	private boolean directed;
 	private boolean loop;
-	/**
-	 * @deprecated
-	 */
-	private float weight;
-	/**
-	 * @deprecated
-	 */
-	private String name;
-	/**
-	 * @deprecated
-	 */
-	private int ID;
-	/**
-	 * @deprecated
-	 */
-	private int frequency;
 
 	public Edge(Node source, Node target, boolean directed) {
 		super();
@@ -115,44 +95,8 @@ public class Edge extends GraphElement implements Serializable {
 		this.directed = directed;
 	}
 
-
-	/**
-	 * @deprecated
-	 */
-	public void setWeight(float weight) {
-		this.weight = weight;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public void setFrequency(int freq) {
-		this.frequency = freq;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public boolean isLoop() {
 		return loop;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public void setID(int property) {
-		this.ID = property;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public int getID() {
-		return ID;
 	}
 
 	public boolean equals(Object obj) {
