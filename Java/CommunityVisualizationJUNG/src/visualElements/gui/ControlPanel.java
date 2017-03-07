@@ -70,6 +70,9 @@ public class ControlPanel extends PApplet {
 
 		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150).setBackgroundColor(parent.color(39, 67, 110));
 		guiArchivo(g1);
+		
+		nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
+				.setBackgroundColor(parent.color(39, 67, 110));
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion = cp5.addAccordion("acc").setPosition(10, 55).setWidth(180).addItem(g1);
 
@@ -89,8 +92,6 @@ public class ControlPanel extends PApplet {
 		Group g4 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		setKeyNamesForNodes(keyNames);
-		nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
-				.setBackgroundColor(parent.color(39, 67, 110));
 		
 		guiBackground(g2);
 		guiNodos(g3);
