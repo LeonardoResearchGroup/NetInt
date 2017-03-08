@@ -123,11 +123,6 @@ public class ImportMenu implements ControlListener {
 					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
 							layoutSelection, GraphLoader.GRAPHML);
 					Executable.setActiveGraph(true);
-					// Populate Control panel with attributes retrieved from the
-					// graph
-				//	 ControlPanel.initGroups(nodeList.getListNames(), edgeList.getListNames());
-
-
 				} else {
 					JOptionPane.showMessageDialog(app.frame, "Missing either \"community\" or \"label\" attributes",
 							"Import warning", JOptionPane.WARNING_MESSAGE);
@@ -137,6 +132,7 @@ public class ImportMenu implements ControlListener {
 						"Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		// Populate Control panel with attributes retrieved from the graph
 		ControlPanel.initGroups(Mapper.getInstance().getAttributesMax().getAttributeKeys("Node"),
 		Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge"));
 		menu.setVisible(false);

@@ -66,9 +66,11 @@ public class Executable extends PApplet {
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
 		}
+		
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
 		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2017", 20, height - 10);
+		
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		UserSettings.getInstance().setEventOnVSettings(false);
@@ -100,9 +102,6 @@ public class Executable extends PApplet {
 		if (selection != null) {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
-			// cFrame.setKeyNamesForEdges(reader.getKeyNamesForEdges())
-			//ControlPanel.initGroups(reader.getKeyNamesForNodes());
-			//UserSettings.getInstance().setDescriptiveStatisticKeys(reader.getKeyNamesForNodes());
 			// this creates and displays the menu
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));

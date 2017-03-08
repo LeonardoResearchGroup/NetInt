@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import graphElements.Node;
 import processing.core.*;
+import utilities.mapping.Mapper;
 import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 
@@ -150,9 +151,21 @@ public class VNode extends VisualAtom implements Serializable {
 	 */
 	public void show(boolean displayed) {
 		setVisibility(UserSettings.getInstance().getUmbralGrados());
-		if (getDiameter() > 50) {
-			setDiameter(60);
+		//if (getDiameter() > 50) {
+			//setDiameter(60);
+		String attributeName = UserSettings.getInstance().getFiltrosNodo();
+		try{
+			
+			float value = node.getFloatAttribute(attributeName);
+			float start1 = Mapper.getInstance().getAttributesMin().getValueofAttribute(attributeName);
+			float stop1 = Mapper.getInstance().getAttributesMax().getValueofAttribute(attributeName);
+			float tmp = PApplet.map(value, start1, stop1, 5, 100);
+			setDiameter(tmp);
+		}catch (NullPointerException npe){
+			setDiameter(5);
+			System.out.println(attributeName);
 		}
+		//}
 		if (displayed && visible) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {

@@ -154,12 +154,10 @@ public class UserSettings {
 
 	public void setColorBackground(int colorValue) {
 		colorBackground = colorValue;
-
 	}
 
 	public void setSoloPropagacion(boolean booleanValue) {
 		soloPropagacion = booleanValue;
-
 	}
 	
 	public void setStatisticVisibility(String key, boolean state){
@@ -169,7 +167,6 @@ public class UserSettings {
 
 	public void setMostrarNodos(boolean booleanValue) {
 		mostrarNodos = booleanValue;
-
 	}
 
 	public void setMostrarVinculosInt(boolean booleanValue) {

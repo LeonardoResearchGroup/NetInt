@@ -36,7 +36,7 @@ public class ControlPanel extends PApplet {
 	private static ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private static ArrayList<String> keyNamesForEdges = new ArrayList<String>();
 	// Groups
-	//private static Group nodeKeys;
+	// private static Group nodeKeys;
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -93,8 +93,8 @@ public class ControlPanel extends PApplet {
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g4 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		Group nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
-				.setBackgroundColor(parent.color(39, 67, 110));
+		Group nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color.getRGB())
+				.setBackgroundHeight(150).setBackgroundColor(parent.color(39, 67, 110));
 		cBox = cp5.addCheckBox("Estadisticas Nodos").setPosition(5, 7);
 		cBox.moveTo(nodeKeys);
 
@@ -173,7 +173,7 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		cp5.addScrollableList("Diametro Nodo").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		cp5.addScrollableList("Diametro").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
@@ -184,16 +184,16 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private static void setVinculosComponent(Group group) {
-		
+
 		// Control de visibilidad
 		cp5.addToggle("Internos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Internos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		
+
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
-		
+
 		// Propagacion
 		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
@@ -201,14 +201,14 @@ public class ControlPanel extends PApplet {
 				.setPaddingX(35);
 		cp5.addToggle("Solo").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
-		
+
 		// Espesor Vinculo
 		Object[] mappers = Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge").toArray();
-		String [] items = new String[mappers.length];
+		String[] items = new String[mappers.length];
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		cp5.addScrollableList("Espesor").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
@@ -219,10 +219,6 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private static void setEstadisticasDescriptivasComponent() {
-		// remove current names
-//		for (Toggle itm : cBox.getItems()) {
-//			cBox.removeItem(itm.getName());
-//		}
 		// Set new names
 		for (int i = 0; i < keyNamesForNodes.size(); i++) {
 			cBox.addItem(keyNamesForNodes.get(i), 1);
@@ -365,8 +361,10 @@ public class ControlPanel extends PApplet {
 			Toggle nombre = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
 			break;
-		case "Diametro Nodo":
-			UserSettings.getInstance().setFiltrosNodo(theEvent.getController().getLabel());
+		case "Diametro":
+			int valueD = (int) cp5.get(ScrollableList.class, "Diametro").getValue();
+			UserSettings.getInstance()
+					.setFiltrosNodo(cp5.get(ScrollableList.class, "Diametro").getItem(valueD).get("name").toString());
 			break;
 
 		// **** EDGES ****
@@ -388,8 +386,10 @@ public class ControlPanel extends PApplet {
 			Toggle solo = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
 			break;
-		case "Espesor Vinculo":
-			UserSettings.getInstance().setFiltrosVinculo(theEvent.getController().getLabel());
+		case "Espesor":
+			int valueE = (int) cp5.get(ScrollableList.class, "Espesor").getValue();
+			UserSettings.getInstance()
+					.setFiltrosNodo(cp5.get(ScrollableList.class, "Espesor").getItem(valueE).get("name").toString());
 			break;
 		default:
 			// Executable.retrieveControlPanelEvent(theEvent);
