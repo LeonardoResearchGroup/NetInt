@@ -132,9 +132,13 @@ public class ImportMenu implements ControlListener {
 						"Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		
 		// Populate Control panel with attributes retrieved from the graph
-		ControlPanel.initGroups(Mapper.getInstance().getAttributesMax().getAttributeKeys("Node"),
-		Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge"));
+		ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getAttributesMax().getAttributeKeys("Node");
+		ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge");
+		ControlPanel.initGroups(nodeAttributesKeys, edgeAttributeKeys);
+		
+		// Hide Import Menu from main panel
 		menu.setVisible(false);
 		nodeList.dropMenu.setVisible(false);
 		edgeList.dropMenu.setVisible(false);

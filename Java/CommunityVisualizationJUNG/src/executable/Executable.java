@@ -38,6 +38,10 @@ public class Executable extends PApplet {
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
+		// Control Panel Frame
+		System.out.println("Building Control Panel");
+		controlPanel = new ControlPanel(this, 200, this.height - 25, "Controls");
+		surface.setTitle("Java Networked Interaction Visualization. NetInt");
 		// Import Menu
 		System.out.println("Instantiating Import Menu");
 		importMenu = new ImportMenu(this);
@@ -46,10 +50,6 @@ public class Executable extends PApplet {
 		app = new Assembler(Assembler.HD720);
 		performance = new TestPerformance();
 		setActiveGraph(false);
-		// Control Panel Frame
-		System.out.println("Building Control Panel");
-		controlPanel = new ControlPanel(this, 200, this.height - 25, "Controls");
-		surface.setTitle("Java Networked Interaction Visualization. NetInt");
 	}
 
 	public void draw() {

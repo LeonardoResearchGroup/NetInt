@@ -25,7 +25,8 @@ import visualElements.gui.UserSettings;
 public class ControlPanel extends PApplet {
 	int w, h;
 	static PApplet parent;
-	private static ControlP5 cp5;
+	private static ControlP5 main;
+	private static ControlP5 secondary;
 	private static CheckBox cBox;
 	private static Accordion accordion;
 	private PFont font;
@@ -60,76 +61,76 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void exit() {
-		println("Control Panel Closed");
+		System.out.println("Control Panel Closed");
 	}
 
 	/**
 	 * Main GUI method that assembles all the GUI components
 	 */
 	public void init() {
-		cp5 = new ControlP5(this);
+		main = new ControlP5(this);
+		secondary = new ControlP5(this);
+		secondary.hide();
 
-		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
-				.setBackgroundColor(parent.color(39, 67, 110));
-		guiArchivo(g1);
+		String[] fileFunctions = { "Open", "Save", "Import", "Export", "Quit" };
+		main.addScrollableList("File").setPosition(10, 55).setSize(180, 110).setBarHeight(18).setItemHeight(18)
+				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion = cp5.addAccordion("acc").setPosition(10, 55).setWidth(180).addItem(g1);
+		// accordion = main.addAccordion("acc").setPosition(10,
+		// 55).setWidth(180).addItem(g1);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
-		accordion.setCollapseMode(Accordion.MULTI);
+		// accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(0);
+		// accordion.open(0);
+
 	}
 
 	public static void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
-		Color color = new Color(0, 0, 0, 64);
+
 		setKeyNamesForNodes(nodeKeyNames);
 		setKeyNamesForEdges(edgeKeyNames);
-		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color.getRGB()).setBackgroundHeight(30)
-				.setBackgroundColor(parent.color(39, 67, 110));
-		Group g3 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
-				.setBackgroundColor(parent.color(39, 67, 110));
-		Group g4 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
-				.setBackgroundColor(parent.color(39, 67, 110));
-		Group nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color.getRGB())
-				.setBackgroundHeight(150).setBackgroundColor(parent.color(39, 67, 110));
-		cBox = cp5.addCheckBox("Estadisticas Nodos").setPosition(5, 7);
-		cBox.moveTo(nodeKeys);
 
-		setBackgroundComponent(g2);
-		setNodosComponent(g3);
-		setVinculosComponent(g4);
-		setEstadisticasDescriptivasComponent();
+		// Group instantiation
+		ControllerGroup<Group> backgGroup = new Group(secondary, "Background");
+		ControllerGroup<Group> nodesGroup = new Group(secondary, "Node");
+		ControllerGroup<Group> edgesGroup = new Group(secondary, "Edge");
+		ControllerGroup<Group> statsGroup = new Group(secondary, "Stats");
 
-		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(g2).addItem(g3).addItem(g4).addItem(nodeKeys);
+		// Group visual attributes
 
-		// use Accordion.MULTI to allow multiple group to be open at a time.
-		accordion.setCollapseMode(Accordion.MULTI);
+		// nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		// edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		// statsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 
-		// open close sections
-		accordion.open(0, 2, 3, 4);
+		// Add Components to each group
+		//synchronized(secondary){
+		setBackgroundComponents(backgGroup);
+		setNodeComponents(nodesGroup);
+		//}
 
-	}
+		// cBox = new CheckBox(secondary, "Stats nodes");
+		// cBox.setPosition(5, 7).moveTo(statsGroup);
 
-	/**
-	 * GUI component related to File Operations
-	 * 
-	 * @param group
-	 *            The Group of GUI elements
-	 */
-	private void guiArchivo(Group group) {
-		cp5.addButton("Abrir").plugTo(parent).setPosition(5, 7).setSize(170, 18).moveTo(group);
-		cp5.addButton("Guardar").plugTo(parent).setPosition(5, 27).setSize(170, 18).moveTo(group);
-		cp5.addButton("Importar").plugTo(parent).setPosition(5, 47).setSize(170, 18).moveTo(group);
-		String[] formatos = { "PNG", "PDF", "JPEG" };
-		cp5.addScrollableList("Exportar").setPosition(5, 67).setSize(170, 40).setBarHeight(13).setItemHeight(13)
-				.addItems(formatos).setType(ScrollableList.LIST).moveTo(group).close();
-		cp5.addButton("Salir").plugTo(parent)
-				.setPosition(5, 67 + cp5.getGroup("Archivo").getController("Exportar").getHeight()).setSize(170, 18)
-				.moveTo(group);
+		
+		// setVinculosComponent(g3);
+		// setEstadisticasDescriptivasComponent();
+
+		// accordion = secondary.addAccordion("acc").setPosition(10,
+		// 175).setWidth(180);
+		//
+		// // create a new accordion. Add g1, g2, and g3 to the accordion.
+		// accordion.addItem(g1).addItem(g2).addItem(g3).addItem(nodeKeys);
+		//
+		// // use Accordion.MULTI to allow multiple group to be open at a time.
+		// accordion.setCollapseMode(Accordion.MULTI);
+		//
+		// // open close sections
+		// accordion.open(0, 1, 2, 3);
+		secondary.show();
+
 	}
 
 	/**
@@ -138,11 +139,14 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setBackgroundComponent(Group group) {
-		cp5.addSlider("Lumiosidad_Fondo").setPosition(5, 10).setWidth(165).setRange(0, 255).setValue(70).moveTo(group);
+	private static void setBackgroundComponents(ControllerGroup<Group> group) {
+		// Group visual attributes
+		Color color = new Color(0, 0, 0, 64);
+		group.setHeight(30);
+		group.setColorBackground(color.getRGB());
 
-		cp5.getController("Lumiosidad_Fondo").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE)
-				.setPaddingX(0);
+		// Add gui elements
+		Slider luminosity = new Slider(secondary, group, "Luminosity", 0f, 255f, 70f, 5, 10, 165, 18);
 	}
 
 	/**
@@ -151,30 +155,41 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setNodosComponent(Group group) {
-		// Control de visibilidad
-		cp5.addToggle("Nodos").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Nodos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		cp5.addToggle("Nombre").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Nombre").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		// Buscador por ID de nodo
-		cp5.addTextfield("Buscar ID Nodo").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group);
-		cp5.getController("Buscar ID Nodo").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
-				.setPaddingX(35);
-		cp5.addBang("Clear").setPosition(77, 20).setSize(28, 15).moveTo(group).getCaptionLabel().align(ControlP5.CENTER,
-				ControlP5.CENTER);
-		cp5.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36)
-				.snapToTickMarks(true).moveTo(group);
-		// Diametro Nodo
-		// String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial",
-		// "Sigmoideo" };
-		Object[] mappers = Mapper.getInstance().getAttributesMax().getAttributeKeys("Node").toArray();
-		String[] items = new String[mappers.length];
-		for (int i = 0; i < mappers.length; i++) {
-			items[i] = (String) mappers[i];
-		}
-		cp5.addScrollableList("Diametro").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
-				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+	private static void setNodeComponents(ControllerGroup<Group> group) {
+		// Group visual attributes
+		Color color = new Color(0, 0, 0, 64);
+		group.setHeight(30);
+		group.setColorBackground(color.getRGB());
+
+//		// Visibility control
+		//Tab tab= new Tab(secondary,secondary.getWindow() ) // , ControlWindow theControlWindow, java.lang.String theName
+//		Toggle nodes = new Toggle(secondary, secondary.getTab("secondary"), "On/Off",0f,5f,5f,45,10);
+//		
+		secondary.addToggle("Nodos").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+//
+//		// Name Visibility control
+//		secondary.addToggle("Nombre").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+			//	.align(ControlP5.CENTER, ControlP5.CENTER);
+//
+//		// Node search
+//		secondary.addTextfield("Buscar ID Nodo").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group)
+//				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
+//
+//		// Clear node search
+//		secondary.addBang("Clear").setPosition(77, 20).setSize(28, 15).moveTo(group).getCaptionLabel()
+//				.align(ControlP5.CENTER, ControlP5.CENTER);
+//
+//		secondary.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35)
+//				.setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
+//		// Diameter
+//		Object[] mappers = Mapper.getInstance().getAttributesMax().getAttributeKeys("Node").toArray();
+//		String[] items = new String[mappers.length];
+//		for (int i = 0; i < mappers.length; i++) {
+//			items[i] = (String) mappers[i];
+//		}
+//
+//		secondary.addScrollableList("Diametro").addItems(items).setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
 	/**
@@ -186,20 +201,20 @@ public class ControlPanel extends PApplet {
 	private static void setVinculosComponent(Group group) {
 
 		// Control de visibilidad
-		cp5.addToggle("Internos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Internos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group);
-		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Internos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
+		secondary.getController("Internos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group);
+		secondary.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Vol. Transaccion
-		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
+		secondary.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
 
 		// Propagacion
-		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
+		secondary.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
-		cp5.getController("Propagacion").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
+		secondary.getController("Propagacion").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
 				.setPaddingX(35);
-		cp5.addToggle("Solo").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
+		secondary.addToggle("Solo").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Espesor Vinculo
@@ -208,7 +223,7 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		cp5.addScrollableList("Espesor").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		secondary.addScrollableList("Espesor").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
 				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
@@ -257,11 +272,85 @@ public class ControlPanel extends PApplet {
 	}
 
 	private void switchCaseCP5(ControlEvent theEvent) {
-		// System.out.println("ControlPanel> Event at: " +
-		// theEvent.getController().getName());
-		switch (theEvent.getController().getName()) {
+		String controllerName = theEvent.getController().getName();
+		System.out.println("ControlPanel> Event at: " + controllerName);
+		switch (controllerName) {
 
-		case "Abrir":
+		case "File":
+			// Get the index
+			int valueFile = (int) main.get(ScrollableList.class, "File").getValue();
+			// The value extracted from the map at that index item
+			String selectionFile = (String) main.get(ScrollableList.class, "File").getItem(valueFile).get("name")
+					.toString();
+			// Handle selection
+			manageFileSelection(selectionFile);
+			break;
+
+		// **** FONDO ****
+		case "Lumiosidad_Fondo":
+			UserSettings.getInstance().setColorBackground((int) theEvent.getController().getValue());
+			// System.out.println(theEvent.getController().getValue());
+			break;
+
+		// **** NODES ****
+		case "Buscar ID Nodo":
+			UserSettings.getInstance().setIdBuscador(theEvent.getStringValue());
+			break;
+		case "Clear":
+			secondary.get(Textfield.class, "Buscar ID Nodo").clear();
+			UserSettings.getInstance().resetIdBuscador();
+			break;
+		case "Min OutDegree":
+			UserSettings.getInstance().setUmbralGrados(theEvent.getValue());
+			break;
+		case "Nodos":
+			Toggle nodo = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setMostrarNodos(nodo.getBooleanValue());
+			break;
+		case "Nombre":
+			Toggle nombre = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
+			break;
+		case "Diametro":
+			int valueD = (int) secondary.get(ScrollableList.class, "Diametro").getValue();
+			UserSettings.getInstance().setFiltrosNodo(
+					secondary.get(ScrollableList.class, "Diametro").getItem(valueD).get("name").toString());
+			break;
+
+		// **** EDGES ****
+		case "Internos":
+			Toggle vinculoInt = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setMostrarVinculosInt(vinculoInt.getBooleanValue());
+			break;
+		case "Externos":
+			Toggle vinculoExt = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setMostrarVinculosExt(vinculoExt.getBooleanValue());
+			break;
+		case "Vol. Transaccion":
+			UserSettings.getInstance().setVolTransaccion(theEvent.getValue());
+			break;
+		case "Propagacion":
+			UserSettings.getInstance().setPropagacion(theEvent.getValue());
+			break;
+		case "Solo":
+			Toggle solo = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
+			break;
+		case "Espesor":
+			int valueE = (int) secondary.get(ScrollableList.class, "Espesor").getValue();
+			UserSettings.getInstance().setFiltrosNodo(
+					secondary.get(ScrollableList.class, "Espesor").getItem(valueE).get("name").toString());
+			break;
+		default:
+			// Executable.retrieveControlPanelEvent(theEvent);
+			break;
+
+		}
+	}
+
+	private void manageFileSelection(String choice) {
+		switch (choice) {
+		case "Open":
 			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, EXTENSION);
 
 			try {
@@ -295,7 +384,7 @@ public class ControlPanel extends PApplet {
 
 			break;
 
-		case "Guardar":
+		case "Save":
 
 			String selectedPath = ChooseHelper.getInstance().showJFileChooser(true, EXTENSION);
 
@@ -325,74 +414,42 @@ public class ControlPanel extends PApplet {
 				}
 
 			}
-
 			break;
 
-		case "Importar":
+		case "Import":
 			ChooseHelper.getInstance().showFileChooser(parent);
 			break;
 
-		case "Salir":
+		case "Export":
+			String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, EXTENSION);
+			if (selectedPathExport != null) {
+				// Executable.activeCursor = Executable.CURSOR_WAIT;
+				// parent.cursor(WAIT);
+				// SerializeWrapper wrapper = new
+				// SerializeWrapper(Assembler.firstOrderVComm,
+				// Assembler.secondOrderVComm,
+				// UserSettings.getInstance(), GraphLoader.theGraph);
+				// try {
+				// SerializeHelper.getInstance().serialize(wrapper,
+				// selectedPath, EXTENSION);
+				// javax.swing.JOptionPane.showMessageDialog(null, "File
+				// exported to " + "path" + "." + EXTENSION, "",
+				// javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				// }
+				// catch (FileNotFoundException e) {
+				// javax.swing.JOptionPane.showMessageDialog(null,
+				// e.getMessage(), "Error",
+				// javax.swing.JOptionPane.ERROR_MESSAGE);
+				// }
+				// finally {
+				// Executable.activeCursor = Executable.CURSOR_ARROW;
+				// parent.cursor(ARROW);
+				// }
+			}
+			break;
+
+		case "Quit":
 			System.exit(0);
-			break;
-
-		// **** FONDO ****
-		case "Lumiosidad_Fondo":
-			UserSettings.getInstance().setColorBackground((int) theEvent.getController().getValue());
-			// System.out.println(theEvent.getController().getValue());
-			break;
-
-		// **** NODES ****
-		case "Buscar ID Nodo":
-			UserSettings.getInstance().setIdBuscador(theEvent.getStringValue());
-			break;
-		case "Clear":
-			cp5.get(Textfield.class, "Buscar ID Nodo").clear();
-			UserSettings.getInstance().resetIdBuscador();
-			break;
-		case "Min OutDegree":
-			UserSettings.getInstance().setUmbralGrados(theEvent.getValue());
-			break;
-		case "Nodos":
-			Toggle nodo = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setMostrarNodos(nodo.getBooleanValue());
-			break;
-		case "Nombre":
-			Toggle nombre = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
-			break;
-		case "Diametro":
-			int valueD = (int) cp5.get(ScrollableList.class, "Diametro").getValue();
-			UserSettings.getInstance()
-					.setFiltrosNodo(cp5.get(ScrollableList.class, "Diametro").getItem(valueD).get("name").toString());
-			break;
-
-		// **** EDGES ****
-		case "Internos":
-			Toggle vinculoInt = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setMostrarVinculosInt(vinculoInt.getBooleanValue());
-			break;
-		case "Externos":
-			Toggle vinculoExt = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setMostrarVinculosExt(vinculoExt.getBooleanValue());
-			break;
-		case "Vol. Transaccion":
-			UserSettings.getInstance().setVolTransaccion(theEvent.getValue());
-			break;
-		case "Propagacion":
-			UserSettings.getInstance().setPropagacion(theEvent.getValue());
-			break;
-		case "Solo":
-			Toggle solo = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
-			break;
-		case "Espesor":
-			int valueE = (int) cp5.get(ScrollableList.class, "Espesor").getValue();
-			UserSettings.getInstance()
-					.setFiltrosNodo(cp5.get(ScrollableList.class, "Espesor").getItem(valueE).get("name").toString());
-			break;
-		default:
-			// Executable.retrieveControlPanelEvent(theEvent);
 			break;
 
 		}
