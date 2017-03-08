@@ -13,6 +13,7 @@ import controlP5.ControlP5;
 import executable.Executable;
 import processing.core.PApplet;
 import utilities.GraphLoader;
+import utilities.mapping.Mapper;
 
 /**
  * The menu displayed to assign attributes from the graph file to the
@@ -95,7 +96,6 @@ public class ImportMenu implements ControlListener {
 		String controllerName = theEvent.getController().getName();
 		if (controllerName.equals("loadGraph")) {
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeList.attributes));
-			ControlPanel.initGroups(temp);
 			UserSettings.getInstance().setDescriptiveStatisticKeys(temp);
 			System.out.println("Node import selection:");
 			for (int i = 0; i < nodeList.getSelection().length; i++) {
@@ -120,8 +120,13 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),layoutSelection, GraphLoader.GRAPHML);
+					Executable.app.loadGraph(Executable.file, nodeList.getSelection(), edgeList.getSelection(),
+							layoutSelection, GraphLoader.GRAPHML);
 					Executable.setActiveGraph(true);
+					// Populate Control panel with attributes retrieved from the
+					// graph
+				//	 ControlPanel.initGroups(nodeList.getListNames(), edgeList.getListNames());
+
 
 				} else {
 					JOptionPane.showMessageDialog(app.frame, "Missing either \"community\" or \"label\" attributes",
@@ -132,6 +137,8 @@ public class ImportMenu implements ControlListener {
 						"Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		ControlPanel.initGroups(Mapper.getInstance().getAttributesMax().getAttributeKeys("Node"),
+		Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge"));
 		menu.setVisible(false);
 		nodeList.dropMenu.setVisible(false);
 		edgeList.dropMenu.setVisible(false);

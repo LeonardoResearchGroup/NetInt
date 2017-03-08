@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import controlP5.*;
 import executable.Executable;
@@ -35,7 +36,7 @@ public class ControlPanel extends PApplet {
 	private static ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private static ArrayList<String> keyNamesForEdges = new ArrayList<String>();
 	// Groups
-	private static Group nodeKeys;
+	//private static Group nodeKeys;
 
 	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
 		super();
@@ -68,44 +69,49 @@ public class ControlPanel extends PApplet {
 	public void init() {
 		cp5 = new ControlP5(this);
 
-		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150).setBackgroundColor(parent.color(39, 67, 110));
-		guiArchivo(g1);
-		
-		nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
+		Group g1 = cp5.addGroup("Archivo").setBackgroundColor(color(0, 64)).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
+		guiArchivo(g1);
+
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion = cp5.addAccordion("acc").setPosition(10, 55).setWidth(180).addItem(g1);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
-		
+
 		// open close sections
 		accordion.open(0);
 	}
-	
-	public static void initGroups(ArrayList<String> keyNames){
-		Color color = new Color (0,0,0,64);
+
+	public static void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
+		Color color = new Color(0, 0, 0, 64);
+		setKeyNamesForNodes(nodeKeyNames);
+		setKeyNamesForEdges(edgeKeyNames);
 		Group g2 = cp5.addGroup("Fondo").setBackgroundColor(color.getRGB()).setBackgroundHeight(30)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g3 = cp5.addGroup("Nodos / Clientes").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
 		Group g4 = cp5.addGroup("Vinculos / Transacciones").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
 				.setBackgroundColor(parent.color(39, 67, 110));
-		setKeyNamesForNodes(keyNames);
-		
-		guiBackground(g2);
-		guiNodos(g3);
-		guiVinculos(g4);
-		guiEstadisticasDescriptivas(nodeKeys);
+		Group nodeKeys = cp5.addGroup("Estadisticas descriptivas").setBackgroundColor(color.getRGB()).setBackgroundHeight(150)
+				.setBackgroundColor(parent.color(39, 67, 110));
+		cBox = cp5.addCheckBox("Estadisticas Nodos").setPosition(5, 7);
+		cBox.moveTo(nodeKeys);
+
+		setBackgroundComponent(g2);
+		setNodosComponent(g3);
+		setVinculosComponent(g4);
+		setEstadisticasDescriptivasComponent();
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion = cp5.addAccordion("acc").addItem(g2).addItem(g3).addItem(g4).addItem(nodeKeys);
+		accordion.addItem(g2).addItem(g3).addItem(g4).addItem(nodeKeys);
+
+		// use Accordion.MULTI to allow multiple group to be open at a time.
+		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(2, 3, 4);
+		accordion.open(0, 2, 3, 4);
 
-
-		
 	}
 
 	/**
@@ -132,7 +138,7 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void guiBackground(Group group) {
+	private static void setBackgroundComponent(Group group) {
 		cp5.addSlider("Lumiosidad_Fondo").setPosition(5, 10).setWidth(165).setRange(0, 255).setValue(70).moveTo(group);
 
 		cp5.getController("Lumiosidad_Fondo").getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE)
@@ -145,7 +151,7 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void guiNodos(Group group) {
+	private static void setNodosComponent(Group group) {
 		// Control de visibilidad
 		cp5.addToggle("Nodos").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Nodos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
@@ -160,10 +166,15 @@ public class ControlPanel extends PApplet {
 		cp5.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36)
 				.snapToTickMarks(true).moveTo(group);
 		// Diametro Nodo
-		//String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
-		String[] mappers = (String[]) Mapper.getInstance().getAttributesMin().getAttributeKeys("Node").toArray();
+		// String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial",
+		// "Sigmoideo" };
+		Object[] mappers = Mapper.getInstance().getAttributesMax().getAttributeKeys("Node").toArray();
+		String[] items = new String[mappers.length];
+		for (int i = 0; i < mappers.length; i++) {
+			items[i] = (String) mappers[i];
+		}
 		cp5.addScrollableList("Diametro Nodo").setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13)
-				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
 	/**
@@ -172,14 +183,17 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void guiVinculos(Group group) {
+	private static void setVinculosComponent(Group group) {
+		
 		// Control de visibilidad
 		cp5.addToggle("Internos").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Internos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 		cp5.addToggle("Externos").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group);
 		cp5.getController("Externos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		
 		// Vol. Transaccion
 		cp5.addSlider("Vol. Transaccion").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
+		
 		// Propagacion
 		cp5.addSlider("Propagacion").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
 				.snapToTickMarks(true).moveTo(group);
@@ -187,10 +201,15 @@ public class ControlPanel extends PApplet {
 				.setPaddingX(35);
 		cp5.addToggle("Solo").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
+		
 		// Espesor Vinculo
-		String[] mappers = { "Lineal", "Logartimico", "Sinusoidal", "Radial", "Sigmoideo" };
+		Object[] mappers = Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge").toArray();
+		String [] items = new String[mappers.length];
+		for (int i = 0; i < mappers.length; i++) {
+			items[i] = (String) mappers[i];
+		}
 		cp5.addScrollableList("Espesor Vinculo").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
-				.addItems(mappers).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
 	/**
@@ -199,12 +218,15 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void guiEstadisticasDescriptivas(Group group) {
-		cBox = cp5.addCheckBox("Estadisticas Nodos").setPosition(5, 7);
+	private static void setEstadisticasDescriptivasComponent() {
+		// remove current names
+//		for (Toggle itm : cBox.getItems()) {
+//			cBox.removeItem(itm.getName());
+//		}
+		// Set new names
 		for (int i = 0; i < keyNamesForNodes.size(); i++) {
 			cBox.addItem(keyNamesForNodes.get(i), 1);
 		}
-		cBox.moveTo(group);
 	}
 
 	public void draw() {
@@ -213,9 +235,6 @@ public class ControlPanel extends PApplet {
 		fill(170);
 		rect(10, 2, 180, 48);
 		image(logo, 15, 5);
-		// This line updates the controller position. It can be controlled by
-		// the event controller for performance improvement.
-		cp5.getGroup("Archivo").getController("Salir").setPosition(5,69 + cp5.getGroup("Archivo").getController("Exportar").getHeight());
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -381,7 +400,6 @@ public class ControlPanel extends PApplet {
 
 	private static void setKeyNamesForNodes(ArrayList<String> keyNames) {
 		keyNamesForNodes = keyNames;
-		guiEstadisticasDescriptivas(nodeKeys);
 	}
 
 	private static void setKeyNamesForEdges(ArrayList<String> keyNames) {

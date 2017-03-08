@@ -21,6 +21,8 @@ public class DropDownList implements ControlListener {
 	public String[] attributes = { "1", "2", "3", "4" };
 	// The user selection
 	private String[] selection = new String[attributes.length];
+	// The list of element names of this DropDownList
+	private ArrayList<String> listNames;
 
 	public DropDownList(PApplet app, String name) {
 		dropMenu = new ControlP5(app);
@@ -31,12 +33,10 @@ public class DropDownList implements ControlListener {
 	 * Inserts the values obtained from the list of keys retrieved from the
 	 * graphml file into each element attribute.
 	 * 
-	 * @param posX
-	 * @param posY
-	 * @param controllerNames
 	 * @param attributeKeys
 	 */
 	public void addElementAttributes(ArrayList<String> attributeKeys) {
+		listNames = attributeKeys;
 		// name
 		dropMenu.addLabel(menuName, posX, posY);
 		// Attributes
@@ -49,6 +49,7 @@ public class DropDownList implements ControlListener {
 			// class
 			dropMenu.getController(attributes[i]).addListener(this);
 		}
+
 	}
 
 	public void controlEvent(ControlEvent arg0) {
@@ -100,5 +101,9 @@ public class DropDownList implements ControlListener {
 			rtn[i] = tmp.get(i);
 		}
 		return rtn;
+	}
+
+	public ArrayList<String> getListNames() {
+		return listNames;
 	}
 }

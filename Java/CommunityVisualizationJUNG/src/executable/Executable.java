@@ -107,7 +107,6 @@ public class Executable extends PApplet {
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
-			//ControlPanel.initGroups(reader.getKeyNamesForNodes());
 		}
 	}
 
