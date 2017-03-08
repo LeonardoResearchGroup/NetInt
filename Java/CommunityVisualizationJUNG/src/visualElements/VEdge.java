@@ -5,7 +5,6 @@ import visualElements.primitives.VisualAtom;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.TreeSet;
 
 import graphElements.Edge;
 import processing.core.PVector;

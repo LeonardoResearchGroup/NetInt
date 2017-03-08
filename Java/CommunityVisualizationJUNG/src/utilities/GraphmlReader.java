@@ -72,10 +72,16 @@ public class GraphmlReader {
 	 * determine the final size of the array in advance.
 	 * 
 	 * @param nodeImportAttributes
+	 * @param saveCategoricalAttributes
+	 *            true if you want to save the categorical attributes in the
+	 *            general collection of attributes stored in Mapper Class. The
+	 *            collection does not accept duplicates. Enabling this might
+	 *            occupy a big chunk of memory because for instance all the node
+	 *            names will be stored in the collection
 	 * @return The collection of nodes ordered by the Integer version of their
 	 *         Id
 	 */
-	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes) {
+	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes, boolean saveCategoricalAttributes) {
 		System.out.println(this.getClass().getName() + " Instantiating Nodes...");
 
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
@@ -125,7 +131,11 @@ public class GraphmlReader {
 			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
 				nodeTmp.setAttribute(key, vertex.getProperty(key));
-				// }
+			}
+			// Setting max min boundaries in Mapper class
+			Mapper.getInstance().setMaxMinGraphElementAttributes(nodeTmp);
+			if (saveCategoricalAttributes) {
+				Mapper.getInstance().setCategoricalGraphElementAttributes(nodeTmp);
 			}
 			theNodes.put(id, nodeTmp);
 		}
@@ -139,10 +149,16 @@ public class GraphmlReader {
 	 *            the vector of node attributes
 	 * @param edgeImportAttributes
 	 *            the vector of edge attributes
+	 * @param saveCategoricalAttributes
+	 *            true if you want to save the categorical attributes in the
+	 *            general collection of attributes stored in Mapper Class. The
+	 *            collection does not accept duplicates. Enabling this might
+	 *            occupy a big chunk of memory because for instance all the node
+	 *            names will be stored in the collection
 	 * @return
 	 */
 	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nodeImportAttributes,
-			String[] edgeImportAttributes) {
+			String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
@@ -151,7 +167,7 @@ public class GraphmlReader {
 		vCommunityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
-		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes);
+		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes, saveCategoricalAttributes);
 
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
@@ -186,20 +202,22 @@ public class GraphmlReader {
 				// if no attributes selected set the weight to 1
 				e.setAttribute("weight", 1);
 			}
-			// Setting max min limits in Mapper class (Singleton
-			// pattern)
+			// Setting max min boundaries in Mapper class
 			Mapper.getInstance().setMaxMinGraphElementAttributes(e);
-			
+			if (saveCategoricalAttributes) {
+				Mapper.getInstance().setCategoricalGraphElementAttributes(e);
+			}
+
 			// For the first order community graph
-						Edge metaE = new Edge(vCommunityNodes.get(nodes.get(idSource).getCommunity(1)),
-								vCommunityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
-						// if no attributes selected set the weight to 1
-						metaE.setAttribute("weight", 1);
-						
-						if (!edgesBetweenCommunities.contains(metaE)) {
-							edgesBetweenCommunities.add(metaE);
-						}
-			
+			Edge metaE = new Edge(vCommunityNodes.get(nodes.get(idSource).getCommunity(1)),
+					vCommunityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
+			// if no attributes selected set the weight to 1
+			metaE.setAttribute("weight", 1);
+
+			if (!edgesBetweenCommunities.contains(metaE)) {
+				edgesBetweenCommunities.add(metaE);
+			}
+
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}

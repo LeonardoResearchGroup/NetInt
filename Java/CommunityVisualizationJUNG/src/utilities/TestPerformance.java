@@ -15,14 +15,14 @@ public class TestPerformance {
 	public void displayValues(Canvas canvas, PVector pos) {
 		runtime = Runtime.getRuntime();
 		// **** Legends
-		canvas.app.fill(255, 90);
-		canvas.app.textAlign(PConstants.RIGHT);
-		canvas.app.text("Heap Memory Ussage in Mb: ", pos.x, pos.y);
-		canvas.app.text("Used Memory: " + (runtime.totalMemory() - runtime.freeMemory()) / mb, pos.x, pos.y + 10);
-		canvas.app.text("Free Memory:" + runtime.freeMemory() / mb, pos.x, pos.y + 20);
-		canvas.app.text("Total Memory " + runtime.totalMemory() / mb, pos.x, pos.y + 30);
-		canvas.app.text("Max Memory:" + runtime.maxMemory() / mb, pos.x, pos.y + 40);
-		canvas.app.text("Frame Rate:" + PApplet.round(canvas.app.frameRate), pos.x, pos.y + 50);
-		canvas.app.textAlign(PConstants.CENTER);
+		Canvas.app.fill(255, 90);
+		Canvas.app.textAlign(PConstants.RIGHT);
+		Canvas.app.text("Heap Memory Ussage in Mb: ", pos.x, pos.y);
+		Canvas.app.text("Used Memory: " + (runtime.totalMemory() - runtime.freeMemory()) / mb, pos.x, pos.y + 10);
+		Canvas.app.text("Free Memory:" + runtime.freeMemory() / mb, pos.x, pos.y + 20);
+		Canvas.app.text("Total Memory " + runtime.totalMemory() / mb, pos.x, pos.y + 30);
+		Canvas.app.text("Max Memory:" + runtime.maxMemory() / mb, pos.x, pos.y + 40);
+		Canvas.app.text("Frame Rate:" + PApplet.round(Canvas.app.frameRate), pos.x, pos.y + 50);
+		Canvas.app.textAlign(PConstants.CENTER);
 	}
 }

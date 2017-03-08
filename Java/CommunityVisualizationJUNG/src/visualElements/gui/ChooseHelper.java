@@ -2,7 +2,6 @@ package visualElements.gui;
 
 import processing.core.PApplet;
 
-
 /**
  * 
  * Singleton pattern.
@@ -25,16 +24,24 @@ public class ChooseHelper {
 	/**
 	 * Shows the Open File window of the OS
 	 * 
-	 * @param save
-	 * @param extension
+	 * 
 	 * @param applet
+	 *            The applet calling the input window
+	 * 
 	 */
-	public void showFileChooser(boolean save, String extension, PApplet applet) {
-		if (!save) {
-			applet.selectInput("Select a graphml file to process:", "selectImport");
-		}
+	public void showFileChooser(PApplet applet) {
+		applet.selectInput("Select a graphml file to process:", "selectImport");
 	}
 
+	/**
+	 * Calls the System File Browser
+	 * 
+	 * @param save
+	 *            either or not show the save dialog
+	 * @param extension
+	 *            the file extension of the file to be loaded
+	 * @return The path to the chosen file
+	 */
 	public String showJFileChooser(boolean save, String extension) {
 		String path = null;
 		javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();

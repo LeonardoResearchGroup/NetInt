@@ -62,7 +62,7 @@ public class GraphmlKeyReader {
 
 	/**
 	 * Splits a Key String in tokens. It must have the following format:
-	 * <key attr.name="nnn" attr.type="ttt" for="eee" id="nnn"/>
+	 * key attr.name="nnn" attr.type="ttt" for="eee" id="nnn"
 	 * 
 	 * 
 	 * @param key

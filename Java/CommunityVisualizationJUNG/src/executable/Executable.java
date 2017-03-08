@@ -31,10 +31,10 @@ public class Executable extends PApplet {
 		surface.setLocation(200, -300);
 		smooth();
 		/*
-		 * Output Console. Uncomment this line to enable a console Catcher.
-		 * CAUTION, it has conflicts with Menu's File Open.
+		 * Output Console Catcher. Uncomment the line below to enable a console Catcher.
+		 * CAUTION, it might trigger conflicts with Menu's File Open.
 		 */
-		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		// consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
@@ -53,8 +53,8 @@ public class Executable extends PApplet {
 	}
 
 	public void draw() {
+		background(UserSettings.getInstance().getColorBackground());
 		if (activeGraph) {
-			background(UserSettings.getInstance().getColorBackground());
 			pushMatrix();
 			canvas.translateCenter((width - app.rootDimension.width) / 2, (height - app.rootDimension.height) / 2);
 			canvas.transform();
@@ -65,12 +65,10 @@ public class Executable extends PApplet {
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
-		} else {
-			background(100);
 		}
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
-		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2016", 20, height - 10);
+		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2017", 20, height - 10);
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		UserSettings.getInstance().setEventOnVSettings(false);
@@ -90,7 +88,8 @@ public class Executable extends PApplet {
 
 	/**
 	 * This method receives the graph file path and triggers an import process.
-	 * The import process follows the parameters chosen by the user from the import menu.
+	 * The import process follows the parameters chosen by the user from the
+	 * import menu.
 	 * 
 	 * The method is invoked by showFileChooser() at the ChooseHelper class
 	 * 
@@ -101,19 +100,19 @@ public class Executable extends PApplet {
 		if (selection != null) {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
-			controlPanel.setKeyNamesForNodes(reader.getKeyNamesForNodes());
-			//cFrame.setKeyNamesForEdges(reader.getKeyNamesForEdges());
-			UserSettings.getInstance().setDescriptiveStatisticKeys(reader.getKeyNamesForNodes());
+			// cFrame.setKeyNamesForEdges(reader.getKeyNamesForEdges())
+			//ControlPanel.initGroups(reader.getKeyNamesForNodes());
+			//UserSettings.getInstance().setDescriptiveStatisticKeys(reader.getKeyNamesForNodes());
 			// this creates and displays the menu
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
+			//ControlPanel.initGroups(reader.getKeyNamesForNodes());
 		}
 	}
 
 	public void settings() {
 		size(displayWidth - 201, displayHeight - 100, P2D);
-		//size(1280,768, P2D);
 	}
 
 	/**
@@ -126,8 +125,6 @@ public class Executable extends PApplet {
 		// Create a stream to hold the output
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps = new PrintStream(baos);
-		// // IMPORTANT: Save the old System.out!
-		// PrintStream old = System.out;
 		// Tell java.System to use the special stream
 		System.setOut(ps);
 		return baos;

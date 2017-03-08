@@ -19,7 +19,7 @@ public class GUIHelper {
 				int clicked = bar.hover();
 				// Graph import.
 				if (clicked == 0) {
-					ChooseHelper.getInstance().showFileChooser(false, "graphml", applet);
+					ChooseHelper.getInstance().showFileChooser(applet);
 				}
 			}
 		};

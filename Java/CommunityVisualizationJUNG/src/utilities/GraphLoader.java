@@ -3,7 +3,6 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
@@ -44,7 +43,7 @@ public class GraphLoader {
 			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
-			theGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes);
+			theGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes, false);
 			totalCommunities = GMLreader.getCommunities().size();
 		}
 		System.out.println("     Jung Graph Created from file:" + file);
