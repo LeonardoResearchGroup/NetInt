@@ -11,12 +11,12 @@ import processing.core.PApplet;
 public class DropDownList implements ControlListener {
 	public ControlP5 dropMenu;
 	public int buttonHeight = 13;
-	public int posX = 10;
-	public int posY = 10;
-	public int width = 170;
-	public int height = buttonHeight * 7;
-	public int buttonWidth = (int) width - 10;
-	public int gap = 2;
+	private int posX = 10;
+	private int posY = 10;
+	private int width = 170;
+	private int height = buttonHeight * 7;
+	private int buttonWidth = (int) width - 10;
+	private int gap = 2;
 	public String menuName;
 	public String[] attributes = { "1", "2", "3", "4" };
 	// The user selection
@@ -27,6 +27,7 @@ public class DropDownList implements ControlListener {
 	public DropDownList(PApplet app, String name) {
 		dropMenu = new ControlP5(app);
 		menuName = name;
+
 	}
 
 	/**
@@ -35,10 +36,11 @@ public class DropDownList implements ControlListener {
 	 * 
 	 * @param attributeKeys
 	 */
-	public void addElementAttributes(ArrayList<String> attributeKeys) {
+	public void initializeList(ArrayList<String> attributeKeys) {
 		listNames = attributeKeys;
 		// name
 		dropMenu.addLabel(menuName, posX, posY);
+
 		// Attributes
 		for (int i = 0; i < attributes.length; i++) {
 			dropMenu.addScrollableList(attributes[i]).setPosition(posX + ((buttonWidth + gap) * i), posY + buttonHeight)
@@ -54,7 +56,6 @@ public class DropDownList implements ControlListener {
 
 	public void controlEvent(ControlEvent arg0) {
 		choiceCatcher(arg0);
-
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class DropDownList implements ControlListener {
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
-
+		System.out.println("DropDownList " +controllerName);
 		// First it goes over the node attributes
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].equals(controllerName)) {

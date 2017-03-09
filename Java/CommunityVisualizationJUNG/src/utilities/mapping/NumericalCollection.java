@@ -100,10 +100,6 @@ public class NumericalCollection {
 		return attributes.get(key);
 	}
 
-	public Object[] getAttributeKeys() {
-		return attributes.keySet().toArray();
-	}
-
 	/**
 	 * Get the list of graph element attributes stores in this
 	 * NumericalCollection
@@ -113,14 +109,10 @@ public class NumericalCollection {
 	 *            or "Edge"
 	 * @return
 	 */
-	public ArrayList<String> getAttributeKeys(String GraphElementClassName) {
+	public ArrayList<String> getAttributeKeys() {
 		ArrayList<String> classElementAttributes = new ArrayList<String>();
-		Object[] attributes = getAttributeKeys();
-		for (int i = 0; i < attributes.length; i++) {
-			String tmp = (String) attributes[i];
-			if (tmp.startsWith(GraphElementClassName))
-				classElementAttributes.add(tmp);
-
+		for (String s: attributes.keySet()) {
+			classElementAttributes.add(s);
 		}
 		return classElementAttributes;
 	}

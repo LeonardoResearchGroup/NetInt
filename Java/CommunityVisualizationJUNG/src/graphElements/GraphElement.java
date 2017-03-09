@@ -25,8 +25,7 @@ public abstract class GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	// For String use the attribute name (Edge_Weight, Out_Degree). For Object
-	// use the attribute value
-	// (either Numerical or categorical)
+	// use the attribute value (either Numerical or categorical)
 	protected HashMap<String, Object> absoluetAttributes;
 	// A set of attributes to be initiated by instances of classes that
 	// inherit from this class. The integer parameter identifies the

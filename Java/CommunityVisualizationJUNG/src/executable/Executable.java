@@ -87,7 +87,7 @@ public class Executable extends PApplet {
 	public static void setActiveGraph(boolean activeGraph) {
 		Executable.activeGraph = activeGraph;
 	}
-
+	
 	/**
 	 * This method receives the graph file path and triggers an import process.
 	 * The import process follows the parameters chosen by the user from the

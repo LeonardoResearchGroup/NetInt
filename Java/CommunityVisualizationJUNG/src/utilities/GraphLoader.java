@@ -54,7 +54,7 @@ public class GraphLoader {
 		// GraphElements and Mapping
 		for (Node n : theGraph.getVertices()) {
 			setNodesDegrees(theGraph, n);
-			Mapper.getInstance().setMaxMinGraphElementAttributes(n);
+			Mapper.getInstance().setMaxMinNodeAttributes(n);
 		}
 		System.out.println("     Degrees assigned to nodes and attributes to Mapper Class");
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE

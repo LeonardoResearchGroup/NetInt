@@ -29,6 +29,9 @@ public class VNode extends VisualAtom implements Serializable {
 	private ArrayList<Integer> propIndex;
 	public int propagationSteps;
 	private VNodeDescription description;
+	// attribute used to map node diameter. It gets its value from the
+	// UserSettings
+	private String attributeName = "no_attribute";
 
 	public VNode(Node node, float x, float y) {
 		super(x, y);
@@ -150,22 +153,23 @@ public class VNode extends VisualAtom implements Serializable {
 	 * @param communityOpen
 	 */
 	public void show(boolean displayed) {
+		// Hide or show the vNode depending of the degrees threshold
 		setVisibility(UserSettings.getInstance().getUmbralGrados());
-		//if (getDiameter() > 50) {
-			//setDiameter(60);
-		String attributeName = UserSettings.getInstance().getFiltrosNodo();
-		try{
-			
-			float value = node.getFloatAttribute(attributeName);
-			float start1 = Mapper.getInstance().getAttributesMin().getValueofAttribute(attributeName);
-			float stop1 = Mapper.getInstance().getAttributesMax().getValueofAttribute(attributeName);
-			float tmp = PApplet.map(value, start1, stop1, 5, 100);
-			setDiameter(tmp);
-		}catch (NullPointerException npe){
+
+		// Set the vNode diameter
+		try {
+			if (!attributeName.equals(UserSettings.getInstance().getFiltrosNodo())) {
+				if (UserSettings.getInstance().getFiltrosNodo() != null)
+					attributeName = UserSettings.getInstance().getFiltrosNodo();
+				float value = node.getFloatAttribute(attributeName);
+				float tmp = Mapper.getInstance().convert(Mapper.SINUSOIDAL, value, 60, Mapper.NODE, attributeName);
+				setDiameter(tmp);
+			}
+		} catch (NullPointerException npe) {
+			//npe.printStackTrace();
 			setDiameter(5);
-			System.out.println(attributeName);
 		}
-		//}
+
 		if (displayed && visible) {
 			// if this node is in the propagation chain
 			if (inPropagationChain) {

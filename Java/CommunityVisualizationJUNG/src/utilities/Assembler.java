@@ -13,8 +13,10 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import graphElements.Edge;
 import graphElements.Node;
+import processing.core.PConstants;
 import utilities.filters.Filters;
 import utilities.mapping.Mapper;
+import visualElements.Canvas;
 import visualElements.VCommunity;
 
 public class Assembler {
@@ -55,7 +57,7 @@ public class Assembler {
 	public void loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
 		// Progress repoort on console
 		System.out.println(this.getClass().getName() + " Loading graph");
-
+		Canvas.app.cursor(PConstants.WAIT);
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
 		
@@ -73,6 +75,7 @@ public class Assembler {
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 				"FirstOrderCommunity", layout);
+		Canvas.app.cursor(PConstants.ARROW);
 	}
 
 	/**

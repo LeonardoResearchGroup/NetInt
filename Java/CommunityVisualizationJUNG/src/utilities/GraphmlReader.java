@@ -133,9 +133,9 @@ public class GraphmlReader {
 				nodeTmp.setAttribute(key, vertex.getProperty(key));
 			}
 			// Setting max min boundaries in Mapper class
-			Mapper.getInstance().setMaxMinGraphElementAttributes(nodeTmp);
+			Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
 			if (saveCategoricalAttributes) {
-				Mapper.getInstance().setCategoricalGraphElementAttributes(nodeTmp);
+				Mapper.getInstance().setCategoricalNodeAttributes(nodeTmp);
 			}
 			theNodes.put(id, nodeTmp);
 		}
@@ -203,9 +203,9 @@ public class GraphmlReader {
 				e.setAttribute("weight", 1);
 			}
 			// Setting max min boundaries in Mapper class
-			Mapper.getInstance().setMaxMinGraphElementAttributes(e);
+			Mapper.getInstance().setMaxMinEdgeAttributes(e);
 			if (saveCategoricalAttributes) {
-				Mapper.getInstance().setCategoricalGraphElementAttributes(e);
+				Mapper.getInstance().setCategoricalEdgeAttributes(e);
 			}
 
 			// For the first order community graph

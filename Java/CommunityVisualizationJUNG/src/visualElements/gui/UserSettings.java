@@ -104,15 +104,14 @@ public class UserSettings {
 	public ArrayList<String> getDescriptiveStatisticKeys() {
 		return descriptiveStatisticKeys;
 	}
-	
+
 	public HashMap<String, Boolean> getDescriptiveStatistics() {
 		return descriptiveStatistics;
 	}
 
-	public boolean isStatisticVisible(String key){
+	public boolean isStatisticVisible(String key) {
 		return descriptiveStatistics.get(key);
 	}
-
 
 	// ***** SETTERS ******
 
@@ -159,11 +158,10 @@ public class UserSettings {
 	public void setSoloPropagacion(boolean booleanValue) {
 		soloPropagacion = booleanValue;
 	}
-	
-	public void setStatisticVisibility(String key, boolean state){
+
+	public void setStatisticVisibility(String key, boolean state) {
 		descriptiveStatistics.put(key, state);
 	}
-
 
 	public void setMostrarNodos(boolean booleanValue) {
 		mostrarNodos = booleanValue;

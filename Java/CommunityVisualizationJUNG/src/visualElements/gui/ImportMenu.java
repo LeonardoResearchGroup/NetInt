@@ -23,28 +23,29 @@ import utilities.mapping.Mapper;
  *
  */
 public class ImportMenu implements ControlListener {
-	public ControlP5 menu;
-	public int gap = 2;
-	public DropDownList nodeList, edgeList, layoutList, graphImportFormat;
+	private ControlP5 importMenu;
+	private DropDownList nodeList, edgeList, layoutList;
 	public PApplet app;
 
 	public ImportMenu(PApplet app) {
 		this.app = app;
-		init();
 	}
 
 	public void init() {
-		menu = new ControlP5(app);
+		importMenu = new ControlP5(app);
+
 		// for nodes
 		nodeList = new DropDownList(app, "Node Attributes");
 		nodeList.setPos(100, 100);
 		String[] nodeAttributeNames = { "Community", "Label", "Size", "Color" };
 		nodeList.setAttributes(nodeAttributeNames);
+		
 		// for edges
 		edgeList = new DropDownList(app, "Edge Attributes");
 		edgeList.setPos(100, 250);
 		String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
 		edgeList.setAttributes(edgeAttributeNames);
+		
 		// for layout
 		layoutList = new DropDownList(app, "Visualization Layout");
 		layoutList.setPos(100, 400);
@@ -57,7 +58,7 @@ public class ImportMenu implements ControlListener {
 	 * are attached to an instance of ControlP5 that draws them in the PApplet
 	 * using an internal ControlP5.autoDraw() method. It initializes the
 	 * ControlP5 variables every time it is invoked. Albeit is is done in the
-	 * constructor, it is necessary to do here in order to have fresh variables
+	 * constructor, it is necessary to do it here in order to have fresh variables
 	 * every time the user loads new files without restarting the application
 	 * 
 	 * @param nodeAttributeKeys
@@ -67,17 +68,17 @@ public class ImportMenu implements ControlListener {
 			ArrayList<String> layoutAttributeKeys) {
 		// Initialize variables
 		init();
-		menu.setVisible(true);
+		importMenu.setVisible(true);
 		nodeList.dropMenu.setVisible(true);
 		edgeList.dropMenu.setVisible(true);
 		layoutList.dropMenu.setVisible(true);
 		//
-		nodeList.addElementAttributes(nodeAttributeKeys);
-		edgeList.addElementAttributes(edgeAttributeKeys);
-		layoutList.addElementAttributes(layoutAttributeKeys);
-		menu.addBang("loadGraph").setPosition(100, 500).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
+		nodeList.initializeList(nodeAttributeKeys);
+		edgeList.initializeList(edgeAttributeKeys);
+		layoutList.initializeList(layoutAttributeKeys);
+		importMenu.addBang("loadGraph").setPosition(100, 500).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
-		menu.getController("loadGraph").addListener(this);
+		importMenu.getController("loadGraph").addListener(this);
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -94,6 +95,7 @@ public class ImportMenu implements ControlListener {
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
+		System.out.println("ImportMenu " +controllerName);
 		if (controllerName.equals("loadGraph")) {
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeList.attributes));
 			UserSettings.getInstance().setDescriptiveStatisticKeys(temp);
@@ -134,12 +136,12 @@ public class ImportMenu implements ControlListener {
 		}
 		
 		// Populate Control panel with attributes retrieved from the graph
-		ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getAttributesMax().getAttributeKeys("Node");
-		ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getAttributesMax().getAttributeKeys("Edge");
+		ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys();
+		ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
 		ControlPanel.initGroups(nodeAttributesKeys, edgeAttributeKeys);
 		
 		// Hide Import Menu from main panel
-		menu.setVisible(false);
+		importMenu.setVisible(false);
 		nodeList.dropMenu.setVisible(false);
 		edgeList.dropMenu.setVisible(false);
 		layoutList.dropMenu.setVisible(false);
