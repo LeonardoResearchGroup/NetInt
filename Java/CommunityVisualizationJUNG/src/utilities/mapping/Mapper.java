@@ -90,8 +90,8 @@ public class Mapper {
 		}
 		rtn = rtn * factor;
 		// Minimal node visibility
-		if (rtn < 2)
-			rtn = 2;
+		if (rtn < 5)
+			rtn = 5;
 
 		if (rtn < 0) {
 			System.out.println(this.getClass().getName() + "   *** Error in " + filter + " filter trying to map : "
