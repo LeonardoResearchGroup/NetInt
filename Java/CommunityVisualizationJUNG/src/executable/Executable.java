@@ -34,13 +34,13 @@ public class Executable extends PApplet {
 		 * Output Console Catcher. Uncomment the line below to enable a console Catcher.
 		 * CAUTION, it might trigger conflicts with Menu's File Open.
 		 */
-		// consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+	   // consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
 		// Control Panel Frame
 		System.out.println("Building Control Panel");
-		controlPanel = new ControlPanel(this, 200, this.height - 25, "Controls");
+		controlPanel = new ControlPanel(this, 200, this.height - 25);
 		surface.setTitle("Java Networked Interaction Visualization. NetInt");
 		// Import Menu
 		System.out.println("Instantiating Import Menu");

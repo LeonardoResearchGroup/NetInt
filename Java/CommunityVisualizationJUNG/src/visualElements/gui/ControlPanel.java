@@ -5,6 +5,7 @@ import utilities.Assembler;
 import utilities.GraphLoader;
 import utilities.SerializeHelper;
 import utilities.SerializeWrapper;
+import utilities.filters.Filters;
 import utilities.mapping.Mapper;
 
 import java.awt.Color;
@@ -23,28 +24,46 @@ import visualElements.gui.UserSettings;
  */
 public class ControlPanel extends PApplet {
 	int w, h;
-	static PApplet parent;
-	private static ControlP5 main;
-	private static ControlP5 secondary;
-	private static CheckBox cBox;
-	private static Accordion accordion;
+	private PApplet parent;
+	private ControlP5 main;
+	private ControlP5 secondary;
+	private CheckBox cBox;
+	private Accordion accordion;
 	private PFont font;
 	private PImage logo;
 	// From NetInt: Java Network Interaction Visualization Library.
 	private final String EXTENSION = "nti";
 	// List of graphElements attribute names
-	private static ArrayList<String> keyNamesForNodes = new ArrayList<String>();
-	private static ArrayList<String> keyNamesForEdges = new ArrayList<String>();
+	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
+	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
 	// Groups
 	// private static Group nodeKeys;
 
-	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
+	private static ControlPanel CPInstance = null;
+
+	public static ControlPanel getInstance() throws NullPointerException {
+		if (CPInstance == null) {
+			return null;
+		}
+		return CPInstance;
+	}
+
+	/**
+	 * This constructor is used to create a control panel for user selection of visualization parameters
+	 * @param _parent
+	 * @param _w
+	 * @param _h
+	 */
+	public ControlPanel(PApplet _parent, int _w, int _h) {
 		super();
 		parent = _parent;
 		w = _w;
 		h = _h;
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		CPInstance = this;
 	}
+
+
 
 	public void setup() {
 		this.surface.setSize(w, h);
@@ -76,7 +95,7 @@ public class ControlPanel extends PApplet {
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
 
-	public static void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
+	public void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
 
 		setKeyNamesForNodes(nodeKeyNames);
 		setKeyNamesForEdges(edgeKeyNames);
@@ -103,18 +122,18 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		 accordion = secondary.addAccordion("acc").setPosition(10,145).setWidth(180);
-		 
-		 // create a new accordion. Add g1, g2, and g3 to the accordion.
-		 accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
-		
-		 // use Accordion.MULTI to allow multiple group to be open at a time.
-		 accordion.setCollapseMode(Accordion.MULTI);
-		
-		 // open close sections
-		 accordion.open(1, 2, 3);
-		 
-		 // Show controller
+		accordion = secondary.addAccordion("acc").setPosition(10, 145).setWidth(180);
+
+		// create a new accordion. Add g1, g2, and g3 to the accordion.
+		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
+
+		// use Accordion.MULTI to allow multiple group to be open at a time.
+		accordion.setCollapseMode(Accordion.MULTI);
+
+		// open close sections
+		accordion.open(1, 2, 3);
+
+		// Show controller
 		secondary.show();
 
 	}
@@ -125,8 +144,10 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setBackgroundComponents(Group group) {
-		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(165, 18).setRange(0, 255).setValue(70).moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);;
+	private void setBackgroundComponents(Group group) {
+		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(165, 18).setRange(0, 255).setValue(70)
+				.moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);
+		;
 	}
 
 	/**
@@ -135,22 +156,27 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setNodeComponents(ControllerGroup<Group> group) {
+	private void setNodeComponents(ControllerGroup<Group> group) {
 
 		// Visibility control
-		secondary.addToggle("On/Off").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		
+		secondary.addToggle("On/Off").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+
 		// Name Visibility control
-		secondary.addToggle("Name").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel() .align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Name").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Node search
-		secondary.addTextfield("Search ID").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group).getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
+		secondary.addTextfield("Search ID").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group)
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
 
 		// Clear node search
-		secondary.addBang("Clear").setPosition(77, 20).setSize(28, 15).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addBang("Clear").setPosition(77, 20).setSize(28, 15).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
-		
+		secondary.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35)
+				.setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
+
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
 		String[] items = new String[mappers.length];
@@ -158,7 +184,8 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Diameter").addItems(items).setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+		secondary.addScrollableList("Diameter").addItems(items).setPosition(5, 53).setSize(100, 100).setBarHeight(13)
+				.setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
 	/**
@@ -167,21 +194,26 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setEdgeComponents(Group group) {
+	private void setEdgeComponents(Group group) {
 
 		// Visibility control
-		secondary.addToggle("Internal").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		
-		secondary.addToggle("External").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Internal").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+
+		secondary.addToggle("External").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group)
+				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Transaction volume
 		secondary.addSlider("Volume").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
 
 		// Propagation
-		secondary.addSlider("Succesors").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10).snapToTickMarks(true).moveTo(group).getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
-		
+		secondary.addSlider("Succesors").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10)
+				.snapToTickMarks(true).moveTo(group).getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER)
+				.setPaddingX(35);
+
 		// Visualize only propagation
-		secondary.addToggle("Only").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Only").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Thickness
 		Object[] mappers = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys().toArray();
@@ -189,7 +221,8 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		secondary.addScrollableList("Thickness").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+		secondary.addScrollableList("Thickness").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
 	}
 
 	/**
@@ -198,7 +231,7 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setEstadisticasDescriptivasComponent() {
+	private void setEstadisticasDescriptivasComponent() {
 		// Set new names
 		for (int i = 0; i < keyNamesForNodes.size(); i++) {
 			cBox.addItem(keyNamesForNodes.get(i), 1);
@@ -419,11 +452,11 @@ public class ControlPanel extends PApplet {
 		}
 	}
 
-	private static void setKeyNamesForNodes(ArrayList<String> keyNames) {
+	private void setKeyNamesForNodes(ArrayList<String> keyNames) {
 		keyNamesForNodes = keyNames;
 	}
 
-	private static void setKeyNamesForEdges(ArrayList<String> keyNames) {
+	private void setKeyNamesForEdges(ArrayList<String> keyNames) {
 		keyNamesForEdges = keyNames;
 	}
 }

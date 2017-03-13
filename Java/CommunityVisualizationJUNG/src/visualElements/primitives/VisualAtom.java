@@ -22,7 +22,7 @@ public abstract class VisualAtom implements Serializable {
 	private int wdth, hght;
 	private float diameter;
 
-	public PVector pos;
+	protected PVector pos;
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
@@ -121,6 +121,10 @@ public abstract class VisualAtom implements Serializable {
 		return color.getRGB();
 	}
 
+	public PVector getPos() {
+		return pos;
+	}
+
 	public int setColor(Color color) {
 		this.color = color;
 		return this.color.getRGB();
@@ -183,7 +187,6 @@ public abstract class VisualAtom implements Serializable {
 	private void mouseClicked(MouseEvent e) {
 		if (isMouseOver) {
 			switch (e.getButton()) {
-			// switch (e.getButton()) {
 			case PConstants.LEFT:
 				leftClicked = !leftClicked;
 				break;

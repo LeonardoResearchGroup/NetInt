@@ -18,11 +18,11 @@ public class GraphmlKeyReader {
 
 	private ArrayList<GraphmlKey> graphKeys;
 
-	public GraphmlKeyReader(String file) {
+	public GraphmlKeyReader(String fileURL) {
 		graphKeys = new ArrayList<GraphmlKey>();
 		try {
 			String currentLine;
-			BufferedReader br = new BufferedReader(new FileReader(file));
+			BufferedReader br = new BufferedReader(new FileReader(fileURL));
 			System.out.println(this.getClass().getName() + " Reading graphml Keys... ");
 			while ((currentLine = br.readLine()) != null) {
 				currentLine = currentLine.trim();
@@ -61,8 +61,7 @@ public class GraphmlKeyReader {
 	}
 
 	/**
-	 * Splits a Key String in tokens. It must have the following format:
-	 * key attr.name="nnn" attr.type="ttt" for="eee" id="nnn"
+	 * Splits a Key String in tokens. And stores each of the following key values: 'name', 'type', 'for' and 'id' 
 	 * 
 	 * 
 	 * @param key
@@ -91,7 +90,7 @@ public class GraphmlKeyReader {
 			graphKeys.add(tmp);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(
-					" **** WARNING **** Check the graphml format. It must follow this structure: <key attr.name=\"nnn\" attr.type=\"ttt\" for=\"eee\" id=\"nnn\"/>");
+					" **** WARNING **** Check the graphml format");
 		}
 	}
 

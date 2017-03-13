@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import graphElements.Edge;
 import processing.core.PVector;
+import utilities.mapping.Mapper;
 
 /**
  * The visual representation of a grahElement.Edge. Each VEdge has a source and
@@ -27,6 +28,8 @@ public class VEdge implements Serializable {
 	private Bezier bezier;
 	// Visual Attributes
 	private float thickness;
+	// UserSettings
+	private String attributeName = "no_attribute";
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
@@ -68,7 +71,7 @@ public class VEdge implements Serializable {
 	}
 
 	public void makeBezier() {
-		bezier = new Bezier(vSource.pos, vTarget.pos);
+		bezier = new Bezier(vSource.getPos(), vTarget.getPos());
 		int alpha = 100; // (int) (Mapper.getInstance().convert(Mapper.LINEAR,
 							// edge.getWeight(), 255, Mapper.EDGE_WEIGHT));
 		bezier.setAlpha(alpha);
@@ -91,6 +94,19 @@ public class VEdge implements Serializable {
 			// Control Panel
 			if (visibility) {
 				// Set thickness
+				try {
+					if (!attributeName.equals(UserSettings.getInstance().getFiltrosVinculo())) {
+						if (UserSettings.getInstance().getFiltrosVinculo() != null)
+							attributeName = UserSettings.getInstance().getFiltrosNodo();
+						float value = edge.getFloatAttribute(attributeName);
+						float tmp = Mapper.getInstance().convert(Mapper.SINUSOIDAL, value, 5, Mapper.EDGE, attributeName);
+						setThickness(tmp);
+					}
+				} catch (NullPointerException npe) {
+					//npe.printStackTrace();
+					setThickness(1);
+				}
+				
 				Canvas.app.strokeWeight(thickness);
 				// Set color
 				if (vSource.isPropagated()) {
@@ -100,7 +116,7 @@ public class VEdge implements Serializable {
 				}
 				// If visualize the nodes and edges if not in propagation
 				if (!UserSettings.getInstance().getOnlyPropagation()) {
-					bezier.setSourceAndTarget(vSource.pos, vTarget.pos);
+					bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
 					// If source and target nodes are in propagation
 					// Edge mode: normal, head, tail or both
 					if (vSource.isPropagated()) {
@@ -113,7 +129,7 @@ public class VEdge implements Serializable {
 				} else {
 					// If solo propagation
 					if (vSource.isPropagated()) {
-						bezier.setSourceAndTarget(vSource.pos, vTarget.pos);
+						bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
 						// Edge mode: normal, head, tail or both
 						bezier.drawBezier2D(Canvas.app, 2f);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);

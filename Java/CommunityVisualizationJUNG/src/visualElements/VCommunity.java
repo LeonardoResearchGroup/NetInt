@@ -29,7 +29,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public Container container;
 	private VCommunityCover comCover;
-	private PVector lastPosition;
+	private PVector lastPosition, deltaMouse;
 	// This lock is used to control iterative behavior in
 	// showCommunityContents()
 	private boolean lock = false;
@@ -62,11 +62,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
 	}
 
-//	public void initializeA() {
-//		container.initialize();
-//		// createEdgesBetweenInternalCommunities();
-//	}
-
 	public void show() {
 		// Display the community cover
 		comCover.show(container, this, containsSearchedNode);
@@ -86,7 +81,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vC.container.buildExternalEdges(container.getVCommunities());
 					}
 				}
-			} else{
+			} else {
 				container.initialize();
 			}
 
@@ -102,9 +97,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 			setDisplayed(false);
 		}
+
 		// Move vCommunity to mouse position if right button is pressed
 		if (isMouseOver && rightPressed) {
-			moveCommunityCenterTo(Canvas.getCanvasMouse());
+			if (deltaMouse == null) {
+				deltaMouse = new PVector(Canvas.getCanvasMouse().x - pos.x, Canvas.getCanvasMouse().y - pos.y);
+			}
+			moveCommunityCenterTo(Canvas.getCanvasMouse().sub(deltaMouse));
+		} else {
+			deltaMouse = null;
 		}
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center. This is needed to reposition deployed and
@@ -199,8 +200,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 				vNodesCentered = false;
 			} else {
+				// This block centers all the elements in the container
 				for (VisualAtom vA : container.getVNodes()) {
-					vA.pos.set(pos);
+					vA.getPos().set(pos);
 					// We have to known which nodes are visible.
 					if (vA instanceof VNode) {
 						VNode vN = (VNode) vA;
@@ -364,7 +366,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		DirectedSparseMultigraph<Node, Edge> tmpGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// If not the same VCommunity
 		if (!this.getNode().equals(otherCommunity.getNode())) {
-			tmpGraph = Filters.filterAndRemoveEdgeLinkingCommunity(container.getName(), otherCommunity.container.getName());
+			tmpGraph = Filters.filterAndRemoveEdgeLinkingCommunity(container.getName(),
+					otherCommunity.container.getName());
 		}
 		return tmpGraph;
 	}

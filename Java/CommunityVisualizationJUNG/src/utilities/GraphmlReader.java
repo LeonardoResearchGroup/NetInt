@@ -45,7 +45,8 @@ public class GraphmlReader {
 
 	/**
 	 * Reader used to read graphml file formats. It receives the path to the
-	 * file, reads its contents and generates a Jung Graph
+	 * file, reads its contents and generates a Jung Graph. It relies on
+	 * GraphMLReader from Thinkerpop
 	 * 
 	 * @param file
 	 *            The url to the source file
@@ -53,8 +54,6 @@ public class GraphmlReader {
 	public GraphmlReader(String file) {
 		graph = new TinkerGraph();
 		GraphMLReader reader = new GraphMLReader(graph);
-		communities = new ArrayList<String>();
-		edgesBetweenCommunities = new ArrayList<Edge>();
 		InputStream input;
 		try {
 			input = new BufferedInputStream(new FileInputStream(file));
@@ -64,6 +63,10 @@ public class GraphmlReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		communities = new ArrayList<String>();
+		edgesBetweenCommunities = new ArrayList<Edge>();
+
 	}
 
 	/**
@@ -72,6 +75,7 @@ public class GraphmlReader {
 	 * determine the final size of the array in advance.
 	 * 
 	 * @param nodeImportAttributes
+	 *            The list of user defined attributes for node importing
 	 * @param saveCategoricalAttributes
 	 *            true if you want to save the categorical attributes in the
 	 *            general collection of attributes stored in Mapper Class. The
@@ -92,7 +96,6 @@ public class GraphmlReader {
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
 			// Make a node with the retrieved ID
 			Node nodeTmp = new Node(String.valueOf(id));
-
 			try {
 				// For the first two attributes: node community and node
 				// name
@@ -130,7 +133,10 @@ public class GraphmlReader {
 			}
 			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
-				nodeTmp.setAttribute(key, vertex.getProperty(key));
+
+				// ********** PROBLEMAS *************************
+
+				 nodeTmp.setAttribute(key, vertex.getProperty(key));
 			}
 			// Setting max min boundaries in Mapper class
 			Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
@@ -309,7 +315,7 @@ public class GraphmlReader {
 	 * 
 	 * @return
 	 */
-	public String[] getNodeGraphmlKeys() {
+	public String[] getNodesGraphmlKeys() {
 		String[] rtn = null;
 		for (Vertex v : graph.getVertices()) {
 			v.getPropertyKeys().toArray(rtn);
@@ -324,7 +330,7 @@ public class GraphmlReader {
 	 * 
 	 * @return
 	 */
-	public String[] getEdgeGraphmlKeys() {
+	public String[] getEdgesGraphmlKeys() {
 		String[] rtn = null;
 		for (com.tinkerpop.blueprints.Edge e : graph.getEdges()) {
 			e.getPropertyKeys().toArray(rtn);

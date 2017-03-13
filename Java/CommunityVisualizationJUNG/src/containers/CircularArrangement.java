@@ -34,7 +34,7 @@ public class CircularArrangement extends Arrangement {
 			// center XY
 			XY.add(center);
 			// set new XY
-			tmp.pos.set(XY);
+			tmp.getPos().set(XY);
 			count++;
 		}
 	}
