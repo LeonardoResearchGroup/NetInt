@@ -62,42 +62,59 @@ public class Mapper {
 		switch (filter) {
 		case "linear":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = linear(val, getMaxMinForNodes(graphAttribute));
+				rtn = linear(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = linear(val, getMaxMinForEdges(graphAttribute));
+				rtn = linear(val, getMinMaxForEdges(graphAttribute));
 			break;
 		case "sinusoidal":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = sinusoidal(val, getMaxMinForNodes(graphAttribute));
+				rtn = sinusoidal(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = sinusoidal(val, getMaxMinForEdges(graphAttribute));
+				rtn = sinusoidal(val, getMinMaxForEdges(graphAttribute));
 			break;
 		case "logarithmic":
 			rtn = log(val);
 			break;
 		case "radial":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = radial(val, getMaxMinForNodes(graphAttribute));
+				rtn = radial(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = radial(val, getMaxMinForEdges(graphAttribute));
+				rtn = radial(val, getMinMaxForEdges(graphAttribute));
 			break;
 		case "sigmoid":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = sigmoid(val, getMaxMinForNodes(graphAttribute));
+				rtn = sigmoid(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = sigmoid(val, getMaxMinForEdges(graphAttribute));
+				rtn = sigmoid(val, getMinMaxForEdges(graphAttribute));
 			break;
 		}
+		
 		rtn = rtn * factor;
-		// Minimal node visibility
-		if (rtn < 5)
-			rtn = 5;
+		
+		if (graphElementClassName.equals(Mapper.NODE)){
+			// Maximal node diameter
+			if (rtn > factor)
+				rtn = factor;
+			// Minimal diameter or thickness
+			if (rtn < 3)
+				rtn = 3;
+		}
+
+		if (graphElementClassName.equals(Mapper.EDGE)){
+			// Maximal node visibility
+			if (rtn > factor)
+				rtn = factor;
+			// Minimal diameter or thickness
+			if (rtn < 1)
+				rtn = 1;
+		}
 
 		if (rtn < 0) {
 			System.out.println(this.getClass().getName() + "   *** Error in " + filter + " filter trying to map : "
 					+ val + ", using the graph atttribute: " + graphAttribute + ". Value mapped to 0");
 			rtn = 0;
 		}
+
 		return rtn;
 	}
 
@@ -115,7 +132,7 @@ public class Mapper {
 	 *            "degree", "inDegree"
 	 * @return Array of floats [0] min, [1] max
 	 */
-	public float[] getMaxMinForNodes(String attributeName) {
+	public float[] getMinMaxForNodes(String attributeName) {
 		float[] rtn = new float[2];
 		try {
 			rtn[0] = nodeAttributesMin.getValueofAttribute(attributeName);
@@ -131,7 +148,7 @@ public class Mapper {
 		return rtn;
 	}
 
-	public float[] getMaxMinForEdges(String attributeName) {
+	public float[] getMinMaxForEdges(String attributeName) {
 		float[] rtn = new float[2];
 		try {
 			rtn[0] = edgeAttributesMin.getValueofAttribute(attributeName);

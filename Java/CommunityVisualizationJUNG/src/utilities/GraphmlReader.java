@@ -63,7 +63,7 @@ public class GraphmlReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
 
@@ -133,10 +133,9 @@ public class GraphmlReader {
 			}
 			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
-
-				// ********** PROBLEMAS *************************
-
-				 nodeTmp.setAttribute(key, vertex.getProperty(key));
+				if (nodeTmp.getAttribute(key) == null) {
+					nodeTmp.setAttribute(key, vertex.getProperty(key));
+				}
 			}
 			// Setting max min boundaries in Mapper class
 			Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
@@ -208,6 +207,14 @@ public class GraphmlReader {
 				// if no attributes selected set the weight to 1
 				e.setAttribute("weight", 1);
 			}
+
+			// Load all the edge attributes from the graphml file
+			for (String key : edge.getPropertyKeys()) {
+				if (e.getAttribute(key) == null) {
+					e.setAttribute(key, edge.getProperty(key));
+				}
+			}
+			
 			// Setting max min boundaries in Mapper class
 			Mapper.getInstance().setMaxMinEdgeAttributes(e);
 			if (saveCategoricalAttributes) {

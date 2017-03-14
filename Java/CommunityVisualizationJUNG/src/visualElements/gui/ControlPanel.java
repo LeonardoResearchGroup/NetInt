@@ -323,7 +323,7 @@ public class ControlPanel extends PApplet {
 			Toggle vinculoExt = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setMostrarVinculosExt(vinculoExt.getBooleanValue());
 			break;
-		case "Voluma":
+		case "Volume":
 			UserSettings.getInstance().setVolTransaccion(theEvent.getValue());
 			break;
 		case "Succesors":
@@ -335,6 +335,7 @@ public class ControlPanel extends PApplet {
 			break;
 		case "Thickness":
 			int valueE = (int) secondary.get(ScrollableList.class, "Thickness").getValue();
+			
 			UserSettings.getInstance().setFiltrosVinculo(
 					secondary.get(ScrollableList.class, "Thickness").getItem(valueE).get("name").toString());
 			break;

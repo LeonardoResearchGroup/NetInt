@@ -6,6 +6,8 @@ import visualElements.primitives.VisualAtom;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.w3c.dom.Node;
+
 import graphElements.Edge;
 import processing.core.PVector;
 import utilities.mapping.Mapper;
@@ -87,26 +89,37 @@ public class VEdge implements Serializable {
 	public void show() {
 		int alpha = 150;
 		// If both source and target are above a visibility threshold
-//		 source.show(source.isDisplayed());
-//		 target.show(target.isDisplayed());
+		// source.show(source.isDisplayed());
+		// target.show(target.isDisplayed());
 		if (vSource.isVisible() && vTarget.isVisible()) {
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
 			if (visibility) {
+
 				// Set thickness
 				try {
-					if (!attributeName.equals(UserSettings.getInstance().getFiltrosVinculo())) {
-						if (UserSettings.getInstance().getFiltrosVinculo() != null)
-							attributeName = UserSettings.getInstance().getFiltrosNodo();
-						float value = edge.getFloatAttribute(attributeName);
-						float tmp = Mapper.getInstance().convert(Mapper.SINUSOIDAL, value, 5, Mapper.EDGE, attributeName);
-						setThickness(tmp);
+					if (UserSettings.getInstance().getFiltrosVinculo() != null) {
+						if (!attributeName.equals(UserSettings.getInstance().getFiltrosVinculo())) {
+							attributeName = UserSettings.getInstance().getFiltrosVinculo();
+							float value = edge.getFloatAttribute(attributeName);
+							float tmp = Mapper.getInstance().convert(Mapper.SINUSOIDAL, value, 5, Mapper.EDGE,
+									attributeName);
+							// float[] minMax =
+							// Mapper.getInstance().getMinMaxForEdges(attributeName);
+							// System.out.println("from:" +
+							// vSource.getNode().getName() + " to "
+							// + vTarget.getNode().getName() + " \n" +
+							// attributeName + ": " + value + ", min: "
+							// + minMax[0] + " max: " + minMax[1] + " value: " +
+							// tmp + "\n");
+							setThickness(tmp);
+						}
 					}
 				} catch (NullPointerException npe) {
-					//npe.printStackTrace();
+					// npe.printStackTrace();
 					setThickness(1);
 				}
-				
+
 				Canvas.app.strokeWeight(thickness);
 				// Set color
 				if (vSource.isPropagated()) {
