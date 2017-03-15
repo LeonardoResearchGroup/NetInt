@@ -183,7 +183,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 				// VNodes
 				for (VNode vN : container.getJustVNodes()) {
-					vN.setVisibility(true);
+					vN.setVisibility(true);	
 					if (vNodesCentered) {
 						// reset vNode coordinates to the coordinates
 						// assigned in the container's layout
@@ -191,10 +191,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 								container.getDimension().height / 2);
 						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
 						vNodesCentered = true;
+						
 					}
 					// If vN is visible and not centered
+					//System.out.println(vN.isDisplayed());
 					if (!vNodesCentered) {
 						vN.show(vN.isDisplayed());
+						vN.setDisplayed(true);
 					}
 				}
 				vNodesCentered = false;

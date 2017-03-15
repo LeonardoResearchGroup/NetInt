@@ -41,7 +41,7 @@ public class VNode extends VisualAtom implements Serializable {
 		propagationSteps = 0;
 		description = new VNodeDescription();
 		visible = false;
-		setDisplayed(false);
+		setDisplayed(true);
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
 		registerEvents();
@@ -55,7 +55,7 @@ public class VNode extends VisualAtom implements Serializable {
 		propagationSteps = 0;
 		description = new VNodeDescription();
 		visible = false;
-		setDisplayed(false);
+		setDisplayed(true);
 		registerEvents();
 	}
 
@@ -192,6 +192,7 @@ public class VNode extends VisualAtom implements Serializable {
 			}
 			// Show propagation and source halo permanently
 			if (leftClicked) {
+				System.out.println("Aquí llegué. Cómo?");
 				propagationSource = true;
 				// Show propagation
 				propagate((int) UserSettings.getInstance().getPropagacion());
@@ -232,8 +233,11 @@ public class VNode extends VisualAtom implements Serializable {
 				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
 			}
 		}
-		if (!displayed) {
-			setDisplayed(true);
+//		if (!displayed) {
+//			setDisplayed(true);
+//		}
+		if(leftClicked){
+			leftClicked = false;
 		}
 
 	}
