@@ -44,7 +44,7 @@ public class DropDownList implements ControlListener {
 		// Attributes
 		for (int i = 0; i < attributes.length; i++) {
 			dropMenu.addScrollableList(attributes[i]).setPosition(posX + ((buttonWidth + gap) * i), posY + buttonHeight)
-					.setSize(buttonWidth, 150).setBarHeight(buttonHeight).setItemHeight(buttonHeight)
+					.setSize(buttonWidth, 140).setBarHeight(buttonHeight).setItemHeight(buttonHeight)
 					.addItems(attributeKeys).setType(ScrollableList.LIST).close();
 			// *** Important *** each controller must add a listener of events
 			// caught by the interface ControlListener implemented by this

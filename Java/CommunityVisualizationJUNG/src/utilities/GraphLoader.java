@@ -39,7 +39,6 @@ public class GraphLoader {
 		if (format == GraphLoader.PAJEK) {
 			PJKreader = new PajekReader();
 			theGraph = PJKreader.getGraph();
-			// jungGraph = PJKreader.getGraph();
 			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
