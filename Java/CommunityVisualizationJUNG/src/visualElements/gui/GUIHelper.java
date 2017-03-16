@@ -3,6 +3,10 @@ package visualElements.gui;
 import controlP5.*;
 import executable.Executable;
 
+/**
+ * @author juansalamanca
+ *@deprecated
+ */
 public class GUIHelper {
 
 	private String[] buttonLabels = { "Import graph" };

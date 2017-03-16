@@ -3,6 +3,7 @@ package visualElements;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import utilities.filters.Filters;
+import utilities.mapping.Mapper;
 import visualElements.gui.UserSettings;
 import visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
@@ -24,8 +25,6 @@ import graphElements.Node;
 public class VCommunity extends VNode implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private float minCommunityDiam, maxCommunityDiam;
-	private int minCommunitySize, maxCommunitySize;
 
 	public Container container;
 	private VCommunityCover comCover;
@@ -45,26 +44,25 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.getDimension().width / 2, (float) container.getDimension().height / 2);
 		this.container = container;
-		setLayoutParameters();
 		lastPosition = pos;
-		comCover = new VCommunityCover();
+		comCover = new VCommunityCover(this);
+		node.setAttribute("Community size", container.size());
+		Mapper.getInstance().setMaxMinNodeAttributes(node);
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 	}
 
-	private void setLayoutParameters() {
-		// Calculate the community diameter
-		minCommunityDiam = 70;
-		maxCommunityDiam = 200;
-		minCommunitySize = 1;
-		maxCommunitySize = 5000;
-		setDiameter(
-				PApplet.map(container.size(), minCommunitySize, maxCommunitySize, minCommunityDiam, maxCommunityDiam));
+	public void init() {
+		setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, container.size(), 150, Mapper.NODE, "Community size"));
+		if (this.getDiameter() < 20)
+			setDiameter(20);
+		comCover.setStrokeThickness(
+				(int) Mapper.getInstance().convert(Mapper.LINEAR, container.size(), 10, Mapper.NODE, "Community size"));
 	}
 
 	public void show() {
 		// Display the community cover
-		comCover.show(container, this, containsSearchedNode);
+		comCover.show(container, containsSearchedNode);
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			setDisplayed(true);
@@ -88,14 +86,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// If the layout is iterative
 			if (container.isLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
-				showCommunityContents(comCover.isUnlocked(),
-						container.stepIterativeLayout(pos).done() || container.isDone());
+				showCommunityContents(comCover.isUnlocked(), comCover.isUnlocked());
 			} else {
 				// If layout not iterative show nodes and edges
 				showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
 			}
 		} else {
-			setDisplayed(false);
+			setDisplayed(true);
 		}
 
 		// Move vCommunity to mouse position if right button is pressed
@@ -110,7 +107,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center. This is needed to reposition deployed and
 		// collapsed VCommunities with the mouse
-		updateContainer(Canvas.eventOnCanvas);
+		updateContainer(Canvas.mouseEventOnCanvas);
 	}
 
 	/**
@@ -129,16 +126,32 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (UserSettings.getInstance().mostrarVinculosInt()) {
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
-				// Show internal edges
-				for (VEdge vE : container.getVEdges()) {
-					// If the edge has any attribute
-					if (vE.getEdge().getAttributeSize() > 0) {
-						vE.setVisibility(UserSettings.getInstance().getVolTransaccion());
+				if (container.isLayoutIterative()) {
+					if (container.stepIterativeLayout(pos).done() || container.isDone()) {
+						// Show internal edges
+						for (VEdge vE : container.getVEdges()) {
+							// If the edge has any attribute
+							if (vE.getEdge().getAttributeSize() > 0) {
+								vE.setVisibility(UserSettings.getInstance().getVolTransaccion());
+							}
+							if (container.currentLayout == Container.CIRCULAR) {
+								vE.setLayoutAndCenter(container.currentLayout, this.pos);
+							}
+							vE.show();
+						}
 					}
-					if (container.currentLayout == Container.CIRCULAR) {
-						vE.setLayoutAndCenter(container.currentLayout, this.pos);
+				} else {
+					// Show internal edges
+					for (VEdge vE : container.getVEdges()) {
+						// If the edge has any attribute
+						if (vE.getEdge().getAttributeSize() > 0) {
+							vE.setVisibility(UserSettings.getInstance().getVolTransaccion());
+						}
+						if (container.currentLayout == Container.CIRCULAR) {
+							vE.setLayoutAndCenter(container.currentLayout, this.pos);
+						}
+						vE.show();
 					}
-					vE.show();
 				}
 			}
 		}
@@ -184,7 +197,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 				// VNodes
 				for (VNode vN : container.getJustVNodes()) {
-					vN.setVisibility(true);	
+					vN.setVisibility(true);
 					if (vNodesCentered) {
 						// reset vNode coordinates to the coordinates
 						// assigned in the container's layout
@@ -192,10 +205,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 								container.getDimension().height / 2);
 						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
 						vNodesCentered = true;
-						
+
 					}
 					// If vN is visible and not centered
-					//System.out.println(vN.isDisplayed());
+					// System.out.println(vN.isDisplayed());
 					if (!vNodesCentered) {
 						vN.show(vN.isDisplayed());
 						vN.setDisplayed(true);
@@ -205,7 +218,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			} else {
 				// This block centers all the elements in the container
 				for (VisualAtom vA : container.getVNodes()) {
-					vA.getPos().set(pos);
+					// vA.getPos().set(pos);
 					// We have to known which nodes are visible.
 					if (vA instanceof VNode) {
 						VNode vN = (VNode) vA;

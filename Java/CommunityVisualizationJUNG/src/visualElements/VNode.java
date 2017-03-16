@@ -17,10 +17,10 @@ public class VNode extends VisualAtom implements Serializable {
 	// This variable is used to control if a given attribute is below or above a
 	// visibility threshold
 	private boolean visible;
-	// This variable is used to control that the vElement is displayed only
-	// once. It is useful to prevent that edges with the same source or target
-	// vNode display the nodes more than once
-	private boolean displayed;
+//	// This variable is used to control that the vElement is displayed only
+//	// once. It is useful to prevent that edges with the same source or target
+//	// vNode display the nodes more than once
+//	private boolean displayed;
 	// propagation attributes
 	private boolean propagationSource, inPropagationChain, propagated = false;
 	private ArrayList<VNode> successors;
@@ -32,6 +32,9 @@ public class VNode extends VisualAtom implements Serializable {
 	// attribute used to map node diameter. It gets its value from the
 	// UserSettings
 	private String attributeName = "no_attribute";
+	// converter used to map node visual attributes. It gets its value from the
+	// UserSettings
+	private String converterName = Mapper.getInstance().LINEAR;
 
 	public VNode(Node node, float x, float y) {
 		super(x, y);
@@ -41,7 +44,6 @@ public class VNode extends VisualAtom implements Serializable {
 		propagationSteps = 0;
 		description = new VNodeDescription();
 		visible = false;
-		setDisplayed(true);
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
 		registerEvents();
@@ -55,7 +57,6 @@ public class VNode extends VisualAtom implements Serializable {
 		propagationSteps = 0;
 		description = new VNodeDescription();
 		visible = false;
-		setDisplayed(true);
 		registerEvents();
 	}
 
@@ -106,8 +107,6 @@ public class VNode extends VisualAtom implements Serializable {
 		if (next >= 0) {
 			for (VNode vN : this.successors) {
 				vN.propagateSuccessor(next);
-				// System.out.println(" 2: " + getNode().getName() + ": " +
-				// prompted + ": " + vN.propIndex.toString());
 				vN.inPropagationChain = true;
 			}
 			propagated = true;
@@ -158,11 +157,20 @@ public class VNode extends VisualAtom implements Serializable {
 
 		// Set the vNode diameter
 		try {
+			// determine the diameter based on the user selected attribute name
 			if (!attributeName.equals(UserSettings.getInstance().getFiltrosNodo())) {
 				if (UserSettings.getInstance().getFiltrosNodo() != null)
 					attributeName = UserSettings.getInstance().getFiltrosNodo();
 				float value = node.getFloatAttribute(attributeName);
-				float tmp = Mapper.getInstance().convert(Mapper.SINUSOIDAL, value, 60, Mapper.NODE, attributeName);
+				float tmp = Mapper.getInstance().convert(converterName, value, 60, Mapper.NODE, attributeName);
+				setDiameter(tmp);
+			}
+			// determine the diameter based on the user selected converter name
+			if (!converterName.equals(UserSettings.getInstance().getConverterNode())) {
+				if (UserSettings.getInstance().getConverterNode() != null)
+					converterName = UserSettings.getInstance().getConverterNode();
+				float value = node.getFloatAttribute(attributeName);
+				float tmp = Mapper.getInstance().convert(converterName, value, 60, Mapper.NODE, attributeName);
 				setDiameter(tmp);
 			}
 		} catch (NullPointerException npe) {
@@ -185,6 +193,7 @@ public class VNode extends VisualAtom implements Serializable {
 				// defined by the user in the control panel
 				if (UserSettings.getInstance().mostrarNombre()) {
 					if (!UserSettings.getInstance().getOnlyPropagation()) {
+						Canvas.app.fill(getColorRGB());
 						Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 					}
 				}
@@ -192,7 +201,6 @@ public class VNode extends VisualAtom implements Serializable {
 			}
 			// Show propagation and source halo permanently
 			if (leftClicked) {
-				System.out.println("Aquí llegué. Cómo?");
 				propagationSource = true;
 				// Show propagation
 				propagate((int) UserSettings.getInstance().getPropagacion());
@@ -236,10 +244,6 @@ public class VNode extends VisualAtom implements Serializable {
 //		if (!displayed) {
 //			setDisplayed(true);
 //		}
-		if(leftClicked){
-			leftClicked = false;
-		}
-
 	}
 
 	public boolean hasNode(Node node) {
@@ -293,14 +297,6 @@ public class VNode extends VisualAtom implements Serializable {
 
 	public boolean isVisible() {
 		return visible;
-	}
-
-	public boolean isDisplayed() {
-		return displayed;
-	}
-
-	public void setDisplayed(boolean displayed) {
-		this.displayed = displayed;
 	}
 
 	public void setVisibility(boolean visible) {

@@ -26,6 +26,10 @@ public abstract class VisualAtom implements Serializable {
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
+	// This variable is used to control that the vElement is displayed only
+	// once. It is useful to prevent that edges with the same source or target
+	// vNode display the nodes more than once
+	protected boolean displayed;
 
 	protected Color color;
 	// Events
@@ -36,6 +40,7 @@ public abstract class VisualAtom implements Serializable {
 		pos = new PVector(x, y);
 		leftClicked = false;
 		color = new Color(255, 255, 255, 90);
+		displayed = true;
 	}
 
 	public VisualAtom(float x, float y, int wdth, int hght) {
@@ -45,6 +50,7 @@ public abstract class VisualAtom implements Serializable {
 		pos = new PVector(x, y);
 		leftClicked = false;
 		color = new Color(255, 255, 255, 90);
+		displayed = true;
 	}
 
 	public abstract void show();
@@ -125,6 +131,14 @@ public abstract class VisualAtom implements Serializable {
 		return pos;
 	}
 
+	public boolean isDisplayed() {
+		return displayed;
+	}
+
+	public void setDisplayed(boolean displayed) {
+		this.displayed = displayed;
+	}
+
 	public int setColor(Color color) {
 		this.color = color;
 		return this.color.getRGB();
@@ -155,7 +169,7 @@ public abstract class VisualAtom implements Serializable {
 
 	// ---------------- MouseEvent methods ----------------
 	private void mousePressed(MouseEvent e) {
-		if (isMouseOver) {
+		if (isMouseOver && displayed) {
 			switch (e.getButton()) {
 			case PConstants.LEFT:
 				leftPressed = true;
@@ -185,7 +199,7 @@ public abstract class VisualAtom implements Serializable {
 	}
 
 	private void mouseClicked(MouseEvent e) {
-		if (isMouseOver) {
+		if (isMouseOver && displayed) {
 			switch (e.getButton()) {
 			case PConstants.LEFT:
 				leftClicked = !leftClicked;
@@ -204,7 +218,8 @@ public abstract class VisualAtom implements Serializable {
 	public abstract void eventRegister(PApplet theApp);
 
 	public void mouseEvent(MouseEvent e) {
-		detectMouseOver(Canvas.getCanvasMouse());
+		if (displayed)
+			detectMouseOver(Canvas.getCanvasMouse());
 		if (e.getAction() == MouseEvent.CLICK) {
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {

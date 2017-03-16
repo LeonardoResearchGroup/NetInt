@@ -3,7 +3,10 @@ package visualElements;
 import java.io.Serializable;
 
 import containers.Container;
+import processing.core.PApplet;
 import processing.core.PConstants;
+import utilities.GraphLoader;
+import utilities.mapping.Mapper;
 
 public class VCommunityCover implements Serializable{
 	
@@ -22,17 +25,19 @@ public class VCommunityCover implements Serializable{
 	private int strokeThickness;
 	private float angle;
 	private float angle2;
+	private VCommunity communityNode;
 
-	public VCommunityCover() {
+	public VCommunityCover(VCommunity communityNode) {
 		increment = 10;
 		unlocked = false;
 		i = 0;
-		strokeThickness = 10;
+		this.communityNode = communityNode;
+		strokeThickness = 2;
 		angle = PConstants.TWO_PI / 360;
 		enableClosing = false;
 	}
 
-	protected void show(Container container, VNode communityNode, boolean containsSearchedNode) {
+	protected void show(Container container, boolean containsSearchedNode) {
 		// If community not opened
 		if (!unlocked) {
 			// listen to the mouse and open the community
@@ -136,10 +141,20 @@ public class VCommunityCover implements Serializable{
 		return unlocked && coverDeployed;
 	}
 	
+	public int getStrokeThickness() {
+		return strokeThickness;
+	}
+	
 	// Setters 
 	
-	public void setUnlocked(boolean val) {
-		unlocked = val;
+//	public void setUnlockedA(boolean val) {
+//		unlocked = val;
+//	}
+
+
+
+	public void setStrokeThickness(int strokeThickness) {
+		this.strokeThickness = strokeThickness;
 	}
 
 	public void setEnableClosing(boolean enableClosing) {

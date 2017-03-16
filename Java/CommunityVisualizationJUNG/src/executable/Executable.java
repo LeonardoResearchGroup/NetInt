@@ -31,10 +31,10 @@ public class Executable extends PApplet {
 		surface.setLocation(200, -300);
 		smooth();
 		/*
-		 * Output Console Catcher. Uncomment the line below to enable a console Catcher.
-		 * CAUTION, it might trigger conflicts with Menu's File Open.
+		 * Output Console Catcher. Uncomment the line below to enable a console
+		 * Catcher. CAUTION, it might trigger conflicts with Menu's File Open.
 		 */
-	   // consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		 consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
@@ -65,12 +65,22 @@ public class Executable extends PApplet {
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(canvas, new PVector(width - 20, height - 60));
+			// Save a frame as png
+			if (UserSettings.getInstance().getFileExportName() != null) {
+				this.cursor(WAIT);
+				saveFrame(UserSettings.getInstance().getFileExportName());
+				javax.swing.JOptionPane.showMessageDialog(null,
+						"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "png", "",
+						javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				UserSettings.getInstance().setFileExportName(null);
+				this.cursor(ARROW);
+			}
 		}
-		
+
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
 		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2017", 20, height - 10);
-		
+
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		UserSettings.getInstance().setEventOnVSettings(false);
@@ -87,7 +97,7 @@ public class Executable extends PApplet {
 	public static void setActiveGraph(boolean activeGraph) {
 		Executable.activeGraph = activeGraph;
 	}
-	
+
 	/**
 	 * This method receives the graph file path and triggers an import process.
 	 * The import process follows the parameters chosen by the user from the

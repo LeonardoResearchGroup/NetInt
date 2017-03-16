@@ -92,6 +92,8 @@ public class Assembler {
 		// Root Community
 		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
 		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
+		// set diameter
+		vCommunity.init();
 		return vCommunity;
 	}
 
@@ -125,6 +127,8 @@ public class Assembler {
 
 		String nodeID = comName + "_" + String.valueOf(0);
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
+		// set diameter
+		communityTemp.init();
 		return communityTemp;
 	}
 
@@ -176,6 +180,9 @@ public class Assembler {
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
 
+		}
+		for(VCommunity vC : vCommunities){
+			vC.init();
 		}
 		return vCommunities;
 	}

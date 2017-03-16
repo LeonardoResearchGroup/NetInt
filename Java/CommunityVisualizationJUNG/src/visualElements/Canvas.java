@@ -23,7 +23,7 @@ public class Canvas {
 	// A Vector for the canvas center
 	private PVector newCenter;
 	// An Event to inform if there was an event on the canvas
-	public static boolean eventOnCanvas;
+	public static boolean mouseEventOnCanvas;
 	// Transformation control
 	private boolean shiftDown;
 	public static boolean canvasBeingTransformed = false;
@@ -248,7 +248,7 @@ public class Canvas {
 	}
 
 	public static void setEventOnCanvas(boolean eventOnCanvas) {
-		Canvas.eventOnCanvas = eventOnCanvas;
+		Canvas.mouseEventOnCanvas = eventOnCanvas;
 	}
 
 	

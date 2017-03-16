@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserSettings {
+	
+	// FILE
+	private String fileExportName;
 
 	// BACKGROUND Visibility Settings
 	private int colorBackground = 70;
@@ -14,6 +17,7 @@ public class UserSettings {
 	private boolean mostrarNodos;
 	private boolean mostrarNombre;
 	private String filtrosNodo;
+	private String converterNode;
 
 	// EDGE Visibility Settings
 	private boolean mostrarVinculosInt;
@@ -22,6 +26,7 @@ public class UserSettings {
 	private float propagacion;
 	private boolean soloPropagacion;
 	private String filtrosVinculo;
+	private String converterEdge;
 
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
@@ -30,6 +35,8 @@ public class UserSettings {
 	// It has the financial statements keys and their titles to show into
 	// VNodeDescriptions
 	private HashMap<String, Boolean> descriptiveStatistics;
+
+
 
 	private static UserSettings vSettingsInstance = null;
 
@@ -112,8 +119,32 @@ public class UserSettings {
 	public boolean isStatisticVisible(String key) {
 		return descriptiveStatistics.get(key);
 	}
+	
+	public HashMap<String, String> getDescriptiveKeys() {
+		return descriptiveKeys;
+	}
+	
+	public String getConverterNode() {
+		return converterNode;
+	}
+	
+	public String getConverterEdge() {
+		return converterEdge;
+	}
+	
+	public String getFileExportName(){
+		return fileExportName ;
+	}
 
 	// ***** SETTERS ******
+	
+	public void setFileExportName(String val){
+		this.fileExportName = val;
+	}
+
+	public void setConverterEdge(String converterEdge) {
+		this.converterEdge = converterEdge;
+	}
 
 	public void setDescriptiveStatisticKeys(ArrayList<String> descriptiveStatisticKeys) {
 		this.descriptiveStatisticKeys = descriptiveStatisticKeys;
@@ -178,9 +209,9 @@ public class UserSettings {
 	public void setEventOnVSettings(boolean eventTriggered) {
 		eventOnVSettings = eventTriggered;
 	}
-
-	public HashMap<String, String> getDescriptiveKeys() {
-		return descriptiveKeys;
+	
+	public void setConverterNode (String val){
+		this.converterNode = val;
 	}
 
 }

@@ -38,13 +38,15 @@ public class ImportMenu implements ControlListener {
 		// for nodes
 		nodeList = new DropDownList(app, "Node Attributes");
 		nodeList.setPos(100, 100);
-		String[] nodeAttributeNames = { "Community", "Label", "Size", "Color" };
+		String[] nodeAttributeNames = { "Community", "Label"};
+		//String[] nodeAttributeNames = { "Community", "Label", "Size", "Color" };
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// for edges
 		edgeList = new DropDownList(app, "Edge Attributes");
 		edgeList.setPos(100, 250);
-		String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
+		//String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
+		String[] edgeAttributeNames = { "Body thickness" };
 		edgeList.setAttributes(edgeAttributeNames);
 
 		// for layout

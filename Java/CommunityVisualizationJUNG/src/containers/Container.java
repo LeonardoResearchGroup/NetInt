@@ -58,7 +58,7 @@ public abstract class Container {
 
 	protected Color color;
 	protected int iterations;
-	protected final int MAX_ITERATIONS = 100;
+	protected final int MAX_ITERATIONS = 70;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
