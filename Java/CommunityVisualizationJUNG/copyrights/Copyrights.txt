@@ -1,4 +1,4 @@
-NETINT JAVA NETWORKED INTERACTION VISUALIZATION
+NETINT - JAVA NETWORKED INTERACTION VISUALIZATION
 
 Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
 License: LGPL 2.1
