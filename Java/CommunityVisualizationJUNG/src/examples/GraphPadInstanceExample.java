@@ -3,9 +3,9 @@ package examples;
 import java.io.FileNotFoundException;
 import netInt.GraphPad;
 
-public class GraphPadInstance {
+public class GraphPadInstanceExample {
 
-	GraphPadInstance() {
+	GraphPadInstanceExample() {
 		try {
 			String filePath = "./data/graphs/samples/Risk.graphml";
 			new GraphPad(filePath);
@@ -15,6 +15,6 @@ public class GraphPadInstance {
 	}
 
 	public static void main(String[] args) {
-		new GraphPadInstance();
+		new GraphPadInstanceExample();
 	}
 }
