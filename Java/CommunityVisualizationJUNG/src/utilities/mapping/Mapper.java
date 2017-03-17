@@ -1,5 +1,7 @@
 package utilities.mapping;
 
+import java.util.ArrayList;
+
 import graphElements.Edge;
 import graphElements.GraphElement;
 import graphElements.Node;
@@ -17,18 +19,23 @@ public class Mapper {
 	// ATTRIBUTE
 	public static final String NODE = "Node";
 	public static final String EDGE = "Edge";
-	// FILTER
+	// CONVERTER
 	public static final String LINEAR = "linear";
 	public static final String SINUSOIDAL = "sinusoidal";
 	public static final String LOGARITMIC = "logarithmic";
 	public static final String RADIAL = "radial";
 	public static final String SIGMOID = "sigmoid";
+
+	private String[] converters = {"linear","sinusoidal","logarithmic","radial","sigmoid"};
 	// MAXs & MINs nodes
 	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
 	private CategoricalCollection nodeCategoricalAttributes;
 	// MAXs & MINs edges
 	private NumericalCollection edgeAttributesMin, edgeAttributesMax;
 	private CategoricalCollection edgeCategoricalAttributes;
+	// MAXs & MINs communities
+	private NumericalCollection commAttributesMin, commAttributesMax;
+	private CategoricalCollection commCategoricalAttributes;
 
 	// Other attributes for sigmoid filter
 	private float alpha = 1;
@@ -47,7 +54,7 @@ public class Mapper {
 	}
 
 	/**
-	 * @param filter
+	 * @param converter
 	 *            filter name
 	 * @param val
 	 *            the number to be mapped
@@ -57,47 +64,64 @@ public class Mapper {
 	 * @param graphAttribute
 	 * @return the value mapped equals to a number between 0 and 1 X factor
 	 */
-	public float convert(String filter, float val, float factor, String graphElementClassName, String graphAttribute) {
+	public float convert(String converter, float val, float factor, String graphElementClassName, String graphAttribute) {
 		float rtn = Float.NEGATIVE_INFINITY;
-		switch (filter) {
+		switch (converter) {
 		case "linear":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = linear(val, getMaxMinForNodes(graphAttribute));
+				rtn = linear(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = linear(val, getMaxMinForEdges(graphAttribute));
+				rtn = linear(val, getMinMaxForEdges(graphAttribute));
 			break;
 		case "sinusoidal":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = sinusoidal(val, getMaxMinForNodes(graphAttribute));
+				rtn = sinusoidal(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = sinusoidal(val, getMaxMinForEdges(graphAttribute));
+				rtn = sinusoidal(val, getMinMaxForEdges(graphAttribute));
 			break;
 		case "logarithmic":
 			rtn = log(val);
 			break;
 		case "radial":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = radial(val, getMaxMinForNodes(graphAttribute));
+				rtn = radial(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = radial(val, getMaxMinForEdges(graphAttribute));
+				rtn = radial(val, getMinMaxForEdges(graphAttribute));
 			break;
 		case "sigmoid":
 			if (graphElementClassName.equals(Mapper.NODE))
-				rtn = sigmoid(val, getMaxMinForNodes(graphAttribute));
+				rtn = sigmoid(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
-				rtn = sigmoid(val, getMaxMinForEdges(graphAttribute));
+				rtn = sigmoid(val, getMinMaxForEdges(graphAttribute));
 			break;
 		}
+		
 		rtn = rtn * factor;
-		// Minimal node visibility
-		if (rtn < 2)
-			rtn = 2;
+		
+		if (graphElementClassName.equals(Mapper.NODE)){
+			// Maximal node diameter
+			if (rtn > factor)
+				rtn = factor;
+			// Minimal diameter or thickness
+			if (rtn < 3)
+				rtn = 3;
+		}
+
+		if (graphElementClassName.equals(Mapper.EDGE)){
+			// Maximal node visibility
+			if (rtn > factor)
+				rtn = factor;
+			// Minimal diameter or thickness
+			if (rtn < 1)
+				rtn = 1;
+		}
 
 		if (rtn < 0) {
-			System.out.println(this.getClass().getName() + "   *** Error in " + filter + " filter trying to map : "
+			System.out.println(this.getClass().getName() + "   *** Error in " + converter + " filter trying to map : "
 					+ val + ", using the graph atttribute: " + graphAttribute + ". Value mapped to 0");
 			rtn = 0;
 		}
+
 		return rtn;
 	}
 
@@ -115,7 +139,7 @@ public class Mapper {
 	 *            "degree", "inDegree"
 	 * @return Array of floats [0] min, [1] max
 	 */
-	public float[] getMaxMinForNodes(String attributeName) {
+	public float[] getMinMaxForNodes(String attributeName) {
 		float[] rtn = new float[2];
 		try {
 			rtn[0] = nodeAttributesMin.getValueofAttribute(attributeName);
@@ -131,7 +155,7 @@ public class Mapper {
 		return rtn;
 	}
 
-	public float[] getMaxMinForEdges(String attributeName) {
+	public float[] getMinMaxForEdges(String attributeName) {
 		float[] rtn = new float[2];
 		try {
 			rtn[0] = edgeAttributesMin.getValueofAttribute(attributeName);
@@ -461,7 +485,7 @@ public class Mapper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Sets the min and max value stored in a collection of node attributes. It
 	 * initializes the collection if attributes in case it is equal to null
@@ -541,4 +565,29 @@ public class Mapper {
 	public CategoricalCollection getEdgeCategoricalAttributes() throws NullPointerException {
 		return edgeCategoricalAttributes;
 	}
+
+	public String[] getConvertersList() {
+		return converters;
+	}
+
+	public ArrayList <String> getNodeNumericalAttributeKeys(){
+		return nodeAttributesMin.getAttributeKeys();
+	}
+	
+	public ArrayList <String> getEdgeNumericalAttributeKeys(){
+		return edgeAttributesMin.getAttributeKeys();
+	}
+	
+	/**
+	 * Get the list of graph element attributes stores in a categorical collection
+	 * 
+	 * @param GraphElementClassName
+	 *            The name of the graph element class. It must be either "Node"
+	 *            or "Edge"
+	 * @return
+	 */
+	public ArrayList <String> getCategorialAttributesKeys(String GraphElementClassName){
+		return nodeCategoricalAttributes.getAttributeKeys(GraphElementClassName);
+	}
+
 }

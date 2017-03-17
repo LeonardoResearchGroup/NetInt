@@ -18,6 +18,10 @@ import javax.swing.JTextField;
 
 import processing.core.PApplet;
 
+/**
+ * @author juansalamanca
+ *@deprecated
+ */
 public class ModalWindow extends JDialog{
 
 	private static final long serialVersionUID = 1L;

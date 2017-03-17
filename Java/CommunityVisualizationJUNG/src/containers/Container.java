@@ -58,7 +58,7 @@ public abstract class Container {
 
 	protected Color color;
 	protected int iterations;
-	protected final int MAX_ITERATIONS = 100;
+	protected final int MAX_ITERATIONS = 70;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -271,7 +271,7 @@ public abstract class Container {
 	 */
 	public void updateVNodesCoordinates(PVector diffPos) {
 		for (VNode vN : getVNodes()) {
-			vN.pos.sub(diffPos);
+			vN.getPos().sub(diffPos);
 		}
 	}
 
@@ -295,9 +295,9 @@ public abstract class Container {
 				for (VNode vN : vNodes) {
 					if (vN.getNode().equals(n)) {
 						// set new position
-						vN.pos.set(nPos);
+						vN.getPos().set(nPos);
 						vN.absoluteToRelative(layoutCenter);
-						vN.pos.add(vCommunityCenter);
+						vN.getPos().add(vCommunityCenter);
 					}
 				}
 			}
@@ -545,7 +545,7 @@ public abstract class Container {
 	public void translateVElementCoordinates(VNode vN, PVector newPosition) {
 		float coordX = (float) layout.getX(vN.getNode()) + newPosition.x;
 		float coordY = (float) layout.getY(vN.getNode()) + newPosition.y;
-		vN.pos.set(coordX, coordY);
+		vN.getPos().set(coordX, coordY);
 	}
 
 	// *** Show

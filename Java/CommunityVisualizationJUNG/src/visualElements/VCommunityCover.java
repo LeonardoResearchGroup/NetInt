@@ -3,7 +3,10 @@ package visualElements;
 import java.io.Serializable;
 
 import containers.Container;
+import processing.core.PApplet;
 import processing.core.PConstants;
+import utilities.GraphLoader;
+import utilities.mapping.Mapper;
 
 public class VCommunityCover implements Serializable{
 	
@@ -22,17 +25,19 @@ public class VCommunityCover implements Serializable{
 	private int strokeThickness;
 	private float angle;
 	private float angle2;
+	private VCommunity communityNode;
 
-	public VCommunityCover() {
+	public VCommunityCover(VCommunity communityNode) {
 		increment = 10;
 		unlocked = false;
 		i = 0;
-		strokeThickness = 10;
+		this.communityNode = communityNode;
+		strokeThickness = 2;
 		angle = PConstants.TWO_PI / 360;
 		enableClosing = false;
 	}
 
-	protected void show(Container container, VNode communityNode, boolean containsSearchedNode) {
+	protected void show(Container container, boolean containsSearchedNode) {
 		// If community not opened
 		if (!unlocked) {
 			// listen to the mouse and open the community
@@ -56,7 +61,7 @@ public class VCommunityCover implements Serializable{
 		// deployed
 		if (containsSearchedNode && !coverDeployed) {
 			Canvas.app.fill(255, 0, 0, 100);
-			Canvas.app.arc(communityNode.pos.x, communityNode.pos.y, communityNode.getDiameter() - 10,
+			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter() - 10,
 					communityNode.getDiameter() - 10, -PConstants.PI, PConstants.PI);
 		}
 		// These lines open two arcs around the community center generating the
@@ -70,7 +75,7 @@ public class VCommunityCover implements Serializable{
 			Canvas.app.stroke(255, 20);
 			Canvas.app.strokeWeight(strokeThickness);
 			Canvas.app.fill(255, 10);
-			Canvas.app.arc(communityNode.pos.x, communityNode.pos.y, communityNode.getDiameter(),
+			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
 					communityNode.getDiameter(), -PConstants.PI, PConstants.PI);
 
 		} else {
@@ -87,13 +92,13 @@ public class VCommunityCover implements Serializable{
 		// Increments the angle of the involute
 		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc right half
-		Canvas.app.arc(communityNode.pos.x, communityNode.pos.y, communityNode.getDiameter(),
+		Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
 				communityNode.getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
 		// *** DRAWS LEFT HALF INVOLUTE
 		// Decrements the angle of the involute
 		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
 		// *** Arc left half
-		Canvas.app.arc(communityNode.pos.x, communityNode.pos.y, communityNode.getDiameter(),
+		Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
 				communityNode.getDiameter(), PConstants.HALF_PI, angle2);
 		// Labels
 		showCoverLable(communityNode, container);
@@ -108,13 +113,13 @@ public class VCommunityCover implements Serializable{
 	public void showCoverLable(VNode communityNode, Container container) {
 		Canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);
 		Canvas.app.fill(250, 200);
-		Canvas.app.text(container.getName(), communityNode.pos.x, communityNode.pos.y);
+		Canvas.app.text(container.getName(), communityNode.getPos().x, communityNode.getPos().y);
 		Canvas.app.noFill();
 		Canvas.app.stroke(180);
 		// Canvas.app.rect(0, 0, container.dimension.width,
 		// container.dimension.height);
-		Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.pos.x, communityNode.pos.y + 20);
-		Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), communityNode.pos.x, communityNode.pos.y + 35);
+		Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.getPos().x, communityNode.getPos().y + 20);
+		Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), communityNode.getPos().x, communityNode.getPos().y + 35);
 	}
 
 	/// **** Getters and Setters
@@ -136,10 +141,20 @@ public class VCommunityCover implements Serializable{
 		return unlocked && coverDeployed;
 	}
 	
+	public int getStrokeThickness() {
+		return strokeThickness;
+	}
+	
 	// Setters 
 	
-	public void setUnlocked(boolean val) {
-		unlocked = val;
+//	public void setUnlockedA(boolean val) {
+//		unlocked = val;
+//	}
+
+
+
+	public void setStrokeThickness(int strokeThickness) {
+		this.strokeThickness = strokeThickness;
 	}
 
 	public void setEnableClosing(boolean enableClosing) {

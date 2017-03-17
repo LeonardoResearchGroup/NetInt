@@ -85,7 +85,7 @@ public class CategoricalCollection {
 
 	/**
 	 * Get the list of graph element attributes stores in this
-	 * NumericalCollection
+	 * CategoricalCollection
 	 * 
 	 * @param GraphElementClassName
 	 *            The name of the graph element class. It must be either "Node"

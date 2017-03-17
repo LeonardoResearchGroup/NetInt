@@ -5,6 +5,7 @@ import utilities.Assembler;
 import utilities.GraphLoader;
 import utilities.SerializeHelper;
 import utilities.SerializeWrapper;
+import utilities.filters.Filters;
 import utilities.mapping.Mapper;
 
 import java.awt.Color;
@@ -23,27 +24,46 @@ import visualElements.gui.UserSettings;
  */
 public class ControlPanel extends PApplet {
 	int w, h;
-	static PApplet parent;
-	private static ControlP5 main;
-	private static ControlP5 secondary;
-	private static CheckBox cBox;
-	private static Accordion accordion;
+	private PApplet parent;
+	private ControlP5 main;
+	private ControlP5 secondary;
+	private CheckBox cBox;
+	private Accordion accordion;
 	private PFont font;
 	private PImage logo;
 	// From NetInt: Java Network Interaction Visualization Library.
-	private final String EXTENSION = "nti";
+	private final String NTI_EXTENSION = "nti";
+	private final String PNG_EXTENSION = "png";
 	// List of graphElements attribute names
-	private static ArrayList<String> keyNamesForNodes = new ArrayList<String>();
-	private static ArrayList<String> keyNamesForEdges = new ArrayList<String>();
+	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
+	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
 	// Groups
 	// private static Group nodeKeys;
 
-	public ControlPanel(PApplet _parent, int _w, int _h, String _name) {
+	private static ControlPanel CPInstance = null;
+
+	public static ControlPanel getInstance() throws NullPointerException {
+		if (CPInstance == null) {
+			return null;
+		}
+		return CPInstance;
+	}
+
+	/**
+	 * This constructor is used to create a control panel for user selection of
+	 * visualization parameters
+	 * 
+	 * @param _parent
+	 * @param _w
+	 * @param _h
+	 */
+	public ControlPanel(PApplet _parent, int _w, int _h) {
 		super();
 		parent = _parent;
 		w = _w;
 		h = _h;
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		CPInstance = this;
 	}
 
 	public void setup() {
@@ -76,7 +96,7 @@ public class ControlPanel extends PApplet {
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
 
-	public static void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
+	public void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
 
 		setKeyNamesForNodes(nodeKeyNames);
 		setKeyNamesForEdges(edgeKeyNames);
@@ -103,18 +123,18 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		 accordion = secondary.addAccordion("acc").setPosition(10,145).setWidth(180);
-		 
-		 // create a new accordion. Add g1, g2, and g3 to the accordion.
-		 accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
-		
-		 // use Accordion.MULTI to allow multiple group to be open at a time.
-		 accordion.setCollapseMode(Accordion.MULTI);
-		
-		 // open close sections
-		 accordion.open(1, 2, 3);
-		 
-		 // Show controller
+		accordion = secondary.addAccordion("acc").setPosition(10, 145).setWidth(180);
+
+		// create a new accordion. Add g1, g2, and g3 to the accordion.
+		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
+
+		// use Accordion.MULTI to allow multiple group to be open at a time.
+		accordion.setCollapseMode(Accordion.MULTI);
+
+		// open close sections
+		accordion.open(1, 2, 3);
+
+		// Show controller
 		secondary.show();
 
 	}
@@ -125,8 +145,10 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setBackgroundComponents(Group group) {
-		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(165, 18).setRange(0, 255).setValue(70).moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);;
+	private void setBackgroundComponents(Group group) {
+		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(165, 18).setRange(0, 255).setValue(70)
+				.moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);
+		;
 	}
 
 	/**
@@ -135,30 +157,54 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setNodeComponents(ControllerGroup<Group> group) {
+	private void setNodeComponents(ControllerGroup<Group> group) {
+		Accordion accordionNodes;
 
 		// Visibility control
-		secondary.addToggle("On/Off").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		
+		secondary.addToggle("On/Off").setPosition(5, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+
 		// Name Visibility control
-		secondary.addToggle("Name").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel() .align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Name").setPosition(60, 5).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Node search
-		secondary.addTextfield("Search ID").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group).getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
+		secondary.addTextfield("Search ID").setPosition(5, 20).setSize(68, 15).setAutoClear(false).moveTo(group)
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
 
 		// Clear node search
-		secondary.addBang("Clear").setPosition(77, 20).setSize(28, 15).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addBang("Clear").setPosition(77, 20).setSize(28, 15).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35).setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
-		
+		secondary.addSlider("Min OutDegree").setPosition(5, 40).setSize(100, 10).setRange(0, 35)
+				.setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
+
+		// Appearance controllers
+		accordionNodes = secondary.addAccordion("accNodes").setPosition(5, 53).setWidth(120).moveTo(group);
+		Group converterNames = new Group(secondary, "Converters");
+		Group nodeAttrList = new Group(secondary, "Attributes");
+
+		// Converters
+		String[] items = Mapper.getInstance().getConvertersList();
+		secondary.addScrollableList("Converter Node").addItems(items).setPosition(2, 2).setSize(100, 100)
+				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNames).close();
+
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
-		String[] items = new String[mappers.length];
+		items = new String[mappers.length];
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Diameter").addItems(items).setPosition(5, 53).setSize(100, 100).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+		secondary.addScrollableList("Diameter").setLabel("Diameter").addItems(items).setPosition(2, 2).setSize(100, 100)
+				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(nodeAttrList).close()
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER);
+
+		// create a new accordion. Add groups to the accordion.
+		accordionNodes.addItem(converterNames).addItem(nodeAttrList);
+
+		// use Accordion.MULTI to allow multiple group to be open at a time.
+		accordionNodes.setCollapseMode(Accordion.MULTI);
 	}
 
 	/**
@@ -167,29 +213,52 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setEdgeComponents(Group group) {
+	private void setEdgeComponents(Group group) {
+		Accordion accordionEdges;
 
 		// Visibility control
-		secondary.addToggle("Internal").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		
-		secondary.addToggle("External").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Internal").setPosition(5, 7).setSize(45, 10).setValue(true).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+
+		secondary.addToggle("External").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group)
+				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Transaction volume
 		secondary.addSlider("Volume").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
 
 		// Propagation
-		secondary.addSlider("Succesors").setPosition(5, 33).setSize(68, 10).setRange(1, 10).setNumberOfTickMarks(10).snapToTickMarks(true).moveTo(group).getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
-		
+		secondary.addSlider("Succesors").setPosition(5, 33).setSize(68, 10).setRange(1, 10).moveTo(group)
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
+
 		// Visualize only propagation
-		secondary.addToggle("Only").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Only").setPosition(77, 33).setSize(28, 10).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+
+		// Appearance controllers
+		accordionEdges = secondary.addAccordion("accEdges").setPosition(5, 53).setWidth(120).moveTo(group);
+		Group converterNamesEdges = new Group(secondary, "Converters Edges");
+		Group edgeAttrList = new Group(secondary, "Attributes Edges");
+
+		// Converters
+		String[] items = Mapper.getInstance().getConvertersList();
+		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(2, 2).setSize(100, 100)
+				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNamesEdges)
+				.close();
 
 		// Thickness
 		Object[] mappers = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys().toArray();
-		String[] items = new String[mappers.length];
+		items = new String[mappers.length];
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		secondary.addScrollableList("Thickness").setPosition(5, 46).setSize(100, 100).setBarHeight(13).setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group).close();
+		secondary.addScrollableList("Thickness").setPosition(2, 2).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(edgeAttrList).close();
+
+		// create a new accordion. Add groups to the accordion.
+		accordionEdges.addItem(converterNamesEdges).addItem(edgeAttrList);
+
+		// use Accordion.MULTI to allow multiple group to be open at a time.
+		accordionEdges.setCollapseMode(Accordion.MULTI);
 	}
 
 	/**
@@ -198,7 +267,7 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private static void setEstadisticasDescriptivasComponent() {
+	private void setEstadisticasDescriptivasComponent() {
 		// Set new names
 		for (int i = 0; i < keyNamesForNodes.size(); i++) {
 			cBox.addItem(keyNamesForNodes.get(i), 1);
@@ -273,6 +342,11 @@ public class ControlPanel extends PApplet {
 			Toggle nombre = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setMostrarNombre(nombre.getBooleanValue());
 			break;
+		case "Converter Node":
+			int valueCN = (int) secondary.get(ScrollableList.class, "Converter Node").getValue();
+			UserSettings.getInstance().setConverterNode(
+					secondary.get(ScrollableList.class, "Converter Node").getItem(valueCN).get("name").toString());
+			break;
 		case "Diameter":
 			int valueD = (int) secondary.get(ScrollableList.class, "Diameter").getValue();
 			UserSettings.getInstance().setFiltrosNodo(
@@ -288,7 +362,7 @@ public class ControlPanel extends PApplet {
 			Toggle vinculoExt = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setMostrarVinculosExt(vinculoExt.getBooleanValue());
 			break;
-		case "Voluma":
+		case "Volume":
 			UserSettings.getInstance().setVolTransaccion(theEvent.getValue());
 			break;
 		case "Succesors":
@@ -298,29 +372,32 @@ public class ControlPanel extends PApplet {
 			Toggle solo = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setSoloPropagacion(solo.getBooleanValue());
 			break;
+		case "Converter Edge":
+			int valueCE = (int) secondary.get(ScrollableList.class, "Converter Edge").getValue();
+			UserSettings.getInstance().setConverterEdge(
+					secondary.get(ScrollableList.class, "Converter Edge").getItem(valueCE).get("name").toString());
+			break;
 		case "Thickness":
 			int valueE = (int) secondary.get(ScrollableList.class, "Thickness").getValue();
+
 			UserSettings.getInstance().setFiltrosVinculo(
 					secondary.get(ScrollableList.class, "Thickness").getItem(valueE).get("name").toString());
 			break;
 		default:
 			// Executable.retrieveControlPanelEvent(theEvent);
 			break;
-
 		}
+
 	}
 
 	private void manageFileSelection(String choice) {
 		switch (choice) {
 		case "Open":
-			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, EXTENSION);
+			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, NTI_EXTENSION);
 
 			try {
 				parent.cursor(WAIT);
-				// Executable.activeCursor = Executable.CURSOR_WAIT;
-
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
-
 				Executable.setActiveGraph(false);
 				Assembler.secondOrderVComm = deserializedWrapper.getvSubCommunities();
 				for (visualElements.VCommunity com : Assembler.secondOrderVComm) {
@@ -341,40 +418,28 @@ public class ControlPanel extends PApplet {
 						javax.swing.JOptionPane.ERROR_MESSAGE);
 			} finally {
 				parent.cursor(ARROW);
-				// Executable.activeCursor = Executable.CURSOR_ARROW;
 			}
 
 			break;
 
 		case "Save":
 
-			String selectedPath = ChooseHelper.getInstance().showJFileChooser(true, EXTENSION);
-
+			String selectedPath = ChooseHelper.getInstance().showJFileChooser(true, NTI_EXTENSION);
 			if (selectedPath != null) {
-
-				// Executable.activeCursor = Executable.CURSOR_WAIT;
 				parent.cursor(WAIT);
-
 				SerializeWrapper wrapper = new SerializeWrapper(Assembler.firstOrderVComm, Assembler.secondOrderVComm,
 						UserSettings.getInstance(), GraphLoader.theGraph);
-
 				try {
-					SerializeHelper.getInstance().serialize(wrapper, selectedPath, EXTENSION);
+					SerializeHelper.getInstance().serialize(wrapper, selectedPath, NTI_EXTENSION);
 					javax.swing.JOptionPane.showMessageDialog(null,
-							"Archivo guardado en " + selectedPath + "." + EXTENSION, "",
+							"File saved in " + selectedPath + "." + NTI_EXTENSION, "",
 							javax.swing.JOptionPane.INFORMATION_MESSAGE);
-				}
-
-				catch (FileNotFoundException e) {
+				} catch (FileNotFoundException e) {
 					javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
 							javax.swing.JOptionPane.ERROR_MESSAGE);
-				}
-
-				finally {
-					// Executable.activeCursor = Executable.CURSOR_ARROW;
+				} finally {
 					parent.cursor(ARROW);
 				}
-
 			}
 			break;
 
@@ -383,45 +448,28 @@ public class ControlPanel extends PApplet {
 			break;
 
 		case "Export":
-			String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, EXTENSION);
-			if (selectedPathExport != null) {
-				// Executable.activeCursor = Executable.CURSOR_WAIT;
-				// parent.cursor(WAIT);
-				// SerializeWrapper wrapper = new
-				// SerializeWrapper(Assembler.firstOrderVComm,
-				// Assembler.secondOrderVComm,
-				// UserSettings.getInstance(), GraphLoader.theGraph);
-				// try {
-				// SerializeHelper.getInstance().serialize(wrapper,
-				// selectedPath, EXTENSION);
-				// javax.swing.JOptionPane.showMessageDialog(null, "File
-				// exported to " + "path" + "." + EXTENSION, "",
-				// javax.swing.JOptionPane.INFORMATION_MESSAGE);
-				// }
-				// catch (FileNotFoundException e) {
-				// javax.swing.JOptionPane.showMessageDialog(null,
-				// e.getMessage(), "Error",
-				// javax.swing.JOptionPane.ERROR_MESSAGE);
-				// }
-				// finally {
-				// Executable.activeCursor = Executable.CURSOR_ARROW;
-				// parent.cursor(ARROW);
-				// }
+			if (accordion != null) {
+				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "png");
+				if (selectedPathExport != null) {
+					UserSettings.getInstance().setFileExportName(selectedPathExport.concat("-###.png"));
+				}
+			} else {
+				javax.swing.JOptionPane.showMessageDialog(null, "No frames to export. Try loading a graph first", "",
+						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			}
 			break;
 
 		case "Quit":
 			System.exit(0);
 			break;
-
 		}
 	}
 
-	private static void setKeyNamesForNodes(ArrayList<String> keyNames) {
+	private void setKeyNamesForNodes(ArrayList<String> keyNames) {
 		keyNamesForNodes = keyNames;
 	}
 
-	private static void setKeyNamesForEdges(ArrayList<String> keyNames) {
+	private void setKeyNamesForEdges(ArrayList<String> keyNames) {
 		keyNamesForEdges = keyNames;
 	}
 }
