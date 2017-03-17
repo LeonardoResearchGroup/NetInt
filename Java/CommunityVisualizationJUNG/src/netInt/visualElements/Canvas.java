@@ -262,11 +262,6 @@ public class Canvas {
  *
  */
 class RemindTask extends TimerTask {
-//	private Canvas c;
-
-//	public RemindTask(Canvas c) {
-//		this.c = c;
-//	}
 	
 	public RemindTask() {
 

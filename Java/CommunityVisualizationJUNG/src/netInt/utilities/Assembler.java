@@ -52,14 +52,15 @@ public class Assembler {
 	 *            The node distribution layout
 	 * @param format
 	 *            Graphml or Pajek. Graphml by default.
+	 * @return true if the graph was loaded successfully
 	 */
-	public void loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
+	public boolean loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
 		// Progress repoort on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 		Canvas.app.cursor(PConstants.WAIT);
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
-		
+
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
 
@@ -75,6 +76,7 @@ public class Assembler {
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 				"FirstOrderCommunity", layout);
 		Canvas.app.cursor(PConstants.ARROW);
+		return true;
 	}
 
 	/**
@@ -180,7 +182,7 @@ public class Assembler {
 			vCommunities.add(communityTemp);
 
 		}
-		for(VCommunity vC : vCommunities){
+		for (VCommunity vC : vCommunities) {
 			vC.init();
 		}
 		return vCommunities;

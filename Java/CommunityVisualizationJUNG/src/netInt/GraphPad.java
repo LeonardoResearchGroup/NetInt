@@ -36,7 +36,7 @@ import processing.core.PVector;
  */
 public class GraphPad extends PApplet {
 	// Class that assembles the graph with the visual elements
-	public static Assembler app;
+	private Assembler app;
 
 	// The canvas on top of which visual elements and mouse events occur
 	private Canvas canvas;
@@ -53,35 +53,55 @@ public class GraphPad extends PApplet {
 	// Instance attributes
 	private PImage netIntLogo;
 	private static File file;
+	
+	public static GraphPad gp = null;
 
 	/**
-	 * Launches a visualization pad together with a Control Panel and a Console
-	 * Catcher
+	 * Launches a visualization pad together with a Console Catcher
 	 * 
 	 * @param args
 	 *            The path to the grap file
 	 * @throws FileNotFoundException
 	 */
 	public GraphPad(String args) throws FileNotFoundException {
+		super();
 		GraphPad.file = new File(args);
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
 	/**
-	 * It launches the visualization pad but omits launching the Control Panel
+	 * Launches a visualization pad together with a Console Catcher
 	 * 
+	 * @param args
+	 *            The graph file
 	 * @throws FileNotFoundException
 	 */
-	public GraphPad() throws FileNotFoundException {
+	public GraphPad(File args) throws FileNotFoundException {
+		super();
+		GraphPad.file = args;
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
-		if (GraphPad.file == null) {
-			new ControlPanel(this, 200, this.height - 25);
+	}
+
+	/**
+	 * Launches a visualization pad together with Console Catcher
+	 * 
+	 * @param enableControlPanel
+	 *            if true it launches a Control Panel
+	 */
+	public GraphPad(boolean enableControlPanel) {
+		super();
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		if (enableControlPanel) {
+			if (GraphPad.file == null) {
+				new ControlPanel(this, 200, this.height - 25);
+			}
 		}
 	}
 
 	/**
 	 * Required method from parent class. It runs only once at the PApplet
-	 * initialization. Instantiate the class declared attributes here.
+	 * initialization. Instantiate the classes and initialize attributes
+	 * declared in this class within this code block.
 	 * 
 	 * @see processing.core.PApplet#setup()
 	 */
@@ -90,23 +110,23 @@ public class GraphPad extends PApplet {
 		surface.setLocation(200, -300);
 		smooth();
 		/*
-		 * Output Console Catcher. Uncomment the line below to enable a console
-		 * Catcher. CAUTION, it might trigger conflicts with Menu's File Open.
+		 * Output Console Catcher. The line below enables a console Catcher.
+		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
 		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
-		surface.setTitle("Java Networked Interaction Visualization. NetInt");
-		// Import Menu
-		System.out.println("Instantiating Import Menu");
-		importMenu = new ImportMenu(this);
+		surface.setTitle("NetInt. Java Networked Interaction Visualization ");
+
 		// Assembling network
 		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD720);
 		setActiveGraph(false);
 		netIntLogo = loadImage("./data/images/netInt.png");
 		selectImport(file);
+		System.out.println("** SETUP completed **");
 	}
 
 	/**
@@ -156,8 +176,12 @@ public class GraphPad extends PApplet {
 		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
-	public Assembler getApp() {
+	public Assembler getAssembler() {
 		return app;
+	}
+	
+	public void setAssembler (Assembler val){
+		app = val;
 	}
 
 	public boolean isActiveGraphA() {
@@ -167,7 +191,7 @@ public class GraphPad extends PApplet {
 	public static void setActiveGraph(boolean activeGraph) {
 		GraphPad.activeGraph = activeGraph;
 	}
-	
+
 	public static File getFile() {
 		return file;
 	}
@@ -182,7 +206,6 @@ public class GraphPad extends PApplet {
 	 * @param selection
 	 *            The file to be imported
 	 */
-
 	public void selectImport(File selection) {
 		if (selection != null) {
 			file = selection;
@@ -190,6 +213,9 @@ public class GraphPad extends PApplet {
 			// this creates and displays the menu
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
+			// Import Menu
+			System.out.println("Instantiating Import Menu");
+			importMenu = new ImportMenu(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
 		}
 	}
