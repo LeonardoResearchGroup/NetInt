@@ -53,8 +53,7 @@ public class GraphPad extends PApplet {
 	// Instance attributes
 	private PImage netIntLogo;
 	private static File file;
-	
-	public static GraphPad gp = null;
+
 
 	/**
 	 * Launches a visualization pad together with a Console Catcher
