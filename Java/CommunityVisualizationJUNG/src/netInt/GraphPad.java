@@ -11,6 +11,7 @@ import netInt.utilities.Assembler;
 import netInt.utilities.GraphmlKeyReader;
 import netInt.utilities.console.ConsoleCatcher;
 import netInt.visualElements.Canvas;
+import netInt.visualElements.gui.ControlPanel;
 import netInt.visualElements.gui.ImportMenu;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PApplet;
@@ -18,21 +19,72 @@ import processing.core.PConstants;
 import processing.core.PImage;
 import processing.core.PVector;
 
+/**
+ * This is the central class of NetInt. It inherits from Processing.PApplet thus
+ * it encloses all the functionalities of a Processing sketch.
+ * 
+ * It could be instantiated in three ways. The simplest way is to invoke
+ * GraphPad() to launch a visualization pad together with a Control Panel and a
+ * Console Catcher. The second way is to invoke GraphPad("filePath")
+ * parameterizing the file path. It launches the visualization pad but omits
+ * launching the Control Panel. The last way is to run the included main class.
+ * The latter needs to set the graph path inside the body of the main method
+ * 
+ * @author jsalam
+ * @version alpha
+ *
+ */
 public class GraphPad extends PApplet {
+	// Class that assembles the graph with the visual elements
 	public static Assembler app;
-	private Canvas canvas;
-	private static boolean activeGraph;
-	protected ConsoleCatcher consoleCatcher;
-	public static File file;
-	protected static ImportMenu importMenu;
-	private PImage netIntLogo;
-	private static String graphURL;
 
+	// The canvas on top of which visual elements and mouse events occur
+	private Canvas canvas;
+
+	// The floating window displaying system messages
+	protected ConsoleCatcher consoleCatcher;
+
+	// The menu displayed once a graph file is selected
+	protected static ImportMenu importMenu;
+
+	// True if the graph is successfully retrieved and loaded from the source
+	private static boolean activeGraph;
+
+	// Instance attributes
+	private PImage netIntLogo;
+	private static File file;
+
+	/**
+	 * Launches a visualization pad together with a Control Panel and a Console
+	 * Catcher
+	 * 
+	 * @param args
+	 *            The path to the grap file
+	 * @throws FileNotFoundException
+	 */
 	public GraphPad(String args) throws FileNotFoundException {
-		GraphPad.graphURL = args;
+		GraphPad.file = new File(args);
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
+	/**
+	 * It launches the visualization pad but omits launching the Control Panel
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	public GraphPad() throws FileNotFoundException {
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		if (GraphPad.file == null) {
+			new ControlPanel(this, 200, this.height - 25);
+		}
+	}
+
+	/**
+	 * Required method from parent class. It runs only once at the PApplet
+	 * initialization. Instantiate the class declared attributes here.
+	 * 
+	 * @see processing.core.PApplet#setup()
+	 */
 	public void setup() {
 		textSize(10);
 		surface.setLocation(200, -300);
@@ -54,10 +106,16 @@ public class GraphPad extends PApplet {
 		app = new Assembler(Assembler.HD720);
 		setActiveGraph(false);
 		netIntLogo = loadImage("./data/images/netInt.png");
-		if (graphURL != null)
-			selectImport(new File(graphURL));
+		selectImport(file);
 	}
 
+	/**
+	 * Required method from parent class. It draws visualElements and other
+	 * PApplet elements on the visualization pad. It constantly iterates over
+	 * its contents
+	 * 
+	 * @see processing.core.PApplet#draw()
+	 */
 	public void draw() {
 		background(UserSettings.getInstance().getColorBackground());
 		if (activeGraph) {
@@ -70,15 +128,9 @@ public class GraphPad extends PApplet {
 			canvas.showLegend(new PVector(width - 20, 20));
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
-			// Save a frame as png
+			// export a frame as png
 			if (UserSettings.getInstance().getFileExportName() != null) {
-				this.cursor(WAIT);
-				saveFrame(UserSettings.getInstance().getFileExportName());
-				javax.swing.JOptionPane.showMessageDialog(null,
-						"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "png", "",
-						javax.swing.JOptionPane.INFORMATION_MESSAGE);
-				UserSettings.getInstance().setFileExportName(null);
-				this.cursor(ARROW);
+				exportFrameAsPNG();
 			}
 		} else {
 			image(netIntLogo, 100, 50);
@@ -94,6 +146,12 @@ public class GraphPad extends PApplet {
 		UserSettings.getInstance().setEventOnVSettings(false);
 	}
 
+	/**
+	 * Required method from parent class. Define here the size of the
+	 * visualization pad
+	 * 
+	 * @see processing.core.PApplet#settings()
+	 */
 	public void settings() {
 		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
@@ -109,15 +167,20 @@ public class GraphPad extends PApplet {
 	public static void setActiveGraph(boolean activeGraph) {
 		GraphPad.activeGraph = activeGraph;
 	}
+	
+	public static File getFile() {
+		return file;
+	}
 
 	/**
-	 * This method receives the graph file path and triggers an import process.
-	 * The import process follows the parameters chosen by the user from the
-	 * import menu.
+	 * Receives the file with the path pointing to the graph file and triggers
+	 * an import process. The import process follows the parameters chosen by
+	 * the user from the import menu.
 	 * 
 	 * The method is invoked by showFileChooser() at the ChooseHelper class
 	 * 
 	 * @param selection
+	 *            The file to be imported
 	 */
 
 	public void selectImport(File selection) {
@@ -146,10 +209,23 @@ public class GraphPad extends PApplet {
 		return baos;
 	}
 
+	/**
+	 * Exports the last frame of the draw loop in format "png"
+	 */
+	private void exportFrameAsPNG() {
+		this.cursor(WAIT);
+		saveFrame(UserSettings.getInstance().getFileExportName());
+		javax.swing.JOptionPane.showMessageDialog(null,
+				"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "png", "",
+				javax.swing.JOptionPane.INFORMATION_MESSAGE);
+		UserSettings.getInstance().setFileExportName(null);
+		this.cursor(ARROW);
+	}
+
 	public static void main(String[] args) {
 		if (args != null) {
 			try {
-				GraphPad gp = new GraphPad("insert your file path here");
+				new GraphPad("insert your file path here");
 			} catch (FileNotFoundException fnfe) {
 				System.out.println("File not found. Check your main parameters in GraphPad Class");
 			}

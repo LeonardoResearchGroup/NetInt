@@ -73,10 +73,11 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void setup() {
+		System.out.println("CPanel initialized");
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		logo = loadImage("../data/images/netIntBanca.png");
+		logo = loadImage("../data/images/netInt.png");
 		keyNamesForNodes.add("empty list");
 		keyNamesForEdges.add("empty list");
 		initMain();
