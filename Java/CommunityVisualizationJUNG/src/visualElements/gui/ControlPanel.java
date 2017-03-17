@@ -50,7 +50,7 @@ public class ControlPanel extends PApplet {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		logo = loadImage("../data/images/Logo_Bancolombia.png");
+		logo = loadImage("../data/images/netIntBanca.png");
 		keyNamesForNodes.add("empty list");
 		keyNamesForEdges.add("empty list");
 		initMain();
@@ -208,9 +208,7 @@ public class ControlPanel extends PApplet {
 	public void draw() {
 		background(70);
 		// logo
-		fill(170);
-		rect(10, 2, 180, 48);
-		image(logo, 15, 5);
+		image(logo, 10, 9);
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -238,7 +236,7 @@ public class ControlPanel extends PApplet {
 
 	private void switchCaseCP5(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
-		System.out.println("ControlPanel> Event at: " + controllerName);
+		//System.out.println("ControlPanel> Event at: " + controllerName);
 		switch (controllerName) {
 
 		case "File":

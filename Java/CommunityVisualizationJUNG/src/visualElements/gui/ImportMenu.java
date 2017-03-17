@@ -52,6 +52,8 @@ public class ImportMenu implements ControlListener {
 		String[] layoutAttributeNames = { "Choose one" };
 		layoutList.setAttributes(layoutAttributeNames);
 	}
+	
+
 
 	/**
 	 * Creates two ContorlP5.Group, one for nodes and one for edges. Both groups
