@@ -2,32 +2,36 @@ package netInt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import netInt.utilities.Assembler;
 import netInt.utilities.GraphmlKeyReader;
-import netInt.utilities.TestPerformance;
 import netInt.utilities.console.ConsoleCatcher;
 import netInt.visualElements.Canvas;
-import netInt.visualElements.gui.ControlPanel;
 import netInt.visualElements.gui.ImportMenu;
 import netInt.visualElements.gui.UserSettings;
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PConstants;
+import processing.core.PImage;
+import processing.core.PVector;
 
 public class GraphPad extends PApplet {
 	public static Assembler app;
 	private Canvas canvas;
-	private TestPerformance performance;
 	private static boolean activeGraph;
-	@SuppressWarnings("unused")
-	private ControlPanel controlPanel;
 	protected ConsoleCatcher consoleCatcher;
 	public static File file;
 	protected static ImportMenu importMenu;
 	private PImage netIntLogo;
 	private static String graphURL;
+
+	public GraphPad(String args) throws FileNotFoundException {
+		GraphPad.graphURL = args;
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+	}
 
 	public void setup() {
 		textSize(10);
@@ -41,9 +45,6 @@ public class GraphPad extends PApplet {
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(this);
-		// Control Panel Frame
-		System.out.println("Building Control Panel");
-		controlPanel = new ControlPanel(this, 200, this.height - 25);
 		surface.setTitle("Java Networked Interaction Visualization. NetInt");
 		// Import Menu
 		System.out.println("Instantiating Import Menu");
@@ -51,10 +52,10 @@ public class GraphPad extends PApplet {
 		// Assembling network
 		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD720);
-		performance = new TestPerformance();
 		setActiveGraph(false);
-		netIntLogo = loadImage ("./data/images/netInt.png");
-		selectImport(new File(graphURL));
+		netIntLogo = loadImage("./data/images/netInt.png");
+		if (graphURL != null)
+			selectImport(new File(graphURL));
 	}
 
 	public void draw() {
@@ -69,7 +70,6 @@ public class GraphPad extends PApplet {
 			canvas.showLegend(new PVector(width - 20, 20));
 			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
-			performance.displayValues(canvas, new PVector(width - 20, height - 60));
 			// Save a frame as png
 			if (UserSettings.getInstance().getFileExportName() != null) {
 				this.cursor(WAIT);
@@ -80,18 +80,22 @@ public class GraphPad extends PApplet {
 				UserSettings.getInstance().setFileExportName(null);
 				this.cursor(ARROW);
 			}
-		}else{
-			image(netIntLogo,100,50);
+		} else {
+			image(netIntLogo, 100, 50);
 		}
 
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
-		fill(186,216,231);
+		fill(186, 216, 231);
 		text("NetInt® | Built with Processing 3 | Leonardo & I2T Research Groups, U. Icesi. 2017", 20, height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		UserSettings.getInstance().setEventOnVSettings(false);
+	}
+
+	public void settings() {
+		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
 	public Assembler getApp() {
@@ -127,10 +131,6 @@ public class GraphPad extends PApplet {
 		}
 	}
 
-	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
-	}
-
 	/**
 	 * Initialized a console visible on runtime. It disables the printing of
 	 * messages on the IDE console.
@@ -147,12 +147,12 @@ public class GraphPad extends PApplet {
 	}
 
 	public static void main(String[] args) {
-		String[] appletArgs = new String[] { "netInt.GraphPad" };
 		if (args != null) {
-			GraphPad.graphURL = args[0];
-			PApplet.main(appletArgs);
-		} else {
-			PApplet.main(appletArgs);
+			try {
+				GraphPad gp = new GraphPad("insert your file path here");
+			} catch (FileNotFoundException fnfe) {
+				System.out.println("File not found. Check your main parameters in GraphPad Class");
+			}
 		}
 	}
 }

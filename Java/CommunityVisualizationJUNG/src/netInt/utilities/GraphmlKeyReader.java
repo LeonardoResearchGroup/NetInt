@@ -53,7 +53,8 @@ public class GraphmlKeyReader {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println(
+					"\n************************\n*** Path to graph file broken ***\n************************\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +62,8 @@ public class GraphmlKeyReader {
 	}
 
 	/**
-	 * Splits a Key String in tokens. And stores each of the following key values: 'name', 'type', 'for' and 'id' 
+	 * Splits a Key String in tokens. And stores each of the following key
+	 * values: 'name', 'type', 'for' and 'id'
 	 * 
 	 * 
 	 * @param key
@@ -89,8 +91,7 @@ public class GraphmlKeyReader {
 			}
 			graphKeys.add(tmp);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println(
-					" **** WARNING **** Check the graphml format");
+			System.out.println(" **** WARNING **** Check the graphml format");
 		}
 	}
 
