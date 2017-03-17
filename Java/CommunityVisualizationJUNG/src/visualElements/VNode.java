@@ -17,10 +17,11 @@ public class VNode extends VisualAtom implements Serializable {
 	// This variable is used to control if a given attribute is below or above a
 	// visibility threshold
 	private boolean visible;
-//	// This variable is used to control that the vElement is displayed only
-//	// once. It is useful to prevent that edges with the same source or target
-//	// vNode display the nodes more than once
-//	private boolean displayed;
+	// // This variable is used to control that the vElement is displayed only
+	// // once. It is useful to prevent that edges with the same source or
+	// target
+	// // vNode display the nodes more than once
+	// private boolean displayed;
 	// propagation attributes
 	private boolean propagationSource, inPropagationChain, propagated = false;
 	private ArrayList<VNode> successors;
@@ -151,7 +152,7 @@ public class VNode extends VisualAtom implements Serializable {
 	 * @param canvas
 	 * @param communityOpen
 	 */
-	public void show(boolean displayed) {
+	public void show(boolean communityDisplayed) {
 		// Hide or show the vNode depending of the degrees threshold
 		setVisibility(UserSettings.getInstance().getUmbralGrados());
 
@@ -174,17 +175,39 @@ public class VNode extends VisualAtom implements Serializable {
 				setDiameter(tmp);
 			}
 		} catch (NullPointerException npe) {
-			//npe.printStackTrace();
+			// npe.printStackTrace();
 			setDiameter(5);
 		}
 
-		if (displayed && visible) {
+		if (UserSettings.getInstance().getOnlyPropagation()) {
+			if (propagationSource || inPropagationChain) {
+				communityDisplayed= true;
+			}else{
+				communityDisplayed= false;
+			}
+		}else{
+			communityDisplayed= true;
+		}
+
+		if (communityDisplayed && visible) {
+
+			if (node.isFound()) {
+				Canvas.app.fill(255, 0, 0);
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+			}
+
+			if (!UserSettings.getInstance().getOnlyPropagation()) {
+				Canvas.app.fill(getColorRGB());
+				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			}
+
 			// if this node is in the propagation chain
 			if (inPropagationChain) {
 				setAlpha(195);
 				Canvas.app.fill(getColorRGB());
 				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
 				if (UserSettings.getInstance().mostrarNombre()) {
+					Canvas.app.fill(200, 200, 200);
 					Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 					Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
 				}
@@ -193,7 +216,8 @@ public class VNode extends VisualAtom implements Serializable {
 				// defined by the user in the control panel
 				if (UserSettings.getInstance().mostrarNombre()) {
 					if (!UserSettings.getInstance().getOnlyPropagation()) {
-						Canvas.app.fill(getColorRGB());
+						// Canvas.app.fill(getColorRGB());
+						Canvas.app.fill(200, 200, 200);
 						Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 					}
 				}
@@ -207,8 +231,9 @@ public class VNode extends VisualAtom implements Serializable {
 				// propagate(propagationSteps);
 				Canvas.app.stroke(225, 0, 0);
 				Canvas.app.strokeWeight(1.5f);
+				Canvas.app.fill(getColorRGB());
 				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
-				Canvas.app.fill(255, 0, 0);
+				Canvas.app.fill(225, 225, 225);
 				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 
 			} else {
@@ -230,20 +255,7 @@ public class VNode extends VisualAtom implements Serializable {
 			} else {
 				Canvas.app.noStroke();
 			}
-
-			if (node.isFound()) {
-				Canvas.app.fill(255, 0, 0);
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-			}
-
-			if (!UserSettings.getInstance().getOnlyPropagation()) {
-				Canvas.app.fill(getColorRGB());
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-			}
 		}
-//		if (!displayed) {
-//			setDisplayed(true);
-//		}
 	}
 
 	public boolean hasNode(Node node) {

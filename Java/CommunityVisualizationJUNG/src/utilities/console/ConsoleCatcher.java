@@ -37,7 +37,9 @@ public class ConsoleCatcher extends PApplet {
 		cp5 = new ControlP5(this);
 		cp5.enableShortcuts();
 		textArea = cp5.addTextarea("console").setPosition(10, 10).setSize(width - 20, height - 20).setScrollActive(1);
-		textArea.hideScrollbar();
+		//textArea.hideScrollbar();
+		int color = color (186,216,231);
+		textArea.setColor(color);
 		this.surface.setSize(width, height);
 		this.surface.setLocation(displayWidth - width, displayHeight - 300);
 		this.surface.setAlwaysOnTop(true);
@@ -51,7 +53,7 @@ public class ConsoleCatcher extends PApplet {
 		}
 	
 	public void draw() {
-		background(100);
+		background(70);
 		textArea.setText(baos.toString());
 		textArea.scroll(1);
 	}

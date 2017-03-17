@@ -79,7 +79,8 @@ public class Executable extends PApplet {
 
 		// Signature Message :)
 		textAlign(PConstants.LEFT);
-		text("Built with Processing 3 | Leonardo, I2T & CIENFI Research Groups, U. Icesi. 2017", 20, height - 10);
+		fill(186,216,231);
+		text("NetInt® | Built with Processing 3 | Leonardo & I2T Research Groups, U. Icesi. 2017", 20, height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
