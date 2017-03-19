@@ -45,19 +45,21 @@ public class Assembler {
 	 * @param file
 	 *            The path to the source file
 	 * @param nodeImportAtts
-	 *            User selection from Import Menu
+	 *            User selection from Import Menu or Comunity and name keys from
+	 *            graphml File
 	 * @param edgeImportAtts
-	 *            User selection from Import Menu
+	 *            User selection from Import Menu or edge keys from graphml file
 	 * @param layout
-	 *            The node distribution layout
+	 *            The node distribution layout. See constants in Container class
 	 * @param format
-	 *            Graphml or Pajek. Graphml by default.
+	 *            Graphml or Pajek. Graphml by default. See constants in
+	 *            GraphLoader class
 	 * @return true if the graph was loaded successfully
 	 */
 	public boolean loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
-		// Progress repoort on console
+		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
-		Canvas.app.cursor(PConstants.WAIT);
+
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
 
@@ -75,7 +77,7 @@ public class Assembler {
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 				"FirstOrderCommunity", layout);
-		Canvas.app.cursor(PConstants.ARROW);
+		
 		return true;
 	}
 

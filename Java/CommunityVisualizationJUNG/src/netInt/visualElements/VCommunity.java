@@ -67,10 +67,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (comCover.isDeployed()) {
 			setDisplayed(true);
 			// if coordinates for all elements inside the container are set.
-			// container.initialize() is a boolean gate that controls looping
-			// over
+			// container.isInitializationComplete() is a boolean gate that
+			// controls iteration
 			if (container.isInitializationComplete()) {
-
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
 				for (VCommunity vC : container.getVCommunities()) {
@@ -83,6 +82,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				container.initialize();
 			}
 
+			
 			// If the layout is iterative
 			if (container.isLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements

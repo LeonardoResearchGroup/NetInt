@@ -3,6 +3,7 @@ package netInt.visualElements;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import netInt.GraphPad;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.*;
 import processing.event.KeyEvent;
@@ -40,6 +41,19 @@ public class Canvas {
 		canvasMouse = new PVector(0, 0);
 		newCenter = new PVector(0, 0);
 		myRegister();
+	}
+
+	public Canvas() {
+		zoom = 1;
+		offset = new PVector(0, 0);
+		startOffset = new PVector(0, 0);
+		endOffset = new PVector(0, 0);
+		canvasMouse = new PVector(0, 0);
+		newCenter = new PVector(0, 0);
+	}
+
+	public void setPApplet(PApplet app) {
+		Canvas.app = app;
 	}
 
 	/**
@@ -80,7 +94,7 @@ public class Canvas {
 	private void zoomIn(float val) {
 		zoom += val;
 		// The values of this substraction factor need to be revised
-		offset.sub(new PVector(100,80));
+		offset.sub(new PVector(100, 80));
 	}
 
 	/**
@@ -94,7 +108,7 @@ public class Canvas {
 			zoom = 0.1f;
 		}
 		// The values of this addition factor need to be revised
-		offset.add(new PVector(100,80));
+		offset.add(new PVector(100, 80));
 	}
 
 	/**
@@ -115,7 +129,6 @@ public class Canvas {
 		return canvasMouse;
 	}
 
-
 	public void translateCenter(float x, float y) {
 		newCenter = new PVector(x, y);
 	}
@@ -124,12 +137,13 @@ public class Canvas {
 		// **** Legends
 		app.fill(255, 90);
 		app.textAlign(PConstants.RIGHT);
-		app.text("Canvas mouse: " + canvasMouse, pos.x, pos.y + 15);
-		app.text("Zoom: " + zoom, pos.x, pos.y + 25);
-		app.text("Offset: " + offset, pos.x, pos.y + 35);
-		app.text("startOffset: " + startOffset, pos.x, pos.y + 45);
-		app.text("endOffset: " + endOffset, pos.x, pos.y + 55);
-		app.textAlign(PConstants.CENTER);
+		app.text("Graph file: " + GraphPad.getFile().getName(), pos.x, pos.y + 15);
+		app.text("Canvas mouse: " + canvasMouse, pos.x, pos.y + 25);
+		app.text("Zoom: " + zoom, pos.x, pos.y + 35);
+		// app.text("Offset: " + offset, pos.x, pos.y + 45);
+		// app.text("startOffset: " + startOffset, pos.x, pos.y + 55);
+		// app.text("endOffset: " + endOffset, pos.x, pos.y + 65);
+		// app.textAlign(PConstants.CENTER);
 	}
 
 	public void showLegend(PVector pos) {
@@ -251,10 +265,9 @@ public class Canvas {
 		Canvas.mouseEventOnCanvas = eventOnCanvas;
 	}
 
-	
 }
 
-//*** Complementary classes
+// *** Complementary classes
 /**
  * It indicates when the canvas is not being zoomed anymore.
  * 
@@ -262,7 +275,7 @@ public class Canvas {
  *
  */
 class RemindTask extends TimerTask {
-	
+
 	public RemindTask() {
 
 	}

@@ -25,31 +25,31 @@ import processing.core.PApplet;
 public class ImportMenu implements ControlListener {
 	private ControlP5 importMenu;
 	private DropDownList nodeList, edgeList, layoutList;
-	public GraphPad graphPad;
+	public PApplet parent;
 
-	public ImportMenu(GraphPad app) {
-		this.graphPad = app;
+	public ImportMenu(PApplet app) {
+		this.parent = app;
 	}
 
 	public void init() {
-		importMenu = new ControlP5(graphPad);
+		importMenu = new ControlP5(parent);
 
 		// for nodes
-		nodeList = new DropDownList(graphPad, "Node Attributes");
+		nodeList = new DropDownList(parent, "Node Attributes");
 		nodeList.setPos(100, 100);
 		String[] nodeAttributeNames = { "Community", "Label"};
 		//String[] nodeAttributeNames = { "Community", "Label", "Size", "Color" };
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// for edges
-		edgeList = new DropDownList(graphPad, "Edge Attributes");
+		edgeList = new DropDownList(parent, "Edge Attributes");
 		edgeList.setPos(100, 250);
 		//String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
 		String[] edgeAttributeNames = { "Body thickness" };
 		edgeList.setAttributes(edgeAttributeNames);
 
 		// for layout
-		layoutList = new DropDownList(graphPad, "Visualization Layout");
+		layoutList = new DropDownList(parent, "Visualization Layout");
 		layoutList.setPos(100, 400);
 		String[] layoutAttributeNames = { "Choose one" };
 		layoutList.setAttributes(layoutAttributeNames);
@@ -127,15 +127,16 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					graphPad.getAssembler().loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
+					System.out.println("AAAA "+ GraphPad.app);
+					GraphPad.app.loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
 							layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
 				} else {
-					JOptionPane.showMessageDialog(graphPad.frame, "Missing either \"community\" or \"label\" attributes",
+					JOptionPane.showMessageDialog(parent.frame, "Missing either \"community\" or \"label\" attributes",
 							"Import warning", JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
-				JOptionPane.showMessageDialog(graphPad.frame, "Must select at least \"community\" and \"label\" attributes",
+				JOptionPane.showMessageDialog(parent.frame, "Must select at least \"community\" and \"label\" attributes",
 						"Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}

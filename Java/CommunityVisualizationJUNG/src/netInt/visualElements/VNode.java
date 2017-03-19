@@ -14,25 +14,25 @@ public class VNode extends VisualAtom implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Node node;
+	
 	// This variable is used to control if a given attribute is below or above a
 	// visibility threshold
 	private boolean visible;
-	// // This variable is used to control that the vElement is displayed only
-	// // once. It is useful to prevent that edges with the same source or
-	// target
-	// // vNode display the nodes more than once
-	// private boolean displayed;
+	
 	// propagation attributes
 	private boolean propagationSource, inPropagationChain, propagated = false;
 	private ArrayList<VNode> successors;
+	
 	// The collection of propagation indexes. Each index represents the position
 	// of this VNode in a propagation chain
 	private ArrayList<Integer> propIndex;
 	public int propagationSteps;
 	private VNodeDescription description;
+	
 	// attribute used to map node diameter. It gets its value from the
 	// UserSettings
 	private String attributeName = "no_attribute";
+	
 	// converter used to map node visual attributes. It gets its value from the
 	// UserSettings
 	private String converterName = Mapper.LINEAR;
@@ -84,6 +84,7 @@ public class VNode extends VisualAtom implements Serializable {
 				// as propagated
 				vN.inPropagationChain = true;
 			}
+			inPropagationChain = true;
 			propagated = true;
 		}
 		// this logic gate serves to update the propagation visualization
@@ -143,7 +144,6 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	// *** SHOW METHODS ***
-
 	public void show() {
 
 	}
@@ -181,12 +181,12 @@ public class VNode extends VisualAtom implements Serializable {
 
 		if (UserSettings.getInstance().getOnlyPropagation()) {
 			if (propagationSource || inPropagationChain) {
-				communityDisplayed= true;
-			}else{
-				communityDisplayed= false;
+				communityDisplayed = true;
+			} else {
+				communityDisplayed = false;
 			}
-		}else{
-			communityDisplayed= true;
+		} else {
+			communityDisplayed = true;
 		}
 
 		if (communityDisplayed && visible) {

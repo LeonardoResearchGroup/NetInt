@@ -14,17 +14,17 @@ public class UserSettings {
 	// NODE Visibility Settings
 	private String idSearch;
 	private float thresholdOutDegree;
-	private boolean showNodes;
-	private boolean showName;
+	private boolean showNodes = true;
+	private boolean showName = false;
 	private String filtersNode;
 	private String converterNode;
 
 	// EDGE Visibility Settings
-	private boolean showInternalEdges;
-	private boolean showExternalEdges;
+	private boolean showInternalEdges = true;
+	private boolean showExternalEdges = true;
 	private float transactionVolume;
-	private float propagation;
-	private boolean onlyPorpagation;
+	private float propagation = 0;
+	private boolean onlyPorpagation= false;
 	private String filtersEdge;
 	private String converterEdge;
 

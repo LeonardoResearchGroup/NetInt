@@ -15,9 +15,14 @@ import netInt.visualElements.VNode;
 import netInt.visualElements.primitives.VisualAtom;
 
 /**
- * @author juansalamanca
+ * Instances of SubContainer are Containers of references to Nodes and Edges and their
+ * visual representations, i.e. the corresponding VNodes and VEdges. Thus all
+ * visual elements included in instances of SubContainer are the visual
+ * representations of Nodes and Edges instantiated in the root graph.
+ * 
+ * @author juan salamanca
  */
-public class SubContainer extends Container implements Serializable{
+public class SubContainer extends Container implements Serializable {
 	/**
 	 * 
 	 */
@@ -30,7 +35,7 @@ public class SubContainer extends Container implements Serializable{
 		this.currentLayout = kindOfLayout;
 		setDimension(dimension);
 	}
-	
+
 	public SubContainer(Graph<Node, Edge> subGraph, int kindOfLayout, Dimension dimension) {
 		super(subGraph);
 		this.currentLayout = kindOfLayout;
@@ -72,7 +77,7 @@ public class SubContainer extends Container implements Serializable{
 						vN.setX((float) layout.getX(n));
 						vN.setY((float) layout.getY(n));
 						vNodes.add(vN);
-						// Look for all the edges of that VNode and add them all
+						// Look for all the edges of that VNode and add them
 						// to the collection of vEdges of this container
 						vEdgeRetriever(vN, sourceContainer.getVEdges());
 					}
@@ -93,7 +98,7 @@ public class SubContainer extends Container implements Serializable{
 		// For each node of Graph
 		for (Node n : graph.getVertices()) {
 			// Look for the corresponding VNode in the collection of VAtoms
-			
+
 			Iterator<VNode> iterator = sourceContainer.getVNodes().iterator();
 			while (iterator.hasNext()) {
 				// Get each visual Nodes

@@ -458,7 +458,7 @@ public class ControlPanel extends PApplet {
 			if (accordion != null) {
 				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "png");
 				if (selectedPathExport != null) {
-					UserSettings.getInstance().setFileExportName(selectedPathExport.concat("-###.png"));
+					UserSettings.getInstance().setFileExportName(selectedPathExport);
 				}
 			} else {
 				javax.swing.JOptionPane.showMessageDialog(null, "No frames to export. Try loading a graph first", "",

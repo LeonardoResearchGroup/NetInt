@@ -12,7 +12,7 @@ public class TestPerformance {
 	public TestPerformance() {
 	}
 
-	public void displayValues(Canvas canvas, PVector pos) {
+	public void displayValues(PVector pos) {
 		runtime = Runtime.getRuntime();
 		// **** Legends
 		Canvas.app.fill(255, 90);
