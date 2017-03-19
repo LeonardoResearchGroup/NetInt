@@ -2,19 +2,11 @@ package netInt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import netInt.utilities.Assembler;
-import netInt.utilities.GraphmlKeyReader;
 import netInt.utilities.TestPerformance;
-import netInt.utilities.console.ConsoleCatcher;
-import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.Canvas;
-import netInt.visualElements.gui.ControlPanel;
-import netInt.visualElements.gui.ImportMenu;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -22,17 +14,11 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 /**
- * This is the central class of NetInt. It inherits from Processing.PApplet thus
- * it encloses all the functionalities of a Processing sketch.
+ * This is the central class of NetInt library.
  * 
- * It could be instantiated in three ways. The simplest way is to invoke
- * GraphPad() to launch a visualization pad together with a Control Panel and a
- * Console Catcher. The second way is to invoke GraphPad("filePath")
- * parameterizing the file path. It launches the visualization pad but omits
- * launching the Control Panel. The last way is to run the included main class.
- * The latter needs to set the graph path inside the body of the main method
+ * It could be instantiated in three ways. ******** MISSING DESCRIPTION *******
  * 
- * @author jsalam
+ * @author Juan Salamanca
  * @version alpha
  *
  */
@@ -48,7 +34,7 @@ public class GraphPad {
 
 	// True if the graph is successfully retrieved and loaded from the source
 	private static boolean activeGraph;
-	
+
 	private TestPerformance performance;
 
 	// Instance attributes
@@ -58,6 +44,8 @@ public class GraphPad {
 	/**
 	 * Launches a visualization pad together with a Console Catcher
 	 * 
+	 * @param parent
+	 *            The PApplet serving as sketch pad
 	 * @param args
 	 *            The path to the grap file
 	 */
@@ -70,6 +58,8 @@ public class GraphPad {
 	/**
 	 * Launches a visualization pad together with a Console Catcher
 	 * 
+	 * @param parent
+	 *            The PApplet serving as sketch pad
 	 * @param args
 	 *            The graph file
 	 */
@@ -83,6 +73,7 @@ public class GraphPad {
 	 * Launches a visualization pad
 	 * 
 	 * @param parent
+	 *            The PApplet serving as sketch pad
 	 */
 	public GraphPad(PApplet parent) {
 		this.parent = parent;
@@ -97,17 +88,21 @@ public class GraphPad {
 	 * @see processing.core.PApplet#setup()
 	 */
 	private void init() {
+		parent.textSize(10);
+		parent.getSurface().setLocation(200, -300);
+		parent.smooth();
+		
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(parent);
-		parent.getSurface().setTitle("NetInt. Java Networked Interaction Visualization ");
+		parent.getSurface().setTitle("NetInt. Networked Interaction Visualization in Java ");
 
 		// Assembling network
 		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD720);
 		setActiveGraph(false);
 		netIntLogo = parent.loadImage("./data/images/netInt.png");
-		
+
 		// Performance
 		performance = new TestPerformance();
 	}
@@ -132,7 +127,7 @@ public class GraphPad {
 			canvas.displayValues(new PVector(parent.width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
-			
+
 			// export a frame as png
 			if (UserSettings.getInstance().getFileExportName() != null) {
 				exportFrameAsPNG();

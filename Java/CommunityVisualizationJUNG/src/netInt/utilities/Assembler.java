@@ -9,14 +9,13 @@ import org.jcolorbrewer.ColorBrewer;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import netInt.GraphPad;
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
-import netInt.visualElements.Canvas;
 import netInt.visualElements.VCommunity;
-import processing.core.PConstants;
 
 public class Assembler {
 
@@ -24,6 +23,7 @@ public class Assembler {
 	// private VCommunity rootVCommunity;
 	public static VCommunity firstOrderVComm;
 	public static ArrayList<VCommunity> secondOrderVComm;
+	
 	// These Dimensions set the RootContainer and top SubContainer boundaries
 	public Dimension rootDimension;
 	public static Dimension HD720 = new Dimension(1280, 720);
@@ -60,6 +60,10 @@ public class Assembler {
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 
+		// Set file if null
+		if(GraphPad.getFile() == null)
+			GraphPad.setFile(file);
+		
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
 

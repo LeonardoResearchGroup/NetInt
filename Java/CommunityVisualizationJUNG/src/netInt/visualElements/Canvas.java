@@ -138,7 +138,7 @@ public class Canvas {
 		app.fill(255, 90);
 		app.textAlign(PConstants.RIGHT);
 		app.text("Graph file: " + GraphPad.getFile().getName(), pos.x, pos.y + 15);
-		app.text("Canvas mouse: " + canvasMouse, pos.x, pos.y + 25);
+		app.text("Mouse on canvas: " + canvasMouse, pos.x, pos.y + 25);
 		app.text("Zoom: " + zoom, pos.x, pos.y + 35);
 		// app.text("Offset: " + offset, pos.x, pos.y + 45);
 		// app.text("startOffset: " + startOffset, pos.x, pos.y + 55);

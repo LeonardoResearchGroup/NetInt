@@ -7,12 +7,10 @@ import java.util.Arrays;
 import netInt.GraphPad;
 import netInt.utilities.GraphmlKeyReader;
 import netInt.utilities.console.ConsoleCatcher;
-import netInt.visualElements.Canvas;
 import netInt.visualElements.gui.ControlPanel;
 import netInt.visualElements.gui.ImportMenu;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PApplet;
-import processing.core.PConstants;
 
 /**
  * 
@@ -88,9 +86,11 @@ public class NetIntApp extends PApplet {
 		if (selection != null) {
 			GraphPad.setFile(selection);
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
+			
 			// this creates and displays the menu
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
+			
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
 			importMenu = new ImportMenu(this);

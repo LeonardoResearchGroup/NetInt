@@ -33,21 +33,17 @@ public class GraphPad_Example extends PApplet {
 	 * @see processing.core.PApplet#setup()
 	 */
 	public void setup() {
-		textSize(10);
-		surface.setLocation(200, -300);
-		smooth();
-
 		pad = new GraphPad(this);
 
 		// The path to the source file
 		File file = new File("./data/graphs/samples/Risk.graphml");
 
-		// In Graphml format, node attributes copied from the graphml file. The
-		// first one defines the communities, the second the node names
+		// In Graphml file format. Node attributes copied from the graphml file.
+		// The first one defines the communities, the second the node names
 		String[] nodeAtts = { "Continent", "label" };
 
-		// In Graphml format, edge attributes copied from the graphml file. The
-		// first one defines edge thickness
+		// In Graphml file format. Edge attributes copied from the graphml file.
+		// The first one defines edge thickness
 		String[] edgeAtts = { "weight" };
 
 		// The node distribution layout
@@ -59,7 +55,7 @@ public class GraphPad_Example extends PApplet {
 		// Load the graph
 		if (GraphPad.app.loadGraph(file, nodeAtts, edgeAtts, layout, graphFormat)) {
 			// Activate graph in the visualization pad
-			pad.setActiveGraph(true);
+			GraphPad.setActiveGraph(true);
 		}
 	}
 
