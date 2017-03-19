@@ -18,7 +18,7 @@ import processing.core.PApplet;
  * @version alpha
  *
  */
-public class NetIntApp extends PApplet {
+public class NetInt_Banca extends PApplet {
 
 	// The GraphPad
 	private GraphPad pad;
@@ -101,6 +101,6 @@ public class NetIntApp extends PApplet {
 	}
 
 	public static void main(String[] args) {
-		PApplet.main("examples.NetIntApp");
+		PApplet.main("examples.NetInt_Banca");
 	}
 }

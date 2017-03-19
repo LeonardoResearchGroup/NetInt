@@ -91,30 +91,41 @@ public class GraphmlReader {
 
 		// *** Go over graph vertex and set all nodes
 		for (Vertex vertex : graph.getVertices()) {
+
 			// Get vertex ID
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
+
 			// Make a node with the retrieved ID
 			Node nodeTmp = new Node(String.valueOf(id));
+
 			try {
 				// For the first two attributes: node community and node
 				// name
 				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
-					// set root community
+
+					// set root community as absolute attribute
 					nodeTmp.setCommunity("Root", 0);
-					// set next community
+
+					// set next community as relative attribute
 					nodeTmp.setCommunity(vertex.getProperty(nodeImportAttributes[0]).toString(), 1);
 					addCommunity(vertex.getProperty(nodeImportAttributes[0]).toString());
-				} else
-					throw new NullPointerException();
+				} else {
+					// for root importing, set root community to absolute and
+					// relative attributes
+					nodeTmp.setCommunity("Root", 0);
+					nodeTmp.setCommunity("Root", 1);
+				}
+
 				// Label
 				if (vertex.getProperty(nodeImportAttributes[1]) != null) {
 					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[1]).toString());
-				} else
-					throw new NullPointerException();
+				} else {
+					nodeTmp.setName("no name yet");
+					//throw new NullPointerException();
+				}
 
 			} catch (NullPointerException e) {
-				System.out.println(this.getClass().getName() + " NullPointerException making nodes "
-						+ nodeImportAttributes[0] + " " + nodeImportAttributes[1]);
+				System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
 			}
 
 			for (int i = 2; i < nodeImportAttributes.length; i++) {
@@ -124,12 +135,16 @@ public class GraphmlReader {
 					// attributes
 					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
 						nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
-					} else
+					} else {
+						// for root importing
 						throw new NullPointerException();
+					}
 				} catch (NullPointerException e) {
-					System.out.println(this.getClass().getName() + " NullPointerException making nodes ");
+					System.out.println(this.getClass().getName()
+							+ " NullPointerException making nodes with remaining attributes ");
 				}
 			}
+
 			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
 				if (nodeTmp.getAttribute(key) == null) {
@@ -213,7 +228,7 @@ public class GraphmlReader {
 					e.setAttribute(key, edge.getProperty(key));
 				}
 			}
-			
+
 			// Setting max min boundaries in Mapper class
 			Mapper.getInstance().setMaxMinEdgeAttributes(e);
 			if (saveCategoricalAttributes) {

@@ -39,7 +39,7 @@ public class ControlPanel extends PApplet {
 	private PFont font;
 	private PImage logo;
 	// From NetInt: Java Network Interaction Visualization Library.
-	private final String NTI_EXTENSION = "nti";
+	private final String netInt_EXTENSION = "nti";
 	// List of graphElements attribute names
 	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
@@ -77,7 +77,7 @@ public class ControlPanel extends PApplet {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		logo = loadImage("../data/images/netInt.png");
+		logo = loadImage("../data/images/netIntBanca.png");
 		keyNamesForNodes.add("empty list");
 		keyNamesForEdges.add("empty list");
 		initMain();
@@ -97,6 +97,8 @@ public class ControlPanel extends PApplet {
 		main = new ControlP5(this);
 		secondary = new ControlP5(this);
 		secondary.hide();
+		main.setColorBackground(0xff353535);
+		secondary.setColorBackground(0xff353535);
 
 		String[] fileFunctions = { "Open", "Save", "Import", "Export", "Quit" };
 		main.addScrollableList("File").setPosition(10, 55).setSize(180, 85).setBarHeight(18).setItemHeight(13)
@@ -115,7 +117,7 @@ public class ControlPanel extends PApplet {
 		Group statsGroup = new Group(secondary, "Stats");
 
 		// Group visual attributes
-		Color color = new Color(0, 35, 80);
+		Color color = new Color(45, 45, 45);
 		backgGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(50);
 		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
@@ -130,7 +132,7 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 145).setWidth(180);
+		accordion = secondary.addAccordion("acc").setPosition(10, 145).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
@@ -187,13 +189,13 @@ public class ControlPanel extends PApplet {
 				.setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
 
 		// Appearance controllers
-		accordionNodes = secondary.addAccordion("accNodes").setPosition(5, 53).setWidth(120).moveTo(group);
+		accordionNodes = secondary.addAccordion("accNodes").setPosition(5, 53).setWidth(100).setMinItemHeight(42).moveTo(group);
 		Group converterNames = new Group(secondary, "Converters");
 		Group nodeAttrList = new Group(secondary, "Attributes");
 
 		// Converters
 		String[] items = Mapper.getInstance().getConvertersList();
-		secondary.addScrollableList("Converter Node").addItems(items).setPosition(2, 2).setSize(100, 100)
+		secondary.addScrollableList("Converter Node").addItems(items).setPosition(4, 2).setSize(98, 39)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNames).close();
 
 		// Diameter
@@ -203,7 +205,7 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Diameter").setLabel("Diameter").addItems(items).setPosition(2, 2).setSize(100, 100)
+		secondary.addScrollableList("Diameter").setLabel("Diameter").addItems(items).setPosition(4, 2).setSize(98, 39)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(nodeAttrList).close()
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER);
 
@@ -242,13 +244,13 @@ public class ControlPanel extends PApplet {
 				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Appearance controllers
-		accordionEdges = secondary.addAccordion("accEdges").setPosition(5, 53).setWidth(120).moveTo(group);
+		accordionEdges = secondary.addAccordion("accEdges").setPosition(5, 53).setWidth(120).setMinItemHeight(42).moveTo(group);
 		Group converterNamesEdges = new Group(secondary, "Converters Edges");
 		Group edgeAttrList = new Group(secondary, "Attributes Edges");
 
 		// Converters
 		String[] items = Mapper.getInstance().getConvertersList();
-		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(2, 2).setSize(100, 100)
+		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(4, 2).setSize(98, 39)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNamesEdges)
 				.close();
 
@@ -258,7 +260,7 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		secondary.addScrollableList("Thickness").setPosition(2, 2).setSize(100, 100).setBarHeight(13).setItemHeight(13)
+		secondary.addScrollableList("Thickness").setPosition(4, 2).setSize(98, 39).setBarHeight(13).setItemHeight(13)
 				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(edgeAttrList).close();
 
 		// create a new accordion. Add groups to the accordion.
@@ -400,7 +402,7 @@ public class ControlPanel extends PApplet {
 	private void manageFileSelection(String choice) {
 		switch (choice) {
 		case "Open":
-			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, NTI_EXTENSION);
+			String selectedFile = ChooseHelper.getInstance().showJFileChooser(false, netInt_EXTENSION);
 
 			try {
 				parent.cursor(WAIT);
@@ -431,15 +433,15 @@ public class ControlPanel extends PApplet {
 
 		case "Save":
 
-			String selectedPath = ChooseHelper.getInstance().showJFileChooser(true, NTI_EXTENSION);
+			String selectedPath = ChooseHelper.getInstance().showJFileChooser(true, netInt_EXTENSION);
 			if (selectedPath != null) {
 				parent.cursor(WAIT);
 				SerializeWrapper wrapper = new SerializeWrapper(Assembler.firstOrderVComm, Assembler.secondOrderVComm,
 						UserSettings.getInstance(), GraphLoader.theGraph);
 				try {
-					SerializeHelper.getInstance().serialize(wrapper, selectedPath, NTI_EXTENSION);
+					SerializeHelper.getInstance().serialize(wrapper, selectedPath, netInt_EXTENSION);
 					javax.swing.JOptionPane.showMessageDialog(null,
-							"File saved in " + selectedPath + "." + NTI_EXTENSION, "",
+							"File saved in " + selectedPath + "." + netInt_EXTENSION, "",
 							javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				} catch (FileNotFoundException e) {
 					javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error",

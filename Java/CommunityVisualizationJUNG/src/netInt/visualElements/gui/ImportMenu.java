@@ -128,7 +128,6 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					System.out.println("AAAA " + GraphPad.app);
 					GraphPad.app.loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
 							layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);

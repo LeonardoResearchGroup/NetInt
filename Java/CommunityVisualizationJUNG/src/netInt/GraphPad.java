@@ -117,8 +117,8 @@ public class GraphPad {
 	public void show() {
 		if (activeGraph) {
 			parent.pushMatrix();
-			canvas.translateCenter((parent.width - app.rootDimension.width) / 2,
-					(parent.height - app.rootDimension.height) / 2);
+			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
+					(parent.height - app.getRootDimension().height) / 2);
 			canvas.transform();
 			// canvas.originCrossHair();
 			app.show();

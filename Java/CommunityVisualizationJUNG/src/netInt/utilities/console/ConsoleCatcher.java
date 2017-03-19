@@ -22,6 +22,7 @@ public class ConsoleCatcher extends PApplet {
 	private ByteArrayOutputStream baos;
 	private Textarea textArea;
 	private ControlP5 cp5;
+	private String output;
 
 	public ConsoleCatcher(ByteArrayOutputStream baos) {
 		super();
@@ -37,8 +38,8 @@ public class ConsoleCatcher extends PApplet {
 		cp5 = new ControlP5(this);
 		cp5.enableShortcuts();
 		textArea = cp5.addTextarea("console").setPosition(10, 10).setSize(width - 20, height - 20).setScrollActive(1);
-		//textArea.hideScrollbar();
-		int color = color (186,216,231);
+		// textArea.hideScrollbar();
+		int color = color(186, 216, 231);
 		textArea.setColor(color);
 		this.surface.setSize(width, height);
 		this.surface.setLocation(displayWidth - width, displayHeight - 300);
@@ -46,15 +47,19 @@ public class ConsoleCatcher extends PApplet {
 		// Font
 		font = createFont("Arial", 11, false);
 		textFont(font);
+		output = "Console Catcher started";
 	}
 
 	public void exit() {
-		  println("Console catcher closed");
-		}
-	
+		System.out.println("Console catcher closed");
+	}
+
 	public void draw() {
 		background(70);
-		textArea.setText(baos.toString());
-		textArea.scroll(1);
+		if (!output.equals(baos.toString())) {
+			output = baos.toString();
+			textArea.setText(output);
+		}
+	//	textArea.scroll(1);
 	}
 }
