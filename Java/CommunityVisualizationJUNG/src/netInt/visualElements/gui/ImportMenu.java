@@ -37,14 +37,16 @@ public class ImportMenu implements ControlListener {
 		// for nodes
 		nodeList = new DropDownList(parent, "Node Attributes");
 		nodeList.setPos(100, 100);
-		String[] nodeAttributeNames = { "Community", "Label"};
-		//String[] nodeAttributeNames = { "Community", "Label", "Size", "Color" };
+		String[] nodeAttributeNames = { "Community", "Label" };
+		// String[] nodeAttributeNames = { "Community", "Label", "Size", "Color"
+		// };
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// for edges
 		edgeList = new DropDownList(parent, "Edge Attributes");
 		edgeList.setPos(100, 250);
-		//String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
+		// String[] edgeAttributeNames = { "Body thickness", "Target thickness",
+		// "Body color", "Target Color" };
 		String[] edgeAttributeNames = { "Body thickness" };
 		edgeList.setAttributes(edgeAttributeNames);
 
@@ -54,8 +56,6 @@ public class ImportMenu implements ControlListener {
 		String[] layoutAttributeNames = { "Choose one" };
 		layoutList.setAttributes(layoutAttributeNames);
 	}
-	
-
 
 	/**
 	 * Creates two ContorlP5.Group, one for nodes and one for edges. Both groups
@@ -73,17 +73,18 @@ public class ImportMenu implements ControlListener {
 			ArrayList<String> layoutAttributeKeys) {
 		// Initialize variables
 		init();
-		importMenu.setVisible(true);
-		nodeList.dropMenu.setVisible(true);
-		edgeList.dropMenu.setVisible(true);
-		layoutList.dropMenu.setVisible(true);
-		//
 		nodeList.initializeList(nodeAttributeKeys);
 		edgeList.initializeList(edgeAttributeKeys);
 		layoutList.initializeList(layoutAttributeKeys);
 		importMenu.addBang("loadGraph").setPosition(100, 500).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
 		importMenu.getController("loadGraph").addListener(this);
+
+		// make them visible
+		importMenu.setVisible(true);
+		nodeList.dropMenu.setVisible(true);
+		edgeList.dropMenu.setVisible(true);
+		layoutList.dropMenu.setVisible(true);
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -127,7 +128,7 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					System.out.println("AAAA "+ GraphPad.app);
+					System.out.println("AAAA " + GraphPad.app);
 					GraphPad.app.loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
 							layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
@@ -136,8 +137,9 @@ public class ImportMenu implements ControlListener {
 							"Import warning", JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
-				JOptionPane.showMessageDialog(parent.frame, "Must select at least \"community\" and \"label\" attributes",
-						"Import warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(parent.frame,
+						"Must select at least \"community\" and \"label\" attributes", "Import warning",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 

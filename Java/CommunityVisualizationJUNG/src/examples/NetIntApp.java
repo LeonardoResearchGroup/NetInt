@@ -20,6 +20,7 @@ import processing.core.PApplet;
  */
 public class NetIntApp extends PApplet {
 
+	// The GraphPad
 	private GraphPad pad;
 
 	// The floating window displaying system messages
@@ -28,8 +29,19 @@ public class NetIntApp extends PApplet {
 	// The menu displayed once a graph file is selected
 	protected static ImportMenu importMenu;
 
+	// The control panel with graphic user interface elements
 	public ControlPanel controlPanel;
 
+	/**
+	 * Required method from parent class. Define here the size of the
+	 * visualization pad
+	 * 
+	 * @see processing.core.PApplet#settings()
+	 */
+	public void settings() {
+		size(displayWidth - 201, displayHeight - 100, P2D);
+	}
+	
 	/**
 	 * Required method from parent class. It runs only once at the PApplet
 	 * initialization. Instantiate the classes and initialize attributes
@@ -38,12 +50,9 @@ public class NetIntApp extends PApplet {
 	 * @see processing.core.PApplet#setup()
 	 */
 	public void setup() {
-		textSize(10);
-		surface.setLocation(200, -300);
-		smooth();
 		pad = new GraphPad(this);
 
-		// Output Console Catcher. The line below enables a console Catcher.
+		// Output Console Catcher
 		consoleCatcher = new ConsoleCatcher(GraphPad.initSystemOutToConsole());
 
 		// Control Panel Frame
@@ -58,18 +67,11 @@ public class NetIntApp extends PApplet {
 	 * @see processing.core.PApplet#draw()
 	 */
 	public void draw() {
+		// Set background color
 		background(UserSettings.getInstance().getColorBackground());
-		pad.show();
-	}
 
-	/**
-	 * Required method from parent class. Define here the size of the
-	 * visualization pad
-	 * 
-	 * @see processing.core.PApplet#settings()
-	 */
-	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
+		// Draw the pad contents
+		pad.show();
 	}
 
 	/**
@@ -86,11 +88,11 @@ public class NetIntApp extends PApplet {
 		if (selection != null) {
 			GraphPad.setFile(selection);
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
-			
+
 			// this creates and displays the menu
 			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
-			
+
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
 			importMenu = new ImportMenu(this);
