@@ -59,7 +59,7 @@ public class ConsoleCatcher extends PApplet {
 		if (!output.equals(baos.toString())) {
 			output = baos.toString();
 			textArea.setText(output);
+			textArea.scroll(1);
 		}
-	//	textArea.scroll(1);
 	}
 }

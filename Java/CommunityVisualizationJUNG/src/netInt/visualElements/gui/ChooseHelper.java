@@ -23,15 +23,18 @@ public class ChooseHelper {
 
 	/**
 	 * Shows the Open File window of the OS
+	 * 
 	 * @param applet
-	 *            The applet calling the input window
+	 *            The PApplet calling the Input Menu. It must have a method
+	 *            named as the second parameter passed to PApplet.selectInput()
 	 */
 	public void showFileChooser(PApplet applet) {
 		applet.selectInput("Select a graphml file to process:", "selectImport");
 	}
 
 	/**
-	 * Calls the System File Browser
+	 * Calls the System File Browser. This is used to load or save files
+	 * 
 	 * @param save
 	 *            either or not show the save dialog
 	 * @param extension
@@ -42,7 +45,8 @@ public class ChooseHelper {
 		String path = null;
 		javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
 		chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
-		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(extension, extension);
+		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(
+				extension, extension);
 		chooser.setFileFilter(filter);
 		int action;
 

@@ -14,9 +14,23 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 /**
- * This is the central class of NetInt library.
- * 
- * It could be instantiated in three ways. ******** MISSING DESCRIPTION *******
+ * <p>
+ * This is the central class of NetInt library. An instance of this class always
+ * needs a <tt>processing.PApplet</tt> to operate. The enclosed instance of
+ * <tt>Assembler</tt> is in charge of putting retrieving the graph from the
+ * source file, generate the <tt>VCommunity</tt>'s (visual communities) and all
+ * the visual elements that represent each vertex and edge of the source graph.
+ * </p>
+ * <p>
+ * It also encloses and instance of <tt>Canvas</tt> that handles the canvas on
+ * top of which visual elements are drawn, mouseEvents are detected, and spatial
+ * transformations such as zoom and pan are controlled.
+ * </p>
+ * <p>
+ * An option to monitor the usage of JVM resources is to instantiate
+ * <tt>TestPerformence</tt> to display on the canvas the status of heap memory
+ * and other features of the virtual machine.
+ * </p>
  * 
  * @author Juan Salamanca
  * @version alpha
@@ -88,10 +102,11 @@ public class GraphPad {
 	 * @see processing.core.PApplet#setup()
 	 */
 	private void init() {
+		// Set PApplet global properties
 		parent.textSize(10);
 		parent.getSurface().setLocation(200, -300);
 		parent.smooth();
-		
+
 		// Canvas
 		System.out.println("Building Canvas");
 		canvas = new Canvas(parent);
@@ -145,14 +160,6 @@ public class GraphPad {
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		UserSettings.getInstance().setEventOnVSettings(false);
-	}
-
-	public Assembler getAssembler() {
-		return app;
-	}
-
-	public void setAssembler(Assembler val) {
-		app = val;
 	}
 
 	public boolean isActiveGraph() {

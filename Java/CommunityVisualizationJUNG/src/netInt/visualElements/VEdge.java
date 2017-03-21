@@ -118,7 +118,6 @@ public class VEdge implements Serializable {
 						}
 					}
 				} catch (NullPointerException npe) {
-					// npe.printStackTrace();
 					setThickness(1);
 				}
 
