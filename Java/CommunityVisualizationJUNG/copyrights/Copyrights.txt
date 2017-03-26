@@ -1,6 +1,5 @@
 NETINT - JAVA NETWORKED INTERACTION VISUALIZATION
 
-Source: https://bitbucket.org/lfrivera/caoba-comunidades-bancolombia
 License: LGPL 2.1
 Authors: Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera & Javier Diaz
 Date: March 17, 2017

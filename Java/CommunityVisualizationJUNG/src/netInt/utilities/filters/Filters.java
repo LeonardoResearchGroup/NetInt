@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * This library is free software. You can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the 
+ * Free Software Foundation; either version 2.1 of the License, or (at your option) 
+ * any later version. This library is distributed  WITHOUT ANY WARRANTY;
+ * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
+ * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
+ * for more information.
+ *
+ * It makes extensive use of free libraries such as Processing, Jung, ControlP5, JOGL, 
+ * Tinkerpop and many others. For details see the copyrights folder. 
+ *
+ * Contributors:
+ * 	Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera, Javier Diaz
+ * 	
+ * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
+ *
+ * version alpha
+ *******************************************************************************/
 package netInt.utilities.filters;
 
 import java.util.TreeMap;
@@ -51,7 +70,6 @@ public class Filters {
 	 * Returns a subgraph of jungGraph whose nodes belong to the specified
 	 * community
 	 * 
-	 * @param comunidad
 	 * @return
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterNodeInCommunity(final String community) {
@@ -74,8 +92,9 @@ public class Filters {
 				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
 				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
 			}
-		//	System.out.println(getInstance().getClass().getName() + " filter:"+ key);
-			//filterResults.put(key, problemGraph);
+			// System.out.println(getInstance().getClass().getName() + "
+			// filter:"+ key);
+			// filterResults.put(key, problemGraph);
 			return problemGraph;
 		}
 	}
@@ -84,8 +103,10 @@ public class Filters {
 	 * Returns a subgraph of jungGraph whose edges connect the specified
 	 * communities in either direction
 	 * 
-	 * @param comumnity1
-	 * @param comumnity2
+	 * @param communityNameA
+	 *            The name of one community
+	 * @param communityNameB
+	 *            The name of a second community
 	 * @return
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterEdgeLinkingCommunities(final String communityNameA,
@@ -100,13 +121,14 @@ public class Filters {
 			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[1]);
 		} else {
 
-		//	System.out.println(getInstance().getClass().getName() + " filter: " + keys[0]);
+			// System.out.println(getInstance().getClass().getName() + " filter:
+			// " + keys[0]);
 			// Filter and extractor
 			EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
 					Predicates.edgeLinkingCommunities(communityNameA, communityNameB));
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
 					.transform(GraphLoader.theGraph);
-		//	filterResults.put(keys[0], problemGraph);
+			// filterResults.put(keys[0], problemGraph);
 			return problemGraph;
 		}
 	}
@@ -116,8 +138,10 @@ public class Filters {
 	 * communities in either direction AND REMOVES edges from
 	 * Filter.remainingGraph
 	 * 
-	 * @param comumnity1
-	 * @param comumnity2
+	 * @param communityNameA
+	 *            The name of one community
+	 * @param communityNameB
+	 *            The name of a second community
 	 * @return
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterAndRemoveEdgeLinkingCommunity(final String communityNameA,
@@ -132,14 +156,15 @@ public class Filters {
 			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[1]);
 		} else {
 
-		//	System.out.println(getInstance().getClass().getName() + " filter: " + keys[0]);
+			// System.out.println(getInstance().getClass().getName() + " filter:
+			// " + keys[0]);
 			// Filter and extractor
 			FilterAndExtractorEdges<Node, Edge> filter = new FilterAndExtractorEdges<Node, Edge>(
 					Predicates.edgeLinkingCommunities(communityNameA, communityNameB),
 					Predicates.edgeInCommunity(communityNameA));
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
 					.transform(remainingGraph);
-		//	filterResults.put(keys[0], problemGraph);
+			// filterResults.put(keys[0], problemGraph);
 			return problemGraph;
 		}
 	}
@@ -171,8 +196,9 @@ public class Filters {
 				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
 				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
 			}
-		//	System.out.println(getInstance().getClass().getName() + " filter: "+ key);
-		//	filterResults.put(key, problemGraph);
+			// System.out.println(getInstance().getClass().getName() + " filter:
+			// "+ key);
+			// filterResults.put(key, problemGraph);
 			return problemGraph;
 		}
 	}
@@ -180,7 +206,7 @@ public class Filters {
 	private static String[] makeDoubleKey(String communityNameA, String communityNameB, String filter) {
 		String[] rtn = new String[2];
 		rtn[0] = communityNameA + "_" + communityNameB + "_" + filter;
-		rtn[1] = communityNameB + "_" + communityNameA + "_"+filter;
+		rtn[1] = communityNameB + "_" + communityNameA + "_" + filter;
 		return rtn;
 	}
 

@@ -1,18 +1,23 @@
 
-/*
- * Created on May 19, 2008
+/*******************************************************************************
+ * This library is free software. You can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the 
+ * Free Software Foundation; either version 2.1 of the License, or (at your option) 
+ * any later version. This library is distributed  WITHOUT ANY WARRANTY;
+ * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
+ * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
+ * for more information.
  *
- * Copyright (c) 2008, the JUNG Project and the Regents of the University 
- * of California
- * All rights reserved.
+ * It makes extensive use of free libraries such as Processing, Jung, ControlP5, JOGL, 
+ * Tinkerpop and many others. For details see the copyrights folder. 
  *
- * This software is open-source under the BSD license; see either
- * "license.txt" or
- * http://jung.sourceforge.net/license.txt for a description.
- * 
- * Complemented on February 8, 2017
- * Juan Salamanca
- */
+ * Contributors:
+ * 	Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera, Javier Diaz
+ * 	
+ * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
+ *
+ * version alpha
+ *******************************************************************************/
 package netInt.utilities.filters;
 
 import edu.uci.ics.jung.algorithms.filters.Filter;

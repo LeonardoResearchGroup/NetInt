@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * This library is free software. You can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the 
+ * Free Software Foundation; either version 2.1 of the License, or (at your option) 
+ * any later version. This library is distributed  WITHOUT ANY WARRANTY;
+ * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
+ * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
+ * for more information.
+ *
+ * It makes extensive use of free libraries such as Processing, Jung, ControlP5, JOGL, 
+ * Tinkerpop and many others. For details see the copyrights folder. 
+ *
+ * Contributors:
+ * 	Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera, Javier Diaz
+ * 	
+ * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
+ *
+ * version alpha
+ *******************************************************************************/
 package netInt.containers;
 
 import java.awt.Color;
@@ -54,7 +73,7 @@ public class SubContainer extends Container implements Serializable {
 	 * rootGraph) that are included in the Container's subGraph and set them the
 	 * new coordinates according to the current layout.
 	 * 
-	 * @param container
+	 * @param sourceContainer
 	 */
 	public void retrieveVisualElements(Container sourceContainer) {
 		// For each node of Graph
@@ -92,7 +111,7 @@ public class SubContainer extends Container implements Serializable {
 	 * the current layout. The VNodes added to this container are removed from
 	 * the sourceContainer.
 	 * 
-	 * @param container
+	 * @param sourceContainer
 	 */
 	public void retrieveVisualElements2(Container sourceContainer) {
 		// For each node of Graph
@@ -128,7 +147,7 @@ public class SubContainer extends Container implements Serializable {
 	 * Get instances of the visual elements from a given list whose Nodes are
 	 * included in the Container's graph
 	 * 
-	 * @param container
+	 * @param vCommunities
 	 */
 	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
 		// For each node of Graph

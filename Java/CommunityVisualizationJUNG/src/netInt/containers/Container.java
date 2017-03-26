@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * This library is free software. You can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the 
+ * Free Software Foundation; either version 2.1 of the License, or (at your option) 
+ * any later version. This library is distributed  WITHOUT ANY WARRANTY;
+ * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
+ * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
+ * for more information.
+ *
+ * It makes extensive use of free libraries such as Processing, Jung, ControlP5, JOGL, 
+ * Tinkerpop and many others. For details see the copyrights folder. 
+ *
+ * Contributors:
+ * 	Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera, Javier Diaz
+ * 	
+ * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
+ *
+ * version alpha
+ *******************************************************************************/
 package netInt.containers;
 
 import java.awt.Color;
@@ -107,7 +126,6 @@ public abstract class Container {
 	/**
 	 * Visual Nodes factory (For rootGraph)
 	 * 
-	 * @return
 	 */
 	protected void runVNodeFactory() {
 		// Instantiate vNodes
@@ -127,7 +145,6 @@ public abstract class Container {
 	/**
 	 * Visual Edges factory (For rootGraph)
 	 * 
-	 * @return
 	 */
 	public void runVEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
@@ -344,7 +361,6 @@ public abstract class Container {
 	 * given graph
 	 * 
 	 * @param graph
-	 * @return
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
 		for (VNode tmp : vNodes) {
@@ -567,7 +583,6 @@ public abstract class Container {
 	 * 
 	 * @param externalCommunityName
 	 * @param externalContainer
-	 * @return
 	 */
 	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
