@@ -296,7 +296,11 @@ public class ControlPanel extends PApplet {
 	public void draw() {
 		background(70);
 		// logo
-		image(logo, 10, 9);
+		if (logo != null) {
+			image(logo, 10, 9);
+		}else{
+			text("Mising Netint logo", 10, 9);
+		}
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
