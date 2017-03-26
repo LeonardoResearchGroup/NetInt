@@ -6,16 +6,8 @@
  * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
  * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
  * for more information.
- *
- * It makes extensive use of free libraries such as Processing, Jung, ControlP5, JOGL, 
- * Tinkerpop and many others. For details see the copyrights folder. 
- *
- * Contributors:
- * 	Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera, Javier Diaz
  * 	
  * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
- *
- * version alpha
  *******************************************************************************/
 package examples;
 
@@ -31,7 +23,7 @@ import processing.core.PApplet;
 
 /**
  * 
- * @author jsalam
+ * @author juan salamanca
  *
  */
 public class ControlPanel_Example extends PApplet {
