@@ -1,4 +1,4 @@
-package examples;
+package executable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import processing.core.PApplet;
 
 /**
  * 
- * @author jsalam
+ * @author juan salamanca
  * @version alpha
  *
  */
@@ -22,8 +22,14 @@ public class NetInt_Banca extends PApplet {
 	// The GraphPad
 	private GraphPad pad;
 
+	// The floating window displaying system messages
+	protected static ConsoleCatcher consoleCatcher;
+
 	// The menu displayed once a graph file is selected
 	protected static ImportMenu importMenu;
+
+	// The control panel with graphic user interface elements
+	//public ControlPanel controlPanel;
 
 	/**
 	 * Required method from parent class. Define here the size of the
@@ -45,10 +51,10 @@ public class NetInt_Banca extends PApplet {
 	public void setup() {
 		pad = new GraphPad(this);
 
-		// The floating window displaying system messages
-		new ConsoleCatcher(GraphPad.initSystemOutToConsole());
+		// Output Console Catcher
+		consoleCatcher = new ConsoleCatcher(GraphPad.initSystemOutToConsole());
 
-		// The control panel with graphic user interface elements
+		// Control Panel Frame
 		new ControlPanel(this, 200, this.height - 25);
 	}
 
@@ -90,10 +96,11 @@ public class NetInt_Banca extends PApplet {
 			System.out.println("Instantiating Import Menu");
 			importMenu = new ImportMenu(this, true);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
+			ControlPanel.getInstance().enableStatistics();
 		}
 	}
 
 	public static void main(String[] args) {
-		PApplet.main("examples.NetInt_Banca");
+		PApplet.main("executable.NetInt_Banca");
 	}
 }

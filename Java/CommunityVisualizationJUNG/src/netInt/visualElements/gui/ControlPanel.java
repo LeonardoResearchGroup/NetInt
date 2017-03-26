@@ -34,6 +34,7 @@ public class ControlPanel extends PApplet {
 	private PApplet parent;
 	private ControlP5 main;
 	private ControlP5 secondary;
+	private Group statsGroup;
 	private CheckBox cBox;
 	private Accordion accordion;
 	private PFont font;
@@ -60,8 +61,11 @@ public class ControlPanel extends PApplet {
 	 * visualization parameters
 	 * 
 	 * @param _parent
+	 *            parent PApplet
 	 * @param _w
+	 *            window width
 	 * @param _h
+	 *            window height
 	 */
 	public ControlPanel(PApplet _parent, int _w, int _h) {
 		super();
@@ -77,7 +81,7 @@ public class ControlPanel extends PApplet {
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		logo = loadImage("../data/images/netIntBanca.png");
+		logo = loadImage("../data/images/controlPanelImage.png");
 		keyNamesForNodes.add("empty list");
 		keyNamesForEdges.add("empty list");
 		initMain();
@@ -114,7 +118,7 @@ public class ControlPanel extends PApplet {
 		Group backgGroup = new Group(secondary, "Background");
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
-		Group statsGroup = new Group(secondary, "Stats");
+		statsGroup = new Group(secondary, "Financial Stats");
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
@@ -124,6 +128,7 @@ public class ControlPanel extends PApplet {
 		statsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(statsGroup);
+		statsGroup.setVisible(false);
 
 		// Add Components to each group
 		setBackgroundComponents(backgGroup);
@@ -189,14 +194,15 @@ public class ControlPanel extends PApplet {
 				.setNumberOfTickMarks(36).snapToTickMarks(true).moveTo(group);
 
 		// Appearance controllers
-		accordionNodes = secondary.addAccordion("accNodes").setPosition(5, 53).setWidth(100).setMinItemHeight(42).moveTo(group);
+		accordionNodes = secondary.addAccordion("accNodes").setPosition(5, 53).setWidth(100).setMinItemHeight(42)
+				.moveTo(group);
 		Group converterNames = new Group(secondary, "Converters");
 		Group nodeAttrList = new Group(secondary, "Attributes");
 
 		// Converters
 		String[] items = Mapper.getInstance().getConvertersList();
-		secondary.addScrollableList("Converter Node").addItems(items).setPosition(4, 2).setSize(98, 39)
-				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNames).close();
+		secondary.addScrollableList("Converter Node").addItems(items).setPosition(4, 2).setSize(98, 39).setBarHeight(13)
+				.setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNames).close();
 
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
@@ -244,15 +250,15 @@ public class ControlPanel extends PApplet {
 				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Appearance controllers
-		accordionEdges = secondary.addAccordion("accEdges").setPosition(5, 53).setWidth(120).setMinItemHeight(42).moveTo(group);
+		accordionEdges = secondary.addAccordion("accEdges").setPosition(5, 53).setWidth(120).setMinItemHeight(42)
+				.moveTo(group);
 		Group converterNamesEdges = new Group(secondary, "Converters Edges");
 		Group edgeAttrList = new Group(secondary, "Attributes Edges");
 
 		// Converters
 		String[] items = Mapper.getInstance().getConvertersList();
-		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(4, 2).setSize(98, 39)
-				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNamesEdges)
-				.close();
+		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(4, 2).setSize(98, 39).setBarHeight(13)
+				.setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(converterNamesEdges).close();
 
 		// Thickness
 		Object[] mappers = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys().toArray();
@@ -281,6 +287,10 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < keyNamesForNodes.size(); i++) {
 			cBox.addItem(keyNamesForNodes.get(i), 1);
 		}
+	}
+
+	public void enableStatistics() {
+		statsGroup.setVisible(true);
 	}
 
 	public void draw() {
@@ -314,7 +324,7 @@ public class ControlPanel extends PApplet {
 
 	private void switchCaseCP5(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
-		//System.out.println("ControlPanel> Event at: " + controllerName);
+		// System.out.println("ControlPanel> Event at: " + controllerName);
 		switch (controllerName) {
 
 		case "File":
@@ -480,5 +490,21 @@ public class ControlPanel extends PApplet {
 
 	private void setKeyNamesForEdges(ArrayList<String> keyNames) {
 		keyNamesForEdges = keyNames;
+	}
+
+	public ControlP5 getSecondaryControllerSet() {
+		return secondary;
+	}
+
+	public void setSecondaryControllerSet(ControlP5 secondary) {
+		this.secondary = secondary;
+	}
+
+	public ControlP5 getMainControllerSet() {
+		return main;
+	}
+
+	public void setMainControllerSet(ControlP5 main) {
+		this.main = main;
 	}
 }

@@ -26,9 +26,11 @@ public class ImportMenu implements ControlListener {
 	private ControlP5 importMenu;
 	private DropDownList nodeList, edgeList, layoutList;
 	public PApplet parent;
+	private boolean enableExtrasAtControlPanel;
 
-	public ImportMenu(PApplet app) {
+	public ImportMenu(PApplet app, boolean extras) {
 		this.parent = app;
+		enableExtrasAtControlPanel = extras;
 	}
 
 	public void init() {
@@ -148,6 +150,8 @@ public class ImportMenu implements ControlListener {
 			ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys();
 			ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
 			ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);
+			if (enableExtrasAtControlPanel)
+				ControlPanel.getInstance().enableStatistics();
 		}
 
 		// Hide Import Menu from main panel
