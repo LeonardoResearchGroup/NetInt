@@ -18,6 +18,7 @@ import processing.core.PApplet;
 import java.awt.Color;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import netInt.canvas.Canvas;
 import netInt.containers.Container;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
@@ -93,7 +94,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				container.initialize();
 			}
 
-			
 			// If the layout is iterative
 			if (container.isLayoutIterative()) {
 				// Show only nodes if layout is still organizing elements
@@ -132,15 +132,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void showCommunityContents(boolean showNodes, boolean showEdges) {
 		// ** Display VEdges
-		// GUI
+		
 		// Internal Edges
 		if (UserSettings.getInstance().showInternalEdges()) {
+
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
+
+				// If the container Layout iterates to distribute nodes
 				if (container.isLayoutIterative()) {
 					if (container.stepIterativeLayout(pos).done() || container.isDone()) {
+
 						// Show internal edges
 						for (VEdge vE : container.getVEdges()) {
+							
 							// If the edge has any attribute
 							if (vE.getEdge().getAttributeSize() > 0) {
 								vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
@@ -152,8 +157,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						}
 					}
 				} else {
+
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
+						
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
 							vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
@@ -166,33 +173,38 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
+		
 		// External edges
 		if (UserSettings.getInstance().showExternalEdges()) {
+			
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
+				
 				// Show external edges
 				for (VEdge vEE : container.getVExtEdges()) {
+					
 					// If the edge has any attribute
-					// These edges have no attributes and no source or
-					// target.
-					// It needs to be solved
 					if (vEE.getEdge().getAttributeSize() > 0) {
 						vEE.setVisibility(UserSettings.getInstance().getTransactionVolume());
 					}
 					if (container.currentLayout == Container.CIRCULAR) {
 						vEE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
+					
+					// Set pink color
 					Color color = new Color(255, 100, 180);
 					vEE.setColor(color.getRGB());
 					vEE.show();
 				}
 			}
-
 		}
+		
 		// ** Display VNodes
 		if (UserSettings.getInstance().showNodes()) {
+			
 			// VCommunity open
 			if (showNodes) {
+				
 				// VCommunities
 				for (VCommunity vC : container.getVCommunities()) {
 					vC.setVisibility(true);
@@ -206,10 +218,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vC.lock = false;
 					}
 				}
+				
 				// VNodes
 				for (VNode vN : container.getJustVNodes()) {
 					vN.setVisibility(true);
 					if (vNodesCentered) {
+						
 						// reset vNode coordinates to the coordinates
 						// assigned in the container's layout
 						PVector newOrigin = new PVector(container.getDimension().width / 2,
@@ -218,6 +232,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vNodesCentered = true;
 
 					}
+					
 					// If vN is visible and not centered
 					// System.out.println(vN.isDisplayed());
 					if (!vNodesCentered) {
@@ -227,9 +242,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 				vNodesCentered = false;
 			} else {
+				
 				// This block centers all the elements in the container
 				for (VisualAtom vA : container.getVNodes()) {
-					// vA.getPos().set(pos);
+				
 					// We have to known which nodes are visible.
 					if (vA instanceof VNode) {
 						VNode vN = (VNode) vA;

@@ -14,6 +14,7 @@ package netInt.visualElements;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import netInt.canvas.Canvas;
 import netInt.graphElements.Edge;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.gui.UserSettings;
@@ -96,16 +97,19 @@ public class VEdge implements Serializable {
 	 */
 	public void show() {
 		int alpha = 150;
+		
 		// If both source and target are above a visibility threshold
 		// source.show(source.isDisplayed());
-		// target.show(target.isDisplayed());
-		if (vSource.isVisible() && vTarget.isVisible()) {
+		// vTarget.show(vTarget.isDisplayed());
+		if (vSource.isVisible() && vTarget.isVisible() && vSource.isDisplayed() && vTarget.isDisplayed()) {
+			
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
 			if (visibility) {
-
+				
 				// Set thickness
 				try {
+					
 					// determine the diameter based on the user selected
 					// attribute name
 					if (UserSettings.getInstance().getEdgeFilters() != null) {

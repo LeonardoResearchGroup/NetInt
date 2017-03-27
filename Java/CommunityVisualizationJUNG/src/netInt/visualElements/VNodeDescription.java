@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import netInt.visualElements.Canvas;
+import netInt.canvas.Canvas;
 import netInt.visualElements.VNode;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PConstants;

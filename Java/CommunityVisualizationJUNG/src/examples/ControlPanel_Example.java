@@ -22,6 +22,10 @@ import netInt.visualElements.gui.ControlPanel;
 import processing.core.PApplet;
 
 /**
+ * IMPORTANT. This example works with the Risk.graphml file furnished with the
+ * library. If you use a different graphml source file you need to set the
+ * nodeAtts[] and edgeAtts[] parameters in the selectImport(File selection)
+ * method of this class.
  * 
  * @author juan salamanca
  *
@@ -52,7 +56,7 @@ public class ControlPanel_Example extends PApplet {
 		pad = new GraphPad(this);
 
 		// Initiate the Control Panel
-		new ControlPanel(this,  200, this.height - 25);
+		new ControlPanel(this, 200, this.height - 25);
 	}
 
 	/**

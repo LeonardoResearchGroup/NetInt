@@ -15,9 +15,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 
+import netInt.canvas.Canvas;
 import netInt.utilities.Assembler;
 import netInt.utilities.TestPerformance;
-import netInt.visualElements.Canvas;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PApplet;
 import processing.core.PConstants;

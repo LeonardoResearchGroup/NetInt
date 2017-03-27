@@ -9,7 +9,7 @@
  * 	
  * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
  *******************************************************************************/
-package netInt.visualElements;
+package netInt.canvas;
 
 import java.util.Timer;
 import java.util.TimerTask;

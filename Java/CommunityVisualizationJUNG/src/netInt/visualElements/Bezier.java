@@ -15,6 +15,7 @@ import processing.core.*;
 
 import java.awt.Color;
 
+import netInt.canvas.Canvas;
 import netInt.containers.Container;
 
 /**

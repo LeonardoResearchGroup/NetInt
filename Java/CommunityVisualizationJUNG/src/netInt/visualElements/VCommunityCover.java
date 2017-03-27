@@ -13,6 +13,7 @@ package netInt.visualElements;
 
 import java.io.Serializable;
 
+import netInt.canvas.Canvas;
 import netInt.containers.Container;
 import processing.core.PConstants;
 

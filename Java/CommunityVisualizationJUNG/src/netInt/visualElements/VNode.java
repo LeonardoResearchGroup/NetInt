@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import netInt.canvas.Canvas;
 import netInt.graphElements.Node;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.gui.UserSettings;
