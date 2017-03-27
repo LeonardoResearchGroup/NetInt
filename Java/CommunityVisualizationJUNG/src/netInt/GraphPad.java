@@ -127,7 +127,9 @@ public class GraphPad {
 		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD720);
 		setActiveGraph(false);
-		netIntLogo = parent.loadImage("./data/images/netInt.png");
+
+		// The path to the icon
+		 netIntLogo = parent.loadImage("./images/netInt.png");
 
 		// Performance
 		performance = new TestPerformance();
@@ -159,7 +161,10 @@ public class GraphPad {
 				exportFrameAsPNG();
 			}
 		} else {
-			parent.image(netIntLogo, 100, 50);
+			if (netIntLogo != null)
+				parent.image(netIntLogo, 100, 50);
+			else
+				parent.text("Missing NetInt Logo", 100, 50);
 		}
 
 		// Signature Message :)

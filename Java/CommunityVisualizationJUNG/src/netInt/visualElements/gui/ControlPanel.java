@@ -87,12 +87,39 @@ public class ControlPanel extends PApplet {
 		CPInstance = this;
 	}
 
+	/**
+	 * This constructor is used to create a control panel for user selection of
+	 * visualization parameters. It sets the ControlPanel logo.
+	 * 
+	 * @param _parent
+	 *            parent PApplet
+	 * @param logo
+	 *            The application logo
+	 * @param _w
+	 *            window width
+	 * @param _h
+	 *            window height
+	 */
+	public ControlPanel(PApplet _parent, PImage logo, int _w, int _h) {
+		super();
+		parent = _parent;
+		w = _w;
+		h = _h;
+		this.logo = logo;
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		CPInstance = this;
+	}
+
 	public void setup() {
 		System.out.println("CPanel initialized");
 		this.surface.setSize(w, h);
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
-		logo = loadImage("../data/images/controlPanelImage.png");
+		if (logo == null) {
+//			URL url = GraphPad.class.getResource("/controlPanelImage.png");
+//			logo = loadImage(url.getPath());
+			logo = loadImage("./images/netInt.png");
+		}
 		keyNamesForNodes.add("empty list");
 		keyNamesForEdges.add("empty list");
 		initMain();
@@ -309,7 +336,7 @@ public class ControlPanel extends PApplet {
 		// logo
 		if (logo != null) {
 			image(logo, 10, 9);
-		}else{
+		} else {
 			text("Mising Netint logo", 10, 9);
 		}
 	}
