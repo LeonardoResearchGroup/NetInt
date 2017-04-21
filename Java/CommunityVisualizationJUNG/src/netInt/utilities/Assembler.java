@@ -35,19 +35,19 @@ import netInt.visualElements.VCommunity;
  * communities).
  * </p>
  * <p>
- * NetInt defines visual communities that may be nested. The simplest visual
- * community is named <i>root community</i>. As any <tt>VCommunity</tt>, it
- * contains all the nodes and edges in a unique <tt>Container</tt> but they are
- * not clustered in communities. It can be used to visualize a graph with no
- * partitions. Caveat: as the focus of NetInt is to visualize nested communities
- * it is not enabled in this version.
+ * NetInt principle is to create nested visual communities. The visual community
+ * at the top of the hierarchical structure is named <i>root community</i>. As
+ * any <tt>VCommunity</tt>, it contains VCommunities (is any), nodes and edges
+ * in a unique <tt>Container</tt>. The root visual community can be used to
+ * visualize a graph with no partitions. Caveat: as the focus of NetInt is to
+ * visualize nested communities such function is not enabled in this version.
  * </p>
  * <p>
  * In a nested structure of <tt>VCommunity</tt>'s, a <i>first order</i>
- * <tt>VCommunity</tt> is the bottom tier that contains a set of
+ * <tt>VCommunity</tt> is the top tier that contains a set of
  * <tt>VCommunity</tt>'s named as <i>second order</i> communities. The latter
  * might contain the next tier of <tt>VCommunity</tt>'s named as <i>third
- * order</i> communities, and so on. The communities at the top tier must
+ * order</i> communities, and so on. The communities at the bottom tier must
  * contain the nodes and edges.
  * </p>
  * <p>
