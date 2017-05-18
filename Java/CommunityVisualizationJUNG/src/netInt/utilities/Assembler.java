@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -27,6 +28,7 @@ import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
 import netInt.visualElements.VCommunity;
+import netInt.visualElements.VNode;
 
 /**
  * <p>
@@ -305,5 +307,63 @@ public class Assembler {
 
 	public void setRootDimension(Dimension rootDimension) {
 		this.rootDimension = rootDimension;
+	}
+	
+	public HashMap<Integer, ArrayList<String>> hmap = new HashMap<Integer, ArrayList<String>>();
+	
+	
+	public VNode createStructureRecursive(DirectedSparseMultigraph<Node, Edge> g, HashMap<Integer, ArrayList<String>> communityClasifiers, int counter){
+
+		for(String a : communityClasifiers.get(counter)){
+			String communityName = a;
+
+			System.out.println("     Working on community " + communityName);
+
+			// SubGraph of each community
+			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(g, communityName);
+			ArrayList<VNode> vn;
+			for (Node n : graphTemp.getVertices()) {
+				VCommunity communityTemp = createStructureRecursive(graphTemp, x,x);
+				vn.add(vn);
+				
+			}
+			
+
+			// SubContainers for each VCommunity
+			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
+
+			// Name container
+			containerTemp.setName(communityName);
+
+			// Initialize container
+			// containerTemp.initialize();
+
+			// Make Node for CommunityCover
+			Node tmpNode = new Node(communityName);
+			
+			
+			containerTemp.assignVisualElements(vn);
+
+			// Name Node
+			tmpNode.setName(communityName);
+
+			// Create temporal community
+			VCommunity communityTemp = new VCommunity(tmpNode, containerTemp);
+
+
+
+			// Add VCommunity to list of VCommunities
+			return communityTemp;
+			
+		}
+		return vn;
+	
+
+	}
+	
+	public void createStructureIterative(VCommunity parentCommunity, HashMap<Integer, ArrayList<String>> communityClasifiers){
+		for(ArrayList<String> a : communityClasifiers.get(arg0)){
+			
+		}
 	}
 }
