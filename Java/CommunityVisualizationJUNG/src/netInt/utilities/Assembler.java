@@ -312,53 +312,72 @@ public class Assembler {
 	public HashMap<Integer, ArrayList<String>> hmap = new HashMap<Integer, ArrayList<String>>();
 	
 	
-	public VNode createStructureRecursive(DirectedSparseMultigraph<Node, Edge> g, HashMap<Integer, ArrayList<String>> communityClasifiers, int counter){
-
+	public VNode createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph, HashMap<Integer, ArrayList<String>> communityClasifiers, int counter){
 		for(String a : communityClasifiers.get(counter)){
 			String communityName = a;
 
 			System.out.println("     Working on community " + communityName);
 
 			// SubGraph of each community
-			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(g, communityName);
+			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(graph, communityName);
 			ArrayList<VNode> vn;
-			for (Node n : graphTemp.getVertices()) {
-				VCommunity communityTemp = createStructureRecursive(graphTemp, x,x);
-				vn.add(vn);
+			VCommunity communityTemp;
+			if(counter == 0){
+				for (Node n : graphTemp.getVertices()) {
+					SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
+
+					// Name container
+					containerTemp.setName(communityName);
+
+
+					// Make Node for CommunityCover
+					Node tmpNode = new Node(communityName);
+
+					// Name Node
+					tmpNode.setName(communityName);
+
+					// Create temporal community
+					communityTemp = new VCommunity(tmpNode, containerTemp);
+
+					
+				}
 				
+			}else{
+				for (Node n : graphTemp.getVertices()) {
+					communityTemp = createStructureRecursive(graphTemp, x,x);
+					
+				}
 			}
 			
-
-			// SubContainers for each VCommunity
-			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
-
-			// Name container
-			containerTemp.setName(communityName);
-
-			// Initialize container
-			// containerTemp.initialize();
-
-			// Make Node for CommunityCover
-			Node tmpNode = new Node(communityName);
+			vn.add(communityTemp);
 			
-			
-			containerTemp.assignVisualElements(vn);
-
-			// Name Node
-			tmpNode.setName(communityName);
-
-			// Create temporal community
-			VCommunity communityTemp = new VCommunity(tmpNode, containerTemp);
-
-
-
-			// Add VCommunity to list of VCommunities
-			return communityTemp;
 			
 		}
-		return vn;
-	
+		// SubContainers for each VCommunity
+		SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
 
+		// Name container
+		containerTemp.setName(communityName);
+
+		// Initialize container
+		// containerTemp.initialize();
+
+		// Make Node for CommunityCover
+		Node tmpNode = new Node(communityName);
+		
+		
+		containerTemp.assignVisualElements(vn);
+
+		// Name Node
+		tmpNode.setName(communityName);
+
+		// Create temporal community
+		VCommunity communityFather = new VCommunity(tmpNode, containerTemp);
+
+
+
+		// Add VCommunity to list of VCommunities
+		return communityFather;
 	}
 	
 	public void createStructureIterative(VCommunity parentCommunity, HashMap<Integer, ArrayList<String>> communityClasifiers){
