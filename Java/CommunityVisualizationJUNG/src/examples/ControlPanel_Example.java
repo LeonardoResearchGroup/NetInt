@@ -99,7 +99,7 @@ public class ControlPanel_Example extends PApplet {
 			int graphFormat = GraphLoader.GRAPHML;
 
 			// Load the graph
-			if (GraphPad.app.loadGraph(selection, nodeAtts, edgeAtts, layout, graphFormat)) {
+			if (GraphPad.app.loadGraph(new File("./data/graphs/samples/Risk.graphml"), nodeAtts, edgeAtts, layout, graphFormat)) {
 				// Activate graph in the visualization pad
 				GraphPad.setActiveGraph(true);
 			}

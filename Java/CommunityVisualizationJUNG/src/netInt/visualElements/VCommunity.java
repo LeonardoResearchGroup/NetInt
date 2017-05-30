@@ -87,7 +87,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
 						// build external edges
-						vC.container.buildExternalEdges(container.getVCommunities());
+//						vC.container.buildExternalEdges(container.getVCommunities());
 					}
 				}
 			} else {
@@ -210,11 +210,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vC.setVisibility(true);
 					vC.show();
 					if (vC.comCover.isUnlocked() && !vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), false);
+//						container.setIncidentEdgesVisibility(vC.getNode(), false);
 						vC.lock = true;
 					}
 					if (!vC.comCover.isUnlocked() && vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), true);
+//						container.setIncidentEdgesVisibility(vC.getNode(), true);
 						vC.lock = false;
 					}
 				}

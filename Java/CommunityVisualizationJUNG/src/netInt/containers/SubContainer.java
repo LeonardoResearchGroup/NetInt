@@ -143,21 +143,23 @@ public class SubContainer extends Container implements Serializable {
 	 */
 	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
 		// For each node of Graph
-		for (Node n : graph.getVertices()) {
+//		for (Node n : graph.getVertices()) {
 			// Look for the corresponding VNode in the collection of VAtoms
 			for (VCommunity vC : vCommunities) {
 				/*
 				 * If the current node of the subGraph matches the node inside
 				 * the VisualAtom retrieved from the collection of visual atoms
 				 */
-				if (n.equals(vC.getNode())) {
-					vNodes.add(vC);
+				//if (n.equals(vC.getNode())) {
+				//	vNodes.add(vC);
 					// Look for all the edges of that VNode and add them all
 					// to the collection of vEdges of this container
 					// vEdgeRetriever(vC, sourceContainer.getVEdges());
-				}
+				//}
+				vNodes.add(vC);
+				System.out.println("peligro");
 			}
-		}
+//		}
 	}
 
 	/**

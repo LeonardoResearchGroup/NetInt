@@ -51,7 +51,7 @@ public class GraphPad_Example extends PApplet {
 
 		// In Graphml file format. Node attributes copied from the graphml file.
 		// The first one defines the communities, the second the node names
-		String[] nodeAtts = { "Continent", "label" };
+		String[] nodeAtts = { "Continent", "label", "ax" };
 
 		// In Graphml file format. Edge attributes copied from the graphml file.
 		// The first one defines edge thickness

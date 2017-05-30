@@ -130,8 +130,11 @@ public class Assembler {
 		ArrayList<String>comm1 = rootGraph.getCommunityNames();
 		ArrayList<String>comm2 = rootGraph.getCommunityNames2();
 		TreeMap<String, ArrayList<String>> hmap = new TreeMap<String, ArrayList<String>>();
+		
 		hmap.put("Continent", comm1);
-		hmap.put("g", comm2);
+		hmap.put("ax", comm2);
+		
+		
 		
 		// List of Second Order Communities: sub communities
 //		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
@@ -343,6 +346,7 @@ public class Assembler {
 
 			// SubGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity( communityName, graph, communityTag);
+			System.out.println("     Vertex Count After filter " + graphTemp.getVertexCount());
 			VCommunity communityTemp = null;
 			
 			if(communityClasifiers.size() == 1){
@@ -361,6 +365,7 @@ public class Assembler {
 
 					// Create temporal community
 					communityTemp = new VCommunity(tmpNode, containerTemp);
+					communityTemp.init();
 
 					
 				//}
@@ -399,9 +404,9 @@ public class Assembler {
 
 		// Create temporal community
 		VCommunity communityFather = new VCommunity(tmpNode, containerTemp);
-
-
-
+		communityFather.init();
+		
+		System.out.println("veces");
 		// Add VCommunity to list of VCommunities
 		return communityFather;
 	}

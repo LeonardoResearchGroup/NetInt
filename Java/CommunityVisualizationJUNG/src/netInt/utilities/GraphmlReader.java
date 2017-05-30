@@ -146,16 +146,19 @@ public class GraphmlReader {
 					// For the remaining attributes
 					// Check if it does exist a property matching other
 					// attributes
-					System.out.println("nodeImportAttributes: " + nodeImportAttributes[i]);
-					System.out.println("value: " + vertex.getProperty(nodeImportAttributes[i]));
-					System.out.println("Boorrar: " );
-					addCommunity2(vertex.getProperty(nodeImportAttributes[i]).toString());
-					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-						nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
-					} else {
-						// for root importing
-						throw new NullPointerException();
-					}
+//					System.out.println("nodeImportAttributes: " + nodeImportAttributes[i]);
+//					System.out.println("value: " + vertex.getProperty(nodeImportAttributes[i]));
+//					System.out.println("Boorrar: " );
+//					addCommunity2(vertex.getProperty(nodeImportAttributes[i]).toString());
+					//if (vertex.getProperty(nodeImportAttributes[i]) != null) {
+						//nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]).toString());
+						String a = vertex.getProperty(nodeImportAttributes[1]).toString().substring(vertex.getProperty(nodeImportAttributes[1]).toString().length() - 1);
+						addCommunity2(a);
+						nodeTmp.setAttribute("ax", a);
+//					} else {
+//						// for root importing
+//						throw new NullPointerException();
+//					}
 				} catch (NullPointerException e) {
 					System.out.println(this.getClass().getName()
 							+ " NullPointerException making nodes with remaining attributes ");
