@@ -14,7 +14,10 @@ package netInt.visualElements.gui;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
+import javax.lang.model.element.Parameterizable;
 
 import controlP5.Accordion;
 import controlP5.CheckBox;
@@ -27,6 +30,7 @@ import controlP5.Textfield;
 import controlP5.Toggle;
 import netInt.GraphPad;
 import netInt.utilities.Assembler;
+import netInt.utilities.ClassLoader;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.SerializeHelper;
 import netInt.utilities.SerializeWrapper;
@@ -142,8 +146,8 @@ public class ControlPanel extends PApplet {
 		main.setColorBackground(0xff353535);
 		secondary.setColorBackground(0xff353535);
 
-		String[] fileFunctions = { "Open", "Save", "Import", "Export", "Quit" };
-		main.addScrollableList("File").setPosition(10, 55).setSize(180, 85).setBarHeight(18).setItemHeight(13)
+		String[] fileFunctions = { "Open", "Save", "Import", "Export","Load Module", "Quit"};
+		main.addScrollableList("File").setPosition(10, 55).setSize(180, 100).setBarHeight(18).setItemHeight(13)
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
 
@@ -451,6 +455,7 @@ public class ControlPanel extends PApplet {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void manageFileSelection(String choice) {
 		switch (choice) {
 		case "Open":
@@ -518,6 +523,50 @@ public class ControlPanel extends PApplet {
 				javax.swing.JOptionPane.showMessageDialog(null, "No frames to export. Try loading a graph first", "",
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			}
+			break;
+			
+		case "Load Module":
+			
+			String selectedJar = ChooseHelper.getInstance().showJFileChooser(false, "jar");
+			System.out.println("-------------------------------------------------------");
+			try {
+				parent.cursor(WAIT);
+				ArrayList<Class> classes = ClassLoader.getInstance().loadClasses(selectedJar);
+				
+				//<DELETE>----------------------------------------------------------------------
+				
+				for(Class c:classes)
+				{
+					System.out.println(c.getName());
+				}
+				
+				Object[] parameters = {"S", 2.1, 2.5};
+				
+				try {
+					
+					Object response = ClassLoader.getInstance().invokeWithParameters(classes.get(2), "operar", parameters);
+					boolean response2 = (boolean) ClassLoader.getInstance().invokeWithoutParameters(classes.get(1), "showNodes");
+					
+					UserSettings.getInstance().setShowNodes(response2);
+					
+					System.out.println(response);
+					System.out.println(response2);
+					
+				} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
+						| IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			} catch (IOException | ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				parent.cursor(ARROW);
+			}
+			
+			//</DELETE>----------------------------------------------------------------------
 			break;
 
 		case "Quit":

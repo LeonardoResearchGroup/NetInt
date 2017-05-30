@@ -33,7 +33,8 @@ public class GraphPad_Example extends PApplet {
 	 * @see processing.core.PApplet#settings()
 	 */
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
+		//Original: size(displayWidth - 201, displayHeight - 100, P2D);
+		size(500,500, P2D);
 	}
 
 	/**
