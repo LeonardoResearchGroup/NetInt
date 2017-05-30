@@ -31,6 +31,21 @@ public abstract class Predicates {
 	 * 
 	 * @return
 	 */
+	public static Predicate<Node> nodeInCommunity(final String communityName, final String communityTag) {
+		Predicate<Node> nodeIncludedInSubgraph = new Predicate<Node>() {
+			public boolean evaluate(Node nodo) {
+				return nodo.belongsTo(communityName, communityTag);
+			}
+		};
+		return nodeIncludedInSubgraph;
+	}
+	
+	/**
+	 * Evaluates if a given node belongs to the named community * @param
+	 * communityName
+	 * 
+	 * @return
+	 */
 	public static Predicate<Node> nodeInCommunity(final String communityName) {
 		Predicate<Node> nodeIncludedInSubgraph = new Predicate<Node>() {
 			public boolean evaluate(Node nodo) {

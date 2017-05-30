@@ -85,7 +85,7 @@ public class ControlPanel_Example extends PApplet {
 		if (selection != null) {
 
 			// The first one defines the communities, the second the node names
-			String[] nodeAtts = { "Continent", "label" };
+			String[] nodeAtts = { "Continent", "label", "g" };
 
 			// In Graphml file format. Edge attributes copied from the graphml
 			// file.

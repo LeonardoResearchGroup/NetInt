@@ -42,6 +42,7 @@ public class GraphmlReader {
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> vCommunityNodes;
 	private ArrayList<String> communities;
+	private ArrayList<String> communities2;
 	// Edges between communities
 	private ArrayList<Edge> edgesBetweenCommunities;
 
@@ -75,6 +76,7 @@ public class GraphmlReader {
 		}
 
 		communities = new ArrayList<String>();
+		communities2 = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
 
 	}
@@ -144,6 +146,10 @@ public class GraphmlReader {
 					// For the remaining attributes
 					// Check if it does exist a property matching other
 					// attributes
+					System.out.println("nodeImportAttributes: " + nodeImportAttributes[i]);
+					System.out.println("value: " + vertex.getProperty(nodeImportAttributes[i]));
+					System.out.println("Boorrar: " );
+					addCommunity2(vertex.getProperty(nodeImportAttributes[i]).toString());
 					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
 						nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
 					} else {
@@ -314,12 +320,23 @@ public class GraphmlReader {
 	public ArrayList<String> getCommunities() {
 		return communities;
 	}
+	
+	public ArrayList<String> getCommunities2() {
+		return communities2;
+	}
 
 	private void addCommunity(String string) {
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
 			vCommunityNodes.put(string, new Node(string));
+		}
+	}
+	
+	private void addCommunity2(String string) {
+		// If community not in the list yet
+		if (!communities2.contains(string)) {
+			communities2.add(string);
 		}
 	}
 

@@ -60,6 +60,16 @@ public class Node extends GraphElement implements Serializable {
 		}
 		return rtn;
 	}
+	
+	// Methods community related
+
+	public boolean belongsTo(String community, String communityTag) {
+		boolean rtn = false;
+		if(absoluetAttributes.get(communityTag).equals(community)){
+			rtn = true;
+		}
+		return rtn;
+	}
 
 	public String getCommunityNames() {
 		String communities = "";

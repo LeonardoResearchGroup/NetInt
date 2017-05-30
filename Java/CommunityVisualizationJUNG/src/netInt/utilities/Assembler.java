@@ -16,6 +16,8 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -124,13 +126,20 @@ public class Assembler {
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
-
+		
+		ArrayList<String>comm1 = rootGraph.getCommunityNames();
+		ArrayList<String>comm2 = rootGraph.getCommunityNames2();
+		TreeMap<String, ArrayList<String>> hmap = new TreeMap<String, ArrayList<String>>();
+		hmap.put("Continent", comm1);
+		hmap.put("g", comm2);
+		
 		// List of Second Order Communities: sub communities
-		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
+//		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
 
 		// First order community: Community of communities
-		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
-				"FirstOrderCommunity", layout);
+//		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
+//				"FirstOrderCommunity", layout);
+		firstOrderVComm = createStructureRecursive((DirectedSparseMultigraph<Node, Edge> )GraphLoader.theGraph, hmap, "basic", layout);
 
 		return true;
 	}
@@ -312,18 +321,32 @@ public class Assembler {
 	public HashMap<Integer, ArrayList<String>> hmap = new HashMap<Integer, ArrayList<String>>();
 	
 	
-	public VNode createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph, HashMap<Integer, ArrayList<String>> communityClasifiers, int counter){
-		for(String a : communityClasifiers.get(counter)){
-			String communityName = a;
+	public VCommunity createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph, TreeMap<String, ArrayList<String>> communityClasifiers,
+			String nameCommunity, int layout){
+		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+		String communityTag = communityClasifiers.firstKey();
+		int numberOfCommunities = communityClasifiers.get(communityTag).size();
+		System.out.println("     number of communities " + numberOfCommunities);
+		
+		// Color
+		boolean colorBlindSafe = false;
+		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
+		ColorBrewer myBrewer = qualitativePalettes[2];
+		Color[] myGradient = myBrewer.getColorPalette(numberOfCommunities);
+		//
+		//for(String a : communityClasifiers.get(counter)){
+		for(int i = 0; i < numberOfCommunities;  i++){
+			System.out.println("     community number " + i);
+			String communityName = communityClasifiers.get(communityTag).get(i);
 
 			System.out.println("     Working on community " + communityName);
 
 			// SubGraph of each community
-			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(graph, communityName);
-			ArrayList<VNode> vn;
-			VCommunity communityTemp;
-			if(counter == 0){
-				for (Node n : graphTemp.getVertices()) {
+			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity( communityName, graph, communityTag);
+			VCommunity communityTemp = null;
+			
+			if(communityClasifiers.size() == 1){
+				//for (Node n : graphTemp.getVertices()) {
 					SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
 
 					// Name container
@@ -340,36 +363,39 @@ public class Assembler {
 					communityTemp = new VCommunity(tmpNode, containerTemp);
 
 					
-				}
+				//}
 				
 			}else{
-				for (Node n : graphTemp.getVertices()) {
-					communityTemp = createStructureRecursive(graphTemp, x,x);
-					
-				}
+				//for (Node n : graphTemp.getVertices()) {
+				System.out.println("Recurseando");
+				//communityClasifiers.remove(communityTag);
+				TreeMap<String, ArrayList<String>> communityClasifiers2 = new TreeMap<String, ArrayList<String>>(communityClasifiers);
+				communityClasifiers2.remove(communityTag);
+				communityTemp = createStructureRecursive(graphTemp, communityClasifiers2, communityName, layout );
+				//}
 			}
 			
-			vn.add(communityTemp);
+			vCommunities.add(communityTemp);
 			
 			
 		}
 		// SubContainers for each VCommunity
-		SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
+		SubContainer containerTemp = new SubContainer(graph, layout, new Dimension(600, 600), new Color(5));
 
 		// Name container
-		containerTemp.setName(communityName);
+		containerTemp.setName(nameCommunity);
 
 		// Initialize container
 		// containerTemp.initialize();
 
 		// Make Node for CommunityCover
-		Node tmpNode = new Node(communityName);
+		Node tmpNode = new Node(nameCommunity);
 		
 		
-		containerTemp.assignVisualElements(vn);
+		containerTemp.assignVisualElements(vCommunities);
 
 		// Name Node
-		tmpNode.setName(communityName);
+		tmpNode.setName(nameCommunity);
 
 		// Create temporal community
 		VCommunity communityFather = new VCommunity(tmpNode, containerTemp);
@@ -380,9 +406,11 @@ public class Assembler {
 		return communityFather;
 	}
 	
+	/**
 	public void createStructureIterative(VCommunity parentCommunity, HashMap<Integer, ArrayList<String>> communityClasifiers){
 		for(ArrayList<String> a : communityClasifiers.get(arg0)){
 			
 		}
 	}
+	*/
 }

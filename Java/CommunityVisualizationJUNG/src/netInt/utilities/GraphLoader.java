@@ -81,6 +81,11 @@ public class GraphLoader {
 			return null;
 		}
 	}
+	
+	public ArrayList<String> getCommunityNames2() {
+			System.out.println("Borrar");
+			return GMLreader.getCommunities2();
+	}
 
 	/**
 	 * Uses 0 as index because this method is only used for root Graphs
