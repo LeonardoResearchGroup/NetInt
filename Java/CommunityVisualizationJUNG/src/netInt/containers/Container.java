@@ -101,7 +101,6 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 			} else {
-				System.out.println(this.getClass().getName() + " Initializing nodes in a full container of " + getName());
 				distributeNodesInLayout(currentLayout, dimension);
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
