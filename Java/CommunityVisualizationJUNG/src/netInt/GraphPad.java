@@ -161,6 +161,9 @@ public class GraphPad {
 			if (UserSettings.getInstance().getFileExportName() != null) {
 				exportFrameAsPNG();
 			}
+			
+//			ColorMap.getInstance("plasma").show(this,20,20);
+			
 		} else {
 			if (netIntLogo != null)
 				parent.image(netIntLogo, 100, 50);
