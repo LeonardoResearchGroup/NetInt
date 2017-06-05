@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="libs/processing/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="libs/processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
+	<classpathentry kind="lib" path="libs/colorMaps/jViridis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
