@@ -159,7 +159,7 @@ public class VEdge implements Serializable {
 						bezier.drawBezier2D(Canvas.app, 2f);
 						bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
 					} else {
-						bezier.drawBezier2D(Canvas.app, 1f);
+						bezier.drawBezier2D(Canvas.app, thickness);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 					}
 				} else {
