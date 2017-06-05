@@ -14,11 +14,13 @@ package netInt.visualElements;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.graphElements.Edge;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.gui.UserSettings;
 import netInt.visualElements.primitives.VisualAtom;
+import processing.core.PApplet;
 import processing.core.PVector;
 
 /**
@@ -38,21 +40,20 @@ public class VEdge implements Serializable {
 	// The curve linking the nodes
 	private Bezier bezier;
 	// Visual Attributes
-	private float thickness;
+	private float thickness = 1;
+	private float scaleFactor  = 5;
 	// UserSettings
 	private String attributeName = "no_attribute";
 	private String converterName = Mapper.LINEAR;
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
-		thickness = 1;
 	}
 
 	public VEdge(VNode source, VNode target) {
 		this.edge = new Edge(source.getNode(), target.getNode(), true);
 		this.vSource = source;
 		this.vTarget = target;
-		thickness = 1;
 	}
 
 	/**
@@ -109,27 +110,32 @@ public class VEdge implements Serializable {
 				
 				// Set thickness
 				try {
-					
-					// determine the diameter based on the user selected
+					// determine the thickness based on the user selected
 					// attribute name
 					if (UserSettings.getInstance().getEdgeFilters() != null) {
 						if (!attributeName.equals(UserSettings.getInstance().getEdgeFilters())) {
 							attributeName = UserSettings.getInstance().getEdgeFilters();
 							float value = edge.getFloatAttribute(attributeName);
-							float tmp = Mapper.getInstance().convert(converterName, value, 5, Mapper.EDGE,
-									attributeName);
-							setThickness(tmp);
+							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
+							//System.out.println("VEdge > value of " + attributeName + " :" + value + ", mapped to: " + tmp);
+							setThickness(scaleFactor* tmp);
+
+							/// COLOR TEMPORARY
+							ColorMap cMap = new ColorMap("plasma");
+							float mappedVal = Mapper.getInstance().convert(Mapper.LINEAR, value, Mapper.EDGE, attributeName);
+							int mappedColor = cMap.getColorRGB(PApplet.map (mappedVal,0,8,0,1));
+							bezier.setColor(mappedColor);
 						}
 
-						// determine the diameter based on the user selected
+						// determine the thickness based on the user selected
 						// converter name
 						if (!converterName.equals(UserSettings.getInstance().getConverterEdge())) {
 							if (UserSettings.getInstance().getConverterEdge() != null)
 								converterName = UserSettings.getInstance().getConverterEdge();
 							float value = edge.getFloatAttribute(attributeName);
-							float tmp = Mapper.getInstance().convert(converterName, value, 5, Mapper.EDGE,
+							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE,
 									attributeName);
-							setThickness(tmp);
+							setThickness(scaleFactor* tmp);
 						}
 					}
 				} catch (NullPointerException npe) {

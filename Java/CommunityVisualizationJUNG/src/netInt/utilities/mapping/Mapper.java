@@ -32,11 +32,11 @@ public class Mapper {
 	// CONVERTER
 	public static final String LINEAR = "linear";
 	public static final String SINUSOIDAL = "sinusoidal";
-	public static final String LOGARITMIC = "logarithmic";
+	public static final String LOGARITHMIC = "logarithmic";
 	public static final String RADIAL = "radial";
 	public static final String SIGMOID = "sigmoid";
 
-	private String[] converters = {"linear","sinusoidal","logarithmic","radial","sigmoid"};
+	private String[] converters = { "linear", "sinusoidal", "logarithmic", "radial", "sigmoid" };
 	// MAXs & MINs nodes
 	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
 	private CategoricalCollection nodeCategoricalAttributes;
@@ -68,14 +68,12 @@ public class Mapper {
 	 *            filter name
 	 * @param val
 	 *            the number to be mapped
-	 * @param factor
-	 *            the desired max output value
 	 * @param graphElementClassName
 	 * @param graphAttribute
 	 * @return the value mapped equals to a number between 0 and 1 X factor
 	 */
-	public float convert(String converter, float val, float factor, String graphElementClassName, String graphAttribute) {
-		float rtn = Float.NEGATIVE_INFINITY;
+	public float convert(String converter, float val, String graphElementClassName, String graphAttribute) {
+		float rtn = Float.POSITIVE_INFINITY;
 		switch (converter) {
 		case "linear":
 			if (graphElementClassName.equals(Mapper.NODE))
@@ -105,30 +103,11 @@ public class Mapper {
 				rtn = sigmoid(val, getMinMaxForEdges(graphAttribute));
 			break;
 		}
-		
-		rtn = rtn * factor;
-		
-		if (graphElementClassName.equals(Mapper.NODE)){
-			// Maximal node diameter
-			if (rtn > factor)
-				rtn = factor;
-			// Minimal diameter or thickness
-			if (rtn < 3)
-				rtn = 3;
-		}
-
-		if (graphElementClassName.equals(Mapper.EDGE)){
-			// Maximal node visibility
-			if (rtn > factor)
-				rtn = factor;
-			// Minimal diameter or thickness
-			if (rtn < 1)
-				rtn = 1;
-		}
 
 		if (rtn < 0) {
-			System.out.println(this.getClass().getName() + "   *** Error in " + converter + " filter trying to map : "
-					+ val + ", using the graph atttribute: " + graphAttribute + ". Value mapped to 0");
+			System.out.println("Mapper > Error in " + converter + " filter for att: " + graphAttribute + ". [min="
+					+ getMinMaxForEdges(graphAttribute)[0] + ", max=" + getMinMaxForEdges(graphAttribute)[1]
+					+ "]. Value: " + val + " corresponds to : " + rtn + ". Less than 0, thus mapped as 0");
 			rtn = 0;
 		}
 
@@ -141,6 +120,8 @@ public class Mapper {
 	 * The keys of the TreeMap are the concatenation of the following Strings:
 	 * graphElementClassName + "_" + AttributeName. For example the weight of an
 	 * edge is stored with the key Edge_Weight
+	 * 
+	 * @param graphElementClassName
 	 * 
 	 * @param attributeName
 	 *            The attribute of either a node or edge. Example "weight",
@@ -157,8 +138,8 @@ public class Mapper {
 					this.getClass().getName() + "> wrong attribute name: " + attributeName + " at getMaxMin()");
 		}
 		if (rtn[0] == rtn[1]) {
-			rtn[0] = 0;
-			rtn[1] = 5;
+			System.out.println(this.getClass().getName() + "> WARNING: min and max values of node attribute "
+					+ attributeName + " are equal");
 		}
 		return rtn;
 	}
@@ -173,16 +154,15 @@ public class Mapper {
 					this.getClass().getName() + "> wrong attribute name: " + attributeName + " at getMaxMin()");
 		}
 		if (rtn[0] == rtn[1]) {
-			rtn[0] = 0;
-			rtn[1] = 5;
+			System.out.println(this.getClass().getName() + "> WARNING: min and max values of edge attribute "
+					+ attributeName + " are equal");
 		}
 		return rtn;
 	}
 
 	// Linear mapping
 	private float linear(float val, float[] minMax) {
-		float yp = PApplet.map(val, minMax[0], minMax[1], 0, 1);
-		return yp;
+		return PApplet.map(val, minMax[0], minMax[1], 0, 1);
 	}
 
 	// Sinusoidal mapping
@@ -194,11 +174,13 @@ public class Mapper {
 	 * @return
 	 */
 	private float sinusoidal(float val, float[] minMax) {
-		// The radians are the limits if the circumference quarter to
+		// The radians are the limits of the circumference quarter to
 		// be used in the filter. PI to HALF_PI is the third quarter counter
 		// clockwise
 		float xp = PApplet.map(val, minMax[0], minMax[1], PApplet.PI, PApplet.HALF_PI);
 		float y = PApplet.sin(xp);
+		if (y < 0)
+			y = 0;
 		return y;
 	}
 
@@ -228,10 +210,8 @@ public class Mapper {
 	 * 
 	 * @param val
 	 *            : the value to be filtered
-	 * @param minOut
-	 *            : the output lower bound
-	 * @param maxOut
-	 *            : the output upper bound
+	 * @param minMax
+	 *            : [0] for min and [1] for max output lower bound
 	 * @param alpha
 	 *            : the width of the input intensity range
 	 * @param beta
@@ -262,13 +242,13 @@ public class Mapper {
 
 	// Logarithmic mapping
 	/**
-	 * Logarithm base 10
+	 * Base 10 Logarithm
 	 * 
 	 * @param weight
 	 * @return
 	 */
 	private float log(float weight) {
-		float rtn = (float) Math.log(weight);
+		float rtn = (float) Math.log10(weight);
 		return rtn;
 	}
 
@@ -493,7 +473,7 @@ public class Mapper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the min and max value stored in a collection of node attributes. It
 	 * initializes the collection if attributes in case it is equal to null
@@ -578,24 +558,31 @@ public class Mapper {
 		return converters;
 	}
 
-	public ArrayList <String> getNodeNumericalAttributeKeys(){
+	public ArrayList<String> getNodeNumericalAttributeKeys() {
 		return nodeAttributesMin.getAttributeKeys();
 	}
-	
-	public ArrayList <String> getEdgeNumericalAttributeKeys(){
+
+	public ArrayList<String> getEdgeNumericalAttributeKeys() {
 		return edgeAttributesMin.getAttributeKeys();
 	}
-	
+
 	/**
-	 * Get the list of graph element attributes stores in a categorical collection
+	 * Get the list of graph element attributes stores in a categorical
+	 * collection
 	 * 
 	 * @param GraphElementClassName
 	 *            The name of the graph element class. It must be either "Node"
 	 *            or "Edge"
 	 * @return
 	 */
-	public ArrayList <String> getCategorialAttributesKeys(String GraphElementClassName){
+	public ArrayList<String> getCategorialAttributesKeys(String GraphElementClassName) {
 		return nodeCategoricalAttributes.getAttributeKeys(GraphElementClassName);
 	}
 
+//	public static void main(String args[]) {
+//		float val = PApplet.map(100000000f, 1000f, 100000000f, PApplet.PI, PApplet.HALF_PI);
+//		System.out.println(Math.sin(val));
+//	}
+
 }
+

@@ -48,6 +48,7 @@ public class VNode extends VisualAtom implements Serializable {
 	// converter used to map node visual attributes. It gets its value from the
 	// UserSettings
 	private String converterName = Mapper.LINEAR;
+	private int minDiameter = 3;
 
 	public VNode(Node node, float x, float y) {
 		super(x, y);
@@ -174,16 +175,24 @@ public class VNode extends VisualAtom implements Serializable {
 				if (UserSettings.getInstance().getNodeFilters() != null)
 					attributeName = UserSettings.getInstance().getNodeFilters();
 				float value = node.getFloatAttribute(attributeName);
-				float tmp = Mapper.getInstance().convert(converterName, value, 60, Mapper.NODE, attributeName);
-				setDiameter(tmp);
+				float tmp = Mapper.getInstance().convert(converterName, value, Mapper.NODE, attributeName);
+				if (tmp < minDiameter) {
+					setDiameter(minDiameter);
+				} else {
+					setDiameter(tmp*60);
+				}
 			}
 			// determine the diameter based on the user selected converter name
 			if (!converterName.equals(UserSettings.getInstance().getConverterNode())) {
 				if (UserSettings.getInstance().getConverterNode() != null)
 					converterName = UserSettings.getInstance().getConverterNode();
 				float value = node.getFloatAttribute(attributeName);
-				float tmp = Mapper.getInstance().convert(converterName, value, 60, Mapper.NODE, attributeName);
-				setDiameter(tmp);
+				float tmp = Mapper.getInstance().convert(converterName, value, Mapper.NODE, attributeName);
+				if (tmp < minDiameter) {
+					setDiameter(minDiameter);
+				} else {
+					setDiameter(tmp*60);
+				}
 			}
 		} catch (NullPointerException npe) {
 			// npe.printStackTrace();

@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 
+import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.utilities.Assembler;
 import netInt.utilities.TestPerformance;
@@ -162,7 +163,7 @@ public class GraphPad {
 				exportFrameAsPNG();
 			}
 			
-//			ColorMap.getInstance("plasma").show(this,20,20);
+			ColorMap.getInstance("plasma").show(parent,20,20);
 			
 		} else {
 			if (netIntLogo != null)
