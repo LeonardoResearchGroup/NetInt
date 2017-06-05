@@ -35,10 +35,10 @@ public class Bezier {
 	private PVector A, B, cA, cB;
 	private int localAlpha;
 	// The bezier body color.
-	private Color bodyColor = new Color(200, 200, 200);
+	private Color bodyColor = new Color(147, 111, 180);
 	// The body color in current use
 	private Color currentColor = bodyColor;
-	private Color headColor = new Color(125, 125, 25);
+	private Color headColor = new Color(200, 200, 200);
 	private Color tailColor = new Color(232, 20, 23);
 	private Color propagated = new Color(250, 0, 0);
 	// The default angle of control points
