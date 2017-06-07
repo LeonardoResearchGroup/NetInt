@@ -156,7 +156,7 @@ public class GraphmlReader {
 				}
 			}
 
-			// Load all the node attributes from the graphml file
+			// Load all the remaining node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
 				if (nodeTmp.getAttribute(key) == null) {
 					nodeTmp.setAttribute(key, vertex.getProperty(key));

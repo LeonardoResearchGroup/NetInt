@@ -118,14 +118,19 @@ public class ImportMenu implements ControlListener {
 		if (controllerName.equals("loadGraph")) {
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeList.attributes));
 			UserSettings.getInstance().setDescriptiveStatisticKeys(temp);
+			
 			System.out.println("Node import selection:");
+			
 			for (int i = 0; i < nodeList.getSelection().length; i++) {
 				System.out.println("..." + nodeList.attributes[i] + ": " + nodeList.getSelection()[i] + ", ");
 			}
+			
 			System.out.println("Edge import selection:");
+			
 			for (int i = 0; i < edgeList.getSelection().length; i++) {
 				System.out.println("..." + edgeList.attributes[i] + ": " + edgeList.getSelection()[i] + ", ");
 			}
+			
 			System.out.println("_ _ _");
 			// If the user selected at least the first two attributes from the
 			// menu
