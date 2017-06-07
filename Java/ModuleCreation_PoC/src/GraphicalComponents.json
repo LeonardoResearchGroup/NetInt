@@ -1,0 +1,18 @@
+{
+  "graphicalElements": 
+                        [
+                          {
+                            "buttonName": "MyButton1",
+                            "buttonType": "Button",
+                            "methodName": "MyMethod1",
+                            "className": "MyClass1"
+                          },
+                          {
+                            "buttonName": "MyButton2",
+                            "buttonType": "Button",
+                            "methodName": "MyMethod2",
+                            "className": "MyClass2"
+                          }
+                        ]
+  
+}

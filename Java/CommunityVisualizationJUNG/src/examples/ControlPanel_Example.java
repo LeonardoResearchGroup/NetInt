@@ -12,11 +12,18 @@
 package examples;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
+import netInt.utilities.JsonReader;
+import netInt.utilities.entities.JsonModuleFile;
+import netInt.utilities.entities.ModuleGraphicalElement;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.gui.ControlPanel;
 import processing.core.PApplet;
@@ -115,6 +122,7 @@ public class ControlPanel_Example extends PApplet {
 	}
 
 	public static void main(String[] args) {
+		
 		PApplet.main("examples.ControlPanel_Example");
 	}
 }
