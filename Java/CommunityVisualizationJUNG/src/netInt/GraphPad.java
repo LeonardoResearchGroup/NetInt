@@ -24,13 +24,16 @@ import processing.core.PVector;
  * This is the central class of NetInt. It inherits from Processing.PApplet thus
  * it encloses all the functionalities of a Processing sketch.
  * 
- * It could be instantiated in three ways. The simplest way is to invoke
- * GraphPad(boolean) to launch a visualization pad and a Console Catcher. If the
- * parameter is true, it opens a Control Panel to choose the graphml file. The
- * second way is to invoke GraphPad(File) or GraphPad(String) parameterizing the
- * file path. It launches the visualization pad but omits launching the Control
- * Panel. The third way is to run the included main class. The latter needs to
- * set the graph path inside the body of the main method
+ * It could be instantiated in three ways. The simplest way is to invoke the
+ * constructor GraphPad(boolean) to launch a visualization pad and a Console
+ * Catcher. If its parameter is true, it opens a Control Panel to choose the
+ * graphml file, else there were no means to load the file and the developer
+ * would need to modify the selectImport() method.
+ * 
+ * The second way is to invoke GraphPad(File) or GraphPad(String) parameterizing
+ * the file path. It launches the visualization pad but omits to launch the
+ * Control Panel. The third way is to run the included main class. The latter
+ * needs to set the graph path inside the body of the main method
  * 
  * The loading flow of each instantiation method is as follows:
  * 
@@ -38,14 +41,14 @@ import processing.core.PVector;
  * there is no file assigned to the GraphPad instance.The user uses the import
  * button to choose the graphml file from the hard drive. Once the user clicks
  * on the import button an instance of ChooseHelper opens the file system window
- * for the user to browse the file. Once the use chooses the file, ChooseHelper
+ * for the user to browse the file. Once the user chooses the file, ChooseHelper
  * triggers the "selectImport(File)" method of the PApplet instance. GraphPad is
  * also an instance of GraphPad. Then see LOADING THE IMPORT MENU.
  * 
  * ii) GraphPad("filePath") runs the PApplet sketch and points the
  * selectImport(File) method. Then see LOADING THE IMPORT MENU
  * 
- * iii) GraphPad main uses the same procedure as GraphPad("filePath").  
+ * iii) GraphPad main uses the same procedure as GraphPad("filePath").
  * 
  * 
  * LOADING THE IMPORT MENU: Inside selectImport a method, an instance of
@@ -54,7 +57,7 @@ import processing.core.PVector;
  * with both the data retrieved from the header and an array of layout names.
  * The import menu is displayed on the PApplet for the user to choose the
  * community and label names from the lists of node attributes of each dropdown
- * menu. Both names are stored in a nodeImportAttributes array that are passed
+ * menu. Both names are stored in a nodeImportAttributes array that is passed
  * across classes up to the GraphmlReader class, where the makeNodes() method
  * uses the String in [0] to set the community attribute and the String [1] to
  * set the name of the node. If there were more attributes in the array, all but
