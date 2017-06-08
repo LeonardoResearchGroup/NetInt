@@ -46,6 +46,7 @@ public class DropDownList implements ControlListener {
 	 * graphml file into each element attribute.
 	 * 
 	 * @param attributeKeys
+	 *            the list of menu option names
 	 */
 	public void initializeList(ArrayList<String> attributeKeys) {
 		listNames = attributeKeys;
@@ -77,7 +78,7 @@ public class DropDownList implements ControlListener {
 	 */
 	private void choiceCatcher(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
-		System.out.println("DropDownList " +controllerName);
+		System.out.println("DropDownList " + controllerName);
 		// First it goes over the node attributes
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].equals(controllerName)) {
@@ -85,7 +86,7 @@ public class DropDownList implements ControlListener {
 				int value = (int) dropMenu.get(ScrollableList.class, controllerName).getValue();
 				// The value extracted from the map at that index item
 				selection[i] = (String) dropMenu.get(ScrollableList.class, controllerName).getItem(value).get("name");
-				//System.out.println(controllerName + ": " + selection[i]);
+				// System.out.println(controllerName + ": " + selection[i]);
 			}
 		}
 	}

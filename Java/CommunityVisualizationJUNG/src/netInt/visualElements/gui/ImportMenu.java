@@ -47,14 +47,16 @@ public class ImportMenu implements ControlListener {
 		// for nodes
 		nodeList = new DropDownList(graphPad, "Node Attributes");
 		nodeList.setPos(100, 100);
-		String[] nodeAttributeNames = { "Community", "Label"};
-		//String[] nodeAttributeNames = { "Community", "Label", "Size", "Color" };
+		String[] nodeAttributeNames = { "Community", "Label" };
+		// String[] nodeAttributeNames = { "Community", "Label", "Size", "Color"
+		// };
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// for edges
 		edgeList = new DropDownList(graphPad, "Edge Attributes");
 		edgeList.setPos(100, 250);
-		//String[] edgeAttributeNames = { "Body thickness", "Target thickness", "Body color", "Target Color" };
+		// String[] edgeAttributeNames = { "Body thickness", "Target thickness",
+		// "Body color", "Target Color" };
 		String[] edgeAttributeNames = { "Body thickness" };
 		edgeList.setAttributes(edgeAttributeNames);
 
@@ -64,8 +66,6 @@ public class ImportMenu implements ControlListener {
 		String[] layoutAttributeNames = { "Choose one" };
 		layoutList.setAttributes(layoutAttributeNames);
 	}
-	
-
 
 	/**
 	 * Creates two ContorlP5.Group, one for nodes and one for edges. Both groups
@@ -77,7 +77,9 @@ public class ImportMenu implements ControlListener {
 	 * application
 	 * 
 	 * @param nodeAttributeKeys
+	 *            The list of node attributes retrieved from the graphml header
 	 * @param edgeAttributeKeys
+	 *            The list of edge attributes retrieved from the graphml header
 	 */
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys,
 			ArrayList<String> layoutAttributeKeys) {
@@ -137,16 +139,18 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					graphPad.getAssembler().loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
-							layoutSelection, GraphLoader.GRAPHML);
+					graphPad.getAssembler().loadGraph(GraphPad.getFile(), nodeList.getSelection(),
+							edgeList.getSelection(), layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
 				} else {
-					JOptionPane.showMessageDialog(graphPad.frame, "Missing either \"community\" or \"label\" attributes",
-							"Import warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(graphPad.frame,
+							"Missing either \"community\" or \"label\" attributes", "Import warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
-				JOptionPane.showMessageDialog(graphPad.frame, "Must select at least \"community\" and \"label\" attributes",
-						"Import warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(graphPad.frame,
+						"Must select at least \"community\" and \"label\" attributes", "Import warning",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 
