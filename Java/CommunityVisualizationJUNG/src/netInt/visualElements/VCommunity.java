@@ -65,11 +65,19 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void init() {
-		setDiameter(Mapper.getInstance().convert(Mapper.LINEAR, container.size(), 150, Mapper.NODE, "Community size"));
-		if (this.getDiameter() < 20)
+		float temp = Mapper.getInstance().convert(Mapper.LINEAR, container.size(), Mapper.NODE, "Community size");
+
+		if ((temp * 150) < 20) {
 			setDiameter(20);
-		comCover.setStrokeThickness(
-				(int) Mapper.getInstance().convert(Mapper.LINEAR, container.size(), 10, Mapper.NODE, "Community size"));
+		} else {
+			setDiameter(temp * 150);
+		}
+
+		if ((temp * 10) < 2) {
+			comCover.setStrokeThickness(2);
+		} else {
+			comCover.setStrokeThickness((int) (temp * 10));
+		}
 	}
 
 	public void show() {

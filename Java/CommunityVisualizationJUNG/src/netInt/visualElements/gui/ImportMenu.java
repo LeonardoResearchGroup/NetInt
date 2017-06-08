@@ -24,7 +24,6 @@ import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.mapping.Mapper;
-import processing.core.PApplet;
 
 /**
  * The menu displayed to assign attributes from the graph file to the
@@ -36,19 +35,17 @@ import processing.core.PApplet;
 public class ImportMenu implements ControlListener {
 	private ControlP5 importMenu;
 	private DropDownList nodeList, edgeList, layoutList;
-	public PApplet parent;
-	private boolean enableExtrasAtControlPanel;
+	public GraphPad graphPad;
 
-	public ImportMenu(PApplet app, boolean extras) {
-		this.parent = app;
-		enableExtrasAtControlPanel = extras;
+	public ImportMenu(GraphPad app) {
+		this.graphPad = app;
 	}
 
 	public void init() {
-		importMenu = new ControlP5(parent);
+		importMenu = new ControlP5(graphPad);
 
 		// for nodes
-		nodeList = new DropDownList(parent, "Node Attributes");
+		nodeList = new DropDownList(graphPad, "Node Attributes");
 		nodeList.setPos(100, 100);
 		String[] nodeAttributeNames = { "Community", "Label" };
 		// String[] nodeAttributeNames = { "Community", "Label", "Size", "Color"
@@ -56,7 +53,7 @@ public class ImportMenu implements ControlListener {
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// for edges
-		edgeList = new DropDownList(parent, "Edge Attributes");
+		edgeList = new DropDownList(graphPad, "Edge Attributes");
 		edgeList.setPos(100, 250);
 		// String[] edgeAttributeNames = { "Body thickness", "Target thickness",
 		// "Body color", "Target Color" };
@@ -64,7 +61,7 @@ public class ImportMenu implements ControlListener {
 		edgeList.setAttributes(edgeAttributeNames);
 
 		// for layout
-		layoutList = new DropDownList(parent, "Visualization Layout");
+		layoutList = new DropDownList(graphPad, "Visualization Layout");
 		layoutList.setPos(100, 400);
 		String[] layoutAttributeNames = { "Choose one" };
 		layoutList.setAttributes(layoutAttributeNames);
@@ -80,24 +77,25 @@ public class ImportMenu implements ControlListener {
 	 * application
 	 * 
 	 * @param nodeAttributeKeys
+	 *            The list of node attributes retrieved from the graphml header
 	 * @param edgeAttributeKeys
+	 *            The list of edge attributes retrieved from the graphml header
 	 */
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys,
 			ArrayList<String> layoutAttributeKeys) {
 		// Initialize variables
 		init();
+		importMenu.setVisible(true);
+		nodeList.dropMenu.setVisible(true);
+		edgeList.dropMenu.setVisible(true);
+		layoutList.dropMenu.setVisible(true);
+		//
 		nodeList.initializeList(nodeAttributeKeys);
 		edgeList.initializeList(edgeAttributeKeys);
 		layoutList.initializeList(layoutAttributeKeys);
 		importMenu.addBang("loadGraph").setPosition(100, 500).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
 		importMenu.getController("loadGraph").addListener(this);
-
-		// make them visible
-		importMenu.setVisible(true);
-		nodeList.dropMenu.setVisible(true);
-		edgeList.dropMenu.setVisible(true);
-		layoutList.dropMenu.setVisible(true);
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
@@ -141,15 +139,16 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					GraphPad.app.loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
-							layoutSelection, GraphLoader.GRAPHML);
+					graphPad.getAssembler().loadGraph(GraphPad.getFile(), nodeList.getSelection(),
+							edgeList.getSelection(), layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
 				} else {
-					JOptionPane.showMessageDialog(parent.frame, "Missing either \"community\" or \"label\" attributes",
-							"Import warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(graphPad.frame,
+							"Missing either \"community\" or \"label\" attributes", "Import warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
-				JOptionPane.showMessageDialog(parent.frame,
+				JOptionPane.showMessageDialog(graphPad.frame,
 						"Must select at least \"community\" and \"label\" attributes", "Import warning",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -161,8 +160,6 @@ public class ImportMenu implements ControlListener {
 			ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys();
 			ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
 			ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);
-			if (enableExtrasAtControlPanel)
-				ControlPanel.getInstance().enableStatistics();
 		}
 
 		// Hide Import Menu from main panel
