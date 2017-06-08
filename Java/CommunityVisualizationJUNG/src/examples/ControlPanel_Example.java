@@ -13,11 +13,18 @@ package examples;
 
 import netInt.GraphPad;
 
+/**
+ * This example makes use of the GraphPad constructor that receives a boolean
+ * parameter that enables or disables the control panel. 
+ * 
+ * @author jsalam
+ *
+ */
 public class ControlPanel_Example {
 
 	public ControlPanel_Example() {
-			// Initialize GraphPad with no parameters
-			new GraphPad(true);
+		// Initialize GraphPad with no parameters
+		new GraphPad(true);
 	}
 
 	public static void main(String[] args) {

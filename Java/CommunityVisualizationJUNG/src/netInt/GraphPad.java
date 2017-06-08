@@ -27,10 +27,39 @@ import processing.core.PVector;
  * It could be instantiated in three ways. The simplest way is to invoke
  * GraphPad(boolean) to launch a visualization pad and a Console Catcher. If the
  * parameter is true, it opens a Control Panel to choose the graphml file. The
- * second way is to invoke GraphPad("filePath") parameterizing the file path. It
- * launches the visualization pad but omits launching the Control Panel. The
- * third way is to run the included main class. The latter needs to set the graph
- * path inside the body of the main method
+ * second way is to invoke GraphPad(File) or GraphPad(String) parameterizing the
+ * file path. It launches the visualization pad but omits launching the Control
+ * Panel. The third way is to run the included main class. The latter needs to
+ * set the graph path inside the body of the main method
+ * 
+ * The loading flow of each instantiation method is as follows:
+ * 
+ * i) GraphPad(boolean) runs the PApplet sketch and loads the Control Panel is
+ * there is no file assigned to the GraphPad instance.The user uses the import
+ * button to choose the graphml file from the hard drive. Once the user clicks
+ * on the import button an instance of ChooseHelper opens the file system window
+ * for the user to browse the file. Once the use chooses the file, ChooseHelper
+ * triggers the "selectImport(File)" method of the PApplet instance. GraphPad is
+ * also an instance of GraphPad. Then see LOADING THE IMPORT MENU.
+ * 
+ * ii) GraphPad("filePath") runs the PApplet sketch and points the
+ * selectImport(File) method. Then see LOADING THE IMPORT MENU
+ * 
+ * iii) GraphPad main uses the same procedure as GraphPad("filePath").  
+ * 
+ * 
+ * LOADING THE IMPORT MENU: Inside selectImport a method, an instance of
+ * GraphmlKeyReader reads the header of the graphml file, instantiate the
+ * ImportMenu class and populate its dropdown menus using the makeList() method
+ * with both the data retrieved from the header and an array of layout names.
+ * The import menu is displayed on the PApplet for the user to choose the
+ * community and label names from the lists of node attributes of each dropdown
+ * menu. Both names are stored in a nodeImportAttributes array that are passed
+ * across classes up to the GraphmlReader class, where the makeNodes() method
+ * uses the String in [0] to set the community attribute and the String [1] to
+ * set the name of the node. If there were more attributes in the array, all but
+ * the last would be community parameters. The last is always reserved for the
+ * name of the node. Such loading attributes operation happens at loading time.
  * 
  * @author jsalam
  * @version alpha
@@ -114,7 +143,7 @@ public class GraphPad extends PApplet {
 		 * Output Console Catcher. The line below enables a console Catcher.
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
-		 consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 
 		// Canvas
 		System.out.println("Building Canvas");
