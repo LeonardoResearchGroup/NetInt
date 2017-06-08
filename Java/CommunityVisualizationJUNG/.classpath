@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="images"/>
 	<classpathentry kind="lib" path="libs/blueprints-core-2.6.0.jar"/>
 	<classpathentry kind="lib" path="libs/controlP5.jar"/>
 	<classpathentry kind="lib" path="libs/JUNG/jung-graph-impl-2.0.1.jar"/>

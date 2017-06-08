@@ -20,67 +20,25 @@ import org.jcolorbrewer.ColorBrewer;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import netInt.GraphPad;
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
+import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
+import processing.core.PConstants;
 
-/**
- * <p>
- * An instance of this class puts together all the components retrieved from the
- * source graph and arranges them in instances of <tt>VCommunity</tt> (visual
- * communities).
- * </p>
- * <p>
- * NetInt principle is to create nested visual communities. The visual community
- * at the top of the hierarchical structure is named <i>root community</i>. As
- * any <tt>VCommunity</tt>, it contains VCommunities (is any), nodes and edges
- * in a unique <tt>Container</tt>. The root visual community can be used to
- * visualize a graph with no partitions. Caveat: as the focus of NetInt is to
- * visualize nested communities such function is not enabled in this version.
- * </p>
- * <p>
- * In a nested structure of <tt>VCommunity</tt>'s, a <i>first order</i>
- * <tt>VCommunity</tt> is the top tier that contains a set of
- * <tt>VCommunity</tt>'s named as <i>second order</i> communities. The latter
- * might contain the next tier of <tt>VCommunity</tt>'s named as <i>third
- * order</i> communities, and so on. The communities at the bottom tier must
- * contain the nodes and edges.
- * </p>
- * <p>
- * The current version of NetInt has been tested with two tiers but it is
- * designed to support virtually unlimited number of tiers.
- * </p>
- * 
- * @author juan salamanca
- *
- */
 public class Assembler {
 
 	// Visual Communities
-	private VCommunity rootVCommunity;
+	// private VCommunity rootVCommunity;
 	public static VCommunity firstOrderVComm;
 	public static ArrayList<VCommunity> secondOrderVComm;
-
 	// These Dimensions set the RootContainer and top SubContainer boundaries
-	private Dimension rootDimension;
-
-	/**
-	 * Dimension to be used in screens with resolution at 1280 X 720 px.
-	 */
+	public Dimension rootDimension;
 	public static Dimension HD720 = new Dimension(1280, 720);
-
-	/**
-	 * Dimension to be used in screens with resolution at 1920 X 1080 px.
-	 */
 	public static Dimension HD1080 = new Dimension(1920, 1080);
-
-	/**
-	 * Dimension to be used in screens with resolution at 3840 X 2160 px.
-	 */
 	public static Dimension UHD = new Dimension(3840, 2160);
 
 	public Assembler(int width, int height) {
@@ -92,36 +50,35 @@ public class Assembler {
 	}
 
 	/**
-	 * Loads and builds a graph with partitions from a given graph-formated file
-	 * (graphml or pajek) using the import attributes selected by the user
+	 * Loads and builds a graph from a given graph-formated file (graphml or
+	 * pajek) using the import attributes selected by the user
 	 * 
 	 * @param file
 	 *            The path to the source file
 	 * @param nodeImportAtts
-	 *            User selection from Import Menu or Community and name keys
-	 *            from graphml File
+	 *            User selection from Import Menu
 	 * @param edgeImportAtts
-	 *            User selection from Import Menu or edge keys from graphml file
+	 *            User selection from Import Menu
 	 * @param layout
-	 *            The node distribution layout. See constants in Container class
+	 *            The node distribution layout
 	 * @param format
-	 *            Graphml or Pajek. Graphml by default. See constants in
-	 *            GraphLoader class
+	 *            Graphml or Pajek. Graphml by default.
 	 * @return true if the graph was loaded successfully
 	 */
 	public boolean loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
-		// Progress report on console
+		// Progress repoort on console
 		System.out.println(this.getClass().getName() + " Loading graph");
-
-		// Set file if null
-		if (GraphPad.getFile() == null)
-			GraphPad.setFile(file);
-
+		Canvas.app.cursor(PConstants.WAIT);
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
+
+		// Root visual community.
+		// Keep it commented unless you want to visualize the root graph with no
+		// communities
+		// rootVCommunity = createRootVCommunity(rootGraph.jungGraph);
 
 		// List of Second Order Communities: sub communities
 		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
@@ -129,48 +86,7 @@ public class Assembler {
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 				"FirstOrderCommunity", layout);
-
-		return true;
-	}
-
-	/**
-	 * Loads and builds a graph with no partitions from a given graph-formated
-	 * file (graphml or pajek) using only edge import attributes
-	 * 
-	 * @param file
-	 *            The path to the source file
-	 * @param edgeImportAtts
-	 *            User defined edge keys from graphml file
-	 * @param layout
-	 *            The node distribution layout. See constants in Container class
-	 * @param format
-	 *            Graphml or Pajek. Graphml by default. See constants in
-	 *            GraphLoader class
-	 * @deprecated
-	 * @return true if the graph was loaded successfully
-	 */
-	public boolean loadGraphAsRoot(File file, String[] edgeImportAtts, int layout, int format) {
-		// Progress report on console
-		System.out.println(this.getClass().getName() + " Loading graph as Root");
-
-		// Set file if null
-		if (GraphPad.getFile() == null)
-			GraphPad.setFile(file);
-
-		// In Graphml file format. Node attributes copied from the graphml file.
-		// The first one defines the communities, the second the node names
-		String[] nodeAtts = { "", "" };
-
-		// Instantiate a graphLoader
-		new GraphLoader(file.getAbsolutePath(), nodeAtts, edgeImportAtts, format);
-
-		// Set rootGraph to Assembler and Filters
-		Filters.getInstance().setRootGraph();
-
-		// Keep it commented unless you want to visualize the root graph with no
-		// communities
-		rootVCommunity = createRootVCommunity(GraphLoader.theGraph);
-
+		Canvas.app.cursor(PConstants.ARROW);
 		return true;
 	}
 
@@ -179,9 +95,9 @@ public class Assembler {
 	 * contains all the VNodes
 	 * 
 	 * @param graph
-	 * @return the root VCommunity
+	 * @return
 	 */
-	private VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
+	public VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, rootDimension);
 		mainCommunity.setName("Root");
@@ -284,26 +200,13 @@ public class Assembler {
 	}
 
 	public void show() {
+		// rootVCommunity.show();
 		firstOrderVComm.show();
 		firstOrderVComm.searchNode();
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public void showRoot() {
-		rootVCommunity.show();
 	}
 
 	public ArrayList<VCommunity> getVisualCommunities() {
 		return secondOrderVComm;
 	}
 
-	public Dimension getRootDimension() {
-		return rootDimension;
-	}
-
-	public void setRootDimension(Dimension rootDimension) {
-		this.rootDimension = rootDimension;
-	}
 }

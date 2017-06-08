@@ -1,24 +1,19 @@
-/*******************************************************************************
- * This library is free software. You can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the 
- * Free Software Foundation; either version 2.1 of the License, or (at your option) 
- * any later version. This library is distributed  WITHOUT ANY WARRANTY;
- * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
- * for more information.
- * 	
- * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
- *******************************************************************************/
 package netInt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import jViridis.ColorMap;
-import netInt.canvas.Canvas;
 import netInt.utilities.Assembler;
-import netInt.utilities.TestPerformance;
+import netInt.utilities.GraphmlKeyReader;
+import netInt.utilities.console.ConsoleCatcher;
+import netInt.canvas.Canvas;
+import netInt.visualElements.gui.ControlPanel;
+import netInt.visualElements.gui.ImportMenu;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -26,42 +21,37 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 /**
- * <p>
- * This is the central class of NetInt library. An instance of this class always
- * needs a <tt>processing.PApplet</tt> to operate. The enclosed instance of
- * <tt>Assembler</tt> is in charge of putting retrieving the graph from the
- * source file, generate the <tt>VCommunity</tt>'s (visual communities) and all
- * the visual elements that represent each vertex and edge of the source graph.
- * </p>
- * <p>
- * It also encloses and instance of <tt>Canvas</tt> that handles the canvas on
- * top of which visual elements are drawn, mouseEvents are detected, and spatial
- * transformations such as zoom and pan are controlled.
- * </p>
- * <p>
- * An option to monitor the usage of JVM resources is to instantiate
- * <tt>TestPerformence</tt> to display on the canvas the status of heap memory
- * and other features of the virtual machine.
- * </p>
+ * This is the central class of NetInt. It inherits from Processing.PApplet thus
+ * it encloses all the functionalities of a Processing sketch.
  * 
- * @author Juan Salamanca
+ * It could be instantiated in three ways. The simplest way is to invoke
+ * GraphPad(boolean) to launch a visualization pad and a Console Catcher. If the
+ * parameter is true, it opens a Control Panel to choose the graphml file. The
+ * second way is to invoke GraphPad("filePath") parameterizing the file path. It
+ * launches the visualization pad but omits launching the Control Panel. The
+ * third way is to run the included main class. The latter needs to set the graph
+ * path inside the body of the main method
+ * 
+ * @author jsalam
  * @version alpha
+ * @date June 2017
  *
  */
-public class GraphPad {
-
-	public PApplet parent;
-
+public class GraphPad extends PApplet {
 	// Class that assembles the graph with the visual elements
-	public static Assembler app;
+	private Assembler app;
 
 	// The canvas on top of which visual elements and mouse events occur
-	public Canvas canvas;
+	private Canvas canvas;
+
+	// The floating window displaying system messages
+	protected ConsoleCatcher consoleCatcher;
+
+	// The menu displayed once a graph file is selected
+	protected static ImportMenu importMenu;
 
 	// True if the graph is successfully retrieved and loaded from the source
 	private static boolean activeGraph;
-
-	private TestPerformance performance;
 
 	// Instance attributes
 	private PImage netIntLogo;
@@ -70,40 +60,43 @@ public class GraphPad {
 	/**
 	 * Launches a visualization pad together with a Console Catcher
 	 * 
-	 * @param parent
-	 *            The PApplet serving as sketch pad
 	 * @param args
 	 *            The path to the grap file
+	 * @throws FileNotFoundException
 	 */
-	public GraphPad(PApplet parent, String args) {
-		this.parent = parent;
+	public GraphPad(String args) throws FileNotFoundException {
+		super();
 		GraphPad.file = new File(args);
-		init();
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
 	/**
 	 * Launches a visualization pad together with a Console Catcher
 	 * 
-	 * @param parent
-	 *            The PApplet serving as sketch pad
 	 * @param args
 	 *            The graph file
+	 * @throws FileNotFoundException
 	 */
-	public GraphPad(PApplet parent, File args) {
-		this.parent = parent;
+	public GraphPad(File args) throws FileNotFoundException {
+		super();
 		GraphPad.file = args;
-		init();
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
 	/**
-	 * Launches a visualization pad
+	 * Launches a visualization pad together with Console Catcher
 	 * 
-	 * @param parent
-	 *            The PApplet serving as sketch pad
+	 * @param enableControlPanel
+	 *            if true it launches a Control Panel
 	 */
-	public GraphPad(PApplet parent) {
-		this.parent = parent;
-		init();
+	public GraphPad(boolean enableControlPanel) {
+		super();
+		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
+		if (enableControlPanel) {
+			if (GraphPad.file == null) {
+				new ControlPanel(this, 200, this.height - 25);
+			}
+		}
 	}
 
 	/**
@@ -113,28 +106,28 @@ public class GraphPad {
 	 * 
 	 * @see processing.core.PApplet#setup()
 	 */
-	private void init() {
-		// Set PApplet global properties
-		parent.textSize(10);
-		//Original: parent.getSurface().setLocation(200, -300);
-		parent.getSurface().setLocation(0,0);
-		parent.smooth();
+	public void setup() {
+		textSize(10);
+		surface.setLocation(200, -300);
+		smooth();
+		/*
+		 * Output Console Catcher. The line below enables a console Catcher.
+		 * WARNING, it might trigger conflicts with Menu's File Open.
+		 */
+		 consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 
 		// Canvas
 		System.out.println("Building Canvas");
-		canvas = new Canvas(parent);
-		parent.getSurface().setTitle("NetInt. Networked Interaction Visualization in Java ");
+		canvas = new Canvas(this);
+		surface.setTitle("NetInt. Java Networked Interaction Visualization ");
 
 		// Assembling network
 		System.out.println("Instantiating Graph Assembler");
 		app = new Assembler(Assembler.HD720);
 		setActiveGraph(false);
-
-		// The path to the icon
-		 netIntLogo = parent.loadImage("./images/netInt.png");
-
-		// Performance
-		performance = new TestPerformance();
+		netIntLogo = loadImage("./data/images/netInt.png");
+		selectImport(file);
+		System.out.println("** SETUP completed **");
 	}
 
 	/**
@@ -144,46 +137,56 @@ public class GraphPad {
 	 * 
 	 * @see processing.core.PApplet#draw()
 	 */
-	public void show() {
+	public void draw() {
+		background(UserSettings.getInstance().getColorBackground());
 		if (activeGraph) {
-			parent.pushMatrix();
-			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
-					(parent.height - app.getRootDimension().height) / 2);
+			pushMatrix();
+			canvas.translateCenter((width - app.rootDimension.width) / 2, (height - app.rootDimension.height) / 2);
 			canvas.transform();
 			// canvas.originCrossHair();
 			app.show();
-			parent.popMatrix();
-			canvas.showLegend(new PVector(parent.width - 20, 20));
-			canvas.displayValues(new PVector(parent.width - 20, 40));
+			popMatrix();
+			canvas.showLegend(new PVector(width - 20, 20));
+			canvas.displayValues(new PVector(width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
-			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
-
 			// export a frame as png
 			if (UserSettings.getInstance().getFileExportName() != null) {
 				exportFrameAsPNG();
 			}
-			
-			ColorMap.getInstance("plasma").show(parent,20,20);
-			
+			ColorMap.getInstance("plasma").show(this, 20, 20);
 		} else {
-			if (netIntLogo != null)
-				parent.image(netIntLogo, 100, 50);
-			else
-				parent.text("Missing NetInt Logo", 100, 50);
+			image(netIntLogo, 100, 50);
 		}
 
 		// Signature Message :)
-		parent.textAlign(PConstants.LEFT);
-		parent.fill(186, 216, 231);
-		parent.text("NetInt® | Built with Processing 3 | Leonardo & I2T Research Groups, U. Icesi. 2017", 20,
-				parent.height - 10);
+		textAlign(PConstants.LEFT);
+		fill(186, 216, 231);
+		text("NetInt® | Built with Processing 3 | Leonardo & I2T Research Groups, U. Icesi. 2017", 20, height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.setEventOnCanvas(false);
 		UserSettings.getInstance().setEventOnVSettings(false);
 	}
 
-	public boolean isActiveGraph() {
+	/**
+	 * Required method from parent class. Define here the size of the
+	 * visualization pad
+	 * 
+	 * @see processing.core.PApplet#settings()
+	 */
+	public void settings() {
+		size(displayWidth - 201, displayHeight - 100, P2D);
+	}
+
+	public Assembler getAssembler() {
+		return app;
+	}
+
+	public void setAssembler(Assembler val) {
+		app = val;
+	}
+
+	public boolean isActiveGraphA() {
 		return activeGraph;
 	}
 
@@ -195,8 +198,28 @@ public class GraphPad {
 		return file;
 	}
 
-	public static void setFile(File file) {
-		GraphPad.file = file;
+	/**
+	 * Receives the file with the path pointing to the graph file and triggers
+	 * an import process. The import process follows the parameters chosen by
+	 * the user from the import menu.
+	 * 
+	 * The method is invoked by showFileChooser() at the ChooseHelper class
+	 * 
+	 * @param selection
+	 *            The file to be imported
+	 */
+	public void selectImport(File selection) {
+		if (selection != null) {
+			file = selection;
+			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
+			// this creates and displays the menu
+			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
+			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
+			// Import Menu
+			System.out.println("Instantiating Import Menu");
+			importMenu = new ImportMenu(this);
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
+		}
 	}
 
 	/**
@@ -205,7 +228,7 @@ public class GraphPad {
 	 * 
 	 * @return A "siphon" that collects all the output messages from the System
 	 */
-	public static ByteArrayOutputStream initSystemOutToConsole() {
+	protected ByteArrayOutputStream initSystemOutToConsole() {
 		// Create a stream to hold the output
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps = new PrintStream(baos);
@@ -218,12 +241,22 @@ public class GraphPad {
 	 * Exports the last frame of the draw loop in format "png"
 	 */
 	private void exportFrameAsPNG() {
-		parent.cursor(PApplet.WAIT);
-		parent.saveFrame(UserSettings.getInstance().getFileExportName());
+		this.cursor(WAIT);
+		saveFrame(UserSettings.getInstance().getFileExportName());
 		javax.swing.JOptionPane.showMessageDialog(null,
 				"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "png", "",
 				javax.swing.JOptionPane.INFORMATION_MESSAGE);
 		UserSettings.getInstance().setFileExportName(null);
-		parent.cursor(PApplet.ARROW);
+		this.cursor(ARROW);
+	}
+
+	public static void main(String[] args) {
+		if (args != null) {
+			try {
+				new GraphPad("insert your file path here");
+			} catch (FileNotFoundException fnfe) {
+				System.out.println("File not found. Check your main parameters in GraphPad Class");
+			}
+		}
 	}
 }
