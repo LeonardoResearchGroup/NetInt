@@ -13,6 +13,8 @@ package examples;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import com.google.gson.JsonIOException;
@@ -22,8 +24,10 @@ import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.JsonReader;
+import netInt.utilities.ModuleLoader;
 import netInt.utilities.entities.JsonModuleFile;
 import netInt.utilities.entities.ModuleGraphicalElement;
+import netInt.utilities.entities.exceptions.ModuleLoadingException;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.gui.ControlPanel;
 import processing.core.PApplet;
@@ -123,6 +127,15 @@ public class ControlPanel_Example extends PApplet {
 
 	public static void main(String[] args) {
 		
-		PApplet.main("examples.ControlPanel_Example");
+		try {
+			ModuleLoader.getInstance().loadModules("C:\\Users\\DiegoFernando\\Desktop\\Nueva_carpeta");
+		} catch (JsonSyntaxException | JsonIOException | ClassNotFoundException | ModuleLoadingException
+				| URISyntaxException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		//PApplet.main("examples.ControlPanel_Example");
 	}
 }

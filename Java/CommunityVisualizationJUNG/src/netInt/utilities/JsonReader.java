@@ -11,9 +11,10 @@
  *******************************************************************************/
 package netInt.utilities;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -58,18 +59,19 @@ public class JsonReader {
 	 * This method allows to read a json file from a module. 
 	 * Based on https://www.mkyong.com/java/how-do-convert-java-object-to-from-json-format-gson-api/
 	 * 
-	 * @param jsonFile - The path of the json file.
+	 * @param jsonFile - The stream of the json file.
 	 * @return Wrapper entity.
 	 * @throws FileNotFoundException Throwable exception.
 	 * @throws JsonIOException Throwable exception.
 	 * @throws JsonSyntaxException Throwable exception.
 	 */
-	public JsonModuleFile readJson(File jsonFile) throws JsonSyntaxException, JsonIOException, FileNotFoundException
+	public JsonModuleFile readJson(InputStream jsonFile) throws JsonSyntaxException, JsonIOException, FileNotFoundException
 	{
 		Gson gson = new Gson();
-
 		// 1. JSON to Java object, read it from a file.
-		JsonModuleFile file = gson.fromJson(new FileReader(jsonFile), JsonModuleFile.class);
+		//Based on: https://stackoverflow.com/questions/5200187/convert-inputstream-to-bufferedreader
+		Reader reader = new InputStreamReader(jsonFile);	
+		JsonModuleFile file = gson.fromJson(reader, JsonModuleFile.class);
 
 		return file;
 	}
