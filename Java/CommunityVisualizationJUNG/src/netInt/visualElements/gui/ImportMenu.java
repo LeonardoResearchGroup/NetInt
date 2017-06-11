@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
+import chooserGui.SelectableList;
 import controlP5.Bang;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
@@ -24,6 +25,7 @@ import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.mapping.Mapper;
+import processing.core.PApplet;
 
 /**
  * The menu displayed to assign attributes from the graph file to the
@@ -35,6 +37,9 @@ import netInt.utilities.mapping.Mapper;
 public class ImportMenu implements ControlListener {
 	private ControlP5 importMenu;
 	private DropDownList nodeList, edgeList, layoutList;
+	// SelectableList is a custom made GUI for this project thus it is not part
+	// of ControlP5
+	private SelectableList communities;
 	public GraphPad graphPad;
 
 	public ImportMenu(GraphPad app) {
@@ -46,11 +51,18 @@ public class ImportMenu implements ControlListener {
 
 		// for nodes
 		nodeList = new DropDownList(graphPad, "Node Attributes");
-		nodeList.setPos(100, 100);
-		String[] nodeAttributeNames = { "Community", "Label" };
+		// nodeList.setPos(100, 100);
+		nodeList.setPos(400, 100);
+		String[] nodeAttributeNames = { "Label" };
+		// String[] nodeAttributeNames = { "Community", "Label" };
 		// String[] nodeAttributeNames = { "Community", "Label", "Size", "Color"
 		// };
 		nodeList.setAttributes(nodeAttributeNames);
+
+		// Selectable List
+		communities = new SelectableList(graphPad, 100f, 100f, "Node Attributes", "Nesting order");
+		// BY now set the capacity to 1 nested tier
+		communities.setMaxCapacityTargetList(1);
 
 		// for edges
 		edgeList = new DropDownList(graphPad, "Edge Attributes");
@@ -65,6 +77,7 @@ public class ImportMenu implements ControlListener {
 		layoutList.setPos(100, 400);
 		String[] layoutAttributeNames = { "Choose one" };
 		layoutList.setAttributes(layoutAttributeNames);
+
 	}
 
 	/**
@@ -89,10 +102,21 @@ public class ImportMenu implements ControlListener {
 		nodeList.dropMenu.setVisible(true);
 		edgeList.dropMenu.setVisible(true);
 		layoutList.dropMenu.setVisible(true);
-		//
+
+		// populate the nodeList
 		nodeList.initializeList(nodeAttributeKeys);
+
+		// populate the selectable list
+		String[] nodeAttributes = nodeAttributeKeys.toArray(new String[nodeAttributeKeys.size()]);
+		communities.makeItems(graphPad, nodeAttributes);
+
+		// Populate edge list
 		edgeList.initializeList(edgeAttributeKeys);
+
+		// Populate layout list
 		layoutList.initializeList(layoutAttributeKeys);
+
+		// Add load button
 		importMenu.addBang("loadGraph").setPosition(100, 500).setSize(100, 20).setTriggerEvent(Bang.RELEASE)
 				.setLabel("Load graph");
 		importMenu.getController("loadGraph").addListener(this);
@@ -113,22 +137,33 @@ public class ImportMenu implements ControlListener {
 	private void choiceCatcher(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
 		System.out.println("ImportMenu " + controllerName);
+
+		// If the load graph button is pressed
 		if (controllerName.equals("loadGraph")) {
+
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeList.attributes));
 			UserSettings.getInstance().setDescriptiveStatisticKeys(temp);
+
+			// get the user selection for nodes
 			System.out.println("Node import selection:");
 			for (int i = 0; i < nodeList.getSelection().length; i++) {
 				System.out.println("..." + nodeList.attributes[i] + ": " + nodeList.getSelection()[i] + ", ");
 			}
+
+			// get the user selection for edges
 			System.out.println("Edge import selection:");
 			for (int i = 0; i < edgeList.getSelection().length; i++) {
 				System.out.println("..." + edgeList.attributes[i] + ": " + edgeList.getSelection()[i] + ", ");
 			}
 			System.out.println("_ _ _");
-			// If the user selected at least the first two attributes from the
-			// menu
-			if (nodeList.getSelection().length >= 2) {
+
+			// Verify if the user selected at least the first two node
+			// attributes from the menu: one for community and one for label
+			if (communities.getOrderedTargetList().length >= 1 && nodeList.getSelection().length >= 1) {
+
+				// Active the graph in the graphPad
 				GraphPad.setActiveGraph(true);
+
 				// If the user does not select a layout, Fruchterman_Reingold is
 				// assigned by default
 				int layoutSelection;
@@ -137,10 +172,13 @@ public class ImportMenu implements ControlListener {
 				} catch (ArrayIndexOutOfBoundsException e) {
 					layoutSelection = Container.FRUCHTERMAN_REINGOLD;
 				}
+
 				// Ask the assembler to load the graph
-				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					graphPad.getAssembler().loadGraph(GraphPad.getFile(), nodeList.getSelection(),
-							edgeList.getSelection(), layoutSelection, GraphLoader.GRAPHML);
+				// if (nodeList.getSelection()[0] != null &&
+				// nodeList.getSelection()[1] != null) {
+				if (communities.getOrderedTargetList()[0] != null && nodeList.getSelection()[1] != null) {
+					graphPad.getAssembler().loadGraph(GraphPad.getFile(), communities.getOrderedTargetList(),
+							nodeList.getSelection(), edgeList.getSelection(), layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
 				} else {
 					JOptionPane.showMessageDialog(graphPad.frame,

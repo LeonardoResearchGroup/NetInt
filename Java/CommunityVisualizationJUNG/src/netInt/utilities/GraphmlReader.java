@@ -95,7 +95,7 @@ public class GraphmlReader {
 	 * @return The collection of nodes ordered by the Integer version of their
 	 *         Id
 	 */
-	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes, boolean saveCategoricalAttributes) {
+	private TreeMap<Integer, Node> makeNodes(String[] nestedAttributesOrder, String[] nodeImportAttributes, boolean saveCategoricalAttributes) {
 		System.out.println(this.getClass().getName() + " Instantiating Nodes...");
 
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
@@ -112,14 +112,14 @@ public class GraphmlReader {
 			try {
 				// For the first two attributes: node community and node
 				// name
-				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
+				if (vertex.getProperty(nestedAttributesOrder[0]) != null) {
 
 					// set root community as absolute attribute
 					nodeTmp.setCommunity("Root", 0);
 
 					// set next community as relative attribute
-					nodeTmp.setCommunity(vertex.getProperty(nodeImportAttributes[0]).toString(), 1);
-					addCommunity(vertex.getProperty(nodeImportAttributes[0]).toString());
+					nodeTmp.setCommunity(vertex.getProperty(nestedAttributesOrder[0]).toString(), 1);
+					addCommunity(vertex.getProperty(nestedAttributesOrder[0]).toString());
 				} else {
 					// for root importing, set root community to absolute and
 					// relative attributes
@@ -128,11 +128,11 @@ public class GraphmlReader {
 				}
 
 				// Label
-				if (vertex.getProperty(nodeImportAttributes[1]) != null) {
-					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[1]).toString());
+				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
+					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[0]).toString());
 				} else {
 					nodeTmp.setName("no name yet");
-					//throw new NullPointerException();
+					// throw new NullPointerException();
 				}
 
 			} catch (NullPointerException e) {
@@ -175,7 +175,7 @@ public class GraphmlReader {
 	/**
 	 * GENERAL METHOD TO GET THE JUNG GRAPH
 	 * 
-	 * @param nodeImportAttributes
+	 * @param nodeLabelAttributes
 	 *            the vector of node attributes
 	 * @param edgeImportAttributes
 	 *            the vector of edge attributes
@@ -187,8 +187,8 @@ public class GraphmlReader {
 	 *            names will be stored in the collection
 	 * @return
 	 */
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nodeImportAttributes,
-			String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
+	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nestedAttributesOrder,
+			String[] nodeLabelAttributes, String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
@@ -197,7 +197,7 @@ public class GraphmlReader {
 		vCommunityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
-		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes, saveCategoricalAttributes);
+		TreeMap<Integer, Node> nodes = makeNodes(nestedAttributesOrder, nodeLabelAttributes, saveCategoricalAttributes);
 
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
