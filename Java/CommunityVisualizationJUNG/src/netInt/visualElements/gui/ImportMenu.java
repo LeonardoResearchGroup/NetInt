@@ -25,7 +25,6 @@ import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.mapping.Mapper;
-import processing.core.PApplet;
 
 /**
  * The menu displayed to assign attributes from the graph file to the
@@ -46,13 +45,22 @@ public class ImportMenu implements ControlListener {
 		this.graphPad = app;
 	}
 
+	/**
+	 * This show simple draws the SelectableList on the graphPad. It is not the
+	 * best solution but it works.
+	 */
+	public void show() {
+		if (communities != null)
+			communities.show();
+	}
+
 	public void init() {
 		importMenu = new ControlP5(graphPad);
 
 		// for nodes
 		nodeList = new DropDownList(graphPad, "Node Attributes");
 		// nodeList.setPos(100, 100);
-		nodeList.setPos(400, 100);
+		nodeList.setPos(400, 80);
 		String[] nodeAttributeNames = { "Label" };
 		// String[] nodeAttributeNames = { "Community", "Label" };
 		// String[] nodeAttributeNames = { "Community", "Label", "Size", "Color"
@@ -60,9 +68,10 @@ public class ImportMenu implements ControlListener {
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// Selectable List
-		communities = new SelectableList(graphPad, 100f, 100f, "Node Attributes", "Nesting order");
-		// BY now set the capacity to 1 nested tier
-		communities.setMaxCapacityTargetList(1);
+		communities = new SelectableList(graphPad, 100f, 80f, "Node Attributes", "Nesting order");
+		communities.setItemSize(100, 12);
+		// By now set the capacity to 1 nested tier
+		//communities.setMaxCapacityTargetList(1);
 
 		// for edges
 		edgeList = new DropDownList(graphPad, "Edge Attributes");
@@ -108,7 +117,7 @@ public class ImportMenu implements ControlListener {
 
 		// populate the selectable list
 		String[] nodeAttributes = nodeAttributeKeys.toArray(new String[nodeAttributeKeys.size()]);
-		communities.makeItems(graphPad, nodeAttributes);
+		communities.setSourceItems(graphPad, nodeAttributes);
 
 		// Populate edge list
 		edgeList.initializeList(edgeAttributeKeys);
@@ -174,9 +183,7 @@ public class ImportMenu implements ControlListener {
 				}
 
 				// Ask the assembler to load the graph
-				// if (nodeList.getSelection()[0] != null &&
-				// nodeList.getSelection()[1] != null) {
-				if (communities.getOrderedTargetList()[0] != null && nodeList.getSelection()[1] != null) {
+				if (communities.getOrderedTargetList()[0] != null && nodeList.getSelection()[0] != null) {
 					graphPad.getAssembler().loadGraph(GraphPad.getFile(), communities.getOrderedTargetList(),
 							nodeList.getSelection(), edgeList.getSelection(), layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
@@ -202,6 +209,7 @@ public class ImportMenu implements ControlListener {
 
 		// Hide Import Menu from main panel
 		importMenu.setVisible(false);
+		communities.setVisible(false);
 		nodeList.dropMenu.setVisible(false);
 		edgeList.dropMenu.setVisible(false);
 		layoutList.dropMenu.setVisible(false);

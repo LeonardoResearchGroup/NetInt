@@ -30,6 +30,6 @@
 	<classpathentry kind="lib" path="libs/processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
 	<classpathentry kind="lib" path="libs/colorMaps/jViridis.jar"/>
-	<classpathentry kind="lib" path="libs/ConcentricChooser/ConcentricChooserGUI.jar"/>
+	<classpathentry kind="lib" path="libs/concentricChooser/ConcentricChooserGUI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

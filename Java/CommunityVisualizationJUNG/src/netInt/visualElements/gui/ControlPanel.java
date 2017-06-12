@@ -179,7 +179,7 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 145).setWidth(180).setMinItemHeight(160);
+		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);

@@ -171,6 +171,11 @@ public class GraphPad extends PApplet {
 	 */
 	public void draw() {
 		background(UserSettings.getInstance().getColorBackground());
+		// User defines import parameters choosing from import menu
+		if(importMenu != null){
+			importMenu.show();
+		}
+		// Once the graph is loaded...
 		if (activeGraph) {
 			pushMatrix();
 			canvas.translateCenter((width - app.rootDimension.width) / 2, (height - app.rootDimension.height) / 2);
@@ -187,7 +192,7 @@ public class GraphPad extends PApplet {
 			}
 			ColorMap.getInstance("plasma").show(this, 20, 20);
 		} else {
-			image(netIntLogo, 100, 50);
+			image(netIntLogo, 100, 30);
 		}
 
 		// Signature Message :)
