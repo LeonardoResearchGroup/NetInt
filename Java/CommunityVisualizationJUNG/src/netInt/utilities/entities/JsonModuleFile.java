@@ -21,6 +21,11 @@ import java.util.ArrayList;
 public class JsonModuleFile {
 
 	/**
+	 * The name of the module.
+	 */
+	private String moduleName;
+	
+	/**
 	 * The list of graphical elements in the new module.
 	 */
 	private ArrayList<ModuleGraphicalElement> graphicalElements;
@@ -31,6 +36,26 @@ public class JsonModuleFile {
 	public JsonModuleFile()
 	{}
 		
+	
+	/**
+	 * Allows to obtain the module name.
+	 * @return
+	 */
+	public String getModuleName() {
+		return moduleName;
+	}
+
+
+	/**
+	 * Allows to set the module name.
+	 * @param moduleName
+	 */
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
+	}
+
+
+
 	/**
 	 * Allows to get the graphical elements.
 	 * @return Graphical elements.

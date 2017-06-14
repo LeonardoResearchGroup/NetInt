@@ -11,7 +11,15 @@
  *******************************************************************************/
 package examples;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
 import netInt.GraphPad;
+import netInt.utilities.ModuleLoader;
+import netInt.utilities.entities.exceptions.ModuleLoadingException;
 
 /**
  * This example makes use of the GraphPad constructor that receives a boolean
@@ -28,8 +36,16 @@ public class ControlPanel_Example {
 	}
 
 	public static void main(String[] args) {
-
-		new ControlPanel_Example();
+		
+	try {
+		ModuleLoader.getInstance().loadModules("C:\\Users\\DiegoFernando\\Desktop\\Nueva_carpeta");
+	} catch (JsonSyntaxException | JsonIOException | ClassNotFoundException | ModuleLoadingException
+			| URISyntaxException | IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+		//new ControlPanel_Example();
 
 	}
 }

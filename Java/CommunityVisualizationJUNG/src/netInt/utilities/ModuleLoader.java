@@ -12,19 +12,12 @@
 package netInt.utilities;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.jar.JarFile;
-
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
 import netInt.utilities.entities.JarFilter;
 import netInt.utilities.entities.JsonModuleFile;
 import netInt.utilities.entities.ModuleGraphicalElement;
