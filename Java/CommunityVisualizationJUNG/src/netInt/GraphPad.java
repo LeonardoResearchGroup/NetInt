@@ -3,14 +3,22 @@ package netInt;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import jViridis.ColorMap;
 import netInt.utilities.Assembler;
 import netInt.utilities.GraphmlKeyReader;
+import netInt.utilities.ModuleAllocator;
+import netInt.utilities.ModuleLoader;
 import netInt.utilities.console.ConsoleCatcher;
+import netInt.utilities.entities.exceptions.ModuleLoadingException;
 import netInt.canvas.Canvas;
 import netInt.visualElements.gui.ControlPanel;
 import netInt.visualElements.gui.ImportMenu;
@@ -98,6 +106,7 @@ public class GraphPad extends PApplet {
 	 */
 	public GraphPad(String args) throws FileNotFoundException {
 		super();
+		loadModules();
 		GraphPad.file = new File(args);
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
@@ -111,6 +120,7 @@ public class GraphPad extends PApplet {
 	 */
 	public GraphPad(File args) throws FileNotFoundException {
 		super();
+		loadModules();
 		GraphPad.file = args;
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
@@ -123,6 +133,7 @@ public class GraphPad extends PApplet {
 	 */
 	public GraphPad(boolean enableControlPanel) {
 		super();
+		loadModules();
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 		if (enableControlPanel) {
 			if (GraphPad.file == null) {
@@ -280,6 +291,21 @@ public class GraphPad extends PApplet {
 				javax.swing.JOptionPane.INFORMATION_MESSAGE);
 		UserSettings.getInstance().setFileExportName(null);
 		this.cursor(ARROW);
+	}
+	
+	/**
+	 * Allows to load the user modules in the main app.
+	 */
+	private void loadModules()
+	{
+		String moduleFolder = ModuleAllocator.getInstance().getModuleFolder();
+		try {
+			ModuleLoader.getInstance().loadModules(moduleFolder);
+		} catch (JsonSyntaxException | JsonIOException | ClassNotFoundException | ModuleLoadingException
+				| URISyntaxException | IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Modules could not be loaded.");
+		}
 	}
 
 	public static void main(String[] args) {
