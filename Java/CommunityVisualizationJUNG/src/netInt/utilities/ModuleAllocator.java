@@ -100,7 +100,8 @@ public class ModuleAllocator {
 		
 		case WIN_OS:
 			
-			
+			String userHome = System.getProperty("user.home");
+			folder = userHome + "/AppData/Local/NetInt/Modules";
 			
 			break;
 			
@@ -115,7 +116,8 @@ public class ModuleAllocator {
 			
 		case MAC_OS:
 		
-
+			String userHomeMac = System.getProperty("user.home");
+			folder = userHomeMac + "/ApplicationData/NetInt/Modules";
 			
 			break;
 		
