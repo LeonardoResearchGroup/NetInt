@@ -151,7 +151,7 @@ public class GraphPad extends PApplet {
 	 */
 	public void setup() {
 		textSize(10);
-		surface.setLocation(200, -300);
+		surface.setLocation(200, 0);
 		smooth();
 		/*
 		 * Output Console Catcher. The line below enables a console Catcher.

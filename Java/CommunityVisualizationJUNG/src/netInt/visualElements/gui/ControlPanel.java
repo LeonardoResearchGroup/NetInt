@@ -15,7 +15,10 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import controlP5.Accordion;
 import controlP5.CheckBox;
 import controlP5.ControlEvent;
@@ -27,10 +30,14 @@ import controlP5.Textfield;
 import controlP5.Toggle;
 import netInt.GraphPad;
 import netInt.utilities.Assembler;
+import netInt.utilities.ClassLoader;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.ModuleAllocator;
 import netInt.utilities.SerializeHelper;
 import netInt.utilities.SerializeWrapper;
+import netInt.utilities.entities.GraphicalElementTypeConstants;
+import netInt.utilities.entities.JsonModuleFile;
+import netInt.utilities.entities.ModuleGraphicalElement;
 import netInt.utilities.mapping.Mapper;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -56,6 +63,8 @@ public class ControlPanel extends PApplet {
 	// List of graphElements attribute names
 	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
+	// Map of module graphical elements
+	private HashMap<String, ModuleGraphicalElement> moduleElements = new HashMap<String, ModuleGraphicalElement>();
 	// Groups
 	// private static Group nodeKeys;
 
@@ -176,7 +185,7 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 145).setWidth(180).setMinItemHeight(160);
+		accordion = secondary.addAccordion("acc").setPosition(10, 160).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
@@ -445,8 +454,21 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setEdgeFilters(
 					secondary.get(ScrollableList.class, "Thickness").getItem(valueE).get("name").toString());
 			break;
+
 		default:
-			// Executable.retrieveControlPanelEvent(theEvent);
+
+			// Module elements
+
+			ModuleGraphicalElement moduleElement = moduleElements.get(controllerName);
+			try {
+				ClassLoader.getInstance().invokeWithoutParameters(Class.forName(moduleElement.getClassName()),
+						moduleElement.getMethodName());
+			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
+					| IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+				javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+						javax.swing.JOptionPane.ERROR_MESSAGE);
+			}
+
 			break;
 		}
 
@@ -525,20 +547,92 @@ public class ControlPanel extends PApplet {
 
 			String selectedJar = ChooseHelper.getInstance().showJFileChooser(false, "jar");
 
-			parent.cursor(WAIT);
-			
-			ModuleAllocator.getInstance().addModule(new File(selectedJar));
+			if (selectedJar != null) {
 
-			parent.cursor(ARROW);
-			
-			javax.swing.JOptionPane.showMessageDialog(null, "Module added. Please restart your application.", "",
-					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				if (selectedJar.length() > 0) {
+
+					parent.cursor(WAIT);
+
+					ModuleAllocator.getInstance().addModule(new File(selectedJar));
+
+					parent.cursor(ARROW);
+
+					javax.swing.JOptionPane.showMessageDialog(null, "Module added. Please restart your application.",
+							"", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+				}
+
+			}
 
 			break;
 
 		case "Quit":
 			System.exit(0);
 			break;
+		}
+	}
+
+	/**
+	 * Allows to load the graphical content of the modules.
+	 * 
+	 * @param modules
+	 *            The modules to be loaded.
+	 */
+	public void loadModulesContent(ArrayList<JsonModuleFile> modules) {
+
+		// Accordion GUI
+		Accordion accordion = secondary.addAccordion("accModules").setPosition(10, 345).setWidth(180)
+				.setMinItemHeight(160);
+
+		// Group visual attributes
+		Color color = new Color(45, 45, 45);
+
+		for (JsonModuleFile module : modules) {
+			// Group instantiation
+			Group group = new Group(secondary, "Module: " + module.getModuleName());
+
+			group.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+
+			// Configuration of the module graphical elements.
+			configureModuleGraphicalElements(module.getGraphicalElements(), group);
+
+			// create a new accordion. Add group to the accordion.
+			accordion.addItem(group);
+
+			// use Accordion.MULTI to allow multiple group to be open at a time.
+			accordion.setCollapseMode(Accordion.MULTI);
+		}
+
+	}
+
+	/**
+	 * Allows to configure the graphical elements of the module.
+	 * 
+	 * @param elements
+	 *            The graphical elements of the module.
+	 * @param group
+	 *            The group where the elements are going to be added.
+	 */
+	private void configureModuleGraphicalElements(ArrayList<ModuleGraphicalElement> elements, Group group) {
+
+		for (int i = 0; i < elements.size(); i++) {
+
+			ModuleGraphicalElement element = elements.get(i);
+
+			switch (element.getButtonType()) {
+
+			case GraphicalElementTypeConstants.TOGGLE:
+
+				secondary.addToggle(element.getButtonName()).setPosition(5, 5).setSize(45, 10).setValue(true)
+						.moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+				break;
+
+			}
+
+			// Adds the element to the map.
+			moduleElements.put(element.getButtonName(), element);
+
 		}
 	}
 
