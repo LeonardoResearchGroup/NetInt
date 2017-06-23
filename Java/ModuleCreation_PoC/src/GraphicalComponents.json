@@ -3,14 +3,14 @@
   "graphicalElements": 
                         [
                           {
-                            "buttonName": "MyButton1",
-                            "buttonType": "Button",
-                            "methodName": "MyMethod1",
-                            "className": "MyClass1"
+                            "buttonName": "Random Backdround",
+                            "buttonType": "Toggle",
+                            "methodName": "generateRadomBackgroundColor",
+                            "className": "classes.MyTestClass"
                           },
                           {
                             "buttonName": "MyButton2",
-                            "buttonType": "Button",
+                            "buttonType": "Toggle",
                             "methodName": "MyMethod2",
                             "className": "MyClass2"
                           }

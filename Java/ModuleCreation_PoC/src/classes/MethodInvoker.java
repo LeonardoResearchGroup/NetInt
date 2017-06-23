@@ -9,7 +9,7 @@
  * 	
  * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
  *******************************************************************************/
-package netInt.utilities;
+package classes;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -28,14 +28,14 @@ import java.util.jar.JarFile;
  * @author lfrivera
  *
  */
-public class ClassLoader {
+public class MethodInvoker {
 
-	private static ClassLoader instance;
+	private static MethodInvoker instance;
 	
 	/**
 	 * Private constructor of the class.
 	 */
-	private ClassLoader()
+	private MethodInvoker()
 	{
 	}
 	
@@ -43,53 +43,26 @@ public class ClassLoader {
 	 * Allows to obtain the unique instance of the class.
 	 * @return Unique instance.
 	 */
-	public static ClassLoader getInstance()
+	public static MethodInvoker getInstance()
 	{
 		if(instance == null)
 		{
-			instance = new ClassLoader();
+			instance = new MethodInvoker();
 		}
 		
 		return instance;
 	}
 	
 	/**
-	 * Based on: 
-	 * https://stackoverflow.com/questions/11016092/how-to-load-classes-at-runtime-from-a-folder-or-jar
-	 * https://stackoverflow.com/questions/5266532/can-i-get-all-methods-of-a-class
-	 * 
-	 * Allows to load classes from a jar.
-	 * @param jarPath Path of the jar file.
-	 * @return List of classes.
-	 * @throws IOException Throwable exception
-	 * @throws ClassNotFoundException Throwable exception
+	 * Allows to obtain a java class object by its name.
+	 * @param name The name of the class.
+	 * @return Class object.
+	 * @throws ClassNotFoundException Throwable exception.
 	 */
 	@SuppressWarnings("rawtypes")
-	public ArrayList<Class> loadClasses(String jarPath) throws IOException, ClassNotFoundException
+	public Class obtainClassByName(String name) throws ClassNotFoundException
 	{
-		JarFile jarFile = new JarFile(jarPath);
-		Enumeration<JarEntry> e = jarFile.entries();
-
-		URL[] urls = { new URL("jar:file:" + jarPath +"!/") };
-		URLClassLoader cl = URLClassLoader.newInstance(urls);
-
-		ArrayList<Class> classes = new ArrayList<Class>();
-		
-		while (e.hasMoreElements()) {
-		    JarEntry je = e.nextElement();
-		    if(je.isDirectory() || !je.getName().endsWith(".class")){
-		        continue;
-		    }
-		    String className = je.getName().substring(0,je.getName().length()-6);
-		    className = className.replace('/', '.');
-		    Class c = cl.loadClass(className);
-		   classes.add(c);
-		    
-		}
-		
-		jarFile.close();
-		
-		return classes;
+		return Class.forName(name);
 	}
 	
 	
@@ -147,8 +120,6 @@ public class ClassLoader {
 		Class noparams[] = {};
 		
 		Object instance = c.newInstance();
-	
-		System.out.println(">>>"+instance);
 		
 		Method method = c.getDeclaredMethod(methodName, noparams);
 		

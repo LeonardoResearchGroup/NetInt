@@ -29,8 +29,10 @@ import controlP5.ScrollableList;
 import controlP5.Textfield;
 import controlP5.Toggle;
 import netInt.GraphPad;
+import netInt.utilities.ActiveModules;
 import netInt.utilities.Assembler;
 import netInt.utilities.ClassLoader;
+import netInt.utilities.ExternalClasses;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.ModuleAllocator;
 import netInt.utilities.SerializeHelper;
@@ -196,6 +198,9 @@ public class ControlPanel extends PApplet {
 		// open close sections
 		accordion.open(1, 2, 3);
 
+		//Load the module content.
+		loadModulesContent(ActiveModules.getInstance().getModules());
+		
 		// Show controller
 		secondary.show();
 
@@ -460,11 +465,13 @@ public class ControlPanel extends PApplet {
 			// Module elements
 
 			ModuleGraphicalElement moduleElement = moduleElements.get(controllerName);
+			
 			try {
-				ClassLoader.getInstance().invokeWithoutParameters(Class.forName(moduleElement.getClassName()),
+				//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<AJUSTAR
+				ClassLoader.getInstance().invokeWithoutParameters(ExternalClasses.getInstance().getClasses().get(0),
 						moduleElement.getMethodName());
 			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
-					| IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+					| IllegalArgumentException | InvocationTargetException e) {
 				javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
 						javax.swing.JOptionPane.ERROR_MESSAGE);
 			}
@@ -578,16 +585,19 @@ public class ControlPanel extends PApplet {
 	 * @param modules
 	 *            The modules to be loaded.
 	 */
-	public void loadModulesContent(ArrayList<JsonModuleFile> modules) {
+	private void loadModulesContent(ArrayList<JsonModuleFile> modules) {
 
 		// Accordion GUI
-		Accordion accordion = secondary.addAccordion("accModules").setPosition(10, 345).setWidth(180)
+		Accordion accordion = secondary.addAccordion("accModules").setPosition(10, 545).setWidth(180)
 				.setMinItemHeight(160);
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 
+	
+		
 		for (JsonModuleFile module : modules) {
+			
 			// Group instantiation
 			Group group = new Group(secondary, "Module: " + module.getModuleName());
 
@@ -601,6 +611,7 @@ public class ControlPanel extends PApplet {
 
 			// use Accordion.MULTI to allow multiple group to be open at a time.
 			accordion.setCollapseMode(Accordion.MULTI);
+			
 		}
 
 	}
@@ -622,8 +633,9 @@ public class ControlPanel extends PApplet {
 			switch (element.getButtonType()) {
 
 			case GraphicalElementTypeConstants.TOGGLE:
-
-				secondary.addToggle(element.getButtonName()).setPosition(5, 5).setSize(45, 10).setValue(true)
+				
+				
+				secondary.addToggle(element.getButtonName()).setPosition(5, 10 * (i+1)).setSize(100, 10)
 						.moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 				break;

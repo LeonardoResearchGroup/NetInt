@@ -23,6 +23,7 @@ import netInt.utilities.entities.JsonModuleFile;
 import netInt.utilities.entities.ModuleGraphicalElement;
 import netInt.utilities.entities.exceptions.ModuleLoadingException;
 import netInt.utilities.entities.exceptions.NotFolderModuleException;
+import netInt.visualElements.gui.ControlPanel;
 
 /**
  * This class allows to load modules in the main application. Implements the
@@ -159,18 +160,18 @@ public class ModuleLoader {
 	 */
 	private void loadModuleGraphicalElements(File[] modules)
 			throws JsonSyntaxException, JsonIOException, URISyntaxException, IOException {
+		
+		ArrayList<JsonModuleFile> loadedModules = new ArrayList<JsonModuleFile>();
+		
 		for (File f : modules) {
 			// Reading the graphical elements of the module.
 			JsonModuleFile moduleFile = readJson(f);
 
-			for (ModuleGraphicalElement element : moduleFile.getGraphicalElements()) {
-				System.out.println("**************************");
-				System.out.println(element.getButtonName());
-				System.out.println(element.getButtonType());
-				System.out.println(element.getClassName());
-				System.out.println(element.getMethodName());
-			}
+			loadedModules.add(moduleFile);
+
 		}
+		
+		ActiveModules.getInstance().setModules(loadedModules);
 
 	}
 
