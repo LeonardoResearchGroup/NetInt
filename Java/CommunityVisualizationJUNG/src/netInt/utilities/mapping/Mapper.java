@@ -70,7 +70,7 @@ public class Mapper {
 	 *            the number to be mapped
 	 * @param graphElementClassName
 	 * @param graphAttribute
-	 * @return the value mapped equals to a number between 0 and 1 X factor
+	 * @return the value mapped equals to a number between 0 and 1
 	 */
 	public float convert(String converter, float val, String graphElementClassName, String graphAttribute) {
 		float rtn = Float.POSITIVE_INFINITY;

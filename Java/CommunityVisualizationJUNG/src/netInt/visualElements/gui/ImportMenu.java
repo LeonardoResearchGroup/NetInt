@@ -16,11 +16,12 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
-import chooserGui.SelectableList;
 import controlP5.Bang;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
+import guiSet.GuiSet;
+import guiSet.SelectableList;
 import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
@@ -35,9 +36,11 @@ import netInt.utilities.mapping.Mapper;
  */
 public class ImportMenu implements ControlListener {
 	private ControlP5 importMenu;
-	private DropDownList nodeList, edgeList, layoutList;
+	private DropDownList nodeList;
+	private DropDownList edgeList, layoutList;
 	// SelectableList is a custom made GUI for this project thus it is not part
 	// of ControlP5
+	private GuiSet guiSet;
 	private SelectableList communities;
 	public GraphPad graphPad;
 
@@ -50,12 +53,13 @@ public class ImportMenu implements ControlListener {
 	 * best solution but it works.
 	 */
 	public void show() {
-		if (communities != null)
-			communities.show();
+		if (guiSet != null)
+			guiSet.show();
 	}
 
 	public void init() {
 		importMenu = new ControlP5(graphPad);
+		guiSet = new GuiSet(graphPad);
 
 		// for nodes
 		nodeList = new DropDownList(graphPad, "Node Attributes");
@@ -68,14 +72,15 @@ public class ImportMenu implements ControlListener {
 		nodeList.setAttributes(nodeAttributeNames);
 
 		// Selectable List
-		communities = new SelectableList(graphPad, 100f, 80f, "Node Attributes", "Nesting order");
+		communities = new SelectableList(100f, 80f, "Node Attributes", "Nesting order");
 		communities.setItemSize(100, 12);
+		guiSet.addGuiElement(communities);
 		// By now set the capacity to 1 nested tier
 		//communities.setMaxCapacityTargetList(1);
 
 		// for edges
 		edgeList = new DropDownList(graphPad, "Edge Attributes");
-		edgeList.setPos(100, 250);
+		edgeList.setPos(600, 80);
 		// String[] edgeAttributeNames = { "Body thickness", "Target thickness",
 		// "Body color", "Target Color" };
 		String[] edgeAttributeNames = { "Body thickness" };
@@ -117,7 +122,7 @@ public class ImportMenu implements ControlListener {
 
 		// populate the selectable list
 		String[] nodeAttributes = nodeAttributeKeys.toArray(new String[nodeAttributeKeys.size()]);
-		communities.setSourceItems(graphPad, nodeAttributes);
+		communities.setSourceItems(nodeAttributes);
 
 		// Populate edge list
 		edgeList.initializeList(edgeAttributeKeys);

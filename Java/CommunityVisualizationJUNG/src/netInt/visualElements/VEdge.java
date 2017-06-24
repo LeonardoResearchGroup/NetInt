@@ -41,7 +41,7 @@ public class VEdge implements Serializable {
 	private Bezier bezier;
 	// Visual Attributes
 	private float thickness = 1;
-	private float scaleFactor  = 5;
+	private float scaleFactor  = 3;
 	// UserSettings
 	private String attributeName = "no_attribute";
 	private String converterName = Mapper.LINEAR;
@@ -122,8 +122,8 @@ public class VEdge implements Serializable {
 
 							/// COLOR TEMPORARY
 							ColorMap cMap = new ColorMap("plasma");
-							float mappedVal = Mapper.getInstance().convert(Mapper.LINEAR, value, Mapper.EDGE, attributeName);
-							int mappedColor = cMap.getColorRGB(PApplet.map (mappedVal,0,8,0,1));
+							float mappedVal = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
+							int mappedColor = cMap.getColorRGB(mappedVal);
 							bezier.setColor(mappedColor);
 						}
 
@@ -160,7 +160,7 @@ public class VEdge implements Serializable {
 						bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
 					} else {
 						bezier.drawBezier2D(Canvas.app, thickness);
-						bezier.drawHeadBezier2D(Canvas.app, thickness+1, alpha);
+						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 					}
 				} else {
 					// If solo propagation
@@ -222,7 +222,9 @@ public class VEdge implements Serializable {
 		// Set the Visibility with the first Attribute of Edge Import: "Body
 		// Thickness"
 		try {
-			if (edgeVisibilityThreshold > edge.getFloatAttribute((String) keys[0]) || hidden) {
+			float value = edge.getFloatAttribute((String) keys[0]);
+			
+			if (edgeVisibilityThreshold > value || hidden) {
 				visibility = false;
 			} else {
 				visibility = true;

@@ -84,6 +84,8 @@ public class GraphmlReader {
 	 * needed to be changed to a TreeMap because it was not possible to
 	 * determine the final size of the array in advance.
 	 * 
+	 * @param nestedAttributesOrder
+	 * 
 	 * @param nodeImportAttributes
 	 *            The list of user defined attributes for node importing
 	 * @param saveCategoricalAttributes
