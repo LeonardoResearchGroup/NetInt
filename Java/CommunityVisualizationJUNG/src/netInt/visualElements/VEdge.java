@@ -20,7 +20,6 @@ import netInt.graphElements.Edge;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.gui.UserSettings;
 import netInt.visualElements.primitives.VisualAtom;
-import processing.core.PApplet;
 import processing.core.PVector;
 
 /**

@@ -13,8 +13,7 @@ import netInt.utilities.GraphmlKeyReader;
 import netInt.utilities.console.ConsoleCatcher;
 import netInt.canvas.Canvas;
 import netInt.visualElements.gui.ControlPanel;
-import netInt.visualElements.gui.ImportMenu;
-import netInt.visualElements.gui.ImportMenuB;
+import netInt.visualElements.gui.ImportMenuGuiSet;
 import netInt.visualElements.gui.UserSettings;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -81,7 +80,7 @@ public class GraphPad extends PApplet {
 	protected ConsoleCatcher consoleCatcher;
 
 	// The menu displayed once a graph file is selected
-	protected static ImportMenuB importMenu;
+	protected static ImportMenuGuiSet importMenu;
 
 	// True if the graph is successfully retrieved and loaded from the source
 	private static boolean activeGraph;
@@ -255,7 +254,7 @@ public class GraphPad extends PApplet {
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
-			importMenu = new ImportMenuB(this);
+			importMenu = new ImportMenuGuiSet(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
 		}
 	}

@@ -31,10 +31,13 @@ import netInt.utilities.mapping.Mapper;
  * The menu displayed to assign attributes from the graph file to the
  * visualization elements
  * 
+ * This class is replaced by ImportMenuGuiSet June 24 2017
+ * 
  * @author jsalam
+ * @deprecated
  *
  */
-public class ImportMenu implements ControlListener {
+public class ImportMenuOLD implements ControlListener {
 	private ControlP5 importMenu;
 	private DropDownList nodeList;
 	private DropDownList edgeList, layoutList;
@@ -44,7 +47,7 @@ public class ImportMenu implements ControlListener {
 	private SelectableList communities;
 	public GraphPad graphPad;
 
-	public ImportMenu(GraphPad app) {
+	public ImportMenuOLD(GraphPad app) {
 		this.graphPad = app;
 	}
 
