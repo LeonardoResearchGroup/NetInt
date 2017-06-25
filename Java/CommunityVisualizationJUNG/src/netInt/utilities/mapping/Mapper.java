@@ -417,6 +417,71 @@ public class Mapper {
 
 	/**
 	 * Sets the min and max value stored in a collection of attributes for
+	 * nodes. It initializes the collection of attributes in case it is equal to
+	 * null
+	 * 
+	 * @param key
+	 *            the key of the attribute
+	 * @param value
+	 *            the value
+	 * 
+	 */
+	public void setMaxMinNodeAttributes(String key, Object value) {
+		// if the min and max collections are not initialized
+		if (nodeAttributesMin == null) {
+			// min values
+			nodeAttributesMin = new NumericalCollection();
+		}
+		if (nodeAttributesMax == null) {
+			// max values
+			nodeAttributesMax = new NumericalCollection();
+		}
+		// If all collections are initialized
+		if (nodeAttributesMin.getSize() >= 0 && nodeAttributesMax.getSize() >= 0) {
+			if (NumericalCollection.isNumerical(value)) {
+				try {
+					if (value instanceof Double) {
+						// If Double convert to float
+						Double rtnObj = (Double) value;
+						Float attrFloat = rtnObj.floatValue();
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!nodeAttributesMin.addLowerValue(key, attrFloat)) {
+							nodeAttributesMax.addHigherValue(key, attrFloat);
+						}
+
+					} else if (value instanceof Integer) {
+						// If Integer
+						Integer attrInteger = (Integer) value;
+						Float attrFloat = attrInteger.floatValue();
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!nodeAttributesMin.addLowerValue(key, attrFloat)) {
+							nodeAttributesMax.addHigherValue(key, attrFloat);
+						}
+
+					} else if (value instanceof Float) {
+						// If Float
+						Float attrFloat = (Float) value;
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!nodeAttributesMin.addLowerValue(key, attrFloat)) {
+							nodeAttributesMax.addHigherValue(key, attrFloat);
+						}
+
+					} else {
+						throw new NumberFormatException();
+					}
+				} catch (NumberFormatException e) {
+					System.out.println(this.getClass().getName() + " Node Attribute named: " + key
+							+ " does not match the available Mapper data type: Double,Float,Integer");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sets the min and max value stored in a collection of attributes for
 	 * edges. It initializes the collection of attributes in case it is equal to
 	 * null
 	 * 
@@ -516,7 +581,8 @@ public class Mapper {
 	 * Sets the min and max value stored in a collection of edge attributes. It
 	 * initializes the collection if attributes in case it is equal to null
 	 * 
-	 * @param gElem the edge to set categorical attributes
+	 * @param gElem
+	 *            the edge to set categorical attributes
 	 */
 	public void setCategoricalEdgeAttributes(Edge gElem) {
 		// if the categorical collection is not initialized
@@ -588,11 +654,5 @@ public class Mapper {
 	public ArrayList<String> getCategorialAttributesKeys(String GraphElementClassName) {
 		return nodeCategoricalAttributes.getAttributeKeys(GraphElementClassName);
 	}
-
-	// public static void main(String args[]) {
-	// float val = PApplet.map(100000000f, 1000f, 100000000f, PApplet.PI,
-	// PApplet.HALF_PI);
-	// System.out.println(Math.sin(val));
-	// }
 
 }

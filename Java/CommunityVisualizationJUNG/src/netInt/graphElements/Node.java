@@ -38,8 +38,8 @@ public class Node extends GraphElement implements Serializable {
 		super();
 		RelativeAttributes metaData = new RelativeAttributes();
 		// Initialize basic attributes
-		absoluetAttributes.put("id", id);
-		absoluetAttributes.put("label", "no name");
+		absoluteAttributes.put("id", id);
+		absoluteAttributes.put("label", "no name");
 		relativeAttributes.put(0, metaData);
 	}
 
@@ -88,16 +88,16 @@ public class Node extends GraphElement implements Serializable {
 	// *** Getters and setters
 
 	public String getId() {
-		String id = (String) absoluetAttributes.get("id");
+		String id = (String) absoluteAttributes.get("id");
 		return id;
 	}
 
 	public String getName() {
-		return (String) absoluetAttributes.get("label");
+		return (String) absoluteAttributes.get("label");
 	}
 
 	public float getSize() {
-		return (Float) absoluetAttributes.get("size");
+		return (Float) absoluteAttributes.get("size");
 	}
 
 	public String getCommunity(int key) {
@@ -122,15 +122,15 @@ public class Node extends GraphElement implements Serializable {
 
 	// Setters
 	public void setId(String id) {
-		absoluetAttributes.put("id", id);
+		absoluteAttributes.put("id", id);
 	}
 
 	public void setName(String object) {
-		absoluetAttributes.put("label", object);
+		absoluteAttributes.put("label", object);
 	}
 
 	public void setSize(float size) {
-		absoluetAttributes.put("size", size);
+		absoluteAttributes.put("size", size);
 	}
 
 	// *****Get & set metrics
@@ -165,19 +165,19 @@ public class Node extends GraphElement implements Serializable {
 	// Setters metrics
 	public void setInDegree(int key, int inDegree) {
 		if (key == 0)
-			this.absoluetAttributes.put("inDegree", inDegree);
+			this.absoluteAttributes.put("inDegree", inDegree);
 		this.relativeAttributes.get(key).setCommunityInDegree(inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
 		if (key == 0)
-			this.absoluetAttributes.put("outDegree", outDegree);
+			this.absoluteAttributes.put("outDegree", outDegree);
 		this.relativeAttributes.get(key).setCommunityOutDegree(outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
 		if (key == 0)
-			this.absoluetAttributes.put("degree", degree);
+			this.absoluteAttributes.put("degree", degree);
 		this.relativeAttributes.get(key).setCommunityDegree(degree);
 	}
 

@@ -453,27 +453,49 @@ public abstract class Container {
 		return iterativeLayout;
 	}
 
-	// *** Getters and setters
+	// ****** Getters and setters *****
 	public Graph<Node, Edge> getGraph() {
 		return graph;
 	}
 
+	/**
+	 * The number of nodes in this container
+	 * @return number of nodes in this container
+	 */
 	public int size() {
 		return graph.getVertexCount();
 	}
 
 	/**
-	 * Returns a the entire set of this cvollection's VNodes containing both
-	 * VNodes and VCommunity instances
+	 * Returns a the entire set of Nodes in this container
 	 * 
 	 * @return List of nodes
+	 */
+	public Collection<Node> getNodes() {
+		return graph.getVertices();
+	}
+	
+	/**
+	 * Returns a the entire set of Edges in this container
+	 * 
+	 * @return List of edges
+	 */
+	public Collection<Edge> getEdges() {
+		return graph.getEdges();
+	}
+	
+	/**
+	 * Returns a the entire set of this collection's VNodes containing both
+	 * VNodes and VCommunity instances
+	 * 
+	 * @return List of vNodes
 	 */
 	public ArrayList<VNode> getVNodes() {
 		return vNodes;
 	}
 
 	/**
-	 * Returns a subset of this cvollection's VNodes that are also VCommunity
+	 * Returns a subset of this collection's VNodes that are also VCommunity
 	 * instances
 	 * 
 	 * @return List of VCommunities

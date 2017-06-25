@@ -15,6 +15,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
+import netInt.utilities.mapping.Mapper;
+
 /**
  * Abstract class that handles two collections for storage of graphElements'
  * attributes (either nodes or edges). The first collection contains absolute
@@ -35,9 +37,11 @@ import java.util.Set;
 public abstract class GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	// For String use the attribute name (Edge_Weight, Out_Degree). For Object
+
+	// For key use the attribute name (Edge_Weight, Out_Degree). For value
 	// use the attribute value (either Numerical or categorical)
-	protected HashMap<String, Object> absoluetAttributes;
+	protected HashMap<String, Object> absoluteAttributes;
+
 	// A set of attributes to be initiated by instances of classes that
 	// inherit from this class. The integer parameter identifies the
 	// community to which a set of relative attributes are related. (0 reserved
@@ -45,23 +49,40 @@ public abstract class GraphElement implements Serializable {
 	protected HashMap<Integer, RelativeAttributes> relativeAttributes;
 
 	public GraphElement() {
-		absoluetAttributes = new HashMap<String, Object>();
+		absoluteAttributes = new HashMap<String, Object>();
 		relativeAttributes = new HashMap<Integer, RelativeAttributes>();
 	}
 
 	// *** Getters
 	public HashMap<String, Object> getAttributes() {
-		return absoluetAttributes;
+		return absoluteAttributes;
 	}
 
+	/**
+	 * Gets the object attribute associated to the key from the map of absolute
+	 * attributes
+	 * 
+	 * @param key
+	 *            key
+	 * @return the object attribute associated to the key from the map of
+	 *         absolute attributes
+	 */
 	public Object getAttribute(String key) {
-		return absoluetAttributes.get(key);
+		return absoluteAttributes.get(key);
 	}
 
+	/**
+	 * Gets the String representation of the object attribute associated to the
+	 * key. The object is retrieved from the map of absolute attributes
+	 * 
+	 * @param key
+	 *            key
+	 * @return String representation of attribute object
+	 */
 	public String getStringAttribute(String key) {
 		String rtn = "void";
 		try {
-			rtn = absoluetAttributes.get(key).toString();
+			rtn = absoluteAttributes.get(key).toString();
 		} catch (Exception e) {
 			System.out
 					.println(this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as String");
@@ -69,42 +90,59 @@ public abstract class GraphElement implements Serializable {
 		return rtn;
 	}
 
+	/**
+	 * Gets the float value of the attribute associated to the key. The value
+	 * is retrieved from the map of absolute attributes
+	 * 
+	 * @param key
+	 *            key
+	 * @return the float value of the attribute associated to the key
+	 */
 	public float getFloatAttribute(String key) {
 		Float rtn = Float.NEGATIVE_INFINITY;
 		try {
 			// If Double
-			if (absoluetAttributes.get(key) instanceof Double) {
-				Double rtnObj = (Double) absoluetAttributes.get(key);
+			if (absoluteAttributes.get(key) instanceof Double) {
+				Double rtnObj = (Double) absoluteAttributes.get(key);
 				rtn = rtnObj.floatValue();
 				// If Integer
-			} else if (absoluetAttributes.get(key) instanceof Integer) {
-				Integer rtnObj = (Integer) absoluetAttributes.get(key);
+			} else if (absoluteAttributes.get(key) instanceof Integer) {
+				Integer rtnObj = (Integer) absoluteAttributes.get(key);
 				rtn = rtnObj.floatValue();
 				// If float
 			} else {
-				rtn = (float) absoluetAttributes.get(key);
+				rtn = (float) absoluteAttributes.get(key);
 			}
 		} catch (Exception e) {
 			System.out.println(this.getClass().getName() + " Attribute key: " + key + " value: "
-					+ absoluetAttributes.get(key).toString() + " couldn't be casted as Float");
+					+ absoluteAttributes.get(key).toString() + " couldn't be casted as Float");
 		}
 		return rtn;
 	}
+
+	/**
+	 * Gets the int value of the attribute associated to the key. The value is
+	 * retrieved from the map of absolute attributes
+	 * 
+	 * @param key
+	 *            key
+	 * @return the float value of the attribute associated to the key
+	 */
 
 	public int getIntegerAttribute(String key) {
 		Integer rtn = Integer.MIN_VALUE;
 		try {
 			// If Double
-			if (absoluetAttributes.get(key) instanceof Double) {
-				Double rtnObj = (Double) absoluetAttributes.get(key);
+			if (absoluteAttributes.get(key) instanceof Double) {
+				Double rtnObj = (Double) absoluteAttributes.get(key);
 				rtn = rtnObj.intValue();
 				// If Float
-			} else if (absoluetAttributes.get(key) instanceof Float) {
-				Float rtnObj = (Float) absoluetAttributes.get(key);
+			} else if (absoluteAttributes.get(key) instanceof Float) {
+				Float rtnObj = (Float) absoluteAttributes.get(key);
 				rtn = rtnObj.intValue();
 				// If Integer
 			} else {
-				rtn = (Integer) absoluetAttributes.get(key);
+				rtn = (Integer) absoluteAttributes.get(key);
 			}
 		} catch (Exception e) {
 			System.out.println(this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as int");
@@ -112,20 +150,35 @@ public abstract class GraphElement implements Serializable {
 		return rtn;
 	}
 
+	/**
+	 * Gets the total number of attributes of this graph element
+	 * 
+	 * @return the total number of attributes
+	 */
 	public int getAttributeSize() {
-		return absoluetAttributes.size();
+		return absoluteAttributes.size();
 	}
 
+	/**
+	 * The vector of keys associated to the attributes of this graph element
+	 * 
+	 * @return The vector of keys associated to the attributes of this graph
+	 *         element
+	 */
 	public Object[] getAttributeKeys() {
-		Set<String> keys = absoluetAttributes.keySet();
+		Set<String> keys = absoluteAttributes.keySet();
 		return keys.toArray();
 	}
 
+	/**
+	 * Prints the pairs of key-value associated to the attributes of this graph
+	 * element
+	 */
 	public void printAttributes() {
 		System.out.println("GRAPH ELEMENT> printAttributes():");
-		Set<String> s = absoluetAttributes.keySet();
+		Set<String> s = absoluteAttributes.keySet();
 		for (String keyName : s) {
-			System.out.println("   Key: " + keyName + ", Value: " + absoluetAttributes.get(keyName));
+			System.out.println("   Key: " + keyName + ", Value: " + absoluteAttributes.get(keyName));
 		}
 	}
 
@@ -165,8 +218,18 @@ public abstract class GraphElement implements Serializable {
 		relativeAttributes.put(key, metaData);
 	}
 
+	/**
+	 * Sets the attribute to this graph element. It is stored in the
+	 * absoluteAttributes HashMap
+	 * 
+	 * @param key
+	 *            key
+	 * @param value
+	 *            value
+	 */
 	public void setAttribute(String key, Object value) {
-		absoluetAttributes.put(key, value);
+		absoluteAttributes.put(key, value);
+		Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
 
 }

@@ -59,12 +59,12 @@ public class Edge extends GraphElement implements Serializable {
 	// *** Getters
 
 	public Object getAttribute(String key) {
-		return absoluetAttributes.get(key);
+		return absoluteAttributes.get(key);
 	}
 
 	public String getAttribute(String key, String rtn) {
 		try {
-			rtn = (String) absoluetAttributes.get(key);
+			rtn = (String) absoluteAttributes.get(key);
 		} catch (Exception e) {
 //			System.out.println("Node Attribute couldn't be casted att");
 		}
@@ -73,7 +73,7 @@ public class Edge extends GraphElement implements Serializable {
 
 	public float getAttribute(String key, Float rtn) {
 		try {
-			rtn = (Float) absoluetAttributes.get(key);
+			rtn = (Float) absoluteAttributes.get(key);
 		} catch (Exception e) {
 //			System.out.println("Node Attribute couldn't be casted att");
 		}
@@ -82,7 +82,7 @@ public class Edge extends GraphElement implements Serializable {
 
 	public int getAttribute(String key, Integer rtn) {
 		try {
-			rtn = (Integer) absoluetAttributes.get(key);
+			rtn = (Integer) absoluteAttributes.get(key);
 		} catch (Exception e) {
 //			System.out.println("Node Attribute couldn't be casted att");
 		}
@@ -90,7 +90,7 @@ public class Edge extends GraphElement implements Serializable {
 	}
 
 	public String getName() {
-		return (String) absoluetAttributes.get("label");
+		return (String) absoluteAttributes.get("label");
 	}
 
 	// *** Setters
