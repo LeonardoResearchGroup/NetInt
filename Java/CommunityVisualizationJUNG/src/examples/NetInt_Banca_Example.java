@@ -25,7 +25,7 @@ import processing.core.PApplet;
  * @date June 2017
  *
  */
-public class ControlPanel_Example extends PApplet {
+public class NetInt_Banca_Example extends PApplet {
 	GraphPad pad;
 
 	/**
@@ -71,11 +71,13 @@ public class ControlPanel_Example extends PApplet {
 	 *            the file chosen by the user at the Control Panel
 	 */
 	public void selectImport(File selection) {
-		
-		pad.selectImport(selection);
+
+		// The second parameter is the array of complementary module names. The
+		// modules must be imported in advance from the Control Panel.
+		pad.selectImport(selection, new String[] { "NetInt_Banca" });
 	}
 
 	public static void main(String[] args) {
-		PApplet.main("examples.ControlPanel_Example");
+		PApplet.main("examples.NetInt_Banca_Example");
 	}
 }

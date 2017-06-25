@@ -29,16 +29,59 @@ import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
 import processing.core.PConstants;
 
+/**
+ * <p>
+ * An instance of this class puts together all the components retrieved from the
+ * source graph and arranges them in instances of <tt>VCommunity</tt> (visual
+ * communities).
+ * </p>
+ * <p>
+ * NetInt defines visual communities that may be nested. The simplest visual
+ * community is named <i>root community</i>. As any <tt>VCommunity</tt>, it
+ * contains all the nodes and edges in a unique <tt>Container</tt> but they are
+ * not clustered in communities. It can be used to visualize a graph with no
+ * partitions. Caveat: as the focus of NetInt is to visualize nested communities
+ * it is not enabled in this version.
+ * </p>
+ * <p>
+ * In a nested structure of <tt>VCommunity</tt>'s, a <i>first order</i>
+ * <tt>VCommunity</tt> is the bottom tier that contains a set of
+ * <tt>VCommunity</tt>'s named as <i>second order</i> communities. The latter
+ * might contain the next tier of <tt>VCommunity</tt>'s named as <i>third
+ * order</i> communities, and so on. The communities at the top tier must
+ * contain the nodes and edges.
+ * </p>
+ * <p>
+ * The current version of NetInt has been tested with two tiers but it is
+ * designed to support virtually unlimited number of tiers.
+ * </p>
+ * 
+ * @author juan salamanca
+ *
+ */
 public class Assembler {
 
 	// Visual Communities
-	// private VCommunity rootVCommunity;
+	private VCommunity rootVCommunity;
 	public static VCommunity firstOrderVComm;
 	public static ArrayList<VCommunity> secondOrderVComm;
+
 	// These Dimensions set the RootContainer and top SubContainer boundaries
-	public Dimension rootDimension;
+	private Dimension rootDimension;
+
+	/**
+	 * Dimension to be used in screens with resolution at 1280 X 720 px.
+	 */
 	public static Dimension HD720 = new Dimension(1280, 720);
+
+	/**
+	 * Dimension to be used in screens with resolution at 1920 X 1080 px.
+	 */
 	public static Dimension HD1080 = new Dimension(1920, 1080);
+
+	/**
+	 * Dimension to be used in screens with resolution at 3840 X 2160 px.
+	 */
 	public static Dimension UHD = new Dimension(3840, 2160);
 
 	public Assembler(int width, int height) {
@@ -55,6 +98,8 @@ public class Assembler {
 	 * 
 	 * @param file
 	 *            The path to the source file
+	 * @param nestedAttributesOrder
+	 *            User selection from Import Menu
 	 * @param nodeLabelAtts
 	 *            User selection from Import Menu
 	 * @param edgeImportAtts
@@ -65,12 +110,15 @@ public class Assembler {
 	 *            Graphml or Pajek. Graphml by default.
 	 * @return true if the graph was loaded successfully
 	 */
-	public boolean loadGraph(File file, String [] nestedAttributesOrder, String[] nodeLabelAtts, String[] edgeImportAtts, int layout, int format) {
-		// Progress repoort on console
+	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeLabelAtts, String[] edgeImportAtts, int layout, int format) {
+		
+		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 		Canvas.app.cursor(PConstants.WAIT);
+		
 		// Instantiate a graphLoader
-		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nestedAttributesOrder, nodeLabelAtts, edgeImportAtts, format);
+		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nestedAttributesOrder, nodeLabelAtts,
+				edgeImportAtts, format);
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
@@ -86,9 +134,12 @@ public class Assembler {
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 				"FirstOrderCommunity", layout);
+		
 		Canvas.app.cursor(PConstants.ARROW);
+		
 		return true;
 	}
+	
 
 	/**
 	 * Creates a single VCommunity of the graph with no subCommunities yet
@@ -111,10 +162,12 @@ public class Assembler {
 
 	private VCommunity createFirstOrderVCommunity(ArrayList<Edge> firstOrderEdgeList, ArrayList<VCommunity> communities,
 			String comName, int layout) {
+		
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Create First Order Visual Community");
 		System.out.println(
 				"     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order container");
+		
 		// Make a temporary graph
 		Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 
@@ -138,9 +191,12 @@ public class Assembler {
 		// subContainer.initialize();
 
 		String nodeID = comName + "_" + String.valueOf(0);
+		
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
+		
 		// set diameter
 		communityTemp.init();
+		
 		return communityTemp;
 	}
 
@@ -156,7 +212,6 @@ public class Assembler {
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(comNames.size());
-		//
 
 		System.out.println("     Generating Graphs for " + comNames.size() + " communities ...");
 
@@ -191,11 +246,12 @@ public class Assembler {
 
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
-
 		}
+		
 		for (VCommunity vC : vCommunities) {
 			vC.init();
 		}
+		
 		return vCommunities;
 	}
 
@@ -207,6 +263,14 @@ public class Assembler {
 
 	public ArrayList<VCommunity> getVisualCommunities() {
 		return secondOrderVComm;
+	}
+
+	public Dimension getRootDimension() {
+		return rootDimension;
+	}
+
+	public void setRootDimension(Dimension rootDimension) {
+		this.rootDimension = rootDimension;
 	}
 
 }

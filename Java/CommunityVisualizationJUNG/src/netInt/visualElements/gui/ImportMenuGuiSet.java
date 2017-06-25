@@ -51,7 +51,7 @@ public class ImportMenuGuiSet implements Observer {
 
 	public ImportMenuGuiSet(GraphPad app) {
 		this.graphPad = app;
-		menu = new GuiSet(graphPad);
+		menu = new GuiSet(graphPad.parent);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ImportMenuGuiSet implements Observer {
 		menu.addGuiElement(loadButton);
 
 		// Register GUI events
-		menu.registerGuiSetEvents(graphPad);
+		menu.registerGuiSetEvents(graphPad.parent);
 
 		// Add observers to menu items
 		menu.addObserverToGuiElement(this, "Finalize import");
@@ -214,15 +214,11 @@ public class ImportMenuGuiSet implements Observer {
 
 				} else {
 
-					JOptionPane.showMessageDialog(graphPad.frame,
-							"Missing either \"community\" or \"label\" attributes", "Import warning",
-							JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(graphPad.parent.frame,"Missing either \"community\" or \"label\" attributes", "Import warning", JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
 
-				JOptionPane.showMessageDialog(graphPad.frame,
-						"Must select at least \"community\" and \"label\" attributes", "Import warning",
-						JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(graphPad.parent.frame, "Must select at least \"community\" and \"label\" attributes", "Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 
 			if (graphLoaded) {
