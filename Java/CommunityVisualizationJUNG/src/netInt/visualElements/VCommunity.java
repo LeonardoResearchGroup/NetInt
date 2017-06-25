@@ -148,21 +148,18 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
 
 				// If the container Layout iterates to distribute nodes
-				if (container.isLayoutIterative()) {
-					if (container.stepIterativeLayout(pos).done() || container.isDone()) {
+				if (container.isDone()) {
+					// Show internal edges
+					for (VEdge vE : container.getVEdges()) {
 
-						// Show internal edges
-						for (VEdge vE : container.getVEdges()) {
-
-							// If the edge has any attribute
-							if (vE.getEdge().getAttributeSize() > 0) {
-								vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
-							}
-							if (container.currentLayout == Container.CIRCULAR) {
-								vE.setLayoutAndCenter(container.currentLayout, this.pos);
-							}
-							vE.show();
+						// If the edge has any attribute
+						if (vE.getEdge().getAttributeSize() > 0) {
+							vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
 						}
+						if (container.currentLayout == Container.CIRCULAR) {
+							vE.setLayoutAndCenter(container.currentLayout, this.pos);
+						}
+						vE.show();
 					}
 				} else {
 
@@ -228,6 +225,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 
 				// VNodes
+				if (container.isLayoutIterative()) {
+
+					container.stepIterativeLayout(pos).done();
+				}
+				
 				for (VNode vN : container.getJustVNodes()) {
 					vN.setVisibility(true);
 					if (vNodesCentered) {

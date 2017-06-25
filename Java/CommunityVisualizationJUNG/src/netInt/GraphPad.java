@@ -53,7 +53,7 @@ import processing.core.PVector;
  * 
  * LOADING THE IMPORT MENU: Inside selectImport a method, an instance of
  * GraphmlKeyReader reads the header of the graphml file, instantiate the
- * ImportMenu class and populate its dropdown menus using the makeList() method
+ * ImportMenuGuiSet class and populate its dropdown menus using the makeList() method
  * with both the data retrieved from the header and an array of layout names.
  * The import menu is displayed on the PApplet for the user to choose the
  * community and label names from the lists of node attributes of each dropdown
