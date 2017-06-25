@@ -95,7 +95,7 @@ public class ControlPanel extends PApplet {
 	 * 
 	 * @param _parent
 	 *            parent PApplet
-	 * @param logo
+	 * @param image
 	 *            The application logo
 	 * @param _w
 	 *            window width

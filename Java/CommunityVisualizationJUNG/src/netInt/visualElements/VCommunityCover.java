@@ -115,8 +115,8 @@ public class VCommunityCover implements Serializable{
 
 	/**
 	 * Displays community information from graph stored in a Container
-	 * @param communityNode
-	 * @param container
+	 * @param communityNode communityNode
+	 * @param container container
 	 */
 	public void showCoverLable(VNode communityNode, Container container) {
 		Canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);

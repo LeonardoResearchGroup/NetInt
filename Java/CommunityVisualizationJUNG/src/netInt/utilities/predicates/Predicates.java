@@ -20,16 +20,25 @@ import netInt.graphElements.Node;
  * A series of predicates used in boolean operations performed over community's
  * graphElements
  * 
+ * In mathematics, a predicate is commonly understood to be a Boolean-valued
+ * function P: X? {true, false}, called the predicate on X. Informally, a
+ * predicate is a statement that may be true or false depending on the values of
+ * its variables. It can be thought of as an operator or function that returns a
+ * value that is either true or false. From:
+ * http://howtodoinjava.com/java-8/how-to-use-predicate-in-java-8/
+ * 
  * @author jsalam
  *
  */
 public abstract class Predicates {
 
 	/**
-	 * Evaluates if a given node belongs to the named community * @param
-	 * communityName
+	 * Evaluates if a given node belongs to the named community
 	 * 
-	 * @return
+	 * @param communityName
+	 *            the community
+	 * 
+	 * @return predicate with the boolean for a node
 	 */
 	public static Predicate<Node> nodeInCommunity(final String communityName) {
 		Predicate<Node> nodeIncludedInSubgraph = new Predicate<Node>() {
@@ -44,8 +53,8 @@ public abstract class Predicates {
 	 * Evaluates if the source and target of a given edge belong to the same
 	 * community
 	 * 
-	 * @param communityName
-	 * @return
+	 * @param communityName communityName
+	 * @return predicate with the boolean for an edge
 	 */
 	public static Predicate<Edge> edgeInCommunity(final String communityName) {
 		Predicate<Edge> rtnPredicate = new Predicate<Edge>() {
@@ -67,9 +76,9 @@ public abstract class Predicates {
 	 * either source and target belong to one of the two communities but both
 	 * cannot belong to the same community
 	 * 
-	 * @param communityNameA
-	 * @param communityNameB
-	 * @return
+	 * @param communityNameA communityName
+	 * @param communityNameB communityName
+	 * @return predicate with the boolean for an edge
 	 */
 	public static Predicate<Edge> edgeLinkingCommunities(final String communityNameA, final String communityNameB) {
 		Predicate<Edge> rtnPredicate = new Predicate<Edge>() {

@@ -84,7 +84,7 @@ public class GraphmlReader {
 	 * needed to be changed to a TreeMap because it was not possible to
 	 * determine the final size of the array in advance.
 	 * 
-	 * @param nestedAttributesOrder
+	 * @param nestedAttributesOrder the vector of ordered node categorical attributes
 	 * 
 	 * @param nodeImportAttributes
 	 *            The list of user defined attributes for node importing
@@ -176,6 +176,7 @@ public class GraphmlReader {
 
 	/**
 	 * GENERAL METHOD TO GET THE JUNG GRAPH
+	 * @param nestedAttributesOrder the ordered vector of node attributes
 	 * 
 	 * @param nodeLabelAttributes
 	 *            the vector of node attributes
@@ -187,7 +188,7 @@ public class GraphmlReader {
 	 *            collection does not accept duplicates. Enabling this might
 	 *            occupy a big chunk of memory because for instance all the node
 	 *            names will be stored in the collection
-	 * @return
+	 * @return THE JUNG GRAPH as DirectedSparseMultigraph
 	 */
 	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nestedAttributesOrder,
 			String[] nodeLabelAttributes, String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
@@ -269,9 +270,9 @@ public class GraphmlReader {
 	 * attribute names come from a list obtained from the source file, usually a
 	 * graphml
 	 * 
-	 * @param vertex
-	 * @param node
-	 * @param nodeImportAttributes
+	 * @param vertex a vertex of a JUNG graph
+	 * @param node the recipient node
+	 * @param nodeImportAttributes list obtained from the source file
 	 */
 	public void assignNodeAttributes(Vertex vertex, Node node, String[] nodeImportAttributes) {
 		// For the first two attributes: node community and node name
@@ -311,7 +312,7 @@ public class GraphmlReader {
 	/**
 	 * ArrayList of community values obtained from the import file
 	 * 
-	 * @return
+	 * @return ArrayList of community values
 	 */
 	public ArrayList<String> getCommunities() {
 		return communities;
@@ -347,7 +348,7 @@ public class GraphmlReader {
 	 * Return the list of all keys associated to vertex read from the graphml
 	 * file
 	 * 
-	 * @return
+	 * @return the list of all keys associated to vertex
 	 */
 	public String[] getNodesGraphmlKeys() {
 		String[] rtn = null;
@@ -362,7 +363,7 @@ public class GraphmlReader {
 	 * Return the list of all keys associated to edges read from the graphml
 	 * file
 	 * 
-	 * @return
+	 * @return the list of all keys associated to edges
 	 */
 	public String[] getEdgesGraphmlKeys() {
 		String[] rtn = null;

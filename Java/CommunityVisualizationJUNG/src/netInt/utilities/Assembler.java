@@ -145,8 +145,8 @@ public class Assembler {
 	 * Creates a single VCommunity of the graph with no subCommunities yet
 	 * contains all the VNodes
 	 * 
-	 * @param graph
-	 * @return
+	 * @param graph the graph
+	 * @return a VCommunity for the graph
 	 */
 	public VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
 		// Container of rootGraph

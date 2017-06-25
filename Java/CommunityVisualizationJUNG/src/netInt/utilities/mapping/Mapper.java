@@ -64,12 +64,21 @@ public class Mapper {
 	}
 
 	/**
+	 * This method serves to map the value of a numerical attribute of either a
+	 * vertex (node) or edge into a range between 0 and 1. These boundary values
+	 * correspond to the lowest and highest value available in the entire graph
+	 * for such attribute
+	 * 
 	 * @param converter
-	 *            filter name
+	 *            filter name. It could be chosen from the list of final values
+	 *            of <tt> Mapper </tt> class. LINEAR, SINUSOIDAL, LOGARITHMIC,
+	 *            RADIAL, SIGMOID
 	 * @param val
-	 *            the number to be mapped
+	 *            the numerical attribute to be mapped
 	 * @param graphElementClassName
+	 *            class name of the graph element to which the attribute belongs
 	 * @param graphAttribute
+	 *            the name of the graph attribute.
 	 * @return the value mapped equals to a number between 0 and 1
 	 */
 	public float convert(String converter, float val, String graphElementClassName, String graphAttribute) {
@@ -120,8 +129,6 @@ public class Mapper {
 	 * The keys of the TreeMap are the concatenation of the following Strings:
 	 * graphElementClassName + "_" + AttributeName. For example the weight of an
 	 * edge is stored with the key Edge_Weight
-	 * 
-	 * @param graphElementClassName
 	 * 
 	 * @param attributeName
 	 *            The attribute of either a node or edge. Example "weight",
@@ -346,6 +353,7 @@ public class Mapper {
 	 * null
 	 * 
 	 * @param gElem
+	 *            the node to set max min values into
 	 */
 	public void setMaxMinNodeAttributes(Node gElem) {
 		// if the min and max collections are not initialized
@@ -413,6 +421,7 @@ public class Mapper {
 	 * null
 	 * 
 	 * @param gElem
+	 *            the edge to set max min values into
 	 */
 	public void setMaxMinEdgeAttributes(Edge gElem) {
 		// if the min and max collections are not initialized
@@ -479,6 +488,7 @@ public class Mapper {
 	 * initializes the collection if attributes in case it is equal to null
 	 * 
 	 * @param gElem
+	 *            the node to set categorical attributes
 	 */
 	public void setCategoricalNodeAttributes(Node gElem) {
 		// if the categorical collection is not initialized
@@ -506,7 +516,7 @@ public class Mapper {
 	 * Sets the min and max value stored in a collection of edge attributes. It
 	 * initializes the collection if attributes in case it is equal to null
 	 * 
-	 * @param gElem
+	 * @param gElem the edge to set categorical attributes
 	 */
 	public void setCategoricalEdgeAttributes(Edge gElem) {
 		// if the categorical collection is not initialized
@@ -573,16 +583,16 @@ public class Mapper {
 	 * @param GraphElementClassName
 	 *            The name of the graph element class. It must be either "Node"
 	 *            or "Edge"
-	 * @return
+	 * @return List of graph element attributes
 	 */
 	public ArrayList<String> getCategorialAttributesKeys(String GraphElementClassName) {
 		return nodeCategoricalAttributes.getAttributeKeys(GraphElementClassName);
 	}
 
-//	public static void main(String args[]) {
-//		float val = PApplet.map(100000000f, 1000f, 100000000f, PApplet.PI, PApplet.HALF_PI);
-//		System.out.println(Math.sin(val));
-//	}
+	// public static void main(String args[]) {
+	// float val = PApplet.map(100000000f, 1000f, 100000000f, PApplet.PI,
+	// PApplet.HALF_PI);
+	// System.out.println(Math.sin(val));
+	// }
 
 }
-

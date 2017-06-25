@@ -33,6 +33,7 @@ public class LinearLayout extends Arrangement  {
 	 * 
 	 * @param margin
 	 *            the gap between the Applet margin and each extreme of the axis
+	 *@param visualElements list of VisualAtom            
 	 */
 	public void linearLayout(float margin, ArrayList<VisualAtom> visualElements) {
 		clearLayout(visualElements);

@@ -78,7 +78,7 @@ public class VNode extends VisualAtom implements Serializable {
 	/**
 	 * Set the collection of VNode successors of this node
 	 * 
-	 * @param successors
+	 * @param successors Collection of successors
 	 */
 	public void setVNodeSuccessors(Collection<VNode> successors) {
 		this.successors.addAll(successors);
@@ -132,8 +132,8 @@ public class VNode extends VisualAtom implements Serializable {
 	 * If this VNode is a link in a propagation chain, propagationChain is set
 	 * to true and the number of next steps in the chain is returned
 	 * 
-	 * @param sequence
-	 * @return
+	 * @param sequence position in propagation chain 
+	 * @return number of next steps in the propagation chain
 	 */
 	public int propagationCount(int sequence) {
 		// this creates an arrayList indicating the position of this node in all
@@ -162,7 +162,7 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	/**
-	 * @param communityDisplayed
+	 * @param communityDisplayed true if show
 	 */
 	public void show(boolean communityDisplayed) {
 		// Hide or show the vNode depending of the degrees threshold

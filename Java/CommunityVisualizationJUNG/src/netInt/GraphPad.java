@@ -35,9 +35,9 @@ import processing.core.PVector;
  * <p>
  * This is the central class of NetInt library. An instance of this class always
  * needs a <tt>processing.PApplet</tt> to operate. The enclosed instance of
- * <tt>Assembler</tt> is in charge of retrieving the graph from the
- * source file, generate the <tt>VCommunity</tt>'s (visual communities) and all
- * the visual elements that represent each vertex and edge of the source graph.
+ * <tt>Assembler</tt> is in charge of retrieving the graph from the source file,
+ * generate the <tt>VCommunity</tt>'s (visual communities) and all the visual
+ * elements that represent each vertex and edge of the source graph.
  * </p>
  * <p>
  * It also encloses and instance of <tt>Canvas</tt> that handles the canvas on
@@ -49,27 +49,20 @@ import processing.core.PVector;
  * <tt>TestPerformence</tt> to display on the canvas the status of heap memory
  * and other features of the virtual machine.
  * </p>
- * 
- * @author Juan Salamanca
- * @version alpha
- *
- */
-
-/**
- * 
- * 
- * LOADING THE IMPORT MENU: Inside selectImport(), an instance of
- * GraphmlKeyReader reads the header of the graphml file, instantiate the
- * ImportMenuGuiSet class and populate its dropdown menus using the makeList()
- * method with both the data retrieved from the header and an array of layout
- * names. The import menu is displayed on the PApplet for the user to choose the
- * community and label names from the lists of node attributes of each dropdown
- * menu. Both names are stored in a nodeImportAttributes array that is passed
- * across classes up to the GraphmlReader class, where the makeNodes() method
- * uses the String in [0] to set the community attribute and the String [1] to
- * set the name of the node. If there were more attributes in the array, all but
- * the last would be community parameters. The last is always reserved for the
- * name of the node. Such loading attributes operation happens at loading time.
+ * <p>
+ * LOADING THE IMPORT MENU: Inside <tt>selectImport()</tt>, an instance of
+ * <tt>GraphmlKeyReader</tt> reads the header of the graphml source file,
+ * instantiate the ImportMenuGuiSet class and populate its dropdown menus using
+ * the <tt>makeList()</tt> method with both the data retrieved from the header
+ * and an array of layout names. The import menu is displayed on the
+ * <tt>PApplet</tt> for the user to choose the nested structure of communities,
+ * the node label and edge weight from the lists of node attributes of each
+ * dropdown menu. Each user selection is stored in arrays or strings that are
+ * passed across classes up to the <tt>GraphmlReader</tt> class, where the
+ * <tt>makeNodes()</tt> method uses them to import nodes and their attributes
+ * from the source graphml file. Such loading attributes operation happens at
+ * loading time.
+ * </p>
  * 
  * @author jsalam
  * @version alpha
@@ -292,7 +285,7 @@ public class GraphPad {
 	 *            names
 	 */
 	public void selectImport(File selection, String[] strings) {
-		
+
 		if (selection != null) {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
@@ -304,7 +297,7 @@ public class GraphPad {
 			importMenu = new ImportMenuGuiSet(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
 		}
-		
+
 		for (int i = 0; i < strings.length; i++) {
 			if (strings[i].equals("NetInt_Banca")) {
 				ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));

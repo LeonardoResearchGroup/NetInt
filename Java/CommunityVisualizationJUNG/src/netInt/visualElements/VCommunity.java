@@ -134,8 +134,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * Therefore a higher tier VCommunity may contain nested VCommunities. In
 	 * order to display each VisualAtom correctly the class type is determined.
 	 * 
-	 * @param showNodes
-	 * @param showEdges
+	 * @param showNodes true if show
+	 * @param showEdges true if show
 	 */
 
 	public void showCommunityContents(boolean showNodes, boolean showEdges) {
@@ -346,7 +346,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	/**
 	 * Search for a Node using the ID parameter
 	 * 
-	 * @param id
+	 * @param id Node id
 	 * @return true if found
 	 */
 	public boolean searchNodeID(String id) {
@@ -367,7 +367,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * Search a vCommunity through the id of some node of his community and
 	 * change the value of his hasFoundNode variable
 	 * 
-	 * @param id
+	 * @param id Node id
 	 * @return true if found
 	 */
 	public boolean searchNodeSuperCommunity(String id) {

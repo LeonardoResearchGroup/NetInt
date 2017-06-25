@@ -112,9 +112,9 @@ public class PajekReader {
 	 * attribute names come from a list obtained from the source file, usually a
 	 * graphml
 	 * 
-	 * @param vertex
-	 * @param node
-	 * @param nodeImportAttributes
+	 * @param vertex vertex of a JUNG graph
+	 * @param node the recipient node
+	 * @param nodeImportAttributes attribute names
 	 */
 	public void assignNodeAttributes(Vertex vertex, Node node, String[] nodeImportAttributes) {
 		// For the first two attributes: node community and node name
@@ -158,7 +158,7 @@ public class PajekReader {
 	/**
 	 * ArrayList of community values obtained from the import file
 	 * 
-	 * @return
+	 * @return ArrayList of community values
 	 */
 	public ArrayList<String> getCommunities() {
 		return communities;
@@ -175,9 +175,9 @@ public class PajekReader {
 	/**
 	 * Looks for the equal node in the graph
 	 * 
-	 * @param graph
-	 * @param searchedNode
-	 * @return
+	 * @param graph the edu.uci.ics.jung.graph.Graph
+	 * @param searchedNode the Node
+	 * @return the equal node in the graph
 	 */
 	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node searchedNode) {
 		Node rtn = null;

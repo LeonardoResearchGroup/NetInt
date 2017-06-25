@@ -67,25 +67,26 @@ public class ImportMenuGuiSet implements Observer {
 	public void init() {
 
 		// Selectable List for nested communities
-		communities = new SelectableList(100f, 80f, "Node Attributes", "Nesting order");
+		communities = new SelectableList(100f, 110f, "Node Attributes", "Nesting order");
 		communities.setItemSize(100, 12);
+		communities.setName("Select nesting order");
 
 		// ItemList for node names
-		nodeNameList = new ItemList(400f, 115f, "Node name");
+		nodeNameList = new ItemList(400f, 145f, "Node name");
 		nodeNameList.setItemSize(new PVector(120, 12));
 
 		// for edges
-		edgeThicknessList = new ItemList(550f, 115f, "Edge thickness");
+		edgeThicknessList = new ItemList(550f, 145f, "Edge weight");
 		edgeThicknessList.setItemSize(new PVector(120, 12));
 
 		// for layout
-		layoutList = new ItemList(700f, 115f, "Visualization Layout");
+		layoutList = new ItemList(700f, 145f, "Visualization Layout");
 		layoutList.setItemSize(new PVector(120, 12));
 
 		// for load button
 		loadButton = new Item();
 		loadButton.setDimension(new PVector(100, 25));
-		loadButton.setPosition(new PVector(850f, 115f));
+		loadButton.setPosition(new PVector(850f, 145f));
 		loadButton.setLabel("Load Graph");
 		loadButton.setName("Finalize import");
 
@@ -116,6 +117,8 @@ public class ImportMenuGuiSet implements Observer {
 	 *            The list of node attributes retrieved from the graphml header
 	 * @param edgeAttributeKeys
 	 *            The list of edge attributes retrieved from the graphml header
+	 * @param layoutAttributeKeys
+	 *            The list of available layout names
 	 */
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys,
 			ArrayList<String> layoutAttributeKeys) {

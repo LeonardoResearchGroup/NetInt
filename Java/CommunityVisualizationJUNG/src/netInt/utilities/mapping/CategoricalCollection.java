@@ -95,13 +95,14 @@ public class CategoricalCollection {
 	}
 
 	/**
-	 * Get the list of graph element attributes stores in this
+	 * Get the list of graph element attributes stored in this
 	 * CategoricalCollection
 	 * 
 	 * @param GraphElementClassName
 	 *            The name of the graph element class. It must be either "Node"
 	 *            or "Edge"
-	 * @return
+	 * @return list of graph element attributes stored in this
+	 * CategoricalCollection
 	 */
 	public ArrayList<String> getAttributeKeys(String GraphElementClassName) {
 		ArrayList<String> classElementAttributes = new ArrayList<String>();

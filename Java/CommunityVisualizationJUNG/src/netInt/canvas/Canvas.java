@@ -125,7 +125,7 @@ public class Canvas {
 	/**
 	 * Returns the current zoom value
 	 * 
-	 * @return
+	 * @return current zoom value
 	 */
 	public float getZoomValue() {
 		return zoom;
@@ -134,7 +134,7 @@ public class Canvas {
 	/**
 	 * Returns the current mouse coordinates in the transformed canvas
 	 * 
-	 * @return
+	 * @return current mouse coordinates in the transformed canvas
 	 */
 	public static PVector getCanvasMouse() {
 		return canvasMouse;

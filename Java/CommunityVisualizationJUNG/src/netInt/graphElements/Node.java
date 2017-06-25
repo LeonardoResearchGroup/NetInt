@@ -138,7 +138,7 @@ public class Node extends GraphElement implements Serializable {
 	/**
 	 * @param key
 	 *            the community from which the procedure is invoked
-	 * @return
+	 * @return in degree of the node
 	 */
 	public int getInDegree(int key) {
 		return relativeAttributes.get(key).getCommunityInDegree();
@@ -147,7 +147,7 @@ public class Node extends GraphElement implements Serializable {
 	/**
 	 * @param key
 	 *            the community from which the procedure is invoked
-	 * @return
+	 * @return out degree of the node
 	 */
 	public int getOutDegree(int key) {
 		return relativeAttributes.get(key).getCommunityOutDegree();
@@ -156,7 +156,7 @@ public class Node extends GraphElement implements Serializable {
 	/**
 	 * @param key
 	 *            the community from which the procedure is invoked
-	 * @return
+	 * @return degree of the node
 	 */
 	public int getDegree(int key) {
 		return relativeAttributes.get(key).getCommunityDegree();
