@@ -142,9 +142,10 @@ public class ImportMenuGuiSet implements Observer {
 	 * This method initiates the importing process based on the user defined
 	 * parameters from the import menu.
 	 * 
-	 * NOTE: It is set to import graphml files only. Jan 15 2017 NOTE: Updated
-	 * with guiSet library. It now works with observer-observable pattern. This
-	 * object observes buttons from the menu.
+	 * NOTE: It is set to import graphml files only. Jan 15 2017
+	 * 
+	 * NOTE: Updated with guiSet library. It now works with observer-observable
+	 * pattern. This object observes buttons from the menu instance.
 	 * 
 	 */
 	private void choiceCatcher(GuiElement button) {
@@ -214,11 +215,15 @@ public class ImportMenuGuiSet implements Observer {
 
 				} else {
 
-					JOptionPane.showMessageDialog(graphPad.parent.frame,"Missing either \"community\" or \"label\" attributes", "Import warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(graphPad.parent.frame,
+							"Missing either \"community\" or \"label\" attributes", "Import warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
 
-				JOptionPane.showMessageDialog(graphPad.parent.frame, "Must select at least \"community\" and \"label\" attributes", "Import warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(graphPad.parent.frame,
+						"Must select at least \"community\" and \"label\" attributes", "Import warning",
+						JOptionPane.WARNING_MESSAGE);
 			}
 
 			if (graphLoaded) {

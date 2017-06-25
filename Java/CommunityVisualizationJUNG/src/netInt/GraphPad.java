@@ -292,6 +292,7 @@ public class GraphPad {
 	 *            names
 	 */
 	public void selectImport(File selection, String[] strings) {
+		
 		if (selection != null) {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
@@ -302,11 +303,12 @@ public class GraphPad {
 			System.out.println("Instantiating Import Menu");
 			importMenu = new ImportMenuGuiSet(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
-
-			for (int i = 0; i < strings.length; i++) {
-				if (strings[i].equals("NetInt_Banca")) {
-					ControlPanel.getInstance().enableStatistics();
-				}
+		}
+		
+		for (int i = 0; i < strings.length; i++) {
+			if (strings[i].equals("NetInt_Banca")) {
+				ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));
+				ControlPanel.getInstance().enableBancaModule();
 			}
 		}
 	}

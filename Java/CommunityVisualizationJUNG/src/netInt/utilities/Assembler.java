@@ -62,7 +62,7 @@ import processing.core.PConstants;
 public class Assembler {
 
 	// Visual Communities
-	private VCommunity rootVCommunity;
+	// private VCommunity rootVCommunity;
 	public static VCommunity firstOrderVComm;
 	public static ArrayList<VCommunity> secondOrderVComm;
 
