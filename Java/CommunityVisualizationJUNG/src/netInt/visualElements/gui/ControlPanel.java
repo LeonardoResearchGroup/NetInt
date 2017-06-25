@@ -58,7 +58,7 @@ public class ControlPanel extends PApplet {
 	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
 	// Modules
-	private boolean bancaEnabled = false;
+	private boolean bancaModuleEnabled = false;
 
 	private static ControlPanel CPInstance = null;
 
@@ -176,7 +176,7 @@ public class ControlPanel extends PApplet {
 		bancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(bancaGroup);
-		bancaGroup.setVisible(bancaEnabled);
+		bancaGroup.setVisible(bancaModuleEnabled);
 
 		// Add Components to each group
 		setBackgroundComponents(backgGroup);
@@ -338,7 +338,7 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void enableBancaModule() {
-		bancaEnabled = true;
+		bancaModuleEnabled = true;
 	}
 
 	public void draw() {
