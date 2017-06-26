@@ -20,6 +20,7 @@ import org.jcolorbrewer.ColorBrewer;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import jViridis.ColorMap;
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
@@ -216,6 +217,7 @@ public class Assembler {
 		System.out.println("     Generating Graphs for " + comNames.size() + " communities ...");
 
 		for (int i = 0; i < comNames.size(); i++) {
+
 			String communityName = comNames.get(i);
 
 			System.out.println("     Working on community " + communityName);
