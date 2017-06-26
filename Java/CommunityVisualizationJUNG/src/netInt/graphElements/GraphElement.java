@@ -114,8 +114,8 @@ public abstract class GraphElement implements Serializable {
 				rtn = (float) absoluteAttributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println(this.getClass().getName() + " Attribute key: " + key + " value: "
-					+ absoluteAttributes.get(key).toString() + " couldn't be casted as Float");
+			String temp = " not available in absoluteAttributes collection.";
+			System.out.println(this.getClass().getName() + " Attribute key: " + key + temp +". Value couldn't be casted as Float");
 		}
 		return rtn;
 	}
@@ -229,7 +229,7 @@ public abstract class GraphElement implements Serializable {
 	 */
 	public void setAttribute(String key, Object value) {
 		absoluteAttributes.put(key, value);
-		Mapper.getInstance().setMaxMinNodeAttributes(key, value);
+		//Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
 
 }

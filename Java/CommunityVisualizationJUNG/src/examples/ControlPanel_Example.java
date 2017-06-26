@@ -35,7 +35,8 @@ public class ControlPanel_Example extends PApplet {
 	 * @see processing.core.PApplet#settings()
 	 */
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
+	//	size(displayWidth - 201, displayHeight - 100, P2D);
+		size(1000,600,P2D);
 	}
 
 	/**

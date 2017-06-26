@@ -151,6 +151,7 @@ public class GraphPad {
 		 * Output Console Catcher. The line below enables a console Catcher.
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
+
 		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 
 		// Canvas

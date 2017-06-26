@@ -26,25 +26,25 @@ public class VNode extends VisualAtom implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Node node;
-	
+
 	// This variable is used to control if a given attribute is below or above a
 	// visibility threshold
 	private boolean visible;
-	
+
 	// propagation attributes
 	private boolean propagationSource, inPropagationChain, propagated = false;
 	private ArrayList<VNode> successors;
-	
+
 	// The collection of propagation indexes. Each index represents the position
 	// of this VNode in a propagation chain
 	private ArrayList<Integer> propIndex;
 	public int propagationSteps;
 	private VNodeDescription description;
-	
+
 	// attribute used to map node diameter. It gets its value from the
 	// UserSettings
 	private String attributeName = "no_attribute";
-	
+
 	// converter used to map node visual attributes. It gets its value from the
 	// UserSettings
 	private String converterName = Mapper.LINEAR;
@@ -78,7 +78,8 @@ public class VNode extends VisualAtom implements Serializable {
 	/**
 	 * Set the collection of VNode successors of this node
 	 * 
-	 * @param successors Collection of successors
+	 * @param successors
+	 *            Collection of successors
 	 */
 	public void setVNodeSuccessors(Collection<VNode> successors) {
 		this.successors.addAll(successors);
@@ -132,7 +133,8 @@ public class VNode extends VisualAtom implements Serializable {
 	 * If this VNode is a link in a propagation chain, propagationChain is set
 	 * to true and the number of next steps in the chain is returned
 	 * 
-	 * @param sequence position in propagation chain 
+	 * @param sequence
+	 *            position in propagation chain
 	 * @return number of next steps in the propagation chain
 	 */
 	public int propagationCount(int sequence) {
@@ -162,7 +164,8 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	/**
-	 * @param communityDisplayed true if show
+	 * @param communityDisplayed
+	 *            true if show
 	 */
 	public void show(boolean communityDisplayed) {
 		// Hide or show the vNode depending of the degrees threshold
@@ -171,27 +174,29 @@ public class VNode extends VisualAtom implements Serializable {
 		// Set the vNode diameter
 		try {
 			// determine the diameter based on the user selected attribute name
-			if (!attributeName.equals(UserSettings.getInstance().getNodeFilters())) {
-				if (UserSettings.getInstance().getNodeFilters() != null)
-					attributeName = UserSettings.getInstance().getNodeFilters();
+			String userSelectedFilter = UserSettings.getInstance().getNodeFilters();
+			if (userSelectedFilter != null && !attributeName.equals(userSelectedFilter)) {
+				// if (userFilter != null)
+				attributeName = userSelectedFilter;
 				float value = node.getFloatAttribute(attributeName);
 				float tmp = Mapper.getInstance().convert(converterName, value, Mapper.NODE, attributeName);
 				if (tmp < minDiameter) {
 					setDiameter(minDiameter);
 				} else {
-					setDiameter(tmp*60);
+					setDiameter(tmp * 60);
 				}
 			}
 			// determine the diameter based on the user selected converter name
-			if (!converterName.equals(UserSettings.getInstance().getConverterNode())) {
-				if (UserSettings.getInstance().getConverterNode() != null)
-					converterName = UserSettings.getInstance().getConverterNode();
+			String userSelectedConverter = UserSettings.getInstance().getConverterNode();
+			if (userSelectedConverter != null && !converterName.equals(userSelectedConverter)) {
+				// if (userConverter != null)
+				converterName = userSelectedConverter;
 				float value = node.getFloatAttribute(attributeName);
 				float tmp = Mapper.getInstance().convert(converterName, value, Mapper.NODE, attributeName);
 				if (tmp < minDiameter) {
 					setDiameter(minDiameter);
 				} else {
-					setDiameter(tmp*60);
+					setDiameter(tmp * 60);
 				}
 			}
 		} catch (NullPointerException npe) {
