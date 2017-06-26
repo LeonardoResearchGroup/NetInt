@@ -227,9 +227,10 @@ public abstract class GraphElement implements Serializable {
 	 * @param value
 	 *            value
 	 */
-	public void setAttribute(String key, Object value) {
-		absoluteAttributes.put(key, value);
-		//Mapper.getInstance().setMaxMinNodeAttributes(key, value);
-	}
+//	public void setAttribute(String key, Object value) {
+//		absoluteAttributes.put(key, value);
+//		//Mapper.getInstance().setMaxMinNodeAttributes(key, value);
+//	}
+	public abstract void setAttribute(String key, Object value);
 
 }

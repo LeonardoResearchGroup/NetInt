@@ -235,13 +235,11 @@ public class ImportMenuGuiSet implements Observer {
 				// graph if the control panel exists
 				if (ControlPanel.getInstance() != null) {
 
-					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax()
-							.getAttributeKeys();
+					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys();
 
-					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax()
-							.getAttributeKeys();
+					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
 
-					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);
+					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);   
 				}
 
 				// Hide Import Menu from main panel

@@ -59,7 +59,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		lastPosition = pos;
 		comCover = new VCommunityCover(this);
 		node.setAttribute("Community size", container.size());
-		Mapper.getInstance().setMaxMinNodeAttributes(node);
+		//Mapper.getInstance().setMaxMinNodeAttributes(node);
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 	}

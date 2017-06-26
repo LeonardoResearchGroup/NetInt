@@ -165,7 +165,7 @@ public class GraphmlReader {
 				}
 			}
 			// Setting max min boundaries in Mapper class
-			Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
+			//Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
 			if (saveCategoricalAttributes) {
 				Mapper.getInstance().setCategoricalNodeAttributes(nodeTmp);
 			}
@@ -244,7 +244,7 @@ public class GraphmlReader {
 			}
 
 			// Setting max min boundaries in Mapper class
-			Mapper.getInstance().setMaxMinEdgeAttributes(e);
+			//Mapper.getInstance().setMaxMinEdgeAttributes(e);
 			if (saveCategoricalAttributes) {
 				Mapper.getInstance().setCategoricalEdgeAttributes(e);
 			}

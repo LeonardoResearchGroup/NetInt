@@ -39,6 +39,7 @@ public class Edge extends GraphElement implements Serializable {
 	}
 
 	public Edge() {
+		super();
 
 	}
 
@@ -92,6 +93,10 @@ public class Edge extends GraphElement implements Serializable {
 	public String getName() {
 		return (String) absoluteAttributes.get("label");
 	}
+	
+	public boolean isLoop() {
+		return loop;
+	}
 
 	// *** Setters
 	public void setSource(Node source) {
@@ -105,10 +110,22 @@ public class Edge extends GraphElement implements Serializable {
 	public void setDirected(boolean directed) {
 		this.directed = directed;
 	}
-
-	public boolean isLoop() {
-		return loop;
+	
+	/**
+	 * Sets the attribute to this graph element. It is stored in the
+	 * absoluteAttributes HashMap
+	 * 
+	 * @param key
+	 *            key
+	 * @param value
+	 *            value
+	 */
+	public void setAttribute(String key, Object value) {
+		absoluteAttributes.put(key, value);
+		netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
 	}
+
+
 
 	public boolean equals(Object obj) {
 		Edge edge = (Edge) obj;

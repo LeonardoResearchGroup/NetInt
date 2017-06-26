@@ -21,8 +21,7 @@ import java.util.Set;
  * the attribute "id" defines the node identity therefore it must be a unique
  * identifier
  * 
- * @author juan salamanca
- * Nov 2016
+ * @author juan salamanca Nov 2016
  */
 public class Node extends GraphElement implements Serializable {
 
@@ -131,6 +130,20 @@ public class Node extends GraphElement implements Serializable {
 
 	public void setSize(float size) {
 		absoluteAttributes.put("size", size);
+	}
+
+	/**
+	 * Sets the attribute to this graph element. It is stored in the
+	 * absoluteAttributes HashMap
+	 * 
+	 * @param key
+	 *            key
+	 * @param value
+	 *            value
+	 */
+	public void setAttribute(String key, Object value) {
+		absoluteAttributes.put(key, value);
+		netInt.utilities.mapping.Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
 
 	// *****Get & set metrics

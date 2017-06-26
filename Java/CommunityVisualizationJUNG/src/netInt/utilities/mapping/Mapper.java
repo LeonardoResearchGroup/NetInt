@@ -547,6 +547,71 @@ public class Mapper {
 			}
 		}
 	}
+	
+	/**
+	 * Sets the min and max value stored in a collection of attributes for
+	 * edges. It initializes the collection of attributes in case it is equal to
+	 * null
+	 * 
+	 * @param key
+	 *            the key of the attribute
+	 * @param value
+	 *            the value
+	 * 
+	 */
+	public void setMaxMinEdgeAttributes(String key, Object value) {
+		// if the min and max collections are not initialized
+		if (edgeAttributesMin == null) {
+			// min values
+			edgeAttributesMin = new NumericalCollection();
+		}
+		if (edgeAttributesMax == null) {
+			// max values
+			edgeAttributesMax = new NumericalCollection();
+		}
+		// If all collections are initialized
+		if (edgeAttributesMin.getSize() >= 0 && edgeAttributesMax.getSize() >= 0) {
+			if (NumericalCollection.isNumerical(value)) {
+				try {
+					if (value instanceof Double) {
+						// If Double convert to float
+						Double rtnObj = (Double) value;
+						Float attrFloat = rtnObj.floatValue();
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!edgeAttributesMin.addLowerValue(key, attrFloat)) {
+							edgeAttributesMax.addHigherValue(key, attrFloat);
+						}
+
+					} else if (value instanceof Integer) {
+						// If Integer
+						Integer attrInteger = (Integer) value;
+						Float attrFloat = attrInteger.floatValue();
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!edgeAttributesMin.addLowerValue(key, attrFloat)) {
+							edgeAttributesMax.addHigherValue(key, attrFloat);
+						}
+
+					} else if (value instanceof Float) {
+						// If Float
+						Float attrFloat = (Float) value;
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!edgeAttributesMin.addLowerValue(key, attrFloat)) {
+							edgeAttributesMax.addHigherValue(key, attrFloat);
+						}
+
+					} else {
+						throw new NumberFormatException();
+					}
+				} catch (NumberFormatException e) {
+					System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
+							+ " does not match the available Mapper data type: Double,Float,Integer");
+				}
+			}
+		}
+	}
 
 	/**
 	 * Sets the min and max value stored in a collection of node attributes. It
