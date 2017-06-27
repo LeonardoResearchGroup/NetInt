@@ -13,7 +13,6 @@ package netInt.graphElements;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -196,7 +195,7 @@ public abstract class GraphElement implements Serializable {
 	 */
 	public void setCommunity(String community, int key) {
 		// create meta-datum
-		RelativeAttributes metaData = new RelativeAttributes();
+		AttributesMap metaData = new AttributesMap();
 		// assign name
 		metaData.setCommunityName(community);
 		// add meta-datum to collection of meta-data
@@ -214,12 +213,16 @@ public abstract class GraphElement implements Serializable {
 	 *            the community to which the attributes are associated. 0 is
 	 *            reserved for the root community
 	 */
-	public void setCommunity(RelativeAttributes metaData, int key) {
+	public void setCommunity(AttributesMap metaData, int key) {
 		relativeAttributes.put(key, metaData);
 	}
 
 	public abstract void setAttribute(String key, Object value);
 
 	public abstract void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet);
+	
+	public HashMap<String,Float> getRelativeAttributes(int key){
+		return relativeAttributes.get(key);
+	}
 
 }

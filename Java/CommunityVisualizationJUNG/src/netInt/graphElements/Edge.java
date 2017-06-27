@@ -137,7 +137,10 @@ public class Edge extends GraphElement implements Serializable {
 	 */
 	public void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet) {
 		relativeAttributes.put(tier, attributeSet);
-	//	netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
+		// Update Mapper.minmax
+		for(String key : attributeSet.keySet()){
+			netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, attributeSet.get(key));
+		}
 	}
 
 
