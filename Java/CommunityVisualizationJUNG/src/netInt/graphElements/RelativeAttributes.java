@@ -12,8 +12,9 @@
 package netInt.graphElements;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
-public class RelativeAttributes implements Serializable{
+public class RelativeAttributes extends HashMap<String, Float> implements Serializable{
 	/**
 	 * 
 	 */
@@ -24,6 +25,11 @@ public class RelativeAttributes implements Serializable{
 	private int inDegree, outDegree, degree;
 	
 	public RelativeAttributes(){
+		super();
+	}
+	
+	public void put(String key, float value){
+		this.put(key, value);
 	}
 	
 	public int getCommunityInDegree() {

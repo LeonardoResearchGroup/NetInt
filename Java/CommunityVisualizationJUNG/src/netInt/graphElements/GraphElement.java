@@ -13,6 +13,7 @@ package netInt.graphElements;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,11 +45,11 @@ public abstract class GraphElement implements Serializable {
 	// inherit from this class. The integer parameter identifies the
 	// community to which a set of relative attributes are related. (0 reserved
 	// for root graph)
-	protected HashMap<Integer, RelativeAttributes> relativeAttributes;
+	protected HashMap<Integer, HashMap<String,Float>> relativeAttributes;
 
 	public GraphElement() {
 		absoluteAttributes = new HashMap<String, Object>();
-		relativeAttributes = new HashMap<Integer, RelativeAttributes>();
+		relativeAttributes = new HashMap<Integer, HashMap<String,Float>>();
 	}
 
 	// *** Getters
@@ -89,8 +90,8 @@ public abstract class GraphElement implements Serializable {
 	}
 
 	/**
-	 * Gets the float value of the attribute associated to the key. The value
-	 * is retrieved from the map of absolute attributes
+	 * Gets the float value of the attribute associated to the key. The value is
+	 * retrieved from the map of absolute attributes
 	 * 
 	 * @param key
 	 *            key
@@ -113,7 +114,8 @@ public abstract class GraphElement implements Serializable {
 			}
 		} catch (Exception e) {
 			String temp = " not available in absoluteAttributes collection.";
-			System.out.println(this.getClass().getName() + " Attribute key: " + key + temp +". Value couldn't be casted as Float");
+			System.out.println(this.getClass().getName() + " Attribute key: " + key + temp
+					+ ". Value couldn't be casted as Float");
 		}
 		return rtn;
 	}
@@ -216,19 +218,8 @@ public abstract class GraphElement implements Serializable {
 		relativeAttributes.put(key, metaData);
 	}
 
-	/**
-	 * Sets the attribute to this graph element. It is stored in the
-	 * absoluteAttributes HashMap
-	 * 
-	 * @param key
-	 *            key
-	 * @param value
-	 *            value
-	 */
-//	public void setAttribute(String key, Object value) {
-//		absoluteAttributes.put(key, value);
-//		//Mapper.getInstance().setMaxMinNodeAttributes(key, value);
-//	}
 	public abstract void setAttribute(String key, Object value);
+
+	public abstract void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet);
 
 }

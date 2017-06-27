@@ -25,7 +25,7 @@ import processing.core.PApplet;
  * @date June 2017
  *
  */
-public class NetInt_Banca_Example extends PApplet {
+public class Module_Example extends PApplet {
 	GraphPad pad;
 
 	/**
@@ -78,6 +78,6 @@ public class NetInt_Banca_Example extends PApplet {
 	}
 
 	public static void main(String[] args) {
-		PApplet.main("examples.NetInt_Banca_Example");
+		PApplet.main("examples.Module_Example");
 	}
 }

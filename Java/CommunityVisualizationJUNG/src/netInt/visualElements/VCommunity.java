@@ -52,6 +52,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected boolean containsSearchedNode = false;
 
 	private boolean vNodesCentered = true;
+	
+	private VNodeDescription description;
 
 	public VCommunity(Node node, Container container) {
 		super(node, (float) container.getDimension().width / 2, (float) container.getDimension().height / 2);
@@ -62,6 +64,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		//Mapper.getInstance().setMaxMinNodeAttributes(node);
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
+		description = new VNodeDescription();
 	}
 
 	public void init() {
@@ -112,6 +115,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 		} else {
 			setDisplayed(true);
+			description.show(this);
 		}
 
 		// Move vCommunity to mouse position if right button is pressed

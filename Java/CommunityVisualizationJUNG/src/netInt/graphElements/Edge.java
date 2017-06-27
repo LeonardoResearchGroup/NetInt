@@ -12,6 +12,7 @@
 package netInt.graphElements;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * @author jsalam
@@ -123,6 +124,20 @@ public class Edge extends GraphElement implements Serializable {
 	public void setAttribute(String key, Object value) {
 		absoluteAttributes.put(key, value);
 		netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
+	}
+	
+	/**
+	 * Sets an object containing attributes to this graph element. It is stored
+	 * in the relativeAttributes HashMap
+	 * 
+	 * @param tier
+	 *            the tier to which the set of attributes belongs
+	 * @param attributeSet
+	 *            An object containing a set of attributes
+	 */
+	public void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet) {
+		relativeAttributes.put(tier, attributeSet);
+	//	netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
 	}
 
 

@@ -12,6 +12,7 @@
 package netInt.graphElements;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -50,8 +51,9 @@ public class Node extends GraphElement implements Serializable {
 
 	public boolean belongsTo(String community) {
 		boolean rtn = false;
-		for (RelativeAttributes rA : relativeAttributes.values()) {
-			if (rA.getCommunityName().equals(community)) {
+		for (Object rA : relativeAttributes.values()) {
+			RelativeAttributes tmp = (RelativeAttributes) rA;
+			if (tmp.getCommunityName().equals(community)) {
 				rtn = true;
 				break;
 			} else
@@ -63,8 +65,9 @@ public class Node extends GraphElement implements Serializable {
 	public String getCommunityNames() {
 		String communities = "";
 		int cont = 0;
-		for (RelativeAttributes mD : relativeAttributes.values()) {
-			communities = communities + mD.getCommunityName();
+		for (Object rA : relativeAttributes.values()) {
+			RelativeAttributes tmp = (RelativeAttributes) rA;
+			communities = communities + tmp.getCommunityName();
 			if (cont < relativeAttributes.size() - 1) {
 				communities = communities + ",";
 			}
@@ -100,7 +103,8 @@ public class Node extends GraphElement implements Serializable {
 	}
 
 	public String getCommunity(int key) {
-		return relativeAttributes.get(key).getCommunityName();
+		RelativeAttributes tmp = (RelativeAttributes) relativeAttributes.get(key);
+		return tmp.getCommunityName();
 	}
 
 	public int getMetadataSize() {
@@ -145,6 +149,20 @@ public class Node extends GraphElement implements Serializable {
 		absoluteAttributes.put(key, value);
 		netInt.utilities.mapping.Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
+	
+	/**
+	 * Sets an object containing attributes to this graph element. It is stored
+	 * in the relativeAttributes HashMap
+	 * 
+	 * @param tier
+	 *            the tier to which the set of attributes belongs
+	 * @param attributeSet
+	 *            An object containing a set of attributes
+	 */
+	public void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet) {
+		relativeAttributes.put(tier, attributeSet);
+		//netInt.utilities.mapping.Mapper.getInstance().setMaxMinNodeAttributes(key, value);
+	}
 
 	// *****Get & set metrics
 	// Getters metric
@@ -154,7 +172,8 @@ public class Node extends GraphElement implements Serializable {
 	 * @return in degree of the node
 	 */
 	public int getInDegree(int key) {
-		return relativeAttributes.get(key).getCommunityInDegree();
+		RelativeAttributes tmp = (RelativeAttributes) relativeAttributes.get(key);
+		return tmp.getCommunityInDegree();
 	}
 
 	/**
@@ -163,7 +182,8 @@ public class Node extends GraphElement implements Serializable {
 	 * @return out degree of the node
 	 */
 	public int getOutDegree(int key) {
-		return relativeAttributes.get(key).getCommunityOutDegree();
+		RelativeAttributes tmp = (RelativeAttributes) relativeAttributes.get(key);
+		return tmp.getCommunityOutDegree();
 	}
 
 	/**
@@ -172,26 +192,30 @@ public class Node extends GraphElement implements Serializable {
 	 * @return degree of the node
 	 */
 	public int getDegree(int key) {
-		return relativeAttributes.get(key).getCommunityDegree();
+		RelativeAttributes tmp = (RelativeAttributes) relativeAttributes.get(key);
+		return tmp.getCommunityDegree();
 	}
 
 	// Setters metrics
 	public void setInDegree(int key, int inDegree) {
 		if (key == 0)
 			this.absoluteAttributes.put("inDegree", inDegree);
-		this.relativeAttributes.get(key).setCommunityInDegree(inDegree);
+		RelativeAttributes tmp = (RelativeAttributes) this.relativeAttributes.get(key);
+		tmp.setCommunityInDegree(inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
 		if (key == 0)
 			this.absoluteAttributes.put("outDegree", outDegree);
-		this.relativeAttributes.get(key).setCommunityOutDegree(outDegree);
+		RelativeAttributes tmp = (RelativeAttributes) this.relativeAttributes.get(key);
+		tmp.setCommunityOutDegree(outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
 		if (key == 0)
 			this.absoluteAttributes.put("degree", degree);
-		this.relativeAttributes.get(key).setCommunityDegree(degree);
+		RelativeAttributes tmp = (RelativeAttributes) this.relativeAttributes.get(key);
+		tmp.setCommunityDegree(degree);
 	}
 
 }
