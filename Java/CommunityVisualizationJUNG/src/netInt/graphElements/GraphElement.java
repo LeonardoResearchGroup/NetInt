@@ -15,8 +15,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
-import netInt.utilities.mapping.Mapper;
-
 /**
  * Abstract class that handles two collections for storage of graphElements'
  * attributes (either nodes or edges). The first collection contains absolute

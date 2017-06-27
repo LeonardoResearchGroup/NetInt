@@ -43,6 +43,11 @@ public class GraphmlKey {
 		return id;
 	}
 
+	public String toString(){
+		String rtn = name + "," + type + "," + element+","+id;
+		return rtn;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
