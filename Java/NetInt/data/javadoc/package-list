@@ -1,0 +1,13 @@
+netInt
+netInt.comparators
+netInt.containers
+netInt.graphElements
+netInt.utilities
+netInt.utilities.console
+netInt.utilities.filters
+netInt.utilities.geometry
+netInt.utilities.mapping
+netInt.utilities.predicates
+netInt.visualElements
+netInt.visualElements.gui
+netInt.visualElements.primitives
