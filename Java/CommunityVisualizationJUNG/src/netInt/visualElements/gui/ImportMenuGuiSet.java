@@ -51,7 +51,7 @@ public class ImportMenuGuiSet implements Observer {
 
 	public ImportMenuGuiSet(GraphPad app) {
 		this.graphPad = app;
-		menu = new GuiSet(graphPad);
+		menu = new GuiSet(graphPad.parent);
 	}
 
 	/**
@@ -67,25 +67,26 @@ public class ImportMenuGuiSet implements Observer {
 	public void init() {
 
 		// Selectable List for nested communities
-		communities = new SelectableList(100f, 80f, "Node Attributes", "Nesting order");
+		communities = new SelectableList(100f, 110f, "Node Attributes", "Nesting order");
 		communities.setItemSize(100, 12);
+		communities.setName("Select nesting order");
 
 		// ItemList for node names
-		nodeNameList = new ItemList(400f, 115f, "Node name");
+		nodeNameList = new ItemList(400f, 145f, "Node name");
 		nodeNameList.setItemSize(new PVector(120, 12));
 
 		// for edges
-		edgeThicknessList = new ItemList(550f, 115f, "Edge thickness");
+		edgeThicknessList = new ItemList(550f, 145f, "Edge weight");
 		edgeThicknessList.setItemSize(new PVector(120, 12));
 
 		// for layout
-		layoutList = new ItemList(700f, 115f, "Visualization Layout");
+		layoutList = new ItemList(700f, 145f, "Visualization Layout");
 		layoutList.setItemSize(new PVector(120, 12));
 
 		// for load button
 		loadButton = new Item();
 		loadButton.setDimension(new PVector(100, 25));
-		loadButton.setPosition(new PVector(850f, 115f));
+		loadButton.setPosition(new PVector(850f, 145f));
 		loadButton.setLabel("Load Graph");
 		loadButton.setName("Finalize import");
 
@@ -97,7 +98,7 @@ public class ImportMenuGuiSet implements Observer {
 		menu.addGuiElement(loadButton);
 
 		// Register GUI events
-		menu.registerGuiSetEvents(graphPad);
+		menu.registerGuiSetEvents(graphPad.parent);
 
 		// Add observers to menu items
 		menu.addObserverToGuiElement(this, "Finalize import");
@@ -116,6 +117,8 @@ public class ImportMenuGuiSet implements Observer {
 	 *            The list of node attributes retrieved from the graphml header
 	 * @param edgeAttributeKeys
 	 *            The list of edge attributes retrieved from the graphml header
+	 * @param layoutAttributeKeys
+	 *            The list of available layout names
 	 */
 	public void makeLists(ArrayList<String> nodeAttributeKeys, ArrayList<String> edgeAttributeKeys,
 			ArrayList<String> layoutAttributeKeys) {
@@ -142,9 +145,10 @@ public class ImportMenuGuiSet implements Observer {
 	 * This method initiates the importing process based on the user defined
 	 * parameters from the import menu.
 	 * 
-	 * NOTE: It is set to import graphml files only. Jan 15 2017 NOTE: Updated
-	 * with guiSet library. It now works with observer-observable pattern. This
-	 * object observes buttons from the menu.
+	 * NOTE: It is set to import graphml files only. Jan 15 2017
+	 * 
+	 * NOTE: Updated with guiSet library. It now works with observer-observable
+	 * pattern. This object observes buttons from the menu instance.
 	 * 
 	 */
 	private void choiceCatcher(GuiElement button) {
@@ -214,13 +218,13 @@ public class ImportMenuGuiSet implements Observer {
 
 				} else {
 
-					JOptionPane.showMessageDialog(graphPad.frame,
+					JOptionPane.showMessageDialog(graphPad.parent.frame,
 							"Missing either \"community\" or \"label\" attributes", "Import warning",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
 
-				JOptionPane.showMessageDialog(graphPad.frame,
+				JOptionPane.showMessageDialog(graphPad.parent.frame,
 						"Must select at least \"community\" and \"label\" attributes", "Import warning",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -231,13 +235,11 @@ public class ImportMenuGuiSet implements Observer {
 				// graph if the control panel exists
 				if (ControlPanel.getInstance() != null) {
 
-					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax()
-							.getAttributeKeys();
+					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys();
 
-					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax()
-							.getAttributeKeys();
+					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
 
-					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);
+					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);   
 				}
 
 				// Hide Import Menu from main panel

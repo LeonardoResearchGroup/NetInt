@@ -65,7 +65,7 @@ public class SubContainer extends Container implements Serializable {
 	 * rootGraph) that are included in the Container's subGraph and set them the
 	 * new coordinates according to the current layout.
 	 * 
-	 * @param sourceContainer
+	 * @param sourceContainer sourceContainer
 	 */
 	public void retrieveVisualElements(Container sourceContainer) {
 		// For each node of Graph
@@ -103,7 +103,7 @@ public class SubContainer extends Container implements Serializable {
 	 * the current layout. The VNodes added to this container are removed from
 	 * the sourceContainer.
 	 * 
-	 * @param sourceContainer
+	 * @param sourceContainer sourceContainer
 	 */
 	public void retrieveVisualElements2(Container sourceContainer) {
 		// For each node of Graph
@@ -139,7 +139,7 @@ public class SubContainer extends Container implements Serializable {
 	 * Get instances of the visual elements from a given list whose Nodes are
 	 * included in the Container's graph
 	 * 
-	 * @param vCommunities
+	 * @param vCommunities Visual Communities
 	 */
 	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
 		// For each node of Graph

@@ -47,18 +47,18 @@ public class ControlPanel extends PApplet {
 	private PApplet parent;
 	private ControlP5 main;
 	private ControlP5 secondary;
-	private Group statsGroup;
+	private Group bancaGroup;
 	private CheckBox cBox;
 	private Accordion accordion;
 	private PFont font;
-	private PImage logo;
+	private static PImage logo;
 	// From NetInt: Java Network Interaction Visualization Library.
 	private final String netInt_EXTENSION = "nti";
 	// List of graphElements attribute names
 	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
-	// Groups
-	// private static Group nodeKeys;
+	// Modules
+	private boolean bancaModuleEnabled = false;
 
 	private static ControlPanel CPInstance = null;
 
@@ -95,19 +95,19 @@ public class ControlPanel extends PApplet {
 	 * 
 	 * @param _parent
 	 *            parent PApplet
-	 * @param logo
+	 * @param image
 	 *            The application logo
 	 * @param _w
 	 *            window width
 	 * @param _h
 	 *            window height
 	 */
-	public ControlPanel(PApplet _parent, PImage logo, int _w, int _h) {
+	public ControlPanel(PApplet _parent, PImage image, int _w, int _h) {
 		super();
 		parent = _parent;
 		w = _w;
 		h = _h;
-		this.logo = logo;
+		logo = image;
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 		CPInstance = this;
 	}
@@ -118,8 +118,8 @@ public class ControlPanel extends PApplet {
 		this.surface.setLocation(0, 45);
 		this.surface.setAlwaysOnTop(false);
 		if (logo == null) {
-//			URL url = GraphPad.class.getResource("/controlPanelImage.png");
-//			logo = loadImage(url.getPath());
+			// URL url = GraphPad.class.getResource("/controlPanelImage.png");
+			// logo = loadImage(url.getPath());
 			logo = loadImage("./images/netInt.png");
 		}
 		keyNamesForNodes.add("empty list");
@@ -144,11 +144,19 @@ public class ControlPanel extends PApplet {
 		main.setColorBackground(0xff353535);
 		secondary.setColorBackground(0xff353535);
 
-		String[] fileFunctions = { "Open", "Save", "Import", "Export","Load Module", "Quit"};
+		String[] fileFunctions = { "Open", "Save", "Import", "Export", "Load Module", "Quit" };
 		main.addScrollableList("File").setPosition(10, 55).setSize(180, 100).setBarHeight(18).setItemHeight(13)
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
 
+	/**
+	 * This method is invoked at Import Menu
+	 * 
+	 * @param nodeKeyNames
+	 *            User Selection of node names list
+	 * @param edgeKeyNames
+	 *            User selection of edge list
+	 */
 	public void initGroups(ArrayList<String> nodeKeyNames, ArrayList<String> edgeKeyNames) {
 
 		setKeyNamesForNodes(nodeKeyNames);
@@ -158,17 +166,17 @@ public class ControlPanel extends PApplet {
 		Group backgGroup = new Group(secondary, "Background");
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
-		statsGroup = new Group(secondary, "Financial Stats");
+		bancaGroup = new Group(secondary, "Financial Stats");
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 		backgGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(50);
 		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
-		statsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		bancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
-		cBox.setPosition(5, 7).moveTo(statsGroup);
-		statsGroup.setVisible(false);
+		cBox.setPosition(5, 7).moveTo(bancaGroup);
+		bancaGroup.setVisible(bancaModuleEnabled);
 
 		// Add Components to each group
 		setBackgroundComponents(backgGroup);
@@ -180,7 +188,7 @@ public class ControlPanel extends PApplet {
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
+		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
@@ -329,8 +337,8 @@ public class ControlPanel extends PApplet {
 		}
 	}
 
-	public void enableStatistics() {
-		statsGroup.setVisible(true);
+	public void enableBancaModule() {
+		bancaModuleEnabled = true;
 	}
 
 	public void draw() {
@@ -522,49 +530,49 @@ public class ControlPanel extends PApplet {
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			}
 			break;
-			
+
 		case "Load Module":
-			
+
 			String selectedJar = ChooseHelper.getInstance().showJFileChooser(false, "jar");
 			System.out.println("-------------------------------------------------------");
 			try {
 				parent.cursor(WAIT);
 				ArrayList<Class> classes = ClassLoader.getInstance().loadClasses(selectedJar);
-				
-				//<DELETE>----------------------------------------------------------------------
-				
-				for(Class c:classes)
-				{
+
+				// <DELETE>----------------------------------------------------------------------
+
+				for (Class c : classes) {
 					System.out.println(c.getName());
 				}
-				
-				Object[] parameters = {"S", 2.1, 2.5};
-				
+
+				Object[] parameters = { "S", 2.1, 2.5 };
+
 				try {
-					
-					Object response = ClassLoader.getInstance().invokeWithParameters(classes.get(2), "operar", parameters);
-					boolean response2 = (boolean) ClassLoader.getInstance().invokeWithoutParameters(classes.get(1), "showNodes");
-					
+
+					Object response = ClassLoader.getInstance().invokeWithParameters(classes.get(2), "operar",
+							parameters);
+					boolean response2 = (boolean) ClassLoader.getInstance().invokeWithoutParameters(classes.get(1),
+							"showNodes");
+
 					UserSettings.getInstance().setShowNodes(response2);
-					
+
 					System.out.println(response);
 					System.out.println(response2);
-					
+
 				} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
 						| IllegalArgumentException | InvocationTargetException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
 			} catch (IOException | ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} finally {
 				parent.cursor(ARROW);
 			}
-			
-			//</DELETE>----------------------------------------------------------------------
+
+			// </DELETE>----------------------------------------------------------------------
 			break;
 
 		case "Quit":
@@ -595,5 +603,9 @@ public class ControlPanel extends PApplet {
 
 	public void setMainControllerSet(ControlP5 main) {
 		this.main = main;
+	}
+
+	public static void setLogo(PImage loadImage) {
+		logo = loadImage;
 	}
 }

@@ -85,6 +85,7 @@ public abstract class Container {
 	 * This method is used to distribute nodes in layout only once after the
 	 * user clicks (opens) on the vCommunity cover
 	 * 
+	 * @return true if initialization completed
 	 */
 	public boolean initialize() {
 		if (!initializationComplete) {
@@ -124,7 +125,7 @@ public abstract class Container {
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
 			// Compute and set the diameter
-			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1),  "Node", "outDegree");
+			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), "Node", "outDegree");
 			if (diameter * 10 > tmp.getDiameter()) {
 				tmp.setDiameter(diameter * 10);
 			}
@@ -160,6 +161,8 @@ public abstract class Container {
 	 * 
 	 * Each edge has a weight equals to the number of edges linking both
 	 * communities
+	 * 
+	 * @param edgeList list of edges
 	 */
 	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList) {
 		for (Edge e : edgeList) {
@@ -181,6 +184,9 @@ public abstract class Container {
 	 * 
 	 * Each edge has a weight equals to the number of edges linking both
 	 * communities
+	 * 
+	 * @param intVComm
+	 *            the list of VCommunities
 	 */
 	public void populateGraphfromVCommunities(ArrayList<VCommunity> intVComm) {
 		System.out.println(this.getClass().getName() + " Building between edges for: " + getVCommunities().size()
@@ -215,6 +221,9 @@ public abstract class Container {
 	/**
 	 * Builds all the external edges of vCommunities contained in a deployed
 	 * community
+	 * 
+	 * @param otherVCommunities
+	 *            The VCommunities different than this one
 	 */
 	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
 		// For all otherCommunities
@@ -250,6 +259,9 @@ public abstract class Container {
 	/**
 	 * Builds all the external edges of this container with the one of a
 	 * deployed community community
+	 * 
+	 * @param otherVCommunity
+	 *            VCommunity
 	 */
 	public void buildExternalEdges(VCommunity otherVCommunity) {
 		if (!betweenEdgeGates.contains(otherVCommunity.container)) {
@@ -277,6 +289,7 @@ public abstract class Container {
 	 * Update Visual Nodes relative to a given position
 	 * 
 	 * @param diffPos
+	 *            Position
 	 */
 	public void updateVNodesCoordinates(PVector diffPos) {
 		for (VNode vN : getVNodes()) {
@@ -288,6 +301,10 @@ public abstract class Container {
 	 * Check if the current layout is an IterativeContext and runs one layout
 	 * step
 	 * 
+	 * @param vCommunityCenter
+	 *            The new center
+	 * 
+	 * @return the IterativeContext
 	 */
 	public IterativeContext stepIterativeLayout(PVector vCommunityCenter) {
 		// Step iteration as many times as parameterized
@@ -321,7 +338,7 @@ public abstract class Container {
 	 * that the layout needs to iterate over several times to achieve the
 	 * distribution of vNodes
 	 * 
-	 * @return
+	 * @return true if iterative
 	 */
 	private boolean isCurrentLayoutIterative() {
 		boolean currentLayoutIsIterativeInterface = false;
@@ -353,6 +370,7 @@ public abstract class Container {
 	 * given graph
 	 * 
 	 * @param graph
+	 *            The graph
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
 		for (VNode tmp : vNodes) {
@@ -366,7 +384,9 @@ public abstract class Container {
 	 * all VNodes of the container from a given graph
 	 * 
 	 * @param graph
+	 *            The graph
 	 * @param extContainer
+	 *            The external container
 	 */
 	public void retrieveExternalVNodeSuccessors(Graph<Node, Edge> graph, Container extContainer) {
 		for (VNode tmp : vNodes) {
@@ -433,30 +453,52 @@ public abstract class Container {
 		return iterativeLayout;
 	}
 
-	// *** Getters and setters
+	// ****** Getters and setters *****
 	public Graph<Node, Edge> getGraph() {
 		return graph;
 	}
 
+	/**
+	 * The number of nodes in this container
+	 * @return number of nodes in this container
+	 */
 	public int size() {
 		return graph.getVertexCount();
 	}
 
 	/**
-	 * Returns a the entire set of this cvollection's VNodes containing both
+	 * Returns a the entire set of Nodes in this container
+	 * 
+	 * @return List of nodes
+	 */
+	public Collection<Node> getNodes() {
+		return graph.getVertices();
+	}
+	
+	/**
+	 * Returns a the entire set of Edges in this container
+	 * 
+	 * @return List of edges
+	 */
+	public Collection<Edge> getEdges() {
+		return graph.getEdges();
+	}
+	
+	/**
+	 * Returns a the entire set of this collection's VNodes containing both
 	 * VNodes and VCommunity instances
 	 * 
-	 * @return
+	 * @return List of vNodes
 	 */
 	public ArrayList<VNode> getVNodes() {
 		return vNodes;
 	}
 
 	/**
-	 * Returns a subset of this cvollection's VNodes that are also VCommunity
+	 * Returns a subset of this collection's VNodes that are also VCommunity
 	 * instances
 	 * 
-	 * @return
+	 * @return List of VCommunities
 	 */
 	public ArrayList<VCommunity> getVCommunities() {
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
@@ -475,7 +517,7 @@ public abstract class Container {
 	 * Returns a subset of this collection's VNodes that are not VCommunity
 	 * instances
 	 * 
-	 * @return
+	 * @return List of VNodes
 	 */
 	public ArrayList<VNode> getJustVNodes() {
 		ArrayList<VNode> justVNodes = new ArrayList<VNode>();
@@ -491,7 +533,8 @@ public abstract class Container {
 	 * Returns a subset of VNodes of this container from a set of Nodes given
 	 * 
 	 * @param c
-	 * @return
+	 *            Collection of nodes
+	 * @return subset of collection of nodes
 	 */
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
@@ -548,7 +591,10 @@ public abstract class Container {
 	/**
 	 * Set coordinates to a Visual Element translated to the specified position
 	 * 
+	 * @param vN
+	 *            VNode
 	 * @param newPosition
+	 *            destination
 	 */
 	public void translateVElementCoordinates(VNode vN, PVector newPosition) {
 		float coordX = (float) layout.getX(vN.getNode()) + newPosition.x;
@@ -574,7 +620,9 @@ public abstract class Container {
 	 * from another community.
 	 * 
 	 * @param externalCommunityName
+	 *            Name of external community
 	 * @param externalContainer
+	 *            External container
 	 */
 	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
@@ -611,8 +659,8 @@ public abstract class Container {
 
 	/**
 	 * 
-	 * @param graph
-	 * @param seekNode
+	 * @param graph Graph
+	 * @param seekNode node searched
 	 * @return
 	 */
 	protected Node getEqualNode(Graph<Node, Edge> graph, Node seekNode) {
@@ -633,8 +681,8 @@ public abstract class Container {
 	/**
 	 * Hide or show the incident VEdges of a node.
 	 * 
-	 * @param node
-	 * @param visibility
+	 * @param node Node
+	 * @param visibility true if visible
 	 */
 	public void setIncidentEdgesVisibility(Node node, boolean visibility) {
 		for (Edge e : graph.getIncidentEdges(node)) {
@@ -650,7 +698,7 @@ public abstract class Container {
 	 * Draws the rectangular boundaries of the container starting from the
 	 * origin. Draws a cross hair at the center of the Dimension rectangle
 	 * 
-	 * @param origin
+	 * @param origin rectangle origin
 	 */
 	public void showBoundaries(PVector origin) {
 		PVector originShifted = new PVector(origin.x - (dimension.width / 2), origin.y - (dimension.height / 2));

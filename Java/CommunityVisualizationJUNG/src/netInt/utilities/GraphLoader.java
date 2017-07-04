@@ -37,13 +37,16 @@ public class GraphLoader {
 	/**
 	 * @param file
 	 *            The path to the source file
+	 * @param nestedAttributesOrder the vector of ordered node categorical attributes
 	 * @param nodeLabelAttributes
 	 *            List of node attributes to be retrieved from the source file
 	 * @param edgeImportAttributes
 	 *            List of edge attributes to be retrieved from the source file
 	 * @param format
+	 *            PAJEK = 1, GRAPHML = 0;
 	 */
-	public GraphLoader(String file, String[] nestedAttributesOrder ,String[] nodeLabelAttributes, String[] edgeImportAttributes, int format) {
+	public GraphLoader(String file, String[] nestedAttributesOrder, String[] nodeLabelAttributes,
+			String[] edgeImportAttributes, int format) {
 		int totalCommunities = 0;
 		System.out.println(this.getClass().getName() + "GraphLoader");
 		fileFormat = format;
@@ -53,7 +56,8 @@ public class GraphLoader {
 			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
-			theGraph = GMLreader.getJungDirectedGraph(nestedAttributesOrder, nodeLabelAttributes, edgeImportAttributes, false);
+			theGraph = GMLreader.getJungDirectedGraph(nestedAttributesOrder, nodeLabelAttributes, edgeImportAttributes,
+					false);
 			totalCommunities = GMLreader.getCommunities().size();
 		}
 		System.out.println("     Jung Graph Created from file:" + file);

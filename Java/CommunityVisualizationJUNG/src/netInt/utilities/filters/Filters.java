@@ -61,8 +61,9 @@ public class Filters {
 	/**
 	 * Returns a subgraph of jungGraph whose nodes belong to the specified
 	 * community
+	 * @param community community name
 	 * 
-	 * @return
+	 * @return a subgraph in form of DirectedSparseMultigraph
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterNodeInCommunity(final String community) {
 
@@ -99,7 +100,7 @@ public class Filters {
 	 *            The name of one community
 	 * @param communityNameB
 	 *            The name of a second community
-	 * @return
+	 * @return DirectedSparseMultigraph
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterEdgeLinkingCommunities(final String communityNameA,
 			final String communityNameB) {
@@ -134,7 +135,7 @@ public class Filters {
 	 *            The name of one community
 	 * @param communityNameB
 	 *            The name of a second community
-	 * @return
+	 * @return DirectedSparseMultigraph
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterAndRemoveEdgeLinkingCommunity(final String communityNameA,
 			final String communityNameB) {
@@ -165,8 +166,8 @@ public class Filters {
 	 * Returns a subgraph of jungGraph whose edges link nodes inside a specified
 	 * community
 	 * 
-	 * @param community
-	 * @return
+	 * @param community community name
+	 * @return DirectedSparseMultigraph
 	 */
 	public static DirectedSparseMultigraph<Node, Edge> filterEdgeInCommunity(final String community) {
 

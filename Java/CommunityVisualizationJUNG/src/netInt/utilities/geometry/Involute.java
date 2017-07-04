@@ -24,7 +24,7 @@ public class Involute {
 	private int index;
 
 	/**
-	 * @param app
+	 * @param app The PApplet
 	 * @param radius
 	 *            the radius of the circumference
 	 * @param sections
@@ -164,6 +164,8 @@ public class Involute {
 	 *            on
 	 * @param increment
 	 *            The displacement of each node on the circumference
+	 *            
+	 * @param unfolding true if unfolding
 	 */
 	public void runInvolute(float limit, float increment, boolean unfolding) {
 		if (!rotateAnchor(limit, increment, unfolding)) {
@@ -174,7 +176,7 @@ public class Involute {
 	/**
 	 * Draws the involute on the canvas around the given PVector
 	 * 
-	 * @param center
+	 * @param center PVector
 	 */
 	public void show(PVector center) {
 		PVector vAnchor = PVector.add(anchor, center);

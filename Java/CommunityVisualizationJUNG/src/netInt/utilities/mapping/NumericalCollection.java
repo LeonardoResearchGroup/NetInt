@@ -65,8 +65,8 @@ public class NumericalCollection {
 	 * Add a value to the HashMap if the key does not exists or if its current
 	 * associated value is higher to the passed parameter
 	 * 
-	 * @param key
-	 * @param value
+	 * @param key key
+	 * @param value value
 	 * @return true if the value is added
 	 */
 	public boolean addLowerValue(String key, Float value) {
@@ -88,8 +88,8 @@ public class NumericalCollection {
 	 * Add a value to the HashMap if the key does not exists or if its current
 	 * associated value is lower to the passed parameter
 	 * 
-	 * @param key
-	 * @param value
+	 * @param key key
+	 * @param value value
 	 * @return true if the value is added
 	 */
 
@@ -115,7 +115,7 @@ public class NumericalCollection {
 	 * Get the list of graph element attributes stores in this
 	 * NumericalCollection
 	 * 
-	 * @return
+	 * @return the list of graph element attributes stores in this NumericalCollection
 	 */
 	public ArrayList<String> getAttributeKeys() {
 		ArrayList<String> classElementAttributes = new ArrayList<String>();

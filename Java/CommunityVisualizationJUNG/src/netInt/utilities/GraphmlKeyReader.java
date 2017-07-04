@@ -107,9 +107,9 @@ public class GraphmlKeyReader {
 	}
 
 	/**
-	 * Returns the GraphmlKey object with all its attribute names
+	 * Returns the GraphmlKey objects with all its attribute names
 	 * 
-	 * @return
+	 * @return the list of GraphmlKeys
 	 */
 	public ArrayList<GraphmlKey> getKeys() {
 		return graphKeys;
@@ -118,7 +118,7 @@ public class GraphmlKeyReader {
 	/**
 	 * Returns all key names from the graphml
 	 * 
-	 * @return
+	 * @return all key names from the graphml
 	 */
 	public ArrayList<String> getKeyNames() {
 		ArrayList<String> tmp = new ArrayList<String>();
@@ -131,7 +131,7 @@ public class GraphmlKeyReader {
 	/**
 	 * Returns all key names of edge attributes from the graphml
 	 * 
-	 * @return
+	 * @return all key names of edge attributes from the graphml
 	 */
 	public ArrayList<String> getKeyNamesForEdges() {
 		ArrayList<String> tmp = new ArrayList<String>();
@@ -145,7 +145,7 @@ public class GraphmlKeyReader {
 	/**
 	 * Returns all key names of node attributes from the graphml
 	 * 
-	 * @return
+	 * @return all key names of node attributes from the graphml
 	 */
 	public ArrayList<String> getKeyNamesForNodes() {
 		ArrayList<String> tmp = new ArrayList<String>();

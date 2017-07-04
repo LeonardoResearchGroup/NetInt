@@ -12,6 +12,7 @@
 package netInt.graphElements;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * @author jsalam
@@ -39,6 +40,7 @@ public class Edge extends GraphElement implements Serializable {
 	}
 
 	public Edge() {
+		super();
 
 	}
 
@@ -59,12 +61,12 @@ public class Edge extends GraphElement implements Serializable {
 	// *** Getters
 
 	public Object getAttribute(String key) {
-		return absoluetAttributes.get(key);
+		return absoluteAttributes.get(key);
 	}
 
 	public String getAttribute(String key, String rtn) {
 		try {
-			rtn = (String) absoluetAttributes.get(key);
+			rtn = (String) absoluteAttributes.get(key);
 		} catch (Exception e) {
 //			System.out.println("Node Attribute couldn't be casted att");
 		}
@@ -73,7 +75,7 @@ public class Edge extends GraphElement implements Serializable {
 
 	public float getAttribute(String key, Float rtn) {
 		try {
-			rtn = (Float) absoluetAttributes.get(key);
+			rtn = (Float) absoluteAttributes.get(key);
 		} catch (Exception e) {
 //			System.out.println("Node Attribute couldn't be casted att");
 		}
@@ -82,7 +84,7 @@ public class Edge extends GraphElement implements Serializable {
 
 	public int getAttribute(String key, Integer rtn) {
 		try {
-			rtn = (Integer) absoluetAttributes.get(key);
+			rtn = (Integer) absoluteAttributes.get(key);
 		} catch (Exception e) {
 //			System.out.println("Node Attribute couldn't be casted att");
 		}
@@ -90,7 +92,11 @@ public class Edge extends GraphElement implements Serializable {
 	}
 
 	public String getName() {
-		return (String) absoluetAttributes.get("label");
+		return (String) absoluteAttributes.get("label");
+	}
+	
+	public boolean isLoop() {
+		return loop;
 	}
 
 	// *** Setters
@@ -105,10 +111,39 @@ public class Edge extends GraphElement implements Serializable {
 	public void setDirected(boolean directed) {
 		this.directed = directed;
 	}
-
-	public boolean isLoop() {
-		return loop;
+	
+	/**
+	 * Sets the attribute to this graph element. It is stored in the
+	 * absoluteAttributes HashMap
+	 * 
+	 * @param key
+	 *            key
+	 * @param value
+	 *            value
+	 */
+	public void setAttribute(String key, Object value) {
+		absoluteAttributes.put(key, value);
+		netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
 	}
+	
+	/**
+	 * Sets an object containing attributes to this graph element. It is stored
+	 * in the relativeAttributes HashMap
+	 * 
+	 * @param tier
+	 *            the tier to which the set of attributes belongs
+	 * @param attributeSet
+	 *            An object containing a set of attributes
+	 */
+	public void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet) {
+		relativeAttributes.put(tier, attributeSet);
+		// Update Mapper.minmax
+		for(String key : attributeSet.keySet()){
+			netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, attributeSet.get(key));
+		}
+	}
+
+
 
 	public boolean equals(Object obj) {
 		Edge edge = (Edge) obj;
