@@ -6,13 +6,21 @@
                             "buttonName": "Random Backdround",
                             "buttonType": "Toggle",
                             "methodName": "generateRadomBackgroundColor",
-                            "className": "classes.MyTestClass"
+                            "className": "classes.MyTestClass",
+                            "posx": 50,
+                            "posy": 50,
+                            "height": 10,
+                            "width": 10
                           },
                           {
                             "buttonName": "MyButton2",
                             "buttonType": "Toggle",
                             "methodName": "MyMethod2",
-                            "className": "MyClass2"
+                            "className": "MyClass2",
+                            "posx": 50,
+                            "posy": 100,
+                            "height": 10,
+                            "width": 10
                           }
                         ]
   
