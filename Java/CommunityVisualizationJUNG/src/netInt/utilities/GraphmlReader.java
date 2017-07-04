@@ -42,6 +42,8 @@ public class GraphmlReader {
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> vCommunityNodes;
 	private ArrayList<String> communities;
+	TreeMap<String, ArrayList<String>> nestedCommunities = new TreeMap<String, ArrayList<String>>();
+
 	private ArrayList<String> communities2;
 	// Edges between communities
 	private ArrayList<Edge> edgesBetweenCommunities;
@@ -97,9 +99,11 @@ public class GraphmlReader {
 	 * @return The collection of nodes ordered by the Integer version of their
 	 *         Id
 	 */
-	private TreeMap<Integer, Node> makeNodes(String[] nodeImportAttributes, boolean saveCategoricalAttributes) {
+	private TreeMap<Integer, Node> makeNodes(String[] nestedAttributesOrder, String[] nodeImportAttributes, boolean saveCategoricalAttributes) {
 		System.out.println(this.getClass().getName() + " Instantiating Nodes...");
-
+		
+		initializeNestedCommunties(nestedAttributesOrder);
+		
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
 
 		// *** Go over graph vertex and set all nodes
@@ -112,8 +116,19 @@ public class GraphmlReader {
 			Node nodeTmp = new Node(String.valueOf(id));
 
 			try {
+				for(String classifier: nestedAttributesOrder){
+					System.out.println(this.getClass().getName() +
+							" classifier " + classifier);
+					Object value = vertex.getProperty(classifier);
+					if (value != null) {
+						System.out.println(this.getClass().getName() +
+								" value " + value.toString());
+						addCommunity(classifier, value.toString());
+					}
+				}
 				// For the first two attributes: node community and node
 				// name
+				
 				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
 
 					// set root community as absolute attribute
@@ -128,10 +143,11 @@ public class GraphmlReader {
 					nodeTmp.setCommunity("Root", 0);
 					nodeTmp.setCommunity("Root", 1);
 				}
+				
 
 				// Label
-				if (vertex.getProperty(nodeImportAttributes[1]) != null) {
-					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[1]).toString());
+				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
+					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[0]).toString());
 				} else {
 					nodeTmp.setName("no name yet");
 					//throw new NullPointerException();
@@ -196,8 +212,8 @@ public class GraphmlReader {
 	 *            names will be stored in the collection
 	 * @return
 	 */
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nodeImportAttributes,
-			String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
+	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nestedAttributesOrder, 
+			String[] nodeImportAttributes, String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
@@ -206,7 +222,7 @@ public class GraphmlReader {
 		vCommunityNodes = new HashMap<String, Node>();
 
 		// **** MAKE NODES ****
-		TreeMap<Integer, Node> nodes = makeNodes(nodeImportAttributes, saveCategoricalAttributes);
+		TreeMap<Integer, Node> nodes = makeNodes(nestedAttributesOrder, nodeImportAttributes, saveCategoricalAttributes);
 
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
@@ -254,7 +270,8 @@ public class GraphmlReader {
 			if (saveCategoricalAttributes) {
 				Mapper.getInstance().setCategoricalEdgeAttributes(e);
 			}
-
+			
+			
 			// For the first order community graph
 			Edge metaE = new Edge(vCommunityNodes.get(nodes.get(idSource).getCommunity(1)),
 					vCommunityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
@@ -264,6 +281,7 @@ public class GraphmlReader {
 			if (!edgesBetweenCommunities.contains(metaE)) {
 				edgesBetweenCommunities.add(metaE);
 			}
+			
 
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
@@ -327,12 +345,28 @@ public class GraphmlReader {
 	public ArrayList<String> getCommunities2() {
 		return communities2;
 	}
+	
+	
 
 	private void addCommunity(String string) {
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
 			vCommunityNodes.put(string, new Node(string));
+		}
+	}
+	
+	private void addCommunity(String classiffier, String community) {
+		// If community not in the list yet
+		ArrayList<String>communitiesOfClassifier = nestedCommunities.get(classiffier);
+		if (!communitiesOfClassifier.contains(community)) {
+			communitiesOfClassifier.add(community);
+		}
+	}
+	
+	private void initializeNestedCommunties(String[] nestedAttributesOrder){
+		for(String classifier:nestedAttributesOrder){
+			nestedCommunities.put(classifier, new ArrayList<String>());
 		}
 	}
 	
@@ -394,4 +428,9 @@ public class GraphmlReader {
 	public ArrayList<Edge> getEdgesBetweenCommunities() {
 		return edgesBetweenCommunities;
 	}
+	
+	public TreeMap<String, ArrayList<String>> getNestedCommunities() {
+		return nestedCommunities;
+	}
+
 }

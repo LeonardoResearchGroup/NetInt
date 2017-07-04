@@ -13,6 +13,7 @@ package netInt.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.TreeMap;
 
 import edu.uci.ics.jung.graph.Graph;
 import netInt.graphElements.Edge;
@@ -43,7 +44,8 @@ public class GraphLoader {
 	 *            List of edge attributes to be retrieved from the source file
 	 * @param format
 	 */
-	public GraphLoader(String file, String[] nodeImportAttributes, String[] edgeImportAttributes, int format) {
+	public GraphLoader(String file, String[] nestedAttributesOrder, String[] nodeImportAttributes,
+			String[] edgeImportAttributes, int format) {
 		int totalCommunities = 0;
 		System.out.println(this.getClass().getName() + "GraphLoader");
 		fileFormat = format;
@@ -53,7 +55,7 @@ public class GraphLoader {
 			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
-			theGraph = GMLreader.getJungDirectedGraph(nodeImportAttributes, edgeImportAttributes, false);
+			theGraph = GMLreader.getJungDirectedGraph(nestedAttributesOrder, nodeImportAttributes, edgeImportAttributes, false);
 			totalCommunities = GMLreader.getCommunities().size();
 		}
 		System.out.println("     Jung Graph Created from file:" + file);
@@ -86,6 +88,10 @@ public class GraphLoader {
 			System.out.println("Borrar");
 			return GMLreader.getCommunities2();
 	}
+	
+	public TreeMap<String, ArrayList<String>> getNestedCommunities() {
+		return GMLreader.getNestedCommunities();
+}
 
 	/**
 	 * Uses 0 as index because this method is only used for root Graphs

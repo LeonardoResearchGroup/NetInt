@@ -91,6 +91,8 @@ public class ControlPanel_Example extends PApplet {
 			// file.
 			// The first one defines edge thickness
 			String[] edgeAtts = { "weight" };
+			
+			String[] nestedAtts = {"Continent", "anotherOne"};
 
 			// The node distribution layout
 			int layout = Container.FRUCHTERMAN_REINGOLD;
@@ -99,7 +101,7 @@ public class ControlPanel_Example extends PApplet {
 			int graphFormat = GraphLoader.GRAPHML;
 
 			// Load the graph
-			if (GraphPad.app.loadGraph(new File("./data/graphs/samples/Risk.graphml"), nodeAtts, edgeAtts, layout, graphFormat)) {
+			if (GraphPad.app.loadGraph(new File("./data/graphs/samples/Risk.graphml"),nestedAtts, nodeAtts, edgeAtts, layout, graphFormat)) {
 				// Activate graph in the visualization pad
 				GraphPad.setActiveGraph(true);
 			}

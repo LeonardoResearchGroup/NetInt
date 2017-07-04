@@ -113,7 +113,8 @@ public class Assembler {
 	 *            GraphLoader class
 	 * @return true if the graph was loaded successfully
 	 */
-	public boolean loadGraph(File file, String[] nodeImportAtts, String[] edgeImportAtts, int layout, int format) {
+	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeImportAtts, String[] edgeImportAtts,
+			int layout, int format) {
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 
@@ -122,11 +123,14 @@ public class Assembler {
 			GraphPad.setFile(file);
 
 		// Instantiate a graphLoader
-		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nodeImportAtts, edgeImportAtts, format);
+		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nestedAttributesOrder,  nodeImportAtts,
+				edgeImportAtts, format);
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
 		
+		
+		/*
 		ArrayList<String>comm1 = rootGraph.getCommunityNames();
 		ArrayList<String>comm2 = rootGraph.getCommunityNames2();
 		TreeMap<String, ArrayList<String>> hmap = new TreeMap<String, ArrayList<String>>();
@@ -134,6 +138,8 @@ public class Assembler {
 		//This is a test. Later it has to come from GraphLoader entirely
 		hmap.put("Continent", comm1);
 		hmap.put("ax", comm2);
+		*/
+		TreeMap<String, ArrayList<String>> hmap = rootGraph.getNestedCommunities();
 		
 		
 		
@@ -177,7 +183,7 @@ public class Assembler {
 		String[] nodeAtts = { "", "" };
 
 		// Instantiate a graphLoader
-		new GraphLoader(file.getAbsolutePath(), nodeAtts, edgeImportAtts, format);
+//		new GraphLoader(file.getAbsolutePath(), nodeAtts, edgeImportAtts, format);
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
