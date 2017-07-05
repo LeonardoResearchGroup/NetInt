@@ -11,15 +11,10 @@
  *******************************************************************************/
 package classes;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.Random;
+
 
 /**
  * 
@@ -67,11 +62,10 @@ public class MethodInvoker {
 	
 	
 	/**
-	 * Based on: http://www.mkyong.com/java/how-to-use-reflection-to-call-java-method-at-runtime/
 	 * 
 	 * Allows to invoke a method from a module.
 	 * 
-	 * @param c Class of the method.
+	 * @param theClass Class of the method.
 	 * @param methodName Method to invoke.
 	 * @param parameters Parameters of the method. Must be an Object array.
 	 * @return Response value of the method.
@@ -81,21 +75,77 @@ public class MethodInvoker {
 	 * @throws NoSuchMethodException Throwable exception
 	 * @throws InvocationTargetException Throwable exception
 	 * @throws IllegalArgumentException Throwable exception
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object invokeWithParameters(Class c, String methodName, Object[] parameters) throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException
+	 * @throws ClassNotFoundException myMethod
+	 */ 
+	public Object invokeWithParameters(String theClass, String methodName, Object[] parameters) throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException
 	{
-		//Object parameter
-		Class[] paramObject = new Class[1];
-		paramObject[0] = Object.class;
 		
-		Object instance = c.newInstance();
+		//Based on: https://stackoverflow.com/questions/16207283/how-to-pass-multiple-parameters-to-a-method-in-java-reflections
 		
-		Method method = c.getDeclaredMethod(methodName, paramObject);
-		
-		Object param = parameters;
-		
-		return method.invoke(instance, param);
+        Class<?> params[] = new Class[parameters.length];
+        
+        System.out.println(">External Jar: Matching parameters...");
+        for (int i = 0; i < parameters.length; i++) {
+           
+        	if (parameters[i].getClass() == Integer.class) {
+                
+        		System.out.println(">External Jar: Integer parameter detected.");
+        		params[i] = Integer.TYPE;
+           
+        	} 
+        	
+        	if (parameters[i].getClass() == String.class) {
+                
+        		System.out.println(">External Jar: String parameter detected.");
+        		params[i] = String.class;
+            
+        	}
+        	
+        	
+        	if (parameters[i].getClass() == Boolean.class) {
+                
+        		System.out.println(">External Jar: Boolean parameter detected.");
+        		params[i] = Boolean.class;
+            
+        	}
+        	
+        	
+        	if (parameters[i].getClass() == Random.class) {
+        		System.out.println(">External Jar: Random parameter detected.");
+        		params[i] = Random.class;
+            
+        	}
+        	
+        	
+        	if (parameters[i].getClass() == Float.class) {
+        		System.out.println(">External Jar: Float parameter detected.");
+        		params[i] = Float.class;
+            
+        	}
+        	
+        	
+        	if (parameters[i].getClass() == Object.class) {
+        		System.out.println(">External Jar: Object parameter detected.");
+        		params[i] = Object.class;
+            
+        	}
+          
+        }
+        
+        System.out.println(">External Jar: Detecting class...");
+        Class<?> cls = Class.forName(theClass);
+        System.out.println(">External Jar: Class detected.");
+        
+        System.out.println(">External Jar: Obtaining class instance...");
+        Object _instance = cls.newInstance();
+        System.out.println(">External Jar: Instance obtained.");
+        
+        System.out.println(">External Jar: Obtaining declared method...");
+        Method myMethod = cls.getDeclaredMethod(methodName, params);
+        System.out.println(">External Jar: Method obtained.");
+        
+       return  myMethod.invoke(_instance, parameters);
+       
 	}
 	
 	/**
@@ -103,7 +153,7 @@ public class MethodInvoker {
 	 * 
 	 * Allows to invoke a method from a module.
 	 * 
-	 * @param c Class of the method.
+	 * @param className Class of the method.
 	 * @param methodName Method to invoke.
 	 * @return Response value of the method.
 	 * @throws IllegalAccessException Throwable exception
@@ -112,10 +162,14 @@ public class MethodInvoker {
 	 * @throws NoSuchMethodException Throwable exception
 	 * @throws InvocationTargetException Throwable exception
 	 * @throws IllegalArgumentException Throwable exception
+	 * @throws ClassNotFoundException Throwable exception
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object invokeWithoutParameters(Class c, String methodName) throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException
+	@SuppressWarnings({ "rawtypes"})
+	public Object invokeWithoutParameters(String className, String methodName) throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException
 	{
+		
+		 Class<?> c = Class.forName(className);
+		
 		//No parameters
 		Class noparams[] = {};
 		
