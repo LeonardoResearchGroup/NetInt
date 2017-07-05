@@ -32,7 +32,6 @@ import netInt.GraphPad;
 import netInt.utilities.ActiveModules;
 import netInt.utilities.Assembler;
 import netInt.utilities.ClassLoader;
-import netInt.utilities.ExternalClasses;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.ModuleAllocator;
 import netInt.utilities.SerializeHelper;
@@ -198,9 +197,9 @@ public class ControlPanel extends PApplet {
 		// open close sections
 		accordion.open(1, 2, 3);
 
-		//Load the module content.
+		// Load the module content.
 		loadModulesContent(ActiveModules.getInstance().getModules());
-		
+
 		// Show controller
 		secondary.show();
 
@@ -465,16 +464,8 @@ public class ControlPanel extends PApplet {
 			// Module elements
 
 			ModuleGraphicalElement moduleElement = moduleElements.get(controllerName);
-			
-			try {
-				//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<AJUSTAR
-				ClassLoader.getInstance().invokeWithoutParameters(ExternalClasses.getInstance().getClasses().get(0),
-						moduleElement.getMethodName());
-			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
-					| IllegalArgumentException | InvocationTargetException e) {
-				javax.swing.JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
-						javax.swing.JOptionPane.ERROR_MESSAGE);
-			}
+
+			processModuleEvent(moduleElement);
 
 			break;
 		}
@@ -594,10 +585,8 @@ public class ControlPanel extends PApplet {
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 
-	
-		
 		for (JsonModuleFile module : modules) {
-			
+
 			// Group instantiation
 			Group group = new Group(secondary, "Module: " + module.getModuleName());
 
@@ -611,7 +600,7 @@ public class ControlPanel extends PApplet {
 
 			// use Accordion.MULTI to allow multiple group to be open at a time.
 			accordion.setCollapseMode(Accordion.MULTI);
-			
+
 		}
 
 	}
@@ -633,10 +622,9 @@ public class ControlPanel extends PApplet {
 			switch (element.getButtonType()) {
 
 			case GraphicalElementTypeConstants.TOGGLE:
-				
-				
-				secondary.addToggle(element.getButtonName()).setPosition(5, 10 * (i+1)).setSize(100, 10)
-						.moveTo(group).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+				secondary.addToggle(element.getButtonName()).setPosition(5, 10 * (i + 1)).setSize(100, 10).moveTo(group)
+						.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 				break;
 
@@ -645,6 +633,113 @@ public class ControlPanel extends PApplet {
 			// Adds the element to the map.
 			moduleElements.put(element.getButtonName(), element);
 
+		}
+	}
+
+	/**
+	 * Allows to process an event generated from a module button.
+	 * 
+	 * @param moduleElement
+	 *            The module element.
+	 */
+	private void processModuleEvent(ModuleGraphicalElement moduleElement) {
+
+		Object[] methodParameters = null;
+
+		boolean methodParametersError = false;
+
+		// If the invocation is performed with parameters.
+		if (moduleElement.isWithParameters()) {
+
+			String paramRegex = moduleElement.getMethodParameters();
+
+			// Defining the parameters.
+			String[] parameters = paramRegex.split(";");
+
+			// Defining the array of parameters.
+			methodParameters = new Object[parameters.length];
+
+			// Obtaining the parameters.
+			for (int i = 0; i < parameters.length && methodParametersError != true; i++) {
+				String param = parameters[i];
+
+				// Obtaining the method name a its class name.
+				String[] methodComponents = param.split(":");
+
+				// Obtaining the method name.
+				String methodName = methodComponents[0];
+
+				// Obtaining the class name.
+				String className = methodComponents[1];
+
+				// Invoking the method.
+				Object returnObject;
+				try {
+
+					returnObject = ClassLoader.getInstance().invokeWithoutParametersInternal(className, methodName);
+					methodParameters[i] = returnObject;
+
+				} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
+						| IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+
+					System.out.println(
+							">ClassLoader: could not obtain a parameter for the method " + moduleElement.getMethodName()
+									+ " through" + methodName + "in class " + className + ". Reason:" + e.getMessage());
+					methodParametersError = true;
+
+				}
+
+			}
+
+		}
+
+		try {
+
+			if (!moduleElement.isExternalClass()) {
+				// If the invocation is performed on a internal class.
+
+				if (methodParameters == null) {
+					// Invocation with no parameters.
+
+					ClassLoader.getInstance().invokeWithoutParametersInternal(moduleElement.getClassName(),
+							moduleElement.getMethodName());
+
+				} else {
+					// Invocation with parameters.
+
+					// Only if there is not an error with parameters.
+					if (!methodParametersError) {
+						ClassLoader.getInstance().invokeWithParametersInternal(moduleElement.getClassName(),
+								moduleElement.getMethodName(), methodParameters);
+					}
+
+				}
+
+			} else {
+				// If the invocation is performed on a external class.
+				
+				if (methodParameters == null) {
+					// Invocation with no parameters.
+
+					ClassLoader.getInstance().invokeWithoutParametersExternal(moduleElement.getClassName(),
+							moduleElement.getMethodName());
+
+				} else {
+					// Invocation with parameters.
+
+					// Only if there is not an error with parameters.
+					if (!methodParametersError) {
+						ClassLoader.getInstance().invokeWithParametersExternal(moduleElement.getClassName(),
+								moduleElement.getMethodName(), methodParameters);
+					}
+
+				}
+			}
+
+		} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
+				| IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package netInt.utilities;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class contains all external classes that were loaded. This class implements the singleton pattern.
@@ -26,14 +26,14 @@ public class ExternalClasses {
 	private static ExternalClasses instance;
 	
 	@SuppressWarnings("rawtypes")
-	private ArrayList<Class> classes;
+	private HashMap<String,Class> classes;
 
 	/**
 	 * Constructor of the class.
 	 */
 	@SuppressWarnings("rawtypes")
 	private ExternalClasses(){
-		classes = new ArrayList<Class>();
+		classes = new  HashMap<String,Class>();
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class ExternalClasses {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public ArrayList<Class> getClasses()
+	public  HashMap<String,Class> getClasses()
 	{
 		return classes;
 	}

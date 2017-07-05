@@ -141,9 +141,13 @@ public class ModuleLoader {
 		for (File f : modules) {
 			@SuppressWarnings("rawtypes")
 			ArrayList<Class> moduleClasses = ClassLoader.getInstance().loadClasses(f.getAbsolutePath());
-
+			
 			// Adding the classes to the repository.
-			ExternalClasses.getInstance().getClasses().addAll(moduleClasses);
+			for(Class<?> c: moduleClasses)
+			{
+				ExternalClasses.getInstance().getClasses().put(c.getName(), c);
+			}
+			
 		}
 
 	}
