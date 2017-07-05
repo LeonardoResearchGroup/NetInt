@@ -20,10 +20,9 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import netInt.utilities.entities.JarFilter;
 import netInt.utilities.entities.JsonModuleFile;
-import netInt.utilities.entities.ModuleGraphicalElement;
 import netInt.utilities.entities.exceptions.ModuleLoadingException;
 import netInt.utilities.entities.exceptions.NotFolderModuleException;
-import netInt.visualElements.gui.ControlPanel;
+
 
 /**
  * This class allows to load modules in the main application. Implements the
