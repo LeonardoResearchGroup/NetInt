@@ -24,9 +24,25 @@ public class ModuleGraphicalElement
 	private String methodName;
 	
 	/**
+	 * Indicates whether the method have parameters.
+	 */
+	private boolean withParameters;
+	
+	/**
+	 * A string list that contains the methods and classes for obtaining the parameters for the method to be invoked.
+	 * e.g. getType:netInt.utilities.GraphmlKey;getName:netInt.utilities.GraphmlKey
+	 */
+	private String methodParameters;
+	
+	/**
 	 * The name of the method's class invoked by the button.
 	 */
 	private String className;
+	
+	/**
+	 * Indicates whether the invocation is realized in a external jar.
+	 */
+	private boolean externalClass;
 	
 	/**
 	 * The horizontal position of the element.
@@ -60,19 +76,26 @@ public class ModuleGraphicalElement
 	 * @param buttonName The label to be used in the element.
 	 * @param buttonType The type of the element.
 	 * @param methodName The method to be invoked by the element.
+	 * @param withParameters Indicates whether the method have parameters.
+	 * @param methodParameters A string list that contains the methods and classes for obtaining the parameters for the method to be invoked.
+	 * e.g. getType:netInt.utilities.GraphmlKey;getName:netInt.utilities.GraphmlKey
 	 * @param className The class of the method to be invoked.
+	 * @param external Indicates whether the invocation is realized in a external jar.
 	 * @param posx The horizontal position of the element.
 	 * @param posy The vertical position of the element.
 	 * @param height The height of the element.
 	 * @param width The width of the element.
 	 */
-	public ModuleGraphicalElement(String buttonName, String buttonType, String methodName, String className, int posx,
+	public ModuleGraphicalElement(String buttonName, String buttonType, String methodName, boolean withParameters, String methodParameters, String className, boolean externalClass, int posx,
 			int posy, int height, int width) {
 		super();
 		this.buttonName = buttonName;
 		this.buttonType = buttonType;
 		this.methodName = methodName;
+		this.withParameters = withParameters;
+		this.methodParameters = methodParameters;
 		this.className = className;
+		this.externalClass = externalClass;
 		this.posx = posx;
 		this.posy = posy;
 		this.height = height;
@@ -106,6 +129,22 @@ public class ModuleGraphicalElement
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
+	
+	public boolean isWithParameters() {
+		return withParameters;
+	}
+
+	public void setWithParameters(boolean withParameters) {
+		this.withParameters = withParameters;
+	}
+	
+	public String getMethodParameters() {
+		return methodParameters;
+	}
+
+	public void setMethodParameters(String methodParameters) {
+		this.methodParameters = methodParameters;
+	}
 
 	public String getClassName() {
 		return className;
@@ -113,6 +152,15 @@ public class ModuleGraphicalElement
 	
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	
+	public boolean isExternalClass() {
+		return externalClass;
+	}
+
+	public void setExternalClass(boolean externalClass) {
+		this.externalClass = externalClass;
 	}
 
 	public int getPosx() {
