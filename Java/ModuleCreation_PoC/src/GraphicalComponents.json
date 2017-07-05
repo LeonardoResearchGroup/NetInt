@@ -10,10 +10,10 @@
                             "methodParameters": "",
                             "className": "classes.MyTestClass",
                             "externalClass": true,
-                            "posx": 50,
-                            "posy": 50,
+                            "posx": 5,
+                            "posy": 5,
                             "height": 10,
-                            "width": 10
+                            "width": 100
                           },
                           {
                             "buttonName": "MyButton2",
@@ -23,10 +23,10 @@
                             "methodParameters": "getType:netInt.utilities.GraphmlKey;getName:netInt.utilities.GraphmlKey",
                             "className": "classes.MyTestClass",
                             "externalClass": true,
-                            "posx": 50,
-                            "posy": 50,
+                            "posx": 5,
+                            "posy": 25,
                             "height": 10,
-                            "width": 10
+                            "width": 100
                           }
                         ]
 }

@@ -191,14 +191,14 @@ public class ControlPanel extends PApplet {
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statsGroup);
 
+		// Load the module content.
+		loadModulesContent(ActiveModules.getInstance().getModules());
+
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(1, 2, 3);
-
-		// Load the module content.
-		loadModulesContent(ActiveModules.getInstance().getModules());
+		//accordion.open(1, 2, 3);
 
 		// Show controller
 		secondary.show();
@@ -578,10 +578,6 @@ public class ControlPanel extends PApplet {
 	 */
 	private void loadModulesContent(ArrayList<JsonModuleFile> modules) {
 
-		// Accordion GUI
-		Accordion accordion = secondary.addAccordion("accModules").setPosition(10, 545).setWidth(180)
-				.setMinItemHeight(160);
-
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 
@@ -597,9 +593,6 @@ public class ControlPanel extends PApplet {
 
 			// create a new accordion. Add group to the accordion.
 			accordion.addItem(group);
-
-			// use Accordion.MULTI to allow multiple group to be open at a time.
-			accordion.setCollapseMode(Accordion.MULTI);
 
 		}
 
@@ -622,8 +615,8 @@ public class ControlPanel extends PApplet {
 			switch (element.getButtonType()) {
 
 			case GraphicalElementTypeConstants.TOGGLE:
-
-				secondary.addToggle(element.getButtonName()).setPosition(5, 10 * (i + 1)).setSize(100, 10).moveTo(group)
+				
+				secondary.addToggle(element.getButtonName()).setPosition(element.getPosx(), element.getPosy()).setSize(element.getWidth(), element.getHeight()).moveTo(group)
 						.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 				break;
@@ -717,7 +710,7 @@ public class ControlPanel extends PApplet {
 
 			} else {
 				// If the invocation is performed on a external class.
-				
+
 				if (methodParameters == null) {
 					// Invocation with no parameters.
 
