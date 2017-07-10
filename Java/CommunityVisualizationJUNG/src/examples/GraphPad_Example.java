@@ -57,7 +57,7 @@ public class GraphPad_Example extends PApplet {
 		// The first one defines edge thickness
 		String[] edgeAtts = { "monto"};
 		
-		String[] nestedAtts = {"community", "SEGMENTO"};
+		String[] nestedAtts = {"community"};
 				
 		
 
