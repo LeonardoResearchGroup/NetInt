@@ -212,8 +212,7 @@ public class GraphmlReader {
 	 *            names will be stored in the collection
 	 * @return
 	 */
-	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nestedAttributesOrder, 
-			String[] nodeImportAttributes, String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
+	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nestedAttributesOrder, String[] nodeImportAttributes, String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
 		// Notify progress on console
