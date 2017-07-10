@@ -22,6 +22,10 @@ import netInt.graphElements.Node;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.predicates.Predicates;
 
+/**
+ * @author jsalam
+ *
+ */
 public class Filters {
 
 	// This graph contains all the nodes that have not been removed after
