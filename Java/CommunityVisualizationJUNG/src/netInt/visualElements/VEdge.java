@@ -120,9 +120,8 @@ public class VEdge implements Serializable {
 							setThickness(scaleFactor* tmp);
 
 							/// COLOR TEMPORARY
-							ColorMap cMap = new ColorMap("plasma");
 							float mappedVal = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
-							int mappedColor = cMap.getColorRGB(mappedVal);
+							int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
 							bezier.setColor(mappedColor);
 						}
 
