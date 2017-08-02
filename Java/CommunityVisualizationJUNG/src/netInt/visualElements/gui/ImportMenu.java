@@ -141,8 +141,8 @@ public class ImportMenu implements ControlListener {
 				}
 				// Ask the assembler to load the graph
 				if (nodeList.getSelection()[0] != null && nodeList.getSelection()[1] != null) {
-					GraphPad.app.loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
-							layoutSelection, GraphLoader.GRAPHML);
+					//GraphPad.app.loadGraph(GraphPad.getFile(), nodeList.getSelection(), edgeList.getSelection(),
+							//layoutSelection, GraphLoader.GRAPHML);
 					GraphPad.setActiveGraph(true);
 				} else {
 					JOptionPane.showMessageDialog(parent.frame, "Missing either \"community\" or \"label\" attributes",

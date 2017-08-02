@@ -271,6 +271,8 @@ public class GraphmlReader {
 			}
 			
 			
+			/*
+			
 			// For the first order community graph
 			Edge metaE = new Edge(vCommunityNodes.get(nodes.get(idSource).getCommunity(1)),
 					vCommunityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
@@ -281,10 +283,12 @@ public class GraphmlReader {
 				edgesBetweenCommunities.add(metaE);
 			}
 			
-
+			*/
+			
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
+		System.out.println(this.getClass().getName() + " kate");
 		return rtnGraph;
 	}
 
