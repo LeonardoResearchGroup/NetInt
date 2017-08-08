@@ -113,8 +113,8 @@ public class Assembler {
 	 *            GraphLoader class
 	 * @return true if the graph was loaded successfully
 	 */
-	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeImportAtts, String[] edgeImportAtts,
-			int layout, int format) {
+	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeImportAtts,
+			String[] edgeImportAtts, int layout, int format) {
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 
@@ -123,33 +123,35 @@ public class Assembler {
 			GraphPad.setFile(file);
 
 		// Instantiate a graphLoader
-		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nestedAttributesOrder,  nodeImportAtts,
+		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nestedAttributesOrder, nodeImportAtts,
 				edgeImportAtts, format);
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
-		
-		
+
 		/*
-		ArrayList<String>comm1 = rootGraph.getCommunityNames();
-		ArrayList<String>comm2 = rootGraph.getCommunityNames2();
-		TreeMap<String, ArrayList<String>> hmap = new TreeMap<String, ArrayList<String>>();
-		
-		//This is a test. Later it has to come from GraphLoader entirely
-		hmap.put("Continent", comm1);
-		hmap.put("ax", comm2);
-		*/
+		 * ArrayList<String>comm1 = rootGraph.getCommunityNames();
+		 * ArrayList<String>comm2 = rootGraph.getCommunityNames2();
+		 * TreeMap<String, ArrayList<String>> hmap = new TreeMap<String,
+		 * ArrayList<String>>();
+		 * 
+		 * //This is a test. Later it has to come from GraphLoader entirely
+		 * hmap.put("Continent", comm1); hmap.put("ax", comm2);
+		 */
 		TreeMap<String, ArrayList<String>> hmap = rootGraph.getNestedCommunities();
-		
-		
-		
+
 		// List of Second Order Communities: sub communities
-//		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
+		// secondOrderVComm =
+		// createSecondOrderVCommunities(GraphLoader.theGraph,
+		// rootGraph.getCommunityNames(), layout);
 
 		// First order community: Community of communities
-//		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
-//				"FirstOrderCommunity", layout);
-		firstOrderVComm = createStructureRecursive((DirectedSparseMultigraph<Node, Edge> )GraphLoader.theGraph, hmap, "basic", layout);
+		// firstOrderVComm =
+		// createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(),
+		// secondOrderVComm,
+		// "FirstOrderCommunity", layout);
+		firstOrderVComm = createStructureRecursive((DirectedSparseMultigraph<Node, Edge>) GraphLoader.theGraph, hmap,
+				"basic", layout);
 		firstOrderVComm.initialize();
 
 		return true;
@@ -184,7 +186,8 @@ public class Assembler {
 		String[] nodeAtts = { "", "" };
 
 		// Instantiate a graphLoader
-//		new GraphLoader(file.getAbsolutePath(), nodeAtts, edgeImportAtts, format);
+		// new GraphLoader(file.getAbsolutePath(), nodeAtts, edgeImportAtts,
+		// format);
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
@@ -328,29 +331,37 @@ public class Assembler {
 	public void setRootDimension(Dimension rootDimension) {
 		this.rootDimension = rootDimension;
 	}
-	
+
 	public HashMap<Integer, ArrayList<String>> hmap = new HashMap<Integer, ArrayList<String>>();
-	
-	
+
 	/**
-	 * A recursive method which constructs a VCommunity with a hierarchy of nested VCommunities inside it.
-	 * @param graph The graph which will be split in different according to the first list in communityClasifiers
-	 * @param communityClasifiers Lists of communities in the different levels of the hierarchy
-	 * @param nameCommunity Name of the community that is returned.
+	 * A recursive method which constructs a VCommunity with a hierarchy of
+	 * nested VCommunities inside it.
+	 * 
+	 * @param graph
+	 *            The graph which will be split in different according to the
+	 *            first list in communityClasifiers
+	 * @param communityClassifiers
+	 *            Lists of communities in the different levels of the hierarchy
+	 * @param nameCommunity
+	 *            Name of the community that is returned.
 	 * @param layout
 	 * @return
 	 */
-	public VCommunity createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph, TreeMap<String, ArrayList<String>> communityClasifiers,
-			String nameCommunity, int layout){
-		//VCommunities whose will be added to 'nameCommunity'
+	public VCommunity createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph,
+			TreeMap<String, ArrayList<String>> communityClassifiers, String nameCommunity, int layout) {
+
+		// VCommunities whose will be added to 'nameCommunity'
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
-		//The first partition comes from the first list of communityClasifiers
-		String communityTag = communityClasifiers.firstKey();
-		int numberOfCommunities = communityClasifiers.get(communityTag).size();
-		
-		System.out.println(this.getClass().getName() +
-				" Number of communities for " + nameCommunity + " " +  numberOfCommunities );
-		
+
+		// The first partition comes from the first list of communityClassifiers
+		String communityTag = communityClassifiers.firstKey();
+
+		int numberOfCommunities = communityClassifiers.get(communityTag).size();
+
+		System.out.println(
+				this.getClass().getName() + " Number of communities for " + nameCommunity + " " + numberOfCommunities);
+
 		// Color
 		boolean colorBlindSafe = false;
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
@@ -358,61 +369,68 @@ public class Assembler {
 		Color[] myGradient = myBrewer.getColorPalette(numberOfCommunities);
 		//
 
-		for(int i = 0; i < numberOfCommunities;  i++){
+		for (int i = 0; i < numberOfCommunities; i++) {
 
-			String communityName = communityClasifiers.get(communityTag).get(i);
-			
-			System.out.println(this.getClass().getName() +
-					" Working on community " + communityName);
+			String communityName = communityClassifiers.get(communityTag).get(i);
+
+			System.out.println(this.getClass().getName() + " Working on community " + communityName);
 
 			// SubGraph of each community
-			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity( communityName, graph, communityTag);
-//			System.out.println("     Vertex Count After filter " + graphTemp.getVertexCount());
+			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName, graph,
+					communityTag);
+
+			// System.out.println(" Vertex Count After filter " +
+			// graphTemp.getVertexCount());
 			VCommunity communityTemp = null;
-			
-			if(graphTemp.getVertexCount() == 0){
+
+			if (graphTemp.getVertexCount() == 0) {
 				continue;
 			}
-			
-			//stopping criterion for the recursive method
-			if(communityClasifiers.size() == 1){
-					
-					//Creation of a community made of nodes instead communities
-				
-					SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
 
-					// Name container
-					containerTemp.setName(communityName);
+			// stopping criterion for the recursive method. CommunityClassifiers'
+			// size is regularly larger than 1. At each iteration its size
+			// decreases by 1 until there is only 1 object in that list, thus
+			// when its size is equal to 1 it reached the last instance
+			if (communityClassifiers.size() == 1) {
 
-					// Make Node for CommunityCover
-					Node tmpNode = new Node(communityName);
+				// Creation of a community made of nodes instead of communities
 
-					// Name Node
-					tmpNode.setName(communityName);
+				SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600),
+						myGradient[i]);
 
-					// Create temporal community
-					communityTemp = new VCommunity(tmpNode, containerTemp);
-					communityTemp.init();
+				// Name container
+				containerTemp.setName(communityName);
 
-				
-			}else{
-				//RECURSION
-				//Creation of a community made of communities 
-				
-				//communityClasifiers is copied
-				TreeMap<String, ArrayList<String>> communityClasifiersCopy = new TreeMap<String, ArrayList<String>>(communityClasifiers);
+				// Make Node for CommunityCover
+				Node tmpNode = new Node(communityName);
+
+				// Name Node
+				tmpNode.setName(communityName);
+
+				// Create temporal community
+				communityTemp = new VCommunity(tmpNode, containerTemp);
+				communityTemp.init();
+
+			} else {
+				// RECURSION
+				// Creation of a community made of communities
+
+				// communityClasifiers is copied
+				TreeMap<String, ArrayList<String>> communityClasifiersCopy = new TreeMap<String, ArrayList<String>>(
+						communityClassifiers);
 				communityClasifiersCopy.remove(communityTag);
-				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout );
-				
+				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout);
+
 			}
-			
+
 			vCommunities.add(communityTemp);
-			
-			
+
 		}
 		
-		System.out.println(this.getClass().getName() + " Communities of "+nameCommunity+":"+vCommunities.size());
-		
+		// HACER AQUI UN JUNG GRAPH DE VCOMMUNITIES
+
+		System.out.println(this.getClass().getName() + " Communities of " + nameCommunity + ":" + vCommunities.size());
+
 		// SubContainers for each VCommunity
 		SubContainer containerTemp = new SubContainer(graph, layout, new Dimension(600, 600), new Color(5));
 
@@ -424,8 +442,7 @@ public class Assembler {
 
 		// Make Node for CommunityCover
 		Node tmpNode = new Node(nameCommunity);
-		
-		
+
 		containerTemp.assignVisualElements(vCommunities);
 
 		// Name Node
@@ -437,12 +454,12 @@ public class Assembler {
 
 		return communityFather;
 	}
-	
+
 	/**
-	public void createStructureIterative(VCommunity parentCommunity, HashMap<Integer, ArrayList<String>> communityClasifiers){
-		for(ArrayList<String> a : communityClasifiers.get(arg0)){
-			
-		}
-	}
-	*/
+	 * public void createStructureIterative(VCommunity parentCommunity,
+	 * HashMap<Integer, ArrayList<String>> communityClasifiers){ for(ArrayList
+	 * <String> a : communityClasifiers.get(arg0)){
+	 * 
+	 * } }
+	 */
 }
