@@ -150,6 +150,7 @@ public class Assembler {
 //		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 //				"FirstOrderCommunity", layout);
 		firstOrderVComm = createStructureRecursive((DirectedSparseMultigraph<Node, Edge> )GraphLoader.theGraph, hmap, "basic", layout);
+		firstOrderVComm.initialize();
 
 		return true;
 	}
@@ -409,6 +410,8 @@ public class Assembler {
 			
 			
 		}
+		
+		System.out.println(this.getClass().getName() + " Communities of "+nameCommunity+":"+vCommunities.size());
 		
 		// SubContainers for each VCommunity
 		SubContainer containerTemp = new SubContainer(graph, layout, new Dimension(600, 600), new Color(5));

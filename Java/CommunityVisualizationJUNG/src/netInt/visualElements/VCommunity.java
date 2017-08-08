@@ -73,6 +73,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void show() {
+		System.out.println(this.getClass().getName() + " "+container.getName()+ " hola");
 		// Display the community cover
 		comCover.show(container, containsSearchedNode);
 		// Check if community cover is completely deployed
@@ -92,6 +93,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			} else {
 				container.initialize();
+				System.out.println(this.getClass().getName() + " "+container.getName()+ " initialize");
 			}
 
 			// If the layout is iterative
@@ -119,6 +121,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// current vCommunity center. This is needed to reposition deployed and
 		// collapsed VCommunities with the mouse
 		updateContainer(Canvas.mouseEventOnCanvas);
+		System.out.println(this.getClass().getName() + " "+container.getName()+ " updatecontainer");
 	}
 
 	/**
@@ -142,7 +145,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				// If the container Layout iterates to distribute nodes
 				if (container.isLayoutIterative()) {
 					if (container.stepIterativeLayout(pos).done() || container.isDone()) {
-
 						// Show internal edges
 						for (VEdge vE : container.getVEdges()) {
 							
@@ -157,7 +159,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						}
 					}
 				} else {
-
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
 						
@@ -173,6 +174,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
+		
 		
 		// External edges
 		if (UserSettings.getInstance().showExternalEdges()) {

@@ -47,21 +47,21 @@ public class GraphPad_Example extends PApplet {
 		pad = new GraphPad(this);
 
 		// The path to the source file
-		//File file = new File("./data/graphs/samples/comunidadesFinal.graphml");
-		File file = new File("./data/graphs/samples/riskMod.graphml");
+		File file = new File("./data/graphs/samples/comunidadesFinal.graphml");
+		//File file = new File("./data/graphs/samples/riskMod.graphml");
 
 		// In Graphml file format. Node attributes copied from the graphml file.
 		// The first one defines the communities, the second the node names
-		//String[] nodeAtts = {"name",  "label", "ax" };
-		String[] nodeAtts = { "label", "ax" };
+		String[] nodeAtts = {"name",  "label", "ax" };
+		//String[] nodeAtts = { "label", "ax" };
 
 		// In Graphml file format. Edge attributes copied from the graphml file.
 		// The first one defines edge thickness
-		//String[] edgeAtts = { "monto"};
 		String[] edgeAtts = { "monto"};
+		//String[] edgeAtts = { "monto"};
 		
-		//String[] nestedAtts = {"community"};
-		String[] nestedAtts = {"Continent", "anotherOne"};
+		String[] nestedAtts = {"community"};
+		//String[] nestedAtts = {"Continent"};
 				
 		
 

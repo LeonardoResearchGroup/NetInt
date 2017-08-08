@@ -100,6 +100,7 @@ public abstract class Container {
 				runVEdgeFactory();
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
+				initializeElements();
 			} else {
 				distributeNodesInLayout(currentLayout, dimension);
 				System.out
@@ -107,6 +108,7 @@ public abstract class Container {
 //				runVEdgeFactory();
 				//System.out.println("peligro");
 				setVElementCoordinates();
+				initializeElements();
 			}
 			iterativeLayout = isCurrentLayoutIterative();
 			initializationComplete = true;
@@ -663,5 +665,15 @@ public abstract class Container {
 				originShifted.x + (dimension.width / 2), originShifted.y + dimension.height);
 		Canvas.app.line(originShifted.x, originShifted.y + (dimension.height / 2), originShifted.x + +(dimension.width),
 				originShifted.y + +(dimension.height / 2));
+	}
+	
+	/**
+	 * rEGISTE
+	 */
+	private void initializeElements() {
+		System.out.println(this.getClass().getName() + " Comunidad:"+getName() + " Inicializando");
+		for (VNode vN : vNodes) {
+			vN.initialize();
+		}
 	}
 }

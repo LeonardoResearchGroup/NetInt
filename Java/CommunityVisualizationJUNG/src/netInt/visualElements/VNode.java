@@ -59,7 +59,7 @@ public class VNode extends VisualAtom implements Serializable {
 		visible = false;
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
-		registerEvents();
+		//registerEvents();
 	}
 
 	public VNode(VNode vNode) {
@@ -70,7 +70,7 @@ public class VNode extends VisualAtom implements Serializable {
 		propagationSteps = 0;
 		description = new VNodeDescription();
 		visible = false;
-		registerEvents();
+		//registerEvents();
 	}
 
 	// *** PROPAGATION
@@ -267,6 +267,7 @@ public class VNode extends VisualAtom implements Serializable {
 				Canvas.app.noStroke();
 			}
 		}
+		
 	}
 
 	public boolean hasNode(Node node) {
@@ -346,6 +347,11 @@ public class VNode extends VisualAtom implements Serializable {
 
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
+	}
+	
+	public void initialize(){
+		registerEvents();
+		
 	}
 
 }

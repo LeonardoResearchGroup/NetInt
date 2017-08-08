@@ -66,7 +66,7 @@ public class Node extends GraphElement implements Serializable {
 	public boolean belongsTo(String community, String communityTag) {
 //		printAttributes();
 		boolean rtn = false;
-		if(absoluetAttributes.get(communityTag).equals(community)){
+		if(absoluetAttributes.get(communityTag).toString().equals(community)){
 			rtn = true;
 		}
 		return rtn;
