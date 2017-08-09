@@ -9,47 +9,54 @@
  * 	
  * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
  *******************************************************************************/
-package netInt.containers;
+package netInt.containers.layout;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import netInt.visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
-public class LinearLayout extends Arrangement  {
+public class CircularLayout extends Arrangement {
 	public PApplet app;
 
-	public LinearLayout(PApplet app) {
+	public CircularLayout(PApplet app, String name) {
 		super();
 		this.app = app;
 	}
 
-	/**
-	 * Assigns coordinates to each VisualAtom on an horizontal axis. The length
-	 * of the axis is the width of the Applet minus 2* margin. Center is at
-	 * (0,0)
-	 * 
-	 * @param margin
-	 *            the gap between the Applet margin and each extreme of the axis
-	 *@param visualElements list of VisualAtom            
-	 */
-	public void linearLayout(float margin, ArrayList<VisualAtom> visualElements) {
+	public void layout(PVector center, float radius, ArrayList<VisualAtom> visualElements) {
+		// clear previous layout
 		clearLayout(visualElements);
-		float dist = app.width - (2 * margin);
-		float xStep = (float) dist / (visualElements.size()-1);
-		PVector left = new PVector(dist/-2, 0);
+		// Organize nodes on a circle
+		float step = PConstants.TWO_PI / visualElements.size();
+		Iterator<VisualAtom> itrVNode = visualElements.iterator();
 		int count = 0;
-		
-		// Organize nodes on a line
-		Iterator<VisualAtom> itr = visualElements.iterator();
-		while (itr.hasNext()) {
-			VisualAtom tmp = itr.next();
-			tmp.setX(left.x + (xStep * count));
-			tmp.setY(left.y);
+		while (itrVNode.hasNext()) {
+			VisualAtom tmp = itrVNode.next();
+			// calculated the angle rotated to the top quadrant
+			float angle = calcAngle(step, count) - PConstants.HALF_PI;
+			// get XY
+			PVector XY = getXY(angle);
+			// multiply by radius
+			XY.mult(radius);
+			// center XY
+			XY.add(center);
+			// set new XY
+			tmp.getPos().set(XY);
 			count++;
 		}
 	}
 
+	private PVector getXY(float angle) {
+		PVector rtn = new PVector(PApplet.cos(angle), PApplet.sin(angle));
+		return rtn;
+	}
+
+	public float calcAngle(float step, int index) {
+		float rtnAngle = (step * index);
+		return rtnAngle;
+	}
 }

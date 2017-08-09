@@ -9,7 +9,7 @@
  * 	
  * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
  *******************************************************************************/
-package netInt.containers;
+package netInt.containers.layout;
 
 import java.util.ArrayList;
 
