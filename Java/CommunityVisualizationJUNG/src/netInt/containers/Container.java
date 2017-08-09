@@ -89,24 +89,32 @@ public abstract class Container {
 	 */
 	public boolean initialize() {
 		if (!initializationComplete) {
+
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 			distributeNodesInLayout(currentLayout, dimension);
+
 			if (vNodes.size() == 0) {
+
 				// Generate Visual Elements
 				System.out.println(
 						this.getClass().getName() + " Building " + graph.getVertices().size() + " visual nodes");
 				runVNodeFactory();
+
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 				runVEdgeFactory();
+
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
+
 			} else {
 				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 				distributeNodesInLayout(currentLayout, dimension);
+
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 				runVEdgeFactory();
+
 				setVElementCoordinates();
 			}
 			iterativeLayout = isCurrentLayoutIterative();
@@ -124,13 +132,18 @@ public abstract class Container {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
-			// Compute and set the diameter
+
+			// Compute and set the node diameter
 			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), "Node", "outDegree");
+
 			if (diameter * 10 > tmp.getDiameter()) {
 				tmp.setDiameter(diameter * 10);
 			}
+
 			tmp.absoluteToRelative(layoutCenter);
+
 			tmp.setColor(color);
+
 			vNodes.add(tmp);
 		}
 	}
@@ -162,7 +175,8 @@ public abstract class Container {
 	 * Each edge has a weight equals to the number of edges linking both
 	 * communities
 	 * 
-	 * @param edgeList list of edges
+	 * @param edgeList
+	 *            list of edges
 	 */
 	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList) {
 		for (Edge e : edgeList) {
@@ -396,19 +410,32 @@ public abstract class Container {
 	}
 
 	// *** Layouts
+	/**
+	 * Distributes nodes within the boundaries of a two dimensional space
+	 * following the given algorithm
+	 * 
+	 * @param kindOfLayout
+	 *            Defined as static attribute
+	 * @param dimension
+	 *            The boundaries of the two dimensional space
+	 */
 	protected void distributeNodesInLayout(int kindOfLayout, Dimension dimension) {
+
 		switch (kindOfLayout) {
+
 		// Circular layout
 		case (Container.CIRCULAR):
 			layout = circle(dimension);
 			layoutCenter = new PVector(0, 0);
 			break;
+
 		// SpringLayout
 		case (Container.SPRING):
 			layout = spring(dimension);
 			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
 					(float) (layout.getSize().getHeight() / 2));
 			break;
+
 		// LinearLayout
 		case (Container.FRUCHTERMAN_REINGOLD):
 			layout = fruchtermanReingold(dimension);
@@ -460,6 +487,7 @@ public abstract class Container {
 
 	/**
 	 * The number of nodes in this container
+	 * 
 	 * @return number of nodes in this container
 	 */
 	public int size() {
@@ -474,7 +502,7 @@ public abstract class Container {
 	public Collection<Node> getNodes() {
 		return graph.getVertices();
 	}
-	
+
 	/**
 	 * Returns a the entire set of Edges in this container
 	 * 
@@ -483,7 +511,7 @@ public abstract class Container {
 	public Collection<Edge> getEdges() {
 		return graph.getEdges();
 	}
-	
+
 	/**
 	 * Returns a the entire set of this collection's VNodes containing both
 	 * VNodes and VCommunity instances
@@ -659,8 +687,10 @@ public abstract class Container {
 
 	/**
 	 * 
-	 * @param graph Graph
-	 * @param seekNode node searched
+	 * @param graph
+	 *            Graph
+	 * @param seekNode
+	 *            node searched
 	 * @return
 	 */
 	protected Node getEqualNode(Graph<Node, Edge> graph, Node seekNode) {
@@ -681,8 +711,10 @@ public abstract class Container {
 	/**
 	 * Hide or show the incident VEdges of a node.
 	 * 
-	 * @param node Node
-	 * @param visibility true if visible
+	 * @param node
+	 *            Node
+	 * @param visibility
+	 *            true if visible
 	 */
 	public void setIncidentEdgesVisibility(Node node, boolean visibility) {
 		for (Edge e : graph.getIncidentEdges(node)) {
@@ -698,7 +730,8 @@ public abstract class Container {
 	 * Draws the rectangular boundaries of the container starting from the
 	 * origin. Draws a cross hair at the center of the Dimension rectangle
 	 * 
-	 * @param origin rectangle origin
+	 * @param origin
+	 *            rectangle origin
 	 */
 	public void showBoundaries(PVector origin) {
 		PVector originShifted = new PVector(origin.x - (dimension.width / 2), origin.y - (dimension.height / 2));

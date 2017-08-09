@@ -11,45 +11,62 @@
  *******************************************************************************/
 package netInt.containers.layout;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
-import netInt.visualElements.primitives.VisualAtom;
-import processing.core.PApplet;
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.graph.Graph;
+import netInt.graphElements.Edge;
+import netInt.graphElements.Node;
 import processing.core.PVector;
 
-public class LinearLayout extends Arrangement  {
-	public PApplet app;
+public class LinearLayout extends AbstractLayout<Node, Edge> {
+	float margin = 50;
 
-	public LinearLayout(PApplet app) {
-		super();
-		this.app = app;
+	public LinearLayout(Graph<Node, Edge> graph) {
+		super(graph);
 	}
 
 	/**
-	 * Assigns coordinates to each VisualAtom on an horizontal axis. The length
-	 * of the axis is the width of the Applet minus 2* margin. Center is at
+	 * Assigns coordinates to each Node on an horizontal axis. The length
+	 * of the axis is the width of the Dimension minus 2* margin. Center is at
 	 * (0,0)
 	 * 
 	 * @param margin
 	 *            the gap between the Applet margin and each extreme of the axis
-	 *@param visualElements list of VisualAtom            
+	 * @param visualElements
+	 *            list of VisualAtom
 	 */
-	public void linearLayout(float margin, ArrayList<VisualAtom> visualElements) {
-		clearLayout(visualElements);
-		float dist = app.width - (2 * margin);
-		float xStep = (float) dist / (visualElements.size()-1);
-		PVector left = new PVector(dist/-2, 0);
-		int count = 0;
+	public void linearLayout() {
 		
+		// size is the Dimension size
+		float dist = (float) (size.getWidth() - (2 * margin));
+		
+		// graph is the passed graph in the construction time
+		float xStep = (float) dist / (graph.getVertexCount() - 1);
+		
+		PVector left = new PVector(dist / -2, 0);
+		
+		int count = 0;
+
 		// Organize nodes on a line
-		Iterator<VisualAtom> itr = visualElements.iterator();
-		while (itr.hasNext()) {
-			VisualAtom tmp = itr.next();
-			tmp.setX(left.x + (xStep * count));
-			tmp.setY(left.y);
-			count++;
-		}
+		Iterator<Node> itr = graph.getVertices().iterator();
+//		while (itr.hasNext()) {
+//			Node tmp = itr.next();
+//			tmp.setX(left.x + (xStep * count));
+//			tmp.setY(left.y);
+//			count++;
+//		}
 	}
 
+	@Override
+	public void initialize() {
+		// DO HERE THE ALLOCATION OF COORDINATES FOR EACH NODE
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 }

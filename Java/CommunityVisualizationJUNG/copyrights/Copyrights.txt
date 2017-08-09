@@ -1,6 +1,6 @@
 NETINT - JAVA NETWORKED INTERACTION VISUALIZATION
 
-License: LGPL 2.1
+License: LGPL 3.0
 Authors: Juan Salamanca, Cesar Loaiza, Luis Felipe Rivera & Javier Diaz
 Date: March 17, 2017
 
