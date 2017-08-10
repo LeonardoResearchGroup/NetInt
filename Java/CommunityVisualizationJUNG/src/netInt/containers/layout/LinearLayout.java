@@ -36,7 +36,7 @@ public class LinearLayout extends AbstractLayout<Node, Edge> {
 	 * @param visualElements
 	 *            list of VisualAtom
 	 */
-	public void linearLayout() {
+	public void initialize() {
 		
 		// size is the Dimension size
 		float dist = (float) (size.getWidth() - (2 * margin));
@@ -58,11 +58,6 @@ public class LinearLayout extends AbstractLayout<Node, Edge> {
 //		}
 	}
 
-	@Override
-	public void initialize() {
-		// DO HERE THE ALLOCATION OF COORDINATES FOR EACH NODE
-		
-	}
 
 	@Override
 	public void reset() {
