@@ -36,3 +36,9 @@ Source: https://github.com/rcsb/colorbrewer
 License: LGPL 2.1 https://github.com/rcsb/colorbrewer/blob/master/LICENSE
 Authors: Andreas Prlic https://github.com/andreasprlic
 Acknowledgments: Cynthia Brewer, Mark Harrower and The Pennsylvania State University http://colorbrewer2.org/
+
+GUAVA
+Source: https://github.com/google/guava
+License: Apache License Version 2.0
+Authors: https://github.com/google/guava
+

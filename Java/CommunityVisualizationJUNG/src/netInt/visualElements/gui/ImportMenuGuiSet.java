@@ -259,6 +259,10 @@ public class ImportMenuGuiSet implements Observer {
 		case "Circular":
 			selection = Container.CIRCULAR;
 			break;
+		case "Linear":
+			selection = Container.LINEAR;
+			break;
+			
 		}
 		return selection;
 	}

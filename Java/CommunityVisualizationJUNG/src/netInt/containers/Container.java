@@ -24,6 +24,7 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.canvas.Canvas;
+import netInt.containers.layout.LinearLayout;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.GraphLoader;
@@ -46,6 +47,7 @@ public abstract class Container {
 	public static final int CIRCULAR = 0;
 	public static final int SPRING = 1;
 	public static final int FRUCHTERMAN_REINGOLD = 2;
+	public static final int LINEAR = 3;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
 	// Visual Elements
@@ -436,11 +438,17 @@ public abstract class Container {
 					(float) (layout.getSize().getHeight() / 2));
 			break;
 
-		// LinearLayout
+		// FRLayout
 		case (Container.FRUCHTERMAN_REINGOLD):
 			layout = fruchtermanReingold(dimension);
 			layoutCenter = new PVector((float) (layout.getSize().getWidth() / 2),
 					(float) (layout.getSize().getHeight() / 2));
+			break;
+
+		// LinearLayout
+		case (Container.LINEAR):
+			layout = line(dimension);
+			layoutCenter = new PVector(0, (float) (layout.getSize().getHeight() / 2));
 			break;
 		}
 	}
@@ -470,6 +478,12 @@ public abstract class Container {
 		frLayout.setRepulsionMultiplier(0.5);
 		frLayout.setMaxIterations(100);
 		return frLayout;
+	}
+
+	protected AbstractLayout<Node, Edge> line(Dimension dimension) {
+		LinearLayout<Node, Edge> line = new LinearLayout<Node, Edge>(graph);
+		line.setSize(dimension);
+		return line;
 	}
 
 	public boolean isInitializationComplete() {
