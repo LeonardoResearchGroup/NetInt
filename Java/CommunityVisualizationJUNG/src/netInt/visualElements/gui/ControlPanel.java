@@ -166,14 +166,16 @@ public class ControlPanel extends PApplet {
 		Group backgGroup = new Group(secondary, "Background");
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
+		Group communitiesGroup = new Group(secondary, "Community");
 		bancaGroup = new Group(secondary, "Financial Stats");
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 		backgGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(50);
-		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
-		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
-		bancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
+		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
+		communitiesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
+		bancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(bancaGroup);
 		bancaGroup.setVisible(bancaModuleEnabled);
@@ -188,13 +190,13 @@ public class ControlPanel extends PApplet {
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
+		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(communitiesGroup).addItem(bancaGroup);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(1, 2, 3);
+		accordion.open(1); //,2,3
 
 		// Show controller
 		secondary.show();

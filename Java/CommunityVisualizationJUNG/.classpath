@@ -31,6 +31,5 @@
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
 	<classpathentry kind="lib" path="libs/colorMaps/jViridis.jar"/>
 	<classpathentry kind="lib" path="libs/customGui/guiSet.jar"/>
-	<classpathentry kind="lib" path="libs/guava/guava-19.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

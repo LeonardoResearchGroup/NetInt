@@ -13,131 +13,68 @@ package netInt.containers.layout;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.graph.Graph;
-import netInt.graphElements.Edge;
-import netInt.graphElements.Node;
 import processing.core.PVector;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.base.Preconditions;
-
-
-import edu.uci.ics.jung.graph.Graph;
-
 /**
- * A {@code Layout} implementation that positions vertices equally spaced on a
- * horizontal line.
- * 
- * Adapted code from CircleLayout by Masanori Harada.
- * 
- * https://github.com/jrtom/jung/blob/master/jung-algorithms/src/main/java/edu/
- * uci/ics/jung/algorithms/layout/CircleLayout.java
+ * A implementation that positions vertices equally spaced on a horizontal line.
  *
  * @author Juan Salamanca
  */
 public class LinearLayout<V, E> extends AbstractLayout<V, E> {
 
-	private double radius;
 	private List<V> vertex_ordered_list;
-
-	protected LoadingCache<V, LineVertexData> pairs = CacheBuilder.newBuilder()
-			.build(new CacheLoader<V, LineVertexData>() {
-				public LineVertexData load(V vertex) {
-					return new LineVertexData();
-				}
-			});
 
 	public LinearLayout(Graph<V, E> g) {
 		super(g);
+		vertex_ordered_list = new ArrayList<V>(graph.getVertices());
 	}
 
-	/**
-	 * Sets the order of the vertices in the layout according to the ordering
-	 * specified by {@code comparator}.
-	 * 
-	 * @param comparator
-	 *            the comparator to use to order the vertices
-	 */
-	public void setVertexOrder(Comparator<V> comparator) {
-		if (vertex_ordered_list == null)
-			vertex_ordered_list = new ArrayList<V>(getGraph().getVertices());
-		Collections.sort(vertex_ordered_list, comparator);
-	}
-
-	/**
-	 * Sets the order of the vertices in the layout according to the ordering of
-	 * {@code vertex_list}.
-	 * 
-	 * @param vertex_list
-	 *            a list specifying the ordering of the vertices
-	 */
-	public void setVertexOrder(List<V> vertex_list) {
-		if (!vertex_list.containsAll(getGraph().getVertices()))
-			throw new IllegalArgumentException("Supplied list must include " + "all vertices of the graph");
-		this.vertex_ordered_list = vertex_list;
-	}
-
-	public void reset() {
+	public LinearLayout(Graph<V, E> g, Dimension size) {
+		super(g, size);
+		vertex_ordered_list = (List<V>) graph.getVertices();
 		initialize();
 	}
 
+	public void setSize(Dimension size) {
+		this.size = size;
+		initialize();
+	}
+
+	public void setVertexOrder(Comparator<V> comparator) {
+		Collections.sort(vertex_ordered_list, comparator);
+	}
+
 	public void initialize() {
-		Dimension d = getSize();
 
-		if (d != null) {
-			if (vertex_ordered_list == null)
-				setVertexOrder(new ArrayList<V>(getGraph().getVertices()));
+		if (size != null) {
 
-			double width = d.getWidth();
-			double height = d.getHeight();
-			
-			System.out.println(this.getClass().getName() + " items in list: " + vertex_ordered_list.size() + " width: " + width);
+			double width = size.getWidth();
+			double height = size.getHeight();
 
 			int i = 0;
+
 			for (V v : vertex_ordered_list) {
-
-				double pos = i * (width / vertex_ordered_list.size());
-			//	Point2D coordA = apply(v);
-
-				Point2D.Double coord = new Point2D.Double();
-				coord.setLocation(pos, height / 2);
-
-				LineVertexData data = getLineData(v);
-				data.setHorizontalPos(pos);
+				float posX = (float) (i * (width / vertex_ordered_list.size()));
+				float posY = (float) (height / 2);
+				Point2D pos = new Point2D.Double(posX, posY);
+				locations.put(v, pos);
 				i++;
 			}
 		}
 	}
 
-	protected LineVertexData getLineData(V v) {
-		return pairs.getUnchecked(v);
-	}
+	public void reset() {
+		initialize();
 
-	// *** Internal class ****
-	protected static class LineVertexData {
-		private double horizontalPos;
-
-		protected double getHorizontalPos() {
-			return horizontalPos;
-		}
-
-		protected void setHorizontalPos(double horizontalPos) {
-			this.horizontalPos = horizontalPos;
-		}
-
-		@Override
-		public String toString() {
-			return "LineVertexData: pos=" + horizontalPos;
-		}
 	}
 }
