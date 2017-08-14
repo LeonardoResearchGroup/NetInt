@@ -483,7 +483,7 @@ public abstract class Container {
 
 	protected AbstractLayout<Node, Edge> line(Dimension dimension) {
 		LinearLayout<Node, Edge> line = new LinearLayout<Node, Edge>(graph);
-		line.setVertexOrder(new DegreeComparator());
+		//line.setVertexOrder(new DegreeComparator());
 		line.setSize(dimension);
 		return line;
 	}
