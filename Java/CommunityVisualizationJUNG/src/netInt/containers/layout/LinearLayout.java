@@ -22,15 +22,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.base.Preconditions;
-
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -49,13 +46,7 @@ public class LinearLayout<V, E> extends AbstractLayout<V, E> {
 
 	private double radius;
 	private List<V> vertex_ordered_list;
-
-	protected LoadingCache<V, LineVertexData> pairs = CacheBuilder.newBuilder()
-			.build(new CacheLoader<V, LineVertexData>() {
-				public LineVertexData load(V vertex) {
-					return new LineVertexData();
-				}
-			});
+	protected HashMap<V, LineVertexData> pairs = new HashMap<V,LineVertexData>();
 
 	public LinearLayout(Graph<V, E> g) {
 		super(g);
@@ -100,17 +91,21 @@ public class LinearLayout<V, E> extends AbstractLayout<V, E> {
 
 			double width = d.getWidth();
 			double height = d.getHeight();
-			
-			System.out.println(this.getClass().getName() + " items in list: " + vertex_ordered_list.size() + " width: " + width);
+
+			System.out.println(
+					this.getClass().getName() + " items in list: " + vertex_ordered_list.size() + " width: " + width);
 
 			int i = 0;
 			for (V v : vertex_ordered_list) {
-
 				double pos = i * (width / vertex_ordered_list.size());
-			//	Point2D coordA = apply(v);
+				
+				pairs.put(v, new PVector(pos, height / 2));
+
+				
+				// Point2D coordA = apply(v);
 
 				Point2D.Double coord = new Point2D.Double();
-				coord.setLocation(pos, height / 2);
+				coord.setLocation();
 
 				LineVertexData data = getLineData(v);
 				data.setHorizontalPos(pos);

@@ -447,7 +447,7 @@ public abstract class Container {
 
 		// LinearLayout
 		case (Container.LINEAR):
-			layout = line(dimension);
+			layout = linear(dimension);
 			layoutCenter = new PVector(0, (float) (layout.getSize().getHeight() / 2));
 			break;
 		}
@@ -480,7 +480,7 @@ public abstract class Container {
 		return frLayout;
 	}
 
-	protected AbstractLayout<Node, Edge> line(Dimension dimension) {
+	protected AbstractLayout<Node, Edge> linear(Dimension dimension) {
 		LinearLayout<Node, Edge> line = new LinearLayout<Node, Edge>(graph);
 		line.setSize(dimension);
 		return line;
