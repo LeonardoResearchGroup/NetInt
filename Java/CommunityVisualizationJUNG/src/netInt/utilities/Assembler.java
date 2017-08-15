@@ -368,7 +368,8 @@ public class Assembler {
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(numberOfCommunities);
 		//
-
+		
+		
 		for (int i = 0; i < numberOfCommunities; i++) {
 
 			String communityName = communityClassifiers.get(communityTag).get(i);
@@ -424,15 +425,21 @@ public class Assembler {
 			}
 
 			vCommunities.add(communityTemp);
-
 		}
 		
 		// HACER AQUI UN JUNG GRAPH DE VCOMMUNITIES
 
 		System.out.println(this.getClass().getName() + " Communities of " + nameCommunity + ":" + vCommunities.size());
+		
+		//This approach will be improved when edgesBetweenCommunies are implemented
+		DirectedSparseMultigraph<Node, Edge> graphBetweenCommunities = new DirectedSparseMultigraph<Node, Edge>();
+		for(VCommunity vC : vCommunities){
+			graphBetweenCommunities.addVertex(vC.getNode());
+		}
+		
 
 		// SubContainers for each VCommunity
-		SubContainer containerTemp = new SubContainer(graph, layout, new Dimension(600, 600), new Color(5));
+		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), new Color(5));
 
 		// Name container
 		containerTemp.setName(nameCommunity);

@@ -73,7 +73,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void show() {
-		System.out.println(this.getClass().getName() + " "+container.getName()+ " hola");
 		// Display the community cover
 		comCover.show(container, containsSearchedNode);
 		// Check if community cover is completely deployed
@@ -121,7 +120,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// current vCommunity center. This is needed to reposition deployed and
 		// collapsed VCommunities with the mouse
 		updateContainer(Canvas.mouseEventOnCanvas);
-		System.out.println(this.getClass().getName() + " "+container.getName()+ " updatecontainer");
 	}
 
 	/**
