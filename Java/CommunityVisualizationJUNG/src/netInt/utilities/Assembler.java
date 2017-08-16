@@ -17,7 +17,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.Map;
+//import java.util.TreeMap;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -138,7 +139,7 @@ public class Assembler {
 		 * //This is a test. Later it has to come from GraphLoader entirely
 		 * hmap.put("Continent", comm1); hmap.put("ax", comm2);
 		 */
-		TreeMap<String, ArrayList<String>> hmap = rootGraph.getNestedCommunities();
+		LinkedHashMap<String, ArrayList<String>> hmap = rootGraph.getNestedCommunities();
 
 		// List of Second Order Communities: sub communities
 		// secondOrderVComm =
@@ -349,13 +350,15 @@ public class Assembler {
 	 * @return
 	 */
 	public VCommunity createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph,
-			TreeMap<String, ArrayList<String>> communityClassifiers, String nameCommunity, int layout) {
+			LinkedHashMap<String, ArrayList<String>> communityClassifiers, String nameCommunity, int layout) {
 
 		// VCommunities whose will be added to 'nameCommunity'
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 
 		// The first partition comes from the first list of communityClassifiers
-		String communityTag = communityClassifiers.firstKey();
+		Map.Entry<String,ArrayList<String>> entry = communityClassifiers.entrySet().iterator().next();
+		String communityTag= entry.getKey();
+		//String communityTag = communityClassifiers.firstKey();
 
 		int numberOfCommunities = communityClassifiers.get(communityTag).size();
 
@@ -417,7 +420,7 @@ public class Assembler {
 				// Creation of a community made of communities
 
 				// communityClasifiers is copied
-				TreeMap<String, ArrayList<String>> communityClasifiersCopy = new TreeMap<String, ArrayList<String>>(
+				LinkedHashMap<String, ArrayList<String>> communityClasifiersCopy = new LinkedHashMap<String, ArrayList<String>>(
 						communityClassifiers);
 				communityClasifiersCopy.remove(communityTag);
 				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout);

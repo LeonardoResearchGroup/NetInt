@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 import com.tinkerpop.blueprints.Graph;
@@ -42,7 +43,7 @@ public class GraphmlReader {
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> vCommunityNodes;
 	private ArrayList<String> communities;
-	TreeMap<String, ArrayList<String>> nestedCommunities = new TreeMap<String, ArrayList<String>>();
+	private LinkedHashMap<String, ArrayList<String>> nestedCommunities = new LinkedHashMap<String, ArrayList<String>>();
 
 	private ArrayList<String> communities2;
 	// Edges between communities
@@ -432,7 +433,7 @@ public class GraphmlReader {
 		return edgesBetweenCommunities;
 	}
 	
-	public TreeMap<String, ArrayList<String>> getNestedCommunities() {
+	public LinkedHashMap<String, ArrayList<String>> getNestedCommunities() {
 		return nestedCommunities;
 	}
 

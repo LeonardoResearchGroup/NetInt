@@ -13,6 +13,7 @@ package netInt.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -89,7 +90,7 @@ public class GraphLoader {
 			return GMLreader.getCommunities2();
 	}
 	
-	public TreeMap<String, ArrayList<String>> getNestedCommunities() {
+	public LinkedHashMap<String, ArrayList<String>> getNestedCommunities() {
 		return GMLreader.getNestedCommunities();
 }
 
