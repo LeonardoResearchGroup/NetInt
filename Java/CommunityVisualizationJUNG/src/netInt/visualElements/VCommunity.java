@@ -86,7 +86,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void show() {
 		// Display the community cover
 		comCover.show(container, containsSearchedNode);
-		container.showBoundaries(new PVector(0,0));
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			setDisplayed(true);

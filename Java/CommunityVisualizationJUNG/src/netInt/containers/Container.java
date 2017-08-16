@@ -24,6 +24,7 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.canvas.Canvas;
+import netInt.comparators.DegreeComparator;
 import netInt.containers.layout.LinearLayout;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
@@ -482,6 +483,7 @@ public abstract class Container {
 
 	protected AbstractLayout<Node, Edge> linear(Dimension dimension) {
 		LinearLayout<Node, Edge> line = new LinearLayout<Node, Edge>(graph);
+		line.setVertexOrder(new DegreeComparator());
 		line.setSize(dimension);
 		return line;
 	}
