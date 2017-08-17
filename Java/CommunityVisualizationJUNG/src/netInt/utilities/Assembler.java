@@ -110,12 +110,13 @@ public class Assembler {
 	 *            Graphml or Pajek. Graphml by default.
 	 * @return true if the graph was loaded successfully
 	 */
-	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeLabelAtts, String[] edgeImportAtts, int layout, int format) {
-		
+	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeLabelAtts, String[] edgeImportAtts,
+			int layout, int format) {
+
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
 		Canvas.app.cursor(PConstants.WAIT);
-		
+
 		// Instantiate a graphLoader
 		GraphLoader rootGraph = new GraphLoader(file.getAbsolutePath(), nestedAttributesOrder, nodeLabelAtts,
 				edgeImportAtts, format);
@@ -134,18 +135,18 @@ public class Assembler {
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
 				"FirstOrderCommunity", layout);
-		
+
 		Canvas.app.cursor(PConstants.ARROW);
-		
+
 		return true;
 	}
-	
 
 	/**
 	 * Creates a single VCommunity of the graph with no subCommunities yet
 	 * contains all the VNodes
 	 * 
-	 * @param graph the graph
+	 * @param graph
+	 *            the graph
 	 * @return a VCommunity for the graph
 	 */
 	public VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
@@ -162,16 +163,16 @@ public class Assembler {
 
 	private VCommunity createFirstOrderVCommunity(ArrayList<Edge> firstOrderEdgeList, ArrayList<VCommunity> communities,
 			String comName, int layout) {
-		
+
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Create First Order Visual Community");
 		System.out.println(
 				"     Adding " + secondOrderVComm.size() + " Second Order VCommunities to Higher Order container");
-		
+
 		// Make a temporary graph
 		Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 
-		// make a Container
+		// make a SubContainer
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
 
 		// make graph from communities
@@ -179,6 +180,10 @@ public class Assembler {
 
 		// make graph from first order edge list
 		subContainer.populateGraphfromEdgeList(firstOrderEdgeList);
+
+		// Set the degrees of the internal graph. The graph is usually made of
+		// community nodes
+		subContainer.setGraphDegrees();
 
 		// Name the community
 		subContainer.setName(comName);
@@ -191,12 +196,12 @@ public class Assembler {
 		// subContainer.initialize();
 
 		String nodeID = comName + "_" + String.valueOf(0);
-		
+
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
-		
+
 		// set diameter
 		communityTemp.init();
-		
+
 		return communityTemp;
 	}
 
@@ -248,11 +253,11 @@ public class Assembler {
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
 		}
-		
+
 		for (VCommunity vC : vCommunities) {
 			vC.init();
 		}
-		
+
 		return vCommunities;
 	}
 

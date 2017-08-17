@@ -41,6 +41,7 @@ public class GraphmlReader {
 	private Graph graph;
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> vCommunityNodes;
+	// ArrayList of community values obtained from the import file
 	private ArrayList<String> communities;
 	// Edges between communities
 	private ArrayList<Edge> edgesBetweenCommunities;
@@ -84,7 +85,8 @@ public class GraphmlReader {
 	 * needed to be changed to a TreeMap because it was not possible to
 	 * determine the final size of the array in advance.
 	 * 
-	 * @param nestedAttributesOrder the vector of ordered node categorical attributes
+	 * @param nestedAttributesOrder
+	 *            the vector of ordered node categorical attributes
 	 * 
 	 * @param nodeImportAttributes
 	 *            The list of user defined attributes for node importing
@@ -97,7 +99,8 @@ public class GraphmlReader {
 	 * @return The collection of nodes ordered by the Integer version of their
 	 *         Id
 	 */
-	private TreeMap<Integer, Node> makeNodes(String[] nestedAttributesOrder, String[] nodeImportAttributes, boolean saveCategoricalAttributes) {
+	private TreeMap<Integer, Node> makeNodes(String[] nestedAttributesOrder, String[] nodeImportAttributes,
+			boolean saveCategoricalAttributes) {
 		System.out.println(this.getClass().getName() + " Instantiating Nodes...");
 
 		TreeMap<Integer, Node> theNodes = new TreeMap<Integer, Node>();
@@ -165,7 +168,7 @@ public class GraphmlReader {
 				}
 			}
 			// Setting max min boundaries in Mapper class
-			//Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
+			// Mapper.getInstance().setMaxMinNodeAttributes(nodeTmp);
 			if (saveCategoricalAttributes) {
 				Mapper.getInstance().setCategoricalNodeAttributes(nodeTmp);
 			}
@@ -176,7 +179,9 @@ public class GraphmlReader {
 
 	/**
 	 * GENERAL METHOD TO GET THE JUNG GRAPH
-	 * @param nestedAttributesOrder the ordered vector of node attributes
+	 * 
+	 * @param nestedAttributesOrder
+	 *            the ordered vector of node attributes
 	 * 
 	 * @param nodeLabelAttributes
 	 *            the vector of node attributes
@@ -192,10 +197,13 @@ public class GraphmlReader {
 	 */
 	public DirectedSparseMultigraph<Node, Edge> getJungDirectedGraph(String[] nestedAttributesOrder,
 			String[] nodeLabelAttributes, String[] edgeImportAttributes, boolean saveCategoricalAttributes) {
+
 		// Create the graph to be returned
 		DirectedSparseMultigraph<Node, Edge> rtnGraph = new DirectedSparseMultigraph<Node, Edge>();
+
 		// Notify progress on console
 		System.out.println(this.getClass().getName() + " Getting Jung Directed Graph...");
+
 		// Hash map <Name of community, Node object of a community>
 		vCommunityNodes = new HashMap<String, Node>();
 
@@ -205,9 +213,11 @@ public class GraphmlReader {
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
+
 			// From each edge retrieve the source and target vertex
 			Vertex source = edge.getVertex(Direction.OUT);
 			Vertex target = edge.getVertex(Direction.IN);
+
 			// Get their ID
 			Integer idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
 			Integer idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
@@ -244,19 +254,27 @@ public class GraphmlReader {
 			}
 
 			// Setting max min boundaries in Mapper class
-			//Mapper.getInstance().setMaxMinEdgeAttributes(e);
+			// Mapper.getInstance().setMaxMinEdgeAttributes(e);
 			if (saveCategoricalAttributes) {
 				Mapper.getInstance().setCategoricalEdgeAttributes(e);
 			}
 
-			// For the first order community graph
-			Edge metaE = new Edge(vCommunityNodes.get(nodes.get(idSource).getCommunity(1)),
-					vCommunityNodes.get(nodes.get(idTarget).getCommunity(1)), true);
-			// if no attributes selected set the weight to 1
-			metaE.setAttribute("weight", 1);
+			// Create edges for communities with at least one edge connecting
+			// nodes from both communities.
+			Node vCSource = vCommunityNodes.get(nodes.get(idSource).getCommunity(1));
+			Node vCTarget = vCommunityNodes.get(nodes.get(idTarget).getCommunity(1));
 
-			if (!edgesBetweenCommunities.contains(metaE)) {
-				edgesBetweenCommunities.add(metaE);
+			// There are no loop edges connecting a community with itself
+			if (!vCSource.equals(vCTarget)) {
+
+				Edge metaE = new Edge(vCSource, vCTarget, true);
+
+				// if no attributes selected set the weight to 1
+				metaE.setAttribute("weight", 1);
+
+				if (!edgesBetweenCommunities.contains(metaE)) {
+					edgesBetweenCommunities.add(metaE);
+				}
 			}
 
 			// Create the edge with source and target nodes
@@ -270,9 +288,12 @@ public class GraphmlReader {
 	 * attribute names come from a list obtained from the source file, usually a
 	 * graphml
 	 * 
-	 * @param vertex a vertex of a JUNG graph
-	 * @param node the recipient node
-	 * @param nodeImportAttributes list obtained from the source file
+	 * @param vertex
+	 *            a vertex of a JUNG graph
+	 * @param node
+	 *            the recipient node
+	 * @param nodeImportAttributes
+	 *            list obtained from the source file
 	 */
 	public void assignNodeAttributes(Vertex vertex, Node node, String[] nodeImportAttributes) {
 		// For the first two attributes: node community and node name
@@ -319,6 +340,7 @@ public class GraphmlReader {
 	}
 
 	private void addCommunity(String string) {
+		
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);

@@ -25,6 +25,8 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.canvas.Canvas;
 import netInt.comparators.DegreeComparator;
+import netInt.comparators.InDegreeComparator;
+import netInt.comparators.OutDegreeComparator;
 import netInt.containers.layout.LinearLayout;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
@@ -165,6 +167,26 @@ public abstract class Container {
 	}
 
 	// *** Other methods
+
+	/**
+	 * Sets the degrees of this container graph. It is useful because the graph
+	 * of higher tier containers is populated during the loading time. This
+	 * graph usually contains nodes that represent communities and edges linking
+	 * communities
+	 */
+	public void setGraphDegrees() {
+
+		// For all the nodes in the graph
+		
+		for (Node n : this.getGraph().getVertices()) {
+			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
+			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
+			n.setDegree(0, this.getGraph().degree(n));
+		}
+
+		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
+	}
+
 	/**
 	 * This method is intended to populate a container's empty graph with
 	 * GraphElements from the non-empty subGraphs of edges between nodes marked
@@ -182,11 +204,13 @@ public abstract class Container {
 	 *            list of edges
 	 */
 	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList) {
+
 		for (Edge e : edgeList) {
-			// Add edge
+
 			this.getGraph().addEdge(e, e.getSource(), e.getTarget());
 		}
-		System.out.println(this.getClass().getName() + " Graph Population Completed");
+
+		System.out.println(this.getClass().getName() + " Container's Graph Population Completed");
 	}
 
 	/**
@@ -257,14 +281,19 @@ public abstract class Container {
 
 					// If the containers are not the same and are initialized
 					if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
+
 						System.out.println(this.getClass().getName() + " " + this.getName()
 								+ " is building External Edges for Vnodes with:" + otherContainer.getName());
+
 						this.runExternalEdgeFactory(otherContainer.getName(), otherContainer);
+
 						this.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, otherContainer);
+
 						otherContainer.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, this);
 
 						// Mark gates as closed for this community
 						betweenEdgeGates.add(otherContainer);
+
 						// Mark gates as closed for otherCommunity
 						otherContainer.betweenEdgeGates.add(this);
 					}
@@ -281,20 +310,29 @@ public abstract class Container {
 	 *            VCommunity
 	 */
 	public void buildExternalEdges(VCommunity otherVCommunity) {
+
 		if (!betweenEdgeGates.contains(otherVCommunity.container)) {
+
 			Container otherContainer = otherVCommunity.container;
+
 			// See if otherCommunity's container has created betweenEdges
 			// with this container
 			if (!otherContainer.betweenEdgeGates.contains(this)) {
+
 				// If the containers are not the same and are initialized
 				if (!otherContainer.equals(this) && otherContainer.initializationComplete) {
 					System.out.println(this.getClass().getName() + " " + this.getName()
 							+ " is building External Edges for Vnodes with:" + otherContainer.getName());
+
 					this.runExternalEdgeFactory(otherContainer.getName(), otherContainer);
+
 					this.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, otherContainer);
+
 					otherContainer.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, this);
+
 					// Mark gates as closed for this community
 					betweenEdgeGates.add(otherContainer);
+
 					// Mark gates as closed for otherCommunity
 					otherContainer.betweenEdgeGates.add(this);
 				}
@@ -324,19 +362,26 @@ public abstract class Container {
 	 * @return the IterativeContext
 	 */
 	public IterativeContext stepIterativeLayout(PVector vCommunityCenter) {
+
 		// Step iteration as many times as parameterized
 		IterativeContext itrContext = (IterativeContext) layout;
+
 		// If node distribution not completed
-		// if (!itrContext.done()) {
 		if (!done && !itrContext.done()) {
+
 			// Run one step
 			itrContext.step();
+
 			// get nodes in layout positions
 			for (Node n : layout.getGraph().getVertices()) {
+
 				PVector nPos = new PVector((float) layout.getX(n), (float) layout.getY(n));
+
 				// Get all vNodes
 				for (VNode vN : vNodes) {
+
 					if (vN.getNode().equals(n)) {
+
 						// set new position
 						vN.getPos().set(nPos);
 						vN.absoluteToRelative(layoutCenter);
@@ -344,7 +389,9 @@ public abstract class Container {
 					}
 				}
 			}
+
 			iterations++;
+
 			done = iterations == MAX_ITERATIONS;
 		}
 		return itrContext;
@@ -358,11 +405,15 @@ public abstract class Container {
 	 * @return true if iterative
 	 */
 	private boolean isCurrentLayoutIterative() {
+
 		boolean currentLayoutIsIterativeInterface = false;
+
 		// check if the layout implements IterativeContext
 		for (int i = 0; i < layout.getClass().getGenericInterfaces().length; i++) {
+
 			if (layout.getClass().getGenericInterfaces()[i].toString()
 					.equals("interface edu.uci.ics.jung.algorithms.util.IterativeContext")) {
+
 				currentLayoutIsIterativeInterface = true;
 			}
 		}
@@ -449,6 +500,7 @@ public abstract class Container {
 		// LinearLayout
 		case (Container.LINEAR):
 			layout = linear(dimension);
+
 			layoutCenter = new PVector(0, (float) (layout.getSize().getHeight() / 2));
 			break;
 		}
@@ -483,7 +535,8 @@ public abstract class Container {
 
 	protected AbstractLayout<Node, Edge> linear(Dimension dimension) {
 		LinearLayout<Node, Edge> line = new LinearLayout<Node, Edge>(graph);
-		//line.setVertexOrder(new DegreeComparator());
+		// Order the vertex with the given comparator
+		line.setVertexOrder(new InDegreeComparator());
 		line.setSize(dimension);
 		return line;
 	}

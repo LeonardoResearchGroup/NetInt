@@ -40,10 +40,6 @@ public class AttributesMap extends HashMap<String, Float> implements Serializabl
 
 	// *** Setters && PUT
 
-//	public void put(String key, float value) {
-//		this.put(key, value);
-//	}
-
 	public void setCommunityDegree(int degree) {
 		put("Degree", (float) degree);
 		// this.degree = degree;

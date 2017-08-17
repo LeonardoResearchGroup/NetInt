@@ -44,11 +44,11 @@ public abstract class GraphElement implements Serializable {
 	// inherit from this class. The integer parameter identifies the
 	// community to which a set of relative attributes are related. (0 reserved
 	// for root graph)
-	protected HashMap<Integer, HashMap<String,Float>> relativeAttributes;
+	protected HashMap<Integer, HashMap<String, Float>> relativeAttributes;
 
 	public GraphElement() {
 		absoluteAttributes = new HashMap<String, Object>();
-		relativeAttributes = new HashMap<Integer, HashMap<String,Float>>();
+		relativeAttributes = new HashMap<Integer, HashMap<String, Float>>();
 	}
 
 	// *** Getters
@@ -170,14 +170,39 @@ public abstract class GraphElement implements Serializable {
 	}
 
 	/**
-	 * Prints the pairs of key-value associated to the attributes of this graph
-	 * element
+	 * Prints the pairs of key-value associated to the AbsoluteAttributes of
+	 * this graph element
 	 */
-	public void printAttributes() {
-		System.out.println("GRAPH ELEMENT> printAttributes():");
+	public void printAbsoluteAttributes() {
+		System.out.println("GRAPH ELEMENT> printAbsoluteAttributes():");
 		Set<String> s = absoluteAttributes.keySet();
 		for (String keyName : s) {
 			System.out.println("   Key: " + keyName + ", Value: " + absoluteAttributes.get(keyName));
+		}
+	}
+
+	public void printRelativeAttributes() {
+		System.out.println("GRAPH ELEMENT> printRelativeAttributes():");
+
+		// Get the set of keys. This means the level in the nested structure of
+		// communities
+		Set<Integer> keys = relativeAttributes.keySet();
+
+		// For each key / level
+		for (Integer i : keys) {
+			System.out.println("   Nested Level: " + i);
+
+			// Get the associated HashMap
+			HashMap<String, Float> map = relativeAttributes.get(i);
+
+			// Get the set of keys for this HashMap
+			Set<String> mapKeys = map.keySet();
+
+			// Iterate over the keys
+			for (String keyName : mapKeys) {
+				System.out.println("   Key: " + keyName + ", Value: " + map.get(keyName));
+			}
+
 		}
 	}
 
@@ -219,9 +244,9 @@ public abstract class GraphElement implements Serializable {
 
 	public abstract void setAttribute(String key, Object value);
 
-	public abstract void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet);
-	
-	public HashMap<String,Float> getRelativeAttributes(int key){
+	public abstract void addRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
+
+	public HashMap<String, Float> getRelativeAttributes(int key) {
 		return relativeAttributes.get(key);
 	}
 
