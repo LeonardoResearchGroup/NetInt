@@ -177,7 +177,7 @@ public abstract class Container {
 	public void setGraphDegrees() {
 
 		// For all the nodes in the graph
-		
+
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
@@ -527,8 +527,14 @@ public abstract class Container {
 	 */
 	protected AbstractLayout<Node, Edge> fruchtermanReingold(Dimension dimension) {
 		FRLayout<Node, Edge> frLayout = new FRLayout<Node, Edge>(graph, dimension);
-		frLayout.setAttractionMultiplier(0.5);
+
+		// attraction multiplier: how much edges try to keep their vertices
+		// together
+		//frLayout.setAttractionMultiplier(0.5);
+
+		// repulsion multiplier: how much vertices try to push each other apart
 		frLayout.setRepulsionMultiplier(0.5);
+
 		frLayout.setMaxIterations(100);
 		return frLayout;
 	}
