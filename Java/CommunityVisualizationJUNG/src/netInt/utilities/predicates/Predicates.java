@@ -102,4 +102,40 @@ public abstract class Predicates {
 		};
 		return rtnPredicate;
 	}
+
+	
+
+	/**
+	 * Evaluates if a given edge links nodes from two communities made of a communityTag. It checks if
+	 * either source and target belong to one of the two communities but both
+	 * cannot belong to the same community
+	 * 
+	 * @param communityNameA
+	 * @param communityNameB
+	 * @param communityTag
+	 * @return
+	 */
+	public static Predicate<Edge> edgeLinkingCommunities(final String communityNameA, final String communityNameB,  final String communityTag) {
+		Predicate<Edge> rtnPredicate = new Predicate<Edge>() {
+			public boolean evaluate(Edge edge) {
+				Node source = edge.getSource();
+				Node target = edge.getTarget();
+				System.out.println(this.getClass().getName());
+				System.out.println("source.belongsTo(communityNameA, communityTag): " +source.belongsTo(communityNameA, communityTag));
+				System.out.println("target.belongsTo(communityNameB, communityTag): " +target.belongsTo(communityNameB, communityTag));
+				System.out.println("source.belongsTo(communityNameB, communityTag): " +source.belongsTo(communityNameB, communityTag));
+				System.out.println("target.belongsTo(communityNameA, communityTag): " +target.belongsTo(communityNameA, communityTag));
+				if (source.belongsTo(communityNameA, communityTag) && target.belongsTo(communityNameB, communityTag)) {
+					return true;
+				} else if (source.belongsTo(communityNameB, communityTag) && target.belongsTo(communityNameA, communityTag)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+		return rtnPredicate;
+	}
+	
+	
 }

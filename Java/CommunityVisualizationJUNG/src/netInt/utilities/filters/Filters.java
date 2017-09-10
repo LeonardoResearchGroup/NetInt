@@ -190,6 +190,44 @@ public class Filters {
 			return problemGraph;
 		}
 	}
+	
+	/**
+	 * Returns a subgraph of a jungGraph whose edges connect the specified
+	 * communities in either direction
+	 * 
+	 * @param communityNameA
+	 *            The name of one community
+	 * @param communityNameB
+	 *            The name of a second community
+	 * @param graph
+	 *            The jung graph
+	 * @return
+	 */
+	public static DirectedSparseMultigraph<Node, Edge> filterEdgeLinkingCommunities(final String communityNameA,
+			final String communityNameB, final String communityTag,  DirectedSparseMultigraph<Node, Edge> graph) {
+
+		// Check if this filter was used in these communities before. If so,
+		// return the stored result
+		String[] keys = makeDoubleKey(communityNameA, communityNameB, "edgeInterCommunities");
+		if (filterResults.containsKey(keys[0])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[0]);
+		} else if (filterResults.containsKey(keys[1])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[1]);
+		} else {
+
+			// System.out.println(getInstance().getClass().getName() + " filter:
+			// " + keys[0]);
+			// Filter and extractor
+			EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
+					Predicates.edgeLinkingCommunities(communityNameA, communityNameB, communityTag));
+			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+					.transform(graph);
+			// filterResults.put(keys[0], problemGraph);
+			return problemGraph;
+		}
+	}
+	
+	
 
 	/**
 	 * Returns a subgraph of jungGraph whose edges connect the specified
