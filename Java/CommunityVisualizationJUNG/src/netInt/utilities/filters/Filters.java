@@ -218,6 +218,7 @@ public class Filters {
 			// System.out.println(getInstance().getClass().getName() + " filter:
 			// " + keys[0]);
 			// Filter and extractor
+			System.out.println(getInstance().getClass().getName() + " tamño de grafo: N:"+graph.getVertexCount()+" E:"+graph.getEdgeCount());
 			EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
 					Predicates.edgeLinkingCommunities(communityNameA, communityNameB, communityTag));
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter

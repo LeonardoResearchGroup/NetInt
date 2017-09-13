@@ -443,6 +443,9 @@ public class Assembler {
 
 		// SubContainers for each VCommunity
 		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), new Color(5));
+		
+		//
+		containerTemp.setGraphOfNodes(graph);
 
 		// Name container
 		containerTemp.setName(nameCommunity);

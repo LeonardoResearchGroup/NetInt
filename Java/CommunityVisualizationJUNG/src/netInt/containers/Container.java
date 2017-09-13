@@ -48,6 +48,10 @@ public abstract class Container {
 	public static final int FRUCHTERMAN_REINGOLD = 2;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
+	//This is a graph made of nodes in opposite of "graph" which could be made of communities
+	protected Graph<Node, Edge> graphOfNodes;
+
+
 	// Visual Elements
 	// All VNodes including VCommunities
 	protected ArrayList<VNode> vNodes;
@@ -678,5 +682,9 @@ public abstract class Container {
 		for (VNode vN : vNodes) {
 			vN.initialize();
 		}
+	}
+	
+	public void setGraphOfNodes(Graph<Node, Edge> graphOfNodes) {
+		this.graphOfNodes = graphOfNodes;
 	}
 }
