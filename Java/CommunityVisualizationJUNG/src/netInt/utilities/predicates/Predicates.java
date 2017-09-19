@@ -120,11 +120,7 @@ public abstract class Predicates {
 			public boolean evaluate(Edge edge) {
 				Node source = edge.getSource();
 				Node target = edge.getTarget();
-				System.out.println(this.getClass().getName());
-				System.out.println("source.belongsTo(communityNameA, communityTag): " +source.belongsTo(communityNameA, communityTag));
-				System.out.println("target.belongsTo(communityNameB, communityTag): " +target.belongsTo(communityNameB, communityTag));
-				System.out.println("source.belongsTo(communityNameB, communityTag): " +source.belongsTo(communityNameB, communityTag));
-				System.out.println("target.belongsTo(communityNameA, communityTag): " +target.belongsTo(communityNameA, communityTag));
+			
 				if (source.belongsTo(communityNameA, communityTag) && target.belongsTo(communityNameB, communityTag)) {
 					return true;
 				} else if (source.belongsTo(communityNameB, communityTag) && target.belongsTo(communityNameA, communityTag)) {

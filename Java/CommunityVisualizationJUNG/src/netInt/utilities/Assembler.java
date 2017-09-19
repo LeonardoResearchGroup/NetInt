@@ -445,7 +445,7 @@ public class Assembler {
 		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), new Color(5));
 		
 		//
-		containerTemp.setGraphOfNodes(graph);
+		//containerTemp.setGraphOfNodes(graph);
 
 		// Name container
 		containerTemp.setName(nameCommunity);

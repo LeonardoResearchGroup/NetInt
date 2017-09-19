@@ -592,23 +592,26 @@ public abstract class Container {
 		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName, "anotherOne", graph);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
-		System.out.println(this.getClass().getName() + " edges between communities: " + edgesBetweenCommunities.size());
+		//System.out.println(this.getClass().getName() + " edges between communities: " + edgesBetweenCommunities.size());
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
 			// Make a VEdge
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			// Set source and target nodes
-			vEdge.setSourceAndTarget(vNodesBothCommunities);
-			// Make the linking curve
-			vEdge.makeBezier();
-			// Add vEdge to externalEdges of this container if the source node
-			// belongs to this container
-			if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {
-				vExtEdges.add(vEdge);
-			} else {
-				// Otherwise, add it to externalEdges of the external container
-				if (!externalContainer.vExtEdges.contains(vEdge)) {
-					externalContainer.vExtEdges.add(vEdge);
+			//If the edge is within the container
+			if( vEdge.setSourceAndTarget(vNodesBothCommunities) )
+			{
+				// Make the linking curve
+				vEdge.makeBezier();
+				// Add vEdge to externalEdges of this container if the source node
+				// belongs to this container
+				if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {
+					vExtEdges.add(vEdge);
+				} else {
+					// Otherwise, add it to externalEdges of the external container
+					if (!externalContainer.vExtEdges.contains(vEdge)) {
+						externalContainer.vExtEdges.add(vEdge);
+					}
 				}
 			}
 		}

@@ -222,7 +222,7 @@ public class Filters {
 			EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
 					Predicates.edgeLinkingCommunities(communityNameA, communityNameB, communityTag));
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-					.transform(graph);
+					.transform(GraphLoader.theGraph);
 			// filterResults.put(keys[0], problemGraph);
 			return problemGraph;
 		}
