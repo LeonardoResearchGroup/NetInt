@@ -166,7 +166,7 @@ public class Executable {
 //		        		" "+ selection + " " + nodeFile ;
 //	        }
 	        //String decoded = URLDecoder.decode(queryString, "UTF-8");
-		    	
+	        
 	    	String[] commands = new String[]{mainCommand,script,edgeFileString,outFileString,selectionString,nodeFileString};	
 	        System.out.println("Current path real "+ URLDecoder.decode(jarDir.getPath(), "UTF-8"));
 	        System.out.println("Current path " + System.getProperty("user.dir"));
