@@ -55,7 +55,9 @@ public class MainFrame extends JFrame {
 	private CsvReader nodesValidator;
 	private boolean validated;
 	private boolean readyForValidation;
-	private JButton btnGenerar;
+	private JButton btnGenerarLouvainIcesi;
+	private JButton btnGenerarLouvainEafit;
+	private JButton btnGenerarInfomapEafit;
 	private JLabel lblValido;
 	private JLabel lblDeteccinDeComunidades;
 	Executable exec = new Executable();
@@ -97,13 +99,29 @@ public class MainFrame extends JFrame {
 		
 		labelNodos = new JLabel("");
 		
-		btnGenerar = new JButton("Detectar Comunidades");
-		btnGenerar.addActionListener(new ActionListener() {
+		btnGenerarLouvainIcesi = new JButton("Louvain Icesi");
+		btnGenerarLouvainIcesi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnGenerarAction(e);
 			}
 		});
-		btnGenerar.setEnabled(false);
+		btnGenerarLouvainIcesi.setEnabled(false);
+		
+		btnGenerarLouvainEafit = new JButton("Louvain Eafit");
+		btnGenerarLouvainEafit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnGenerarAction(e);
+			}
+		});
+		btnGenerarLouvainEafit.setEnabled(false);
+		
+		btnGenerarInfomapEafit = new JButton("Infomap Eafit");
+		btnGenerarInfomapEafit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnGenerarAction(e);
+			}
+		});
+		btnGenerarInfomapEafit.setEnabled(false);
 		
 		btnArchivoNodos = new JButton("Archivo de Nodos");
 		btnArchivoNodos.addActionListener(new ActionListener() {
@@ -142,7 +160,9 @@ public class MainFrame extends JFrame {
 							.addGap(56)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(lblValido)
-								.addComponent(btnGenerar, 0, 0, Short.MAX_VALUE)
+								.addComponent(btnGenerarLouvainIcesi, 0, 0, Short.MAX_VALUE)
+								.addComponent(btnGenerarLouvainEafit, 0, 0, Short.MAX_VALUE)
+								.addComponent(btnGenerarInfomapEafit, 0, 0, Short.MAX_VALUE)
 								.addComponent(comboBoxWeights, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(btnValidar, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
 								.addComponent(btnArchivoVinculos, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -177,7 +197,9 @@ public class MainFrame extends JFrame {
 					.addGap(41)
 					.addComponent(comboBoxWeights, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(btnGenerar)
+					.addComponent(btnGenerarLouvainIcesi)
+					.addComponent(btnGenerarLouvainEafit)
+					.addComponent(btnGenerarInfomapEafit)
 					.addGap(18)
 					.addComponent(lblCargando)
 					.addContainerGap(81, Short.MAX_VALUE))
@@ -333,7 +355,9 @@ public class MainFrame extends JFrame {
 	}
 	private void enableDisableDetection(){
 		comboBoxWeights.setEnabled(validated);
-		btnGenerar.setEnabled(validated);
+		btnGenerarLouvainIcesi.setEnabled(validated);
+		btnGenerarLouvainEafit.setEnabled(validated);
+		btnGenerarInfomapEafit.setEnabled(validated);
 //		if(readyForValidation){
 			lblValido.setVisible(true);
 			if(validated && edgesValidator!= null){
