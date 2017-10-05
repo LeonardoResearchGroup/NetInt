@@ -137,13 +137,12 @@ public class Executable {
 		return exist;
 	}
 	
-	public String Execute(String edgeFile, String nodeFile, String selection, String outFile){
+	public String Execute(String script, String edgeFile, String nodeFile, String selection, String outFile){
 		String result = "";
 		try {
 			File jarDir = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
 			String command = "";
 			String thisFilePath = "";
-	    	String script ="generarComunidadesYGraphml.R";
 	    	String edgeFileString =edgeFile;
 	    	String outFileString =outFile;
 	    	String selectionString =selection;
@@ -167,7 +166,7 @@ public class Executable {
 //	        }
 	        //String decoded = URLDecoder.decode(queryString, "UTF-8");
 	        
-	    	String[] commands = new String[]{mainCommand,script,edgeFileString,outFileString,selectionString,nodeFileString};	
+	    	String[] commands = new String[]{mainCommand, "--vanilla",script,edgeFileString,outFileString,selectionString,nodeFileString};	
 	        System.out.println("Current path real "+ URLDecoder.decode(jarDir.getPath(), "UTF-8"));
 	        System.out.println("Current path " + System.getProperty("user.dir"));
 	        System.out.println(command);

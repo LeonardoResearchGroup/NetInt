@@ -102,7 +102,7 @@ public class MainFrame extends JFrame {
 		btnGenerarLouvainIcesi = new JButton("Louvain Icesi");
 		btnGenerarLouvainIcesi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnGenerarAction(e);
+				btnGenerarLouvainIcesiAction(e);
 			}
 		});
 		btnGenerarLouvainIcesi.setEnabled(false);
@@ -110,7 +110,7 @@ public class MainFrame extends JFrame {
 		btnGenerarLouvainEafit = new JButton("Louvain Eafit");
 		btnGenerarLouvainEafit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnGenerarAction(e);
+				btnGenerarLouvainEafitAction(e);
 			}
 		});
 		btnGenerarLouvainEafit.setEnabled(false);
@@ -118,7 +118,7 @@ public class MainFrame extends JFrame {
 		btnGenerarInfomapEafit = new JButton("Infomap Eafit");
 		btnGenerarInfomapEafit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnGenerarAction(e);
+				btnGenerarInfomapEafitAction(e);
 			}
 		});
 		btnGenerarInfomapEafit.setEnabled(false);
@@ -307,7 +307,7 @@ public class MainFrame extends JFrame {
 		System.out.println(validated);
 		enableDisableDetection();
 	}
-	private void btnGenerarAction(ActionEvent ae){
+	private void btnGenerarLouvainIcesiAction(ActionEvent ae){
 			lblCargando.setVisible(true);
 			JFileChooser jfc = new JFileChooser();
 			//jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -337,7 +337,8 @@ public class MainFrame extends JFrame {
 		        if(csvNodeFile != null){
 		        	nodeFilePath = csvNodeFile.getPath();
 		        }
-		        String result = exec.Execute(csvEdgeFile.getPath(), nodeFilePath, (String)comboBoxWeights.getSelectedItem(),
+		        String script = "generarComunidadesYGraphml.R";
+		        String result = exec.Execute(script, csvEdgeFile.getPath(), nodeFilePath, (String)comboBoxWeights.getSelectedItem(),
 		        		jfc.getSelectedFile().getPath());
 		        textAreaResults.setText(result);
 		        
@@ -353,6 +354,106 @@ public class MainFrame extends JFrame {
 		
 		
 	}
+	
+	private void btnGenerarLouvainEafitAction(ActionEvent ae){
+		lblCargando.setVisible(true);
+		JFileChooser jfc = new JFileChooser();
+		//jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        //set it to be a save dialog
+        jfc.setDialogType(JFileChooser.SAVE_DIALOG);
+        //set a default filename (this is where you default extension first comes in)
+        jfc.setSelectedFile(new File("comunidades.graphml"));
+        //Set an extension filter, so the user sees other XML files
+        jfc.setFileFilter(new FileNameExtensionFilter("graphml file","graphml"));
+        int returnVal = jfc.showSaveDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	
+           //labelNodos.setText(jfc.getSelectedFile().getName());
+        	System.out.println(jfc.getSelectedFile());
+        	if(!exec.checkRscript()){
+	        	JOptionPane.showMessageDialog(null, "Indique por favor en dónde tiene instalado Rscript");
+	        	JFileChooser jfcR = new JFileChooser();
+	            int returnValR = jfcR.showOpenDialog(this);
+	            if(returnValR == JFileChooser.APPROVE_OPTION) {
+	            	exec.setMainCommand("\""+ jfcR.getSelectedFile().getPath() +"\"");
+	            }else{
+	            	return;
+	            }
+	        }
+	        String nodeFilePath = "";
+	        if(csvNodeFile != null){
+	        	nodeFilePath = csvNodeFile.getPath();
+	        }
+	        
+	        String script = "InfomapComms.R";
+	        String result = exec.Execute(script, csvEdgeFile.getPath(), nodeFilePath, (String)comboBoxWeights.getSelectedItem(),
+	        		jfc.getSelectedFile().getPath());
+	        
+	        textAreaResults.setText(result);
+	        
+			CardLayout cl = (CardLayout)(contentPane.getLayout());
+		    cl.show(contentPane, "name_112771585507934");
+        }
+        lblCargando.setVisible(false);
+        
+        
+	        
+    
+
+	
+	
+	}
+	
+	private void btnGenerarInfomapEafitAction(ActionEvent ae){
+		lblCargando.setVisible(true);
+		JFileChooser jfc = new JFileChooser();
+		//jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        //set it to be a save dialog
+        jfc.setDialogType(JFileChooser.SAVE_DIALOG);
+        //set a default filename (this is where you default extension first comes in)
+        jfc.setSelectedFile(new File("comunidades.graphml"));
+        //Set an extension filter, so the user sees other XML files
+        jfc.setFileFilter(new FileNameExtensionFilter("graphml file","graphml"));
+        int returnVal = jfc.showSaveDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	
+           //labelNodos.setText(jfc.getSelectedFile().getName());
+        	System.out.println(jfc.getSelectedFile());
+        	if(!exec.checkRscript()){
+	        	JOptionPane.showMessageDialog(null, "Indique por favor en dónde tiene instalado Rscript");
+	        	JFileChooser jfcR = new JFileChooser();
+	            int returnValR = jfcR.showOpenDialog(this);
+	            if(returnValR == JFileChooser.APPROVE_OPTION) {
+	            	exec.setMainCommand("\""+ jfcR.getSelectedFile().getPath() +"\"");
+	            }else{
+	            	return;
+	            }
+	        }
+	        String nodeFilePath = "";
+	        if(csvNodeFile != null){
+	        	nodeFilePath = csvNodeFile.getPath();
+	        }
+	        
+	        String script = "LouvainComms.R";
+	        String result = exec.Execute(script, csvEdgeFile.getPath(), nodeFilePath, (String)comboBoxWeights.getSelectedItem(),
+	        		jfc.getSelectedFile().getPath());
+	        textAreaResults.setText(result);
+	        
+			CardLayout cl = (CardLayout)(contentPane.getLayout());
+		    cl.show(contentPane, "name_112771585507934");
+        }
+        lblCargando.setVisible(false);
+        
+        
+	        
+    
+
+	
+	
+	}
+	
 	private void enableDisableDetection(){
 		comboBoxWeights.setEnabled(validated);
 		btnGenerarLouvainIcesi.setEnabled(validated);
