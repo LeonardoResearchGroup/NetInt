@@ -79,7 +79,7 @@ public class Mapper {
 	 *            class name of the graph element to which the attribute belongs
 	 * @param graphAttribute
 	 *            the name of the graph attribute.
-	 * @return the value mapped equals to a number between 0 and 1
+	 * @return the value mapped between 0 and 1
 	 */
 	public float convert(String converter, float val, String graphElementClassName, String graphAttribute) {
 		float rtn = Float.POSITIVE_INFINITY;

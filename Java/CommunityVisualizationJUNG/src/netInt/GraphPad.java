@@ -23,6 +23,7 @@ import netInt.utilities.Assembler;
 import netInt.utilities.GraphmlKeyReader;
 import netInt.utilities.TestPerformance;
 import netInt.utilities.console.ConsoleCatcher;
+import netInt.utilities.mapping.MapperViewer;
 import netInt.visualElements.gui.ControlPanel;
 import netInt.visualElements.gui.ImportMenuGuiSet;
 import netInt.visualElements.gui.UserSettings;
@@ -88,6 +89,9 @@ public class GraphPad {
 
 	// The floating window displaying system messages
 	protected ConsoleCatcher consoleCatcher;
+	
+	// The Mapper viewer window
+	protected MapperViewer mapperViewer;
 
 	private TestPerformance performance;
 
@@ -153,6 +157,7 @@ public class GraphPad {
 		 */
 
 		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		mapperViewer = new MapperViewer();
 
 		// Canvas
 		System.out.println("Building Canvas");
@@ -169,7 +174,7 @@ public class GraphPad {
 
 		// Performance
 		performance = new TestPerformance();
-
+		
 		System.out.println("** GraphPad Init() completed **");
 	}
 
@@ -188,7 +193,6 @@ public class GraphPad {
 		}
 
 		if (activeGraph) {
-			ColorMap.getInstance("plasma").show(parent, 20, 20);
 			parent.pushMatrix();
 			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
 					(parent.height - app.getRootDimension().height) / 2);

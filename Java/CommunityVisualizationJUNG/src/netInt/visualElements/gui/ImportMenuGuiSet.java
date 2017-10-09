@@ -27,6 +27,7 @@ import netInt.GraphPad;
 import netInt.containers.Container;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.mapping.Mapper;
+import netInt.utilities.mapping.MapperViewer;
 import processing.core.PVector;
 
 /**
@@ -239,8 +240,12 @@ public class ImportMenuGuiSet implements Observer {
 
 					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
 
-					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);   
+					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys); 
+					
 				}
+				
+				// Feed min & max values to mapper viewer
+				MapperViewer.getInstance().initMinMaxValues();
 
 				// Hide Import Menu from main panel
 				menu.setVisible(false);
