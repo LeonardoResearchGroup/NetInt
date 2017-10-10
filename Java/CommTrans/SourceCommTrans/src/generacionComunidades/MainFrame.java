@@ -386,7 +386,7 @@ public class MainFrame extends JFrame {
 	        	nodeFilePath = csvNodeFile.getPath();
 	        }
 	        
-	        String script = "InfomapComms.R";
+	        String script = "LouvainComms.R";
 	        String result = exec.Execute(script, csvEdgeFile.getPath(), nodeFilePath, (String)comboBoxWeights.getSelectedItem(),
 	        		jfc.getSelectedFile().getPath());
 	        
@@ -436,7 +436,7 @@ public class MainFrame extends JFrame {
 	        	nodeFilePath = csvNodeFile.getPath();
 	        }
 	        
-	        String script = "LouvainComms.R";
+	        String script = "InfomapComms.R";
 	        String result = exec.Execute(script, csvEdgeFile.getPath(), nodeFilePath, (String)comboBoxWeights.getSelectedItem(),
 	        		jfc.getSelectedFile().getPath());
 	        textAreaResults.setText(result);
