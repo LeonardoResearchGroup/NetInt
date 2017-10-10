@@ -48,6 +48,7 @@ public class ControlPanel extends PApplet {
 	private ControlP5 main;
 	private ControlP5 secondary;
 	private Group bancaGroup;
+	private Group bancaGroupEafit;
 	private CheckBox cBox;
 	private Accordion accordion;
 	private PFont font;
@@ -169,6 +170,7 @@ public class ControlPanel extends PApplet {
 		Group communitiesGroup = new Group(secondary, "Community");
 		bancaGroup = new Group(secondary, "Financial Stats");
 
+
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 		backgGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(50);
@@ -180,6 +182,11 @@ public class ControlPanel extends PApplet {
 		cBox.setPosition(5, 7).moveTo(bancaGroup);
 		bancaGroup.setVisible(bancaModuleEnabled);
 
+		// Group Banca Eafit
+		bancaGroupEafit = new Group(secondary, "Financial Stats Eafit");
+		bancaGroupEafit.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
+		bancaGroupEafit.setVisible(bancaModuleEnabled);
+
 		// Add Components to each group
 		setBackgroundComponents(backgGroup);
 		setNodeComponents(nodesGroup);
@@ -190,7 +197,7 @@ public class ControlPanel extends PApplet {
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(communitiesGroup).addItem(bancaGroup);
+		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(communitiesGroup).addItem(bancaGroup).addItem(bancaGroupEafit);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
