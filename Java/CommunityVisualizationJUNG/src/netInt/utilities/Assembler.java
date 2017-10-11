@@ -404,6 +404,7 @@ public class Assembler {
 
 				// Name container
 				containerTemp.setName(communityName);
+				containerTemp.setCommunityTag(communityTag);
 
 				// Make Node for CommunityCover
 				Node tmpNode = new Node(communityName);
@@ -424,7 +425,7 @@ public class Assembler {
 						communityClassifiers);
 				communityClasifiersCopy.remove(communityTag);
 				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout);
-
+				communityTemp.container.setCommunityTag(communityTag);
 			}
 
 			vCommunities.add(communityTemp);
@@ -449,6 +450,7 @@ public class Assembler {
 
 		// Name container
 		containerTemp.setName(nameCommunity);
+		
 
 		// Initialize container
 		// containerTemp.initialize();

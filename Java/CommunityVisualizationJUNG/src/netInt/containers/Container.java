@@ -60,6 +60,9 @@ public abstract class Container {
 
 	// Custom Layouts
 	protected String name = "no name";
+	//Variable which this community was generated
+	protected String communityTag = "no tag";
+
 	public PVector layoutCenter;
 	public AbstractLayout<Node, Edge> layout;
 	public int currentLayout;
@@ -590,7 +593,7 @@ public abstract class Container {
 		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName, "anotherOne", graph);
+		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName, communityTag, graph);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		//System.out.println(this.getClass().getName() + " edges between communities: " + edgesBetweenCommunities.size());
 		// For each edge between containers
@@ -689,5 +692,9 @@ public abstract class Container {
 	
 	public void setGraphOfNodes(Graph<Node, Edge> graphOfNodes) {
 		this.graphOfNodes = graphOfNodes;
+	}
+	
+	public void setCommunityTag(String communitieTag) {
+		this.communityTag = communitieTag;
 	}
 }
