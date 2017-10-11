@@ -13,6 +13,7 @@ package netInt.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
@@ -137,6 +138,15 @@ public class GraphLoader {
 			return GMLreader.getEdgesBetweenCommunities();
 		else if (fileFormat == GraphLoader.PAJEK)
 			return PJKreader.getEdgesBetweenCommunities();
+		else
+			return null;
+	}
+	
+	public HashMap<String,ArrayList<Edge>> getCommunitiesOrderEdgeList() {
+		if (fileFormat == GraphLoader.GRAPHML)
+			return GMLreader.getEdgesBetweenCommunitiesPerClassifier();
+		//else if (fileFormat == GraphLoader.PAJEK)
+		//	return PJKreader.getEdgesBetweenCommunities();
 		else
 			return null;
 	}

@@ -95,6 +95,8 @@ public class Assembler {
 	public Assembler(Dimension dim) {
 		rootDimension = dim;
 	}
+	
+	private HashMap<String,ArrayList<Edge>> communitiesOrderEdgeList;
 
 	/**
 	 * Loads and builds a graph with partitions from a given graph-formated file
@@ -129,6 +131,8 @@ public class Assembler {
 
 		// Set rootGraph to Assembler and Filters
 		Filters.getInstance().setRootGraph();
+		
+		communitiesOrderEdgeList =  rootGraph.getCommunitiesOrderEdgeList();
 
 		/*
 		 * ArrayList<String>comm1 = rootGraph.getCommunityNames();
@@ -426,6 +430,7 @@ public class Assembler {
 				communityClasifiersCopy.remove(communityTag);
 				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout);
 				communityTemp.container.setCommunityTag(communityTag);
+				//communityTemp.container.populateGraphfromEdgeList(communitiesOrderEdgeList.get(communityTag));
 			}
 
 			vCommunities.add(communityTemp);
@@ -436,11 +441,13 @@ public class Assembler {
 		System.out.println(this.getClass().getName() + " Communities of " + nameCommunity + ":" + vCommunities.size());
 		
 		//This approach will be improved when edgesBetweenCommunies are implemented
+		
 		DirectedSparseMultigraph<Node, Edge> graphBetweenCommunities = new DirectedSparseMultigraph<Node, Edge>();
 		for(VCommunity vC : vCommunities){
 			graphBetweenCommunities.addVertex(vC.getNode());
 		}
 		
+		//Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
 
 		// SubContainers for each VCommunity
 		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), new Color(5));
