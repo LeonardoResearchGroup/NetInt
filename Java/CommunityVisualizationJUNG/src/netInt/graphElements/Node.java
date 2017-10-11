@@ -24,7 +24,7 @@ import java.util.Set;
  * 
  * @author juan salamanca Nov 2016
  */
-public class Node extends GraphElement implements Serializable {
+public class Node extends GraphElement implements Serializable, Comparable<Node> {
 
 	private static final long serialVersionUID = 1L;
 	// True if the node searcher query matches any of this node's attributes
@@ -43,6 +43,8 @@ public class Node extends GraphElement implements Serializable {
 		relativeAttributes.put(0, metaData);
 	}
 
+	// Comparators
+	
 	public int compareTo(Node node) {
 		return this.getId().compareTo(node.getId());
 	}

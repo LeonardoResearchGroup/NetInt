@@ -74,6 +74,9 @@ public class GraphLoader {
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println("     Edge attributes assigned to edges and to Mapper Class");
+		
+		// ********** DELETE ****************
+		SortedNodeList SNL = new SortedNodeList();
 	}
 
 	public ArrayList<String> getCommunityNames() {
