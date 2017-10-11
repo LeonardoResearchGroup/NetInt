@@ -260,7 +260,9 @@ public class GraphmlReader {
 			}
 
 			// Create edges for communities with at least one edge connecting
-			// nodes from both communities.
+			// nodes from both communities. Here we retrieve the Node object of a
+			// community passing the key: Name of community
+
 			Node vCSource = vCommunityNodes.get(nodes.get(idSource).getCommunity(1));
 			Node vCTarget = vCommunityNodes.get(nodes.get(idTarget).getCommunity(1));
 
@@ -269,11 +271,14 @@ public class GraphmlReader {
 
 				Edge metaE = new Edge(vCSource, vCTarget, true);
 
-				// if no attributes selected set the weight to 1
+				// If no attributes selected set the weight to 1
 				metaE.setAttribute("weight", 1);
 
+				// If there are no edges linking these two community nodes 
 				if (!edgesBetweenCommunities.contains(metaE)) {
 					edgesBetweenCommunities.add(metaE);
+					System.out.println("      New synthetic edge between communities: " + vCSource.getId() + " & "
+							+ vCTarget.getId());
 				}
 			}
 
@@ -340,7 +345,7 @@ public class GraphmlReader {
 	}
 
 	private void addCommunity(String string) {
-		
+
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
