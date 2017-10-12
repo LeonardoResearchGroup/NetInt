@@ -112,8 +112,7 @@ public abstract class Container {
 				distributeNodesInLayout(currentLayout, dimension);
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
-//				runVEdgeFactory();
-				//System.out.println("peligro");
+				runVEdgeFactory();
 				setVElementCoordinates();
 				initializeElements();
 			}
@@ -150,9 +149,10 @@ public abstract class Container {
 	public void runVEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
-			vEdge.setSourceAndTarget(vNodes);
-			vEdge.makeBezier();
-			vEdges.add(vEdge);
+			if(vEdge.setSourceAndTarget(vNodes)){		
+				vEdge.makeBezier();
+				vEdges.add(vEdge);
+			}
 		}
 	}
 
@@ -175,7 +175,7 @@ public abstract class Container {
 			// Add edge
 			this.getGraph().addEdge(e, e.getSource(), e.getTarget());
 		}
-		System.out.println(this.getClass().getName() + " Graph Population Completed");
+		System.out.println(this.getClass().getName() + " Graph Population["+edgeList.size()+"] Completed");
 	}
 
 	/**

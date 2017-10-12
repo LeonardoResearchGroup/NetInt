@@ -430,7 +430,6 @@ public class Assembler {
 				communityClasifiersCopy.remove(communityTag);
 				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout);
 				communityTemp.container.setCommunityTag(communityTag);
-				//communityTemp.container.populateGraphfromEdgeList(communitiesOrderEdgeList.get(communityTag));
 			}
 
 			vCommunities.add(communityTemp);
@@ -440,17 +439,19 @@ public class Assembler {
 
 		System.out.println(this.getClass().getName() + " Communities of " + nameCommunity + ":" + vCommunities.size());
 		
-		//This approach will be improved when edgesBetweenCommunies are implemented
-		
+		/*
+		//This approach will be improved when edgesBetweenCommunies are implemented	
 		DirectedSparseMultigraph<Node, Edge> graphBetweenCommunities = new DirectedSparseMultigraph<Node, Edge>();
 		for(VCommunity vC : vCommunities){
 			graphBetweenCommunities.addVertex(vC.getNode());
 		}
-		
-		//Graph<Node, Edge> graphTemp = new DirectedSparseMultigraph<Node, Edge>();
+		*/
+		Graph<Node, Edge> graphBetweenCommunities = new DirectedSparseMultigraph<Node, Edge>();
 
 		// SubContainers for each VCommunity
 		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), new Color(5));
+		
+		containerTemp.populateGraphfromEdgeList(communitiesOrderEdgeList.get(communityTag));
 		
 		//
 		//containerTemp.setGraphOfNodes(graph);

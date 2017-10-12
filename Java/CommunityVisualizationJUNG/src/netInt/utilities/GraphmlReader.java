@@ -59,6 +59,8 @@ public class GraphmlReader {
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+		edgesBetweenCommunitiesPerClassifier = new HashMap<String,ArrayList<Edge>>();
+		vCommunityNodesPerClassifier = new HashMap<String,Node>();
 	}
 
 	/**
@@ -85,6 +87,8 @@ public class GraphmlReader {
 		communities = new ArrayList<String>();
 		communities2 = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+		edgesBetweenCommunitiesPerClassifier = new HashMap<String,ArrayList<Edge>>();
+		vCommunityNodesPerClassifier = new HashMap<String,Node>();
 
 	}
 
@@ -189,6 +193,7 @@ public class GraphmlReader {
 			// Load all the node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
 				if (nodeTmp.getAttribute(key) == null) {
+					System.out.println(key);
 					nodeTmp.setAttribute(key, vertex.getProperty(key));
 				}
 			}
@@ -227,6 +232,8 @@ public class GraphmlReader {
 
 		// **** MAKE NODES ****
 		TreeMap<Integer, Node> nodes = makeNodes(nestedAttributesOrder, nodeImportAttributes, saveCategoricalAttributes);
+		
+		initializeEdgesBetweenCommunities(nestedAttributesOrder);
 
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
@@ -275,10 +282,10 @@ public class GraphmlReader {
 				Mapper.getInstance().setCategoricalEdgeAttributes(e);
 			}
 			
-			/*
+			
+			
 			
 			for(String classifier: nestedAttributesOrder){
-				ArrayList<Edge> localEdgesBetweenCommunities;
 				// For the first order community graph
 				Edge metaE = new Edge(vCommunityNodesPerClassifier.get(nodes.get(idSource).getAttribute(classifier)),
 						vCommunityNodesPerClassifier.get(nodes.get(idTarget).getAttribute(classifier)), true);
@@ -286,17 +293,20 @@ public class GraphmlReader {
 				metaE.setAttribute("weight", 1);
 	
 				if (!edgesBetweenCommunitiesPerClassifier.get(classifier).contains(metaE)) {
+					System.out.println(classifier);
+					System.out.println("Veces");
+					
 					edgesBetweenCommunitiesPerClassifier.get(classifier).add(metaE);
 				}
 			}
-			*/
+			
 			
 			
 			
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
-		System.out.println(this.getClass().getName() + " kate");
+		System.out.println(this.getClass().getName() +" Edges Continent" +  edgesBetweenCommunitiesPerClassifier.get("Continent").get(0).getTarget().getId());
 		return rtnGraph;
 	}
 
