@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.TreeMap;
 
 import com.tinkerpop.blueprints.Graph;
@@ -46,12 +47,15 @@ public class GraphmlReader {
 	// Edges between communities
 	private ArrayList<Edge> edgesBetweenCommunities;
 
+	private Hashtable<Node, ArrayList<Node>> edgesBtwnCommunities;
+
 	/**
 	 * Reader usually used to load pajek format files
 	 */
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+		edgesBtwnCommunities = new Hashtable<Node, ArrayList<Node>>();
 	}
 
 	/**
@@ -77,6 +81,7 @@ public class GraphmlReader {
 
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+		edgesBtwnCommunities = new Hashtable<Node, ArrayList<Node>>();
 
 	}
 
@@ -267,20 +272,56 @@ public class GraphmlReader {
 			// There are no loop edges connecting a community with itself
 			if (!vCSource.equals(vCTarget)) {
 
-				Edge metaE = new Edge(vCSource, vCTarget, true);
+				// if the edgesBtwnCommunities DOES NOT contain the vCSource
+				if (!edgesBtwnCommunities.containsKey(vCSource)) {
 
-				// if no attributes selected set the weight to 1
-				metaE.setAttribute("weight", 1);
+					// Initialize the arraylist
+					ArrayList<Node> tmp = new ArrayList<Node>();
 
-				if (!edgesBetweenCommunities.contains(metaE)) {
+					// Add the target node
+					tmp.add(vCTarget);
+
+					// put the arraylist in the hashMap
+					edgesBtwnCommunities.put(vCSource, tmp);
+
+					// Make edge and add it to the collection
+					Edge metaE = new Edge(vCSource, vCTarget, true);
+
+					// if no attributes selected set the weight to 1
+					metaE.setAttribute("weight", 1);
+
 					edgesBetweenCommunities.add(metaE);
+
+				} else {
+
+					// if edgesBtwnCommunities DOES contain the vCSource, check
+					// if the vCTarget is in the arrayList
+					boolean targetInList = edgesBtwnCommunities.get(vCSource).contains(vCTarget);
+
+					// If target is not in list
+					if (!targetInList) {
+
+						// add it to the list
+						edgesBtwnCommunities.get(vCSource).add(vCTarget);
+
+						// Make edge and add it to the collection
+						Edge metaE = new Edge(vCSource, vCTarget, true);
+
+						// if no attributes selected set the weight to 1
+						metaE.setAttribute("weight", 1);
+
+						edgesBetweenCommunities.add(metaE);
+					}
+
 				}
+
 			}
 
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
 		return rtnGraph;
+
 	}
 
 	/**
@@ -340,7 +381,7 @@ public class GraphmlReader {
 	}
 
 	private void addCommunity(String string) {
-		
+
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
