@@ -48,6 +48,7 @@ public class GraphmlReader {
 	private ArrayList<Edge> edgesBetweenCommunities;
 
 	private Hashtable<Node, ArrayList<Node>> edgesBtwnCommunities;
+	private Hashtable<Node, ArrayList<Node>> cache;
 
 	/**
 	 * Reader usually used to load pajek format files
@@ -56,6 +57,7 @@ public class GraphmlReader {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
 		edgesBtwnCommunities = new Hashtable<Node, ArrayList<Node>>();
+		cache = new Hashtable<Node, ArrayList<Node>>();
 	}
 
 	/**
@@ -82,6 +84,7 @@ public class GraphmlReader {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
 		edgesBtwnCommunities = new Hashtable<Node, ArrayList<Node>>();
+		cache = new Hashtable<Node, ArrayList<Node>>();
 
 	}
 
@@ -292,17 +295,24 @@ public class GraphmlReader {
 
 					edgesBetweenCommunities.add(metaE);
 
+					// ** cache **
+					ArrayList<Node> tmpCache = new ArrayList<Node>();
+					tmpCache.add(vCTarget);
+					cache.put(vCSource, tmpCache);
+
 				} else {
 
-					// if edgesBtwnCommunities DOES contain the vCSource, check
-					// if the vCTarget is in the arrayList
-					boolean targetInList = edgesBtwnCommunities.get(vCSource).contains(vCTarget);
+					// Look for vCTarget in cache
+					boolean targetInCache = cache.get(vCSource).contains(vCTarget);
 
-					// If target is not in list
-					if (!targetInList) {
-
+					// if vCTarget IS NOT in cache do the search
+					if (!targetInCache) {
+						
 						// add it to the list
 						edgesBtwnCommunities.get(vCSource).add(vCTarget);
+						
+						// add it to cache
+						cache.get(vCSource).add(vCTarget);
 
 						// Make edge and add it to the collection
 						Edge metaE = new Edge(vCSource, vCTarget, true);
@@ -311,7 +321,29 @@ public class GraphmlReader {
 						metaE.setAttribute("weight", 1);
 
 						edgesBetweenCommunities.add(metaE);
+
+					}else{
+						// Return a already searched message !!!!!
 					}
+
+					// if edgesBtwnCommunities DOES contain the vCSource, check
+					// if the vCTarget is in the arrayList
+//					boolean targetInList = edgesBtwnCommunities.get(vCSource).contains(vCTarget);
+
+//					// If target is not in list
+//					if (!targetInList) {
+//
+//						// add it to the list
+//						edgesBtwnCommunities.get(vCSource).add(vCTarget);
+//
+//						// Make edge and add it to the collection
+//						Edge metaE = new Edge(vCSource, vCTarget, true);
+//
+//						// if no attributes selected set the weight to 1
+//						metaE.setAttribute("weight", 1);
+//
+//						edgesBetweenCommunities.add(metaE);
+//					}
 
 				}
 
