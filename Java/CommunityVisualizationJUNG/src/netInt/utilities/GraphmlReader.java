@@ -53,6 +53,7 @@ public class GraphmlReader {
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+
 	}
 
 	/**
@@ -279,7 +280,7 @@ public class GraphmlReader {
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
 		
-		linkComparator.printCacheTable();
+		//linkComparator.printCacheTable();
 		linkComparator.reset();
 		
 		return rtnGraph;
