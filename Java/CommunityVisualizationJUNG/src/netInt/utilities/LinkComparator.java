@@ -8,7 +8,7 @@ import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 
 /**
- * Utility for evaluating of there is at least one edge between to nodes in a
+ * Utility for evaluating if there is at least one edge between to nodes in a
  * graph. The data structure is optimized for quick search in large datasets.
  * 
  * 

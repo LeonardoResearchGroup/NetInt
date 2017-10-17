@@ -6,6 +6,13 @@ import java.util.Collections;
 import netInt.comparators.NodeComparatorByAttribute;
 import netInt.graphElements.Node;
 
+/**
+ * Utility class made to sort nodes by one of their attributes. It does not
+ * accept nodes with N.A. attributes
+ * 
+ * @author jsalam
+ *
+ */
 public class SortedNodeList {
 	private static ArrayList<Node> nodeList;
 	private static float[] percentileValues;
@@ -16,11 +23,16 @@ public class SortedNodeList {
 		nodeList = new ArrayList<Node>(GraphLoader.theGraph.getVertices());
 
 		// Sort the list with the comparator
-		
-		
 		Collections.sort(nodeList, new NodeComparatorByAttribute(attributeName));
 	}
 
+	/**
+	 * Sort a node list by the parameterized attribute
+	 * 
+	 * @param attributeName
+	 *            the attribute to sort the list
+	 * @return sorted list of nodes
+	 */
 	public static ArrayList<Node> getSortedNodeList(String attributeName) {
 		makeSortedNodeList(attributeName);
 		return nodeList;

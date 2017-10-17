@@ -48,7 +48,7 @@ public class GraphLoader {
 	public GraphLoader(String file, String[] nestedAttributesOrder, String[] nodeLabelAttributes,
 			String[] edgeImportAttributes, int format) {
 		int totalCommunities = 0;
-		System.out.println(this.getClass().getName() + "GraphLoader");
+		System.out.println(this.getClass().getName() + " GraphLoader");
 		fileFormat = format;
 		if (format == GraphLoader.PAJEK) {
 			PJKreader = new PajekReader();
@@ -63,7 +63,7 @@ public class GraphLoader {
 		System.out.println("     Jung Graph Created from file:" + file);
 		System.out.println("        Total Nodes in the graph: " + theGraph.getVertexCount());
 		System.out.println("        Total Edges in the graph: " + theGraph.getEdgeCount());
-		System.out.println("     " + totalCommunities + " communities loaded");
+		System.out.println("     " + totalCommunities + " communities names identified");
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
 		for (Node n : theGraph.getVertices()) {

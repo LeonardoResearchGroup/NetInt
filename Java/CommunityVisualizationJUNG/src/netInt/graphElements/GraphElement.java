@@ -241,6 +241,11 @@ public abstract class GraphElement implements Serializable {
 	public void setCommunity(AttributesMap metaData, int key) {
 		relativeAttributes.put(key, metaData);
 	}
+	
+	public String getId() {
+		String id = (String) absoluteAttributes.get("id");
+		return id;
+	}
 
 	public abstract void setAttribute(String key, Object value);
 

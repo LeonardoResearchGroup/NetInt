@@ -84,6 +84,8 @@ public class Assembler {
 	 */
 	public static Dimension UHD = new Dimension(3840, 2160);
 
+	private int startTime = 0;
+	
 	public Assembler(int width, int height) {
 		rootDimension = new Dimension(width, height);
 	}
@@ -112,6 +114,8 @@ public class Assembler {
 	 */
 	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeLabelAtts, String[] edgeImportAtts,
 			int layout, int format) {
+		
+		startTime = Canvas.app.millis();
 
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
@@ -137,6 +141,8 @@ public class Assembler {
 				"FirstOrderCommunity", layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
+		
+		System.out.println("Elapsed Time :" + (Canvas.app.millis() - startTime)/1000);
 
 		return true;
 	}
@@ -220,9 +226,8 @@ public class Assembler {
 
 		System.out.println("     Generating Graphs for " + comNames.size() + " communities ...");
 
-		for (int i = 0; i < comNames.size(); i++) {
-
-			String communityName = comNames.get(i);
+		int i = 0;
+		for (String communityName : comNames) {
 
 			System.out.println("     Working on community " + communityName);
 
@@ -252,12 +257,14 @@ public class Assembler {
 
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
+
+			i++;
 		}
 
 		for (VCommunity vC : vCommunities) {
 			vC.init();
 		}
-
+		
 		return vCommunities;
 	}
 
