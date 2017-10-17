@@ -84,7 +84,6 @@ public class Assembler {
 	 */
 	public static Dimension UHD = new Dimension(3840, 2160);
 
-	private int startTime = 0;
 	
 	public Assembler(int width, int height) {
 		rootDimension = new Dimension(width, height);
@@ -114,8 +113,6 @@ public class Assembler {
 	 */
 	public boolean loadGraph(File file, String[] nestedAttributesOrder, String[] nodeLabelAtts, String[] edgeImportAtts,
 			int layout, int format) {
-		
-		startTime = Canvas.app.millis();
 
 		// Progress report on console
 		System.out.println(this.getClass().getName() + " Loading graph");
@@ -141,8 +138,6 @@ public class Assembler {
 				"FirstOrderCommunity", layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
-		
-		System.out.println("Elapsed Time :" + (Canvas.app.millis() - startTime)/1000);
 
 		return true;
 	}
