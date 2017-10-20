@@ -52,6 +52,7 @@ public class GraphmlReader {
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+
 	}
 
 	/**
@@ -77,7 +78,6 @@ public class GraphmlReader {
 
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
-
 	}
 
 	/**
@@ -212,6 +212,10 @@ public class GraphmlReader {
 
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
+		
+		// The comparator of former links between nodes
+		LinkComparator linkComparator = new LinkComparator();
+		
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 
 			// From each edge retrieve the source and target vertex
@@ -268,24 +272,21 @@ public class GraphmlReader {
 
 			// There are no loop edges connecting a community with itself
 			if (!vCSource.equals(vCTarget)) {
+				
+				//Make edges between communities
+				linkComparator.link(vCSource, vCTarget, edgesBetweenCommunities);
 
-				Edge metaE = new Edge(vCSource, vCTarget, true);
-
-				// If no attributes selected set the weight to 1
-				metaE.setAttribute("weight", 1);
-
-				// If there are no edges linking these two community nodes 
-				if (!edgesBetweenCommunities.contains(metaE)) {
-					edgesBetweenCommunities.add(metaE);
-					System.out.println("      New synthetic edge between communities: " + vCSource.getId() + " & "
-							+ vCTarget.getId());
-				}
 			}
-
+			
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
+		
+		//linkComparator.printCacheTable();
+		linkComparator.reset();
+		
 		return rtnGraph;
+
 	}
 
 	/**

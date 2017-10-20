@@ -34,6 +34,7 @@ public class Edge extends GraphElement implements Serializable {
 		super();
 		this.source = source;
 		this.target = target;
+		absoluteAttributes.put("id",  source.getId()+"&"+target.getId());
 		this.directed = directed;
 		if (source.equals(target))
 			loop = true;
@@ -145,11 +146,15 @@ public class Edge extends GraphElement implements Serializable {
 
 
 
-	public boolean equals(Object obj) {
-		Edge edge = (Edge) obj;
-		boolean sourceIsEqual = edge.getSource().equals(this.getSource());
-		boolean targetIsEqual = edge.getTarget().equals(this.getTarget());
-		return sourceIsEqual && targetIsEqual;
-	}
+//	public boolean equals(Object obj) {
+//		Edge edge = (Edge) obj;
+//		boolean sourceIsEqual = edge.getSource().equals(this.getSource());
+//		boolean targetIsEqual = edge.getTarget().equals(this.getTarget());
+//		return sourceIsEqual && targetIsEqual;
+//	}
 
+	public boolean equals(Object obj){
+		Edge edge = (Edge) obj;
+		return getId().equals(edge);
+	}
 }

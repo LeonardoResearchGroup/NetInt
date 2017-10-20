@@ -91,11 +91,6 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 
 	// *** Getters and setters
 
-	public String getId() {
-		String id = (String) absoluteAttributes.get("id");
-		return id;
-	}
-
 	public String getName() {
 		return (String) absoluteAttributes.get("label");
 	}

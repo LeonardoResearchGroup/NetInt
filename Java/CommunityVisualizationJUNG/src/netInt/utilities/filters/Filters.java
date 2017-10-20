@@ -33,7 +33,7 @@ public class Filters {
 	// filterAndRemoveCommunityLinks()
 	private static Graph<Node, Edge> remainingGraph;
 	// Collection of results
-	private static TreeMap<String, Graph<Node, Edge>> filterResults = new TreeMap<String, Graph<Node, Edge>>();
+	private static TreeMap<String, Graph<Node, Edge>> filteredResults = new TreeMap<String, Graph<Node, Edge>>();
 
 	private static Filters filtersInstance = null;
 
@@ -74,21 +74,23 @@ public class Filters {
 		// Check if this filter was used with this community before. If so,
 		// return the stored result
 		String key = makeKey(community, "edgeInterCommunities");
-		if (filterResults.containsKey(key)) {
-			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(key);
+		
+		if (filteredResults.containsKey(key)) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(key);
 		} else {
 
 			// Make the predicate
-			VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(
-					Predicates.nodeInCommunity(community));
+			VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(Predicates.nodeInCommunity(community));
+			
 			// Filter the graph
-			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
-					.transform(GraphLoader.theGraph);
+			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter.transform(GraphLoader.theGraph);
+			
 			// Set In and Out Degree
 			for (Node n : problemGraph.getVertices()) {
 				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
 				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
 			}
+			
 			// System.out.println(getInstance().getClass().getName() + "
 			// filter:"+ key);
 			// filterResults.put(key, problemGraph);
@@ -112,10 +114,10 @@ public class Filters {
 		// Check if this filter was used in these communities before. If so,
 		// return the stored result
 		String[] keys = makeDoubleKey(communityNameA, communityNameB, "edgeInterCommunities");
-		if (filterResults.containsKey(keys[0])) {
-			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[0]);
-		} else if (filterResults.containsKey(keys[1])) {
-			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[1]);
+		if (filteredResults.containsKey(keys[0])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(keys[0]);
+		} else if (filteredResults.containsKey(keys[1])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(keys[1]);
 		} else {
 
 			// System.out.println(getInstance().getClass().getName() + " filter:
@@ -147,10 +149,10 @@ public class Filters {
 		// Check if this filter was used in these communities before. If so,
 		// return the stored result
 		String[] keys = makeDoubleKey(communityNameA, communityNameB, "edgeInterCommunities");
-		if (filterResults.containsKey(keys[0])) {
-			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[0]);
-		} else if (filterResults.containsKey(keys[1])) {
-			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(keys[1]);
+		if (filteredResults.containsKey(keys[0])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(keys[0]);
+		} else if (filteredResults.containsKey(keys[1])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(keys[1]);
 		} else {
 
 			// System.out.println(getInstance().getClass().getName() + " filter:
@@ -178,8 +180,8 @@ public class Filters {
 		// Check if this filter was used with this community before. If so,
 		// return the stored result
 		String key = makeKey(community, "edgeInterCommunities");
-		if (filterResults.containsKey(key)) {
-			return (DirectedSparseMultigraph<Node, Edge>) filterResults.get(key);
+		if (filteredResults.containsKey(key)) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(key);
 		} else {
 
 			// Instantiate the predicate
