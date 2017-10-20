@@ -137,8 +137,8 @@ public class MapperViewer extends PApplet {
 				 */
 				sizes[i] = Mapper.getInstance().convert(Mapper.LINEAR, percentiles[i], "Node", attributeName);
 				sizes[i] *= 10f;
-				System.out.println(attributeName + "  " + percentiles[i] + " " + sizes[i]);
-				System.out.println("MIN: " + minMax[0] + " MAX:" + minMax[1] + " VAL:" + percentiles[i]);
+//				System.out.println(attributeName + "  " + percentiles[i] + " " + sizes[i]);
+//				System.out.println("MIN: " + minMax[0] + " MAX:" + minMax[1] + " VAL:" + percentiles[i]);
 
 				if (!attributeName.equals("Community size")) {
 					fills[i] = ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], percentiles[i]);
