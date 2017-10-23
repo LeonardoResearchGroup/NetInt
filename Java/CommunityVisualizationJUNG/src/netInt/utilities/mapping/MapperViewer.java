@@ -33,6 +33,9 @@ public class MapperViewer extends PApplet {
 		MVInstance = this;
 	}
 
+	/**
+	 * Launch MapperViewer window
+	 */
 	public void kickOff() {
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
@@ -42,7 +45,6 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void setup() {
-		System.out.println("Mapper Viewer initialized");
 		this.surface.setLocation(displayWidth - 400, 45);
 		this.surface.setAlwaysOnTop(true);
 
@@ -54,15 +56,23 @@ public class MapperViewer extends PApplet {
 	public void draw() {
 		background(70);
 		ColorMap.getInstance().showPalette(this, 20, 15, 256);
-		
+
 		if (bars != null) {
+			int j = 40;
+			text("PERCENTILES BELOW WHICH VALUES FALL", 20, j, 250, 150);
+
+			// j = 35;
+
 			for (int i = 0; i < bars.size(); i++) {
-				bars.get(i).show(this, 20, 45 + (i * 35));
+				bars.get(i).show(this, 20, 45 + (j + i * 35));
 			}
+
 		}
+
 	}
 
 	public void initMinMaxValues() {
+		// Launch MapperViewer window
 		kickOff();
 
 		// NODES
@@ -70,10 +80,18 @@ public class MapperViewer extends PApplet {
 			if (Mapper.getInstance().getNodeNumericalAttributeKeys() != null) {
 				ArrayList<String> attributeKeys = Mapper.getInstance().getNodeNumericalAttributeKeys();
 				for (int i = 0; i < attributeKeys.size(); i++) {
-					Bar temp = new Bar(attributeKeys.get(i));
-					temp.min = Mapper.getInstance().getNodeAttributesMin().getValueofAttribute(attributeKeys.get(i));
-					temp.max = Mapper.getInstance().getNodeAttributesMax().getValueofAttribute(attributeKeys.get(i));
-					bars.add(temp);
+					// ************* THIS 'IF' CONDITIONAL IS NOT THE RIGHT WAY TO DO FILTER
+					// WHICH ATTRIBUTES HAVE VALUE.
+					// **************** MORE WORK NEED TO BE DONE HERE TO SOLVE
+					// THIS ISSUE
+					if (!attributeKeys.get(i).equals("Community size")) {
+						Bar temp = new Bar(attributeKeys.get(i));
+						temp.min = Mapper.getInstance().getNodeAttributesMin()
+								.getValueofAttribute(attributeKeys.get(i));
+						temp.max = Mapper.getInstance().getNodeAttributesMax()
+								.getValueofAttribute(attributeKeys.get(i));
+						bars.add(temp);
+					}
 				}
 			}
 		} catch (NullPointerException np) {
@@ -99,10 +117,12 @@ public class MapperViewer extends PApplet {
 		// System.out.println(this.getClass().getName() + " Mapper does not have
 		// Edge Numerical Attributes");
 		// }
+
+		System.out.println("MapperViewer initialized");
 	}
 
 	public void exit() {
-		System.out.println("Mapper viewer closed");
+		System.out.println("MapperViewer closed");
 	}
 
 	// INTERNAL CLASS
@@ -137,19 +157,17 @@ public class MapperViewer extends PApplet {
 				 */
 				sizes[i] = Mapper.getInstance().convert(Mapper.LINEAR, percentiles[i], "Node", attributeName);
 				sizes[i] *= 10f;
-//				System.out.println(attributeName + "  " + percentiles[i] + " " + sizes[i]);
-//				System.out.println("MIN: " + minMax[0] + " MAX:" + minMax[1] + " VAL:" + percentiles[i]);
+				// System.out.println(attributeName + " " + percentiles[i] +
+				// " " + sizes[i]);
+				// System.out.println("MIN: " + minMax[0] + " MAX:" +
+				// minMax[1] + " VAL:" + percentiles[i]);
 
-				if (!attributeName.equals("Community size")) {
-					fills[i] = ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], percentiles[i]);
-				}
+				fills[i] = ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], percentiles[i]);
 			}
-			
-
 		}
 
 		public void show(PApplet app, int orgX, int orgY) {
-			
+
 			// Bar name
 			app.text(attribute, orgX, orgY);
 
@@ -161,7 +179,7 @@ public class MapperViewer extends PApplet {
 			// Bins
 			float wdth = (lenght - 5) / bins;
 			for (int i = 0; i < bins; i++) {
-				//app.noStroke();
+				// app.noStroke();
 				app.fill(fills[i]);
 				app.rect(orgX + tab + 5 + wdth * i, orgY + 15, wdth, -5); // sizes[i]
 				app.fill(155);

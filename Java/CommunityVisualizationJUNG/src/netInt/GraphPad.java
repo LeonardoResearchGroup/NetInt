@@ -91,7 +91,7 @@ public class GraphPad {
 
 	// The floating window displaying system messages
 	protected ConsoleCatcher consoleCatcher;
-	
+
 	// The Mapper viewer window
 	protected MapperViewer mapperViewer;
 
@@ -158,7 +158,7 @@ public class GraphPad {
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
 
-		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+	//	consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		mapperViewer = new MapperViewer();
 
 		// Canvas
@@ -176,9 +176,9 @@ public class GraphPad {
 
 		// Performance
 		performance = new TestPerformance();
-		
+
 		System.out.println("** GraphPad Init() completed **");
-		
+
 	}
 
 	/**
@@ -196,6 +196,7 @@ public class GraphPad {
 		}
 
 		if (activeGraph) {
+
 			parent.pushMatrix();
 			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
 					(parent.height - app.getRootDimension().height) / 2);

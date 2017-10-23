@@ -138,6 +138,8 @@ public class Assembler {
 				"FirstOrderCommunity", layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
+		
+		System.out.println(this.getClass().getName() + " Loading graph DONE!" + "\n");
 
 		return true;
 	}
@@ -224,10 +226,12 @@ public class Assembler {
 		int i = 0;
 		for (String communityName : comNames) {
 
-			System.out.println("     Working on community " + communityName);
+			System.out.println("     Working on community. " + communityName);
 
 			// SubGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName);
+			
+			System.out.println("         Nodes: " + graphTemp.getVertexCount() + ", Edges: " + graphTemp.getEdgeCount());
 
 			// SubContainers for each VCommunity
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);

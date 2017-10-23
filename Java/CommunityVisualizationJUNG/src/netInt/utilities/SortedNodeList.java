@@ -53,7 +53,7 @@ public class SortedNodeList {
 	private static float[] calculatePercentiles(int p, String attributeName) {
 		float[] vals = new float[p];
 
-		if (p <= 100) {
+		if (p>= 0 && p <= 100) {
 			for (int i = p; i <= 100; i += p) {
 
 				// Get percentile range

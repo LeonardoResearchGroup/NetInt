@@ -356,7 +356,7 @@ public class ControlPanel extends PApplet {
 		if (logo != null) {
 			image(logo, 10, 9);
 		} else {
-			text("Mising Netint logo", 10, 9);
+			text("Missing Netint logo", 10, 9);
 		}
 	}
 

@@ -132,7 +132,7 @@ public class LinkComparator {
 	 * @param target
 	 * @param edges
 	 */
-	public void link(Node source, Node target, ArrayList<Edge> edges) {
+	public void buildLink(Node source, Node target, ArrayList<Edge> edges) {
 		if (link(source, target)) {
 			Edge temp = new Edge(source, target, true);
 			temp.setAttribute("weight", 1);

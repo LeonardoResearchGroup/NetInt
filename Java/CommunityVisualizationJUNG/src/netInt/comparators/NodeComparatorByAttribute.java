@@ -21,12 +21,13 @@ public class NodeComparatorByAttribute implements Comparator<Node> {
 				return 1;
 			} else if (value == 0) {
 				return 0;
-			} else{
-				return 0;	
+			} else {
+				return 0;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(this.getClass().getName() + "  Attribute not found in nodes");
+			System.out.println(this.getClass().getName() + " " + e.toString() + " \n" + "    Attribute name - "
+					+ attributeName + " - not found in nodes. CHECK COMPARATOR RESULTS");
+
 			return 0;
 		}
 	}

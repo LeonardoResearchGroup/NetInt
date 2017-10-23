@@ -210,12 +210,12 @@ public class ImportMenuGuiSet implements Observer {
 				// Ask the assembler to load the graph
 				if (communityStructure[0] != null && nodeName != null) {
 
-					graphPad.getAssembler().loadGraph(GraphPad.getFile(), communityStructure, nodeName, edgeThickness,
-							layoutSelection, GraphLoader.GRAPHML);
+					// set graphLoaded to true
+					graphLoaded = graphPad.getAssembler().loadGraph(GraphPad.getFile(), communityStructure, nodeName,
+							edgeThickness, layoutSelection, GraphLoader.GRAPHML);
 
-					GraphPad.setActiveGraph(true);
-
-					graphLoaded = true;
+					// Enable some loop operations in GraphPad
+					GraphPad.setActiveGraph(graphLoaded);
 
 				} else {
 
@@ -236,14 +236,16 @@ public class ImportMenuGuiSet implements Observer {
 				// graph if the control panel exists
 				if (ControlPanel.getInstance() != null) {
 
-					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys();
+					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax()
+							.getAttributeKeys();
 
-					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys();
+					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax()
+							.getAttributeKeys();
 
-					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys); 
-					
+					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);
+
 				}
-				
+
 				// Feed min & max values to mapper viewer
 				MapperViewer.getInstance().initMinMaxValues();
 
@@ -252,6 +254,10 @@ public class ImportMenuGuiSet implements Observer {
 			}
 		}
 
+	}
+
+	public boolean getGraphLoaded() {
+		return graphLoaded;
 	}
 
 	private int layoutSelection(String value) {
@@ -267,7 +273,7 @@ public class ImportMenuGuiSet implements Observer {
 		case "Linear":
 			selection = Container.LINEAR;
 			break;
-			
+
 		}
 		return selection;
 	}

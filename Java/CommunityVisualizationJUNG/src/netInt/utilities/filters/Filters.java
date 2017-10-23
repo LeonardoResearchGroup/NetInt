@@ -64,7 +64,7 @@ public class Filters {
 
 	/**
 	 * Returns a subgraph of jungGraph whose nodes belong to the specified
-	 * community
+	 * community. It uses JUNG predicates, that are not fast enough for large datasets
 	 * @param community community name
 	 * 
 	 * @return a subgraph in form of DirectedSparseMultigraph
@@ -97,6 +97,27 @@ public class Filters {
 			return problemGraph;
 		}
 	}
+//	
+//	/**
+//	 * Returns a subgraph of jungGraph whose nodes belong to the specified
+//	 * community. It uses CUSTOM MADE filtering that outperforms JUNG's predicates
+//	 * @param community community name
+//	 * 
+//	 * @return a subgraph in form of DirectedSparseMultigraph
+//	 */
+//	public static DirectedSparseMultigraph<Node, Edge> filterNodeInCommunity(final String community) {
+//
+//		// Check if this filter was used with this community before. If so,
+//		// return the stored result
+//		String key = makeKey(community, "edgeInterCommunities");
+//		
+//		if (filteredResults.containsKey(key)) {
+//			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(key);
+//		} else {
+//
+//		
+//		}
+//	}
 
 	/**
 	 * Returns a subgraph of jungGraph whose edges connect the specified

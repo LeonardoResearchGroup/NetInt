@@ -142,11 +142,11 @@ public class Mapper {
 			rtn[1] = nodeAttributesMax.getValueofAttribute(attributeName);
 		} catch (NullPointerException e) {
 			System.out.println(
-					this.getClass().getName() + "> wrong attribute name: " + attributeName + " at getMaxMin()");
+					this.getClass().getName() + "> wrong attribute name: " + attributeName + " - at getMaxMin()");
 		}
 		if (rtn[0] == rtn[1]) {
 			System.out.println(this.getClass().getName() + "> WARNING: min and max values of node attribute "
-					+ attributeName + " are equal");
+					+ attributeName + " - are equal");
 		}
 		return rtn;
 	}
@@ -158,11 +158,11 @@ public class Mapper {
 			rtn[1] = edgeAttributesMax.getValueofAttribute(attributeName);
 		} catch (NullPointerException e) {
 			System.out.println(
-					this.getClass().getName() + "> wrong attribute name: " + attributeName + " at getMaxMin()");
+					this.getClass().getName() + "> wrong attribute name: " + attributeName + " - at getMaxMin()");
 		}
 		if (rtn[0] == rtn[1]) {
 			System.out.println(this.getClass().getName() + "> WARNING: min and max values of edge attribute "
-					+ attributeName + " are equal");
+					+ attributeName + " - are equal");
 		}
 		return rtn;
 	}
@@ -408,7 +408,7 @@ public class Mapper {
 						}
 					} catch (NumberFormatException e) {
 						System.out.println(this.getClass().getName() + " Node Attribute named: " + key
-								+ " does not match the available Mapper data type: Double,Float,Integer");
+								+ " - does not match the available Mapper data type: Double,Float,Integer");
 					}
 				}
 			}
@@ -474,7 +474,7 @@ public class Mapper {
 					}
 				} catch (NumberFormatException e) {
 					System.out.println(this.getClass().getName() + " Node Attribute named: " + key
-							+ " does not match the available Mapper data type: Double,Float,Integer");
+							+ " - does not match the available Mapper data type: Double,Float,Integer");
 				}
 			}
 		}
@@ -541,7 +541,7 @@ public class Mapper {
 						}
 					} catch (NumberFormatException e) {
 						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
-								+ " does not match the available Mapper data type: Double,Float,Integer");
+								+ " - does not match the available Mapper data type: Double,Float,Integer");
 					}
 				}
 			}
@@ -607,7 +607,7 @@ public class Mapper {
 					}
 				} catch (NumberFormatException e) {
 					System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
-							+ " does not match the available Mapper data type: Double,Float,Integer");
+							+ " - does not match the available Mapper data type: Double,Float,Integer");
 				}
 			}
 		}

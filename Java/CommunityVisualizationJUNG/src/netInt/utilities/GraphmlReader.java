@@ -43,7 +43,7 @@ public class GraphmlReader {
 	private HashMap<String, Node> vCommunityNodes;
 	// ArrayList of community values obtained from the import file
 	private ArrayList<String> communities;
-	// Edges between communities
+	// Edges between VCommunities
 	private ArrayList<Edge> edgesBetweenCommunities;
 
 	/**
@@ -270,11 +270,11 @@ public class GraphmlReader {
 			Node vCSource = vCommunityNodes.get(nodes.get(idSource).getCommunity(1));
 			Node vCTarget = vCommunityNodes.get(nodes.get(idTarget).getCommunity(1));
 
-			// There are no loop edges connecting a community with itself
+			// if there are no loop edges connecting a community with itself
 			if (!vCSource.equals(vCTarget)) {
 				
 				//Make edges between communities
-				linkComparator.link(vCSource, vCTarget, edgesBetweenCommunities);
+				linkComparator.buildLink(vCSource, vCTarget, edgesBetweenCommunities);
 
 			}
 			
