@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -84,7 +85,6 @@ public class Assembler {
 	 */
 	public static Dimension UHD = new Dimension(3840, 2160);
 
-	
 	public Assembler(int width, int height) {
 		rootDimension = new Dimension(width, height);
 	}
@@ -138,7 +138,7 @@ public class Assembler {
 				"FirstOrderCommunity", layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
-		
+
 		System.out.println(this.getClass().getName() + " Loading graph DONE!" + "\n");
 
 		return true;
@@ -223,15 +223,22 @@ public class Assembler {
 
 		System.out.println("     Generating Graphs for " + comNames.size() + " communities ...");
 
+		// The subsetter containing each community subset. Subsetting is made
+		// following the user defined import Nested attribute order. As of
+		// October 2017 it uses only the first one
+		GraphSubsetter subsetter = new GraphSubsetter();
+
 		int i = 0;
 		for (String communityName : comNames) {
 
 			System.out.println("     Working on community. " + communityName);
 
 			// SubGraph of each community
-			DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName);
-			
-			System.out.println("         Nodes: " + graphTemp.getVertexCount() + ", Edges: " + graphTemp.getEdgeCount());
+			//DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName);
+			DirectedSparseMultigraph<Node, Edge> graphTemp = subsetter.getSubGraphForCommunity(communityName);
+
+			System.out
+					.println("         Nodes: " + graphTemp.getVertexCount() + ", Edges: " + graphTemp.getEdgeCount());
 
 			// SubContainers for each VCommunity
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);
@@ -263,7 +270,7 @@ public class Assembler {
 		for (VCommunity vC : vCommunities) {
 			vC.init();
 		}
-		
+
 		return vCommunities;
 	}
 

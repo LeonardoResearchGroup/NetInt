@@ -17,6 +17,7 @@ import java.util.Collection;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
+import netInt.utilities.customCollections.NestedNodeMap;
 import netInt.utilities.mapping.Mapper;
 
 /**
@@ -26,7 +27,13 @@ import netInt.utilities.mapping.Mapper;
  *
  */
 public class GraphLoader {
+
+	// The original graph available across classes
 	public static Graph<Node, Edge> theGraph;
+
+	// The nested map of nodes avilable across classes
+	public static NestedNodeMap<String, Character> nestedMap;
+
 	private GraphmlReader GMLreader;
 	private PajekReader PJKreader;
 	public static final int PAJEK = 1;
@@ -37,7 +44,8 @@ public class GraphLoader {
 	/**
 	 * @param file
 	 *            The path to the source file
-	 * @param nestedAttributesOrder the vector of ordered node categorical attributes
+	 * @param nestedAttributesOrder
+	 *            the vector of ordered node categorical attributes
 	 * @param nodeLabelAttributes
 	 *            List of node attributes to be retrieved from the source file
 	 * @param edgeImportAttributes
@@ -64,17 +72,25 @@ public class GraphLoader {
 		System.out.println("        Total Nodes in the graph: " + theGraph.getVertexCount());
 		System.out.println("        Total Edges in the graph: " + theGraph.getEdgeCount());
 		System.out.println("     " + totalCommunities + " communities names identified");
+		
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
 		for (Node n : theGraph.getVertices()) {
 			setNodesDegrees(theGraph, n);
 			Mapper.getInstance().setMaxMinNodeAttributes(n);
 		}
+		
 		System.out.println("     Degrees assigned to nodes and attributes to Mapper Class");
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println("     Edge attributes assigned to edges and to Mapper Class");
-		
+
+		// Instantiation of nested map
+		nestedMap = new NestedNodeMap<String, Character>();
+
+		// Initialization of nested map
+		nestedMap.init(theGraph.getVertices(), nestedAttributesOrder[0]);
+
 	}
 
 	public ArrayList<String> getCommunityNames() {
