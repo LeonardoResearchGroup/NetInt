@@ -140,7 +140,7 @@ public class PajekReader {
 					// Check if it does exist a property matching other
 					// attributes
 					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-						node.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
+						node.setAbsoluteAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
 					} else
 						throw new NullPointerException();
 				}

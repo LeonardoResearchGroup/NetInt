@@ -86,11 +86,10 @@ public class GraphLoader {
 		System.out.println("     Edge attributes assigned to edges and to Mapper Class");
 
 		// Instantiation of nested map
-		nestedMap = new NestedNodeMap<String, Character>();
+		nestedMap = new NestedNodeMap<String, Character>(theGraph.getVertices(), nestedAttributesOrder[0]);
 
-		// Initialization of nested map
-		nestedMap.init(theGraph.getVertices(), nestedAttributesOrder[0]);
-
+		// Initialization of nested map in a new thread
+		nestedMap.start();
 	}
 
 	public ArrayList<String> getCommunityNames() {

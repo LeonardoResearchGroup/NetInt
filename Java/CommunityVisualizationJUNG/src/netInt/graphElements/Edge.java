@@ -122,7 +122,7 @@ public class Edge extends GraphElement implements Serializable {
 	 * @param value
 	 *            value
 	 */
-	public void setAttribute(String key, Object value) {
+	public void setAbsoluteAttribute(String key, Object value) {
 		absoluteAttributes.put(key, value);
 		netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
 	}
@@ -143,15 +143,6 @@ public class Edge extends GraphElement implements Serializable {
 			netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, attributeSet.get(key));
 		}
 	}
-
-
-
-//	public boolean equals(Object obj) {
-//		Edge edge = (Edge) obj;
-//		boolean sourceIsEqual = edge.getSource().equals(this.getSource());
-//		boolean targetIsEqual = edge.getTarget().equals(this.getTarget());
-//		return sourceIsEqual && targetIsEqual;
-//	}
 
 	public boolean equals(Object obj){
 		Edge edge = (Edge) obj;

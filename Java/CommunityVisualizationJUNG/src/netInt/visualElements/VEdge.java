@@ -40,7 +40,7 @@ public class VEdge implements Serializable {
 	private Bezier bezier;
 	// Visual Attributes
 	private float thickness = 1;
-	private float scaleFactor  = 3;
+	private float scaleFactor = 3;
 	// UserSettings
 	private String attributeName = "no_attribute";
 	private String converterName = Mapper.LINEAR;
@@ -97,16 +97,16 @@ public class VEdge implements Serializable {
 	 */
 	public void show() {
 		int alpha = 150;
-		
+
 		// If both source and target are above a visibility threshold
 		// source.show(source.isDisplayed());
 		// vTarget.show(vTarget.isDisplayed());
 		if (vSource.isVisible() && vTarget.isVisible() && vSource.isDisplayed() && vTarget.isDisplayed()) {
-			
+
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
 			if (visibility) {
-				
+
 				// Set thickness
 				try {
 					// determine the thickness based on the user selected
@@ -116,11 +116,14 @@ public class VEdge implements Serializable {
 							attributeName = UserSettings.getInstance().getEdgeFilters();
 							float value = edge.getFloatAttribute(attributeName);
 							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
-							//System.out.println("VEdge > value of " + attributeName + " :" + value + ", mapped to: " + tmp);
-							setThickness(scaleFactor* tmp);
+							// System.out.println("VEdge > value of " +
+							// attributeName + " :" + value + ", mapped to: " +
+							// tmp);
+							setThickness(scaleFactor * tmp);
 
 							/// COLOR TEMPORARY
-							float mappedVal = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
+							float mappedVal = Mapper.getInstance().convert(converterName, value, Mapper.EDGE,
+									attributeName);
 							int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
 							bezier.setColor(mappedColor);
 						}
@@ -131,9 +134,8 @@ public class VEdge implements Serializable {
 							if (UserSettings.getInstance().getConverterEdge() != null)
 								converterName = UserSettings.getInstance().getConverterEdge();
 							float value = edge.getFloatAttribute(attributeName);
-							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE,
-									attributeName);
-							setThickness(scaleFactor* tmp);
+							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
+							setThickness(scaleFactor * tmp);
 						}
 					}
 				} catch (NullPointerException npe) {
@@ -149,8 +151,9 @@ public class VEdge implements Serializable {
 				}
 				// If visualize the nodes and edges if not in propagation
 				if (!UserSettings.getInstance().getOnlyPropagation()) {
-				//	if (!vSource.getPos().equals(vTarget.getPos()) && Canvas.mouseEventOnCanvas)
-						bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
+					// if (!vSource.getPos().equals(vTarget.getPos()) &&
+					// Canvas.mouseEventOnCanvas)
+					bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
 					// If source and target nodes are in propagation
 					// Edge mode: normal, head, tail or both
 					if (vSource.isPropagated()) {
@@ -163,8 +166,8 @@ public class VEdge implements Serializable {
 				} else {
 					// If solo propagation
 					if (vSource.isPropagated()) {
-					//	if (!vSource.getPos().equals(vTarget.getPos()))
-							bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
+						// if (!vSource.getPos().equals(vTarget.getPos()))
+						bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
 						// Edge mode: normal, head, tail or both
 						bezier.drawBezier2D(Canvas.app, 2f);
 						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
@@ -217,13 +220,18 @@ public class VEdge implements Serializable {
 
 	public void setVisibility(float edgeVisibilityThreshold) {
 		Object[] keys = edge.getAttributeKeys();
-		// Set the Visibility with the first Attribute of Edge Import: "Body
+		// Set the Visibility with the second Attribute of Edge Import: "Body
 		// Thickness"
 		try {
-			float value = edge.getFloatAttribute((String) keys[0]);
-			
-			if (edgeVisibilityThreshold > value || hidden) {
-				visibility = false;
+			if (edge.getAttribute((String) keys[1]) instanceof Float) {
+				
+				float value = edge.getFloatAttribute((String) keys[1]);
+
+				if (edgeVisibilityThreshold > value || hidden) {
+					visibility = false;
+				} else {
+					visibility = true;
+				}
 			} else {
 				visibility = true;
 			}

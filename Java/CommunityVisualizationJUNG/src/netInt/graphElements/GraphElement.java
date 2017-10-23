@@ -96,8 +96,9 @@ public abstract class GraphElement implements Serializable {
 	 *            key
 	 * @return the float value of the attribute associated to the key
 	 */
-	public float getFloatAttribute (String key) {
-		Float rtn = null ;
+	public float getFloatAttribute(String key) {
+		Float rtn = null;
+		
 		try {
 			// If Double
 			if (absoluteAttributes.get(key) instanceof Double) {
@@ -112,10 +113,9 @@ public abstract class GraphElement implements Serializable {
 				rtn = (float) absoluteAttributes.get(key);
 			}
 		} catch (Exception e) {
-			String temp = " - not available in absoluteAttributes collection.";
-			System.out.println(this.getClass().getName() + " Attribute key: " + key + temp
-					+ " Value couldn't be casted as Float");
-//			throw (e);
+			System.out.println(this.getClass().getName() + " Attribute key: " + key
+					+ " - not available in absoluteAttributes collection. Value couldn't be casted as Float");
+			// throw (e);
 		}
 		return rtn;
 	}
@@ -242,13 +242,13 @@ public abstract class GraphElement implements Serializable {
 	public void setCommunity(AttributesMap metaData, int key) {
 		relativeAttributes.put(key, metaData);
 	}
-	
+
 	public String getId() {
 		String id = (String) absoluteAttributes.get("id");
 		return id;
 	}
 
-	public abstract void setAttribute(String key, Object value);
+	public abstract void setAbsoluteAttribute(String key, Object value);
 
 	public abstract void addRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
 

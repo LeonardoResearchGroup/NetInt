@@ -150,7 +150,7 @@ public class GraphmlReader {
 					// Check if it does exist a property matching other
 					// attributes
 					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-						nodeTmp.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
+						nodeTmp.setAbsoluteAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
 					} else {
 						// for root importing
 						throw new NullPointerException();
@@ -164,7 +164,7 @@ public class GraphmlReader {
 			// Load all the remaining node attributes from the graphml file
 			for (String key : vertex.getPropertyKeys()) {
 				if (nodeTmp.getAttribute(key) == null) {
-					nodeTmp.setAttribute(key, vertex.getProperty(key));
+					nodeTmp.setAbsoluteAttribute(key, vertex.getProperty(key));
 				}
 			}
 			// Setting max min boundaries in Mapper class
@@ -236,7 +236,7 @@ public class GraphmlReader {
 						if (edge.getProperty(edgeImportAttributes[i]) != null) {
 							Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
 							// Add the attribute value to the temporal edge;
-							e.setAttribute(edgeImportAttributes[i], tmpProperty);
+							e.setAbsoluteAttribute(edgeImportAttributes[i], tmpProperty);
 						} else
 							throw new NullPointerException();
 					} catch (NullPointerException exception) {
@@ -247,13 +247,13 @@ public class GraphmlReader {
 				}
 			} else {
 				// if no attributes selected set the weight to 1
-				e.setAttribute("weight", 1);
+				e.setAbsoluteAttribute("weight", 1);
 			}
 
 			// Load all the edge attributes from the graphml file
 			for (String key : edge.getPropertyKeys()) {
 				if (e.getAttribute(key) == null) {
-					e.setAttribute(key, edge.getProperty(key));
+					e.setAbsoluteAttribute(key, edge.getProperty(key));
 				}
 			}
 
@@ -325,7 +325,7 @@ public class GraphmlReader {
 					// Check if it does exist a property matching other
 					// attributes
 					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-						node.setAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
+						node.setAbsoluteAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
 					} else
 						throw new NullPointerException();
 				}

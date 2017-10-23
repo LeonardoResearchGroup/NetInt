@@ -142,7 +142,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @param value
 	 *            value
 	 */
-	public void setAttribute(String key, Object value) {
+	public void setAbsoluteAttribute(String key, Object value) {
 		absoluteAttributes.put(key, value);
 		netInt.utilities.mapping.Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
@@ -179,7 +179,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 
 	/**
 	 * @param key
-	 *            the community from which the procedure is invoked
+	 *            the tier from which the procedure is invoked
 	 * @return out degree of the node
 	 */
 	public int getOutDegree(int key) {

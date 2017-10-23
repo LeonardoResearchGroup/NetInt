@@ -111,8 +111,8 @@ public abstract class Container {
 				retrieveVNodeSuccessors(layout.getGraph());
 
 			} else {
-				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
-				distributeNodesInLayout(currentLayout, dimension);
+//				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
+//				distributeNodesInLayout(currentLayout, dimension);
 
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
@@ -135,6 +135,9 @@ public abstract class Container {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
+
+			n.printAbsoluteAttributes();
+			n.printRelativeAttributes();
 
 			// Compute and set the node diameter
 			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), "Node", "outDegree");
@@ -248,7 +251,7 @@ public abstract class Container {
 
 					// Build edge
 					Edge tempEdge = new Edge(vCA.getNode(), vCB.getNode(), false);
-					tempEdge.setAttribute("weight", linkingEdges.getEdgeCount());
+					tempEdge.setAbsoluteAttribute("weight", linkingEdges.getEdgeCount());
 
 					// Add edge
 					this.getGraph().addEdge(tempEdge, vCA.getNode(), vCB.getNode());
@@ -528,7 +531,7 @@ public abstract class Container {
 
 		// attraction multiplier: how much edges try to keep their vertices
 		// together
-		//frLayout.setAttractionMultiplier(0.5);
+		// frLayout.setAttractionMultiplier(0.5);
 
 		// repulsion multiplier: how much vertices try to push each other apart
 		frLayout.setRepulsionMultiplier(0.5);

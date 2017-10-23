@@ -26,6 +26,7 @@ import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
+import netInt.utilities.filters.GraphSubsetterFilter;
 import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
 import processing.core.PConstants;
@@ -42,7 +43,7 @@ import processing.core.PConstants;
  * contains all the nodes and edges in a unique <tt>Container</tt> but they are
  * not clustered in communities. It can be used to visualize a graph with no
  * partitions. Caveat: as the focus of NetInt is to visualize nested communities
- * it is not enabled in this version.
+ * it is not enabled in this version yet.
  * </p>
  * <p>
  * In a nested structure of <tt>VCommunity</tt>'s, a <i>first order</i>
@@ -226,12 +227,12 @@ public class Assembler {
 		// The subsetter containing each community subset. Subsetting is made
 		// following the user defined import Nested attribute order. As of
 		// October 2017 it uses only the first one
-		GraphSubsetter subsetter = new GraphSubsetter();
+		GraphSubsetterFilter subsetter = new GraphSubsetterFilter();
 
 		int i = 0;
 		for (String communityName : comNames) {
 
-			System.out.println("     Working on community. " + communityName);
+			System.out.println("     Creating Second Order VCommunity: " + communityName);
 
 			// SubGraph of each community
 			//DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName);
