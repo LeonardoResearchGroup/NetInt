@@ -52,7 +52,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected boolean containsSearchedNode = false;
 
 	private boolean vNodesCentered = true;
-	
+
 	private VNodeDescription description;
 
 	public VCommunity(Node node, Container container) {
@@ -61,7 +61,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		lastPosition = pos;
 		comCover = new VCommunityCover(this);
 		node.setAbsoluteAttribute("Community size", container.size());
-		//Mapper.getInstance().setMaxMinNodeAttributes(node);
+		// Mapper.getInstance().setMaxMinNodeAttributes(node);
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 		description = new VNodeDescription();
@@ -76,11 +76,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			setDiameter(temp * 50);
 		}
 
-//		if ((temp * 10) < 2) {
-//			comCover.setStrokeThickness(1);
-//		} else {
-//			comCover.setStrokeThickness((int) (temp * 10));
-//		}
+		// if ((temp * 10) < 2) {
+		// comCover.setStrokeThickness(1);
+		// } else {
+		// comCover.setStrokeThickness((int) (temp * 10));
+		// }
 	}
 
 	public void show() {
@@ -116,7 +116,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 			setDisplayed(true);
 			description.show(this);
-			if (isMouseOver){
+			if (isMouseOver) {
 				Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), getPos().x, getPos().y + 20);
 				Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), getPos().x, getPos().y + 35);
 			}
@@ -142,8 +142,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * Therefore a higher tier VCommunity may contain nested VCommunities. In
 	 * order to display each VisualAtom correctly the class type is determined.
 	 * 
-	 * @param showNodes true if show
-	 * @param showEdges true if show
+	 * @param showNodes
+	 *            true if show
+	 * @param showEdges
+	 *            true if show
 	 */
 
 	public void showCommunityContents(boolean showNodes, boolean showEdges) {
@@ -237,7 +239,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					container.stepIterativeLayout(pos).done();
 				}
-				
+
 				for (VNode vN : container.getJustVNodes()) {
 					vN.setVisibility(true);
 					if (vNodesCentered) {
@@ -354,7 +356,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	/**
 	 * Search for a Node using the ID parameter
 	 * 
-	 * @param id Node id
+	 * @param id
+	 *            Node id
 	 * @return true if found
 	 */
 	public boolean searchNodeID(String id) {
@@ -375,7 +378,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * Search a vCommunity through the id of some node of his community and
 	 * change the value of his hasFoundNode variable
 	 * 
-	 * @param id Node id
+	 * @param id
+	 *            Node id
 	 * @return true if found
 	 */
 	public boolean searchNodeSuperCommunity(String id) {
