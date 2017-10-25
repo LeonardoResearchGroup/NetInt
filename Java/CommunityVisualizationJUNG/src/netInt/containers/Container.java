@@ -115,7 +115,7 @@ public abstract class Container {
 			}else{
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
-				//runVEdgeFactory();
+				runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
