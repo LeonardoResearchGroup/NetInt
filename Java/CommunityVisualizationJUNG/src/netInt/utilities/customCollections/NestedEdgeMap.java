@@ -10,6 +10,7 @@ import netInt.graphElements.Node;
  * hashMap<K2, hashSet<Edge>>>. It is extremely efficient to look for an object
  * of type Edge if K1 and K2 are attributes of Edge
  * 
+ 
  * @author juan salamanca 
  * 
  * October 2017
