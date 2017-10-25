@@ -221,7 +221,7 @@ public abstract class GraphElement implements Serializable {
 	 */
 	public void setCommunity(String community, int key) {
 		// create meta-datum
-		AttributesMap metaData = new AttributesMap();
+		ElementAttributeMap metaData = new ElementAttributeMap();
 		// assign name
 		metaData.setCommunityName(community);
 		// add meta-datum to collection of meta-data
@@ -239,7 +239,7 @@ public abstract class GraphElement implements Serializable {
 	 *            the community to which the attributes are associated. 0 is
 	 *            reserved for the root community
 	 */
-	public void setCommunity(AttributesMap metaData, int key) {
+	public void setCommunity(ElementAttributeMap metaData, int key) {
 		relativeAttributes.put(key, metaData);
 	}
 

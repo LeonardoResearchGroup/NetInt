@@ -18,12 +18,12 @@ import processing.core.PApplet;
 
 /**
  * This class is regularly used to store the set of Degree attributes of a
- * community, however it can store any <String, Float> using put()
+ * node in a tier, however it can store any <String, Float> using put()
  * 
  * @author jsalam
  *
  */
-public class AttributesMap extends HashMap<String, Float> implements Serializable {
+public class ElementAttributeMap extends HashMap<String, Float> implements Serializable {
 	/**
 	 * 
 	 */
@@ -34,7 +34,7 @@ public class AttributesMap extends HashMap<String, Float> implements Serializabl
 	// Degrees
 	// private int inDegree, outDegree, degree;
 
-	public AttributesMap() {
+	public ElementAttributeMap() {
 		super();
 	}
 

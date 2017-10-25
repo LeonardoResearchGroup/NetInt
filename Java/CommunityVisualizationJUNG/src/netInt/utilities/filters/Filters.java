@@ -84,12 +84,7 @@ public class Filters {
 			
 			// Filter the graph
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter.transform(GraphLoader.theGraph);
-			
-			// Set In and Out Degree
-			for (Node n : problemGraph.getVertices()) {
-				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
-				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
-			}
+
 			
 			// System.out.println(getInstance().getClass().getName() + "
 			// filter:"+ key);
@@ -211,11 +206,7 @@ public class Filters {
 			// Filter the graph
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
 					.transform(GraphLoader.theGraph);
-			// Set In and Out Degree
-			for (Node n : problemGraph.getVertices()) {
-				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
-				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
-			}
+			
 			// System.out.println(getInstance().getClass().getName() + " filter:
 			// "+ key);
 			// filterResults.put(key, problemGraph);

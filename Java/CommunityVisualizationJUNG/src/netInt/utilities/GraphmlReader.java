@@ -30,6 +30,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
+import netInt.utilities.customCollections.NestedNodeMap;
 import netInt.utilities.mapping.Mapper;
 
 /**
@@ -39,12 +40,18 @@ import netInt.utilities.mapping.Mapper;
  */
 public class GraphmlReader {
 	private Graph graph;
+
 	// Hash map <Name of community, Node object of a community>
 	private HashMap<String, Node> vCommunityNodes;
+
 	// ArrayList of community values obtained from the import file
 	private ArrayList<String> communities;
+
 	// Edges between VCommunities
 	private ArrayList<Edge> edgesBetweenCommunities;
+
+	// Collection of community subgraphs
+	public static HashMap<String, DirectedSparseMultigraph<Node, Edge>> subGraphs;
 
 	/**
 	 * Reader usually used to load pajek format files
@@ -52,7 +59,7 @@ public class GraphmlReader {
 	public GraphmlReader() {
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
-
+		subGraphs = new HashMap<String, DirectedSparseMultigraph<Node, Edge>>();
 	}
 
 	/**
@@ -78,6 +85,7 @@ public class GraphmlReader {
 
 		communities = new ArrayList<String>();
 		edgesBetweenCommunities = new ArrayList<Edge>();
+		subGraphs = new HashMap<String, DirectedSparseMultigraph<Node, Edge>>();
 	}
 
 	/**
@@ -150,7 +158,8 @@ public class GraphmlReader {
 					// Check if it does exist a property matching other
 					// attributes
 					if (vertex.getProperty(nodeImportAttributes[i]) != null) {
-						nodeTmp.setAbsoluteAttribute(nodeImportAttributes[i], vertex.getProperty(nodeImportAttributes[i]));
+						nodeTmp.setAbsoluteAttribute(nodeImportAttributes[i],
+								vertex.getProperty(nodeImportAttributes[i]));
 					} else {
 						// for root importing
 						throw new NullPointerException();
@@ -212,29 +221,42 @@ public class GraphmlReader {
 
 		// **** CREATE EDGES ****
 		System.out.println(this.getClass().getName() + " Instantiating Edges...");
-		
+
 		// The comparator of former links between nodes
 		LinkComparator linkComparator = new LinkComparator();
-		
+
 		for (com.tinkerpop.blueprints.Edge edge : graph.getEdges()) {
 
 			// From each edge retrieve the source and target vertex
-			Vertex source = edge.getVertex(Direction.OUT);
-			Vertex target = edge.getVertex(Direction.IN);
+			Vertex sourceVertex = edge.getVertex(Direction.OUT);
+			Vertex targetVertex = edge.getVertex(Direction.IN);
 
 			// Get their ID
-			Integer idSource = Integer.parseInt(source.getId().toString().replace("n", ""));
-			Integer idTarget = Integer.parseInt(target.getId().toString().replace("n", ""));
+			Integer idSource = Integer.parseInt(sourceVertex.getId().toString().replace("n", ""));
+			Integer idTarget = Integer.parseInt(targetVertex.getId().toString().replace("n", ""));
 
 			// **** MAKE EDGE FROM SOURCE AND TARGET NODES ****
-			netInt.graphElements.Edge e = new netInt.graphElements.Edge(nodes.get(idSource), nodes.get(idTarget), true);
+
+			Node source = nodes.get(idSource);
+			Node target = nodes.get(idTarget);
+
+			String sourceCommunityName = source.getCommunity(1);
+			String targetCommunityName = target.getCommunity(1);
+
+			netInt.graphElements.Edge e = new netInt.graphElements.Edge(source, target, true);
+
+			// set edges and nodes to community subGraphs
+			addEdgeToSubgraphs(e);
+
 			// Check if the edge has any of the edge Import attributes
 			if (edgeImportAttributes.length > 0) {
 				for (int i = 0; i < edgeImportAttributes.length; i++) {
 					try {
+
 						// Retrieve the attribute value and check if it is null
 						if (edge.getProperty(edgeImportAttributes[i]) != null) {
 							Object tmpProperty = edge.getProperty(edgeImportAttributes[i]);
+
 							// Add the attribute value to the temporal edge;
 							e.setAbsoluteAttribute(edgeImportAttributes[i], tmpProperty);
 						} else
@@ -246,6 +268,7 @@ public class GraphmlReader {
 					}
 				}
 			} else {
+
 				// if no attributes selected set the weight to 1
 				e.setAbsoluteAttribute("weight", 1);
 			}
@@ -264,29 +287,100 @@ public class GraphmlReader {
 			}
 
 			// Create edges for communities with at least one edge connecting
-			// nodes from both communities. Here we retrieve the Node object of a
-			// community passing the key: Name of community
+			// nodes from both communities. Here we retrieve the Node object of
+			// a community passing the key: Name of community
 
-			Node vCSource = vCommunityNodes.get(nodes.get(idSource).getCommunity(1));
-			Node vCTarget = vCommunityNodes.get(nodes.get(idTarget).getCommunity(1));
+			Node vCSource = vCommunityNodes.get(sourceCommunityName);
+			Node vCTarget = vCommunityNodes.get(targetCommunityName);
 
 			// if there are no loop edges connecting a community with itself
 			if (!vCSource.equals(vCTarget)) {
-				
-				//Make edges between communities
+
+				// Make edges between communities
 				linkComparator.buildLink(vCSource, vCTarget, edgesBetweenCommunities);
 
 			}
-			
+
 			// Create the edge with source and target nodes
-			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
+			rtnGraph.addEdge(e, source, target, EdgeType.DIRECTED);
 		}
-		
-		//linkComparator.printCacheTable();
+
+		// linkComparator.printCacheTable();
 		linkComparator.reset();
-		
+
+		System.out.println(this.getClass().getName() + "  Subgraphs size: " + subGraphs.size());
 		return rtnGraph;
 
+	}
+
+	/**
+	 * Add edge to Jung DirectedSparseMultigraphs mapped to community name keys.
+	 * The hashMap containing these subgraphs provides them to container at the
+	 * assembly time in the assembler class
+	 * 
+	 * The edges added to each subgraph are only those linking nodes within the
+	 * same community. If source and target nodes belong to different
+	 * communities, only the nodes are added to their respective communities
+	 * 
+	 * @param e
+	 *            the edge to be added
+	 */
+	private void addEdgeToSubgraphs(Edge e) {
+		Node source = e.getSource();// nodes.get(idSource);
+		Node target = e.getTarget();// nodes.get(idTarget);
+
+		String sourceCommunityName = source.getCommunity(1);
+		String targetCommunityName = target.getCommunity(1);
+
+		// If source and community belong to the same community
+		if (sourceCommunityName.equals(targetCommunityName)) {
+
+			// if the source community exists in subgraphs
+			if (subGraphs.containsKey(sourceCommunityName)) {
+				subGraphs.get(sourceCommunityName).addEdge(e, source, target);
+			} else {
+
+				// If community does not exist in subgraphs
+				// Make the subgraph
+				DirectedSparseMultigraph<Node, Edge> tmp = new DirectedSparseMultigraph<Node, Edge>();
+
+				// Add the edge
+				tmp.addEdge(e, source, target);
+
+				// Put edge in subgraph
+				subGraphs.put(sourceCommunityName, tmp);
+			}
+		} else {
+			// Put source node in subgraphs
+			if (subGraphs.containsKey(sourceCommunityName)) {
+				subGraphs.get(sourceCommunityName).addVertex(source);
+			} else {
+				// If community does not exist in subgraphs
+				// Make the subgraph
+				DirectedSparseMultigraph<Node, Edge> tmp = new DirectedSparseMultigraph<Node, Edge>();
+
+				// Add the edge
+				tmp.addVertex(source);
+
+				// Put edge in subgraph
+				subGraphs.put(sourceCommunityName, tmp);
+			}
+
+			// Put target node in subgraphs
+			if (subGraphs.containsKey(targetCommunityName)) {
+				subGraphs.get(targetCommunityName).addVertex(target);
+			} else {
+				// If community does not exist in subgraphs
+				// Make the subgraph
+				DirectedSparseMultigraph<Node, Edge> tmp = new DirectedSparseMultigraph<Node, Edge>();
+
+				// Add the edge
+				tmp.addVertex(target);
+
+				// Put edge in subgraph
+				subGraphs.put(targetCommunityName, tmp);
+			}
+		}
 	}
 
 	/**

@@ -32,7 +32,7 @@ public class GraphLoader {
 	public static Graph<Node, Edge> theGraph;
 
 	// The nested map of nodes avilable across classes
-	public static NestedNodeMap<String, Character> nestedMap;
+	// public static NestedNodeMap<String, Character> nestedMap;
 
 	private GraphmlReader GMLreader;
 	private PajekReader PJKreader;
@@ -72,24 +72,28 @@ public class GraphLoader {
 		System.out.println("        Total Nodes in the graph: " + theGraph.getVertexCount());
 		System.out.println("        Total Edges in the graph: " + theGraph.getEdgeCount());
 		System.out.println("     " + totalCommunities + " communities names identified");
-		
+
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
 		for (Node n : theGraph.getVertices()) {
 			setNodesDegrees(theGraph, n);
 			Mapper.getInstance().setMaxMinNodeAttributes(n);
 		}
-		
+
 		System.out.println("     Degrees assigned to nodes and attributes to Mapper Class");
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println("     Edge attributes assigned to edges and to Mapper Class");
 
-		// Instantiation of nested map
-		nestedMap = new NestedNodeMap<String, Character>(theGraph.getVertices(), nestedAttributesOrder[0]);
+//		// Instantiation of nested map. Start() invoked in nestedMap contructor
+//		nestedMap = new NestedNodeMap<String, Character>(theGraph.getVertices(), nestedAttributesOrder[0]);
+//
+//		// Initialization of nested map in a new thread
+//		nestedMap.start();
+//
+//		System.out.println(
+//				this.getClass().getName() + " Waiting for initialization completion of nested node structure ...");
 
-		// Initialization of nested map in a new thread
-		nestedMap.start();
 	}
 
 	public ArrayList<String> getCommunityNames() {

@@ -203,7 +203,7 @@ public class ImportMenuGuiSet implements Observer {
 
 				} catch (ArrayIndexOutOfBoundsException e) {
 
-					layoutSelection = Container.FRUCHTERMAN_REINGOLD;
+					layoutSelection = Container.CIRCULAR;
 
 				}
 

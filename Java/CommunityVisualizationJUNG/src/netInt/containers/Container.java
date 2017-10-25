@@ -94,6 +94,7 @@ public abstract class Container {
 		if (!initializationComplete) {
 
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
+			
 			distributeNodesInLayout(currentLayout, dimension);
 
 			if (vNodes.size() == 0) {
@@ -110,13 +111,11 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 
-			} else {
-//				System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
-//				distributeNodesInLayout(currentLayout, dimension);
-
+			//} else if (vEdges.size() == 0){
+			}else{
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
-				runVEdgeFactory();
+				//runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
@@ -135,9 +134,6 @@ public abstract class Container {
 		// Instantiate vNodes
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
-
-			n.printAbsoluteAttributes();
-			n.printRelativeAttributes();
 
 			// Compute and set the node diameter
 			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), "Node", "outDegree");

@@ -15,7 +15,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.jcolorbrewer.ColorBrewer;
 
@@ -192,6 +191,7 @@ public class Assembler {
 		// Name the community
 		subContainer.setName(comName);
 
+		// Assign visual elements to First Order Community
 		subContainer.assignVisualElements(communities);
 
 		// Initialize container NOTE: SEE VCommunity.show(). The container is
@@ -222,24 +222,28 @@ public class Assembler {
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(comNames.size());
 
-		System.out.println("     Generating Graphs for " + comNames.size() + " communities ...");
+		System.out.println("     Generating Graphs for " + comNames.size() + " communities ..." + "\n"
+				+ "     Creating Second Order VCommunity: ");
 
 		// The subsetter containing each community subset. Subsetting is made
 		// following the user defined import Nested attribute order. As of
 		// October 2017 it uses only the first one
-		GraphSubsetterFilter subsetter = new GraphSubsetterFilter();
+		// GraphSubsetterFilter subsetter = new GraphSubsetterFilter();
 
 		int i = 0;
 		for (String communityName : comNames) {
 
-			System.out.println("     Creating Second Order VCommunity: " + communityName);
+			// Get subGraph of each community
+			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphmlReader.subGraphs.get(communityName);
 
-			// SubGraph of each community
-			//DirectedSparseMultigraph<Node, Edge> graphTemp = Filters.filterNodeInCommunity(communityName);
-			DirectedSparseMultigraph<Node, Edge> graphTemp = subsetter.getSubGraphForCommunity(communityName);
+			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount() + ", Edges: "
+					+ graphTemp.getEdgeCount());
 
-			System.out
-					.println("         Nodes: " + graphTemp.getVertexCount() + ", Edges: " + graphTemp.getEdgeCount());
+			// Set In and Out Degree
+			for (Node n : graphTemp.getVertices()) {
+				n.setOutDegree(n.getMetadataSize() - 1, graphTemp.getSuccessorCount(n));
+				n.setInDegree(n.getMetadataSize() - 1, graphTemp.getPredecessorCount(n));
+			}
 
 			// SubContainers for each VCommunity
 			SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600), myGradient[i]);

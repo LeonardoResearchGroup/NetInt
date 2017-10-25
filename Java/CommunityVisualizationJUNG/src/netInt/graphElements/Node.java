@@ -36,7 +36,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 
 	public Node(String id) {
 		super();
-		AttributesMap metaData = new AttributesMap();
+		ElementAttributeMap metaData = new ElementAttributeMap();
 		// Initialize basic attributes
 		absoluteAttributes.put("id", id);
 		absoluteAttributes.put("label", "no name");
@@ -54,7 +54,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	public boolean belongsTo(String community) {
 		boolean rtn = false;
 		for (Object rA : relativeAttributes.values()) {
-			AttributesMap tmp = (AttributesMap) rA;
+			ElementAttributeMap tmp = (ElementAttributeMap) rA;
 			if (tmp.getCommunityName().equals(community)) {
 				rtn = true;
 				break;
@@ -68,7 +68,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 		String communities = "";
 		int cont = 0;
 		for (Object rA : relativeAttributes.values()) {
-			AttributesMap tmp = (AttributesMap) rA;
+			ElementAttributeMap tmp = (ElementAttributeMap) rA;
 			communities = communities + tmp.getCommunityName();
 			if (cont < relativeAttributes.size() - 1) {
 				communities = communities + ",";
@@ -100,7 +100,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	}
 
 	public String getCommunity(int key) {
-		AttributesMap tmp = (AttributesMap) relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) relativeAttributes.get(key);
 		return tmp.getCommunityName();
 	}
 
@@ -169,11 +169,11 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	// Getters metric
 	/**
 	 * @param key
-	 *            the community from which the procedure is invoked
+	 *            the tier from which the procedure is invoked
 	 * @return in degree of the node
 	 */
 	public int getInDegree(int key) {
-		AttributesMap tmp = (AttributesMap) relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) relativeAttributes.get(key);
 		return tmp.getCommunityInDegree();
 	}
 
@@ -183,7 +183,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @return out degree of the node
 	 */
 	public int getOutDegree(int key) {
-		AttributesMap tmp = (AttributesMap) relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) relativeAttributes.get(key);
 		return tmp.getCommunityOutDegree();
 	}
 
@@ -193,7 +193,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @return degree of the node
 	 */
 	public int getDegree(int key) {
-		AttributesMap tmp = (AttributesMap) relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) relativeAttributes.get(key);
 		return tmp.getCommunityDegree();
 	}
 
@@ -201,21 +201,21 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	public void setInDegree(int key, int inDegree) {
 		if (key == 0)
 			this.absoluteAttributes.put("inDegree", inDegree);
-		AttributesMap tmp = (AttributesMap) this.relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) this.relativeAttributes.get(key);
 		tmp.setCommunityInDegree(inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
 		if (key == 0)
 			this.absoluteAttributes.put("outDegree", outDegree);
-		AttributesMap tmp = (AttributesMap) this.relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) this.relativeAttributes.get(key);
 		tmp.setCommunityOutDegree(outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
 		if (key == 0)
 			this.absoluteAttributes.put("degree", degree);
-		AttributesMap tmp = (AttributesMap) this.relativeAttributes.get(key);
+		ElementAttributeMap tmp = (ElementAttributeMap) this.relativeAttributes.get(key);
 		tmp.setCommunityDegree(degree);
 	}
 

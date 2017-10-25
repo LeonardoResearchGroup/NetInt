@@ -26,9 +26,9 @@ import netInt.visualElements.VNode;
 import netInt.visualElements.primitives.VisualAtom;
 
 /**
- * Instances of SubContainer are Containers of references to Nodes and Edges and their
- * visual representations, i.e. the corresponding VNodes and VEdges. Thus all
- * visual elements included in instances of SubContainer are the visual
+ * Instances of SubContainer are Containers of references to Nodes and Edges and
+ * their visual representations, i.e. the corresponding VNodes and VEdges. Thus
+ * all visual elements included in instances of SubContainer are the visual
  * representations of Nodes and Edges instantiated in the root graph.
  * 
  * @author juan salamanca
@@ -61,11 +61,44 @@ public class SubContainer extends Container implements Serializable {
 	}
 
 	/**
+	 * Get instances of the visual elements from a given list whose Nodes are
+	 * included in the Container's graph
+	 * 
+	 * @param vCommunities
+	 *            Visual Communities
+	 */
+	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
+		// For each node of Graph
+		for (Node n : graph.getVertices()) {
+			// Look for the corresponding VNode in the collection of VAtoms
+			for (VCommunity vC : vCommunities) {
+				/*
+				 * If the current node of the subGraph matches the node inside
+				 * the VisualAtom retrieved from the collection of visual atoms
+				 */
+				if (n.equals(vC.getNode())) {
+					vNodes.add(vC);
+					// Look for all the incident edges of that node, make the
+					// vEdge and add them all to the collection of vEdges of
+					// this container
+//					for(Edge e: graph.getIncidentEdges(n)){
+//						VEdge vEdge = new VEdge(e);
+//						vEdge.setSourceAndTarget(vNodes);
+//						//vEdge.makeBezier();
+//						vEdges.add(new VEdge(e));
+//					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Get instances of the visual elements from a given graph (usually
 	 * rootGraph) that are included in the Container's subGraph and set them the
 	 * new coordinates according to the current layout.
 	 * 
-	 * @param sourceContainer sourceContainer
+	 * @param sourceContainer
+	 *            sourceContainer
 	 */
 	public void retrieveVisualElements(Container sourceContainer) {
 		// For each node of Graph
@@ -103,7 +136,8 @@ public class SubContainer extends Container implements Serializable {
 	 * the current layout. The VNodes added to this container are removed from
 	 * the sourceContainer.
 	 * 
-	 * @param sourceContainer sourceContainer
+	 * @param sourceContainer
+	 *            sourceContainer
 	 */
 	public void retrieveVisualElements2(Container sourceContainer) {
 		// For each node of Graph
@@ -136,38 +170,13 @@ public class SubContainer extends Container implements Serializable {
 	}
 
 	/**
-	 * Get instances of the visual elements from a given list whose Nodes are
-	 * included in the Container's graph
-	 * 
-	 * @param vCommunities Visual Communities
-	 */
-	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
-		// For each node of Graph
-		for (Node n : graph.getVertices()) {
-			// Look for the corresponding VNode in the collection of VAtoms
-			for (VCommunity vC : vCommunities) {
-				/*
-				 * If the current node of the subGraph matches the node inside
-				 * the VisualAtom retrieved from the collection of visual atoms
-				 */
-				if (n.equals(vC.getNode())) {
-					vNodes.add(vC);
-					// Look for all the edges of that VNode and add them all
-					// to the collection of vEdges of this container
-					// vEdgeRetriever(vC, sourceContainer.getVEdges());
-				}
-			}
-		}
-	}
-
-	/**
 	 * Edges retriever (For SubGraphs). Invoked by retrieveVisualElements()
 	 * 
 	 * @param vNode
-	 * @param rootEdgeList
+	 * @param edgeList
 	 */
-	private void vEdgeRetriever(VNode vNode, ArrayList<VEdge> rootEdgeList) {
-		for (VEdge vEdg : rootEdgeList) {
+	private void vEdgeRetriever(VNode vNode, ArrayList<VEdge> edgeList) {
+		for (VEdge vEdg : edgeList) {
 			// Check if the VNode source matches any of the VEdge sources in the
 			// rootGraph
 			if (vEdg.getSource().equals(vNode))

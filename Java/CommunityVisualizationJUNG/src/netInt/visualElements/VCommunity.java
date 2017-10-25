@@ -70,17 +70,17 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void init() {
 		float temp = Mapper.getInstance().convert(Mapper.LINEAR, container.size(), Mapper.NODE, "Community size");
 
-		if ((temp * 150) < 20) {
-			setDiameter(20);
+		if ((temp * 50) < 10) {
+			setDiameter(10);
 		} else {
-			setDiameter(temp * 150);
+			setDiameter(temp * 50);
 		}
 
-		if ((temp * 10) < 2) {
-			comCover.setStrokeThickness(2);
-		} else {
-			comCover.setStrokeThickness((int) (temp * 10));
-		}
+//		if ((temp * 10) < 2) {
+//			comCover.setStrokeThickness(1);
+//		} else {
+//			comCover.setStrokeThickness((int) (temp * 10));
+//		}
 	}
 
 	public void show() {
@@ -116,6 +116,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 			setDisplayed(true);
 			description.show(this);
+			if (isMouseOver){
+				Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), getPos().x, getPos().y + 20);
+				Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), getPos().x, getPos().y + 35);
+			}
 		}
 
 		// Move vCommunity to mouse position if right button is pressed
