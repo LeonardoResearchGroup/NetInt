@@ -155,12 +155,12 @@ public abstract class Container {
 	 * 
 	 */
 	public void runVEdgeFactory() {
-		for (Edge e : graph.getEdges()) {
-			VEdge vEdge = new VEdge(e);
-			vEdge.setSourceAndTarget(vNodes);
-			vEdge.makeBezier();
-			vEdges.add(vEdge);
-		}
+//		for (Edge e : graph.getEdges()) {
+//			VEdge vEdge = new VEdge(e);
+//			vEdge.setSourceAndTarget(vNodes);
+//			vEdge.makeBezier();
+//			vEdges.add(vEdge);
+//		}
 	}
 
 	// *** Other methods
