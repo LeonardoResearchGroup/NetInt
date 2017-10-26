@@ -73,6 +73,9 @@ public abstract class Container {
 	protected Color color;
 	protected int iterations;
 	protected final int MAX_ITERATIONS = 70;
+	
+	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+	protected ArrayList<VNode> justVNodes = new ArrayList<VNode>();
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -155,12 +158,12 @@ public abstract class Container {
 	 * 
 	 */
 	public void runVEdgeFactory() {
-//		for (Edge e : graph.getEdges()) {
-//			VEdge vEdge = new VEdge(e);
-//			vEdge.setSourceAndTarget(vNodes);
-//			vEdge.makeBezier();
-//			vEdges.add(vEdge);
-//		}
+		for (Edge e : graph.getEdges()) {
+			VEdge vEdge = new VEdge(e);
+			vEdge.setSourceAndTarget(vNodes);
+			vEdge.makeBezier();
+			vEdges.add(vEdge);
+		}
 	}
 
 	// *** Other methods
@@ -601,9 +604,10 @@ public abstract class Container {
 	 * @return List of VCommunities
 	 */
 	public ArrayList<VCommunity> getVCommunities() {
-		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+//		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		// This process is made one once
 		if (vCommunities.size() == 0) {
+			System.out.println(this.getClass().getName() + "DESCUCOMM Once? com: "+ this.getName());
 			for (VNode vN : vNodes) {
 				if (vN instanceof VCommunity) {
 					vCommunities.add((VCommunity) vN);
@@ -620,9 +624,10 @@ public abstract class Container {
 	 * @return List of VNodes
 	 */
 	public ArrayList<VNode> getJustVNodes() {
-		ArrayList<VNode> justVNodes = new ArrayList<VNode>();
+		
 		// This process is made one once
 		if (justVNodes.size() == 0) {
+			System.out.println(this.getClass().getName() + "DESCUCOMM Once?: nod"+ this.getName());
 			justVNodes = new ArrayList<VNode>(getVNodes());
 			justVNodes.removeAll(getVCommunities());
 		}

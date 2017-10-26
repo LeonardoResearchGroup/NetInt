@@ -110,7 +110,7 @@ public class VCommunityCover implements Serializable {
 
 		// Labels
 		Canvas.app.textSize(10);
-		showCoverLable(communityNode, container);
+//		showCoverLable(communityNode, container);
 
 		// If mouse over, darken its color
 		if (communityNode.isMouseOver) {

@@ -282,7 +282,7 @@ public class Assembler {
 	public void show() {
 		// rootVCommunity.show();
 		firstOrderVComm.show();
-		firstOrderVComm.searchNode();
+//		firstOrderVComm.searchNode();
 	}
 
 	public ArrayList<VCommunity> getVisualCommunities() {

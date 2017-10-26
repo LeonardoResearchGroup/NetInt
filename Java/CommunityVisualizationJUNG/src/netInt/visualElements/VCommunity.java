@@ -88,6 +88,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		comCover.show(container, containsSearchedNode);
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
+//			System.out.println(this.getClass().getName() + "DESCUCOMM: deployed "+ this.container.getName());
 			setDisplayed(true);
 			// if coordinates for all elements inside the container are set.
 			// container.isInitializationComplete() is a boolean gate that
@@ -95,14 +96,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (container.isInitializationComplete()) {
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
-				for (VCommunity vC : container.getVCommunities()) {
-					if (vC.comCover.isDeployed()) {
-						// build external edges
-						vC.container.buildExternalEdges(container.getVCommunities());
-					}
-				}
+//				for (VCommunity vC : container.getVCommunities()) {
+//					if (vC.comCover.isDeployed()) {
+//						// build external edges
+////						vC.container.buildExternalEdges(container.getVCommunities());
+//					}
+//				}
 			} else {
 				container.initialize();
+				System.out.println(this.getClass().getName() + "-DESCUCOMMLEN Veces??");
 			}
 
 			// If the layout is iterative
@@ -115,7 +117,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 		} else {
 			setDisplayed(true);
-			description.show(this);
+//			description.show(this);
 			if (isMouseOver) {
 				Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), getPos().x, getPos().y + 20);
 				Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), getPos().x, getPos().y + 35);
@@ -131,10 +133,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 			deltaMouse = null;
 		}
+		
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center. This is needed to reposition deployed and
 		// collapsed VCommunities with the mouse
-		updateContainer(Canvas.mouseEventOnCanvas);
+//		updateContainer(Canvas.mouseEventOnCanvas);
 	}
 
 	/**
@@ -150,6 +153,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void showCommunityContents(boolean showNodes, boolean showEdges) {
 		// ** Display VEdges
+//		System.out.println(this.getClass().getName() + "DESCUCOMM: "+ this.container.getName());
 
 		// Internal Edges
 		if (UserSettings.getInstance().showInternalEdges()) {
@@ -161,6 +165,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				if (container.isDone()) {
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
+						System.out.println(this.getClass().getName() + "DESCUCOMM edges: "+ this.container.getName());
 
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
@@ -175,6 +180,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
+						System.out.println(this.getClass().getName() + "DESCUCOMM edges2: "+ this.container.getName());
 
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
@@ -197,6 +203,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// Show external edges
 				for (VEdge vEE : container.getVExtEdges()) {
+					System.out.println(this.getClass().getName() + "DESCUCOMM extedges: "+ this.container.getName());
 
 					// If the edge has any attribute
 					if (vEE.getEdge().getAttributeSize() > 0) {
@@ -222,25 +229,27 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// VCommunities
 				for (VCommunity vC : container.getVCommunities()) {
+//					System.out.println(this.getClass().getName() + "DESCUCOMM commus: "+ this.container.getName());
 					vC.setVisibility(true);
 					vC.show();
-					if (vC.comCover.isUnlocked() && !vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), false);
-						vC.lock = true;
-					}
-					if (!vC.comCover.isUnlocked() && vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), true);
-						vC.lock = false;
-					}
+//					if (vC.comCover.isUnlocked() && !vC.lock) {
+//						container.setIncidentEdgesVisibility(vC.getNode(), false);
+//						vC.lock = true;
+//					}
+//					if (!vC.comCover.isUnlocked() && vC.lock) {
+//						container.setIncidentEdgesVisibility(vC.getNode(), true);
+//						vC.lock = false;
+//					}
 				}
 
 				// VNodes
-				if (container.isLayoutIterative()) {
+//				if (container.isLayoutIterative()) {
+//
+//					container.stepIterativeLayout(pos).done();
+//				}
 
-					container.stepIterativeLayout(pos).done();
-				}
-
-				for (VNode vN : container.getJustVNodes()) {
+				for (VNode vN : container.getVNodes()) {
+					System.out.println(this.getClass().getName() + "DESCUCOMM justNOdes: "+ this.container.getName());
 					vN.setVisibility(true);
 					if (vNodesCentered) {
 
@@ -265,6 +274,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// This block centers all the elements in the container
 				for (VisualAtom vA : container.getVNodes()) {
+					System.out.println(this.getClass().getName() + "DESCUCOMM centering nodes: "+ this.container.getName());
 
 					// We have to known which nodes are visible.
 					if (vA instanceof VNode) {
