@@ -1,3 +1,26 @@
 bin/
 .metadata/
 
+/hs_err_pid4608.log
+/hs_err_pid4783.log
+/hs_err_pid5011.log
+/hs_err_pid5289.log
+/hs_err_pid5309.log
+/hs_err_pid5382.log
+/hs_err_pid5583.log
+/hs_err_pid5667.log
+/hs_err_pid5964.log
+/hs_err_pid6047.log
+/hs_err_pid6274.log
+/hs_err_pid6361.log
+/hs_err_pid6468.log
+/hs_err_pid6635.log
+/hs_err_pid6824.log
+/hs_err_pid6953.log
+/hs_err_pid7606.log
+/hs_err_pid31050.log
+/hs_err_pid31156.log
+/hs_err_pid31369.log
+/hs_err_pid31613.log
+/hs_err_pid32019.log
+/hs_err_pid32315.log
