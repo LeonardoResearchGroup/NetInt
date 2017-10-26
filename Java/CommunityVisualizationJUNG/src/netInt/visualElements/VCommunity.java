@@ -248,27 +248,27 @@ public class VCommunity extends VNode implements java.io.Serializable {
 //					container.stepIterativeLayout(pos).done();
 //				}
 
-//				for (VNode vN : container.getVNodes()) {
-//					System.out.println(this.getClass().getName() + "DESCUCOMM justNOdes: "+ this.container.getName());
-//					vN.setVisibility(true);
-//					if (vNodesCentered) {
-//
-//						// reset vNode coordinates to the coordinates
-//						// assigned in the container's layout
-//						PVector newOrigin = new PVector(container.getDimension().width / 2,
-//								container.getDimension().height / 2);
-//						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
-//						vNodesCentered = true;
-//
-//					}
-//
-//					// If vN is visible and not centered
-//					// System.out.println(vN.isDisplayed());
-//					if (!vNodesCentered) {
-//						vN.show(vN.isDisplayed());
-//						vN.setDisplayed(true);
-//					}
-//				}
+				for (VNode vN : container.getVNodes()) {
+					System.out.println(this.getClass().getName() + "DESCUCOMM justNOdes: "+ this.container.getName());
+					vN.setVisibility(true);
+					if (vNodesCentered) {
+
+						// reset vNode coordinates to the coordinates
+						// assigned in the container's layout
+						PVector newOrigin = new PVector(container.getDimension().width / 2,
+								container.getDimension().height / 2);
+						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
+						vNodesCentered = true;
+
+					}
+
+					// If vN is visible and not centered
+					// System.out.println(vN.isDisplayed());
+					if (!vNodesCentered) {
+						vN.show(vN.isDisplayed());
+						vN.setDisplayed(true);
+					}
+				}
 				vNodesCentered = false;
 			} else {
 

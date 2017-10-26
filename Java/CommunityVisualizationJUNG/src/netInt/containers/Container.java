@@ -154,7 +154,7 @@ public abstract class Container {
 	}
 
 	/**
-	 * Visual Edges factory (For rootGraph)
+	 * Visual Edges factory (For this container's subgraph)
 	 * 
 	 */
 	public void runVEdgeFactory() {
@@ -166,6 +166,19 @@ public abstract class Container {
 		}
 	}
 
+	/**
+	 * Visual Edges factory (For this node)
+	 * 
+	 */
+	public void runVEdgeFactory(Node n) {
+		for (Edge e : graph.getIncidentEdges(n)) {
+			VEdge vEdge = new VEdge(e);
+			vEdge.setSourceAndTarget(vNodes);
+			vEdge.makeBezier();
+			vEdges.add(vEdge);
+		}
+	}
+	
 	// *** Other methods
 
 	/**
