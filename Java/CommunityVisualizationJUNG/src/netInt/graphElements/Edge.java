@@ -26,7 +26,7 @@ public class Edge extends GraphElement implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Node source;
 	private Node target;
-	//private HashMap<String, Object> attributes;
+	// private HashMap<String, Object> attributes;
 	private boolean directed;
 	private boolean loop;
 
@@ -34,7 +34,7 @@ public class Edge extends GraphElement implements Serializable {
 		super();
 		this.source = source;
 		this.target = target;
-		absoluteAttributes.put("id",  source.getId()+"&"+target.getId());
+		absoluteAttributes.put("id", source.getId() + "&" + target.getId());
 		this.directed = directed;
 		if (source.equals(target))
 			loop = true;
@@ -69,7 +69,7 @@ public class Edge extends GraphElement implements Serializable {
 		try {
 			rtn = (String) absoluteAttributes.get(key);
 		} catch (Exception e) {
-//			System.out.println("Node Attribute couldn't be casted att");
+			// System.out.println("Node Attribute couldn't be casted att");
 		}
 		return rtn;
 	}
@@ -78,7 +78,7 @@ public class Edge extends GraphElement implements Serializable {
 		try {
 			rtn = (Float) absoluteAttributes.get(key);
 		} catch (Exception e) {
-//			System.out.println("Node Attribute couldn't be casted att");
+			// System.out.println("Node Attribute couldn't be casted att");
 		}
 		return rtn;
 	}
@@ -87,7 +87,7 @@ public class Edge extends GraphElement implements Serializable {
 		try {
 			rtn = (Integer) absoluteAttributes.get(key);
 		} catch (Exception e) {
-//			System.out.println("Node Attribute couldn't be casted att");
+			// System.out.println("Node Attribute couldn't be casted att");
 		}
 		return rtn;
 	}
@@ -95,7 +95,7 @@ public class Edge extends GraphElement implements Serializable {
 	public String getName() {
 		return (String) absoluteAttributes.get("label");
 	}
-	
+
 	public boolean isLoop() {
 		return loop;
 	}
@@ -112,7 +112,7 @@ public class Edge extends GraphElement implements Serializable {
 	public void setDirected(boolean directed) {
 		this.directed = directed;
 	}
-	
+
 	/**
 	 * Sets the attribute to this graph element. It is stored in the
 	 * absoluteAttributes HashMap
@@ -126,7 +126,7 @@ public class Edge extends GraphElement implements Serializable {
 		absoluteAttributes.put(key, value);
 		netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
 	}
-	
+
 	/**
 	 * Sets an object containing attributes to this graph element. It is stored
 	 * in the relativeAttributes HashMap
@@ -136,15 +136,15 @@ public class Edge extends GraphElement implements Serializable {
 	 * @param attributeSet
 	 *            An object containing a set of attributes
 	 */
-	public void addRelativeAttributes(int tier, HashMap<String,Float> attributeSet) {
+	public void addRelativeAttributes(int tier, HashMap<String, Float> attributeSet) {
 		relativeAttributes.put(tier, attributeSet);
 		// Update Mapper.minmax
-		for(String key : attributeSet.keySet()){
+		for (String key : attributeSet.keySet()) {
 			netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, attributeSet.get(key));
 		}
 	}
 
-	public boolean equals(Object obj){
+	public boolean equals(Object obj) {
 		Edge edge = (Edge) obj;
 		return getId().equals(edge);
 	}

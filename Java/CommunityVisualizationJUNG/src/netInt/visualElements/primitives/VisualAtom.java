@@ -154,6 +154,11 @@ public abstract class VisualAtom implements Serializable {
 		this.color = color;
 		return this.color.getRGB();
 	}
+	
+	public int setColor(int rgbColor) {
+		this.color = new Color(rgbColor);
+		return rgbColor;
+	}
 
 	public int setColor(int red, int green, int blue) {
 		this.color = new Color(red, green, blue);

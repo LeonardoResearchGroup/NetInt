@@ -68,9 +68,10 @@ public class SubContainer extends Container implements Serializable {
 	 *            Visual Communities
 	 */
 	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
-		// For each node of Graph
+		// For each node of this container's Graph
 		for (Node n : graph.getVertices()) {
-			// Look for the corresponding VNode in the collection of VAtoms
+			
+			// Look for the corresponding VNode in the collection of VCommunities
 			for (VCommunity vC : vCommunities) {
 				/*
 				 * If the current node of the subGraph matches the node inside
@@ -78,15 +79,7 @@ public class SubContainer extends Container implements Serializable {
 				 */
 				if (n.equals(vC.getNode())) {
 					vNodes.add(vC);
-					// Look for all the incident edges of that node, make the
-					// vEdge and add them all to the collection of vEdges of
-					// this container
-//					for(Edge e: graph.getIncidentEdges(n)){
-//						VEdge vEdge = new VEdge(e);
-//						vEdge.setSourceAndTarget(vNodes);
-//						//vEdge.makeBezier();
-//						vEdges.add(new VEdge(e));
-//					}
+					vC.setNode(n);
 				}
 			}
 		}

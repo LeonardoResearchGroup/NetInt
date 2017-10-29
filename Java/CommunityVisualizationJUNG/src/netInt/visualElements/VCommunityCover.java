@@ -28,6 +28,8 @@ public class VCommunityCover implements Serializable {
 	private int increment;
 	// the user presses "c" to close the community
 	private boolean enableClosing;
+	// false if there are too many communities on canvas
+	private boolean showLabel = true;
 	// Counter
 	private int i;
 	// visibility settings
@@ -89,32 +91,37 @@ public class VCommunityCover implements Serializable {
 
 			/// *****
 
-		//	if (i > 0 || i < 180) {
-				// *** DRAWS RIGHT HALF INVOLUTE
-				Canvas.app.stroke(communityNode.getColorRGB());
-				Canvas.app.strokeWeight(strokeThickness);
-				Canvas.app.noFill();
-				// Increments the angle of the involute
-				angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
-				// *** Arc right half
-				Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
-						communityNode.getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
-				// *** DRAWS LEFT HALF INVOLUTE
-				// Decrements the angle of the involute
-				angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
-				// *** Arc left half
-				Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
-						communityNode.getDiameter(), PConstants.HALF_PI, angle2);
-		//	}
+			// if (i > 0 || i < 180) {
+			// *** DRAWS RIGHT HALF INVOLUTE
+			Canvas.app.stroke(communityNode.getColorRGB());
+			Canvas.app.strokeWeight(strokeThickness);
+			Canvas.app.noFill();
+			// Increments the angle of the involute
+			angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
+			// *** Arc right half
+			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
+					communityNode.getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
+			// *** DRAWS LEFT HALF INVOLUTE
+			// Decrements the angle of the involute
+			angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
+			// *** Arc left half
+			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
+					communityNode.getDiameter(), PConstants.HALF_PI, angle2);
+			// }
 		}
 
 		// Labels
-		Canvas.app.textSize(10);
-		showCoverLable(communityNode, container);
+		if (showLabel) {
+			Canvas.app.textSize(10);
+			showCoverLable(communityNode, container);
+		}
 
 		// If mouse over, darken its color
 		if (communityNode.isMouseOver) {
 			Canvas.app.fill(communityNode.darker());
+			if (!showLabel){
+				showCoverLable(communityNode, container);
+			}
 		}
 
 		// highlights itself if it contains a searched node and it has not been
@@ -164,6 +171,14 @@ public class VCommunityCover implements Serializable {
 
 	public boolean isUnlockedAndDeployed() {
 		return unlocked && coverDeployed;
+	}
+
+	public boolean isShowLabel() {
+		return showLabel;
+	}
+
+	public void setShowLabel(boolean showLabel) {
+		this.showLabel = showLabel;
 	}
 
 	public int getStrokeThickness() {

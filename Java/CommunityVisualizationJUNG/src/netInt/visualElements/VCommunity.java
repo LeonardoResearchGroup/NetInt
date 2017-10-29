@@ -18,6 +18,7 @@ import processing.core.PApplet;
 import java.awt.Color;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.containers.Container;
 import netInt.graphElements.Edge;
@@ -51,7 +52,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private String idSearch = null;
 	protected boolean containsSearchedNode = false;
 
-	private boolean vNodesCentered = true;
+	private boolean vNodesCentered = false;
+	private boolean vCommunitiesCentered = false;
 
 	private VNodeDescription description;
 
@@ -81,6 +83,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// } else {
 		// comCover.setStrokeThickness((int) (temp * 10));
 		// }
+		
+		float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
+		getNode().printAbsoluteAttributes();
+		//setColor(ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], getNode().getFloatAttribute("degree")));
 	}
 
 	public void show() {
@@ -116,6 +122,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 			setDisplayed(true);
 			description.show(this);
+
+			// Show community overall description on mouse over
 			if (isMouseOver) {
 				Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), getPos().x, getPos().y + 20);
 				Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), getPos().x, getPos().y + 35);
@@ -152,6 +160,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// ** Display VEdges
 
 		// Internal Edges
+
+		// If the user chooses to turn on/off the internal edges
 		if (UserSettings.getInstance().showInternalEdges()) {
 
 			// VCommunity open and it is not being modified by the user
@@ -166,6 +176,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (vE.getEdge().getAttributeSize() > 0) {
 							vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
 						}
+
 						if (container.currentLayout == Container.CIRCULAR) {
 							vE.setLayoutAndCenter(container.currentLayout, this.pos);
 						}
@@ -180,6 +191,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (vE.getEdge().getAttributeSize() > 0) {
 							vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
 						}
+
 						if (container.currentLayout == Container.CIRCULAR) {
 							vE.setLayoutAndCenter(container.currentLayout, this.pos);
 						}
@@ -190,6 +202,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 
 		// External edges
+
+		// If the user chooses to turn on/off the external edges
 		if (UserSettings.getInstance().showExternalEdges()) {
 
 			// VCommunity open and it is not being modified by the user
@@ -202,6 +216,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					if (vEE.getEdge().getAttributeSize() > 0) {
 						vEE.setVisibility(UserSettings.getInstance().getTransactionVolume());
 					}
+
 					if (container.currentLayout == Container.CIRCULAR) {
 						vEE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
@@ -215,6 +230,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 
 		// ** Display VNodes
+
+		// If the user chooses to turn on/off the nodes
 		if (UserSettings.getInstance().showNodes()) {
 
 			// VCommunity open
@@ -222,17 +239,30 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// VCommunities
 				for (VCommunity vC : container.getVCommunities()) {
+
 					vC.setVisibility(true);
+
+					// set subCommunities coordinates relative to vCommunity
+					// position
+					if (!vCommunitiesCentered) {
+						container.translateVElementCoordinates(vC, this.getPos());
+					}
+
 					vC.show();
+
 					if (vC.comCover.isUnlocked() && !vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), false);
 						vC.lock = true;
 					}
+
 					if (!vC.comCover.isUnlocked() && vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), true);
 						vC.lock = false;
 					}
 				}
+				
+				// This gate prevents vCommunity relocation in every draw() loop
+				vCommunitiesCentered = true;
 
 				// VNodes
 				if (container.isLayoutIterative()) {
@@ -242,25 +272,23 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				for (VNode vN : container.getJustVNodes()) {
 					vN.setVisibility(true);
-					if (vNodesCentered) {
 
-						// reset vNode coordinates to the coordinates
-						// assigned in the container's layout
-						PVector newOrigin = new PVector(container.getDimension().width / 2,
-								container.getDimension().height / 2);
-						container.translateVElementCoordinates(vN, PVector.sub(pos, newOrigin));
-						vNodesCentered = true;
+					// Center vNodes relative to a given position
+					if (!vNodesCentered) {
 
+						// set vNodes coordinates relative to vCommunity
+						// position
+						container.translateVElementCoordinates(vN, this.getPos());
 					}
 
 					// If vN is visible and not centered
 					// System.out.println(vN.isDisplayed());
-					if (!vNodesCentered) {
+					if (vNodesCentered) {
 						vN.show(vN.isDisplayed());
 						vN.setDisplayed(true);
 					}
 				}
-				vNodesCentered = false;
+				vNodesCentered = true;
 			} else {
 
 				// This block centers all the elements in the container
@@ -272,7 +300,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vN.setDisplayed(false);
 					}
 				}
-				vNodesCentered = true;
+				vNodesCentered = false;
 			}
 		}
 	}
@@ -341,14 +369,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (idSearch != UserSettings.getInstance().getIdSearch()) {
 				idSearch = UserSettings.getInstance().getIdSearch();
 				boolean rtn = searchNodeSuperCommunity(idSearch);
-				System.out.println("VCommunity> searchNode: Cadena de busqueda encontro: " + rtn);
+				System.out.println("VCommunity> searchNode: Search chain found: " + rtn);
 			}
 		} else {
 			// if the search tool is cleared
 			if (idSearch != null) {
 				resetNodeFoundSuperCommunity();
 				idSearch = null;
-				System.out.println("VCommunity> searchNode: Cadena de busqueda NULL: ");
+				System.out.println("VCommunity> searchNode: Query didn't match any node");
 			}
 		}
 	}

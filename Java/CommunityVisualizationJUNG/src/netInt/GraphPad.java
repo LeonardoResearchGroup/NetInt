@@ -158,7 +158,7 @@ public class GraphPad {
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
 
-	//	consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		mapperViewer = new MapperViewer();
 
 		// Canvas
@@ -271,7 +271,7 @@ public class GraphPad {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular", "Linear" };
+			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular", "Circular_Concentric", "Linear" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
@@ -299,7 +299,7 @@ public class GraphPad {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = { "Fruchterman_Reingold", "Spring", "Circular" };
+			String[] layoutKeys = { "Fruchterman-Reingold", "Spring", "Circular","Concentric", "Linear" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");

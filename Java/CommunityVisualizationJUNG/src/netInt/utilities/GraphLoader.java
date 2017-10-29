@@ -13,7 +13,9 @@ package netInt.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
@@ -30,6 +32,7 @@ public class GraphLoader {
 
 	// The original graph available across classes
 	public static Graph<Node, Edge> theGraph;
+	public static HashMap<String, DirectedSparseMultigraph<Node, Edge>> subGraphs;
 
 	// The nested map of nodes avilable across classes
 	// public static NestedNodeMap<String, Character> nestedMap;
@@ -59,13 +62,15 @@ public class GraphLoader {
 		System.out.println(this.getClass().getName() + " GraphLoader");
 		fileFormat = format;
 		if (format == GraphLoader.PAJEK) {
-			PJKreader = new PajekReader();
-			theGraph = PJKreader.getGraph();
-			totalCommunities = PJKreader.getCommunities().size();
+//			PJKreader = new PajekReader();
+//			theGraph = PJKreader.getGraph();
+//			subGraphs = PJKreader.getSubGraphs();
+//			totalCommunities = PJKreader.getCommunities().size();
 		} else if (format == GraphLoader.GRAPHML) {
 			GMLreader = new GraphmlReader(file);
 			theGraph = GMLreader.getJungDirectedGraph(nestedAttributesOrder, nodeLabelAttributes, edgeImportAttributes,
 					false);
+			subGraphs = GMLreader.getSubGraphs();
 			totalCommunities = GMLreader.getCommunities().size();
 		}
 		System.out.println("     Jung Graph Created from file:" + file);
@@ -84,15 +89,6 @@ public class GraphLoader {
 		// ***** EDGE ATRIBUTES ADDED IN METHOD getJungDirectedGraph AROUND LINE
 		// 183 OF GRAPHMLREADER CLASS
 		System.out.println("     Edge attributes assigned to edges and to Mapper Class");
-
-//		// Instantiation of nested map. Start() invoked in nestedMap contructor
-//		nestedMap = new NestedNodeMap<String, Character>(theGraph.getVertices(), nestedAttributesOrder[0]);
-//
-//		// Initialization of nested map in a new thread
-//		nestedMap.start();
-//
-//		System.out.println(
-//				this.getClass().getName() + " Waiting for initialization completion of nested node structure ...");
 
 	}
 

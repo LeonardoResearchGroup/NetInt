@@ -20,12 +20,14 @@ import org.jcolorbrewer.ColorBrewer;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import jViridis.ColorMap;
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
 import netInt.utilities.filters.GraphSubsetterFilter;
+import netInt.utilities.mapping.Mapper;
 import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
 import processing.core.PConstants;
@@ -135,7 +137,7 @@ public class Assembler {
 
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
-				"FirstOrderCommunity", layout);
+				"Tier1_Comm", layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
 
@@ -193,7 +195,11 @@ public class Assembler {
 
 		// Assign visual elements to First Order Community
 		subContainer.assignVisualElements(communities);
-
+		
+		for(VCommunity vC: communities){
+			vC.init();
+		}
+		
 		// Initialize container NOTE: SEE VCommunity.show(). The container is
 		// only initialized if it going to be shown, That's is why this method
 		// is invoked inside VCommunity.show()
@@ -221,6 +227,9 @@ public class Assembler {
 		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
 		ColorBrewer myBrewer = qualitativePalettes[2];
 		Color[] myGradient = myBrewer.getColorPalette(comNames.size());
+		for (int i = 0; i < myGradient.length; i++) {
+			myGradient[i] = new Color(myGradient[i].getRed(), myGradient[i].getGreen(), myGradient[i].getBlue(), 100);
+		}
 
 		System.out.println("     Generating Graphs for " + comNames.size() + " communities ..." + "\n"
 				+ "     Creating Second Order VCommunity: ");
@@ -234,7 +243,7 @@ public class Assembler {
 		for (String communityName : comNames) {
 
 			// Get subGraph of each community
-			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphmlReader.subGraphs.get(communityName);
+			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.subGraphs.get(communityName);
 
 			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount() + ", Edges: "
 					+ graphTemp.getEdgeCount());
@@ -243,6 +252,7 @@ public class Assembler {
 			for (Node n : graphTemp.getVertices()) {
 				n.setOutDegree(n.getMetadataSize() - 1, graphTemp.getSuccessorCount(n));
 				n.setInDegree(n.getMetadataSize() - 1, graphTemp.getPredecessorCount(n));
+				n.setDegree(n.getMetadataSize() - 1, graphTemp.degree(n));
 			}
 
 			// SubContainers for each VCommunity
@@ -266,15 +276,19 @@ public class Assembler {
 			// Set VCommunity color
 			communityTemp.setColor(myGradient[i]);
 
+			// Set label visibility for overcrowded first order communities
+			if (comNames.size() > 100)
+				communityTemp.getComCover().setShowLabel(false);
+
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
 
 			i++;
 		}
 
-		for (VCommunity vC : vCommunities) {
-			vC.init();
-		}
+//		for (VCommunity vC : vCommunities) {
+//			vC.init();
+//		}
 
 		return vCommunities;
 	}

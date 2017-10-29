@@ -36,7 +36,7 @@ public class MapperViewer extends PApplet {
 	/**
 	 * Launch MapperViewer window
 	 */
-	public void kickOff() {
+	public void kickOffPApplet() {
 		PApplet.runSketch(new String[] { this.getClass().getName() }, this);
 	}
 
@@ -73,7 +73,7 @@ public class MapperViewer extends PApplet {
 
 	public void initMinMaxValues() {
 		// Launch MapperViewer window
-		kickOff();
+		kickOffPApplet();
 
 		// NODES
 		try {

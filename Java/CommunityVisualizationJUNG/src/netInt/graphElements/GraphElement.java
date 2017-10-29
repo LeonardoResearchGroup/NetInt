@@ -98,7 +98,7 @@ public abstract class GraphElement implements Serializable {
 	 */
 	public float getFloatAttribute(String key) {
 		Float rtn = null;
-		
+
 		try {
 			// If Double
 			if (absoluteAttributes.get(key) instanceof Double) {

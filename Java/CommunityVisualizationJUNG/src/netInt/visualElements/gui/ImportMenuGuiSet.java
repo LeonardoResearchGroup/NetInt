@@ -192,7 +192,7 @@ public class ImportMenuGuiSet implements Observer {
 				// Active the graph in the graphPad
 				GraphPad.setActiveGraph(true);
 
-				// If the user does not select a layout, Fruchterman_Reingold is
+				// If the user does not select a layout, Concentric is
 				// assigned by default
 
 				int layoutSelection;
@@ -203,7 +203,7 @@ public class ImportMenuGuiSet implements Observer {
 
 				} catch (ArrayIndexOutOfBoundsException e) {
 
-					layoutSelection = Container.CIRCULAR;
+					layoutSelection = Container.CONCENTRIC;
 
 				}
 
@@ -262,16 +262,22 @@ public class ImportMenuGuiSet implements Observer {
 
 	private int layoutSelection(String value) {
 		// Default selection fruchterman_reingold
-		int selection = Container.FRUCHTERMAN_REINGOLD;
+		int selection = Container.CONCENTRIC;
 		switch (value) {
 		case "Spring":
 			selection = Container.SPRING;
 			break;
-		case "Circular":
-			selection = Container.CIRCULAR;
+		case "Fruchterman-Reingold":
+			selection = Container.FRUCHTERMAN_REINGOLD;
 			break;
 		case "Linear":
 			selection = Container.LINEAR;
+			break;
+		case "Concentric":
+			selection = Container.CONCENTRIC;
+			break;
+		case "Circular":
+			selection = Container.CIRCULAR;
 			break;
 
 		}

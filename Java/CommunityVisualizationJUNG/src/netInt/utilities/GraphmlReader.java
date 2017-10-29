@@ -51,7 +51,7 @@ public class GraphmlReader {
 	private ArrayList<Edge> edgesBetweenCommunities;
 
 	// Collection of community subgraphs
-	public static HashMap<String, DirectedSparseMultigraph<Node, Edge>> subGraphs;
+	private  HashMap<String, DirectedSparseMultigraph<Node, Edge>> subGraphs;
 
 	/**
 	 * Reader usually used to load pajek format files
@@ -144,7 +144,7 @@ public class GraphmlReader {
 				if (vertex.getProperty(nodeImportAttributes[0]) != null) {
 					nodeTmp.setName(vertex.getProperty(nodeImportAttributes[0]).toString());
 				} else {
-					nodeTmp.setName("no name yet");
+					nodeTmp.setName("no named yet");
 					// throw new NullPointerException();
 				}
 
@@ -170,7 +170,8 @@ public class GraphmlReader {
 				}
 			}
 
-			// Load all the remaining node attributes from the graphml file
+			// Load all the remaining node attributes from the graphml file and
+			// set the attributes from the file
 			for (String key : vertex.getPropertyKeys()) {
 				if (nodeTmp.getAttribute(key) == null) {
 					nodeTmp.setAbsoluteAttribute(key, vertex.getProperty(key));
@@ -428,6 +429,10 @@ public class GraphmlReader {
 			// e.printStackTrace();
 			System.out.println(this.getClass().getName() + ": No vertex label match, Check the attribute key");
 		}
+	}
+
+	public HashMap<String, DirectedSparseMultigraph<Node, Edge>> getSubGraphs() {
+		return subGraphs;
 	}
 
 	/**

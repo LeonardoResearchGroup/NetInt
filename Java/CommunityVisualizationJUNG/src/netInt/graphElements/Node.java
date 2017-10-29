@@ -44,7 +44,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	}
 
 	// Comparators
-	
+
 	public int compareTo(Node node) {
 		return this.getId().compareTo(node.getId());
 	}

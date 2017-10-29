@@ -25,6 +25,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.canvas.Canvas;
 import netInt.comparators.InDegreeComparator;
+import netInt.containers.layout.ConcentricLayout;
 import netInt.containers.layout.LinearLayout;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
@@ -49,6 +50,7 @@ public abstract class Container {
 	public static final int SPRING = 1;
 	public static final int FRUCHTERMAN_REINGOLD = 2;
 	public static final int LINEAR = 3;
+	public static final int CONCENTRIC = 4;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
 	// Visual Elements
@@ -59,7 +61,7 @@ public abstract class Container {
 
 	// Custom Layouts
 	protected String name = "no name";
-	public PVector layoutCenter;
+	private PVector layoutCenter;
 	public AbstractLayout<Node, Edge> layout;
 	public int currentLayout;
 	private boolean iterativeLayout;
@@ -111,7 +113,6 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 
-			//} else if (vEdges.size() == 0){
 			}else{
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
@@ -179,6 +180,7 @@ public abstract class Container {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
 			n.setDegree(0, this.getGraph().degree(n));
+			System.out.println("Degree set to: "+n.getId() + " degree:"+ n.getFloatAttribute("degree"));
 		}
 
 		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
@@ -497,14 +499,25 @@ public abstract class Container {
 		// LinearLayout
 		case (Container.LINEAR):
 			layout = linear(dimension);
-
 			layoutCenter = new PVector(0, (float) (layout.getSize().getHeight() / 2));
+			break;
+		
+		// CircularConcentricLayout
+		case (Container.CONCENTRIC):
+			layout = concentric(dimension);
+			layoutCenter = new PVector(0, 0);
 			break;
 		}
 	}
 
 	protected AbstractLayout<Node, Edge> circle(Dimension dimension) {
 		CircleLayout<Node, Edge> circle = new CircleLayout<Node, Edge>(graph);
+		circle.setSize(dimension);
+		return circle;
+	}
+	
+	protected AbstractLayout<Node, Edge> concentric(Dimension dimension) {
+		ConcentricLayout<Node, Edge> circle = new ConcentricLayout<Node, Edge>(graph);
 		circle.setSize(dimension);
 		return circle;
 	}
@@ -621,7 +634,7 @@ public abstract class Container {
 	 */
 	public ArrayList<VNode> getJustVNodes() {
 		ArrayList<VNode> justVNodes = new ArrayList<VNode>();
-		// This process is made one once
+		// This process is made only once
 		if (justVNodes.size() == 0) {
 			justVNodes = new ArrayList<VNode>(getVNodes());
 			justVNodes.removeAll(getVCommunities());
@@ -689,7 +702,7 @@ public abstract class Container {
 	}
 
 	/**
-	 * Set coordinates to a Visual Element translated to the specified position
+	 * Translates the coordinates of a Visual Element relative to the specified position
 	 * 
 	 * @param vN
 	 *            VNode
