@@ -278,24 +278,24 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					container.stepIterativeLayout(pos).done();
 				}
 
-				for (VNode vN : container.getJustVNodes()) {
-					vN.setVisibility(true);
-
-					// Center vNodes relative to a given position
-					if (!vNodesCentered) {
-
-						// set vNodes coordinates relative to vCommunity
-						// position
-						container.translateVElementCoordinates(vN, this.getPos());
-					}
-
-					// If vN is visible and not centered
-					// System.out.println(vN.isDisplayed());
-					if (vNodesCentered) {
-						vN.show(vN.isDisplayed());
-						vN.setDisplayed(true);
-					}
-				}
+//				for (VNode vN : container.getVNodes()) {
+//					vN.setVisibility(true);
+//
+//					// Center vNodes relative to a given position
+//					if (!vNodesCentered) {
+//
+//						// set vNodes coordinates relative to vCommunity
+//						// position
+//						container.translateVElementCoordinates(vN, this.getPos());
+//					}
+//
+//					// If vN is visible and not centered
+//					// System.out.println(vN.isDisplayed());
+//					if (vNodesCentered) {
+//						vN.show(vN.isDisplayed());
+//						vN.setDisplayed(true);
+//					}
+//				}
 				vNodesCentered = true;
 			} else {
 

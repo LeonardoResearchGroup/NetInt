@@ -75,6 +75,8 @@ public abstract class Container {
 	protected Color color;
 	protected int iterations;
 	protected final int MAX_ITERATIONS = 70;
+	
+	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -613,7 +615,7 @@ public abstract class Container {
 	 * @return List of VCommunities
 	 */
 	public ArrayList<VCommunity> getVCommunities() {
-		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+//		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		// This process is made one once
 		if (vCommunities.size() == 0) {
 			for (VNode vN : vNodes) {
