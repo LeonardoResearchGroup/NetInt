@@ -63,10 +63,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		lastPosition = pos;
 		comCover = new VCommunityCover(this);
 		node.setAbsoluteAttribute("Community size", container.size());
-		// Mapper.getInstance().setMaxMinNodeAttributes(node);
 		// Move vNodes relative to the vCommnity center
 		updateContainer(true);
 		description = new VNodeDescription();
+		setDiameter(30);
 	}
 
 	public void init() {
@@ -83,10 +83,18 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// } else {
 		// comCover.setStrokeThickness((int) (temp * 10));
 		// }
-		
-		float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
-		getNode().printAbsoluteAttributes();
-		//setColor(ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], getNode().getFloatAttribute("degree")));
+//		try {
+//			float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
+//			getNode().printAbsoluteAttributes();
+//			float val = getNode().getFloatAttribute("degree");
+//			System.out.println("min: " + minMax[0] + " max:" + minMax[1] + " node:" + val);
+//
+//			setColor(ColorMap.getInstance(ColorMap.PLASMA).getMappedColorRGB(minMax[0], minMax[1],
+//					getNode().getFloatAttribute("degree")), 100);
+//		} catch (NullPointerException n) {
+//			System.out.println(this.getClass().getName() + " " + n.toString());
+//			//setColor(new Color(0));
+//		}
 	}
 
 	public void show() {
@@ -260,7 +268,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vC.lock = false;
 					}
 				}
-				
+
 				// This gate prevents vCommunity relocation in every draw() loop
 				vCommunitiesCentered = true;
 

@@ -116,7 +116,7 @@ public abstract class Container {
 			}else{
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
-				runVEdgeFactory();
+				//runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
@@ -180,7 +180,6 @@ public abstract class Container {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
 			n.setDegree(0, this.getGraph().degree(n));
-			System.out.println("Degree set to: "+n.getId() + " degree:"+ n.getFloatAttribute("degree"));
 		}
 
 		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");

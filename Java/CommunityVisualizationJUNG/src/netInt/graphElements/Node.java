@@ -15,6 +15,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
+import netInt.utilities.mapping.Mapper;
+
 /**
  * This class has two predefined attributes stored in the hashMap that use these
  * keys: id (String) and (label (String). Any other attribute is stored with the
@@ -203,6 +205,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 			this.absoluteAttributes.put("inDegree", inDegree);
 		ElementAttributeMap tmp = (ElementAttributeMap) this.relativeAttributes.get(key);
 		tmp.setCommunityInDegree(inDegree);
+		Mapper.getInstance().setMaxMinNodeAttributes("inDegree", inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
@@ -210,6 +213,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 			this.absoluteAttributes.put("outDegree", outDegree);
 		ElementAttributeMap tmp = (ElementAttributeMap) this.relativeAttributes.get(key);
 		tmp.setCommunityOutDegree(outDegree);
+		Mapper.getInstance().setMaxMinNodeAttributes("outDegree", outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
@@ -217,6 +221,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 			this.absoluteAttributes.put("degree", degree);
 		ElementAttributeMap tmp = (ElementAttributeMap) this.relativeAttributes.get(key);
 		tmp.setCommunityDegree(degree);
+		Mapper.getInstance().setMaxMinNodeAttributes("degree", degree);
 	}
 
 }

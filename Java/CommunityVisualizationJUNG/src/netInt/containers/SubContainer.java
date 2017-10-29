@@ -79,6 +79,8 @@ public class SubContainer extends Container implements Serializable {
 				 */
 				if (n.equals(vC.getNode())) {
 					vNodes.add(vC);
+					
+					// Changes the vCommunity node for the corresponding node in the graph
 					vC.setNode(n);
 				}
 			}

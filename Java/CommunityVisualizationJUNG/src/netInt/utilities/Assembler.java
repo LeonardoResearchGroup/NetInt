@@ -210,7 +210,7 @@ public class Assembler {
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
 
 		// set diameter
-		communityTemp.init();
+		//communityTemp.init();
 
 		return communityTemp;
 	}

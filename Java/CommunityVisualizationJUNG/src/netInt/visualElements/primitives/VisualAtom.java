@@ -159,6 +159,12 @@ public abstract class VisualAtom implements Serializable {
 		this.color = new Color(rgbColor);
 		return rgbColor;
 	}
+	
+	public int setColor(int rgbColor, int alpha) {
+		this.color = new Color(rgbColor);
+		this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(),alpha);
+		return this.color.getRGB();
+	}
 
 	public int setColor(int red, int green, int blue) {
 		this.color = new Color(red, green, blue);
@@ -170,10 +176,10 @@ public abstract class VisualAtom implements Serializable {
 		return this.color.getRGB();
 	}
 
-	public int setColor(int brightness, int alpha) {
-		this.color = new Color(brightness, brightness, brightness, alpha);
-		return this.color.getRGB();
-	}
+//	public int setColor(int brightness, int alpha) {
+//		this.color = new Color(brightness, brightness, brightness, alpha);
+//		return this.color.getRGB();
+//	}
 
 	public int darker() {
 		return this.color.darker().getRGB();
