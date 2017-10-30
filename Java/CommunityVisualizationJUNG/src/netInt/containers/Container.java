@@ -77,6 +77,9 @@ public abstract class Container {
 	protected final int MAX_ITERATIONS = 70;
 	
 	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+	
+	//Visibility
+	private double degreeThreshold;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -118,7 +121,7 @@ public abstract class Container {
 			}else{
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
-				//runVEdgeFactory();
+//				runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
@@ -163,6 +166,9 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
 			vEdges.add(vEdge);
+			if(e.getSource().getDegree(0) > degreeThreshold && e.getTarget().getDegree(0) > degreeThreshold) {
+				vEdge.setAnotherVisibility(true);
+			}
 		}
 	}
 
@@ -177,12 +183,18 @@ public abstract class Container {
 	public void setGraphDegrees() {
 
 		// For all the nodes in the graph
+		degreeThreshold = 0;
 
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
-			n.setDegree(0, this.getGraph().degree(n));
+			int degree = this.getGraph().degree(n);
+			n.setDegree(0, degree);
+			degreeThreshold += degree;
 		}
+		
+		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
+		degreeThreshold = 1000;
 
 		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
 	}

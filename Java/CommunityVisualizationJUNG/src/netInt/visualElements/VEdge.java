@@ -34,6 +34,8 @@ public class VEdge implements Serializable {
 	private Edge edge;
 	// Visibility attributes
 	private boolean visibility, hidden;
+	//Depends on degree of the nodes
+	private boolean anotherVisibility = false;
 	// Source and target nodes
 	private VNode vSource, vTarget;
 	// The curve linking the nodes
@@ -105,7 +107,7 @@ public class VEdge implements Serializable {
 
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
-			if (visibility) {
+			if (visibility && anotherVisibility) {
 
 				// Set thickness
 				try {
@@ -244,4 +246,9 @@ public class VEdge implements Serializable {
 		this.hidden = hidden;
 
 	}
+	
+	public void setAnotherVisibility(boolean anotherVisibility) {
+		this.anotherVisibility = anotherVisibility;
+	}
+
 }
