@@ -14,6 +14,7 @@ package netInt.containers;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
@@ -181,20 +182,49 @@ public abstract class Container {
 	 * communities
 	 */
 	public void setGraphDegrees() {
+		
+		int numberNodes = this.getGraph().getVertices().size();
+		int i = 0;
+		
+		int[] degrees = new int[numberNodes];
 
 		// For all the nodes in the graph
 		degreeThreshold = 0;
+		
+		System.out.println(this.getClass().getName() + " numberNodes: "+ numberNodes);
+		
+		//Percentage of degree threshold (0-100)
+		float degreeThresholdPercentage = 99;
+		
+		int degreeThresholdPosition = (int)((degreeThresholdPercentage/100) * numberNodes ) - 1;
+		
+		System.out.println(this.getClass().getName() + " operacion: "+ ((int)((degreeThresholdPercentage/100) * numberNodes ) - 1));
+		
 
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
 			int degree = this.getGraph().degree(n);
 			n.setDegree(0, degree);
-			degreeThreshold += degree;
+			degrees[i] = degree;
+			i++;
+//			degreeThreshold += degree;
 		}
 		
-		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
-		degreeThreshold = 1000;
+		Arrays.sort( degrees );
+		
+//		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
+//		degreeThreshold = 1000;
+		
+		if(degreeThresholdPosition < 0){
+			degreeThreshold = 0;	
+		}else{
+			degreeThreshold = degrees[degreeThresholdPosition];
+		}
+			
+		System.out.println(this.getClass().getName() + " degreeThreshold: "+ degreeThreshold);
+
+		System.out.println(this.getClass().getName() + " degreeThresholdPosition: "+ degreeThresholdPosition);
 
 		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
 	}
