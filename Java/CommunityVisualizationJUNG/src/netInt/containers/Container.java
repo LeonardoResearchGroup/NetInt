@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -56,7 +57,7 @@ public abstract class Container {
 	protected Graph<Node, Edge> graph;
 	// Visual Elements
 	// All VNodes including VCommunities
-	protected ArrayList<VNode> vNodes;
+	protected HashMap<String, VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
 
@@ -86,7 +87,7 @@ public abstract class Container {
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 		// Instantiate empty collections
-		vNodes = new ArrayList<VNode>();
+		vNodes = new HashMap<String,VNode>();
 		vEdges = new ArrayList<VEdge>();
 		vExtEdges = new ArrayList<VEdge>();
 		betweenEdgeGates = new ArrayList<Container>();
@@ -153,7 +154,7 @@ public abstract class Container {
 
 			tmp.setColor(color);
 
-			vNodes.add(tmp);
+			vNodes.put(n.getId(),tmp);
 		}
 	}
 
@@ -420,7 +421,7 @@ public abstract class Container {
 				PVector nPos = new PVector((float) layout.getX(n), (float) layout.getY(n));
 
 				// Get all vNodes
-				for (VNode vN : vNodes) {
+				for (VNode vN : vNodes.values()) {
 
 					if (vN.getNode().equals(n)) {
 
@@ -483,7 +484,7 @@ public abstract class Container {
 	 *            The graph
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
-		for (VNode tmp : vNodes) {
+		for (VNode tmp : vNodes.values()) {
 			Collection<Node> succesorNodes = graph.getSuccessors(tmp.getNode());
 			tmp.setVNodeSuccessors(getVNodes(succesorNodes));
 		}
@@ -499,7 +500,7 @@ public abstract class Container {
 	 *            The external container
 	 */
 	public void retrieveExternalVNodeSuccessors(Graph<Node, Edge> graph, Container extContainer) {
-		for (VNode tmp : vNodes) {
+		for (VNode tmp : vNodes.values()) {
 			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
 			tmp.setVNodeSuccessors(extContainer.getVNodes(nodes));
 		}
@@ -646,8 +647,8 @@ public abstract class Container {
 	 * 
 	 * @return List of vNodes
 	 */
-	public ArrayList<VNode> getVNodes() {
-		return vNodes;
+	public Collection<VNode> getVNodes() {
+		return vNodes.values();
 	}
 
 	/**
@@ -660,7 +661,7 @@ public abstract class Container {
 //		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		// This process is made one once
 		if (vCommunities.size() == 0) {
-			for (VNode vN : vNodes) {
+			for (VNode vN : vNodes.values()) {
 				if (vN instanceof VCommunity) {
 					vCommunities.add((VCommunity) vN);
 				}
@@ -694,7 +695,7 @@ public abstract class Container {
 	 */
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
-		for (VNode vN : vNodes) {
+		for (VNode vN : vNodes.values()) {
 			if (c.contains(vN.getNode())) {
 				rtn.add(vN);
 			}
@@ -722,23 +723,23 @@ public abstract class Container {
 		this.name = name;
 	}
 
-	public void addVNode(VNode vN) {
-		vNodes.add(vN);
+	public void addVNode(String id, VNode vN) {
+		vNodes.put(id,vN);
 	}
 
-	public void setVCommunities(ArrayList<VCommunity> otherVNodes) {
-		vNodes.addAll(otherVNodes);
-	}
+//	public void setVCommunitie(ArrayList<VCommunity> otherVNodes) {
+//		vNodes.addAll(otherVNodes);
+//	}
 
-	public void setVNodes(ArrayList<VCommunity> communities) {
-		vNodes.addAll(communities);
-	}
+//	public void setVNodes(ArrayList<VCommunity> communities) {
+//		vNodes.addAll(communities);
+//	}
 
 	/**
 	 * Set coordinates to Visual Elements
 	 */
 	private void setVElementCoordinates() {
-		for (VNode vN : vNodes) {
+		for (VNode vN : vNodes.values()) {
 			vN.setX((float) layout.getX(vN.getNode()));
 			vN.setY((float) layout.getY(vN.getNode()));
 		}
@@ -783,7 +784,7 @@ public abstract class Container {
 	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
-		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
+		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes.values());
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName);

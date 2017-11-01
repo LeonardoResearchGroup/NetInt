@@ -13,6 +13,7 @@ package netInt.visualElements;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
@@ -83,7 +84,33 @@ public class VEdge implements Serializable {
 		}
 		return sourceDone && targetDone;
 	}
-
+	
+	/**
+	 * Retrieves the vNodes that are the visual representation of the source and
+	 * target nodes associated to the edge.
+	 * 
+	 * @param visualNodes
+	 *            The collection of visual nodes that contain edge's source and
+	 *            target
+	 * @return false if source and target are not found in the given collection
+	 */
+	public boolean setSourceAndTarget(HashMap<String,VNode> visualNodes) {
+		boolean sourceDone = false;
+		boolean targetDone = false;
+		VNode vSourceTmp = visualNodes.get(edge.getSource().getId());
+		VNode vTargetTmp = visualNodes.get(edge.getTarget().getId());
+		if(vSourceTmp != null){
+			vSource	= vSourceTmp;
+			sourceDone = true;
+		}
+		if(vTargetTmp != null){
+			vTarget	= vTargetTmp;
+			targetDone = true;
+		}
+		
+		return sourceDone && targetDone;
+	}	
+	
 	public void makeBezier() {
 		bezier = new Bezier(vSource.getPos(), vTarget.getPos());
 		int alpha = 100;
