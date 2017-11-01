@@ -109,10 +109,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (container.isInitializationComplete()) {
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
+				int contador = 0;
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
+						System.out.println(this.getClass().getName() + ": "+ "VEZONAS " + this.container.getName());
+						System.out.println(this.getClass().getName() + ": "+ "VEZONAS " + contador);
 						// build external edges
 						vC.container.buildExternalEdges(container.getVCommunities());
+						contador++;
 					}
 				}
 			} else {
