@@ -78,7 +78,7 @@ public class SubContainer extends Container implements Serializable {
 				 * the VisualAtom retrieved from the collection of visual atoms
 				 */
 				if (n.equals(vC.getNode())) {
-					vNodes.add(vC);
+					vNodes.put(n.getId(),vC);
 					
 					// Changes the vCommunity node for the corresponding node in the graph
 					vC.setNode(n);
@@ -115,7 +115,7 @@ public class SubContainer extends Container implements Serializable {
 						// container
 						vN.setX((float) layout.getX(n));
 						vN.setY((float) layout.getY(n));
-						vNodes.add(vN);
+						vNodes.put(n.getId(),vN);
 						// Look for all the edges of that VNode and add them
 						// to the collection of vEdges of this container
 						vEdgeRetriever(vN, sourceContainer.getVEdges());
@@ -153,7 +153,7 @@ public class SubContainer extends Container implements Serializable {
 					// container
 					vN.setX((float) layout.getX(n));
 					vN.setY((float) layout.getY(n));
-					vNodes.add(vN);
+					vNodes.put(n.getId(),vN);
 					// Look for all the edges of that VNode and add them all
 					// to the collection of vEdges of this container
 					vEdgeRetriever(vN, sourceContainer.getVEdges());

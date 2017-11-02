@@ -97,10 +97,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (container.isInitializationComplete()) {
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
+				int contador = 0;
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
+						System.out.println(this.getClass().getName() + ": "+ "VEZONAS " + this.container.getName());
+						System.out.println(this.getClass().getName() + ": "+ "VEZONAS " + contador);
 						// build external edges
 						vC.container.buildExternalEdges(container.getVCommunities());
+						contador++;
 					}
 				}
 			} else {
@@ -265,26 +269,29 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					container.stepIterativeLayout(pos).done();
 				}
+				
+				if(container.getVCommunities().size() == 0){
 
-				for (VNode vN : container.getJustVNodes()) {
-					vN.setVisibility(true);
-
-					// Center vNodes relative to a given position
-					if (!vNodesCentered) {
-
-						// set vNodes coordinates relative to vCommunity
-						// position
-						container.translateVElementCoordinates(vN, this.getPos());
+					for (VNode vN : container.getVNodes()) {
+						vN.setVisibility(true);
+	
+						// Center vNodes relative to a given position
+						if (!vNodesCentered) {
+	
+							// set vNodes coordinates relative to vCommunity
+							// position
+							container.translateVElementCoordinates(vN, this.getPos());
+						}
+	
+						// If vN is visible and not centered
+						// System.out.println(vN.isDisplayed());
+						if (vNodesCentered) {
+							vN.show(vN.isDisplayed());
+							vN.setDisplayed(true);
+						}
 					}
-
-					// If vN is visible and not centered
-					// System.out.println(vN.isDisplayed());
-					if (vNodesCentered) {
-						vN.show(vN.isDisplayed());
-						vN.setDisplayed(true);
-					}
+					vNodesCentered = true;
 				}
-				vNodesCentered = true;
 			} else {
 
 				// This block centers all the elements in the container

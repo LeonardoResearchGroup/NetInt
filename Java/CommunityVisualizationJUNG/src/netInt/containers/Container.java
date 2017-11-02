@@ -14,7 +14,9 @@ package netInt.containers;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -55,7 +57,7 @@ public abstract class Container {
 	protected Graph<Node, Edge> graph;
 	// Visual Elements
 	// All VNodes including VCommunities
-	protected ArrayList<VNode> vNodes;
+	protected HashMap<String, VNode> vNodes;
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
 
@@ -75,12 +77,17 @@ public abstract class Container {
 	protected Color color;
 	protected int iterations;
 	protected final int MAX_ITERATIONS = 70;
+	
+	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+	
+	//Visibility
+	private double degreeThreshold;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 		// Instantiate empty collections
-		vNodes = new ArrayList<VNode>();
+		vNodes = new HashMap<String,VNode>();
 		vEdges = new ArrayList<VEdge>();
 		vExtEdges = new ArrayList<VEdge>();
 		betweenEdgeGates = new ArrayList<Container>();
@@ -118,7 +125,7 @@ public abstract class Container {
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 
-				runVEdgeFactory();
+//				runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
@@ -149,7 +156,7 @@ public abstract class Container {
 
 			tmp.setColor(color);
 
-			vNodes.add(tmp);
+			vNodes.put(n.getId(),tmp);
 		}
 	}
 
@@ -163,6 +170,9 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
 			vEdges.add(vEdge);
+			if(e.getSource().getDegree(0) > degreeThreshold && e.getTarget().getDegree(0) > degreeThreshold) {
+				vEdge.setAnotherVisibility(true);
+			}
 		}
 	}
 
@@ -175,14 +185,49 @@ public abstract class Container {
 	 * communities
 	 */
 	public void setGraphDegrees() {
+		
+		int numberNodes = this.getGraph().getVertices().size();
+		int i = 0;
+		
+		int[] degrees = new int[numberNodes];
 
 		// For all the nodes in the graph
+		degreeThreshold = 0;
+		
+		System.out.println(this.getClass().getName() + " numberNodes: "+ numberNodes);
+		
+		//Percentage of degree threshold (0-100)
+		float degreeThresholdPercentage = 99;
+		
+		int degreeThresholdPosition = (int)((degreeThresholdPercentage/100) * numberNodes ) - 1;
+		
+		System.out.println(this.getClass().getName() + " operacion: "+ ((int)((degreeThresholdPercentage/100) * numberNodes ) - 1));
+		
 
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
-			n.setDegree(0, this.getGraph().degree(n));
+			int degree = this.getGraph().degree(n);
+			n.setDegree(0, degree);
+			degrees[i] = degree;
+			i++;
+//			degreeThreshold += degree;
 		}
+		
+		Arrays.sort( degrees );
+		
+//		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
+//		degreeThreshold = 1000;
+		
+		if(degreeThresholdPosition < 0){
+			degreeThreshold = 0;	
+		}else{
+			degreeThreshold = degrees[degreeThresholdPosition];
+		}
+			
+		System.out.println(this.getClass().getName() + " degreeThreshold: "+ degreeThreshold);
+
+		System.out.println(this.getClass().getName() + " degreeThresholdPosition: "+ degreeThresholdPosition);
 
 		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
 	}
@@ -378,7 +423,7 @@ public abstract class Container {
 				PVector nPos = new PVector((float) layout.getX(n), (float) layout.getY(n));
 
 				// Get all vNodes
-				for (VNode vN : vNodes) {
+				for (VNode vN : vNodes.values()) {
 
 					if (vN.getNode().equals(n)) {
 
@@ -441,7 +486,7 @@ public abstract class Container {
 	 *            The graph
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
-		for (VNode tmp : vNodes) {
+		for (VNode tmp : vNodes.values()) {
 			Collection<Node> succesorNodes = graph.getSuccessors(tmp.getNode());
 			tmp.setVNodeSuccessors(getVNodes(succesorNodes));
 		}
@@ -457,7 +502,7 @@ public abstract class Container {
 	 *            The external container
 	 */
 	public void retrieveExternalVNodeSuccessors(Graph<Node, Edge> graph, Container extContainer) {
-		for (VNode tmp : vNodes) {
+		for (VNode tmp : vNodes.values()) {
 			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
 			tmp.setVNodeSuccessors(extContainer.getVNodes(nodes));
 		}
@@ -604,8 +649,8 @@ public abstract class Container {
 	 * 
 	 * @return List of vNodes
 	 */
-	public ArrayList<VNode> getVNodes() {
-		return vNodes;
+	public Collection<VNode> getVNodes() {
+		return vNodes.values();
 	}
 
 	/**
@@ -615,10 +660,10 @@ public abstract class Container {
 	 * @return List of VCommunities
 	 */
 	public ArrayList<VCommunity> getVCommunities() {
-		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+//		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		// This process is made one once
 		if (vCommunities.size() == 0) {
-			for (VNode vN : vNodes) {
+			for (VNode vN : vNodes.values()) {
 				if (vN instanceof VCommunity) {
 					vCommunities.add((VCommunity) vN);
 				}
@@ -652,7 +697,7 @@ public abstract class Container {
 	 */
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
-		for (VNode vN : vNodes) {
+		for (VNode vN : vNodes.values()) {
 			if (c.contains(vN.getNode())) {
 				rtn.add(vN);
 			}
@@ -680,23 +725,23 @@ public abstract class Container {
 		this.name = name;
 	}
 
-	public void addVNode(VNode vN) {
-		vNodes.add(vN);
+	public void addVNode(String id, VNode vN) {
+		vNodes.put(id,vN);
 	}
 
-	public void setVCommunities(ArrayList<VCommunity> otherVNodes) {
-		vNodes.addAll(otherVNodes);
-	}
+//	public void setVCommunitie(ArrayList<VCommunity> otherVNodes) {
+//		vNodes.addAll(otherVNodes);
+//	}
 
-	public void setVNodes(ArrayList<VCommunity> communities) {
-		vNodes.addAll(communities);
-	}
+//	public void setVNodes(ArrayList<VCommunity> communities) {
+//		vNodes.addAll(communities);
+//	}
 
 	/**
 	 * Set coordinates to Visual Elements
 	 */
 	private void setVElementCoordinates() {
-		for (VNode vN : vNodes) {
+		for (VNode vN : vNodes.values()) {
 			vN.setX((float) layout.getX(vN.getNode()));
 			vN.setY((float) layout.getY(vN.getNode()));
 		}
@@ -742,7 +787,7 @@ public abstract class Container {
 	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
-		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes);
+		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes.values());
 		vNodesBothCommunities.addAll(externalContainer.getVNodes());
 		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName);

@@ -150,7 +150,7 @@ public class GraphPad {
 	private void init() {
 		// Set PApplet global properties
 		parent.textSize(10);
-		parent.getSurface().setLocation(200, -300);
+		parent.getSurface().setLocation(200, 0);
 		parent.smooth();
 
 		/*
