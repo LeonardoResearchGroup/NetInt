@@ -224,7 +224,7 @@ public class GraphPad {
 		// Signature Message :)
 		parent.textAlign(PConstants.LEFT);
 		parent.fill(186, 216, 231);
-		parent.text("NetInt® | Built with Processing 3 | Leonardo & I2T Research Groups, U. Icesi. 2017", 20,
+		parent.text("NetInt® | Built with Processing 3 | 2017", 20,
 				parent.height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()

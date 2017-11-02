@@ -103,7 +103,7 @@ public abstract class Container {
 		if (!initializationComplete) {
 
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
-
+			
 			distributeNodesInLayout(currentLayout, dimension);
 
 			// For the first iteration when the container has no VNodes
@@ -121,11 +121,11 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 
-			} else {
+			}else{
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 
-//				runVEdgeFactory();
+				runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
