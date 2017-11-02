@@ -96,9 +96,10 @@ public abstract class Container {
 		if (!initializationComplete) {
 
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
-			
+
 			distributeNodesInLayout(currentLayout, dimension);
 
+			// For the first iteration when the container has no VNodes
 			if (vNodes.size() == 0) {
 
 				// Generate Visual Elements
@@ -113,10 +114,11 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 
-			}else{
+			} else {
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
-				//runVEdgeFactory();
+
+				runVEdgeFactory();
 
 				setVElementCoordinates();
 			}
@@ -500,7 +502,7 @@ public abstract class Container {
 			layout = linear(dimension);
 			layoutCenter = new PVector(0, (float) (layout.getSize().getHeight() / 2));
 			break;
-		
+
 		// CircularConcentricLayout
 		case (Container.CONCENTRIC):
 			layout = concentric(dimension);
@@ -514,7 +516,7 @@ public abstract class Container {
 		circle.setSize(dimension);
 		return circle;
 	}
-	
+
 	protected AbstractLayout<Node, Edge> concentric(Dimension dimension) {
 		ConcentricLayout<Node, Edge> circle = new ConcentricLayout<Node, Edge>(graph);
 		circle.setSize(dimension);
@@ -701,7 +703,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Translates the coordinates of a Visual Element relative to the specified position
+	 * Translates the coordinates of a Visual Element relative to the specified
+	 * position
 	 * 
 	 * @param vN
 	 *            VNode
