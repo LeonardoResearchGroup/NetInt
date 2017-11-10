@@ -261,6 +261,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					}
 
 					vC.show();
+					
+					/*
 
 					if (vC.comCover.isUnlocked() && !vC.lock) {
 						container.setIncidentEdgesVisibility(vC.getNode(), false);
@@ -271,6 +273,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						container.setIncidentEdgesVisibility(vC.getNode(), true);
 						vC.lock = false;
 					}
+					
+					*/
+					
+					
 				}
 
 				// This gate prevents vCommunity relocation in every draw() loop

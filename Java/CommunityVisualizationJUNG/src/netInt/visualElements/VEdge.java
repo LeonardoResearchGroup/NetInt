@@ -34,7 +34,7 @@ public class VEdge implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Edge edge;
 	// Visibility attributes
-	private boolean visibility, hidden;
+	private boolean visibility, hidden = true;
 	//Depends on degree of the nodes
 	private boolean anotherVisibility = false;
 	// Source and target nodes
@@ -130,7 +130,9 @@ public class VEdge implements Serializable {
 		// If both source and target are above a visibility threshold
 		// source.show(source.isDisplayed());
 		// vTarget.show(vTarget.isDisplayed());
-		if (vSource.isVisible() && vTarget.isVisible() && vSource.isDisplayed() && vTarget.isDisplayed()) {
+		
+		
+		if (checkVisibility()) {
 
 			// This visibility is determined by a threshold parameter set at the
 			// Control Panel
@@ -276,6 +278,18 @@ public class VEdge implements Serializable {
 	
 	public void setAnotherVisibility(boolean anotherVisibility) {
 		this.anotherVisibility = anotherVisibility;
+	}
+	
+	public boolean checkVisibility(){
+		boolean isVisible = vSource.isVisible() && vTarget.isVisible() && vSource.isDisplayed() && vTarget.isDisplayed();		
+		if (vSource instanceof VCommunity) {
+			VCommunity vCSource =  (VCommunity) vSource;
+			VCommunity vCTarget =  (VCommunity) vTarget;
+			isVisible = isVisible && !vCSource.getComCover().isUnlocked() && !vCTarget.getComCover().isUnlocked() ;
+			
+		}
+		return isVisible;
+		
 	}
 
 }
