@@ -1,14 +1,19 @@
 /*******************************************************************************
- * This library is free software. You can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the 
- * Free Software Foundation; either version 2.1 of the License, or (at your option) 
- * any later version. This library is distributed  WITHOUT ANY WARRANTY;
- * without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. See the file COPYING included with this distribution 
- * for more information.
- * 	
- * Copyright (c) 2017 Universidad Icesi. All rights reserved. www.icesi.edu.co
- *******************************************************************************/
+ * Copyright (C) 2017 Universidad Icesi & Bancolombia
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package netInt.visualElements.primitives;
 
 import java.awt.Color;
@@ -64,7 +69,7 @@ public abstract class VisualAtom implements Serializable {
 		displayed = true;
 	}
 
-	public abstract void show();
+	// public abstract void show();
 
 	/**
 	 * Register mouse, touch or key events triggered on this object in the
@@ -154,15 +159,15 @@ public abstract class VisualAtom implements Serializable {
 		this.color = color;
 		return this.color.getRGB();
 	}
-	
+
 	public int setColor(int rgbColor) {
 		this.color = new Color(rgbColor);
 		return rgbColor;
 	}
-	
+
 	public int setColor(int rgbColor, int alpha) {
 		this.color = new Color(rgbColor);
-		this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(),alpha);
+		this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 		return this.color.getRGB();
 	}
 
@@ -176,10 +181,10 @@ public abstract class VisualAtom implements Serializable {
 		return this.color.getRGB();
 	}
 
-//	public int setColor(int brightness, int alpha) {
-//		this.color = new Color(brightness, brightness, brightness, alpha);
-//		return this.color.getRGB();
-//	}
+	// public int setColor(int brightness, int alpha) {
+	// this.color = new Color(brightness, brightness, brightness, alpha);
+	// return this.color.getRGB();
+	// }
 
 	public int darker() {
 		return this.color.darker().getRGB();
@@ -235,13 +240,17 @@ public abstract class VisualAtom implements Serializable {
 			}
 		}
 	}
+	
+	protected abstract void mouseMoved(MouseEvent e);
 
 	// P3
 	public abstract void eventRegister(PApplet theApp);
 
 	public void mouseEvent(MouseEvent e) {
-		if (displayed)
+		if (displayed && e.getAction() == MouseEvent.MOVE) {
+			mouseMoved(e);
 			detectMouseOver(Canvas.getCanvasMouse());
+		}
 		if (e.getAction() == MouseEvent.CLICK) {
 			mouseClicked(e);
 		} else if (e.getAction() == MouseEvent.RELEASE) {
