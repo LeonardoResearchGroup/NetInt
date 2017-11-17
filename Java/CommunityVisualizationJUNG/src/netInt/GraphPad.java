@@ -158,7 +158,7 @@ public class GraphPad {
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
 
-		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+//		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		mapperViewer = new MapperViewer();
 
 		// Canvas

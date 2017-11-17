@@ -36,7 +36,7 @@ public class VEdge implements Serializable {
 	// Visibility attributes
 	private boolean visibility, hidden;
 	//Depends on degree of the nodes
-	private boolean anotherVisibility = false;
+	private boolean anotherVisibility = true;
 	// Source and target nodes
 	private VNode vSource, vTarget;
 	// The curve linking the nodes
@@ -126,6 +126,7 @@ public class VEdge implements Serializable {
 	 */
 	public void show() {
 		int alpha = 150;
+		
 
 		// If both source and target are above a visibility threshold
 		// source.show(source.isDisplayed());
