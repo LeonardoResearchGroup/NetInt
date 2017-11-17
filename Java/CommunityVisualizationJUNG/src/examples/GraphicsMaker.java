@@ -17,7 +17,7 @@ public class GraphicsMaker {
 	}
 
 	public void init() {
-		circles = new Circle[80000];
+		circles = new Circle[3500];
 
 		for (int i = 0; i < circles.length; i++) {
 			circles[i] = new Circle((float) Math.random() * Canvas.app.width,
@@ -67,6 +67,12 @@ public class GraphicsMaker {
 		graphics[1].clear();
 		graphics[1].line(Canvas.app.mouseX, 0, Canvas.app.mouseX, Canvas.app.height);
 		graphics[1].endDraw();
+	}
+	
+	public void show(){
+		for (int i = 0; i < circles.length; i++) {
+			circles[i].show();
+		}
 	}
 
 	public PGraphics[] getPGraphic() {

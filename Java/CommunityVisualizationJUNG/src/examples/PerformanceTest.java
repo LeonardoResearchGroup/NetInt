@@ -70,6 +70,7 @@ public class PerformanceTest extends PApplet {
 	public void draw() {
 		background(70);
 		pad.show(graphics.getPGraphic());
+		//graphics.show();
 	}
 
 	public static void main(String[] args) {
