@@ -257,13 +257,13 @@ public class VEdge implements Serializable {
 	public void setVisibility(float edgeVisibilityThreshold) {
 		Object[] keys = edge.getAttributeKeys();
 
-		// Set the Visibility with the second Attribute of Edge Import. (The first id ID)
-
+		// Set the Visibility with the second Attribute of Edge Import. (The
+		// first id ID)
 		float weight = edge.getFloatAttribute((String) keys[1]);
 
 		if (edgeVisibilityThreshold > weight || hidden) {
 			visibility = false;
-			System.out.println(this.getClass().getName() + " " + (String) keys[1] + " : " + weight + "    th:" + edgeVisibilityThreshold);
+
 		} else {
 			visibility = true;
 		}
