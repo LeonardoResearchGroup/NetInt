@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import netInt.canvas.Canvas;
+import netInt.gui.UserSettings;
 import netInt.visualElements.VNode;
-import netInt.visualElements.gui.UserSettings;
 import processing.core.PConstants;
 
 public class VNodeDescription implements Serializable {

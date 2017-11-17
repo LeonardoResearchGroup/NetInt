@@ -23,8 +23,8 @@ import java.util.HashMap;
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.graphElements.Edge;
+import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
-import netInt.visualElements.gui.UserSettings;
 import netInt.visualElements.primitives.VisualAtom;
 import processing.core.PVector;
 

@@ -22,8 +22,8 @@ import java.util.Collection;
 
 import netInt.canvas.Canvas;
 import netInt.graphElements.Node;
+import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
-import netInt.visualElements.gui.UserSettings;
 import netInt.visualElements.primitives.VisualAtom;
 import processing.core.*;
 

@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import edu.uci.ics.jung.graph.Graph;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
+import netInt.gui.UserSettings;
 import netInt.visualElements.VCommunity;
-import netInt.visualElements.gui.UserSettings;
 
 @SuppressWarnings("serial")
 public class SerializeWrapper implements Serializable{

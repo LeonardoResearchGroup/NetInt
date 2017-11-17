@@ -14,7 +14,7 @@
  * 
  * Copyright (C) 2017 Universidad Icesi & Bancolombia
  ******************************************************************************/
-package netInt.visualElements.gui;
+package netInt.gui;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;

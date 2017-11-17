@@ -19,8 +19,8 @@ package examples;
 import java.io.File;
 
 import netInt.GraphPad;
-import netInt.visualElements.gui.ControlPanel;
-import netInt.visualElements.gui.UserSettings;
+import netInt.gui.ControlPanel;
+import netInt.gui.UserSettings;
 import processing.core.PApplet;
 
 /**

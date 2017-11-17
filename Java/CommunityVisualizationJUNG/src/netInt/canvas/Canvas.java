@@ -20,7 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import netInt.GraphPad;
-import netInt.visualElements.gui.UserSettings;
+import netInt.gui.UserSettings;
 import processing.core.*;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
