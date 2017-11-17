@@ -39,7 +39,9 @@ public class Canvas {
 	private static PVector canvasMouse;
 	// A Vector for the canvas center
 	private PVector newCenter;
-	// An Event to inform if there was an event on the canvas
+	// An Event to inform if there was an event on the canvas. This is used to
+	// control the visibility of visual elements while the mouse is acting over
+	// them
 	public static boolean mouseEventOnCanvas;
 	// Transformation control
 	private boolean shiftDown;

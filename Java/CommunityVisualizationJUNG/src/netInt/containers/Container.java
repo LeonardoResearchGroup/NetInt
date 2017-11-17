@@ -82,17 +82,17 @@ public abstract class Container {
 	protected Color color;
 	protected int iterations;
 	protected final int MAX_ITERATIONS = 70;
-	
+
 	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
-	
-	//Visibility
+
+	// Visibility
 	private double degreeThreshold;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
 		this.graph = graph;
 		// Instantiate empty collections
-		vNodes = new HashMap<String,VNode>();
+		vNodes = new HashMap<String, VNode>();
 		vEdges = new ArrayList<VEdge>();
 		vExtEdges = new ArrayList<VEdge>();
 		betweenEdgeGates = new ArrayList<Container>();
@@ -108,7 +108,7 @@ public abstract class Container {
 		if (!initializationComplete) {
 
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
-			
+
 			distributeNodesInLayout(currentLayout, dimension);
 
 			if (vNodes.size() == 0) {
@@ -125,7 +125,7 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				retrieveVNodeSuccessors(layout.getGraph());
 
-			}else{
+			} else {
 				System.out
 						.println(this.getClass().getName() + " Building " + graph.getEdges().size() + " visual edges");
 				runVEdgeFactory();
@@ -159,7 +159,7 @@ public abstract class Container {
 
 			tmp.setColor(color);
 
-			vNodes.put(n.getId(),tmp);
+			vNodes.put(n.getId(), tmp);
 		}
 	}
 
@@ -173,7 +173,7 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
 			vEdges.add(vEdge);
-			if(e.getSource().getDegree(0) < degreeThreshold || e.getTarget().getDegree(0) < degreeThreshold) {
+			if (e.getSource().getDegree(0) < degreeThreshold || e.getTarget().getDegree(0) < degreeThreshold) {
 				vEdge.setAnotherVisibility(false);
 			}
 		}
@@ -188,24 +188,24 @@ public abstract class Container {
 	 * communities
 	 */
 	public void setGraphDegrees() {
-		
+
 		int numberNodes = this.getGraph().getVertices().size();
 		int i = 0;
-		
+
 		int[] degrees = new int[numberNodes];
 
 		// For all the nodes in the graph
 		degreeThreshold = 0;
-		
-		System.out.println(this.getClass().getName() + " numberNodes: "+ numberNodes);
-		
-		//Percentage of degree threshold (0-100)
+
+		System.out.println(this.getClass().getName() + " numberNodes: " + numberNodes);
+
+		// Percentage of degree threshold (0-100)
 		float degreeThresholdPercentage = 99;
-		
-		int degreeThresholdPosition = (int)((degreeThresholdPercentage/100) * numberNodes ) - 1;
-		
-		System.out.println(this.getClass().getName() + " operacion: "+ ((int)((degreeThresholdPercentage/100) * numberNodes ) - 1));
-		
+
+		int degreeThresholdPosition = (int) ((degreeThresholdPercentage / 100) * numberNodes) - 1;
+
+		System.out.println(this.getClass().getName() + " operacion: "
+				+ ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
 
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
@@ -214,23 +214,24 @@ public abstract class Container {
 			n.setDegree(0, degree);
 			degrees[i] = degree;
 			i++;
-//			degreeThreshold += degree;
+			// degreeThreshold += degree;
 		}
-		
-		Arrays.sort( degrees );
-		
-//		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
-//		degreeThreshold = 1000;
-		
-		if(degreeThresholdPosition < 0){
-			degreeThreshold = 0;	
-		}else{
+
+		Arrays.sort(degrees);
+
+		// degreeThreshold = degreeThreshold /
+		// this.getGraph().getVertices().size();
+		// degreeThreshold = 1000;
+
+		if (degreeThresholdPosition < 0) {
+			degreeThreshold = 0;
+		} else {
 			degreeThreshold = degrees[degreeThresholdPosition];
 		}
-			
-		System.out.println(this.getClass().getName() + " degreeThreshold: "+ degreeThreshold);
 
-		System.out.println(this.getClass().getName() + " degreeThresholdPosition: "+ degreeThresholdPosition);
+		System.out.println(this.getClass().getName() + " degreeThreshold: " + degreeThreshold);
+
+		System.out.println(this.getClass().getName() + " degreeThresholdPosition: " + degreeThresholdPosition);
 
 		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
 	}
@@ -550,7 +551,7 @@ public abstract class Container {
 			layout = linear(dimension);
 			layoutCenter = new PVector(0, (float) (layout.getSize().getHeight() / 2));
 			break;
-		
+
 		// CircularConcentricLayout
 		case (Container.CONCENTRIC):
 			layout = concentric(dimension);
@@ -564,7 +565,7 @@ public abstract class Container {
 		circle.setSize(dimension);
 		return circle;
 	}
-	
+
 	protected AbstractLayout<Node, Edge> concentric(Dimension dimension) {
 		ConcentricLayout<Node, Edge> circle = new ConcentricLayout<Node, Edge>(graph);
 		circle.setSize(dimension);
@@ -663,7 +664,7 @@ public abstract class Container {
 	 * @return List of VCommunities
 	 */
 	public ArrayList<VCommunity> getVCommunities() {
-//		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
+		// ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 		// This process is made one once
 		if (vCommunities.size() == 0) {
 			for (VNode vN : vNodes.values()) {
@@ -729,16 +730,16 @@ public abstract class Container {
 	}
 
 	public void addVNode(String id, VNode vN) {
-		vNodes.put(id,vN);
+		vNodes.put(id, vN);
 	}
 
-//	public void setVCommunitie(ArrayList<VCommunity> otherVNodes) {
-//		vNodes.addAll(otherVNodes);
-//	}
+	// public void setVCommunitie(ArrayList<VCommunity> otherVNodes) {
+	// vNodes.addAll(otherVNodes);
+	// }
 
-//	public void setVNodes(ArrayList<VCommunity> communities) {
-//		vNodes.addAll(communities);
-//	}
+	// public void setVNodes(ArrayList<VCommunity> communities) {
+	// vNodes.addAll(communities);
+	// }
 
 	/**
 	 * Set coordinates to Visual Elements
@@ -751,7 +752,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Translates the coordinates of a Visual Element relative to the specified position
+	 * Translates the coordinates of a Visual Element relative to the specified
+	 * position
 	 * 
 	 * @param vN
 	 *            VNode

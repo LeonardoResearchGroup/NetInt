@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import netInt.canvas.Canvas;
+import netInt.canvas.MouseHook;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
@@ -39,6 +40,10 @@ public abstract class VisualAtom implements Serializable {
 	private float diameter;
 
 	protected PVector pos;
+
+	// The difference between the
+	protected PVector deltaMouse;
+
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
@@ -159,15 +164,15 @@ public abstract class VisualAtom implements Serializable {
 		this.color = color;
 		return this.color.getRGB();
 	}
-	
+
 	public int setColor(int rgbColor) {
 		this.color = new Color(rgbColor);
 		return rgbColor;
 	}
-	
+
 	public int setColor(int rgbColor, int alpha) {
 		this.color = new Color(rgbColor);
-		this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(),alpha);
+		this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 		return this.color.getRGB();
 	}
 
@@ -181,10 +186,10 @@ public abstract class VisualAtom implements Serializable {
 		return this.color.getRGB();
 	}
 
-//	public int setColor(int brightness, int alpha) {
-//		this.color = new Color(brightness, brightness, brightness, alpha);
-//		return this.color.getRGB();
-//	}
+	// public int setColor(int brightness, int alpha) {
+	// this.color = new Color(brightness, brightness, brightness, alpha);
+	// return this.color.getRGB();
+	// }
 
 	public int darker() {
 		return this.color.darker().getRGB();
@@ -200,6 +205,15 @@ public abstract class VisualAtom implements Serializable {
 			switch (e.getButton()) {
 			case PConstants.LEFT:
 				leftPressed = true;
+				
+				// hooks this vAtom
+				MouseHook.getInstance().hook(this);
+
+				// stores the mousePosition
+				if (deltaMouse == null) {
+					deltaMouse = new PVector(Canvas.getCanvasMouse().x - pos.x, Canvas.getCanvasMouse().y - pos.y);
+				}
+				
 				break;
 			case PConstants.CENTER:
 				centerPressed = true;
@@ -215,6 +229,8 @@ public abstract class VisualAtom implements Serializable {
 		switch (e.getButton()) {
 		case PConstants.LEFT:
 			leftPressed = false;
+			deltaMouse = null;
+			MouseHook.getInstance().release();
 			break;
 		case PConstants.CENTER:
 			centerPressed = false;
@@ -226,7 +242,9 @@ public abstract class VisualAtom implements Serializable {
 	}
 
 	private void mouseClicked(MouseEvent e) {
+		
 		if (isMouseOver && displayed) {
+			// change booleans
 			switch (e.getButton()) {
 			case PConstants.LEFT:
 				leftClicked = !leftClicked;
@@ -238,6 +256,16 @@ public abstract class VisualAtom implements Serializable {
 				rightClicked = !rightClicked;
 				break;
 			}
+
+		}
+	}
+
+	private void mouseDragged(MouseEvent e) {
+		
+		// Move VAtom
+		if (MouseHook.getInstance().isHooked(this) && displayed) {
+			pos = Canvas.getCanvasMouse().sub(deltaMouse);
+			System.out.println(this.getClass().getName() + " Dragged, " + deltaMouse);
 		}
 	}
 
@@ -253,6 +281,9 @@ public abstract class VisualAtom implements Serializable {
 			mouseReleased(e);
 		} else if (e.getAction() == MouseEvent.PRESS) {
 			mousePressed(e);
+		} else if (e.getAction() == MouseEvent.DRAG) {
+			mouseDragged(e);
 		}
 	}
+
 }

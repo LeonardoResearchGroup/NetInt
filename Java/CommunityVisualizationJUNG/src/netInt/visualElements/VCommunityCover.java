@@ -50,7 +50,7 @@ public class VCommunityCover implements Serializable {
 		this.communityNode = communityNode;
 		strokeThickness = 1;
 		angle = PConstants.TWO_PI / 360;
-		enableClosing = false;
+		enableClosing = true;
 	}
 
 	protected void show(Container container, boolean containsSearchedNode) {
@@ -200,8 +200,8 @@ public class VCommunityCover implements Serializable {
 		this.strokeThickness = strokeThickness;
 	}
 
-	public void setEnableClosing(boolean enableClosing) {
-		this.enableClosing = enableClosing;
-	}
+//	public void setEnableClosing(boolean enableClosing) {
+//		this.enableClosing = enableClosing;
+//	}
 
 }

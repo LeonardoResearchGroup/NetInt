@@ -25,6 +25,7 @@ import java.awt.Color;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
+import netInt.canvas.MouseHook;
 import netInt.containers.Container;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
@@ -46,7 +47,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public Container container;
 	private VCommunityCover comCover;
-	private PVector lastPosition, deltaMouse;
+	private PVector lastPosition;
+
 	// This lock is used to control iterative behavior in
 	// showCommunityContents()
 	private boolean lock = false;
@@ -88,18 +90,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// } else {
 		// comCover.setStrokeThickness((int) (temp * 10));
 		// }
-//		try {
-//			float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
-//			getNode().printAbsoluteAttributes();
-//			float val = getNode().getFloatAttribute("degree");
-//			System.out.println("min: " + minMax[0] + " max:" + minMax[1] + " node:" + val);
-//
-//			setColor(ColorMap.getInstance(ColorMap.PLASMA).getMappedColorRGB(minMax[0], minMax[1],
-//					getNode().getFloatAttribute("degree")), 100);
-//		} catch (NullPointerException n) {
-//			System.out.println(this.getClass().getName() + " " + n.toString());
-//			//setColor(new Color(0));
-//		}
+		// try {
+		// float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
+		// getNode().printAbsoluteAttributes();
+		// float val = getNode().getFloatAttribute("degree");
+		// System.out.println("min: " + minMax[0] + " max:" + minMax[1] + "
+		// node:" + val);
+		//
+		// setColor(ColorMap.getInstance(ColorMap.PLASMA).getMappedColorRGB(minMax[0],
+		// minMax[1],
+		// getNode().getFloatAttribute("degree")), 100);
+		// } catch (NullPointerException n) {
+		// System.out.println(this.getClass().getName() + " " + n.toString());
+		// //setColor(new Color(0));
+		// }
 	}
 
 	public void show() {
@@ -114,14 +118,16 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (container.isInitializationComplete()) {
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
-				int contador = 0;
+				// int contador = 0;
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
-						System.out.println(this.getClass().getName() + ": "+ "VEZONAS " + this.container.getName());
-						System.out.println(this.getClass().getName() + ": "+ "VEZONAS " + contador);
+						// System.out.println(this.getClass().getName() + ": "+
+						// "VEZONAS " + this.container.getName());
+						// System.out.println(this.getClass().getName() + ": "+
+						// "VEZONAS " + contador);
 						// build external edges
 						vC.container.buildExternalEdges(container.getVCommunities());
-						contador++;
+						// contador++;
 					}
 				}
 			} else {
@@ -147,15 +153,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 		}
 
-		// Move vCommunity to mouse position if right button is pressed
-		if (isMouseOver && rightPressed) {
-			if (deltaMouse == null) {
-				deltaMouse = new PVector(Canvas.getCanvasMouse().x - pos.x, Canvas.getCanvasMouse().y - pos.y);
-			}
-			moveCommunityCenterTo(Canvas.getCanvasMouse().sub(deltaMouse));
-		} else {
-			deltaMouse = null;
-		}
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center. This is needed to reposition deployed and
 		// collapsed VCommunities with the mouse
@@ -182,7 +179,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (UserSettings.getInstance().showInternalEdges()) {
 
 			// VCommunity open and it is not being modified by the user
-			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
+			if (showEdges && !Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this)
+					&& !Canvas.canvasBeingZoomed) {
 
 				// If the container Layout iterates to distribute nodes
 				if (container.isDone()) {
@@ -266,22 +264,19 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					}
 
 					vC.show();
-					
+
 					/*
+					 * 
+					 * if (vC.comCover.isUnlocked() && !vC.lock) {
+					 * container.setIncidentEdgesVisibility(vC.getNode(),
+					 * false); vC.lock = true; }
+					 * 
+					 * if (!vC.comCover.isUnlocked() && vC.lock) {
+					 * container.setIncidentEdgesVisibility(vC.getNode(), true);
+					 * vC.lock = false; }
+					 * 
+					 */
 
-					if (vC.comCover.isUnlocked() && !vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), false);
-						vC.lock = true;
-					}
-
-					if (!vC.comCover.isUnlocked() && vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), true);
-						vC.lock = false;
-					}
-					
-					*/
-					
-					
 				}
 
 				// This gate prevents vCommunity relocation in every draw() loop
@@ -292,20 +287,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					container.stepIterativeLayout(pos).done();
 				}
-				
-				if(container.getVCommunities().size() == 0){
+
+				if (container.getVCommunities().size() == 0) {
 
 					for (VNode vN : container.getVNodes()) {
 						vN.setVisibility(true);
-	
+
 						// Center vNodes relative to a given position
 						if (!vNodesCentered) {
-	
+
 							// set vNodes coordinates relative to vCommunity
 							// position
 							container.translateVElementCoordinates(vN, this.getPos());
 						}
-	
+
 						// If vN is visible and not centered
 						// System.out.println(vN.isDisplayed());
 						if (vNodesCentered) {
@@ -343,10 +338,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 	}
 
-	public void moveCommunityCenterTo(PVector newPos) {
-		pos = newPos;
-	}
-
 	// ***** Setters
 	public void setContainer(Container nodesAndEdges) {
 		container = nodesAndEdges;
@@ -360,27 +351,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
-		theApp.registerMethod("keyEvent", this);
-	}
-
-	public void keyEvent(KeyEvent k) {
-		kPressed(k);
-	}
-
-	private void kPressed(KeyEvent k) {
-		// Control closing communities
-		if (k.getAction() == KeyEvent.PRESS) {
-			if (k.getKey() == 'c' || k.getKey() == 'C') {
-				comCover.setEnableClosing(true);
-			}
-		} else {
-			if (k.getAction() == KeyEvent.RELEASE) {
-				if (k.getKey() == 'c' || k.getKey() == 'C') {
-					comCover.setEnableClosing(true);
-				}
-			}
-
-		}
 	}
 
 	// ***** Search Methods *******

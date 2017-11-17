@@ -26,6 +26,7 @@ import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.primitives.VisualAtom;
 import processing.core.*;
+import processing.event.MouseEvent;
 
 public class VNode extends VisualAtom implements Serializable {
 
@@ -366,5 +367,7 @@ public class VNode extends VisualAtom implements Serializable {
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 	}
+
+
 
 }
