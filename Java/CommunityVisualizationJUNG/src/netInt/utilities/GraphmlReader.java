@@ -33,6 +33,7 @@ import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import netInt.comparators.LinkComparator;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.customCollections.NestedNodeMap;

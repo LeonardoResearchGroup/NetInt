@@ -14,7 +14,7 @@
  * 
  * Copyright (C) 2017 Universidad Icesi & Bancolombia
  ******************************************************************************/
-package netInt.utilities;
+package netInt.comparators;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
