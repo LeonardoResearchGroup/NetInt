@@ -38,7 +38,7 @@ public class UserSettings {
 	// EDGE Visibility Settings
 	private boolean showInternalEdges = true;
 	private boolean showExternalEdges = true;
-	private float transactionVolume;
+	private float weight;
 	private float propagation = 0;
 	private boolean onlyPorpagation= false;
 	private String filtersEdge;
@@ -100,8 +100,8 @@ public class UserSettings {
 		return filtersNode;
 	}
 
-	public float getTransactionVolume() {
-		return transactionVolume;
+	public float getWeight() {
+		return weight;
 	}
 
 	public float getPropagation() {
@@ -178,8 +178,8 @@ public class UserSettings {
 		this.filtersNode = filtrosNodo;
 	}
 
-	public void setTransactionVolume(float volTransaccion) {
-		this.transactionVolume = volTransaccion;
+	public void setWeight(float volTransaccion) {
+		this.weight = volTransaccion;
 	}
 
 	public void setPropagation(float propagacion) {

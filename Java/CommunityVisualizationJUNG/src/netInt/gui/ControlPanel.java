@@ -300,8 +300,9 @@ public class ControlPanel extends PApplet {
 		secondary.addToggle("External").setPosition(60, 7).setSize(45, 10).setValue(true).moveTo(group)
 				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
-		// Transaction volume
-		secondary.addSlider("Volume").setPosition(5, 20).setSize(100, 10).setRange(0, 1).moveTo(group);
+		// Weight
+		float[] minMaxWeightValue = Mapper.getInstance().getMinMaxForEdges(keyNamesForEdges.get(0));
+		secondary.addSlider("Weight").setPosition(5, 20).setSize(100, 10).setRange(minMaxWeightValue[0], minMaxWeightValue[1]).moveTo(group);
 
 		// Propagation
 		secondary.addSlider("Succesors").setPosition(5, 33).setSize(68, 10).setRange(1, 10).moveTo(group)
@@ -447,8 +448,8 @@ public class ControlPanel extends PApplet {
 			Toggle vinculoExt = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(vinculoExt.getBooleanValue());
 			break;
-		case "Volume":
-			UserSettings.getInstance().setTransactionVolume(theEvent.getValue());
+		case "Weight":
+			UserSettings.getInstance().setWeight(theEvent.getValue());
 			break;
 		case "Succesors":
 			UserSettings.getInstance().setPropagation(theEvent.getValue());

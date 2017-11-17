@@ -189,7 +189,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
-							vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
+							vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
 
 						if (container.currentLayout == Container.CIRCULAR) {
@@ -204,7 +204,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
-							vE.setVisibility(UserSettings.getInstance().getTransactionVolume());
+							vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
 
 						if (container.currentLayout == Container.CIRCULAR) {
@@ -229,7 +229,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					// If the edge has any attribute
 					if (vEE.getEdge().getAttributeSize() > 0) {
-						vEE.setVisibility(UserSettings.getInstance().getTransactionVolume());
+						vEE.setVisibility(UserSettings.getInstance().getWeight());
 					}
 
 					if (container.currentLayout == Container.CIRCULAR) {

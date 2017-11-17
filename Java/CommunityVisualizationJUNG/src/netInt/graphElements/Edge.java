@@ -19,6 +19,8 @@ package netInt.graphElements;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import netInt.utilities.mapping.Mapper;
+
 /**
  * @author jsalam
  *
@@ -129,7 +131,7 @@ public class Edge extends GraphElement implements Serializable {
 	 */
 	public void setAbsoluteAttribute(String key, Object value) {
 		absoluteAttributes.put(key, value);
-		netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
+		Mapper.getInstance().setMaxMinEdgeAttributes(key, value);
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class Edge extends GraphElement implements Serializable {
 		relativeAttributes.put(tier, attributeSet);
 		// Update Mapper.minmax
 		for (String key : attributeSet.keySet()) {
-			netInt.utilities.mapping.Mapper.getInstance().setMaxMinEdgeAttributes(key, attributeSet.get(key));
+			Mapper.getInstance().setMaxMinEdgeAttributes(key, attributeSet.get(key));
 		}
 	}
 
