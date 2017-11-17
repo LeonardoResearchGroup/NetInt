@@ -229,7 +229,7 @@ public class GraphPad {
 		// Signature Message :)
 		parent.textAlign(PConstants.LEFT);
 		parent.fill(186, 216, 231);
-		parent.text("NetInt® | Built with Processing 3 | Leonardo & I2T Research Groups, U. Icesi. 2017", 20,
+		parent.text("NetInt | Built with Processing 3 | 2017", 20,
 				parent.height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
@@ -304,7 +304,7 @@ public class GraphPad {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = { "Fruchterman-Reingold", "Spring", "Circular","Concentric", "Linear" };
+			String[] layoutKeys = { "Concentric","Fruchterman-Reingold", "Spring", "Linear" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");

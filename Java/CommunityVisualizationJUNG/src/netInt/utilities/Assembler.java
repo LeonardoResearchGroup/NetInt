@@ -161,7 +161,7 @@ public class Assembler {
 	 */
 	public VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
 		// Container of rootGraph
-		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CIRCULAR, rootDimension);
+		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CONCENTRIC, rootDimension);
 		mainCommunity.setName("Root");
 		// Root Community
 		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);

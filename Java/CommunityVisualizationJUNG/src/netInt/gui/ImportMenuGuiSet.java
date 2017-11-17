@@ -281,9 +281,9 @@ public class ImportMenuGuiSet implements Observer {
 		case "Concentric":
 			selection = Container.CONCENTRIC;
 			break;
-		case "Circular":
-			selection = Container.CIRCULAR;
-			break;
+//		case "Circular":
+//			selection = Container.CIRCULAR;
+//			break;
 
 		}
 		return selection;

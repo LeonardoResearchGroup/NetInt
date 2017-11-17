@@ -177,7 +177,7 @@ public class Bezier {
 			sagitta = getChord() / 2;
 		}
 		// Get control points
-		if (containerLayout != Container.CIRCULAR) {
+		if (containerLayout != Container.CONCENTRIC) {
 			cA = getControlPoint(A, direction, controlInclination);
 			cB = getControlPoint(B, direction, controlInclination);
 		} else {

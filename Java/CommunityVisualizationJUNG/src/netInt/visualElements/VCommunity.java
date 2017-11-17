@@ -183,6 +183,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					&& !Canvas.canvasBeingZoomed) {
 
 				// If the container Layout iterates to distribute nodes
+				// ****** Double check this boolean, it is doing nothing ****
 				if (container.isDone()) {
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
@@ -192,7 +193,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
 
-						if (container.currentLayout == Container.CIRCULAR) {
+						if (container.currentLayout == Container.CONCENTRIC) {
 							vE.setLayoutAndCenter(container.currentLayout, this.pos);
 						}
 						vE.show();
@@ -207,7 +208,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 							vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
 
-						if (container.currentLayout == Container.CIRCULAR) {
+						if (container.currentLayout == Container.CONCENTRIC) {
 							vE.setLayoutAndCenter(container.currentLayout, this.pos);
 						}
 						vE.show();
@@ -222,7 +223,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (UserSettings.getInstance().showExternalEdges()) {
 
 			// VCommunity open and it is not being modified by the user
-			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
+			if (showEdges && !Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this)
+					&& !Canvas.canvasBeingZoomed) {
 
 				// Show external edges
 				for (VEdge vEE : container.getVExtEdges()) {
@@ -232,7 +234,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						vEE.setVisibility(UserSettings.getInstance().getWeight());
 					}
 
-					if (container.currentLayout == Container.CIRCULAR) {
+					if (container.currentLayout == Container.CONCENTRIC) {
 						vEE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
 
@@ -288,6 +290,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					container.stepIterativeLayout(pos).done();
 				}
 
+				// If the container does not contain vCommunities
 				if (container.getVCommunities().size() == 0) {
 
 					for (VNode vN : container.getVNodes()) {
@@ -302,7 +305,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						}
 
 						// If vN is visible and not centered
-						// System.out.println(vN.isDisplayed());
 						if (vNodesCentered) {
 							vN.show(vN.isDisplayed());
 							vN.setDisplayed(true);

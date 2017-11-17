@@ -53,7 +53,7 @@ import processing.core.PVector;
  */
 public abstract class Container {
 	// Kinds of layouts
-	public static final int CIRCULAR = 0;
+//	public static final int CIRCULAR = 0;
 	public static final int SPRING = 1;
 	public static final int FRUCHTERMAN_REINGOLD = 2;
 	public static final int LINEAR = 3;
@@ -526,11 +526,11 @@ public abstract class Container {
 
 		switch (kindOfLayout) {
 
-		// Circular layout
-		case (Container.CIRCULAR):
-			layout = circle(dimension);
-			layoutCenter = new PVector(0, 0);
-			break;
+//		// Circular layout
+//		case (Container.CIRCULAR):
+//			layout = circle(dimension);
+//			layoutCenter = new PVector(0, 0);
+//			break;
 
 		// SpringLayout
 		case (Container.SPRING):
