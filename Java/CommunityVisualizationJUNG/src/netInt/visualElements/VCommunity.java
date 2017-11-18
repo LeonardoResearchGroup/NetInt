@@ -50,10 +50,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private VCommunityCover comCover;
 	private PVector lastPosition;
 
-	// This lock is used to control iterative behavior in
-	// showCommunityContents()
-	private boolean lock = false;
-
 	// Search tool
 	protected Node nodeFound;
 	protected VCommunity nodeFoundInSuperCommunity;
@@ -166,28 +162,71 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 	}
 
+	/**
+	 * A community contains VisualAtoms that might be VNodes or VCommunities.
+	 * Therefore a higher tier VCommunity may contain nested VCommunities. In
+	 * order to display each VisualAtom correctly the class type is determined.
+	 * 
+	 * @param showVAtoms
+	 *            true if show
+	 * @param showEdges
+	 *            true if show
+	 */
+
+	public void showCommunityContents(boolean showVAtoms, boolean showEdges) {
+
+		// ** Display VEdges
+
+		// Internal Edges
+		// If the user chooses to turn on/off the internal edges
+		if (UserSettings.getInstance().showInternalEdges() && showEdges && comCover.isUnlocked()) {
+
+			showInternalEdges();
+		}
+
+		// External edges
+		// If the user chooses to turn on/off the external edges
+		if (UserSettings.getInstance().showExternalEdges() && showEdges && comCover.isUnlocked()) {
+
+			showExternalEdges();
+		}
+
+		// ** Display VNodes
+
+		// If the user chooses to turn on/off the nodes
+		if (UserSettings.getInstance().showNodes()) {
+
+			// VCommunity open show:
+			// internal VCommunities if any
+			showVCommunities(showVAtoms);
+
+			// VNodes
+			showVNodes(showVAtoms);
+		}
+	}
+
 	private void showInternalEdges() {
 		// VCommunity open and it is not being modified by the user
 		if (!Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this) && !Canvas.canvasBeingZoomed) {
 
 			// If the container Layout iterates to distribute nodes
-			// ****** Double check this boolean, it is doing nothing ****
-			if (container.isDone()) {
-				// Show internal edges
-				for (VEdge vE : container.getVEdges()) {
+			if (container.isLayoutIterative()) {
+				if (container.isDone()) {
+					// Show internal edges
+					for (VEdge vE : container.getVEdges()) {
 
-					// If the edge has any attribute
-					if (vE.getEdge().getAttributeSize() > 0) {
-						vE.setVisibility(UserSettings.getInstance().getWeight());
-					}
+						// If the edge has any attribute
+						if (vE.getEdge().getAttributeSize() > 0) {
+							vE.setVisibility(UserSettings.getInstance().getWeight());
+						}
 
-					if (container.currentLayout == Container.CONCENTRIC) {
-						vE.setLayoutAndCenter(container.currentLayout, this.pos);
+						if (container.currentLayout == Container.CONCENTRIC) {
+							vE.setLayoutAndCenter(container.currentLayout, this.pos);
+						}
+						vE.show();
 					}
-					vE.show();
 				}
 			} else {
-
 				// Show internal edges
 				for (VEdge vE : container.getVEdges()) {
 
@@ -201,6 +240,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					}
 					vE.show();
 				}
+
 			}
 		}
 	}
@@ -306,49 +346,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			}
 		}
 
-	}
-
-	/**
-	 * A community contains VisualAtoms that might be VNodes or VCommunities.
-	 * Therefore a higher tier VCommunity may contain nested VCommunities. In
-	 * order to display each VisualAtom correctly the class type is determined.
-	 * 
-	 * @param showVAtoms
-	 *            true if show
-	 * @param showEdges
-	 *            true if show
-	 */
-
-	public void showCommunityContents(boolean showVAtoms, boolean showEdges) {
-
-		// ** Display VEdges
-
-		// Internal Edges
-		// If the user chooses to turn on/off the internal edges
-		if (UserSettings.getInstance().showInternalEdges() && showEdges && comCover.isUnlocked()) {
-
-			showInternalEdges();
-		}
-
-		// External edges
-		// If the user chooses to turn on/off the external edges
-		if (UserSettings.getInstance().showExternalEdges() && showEdges && comCover.isUnlocked()) {
-
-			showExternalEdges();
-		}
-
-		// ** Display VNodes
-
-		// If the user chooses to turn on/off the nodes
-		if (UserSettings.getInstance().showNodes()) {
-
-			// VCommunity open show:
-			// internal VCommunities if any
-			showVCommunities(showVAtoms);
-
-			// VNodes
-			showVNodes(showVAtoms);
-		}
 	}
 
 	/**
