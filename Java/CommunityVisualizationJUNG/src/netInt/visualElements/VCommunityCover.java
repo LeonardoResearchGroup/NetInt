@@ -20,7 +20,10 @@ import java.io.Serializable;
 
 import netInt.canvas.Canvas;
 import netInt.containers.Container;
+import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
 public class VCommunityCover implements Serializable {
 
@@ -48,72 +51,54 @@ public class VCommunityCover implements Serializable {
 		unlocked = false;
 		i = 0;
 		this.communityNode = communityNode;
-		strokeThickness = 1;
+		strokeThickness = 0;
 		angle = PConstants.TWO_PI / 360;
-		enableClosing = true;
+		enableClosing = false;
+		eventRegister(Canvas.app);
 	}
 
 	protected void show(Container container, boolean containsSearchedNode) {
 
-		// Colors and visual attributes
-		Canvas.app.stroke(100);
-		Canvas.app.strokeWeight(0);
-		Canvas.app.fill(communityNode.getColorRGB());
+		// If mouse over, darken its color
+		if (communityNode.isMouseOver) {
+			strokeThickness = 1;
+			
+			if (enableClosing) {
+				strokeThickness = 2;
+			}
+			
+			if (!showLabel) {
+				showCoverLable(communityNode, container);
+			}
+		} else {
+			
+			strokeThickness = 0;
+		}
+
+		Canvas.app.strokeWeight(strokeThickness);
 
 		// If community not opened
 		if (!unlocked) {
-			// listen to the mouse and open the community
-			unlocked = communityNode.leftClicked;
 
-			if (i > 0) {
-				i -= increment;
-			} else {
-				coverDeployed = false;
+			// Colors and visual attributes
+			Canvas.app.stroke(100);
+			Canvas.app.fill(communityNode.getColorRGB());
+
+			if (coverDeployed) {
+				fold();
 			}
 
-			Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
-					communityNode.getDiameter());
-
-			// else, If community is locked, ask if the "C" key is pressed
 		} else {
-			if (enableClosing) {
-				// listen to the mouse and close the community
-				unlocked = communityNode.leftClicked;
+			Canvas.app.fill(100, 50);
+
+			if (!coverDeployed) {
+				unfold();
+				drawArcs();
 			}
-
-			/// *****
-			if (i < 180) {
-				i += increment;
-			} else {
-				coverDeployed = true;
-			}
-
-			Canvas.app.stroke(255, 20);
-			Canvas.app.strokeWeight(strokeThickness);
-			Canvas.app.fill(255, 10);
-			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
-					communityNode.getDiameter(), -PConstants.PI, PConstants.PI);
-
-			/// *****
-
-			// if (i > 0 || i < 180) {
-			// *** DRAWS RIGHT HALF INVOLUTE
-			Canvas.app.stroke(communityNode.getColorRGB());
-			Canvas.app.strokeWeight(strokeThickness);
-			Canvas.app.noFill();
-			// Increments the angle of the involute
-			angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
-			// *** Arc right half
-			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
-					communityNode.getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
-			// *** DRAWS LEFT HALF INVOLUTE
-			// Decrements the angle of the involute
-			angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
-			// *** Arc left half
-			Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
-					communityNode.getDiameter(), PConstants.HALF_PI, angle2);
-			// }
 		}
+
+		Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
+				communityNode.getDiameter());
 
 		// Labels
 		if (showLabel) {
@@ -121,24 +106,53 @@ public class VCommunityCover implements Serializable {
 			showCoverLable(communityNode, container);
 		}
 
-		// If mouse over, darken its color
-		if (communityNode.isMouseOver) {
-			Canvas.app.fill(communityNode.darker());
-			if (!showLabel){
-				showCoverLable(communityNode, container);
-			}
-		}
-
-		// highlights itself if it contains a searched node and it has not been
-		// deployed
-		if (containsSearchedNode && !coverDeployed) {
-			Canvas.app.fill(255, 0, 0, 100);
+		// highlights itself if it contains a searched node and it has
+		// not been deployed
+		if (containsSearchedNode) {
+			Canvas.app.fill(255, 0, 0);
 			Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
 					communityNode.getDiameter());
-			// Canvas.app.arc(communityNode.getPos().x,
-			// communityNode.getPos().y, communityNode.getDiameter() - 10,
-			// communityNode.getDiameter() - 10, -PConstants.PI, PConstants.PI);
 		}
+
+	}
+
+	private void fold() {
+		if (i > 0) {
+			i -= increment;
+		} else {
+			coverDeployed = false;
+		}
+	}
+
+	private void unfold() {
+		if (i < 180) {
+			i += increment;
+		} else {
+			coverDeployed = true;
+		}
+	}
+
+	private void drawArcs() {
+
+		// *** DRAWS RIGHT HALF INVOLUTE
+		Canvas.app.stroke(communityNode.getColorRGB());
+		Canvas.app.noFill();
+
+		// Increments the angle of the involute
+		angle2 = (angle * i) + PConstants.PI + PConstants.HALF_PI;
+
+		// *** Arc right half
+		Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
+				communityNode.getDiameter(), angle2, PConstants.TWO_PI + PConstants.HALF_PI);
+
+		// *** DRAWS LEFT HALF INVOLUTE
+
+		// Decrements the angle of the involute
+		angle2 = (-angle * i) + PConstants.PI + PConstants.HALF_PI;
+
+		// *** Arc left half
+		Canvas.app.arc(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
+				communityNode.getDiameter(), PConstants.HALF_PI, angle2);
 	}
 
 	/**
@@ -155,16 +169,11 @@ public class VCommunityCover implements Serializable {
 		Canvas.app.text(container.getName(), communityNode.getPos().x, communityNode.getPos().y);
 		Canvas.app.noFill();
 		Canvas.app.stroke(180);
-		// Canvas.app.rect(0, 0, container.dimension.width,
-		// container.dimension.height);
 	}
 
-	/// **** Getters and Setters
+	// **** Getters and Setters ****
 
 	// Getters
-	public boolean isEnableClosing() {
-		return enableClosing;
-	}
 
 	public boolean isDeployed() {
 		return coverDeployed;
@@ -178,30 +187,57 @@ public class VCommunityCover implements Serializable {
 		return unlocked && coverDeployed;
 	}
 
-	public boolean isShowLabel() {
-		return showLabel;
+	// Setters
+
+	public void setStrokeThickness(int strokeThickness) {
+		this.strokeThickness = strokeThickness;
 	}
 
 	public void setShowLabel(boolean showLabel) {
 		this.showLabel = showLabel;
 	}
 
-	public int getStrokeThickness() {
-		return strokeThickness;
+	// ******** Events *********
+
+	public void eventRegister(PApplet theApp) {
+		theApp.registerMethod("mouseEvent", this);
+		theApp.registerMethod("keyEvent", this);
 	}
 
-	// Setters
+	public void mouseEvent(MouseEvent e) {
 
-	// public void setUnlockedA(boolean val) {
-	// unlocked = val;
-	// }
+		if (e.getAction() == MouseEvent.CLICK) {
 
-	public void setStrokeThickness(int strokeThickness) {
-		this.strokeThickness = strokeThickness;
+			// If clicked, not open and mouse over
+			if (!unlocked && communityNode.isMouseOver) {
+				unlocked = true;
+			}
+			// If clicked, open and enabled to be closed
+			if (unlocked && enableClosing) {
+				unlocked = false;
+			}
+		}
 	}
 
-//	public void setEnableClosing(boolean enableClosing) {
-//		this.enableClosing = enableClosing;
-//	}
+	public void keyEvent(KeyEvent k) {
+		kPressed(k);
+	}
 
+	private void kPressed(KeyEvent k) {
+		// Control closing communities
+
+		if (k.getAction() == KeyEvent.PRESS) {
+			if (k.getKey() == 'c' || k.getKey() == 'C') {
+				if (communityNode.isMouseOver) {
+					enableClosing = true;
+				}
+			}
+		} else {
+			if (k.getAction() == KeyEvent.RELEASE) {
+				if (k.getKey() == 'c' || k.getKey() == 'C') {
+					enableClosing = false;
+				}
+			}
+		}
+	}
 }

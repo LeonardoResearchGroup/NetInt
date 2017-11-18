@@ -18,6 +18,7 @@ package netInt.visualElements;
 
 import processing.core.PVector;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 import processing.core.PApplet;
 
 import java.awt.Color;
@@ -354,6 +355,21 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 	}
+
+//	public void mouseEvent(MouseEvent e) {
+//		if (displayed) {
+//			detectMouseOver(Canvas.getCanvasMouse());
+//		}
+//		if (e.getAction() == MouseEvent.CLICK) {
+//			mouseClicked(e);
+//		} else if (e.getAction() == MouseEvent.RELEASE) {
+//			mouseReleased(e);
+//		} else if (e.getAction() == MouseEvent.PRESS) {
+//			mousePressed(e);
+//		} else if (e.getAction() == MouseEvent.DRAG) {
+//			mouseDragged(e);
+//		}
+//	}
 
 	// ***** Search Methods *******
 	/**
