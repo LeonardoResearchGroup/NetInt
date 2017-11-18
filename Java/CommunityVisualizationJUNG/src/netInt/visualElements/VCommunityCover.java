@@ -28,18 +28,25 @@ import processing.event.MouseEvent;
 public class VCommunityCover implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	// The community was clicked to be opened
 	private boolean unlocked;
+	
 	// The community was completely open
 	private boolean coverDeployed;
+	
 	// Amount of degrees to open the community
 	private int increment;
+	
 	// the user presses "c" to close the community
 	private boolean enableClosing;
+	
 	// false if there are too many communities on canvas
 	private boolean showLabel = true;
+	
 	// Counter
 	private int i;
+	
 	// visibility settings
 	private int strokeThickness;
 	private float angle;
@@ -63,7 +70,7 @@ public class VCommunityCover implements Serializable {
 		if (communityNode.isMouseOver) {
 			strokeThickness = 1;
 			
-			if (enableClosing) {
+			if (unlocked && enableClosing) {
 				strokeThickness = 2;
 			}
 			
@@ -208,11 +215,11 @@ public class VCommunityCover implements Serializable {
 
 		if (e.getAction() == MouseEvent.CLICK) {
 
-			// If clicked, not open and mouse over
+			// If clicked, not opened and mouse over
 			if (!unlocked && communityNode.isMouseOver) {
 				unlocked = true;
 			}
-			// If clicked, open and enabled to be closed
+			// If clicked, opened and enabled to be closed
 			if (unlocked && enableClosing) {
 				unlocked = false;
 			}

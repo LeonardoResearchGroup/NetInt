@@ -279,8 +279,13 @@ public class Canvas {
 		}
 	}
 
-	public static void setEventOnCanvas(boolean eventOnCanvas) {
+	
+	private static void setEventOnCanvas(boolean eventOnCanvas) {
 		Canvas.mouseEventOnCanvas = eventOnCanvas;
+	}
+	
+	public static void resetEventOnCanvas() {
+		Canvas.mouseEventOnCanvas = false;
 	}
 
 }

@@ -72,7 +72,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		comCover = new VCommunityCover(this);
 		node.setAbsoluteAttribute("Community size", container.size());
 		// Move vNodes relative to the vCommnity center
-		updateContainer(true);
+		updateContainer();
 		description = new VNodeDescription();
 		setDiameter(30);
 	}
@@ -108,47 +108,51 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void show() {
+
 		// Display the community cover
 		comCover.show(container, containsSearchedNode);
+
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			setDisplayed(true);
+
 			// if coordinates for all elements inside the container are set.
 			// container.isInitializationComplete() is a boolean gate that
 			// controls iteration
 			if (container.isInitializationComplete()) {
+
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
-				// int contador = 0;
 				for (VCommunity vC : container.getVCommunities()) {
+
 					if (vC.comCover.isDeployed()) {
-						// System.out.println(this.getClass().getName() + ": "+
-						// "VEZONAS " + this.container.getName());
-						// System.out.println(this.getClass().getName() + ": "+
-						// "VEZONAS " + contador);
+
 						// build external edges
 						vC.container.buildExternalEdges(container.getVCommunities());
-						// contador++;
 					}
 				}
+
 			} else {
 				container.initialize();
 			}
 
 			// If the layout is iterative
 			if (container.isLayoutIterative()) {
+
 				// Show only nodes if layout is still organizing elements
 				showCommunityContents(comCover.isUnlocked(), comCover.isUnlocked());
+
 			} else {
+
 				// If layout not iterative show nodes and edges
 				showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
 			}
 		} else {
 			setDisplayed(true);
-			description.show(this);
 
 			// Show community overall description on mouse over
 			if (isMouseOver) {
+				description.show(this);
 				Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), getPos().x, getPos().y + 20);
 				Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), getPos().x, getPos().y + 35);
 			}
@@ -156,8 +160,152 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center. This is needed to reposition deployed and
-		// collapsed VCommunities with the mouse
-		updateContainer(Canvas.mouseEventOnCanvas);
+		// collapsed VCommunities when the user interacts with this VAtom
+		if (Canvas.mouseEventOnCanvas && MouseHook.getInstance().isHooked(this)) {
+			updateContainer();
+		}
+	}
+
+	private void showInternalEdges() {
+		// VCommunity open and it is not being modified by the user
+		if (!Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this) && !Canvas.canvasBeingZoomed) {
+
+			// If the container Layout iterates to distribute nodes
+			// ****** Double check this boolean, it is doing nothing ****
+			if (container.isDone()) {
+				// Show internal edges
+				for (VEdge vE : container.getVEdges()) {
+
+					// If the edge has any attribute
+					if (vE.getEdge().getAttributeSize() > 0) {
+						vE.setVisibility(UserSettings.getInstance().getWeight());
+					}
+
+					if (container.currentLayout == Container.CONCENTRIC) {
+						vE.setLayoutAndCenter(container.currentLayout, this.pos);
+					}
+					vE.show();
+				}
+			} else {
+
+				// Show internal edges
+				for (VEdge vE : container.getVEdges()) {
+
+					// If the edge has any attribute
+					if (vE.getEdge().getAttributeSize() > 0) {
+						vE.setVisibility(UserSettings.getInstance().getWeight());
+					}
+
+					if (container.currentLayout == Container.CONCENTRIC) {
+						vE.setLayoutAndCenter(container.currentLayout, this.pos);
+					}
+					vE.show();
+				}
+			}
+		}
+	}
+
+	private void showExternalEdges() {
+		// VCommunity open and it is not being modified by the user
+		if (!Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this) && !Canvas.canvasBeingZoomed) {
+
+			// Show external edges
+			for (VEdge vEE : container.getVExtEdges()) {
+
+				// If the edge has any attribute
+				if (vEE.getEdge().getAttributeSize() > 0) {
+					vEE.setVisibility(UserSettings.getInstance().getWeight());
+				}
+
+				if (container.currentLayout == Container.CONCENTRIC) {
+					vEE.setLayoutAndCenter(container.currentLayout, this.pos);
+				}
+
+				// Set pink color
+				Color color = new Color(255, 100, 180);
+				vEE.setColor(color.getRGB());
+				vEE.show();
+			}
+		}
+	}
+
+	private void showVCommunities(boolean communityOpen) {
+		if (communityOpen) {
+			// VCommunities
+			for (VCommunity vC : container.getVCommunities()) {
+
+				vC.setVisibility(true);
+
+				// set subCommunities coordinates relative to vCommunity
+				// position
+				if (!vCommunitiesCentered) {
+					container.translateVElementCoordinates(vC, this.getPos());
+				}
+
+				vC.show();
+
+				/*
+				 * 
+				 * if (vC.comCover.isUnlocked() && !vC.lock) {
+				 * container.setIncidentEdgesVisibility(vC.getNode(), false);
+				 * vC.lock = true; }
+				 * 
+				 * if (!vC.comCover.isUnlocked() && vC.lock) {
+				 * container.setIncidentEdgesVisibility(vC.getNode(), true);
+				 * vC.lock = false; }
+				 * 
+				 */
+			}
+
+		}
+
+		// This gate prevents vCommunity relocation in every draw() loop
+		vCommunitiesCentered = true;
+	}
+
+	private void showVNodes(boolean communityOpen) {
+		if (communityOpen) {
+			if (container.isLayoutIterative()) {
+
+				container.stepIterativeLayout(pos).done();
+			}
+
+			// If the container does not contain vCommunities
+			if (container.getVCommunities().size() == 0) {
+
+				// Get all the nodes
+				for (VNode vN : container.getVNodes()) {
+
+					//
+					vN.setVisibility(true);
+
+					// Center vNodes relative to a given position
+					// if (Canvas.mouseEventOnCanvas &&
+					// MouseHook.getInstance().isHooked(this)) {
+					if (!vNodesCentered) {
+
+						// set vNodes coordinates relative to vCommunity
+						// position
+						container.translateVElementCoordinates(vN, this.getPos());
+
+					}
+
+					// If vN is visible and not centered
+					if (vNodesCentered) {
+						vN.show(vN.isDisplayed());
+						vN.setDisplayed(true);
+					}
+				}
+				vNodesCentered = true;
+			}
+		} else {
+
+			// This resets visibility of all VNodes in the container
+			for (VNode vN : container.getVNodes()) {
+				vN.setDisplayed(false);
+			}
+		}
+
 	}
 
 	/**
@@ -165,86 +313,28 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * Therefore a higher tier VCommunity may contain nested VCommunities. In
 	 * order to display each VisualAtom correctly the class type is determined.
 	 * 
-	 * @param showNodes
+	 * @param showVAtoms
 	 *            true if show
 	 * @param showEdges
 	 *            true if show
 	 */
 
-	public void showCommunityContents(boolean showNodes, boolean showEdges) {
+	public void showCommunityContents(boolean showVAtoms, boolean showEdges) {
+
 		// ** Display VEdges
 
 		// Internal Edges
-
 		// If the user chooses to turn on/off the internal edges
-		if (UserSettings.getInstance().showInternalEdges()) {
+		if (UserSettings.getInstance().showInternalEdges() && showEdges && comCover.isUnlocked()) {
 
-			// VCommunity open and it is not being modified by the user
-			if (showEdges && !Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this)
-					&& !Canvas.canvasBeingZoomed) {
-
-				// If the container Layout iterates to distribute nodes
-				// ****** Double check this boolean, it is doing nothing ****
-				if (container.isDone()) {
-					// Show internal edges
-					for (VEdge vE : container.getVEdges()) {
-
-						// If the edge has any attribute
-						if (vE.getEdge().getAttributeSize() > 0) {
-							vE.setVisibility(UserSettings.getInstance().getWeight());
-						}
-
-						if (container.currentLayout == Container.CONCENTRIC) {
-							vE.setLayoutAndCenter(container.currentLayout, this.pos);
-						}
-						vE.show();
-					}
-				} else {
-
-					// Show internal edges
-					for (VEdge vE : container.getVEdges()) {
-
-						// If the edge has any attribute
-						if (vE.getEdge().getAttributeSize() > 0) {
-							vE.setVisibility(UserSettings.getInstance().getWeight());
-						}
-
-						if (container.currentLayout == Container.CONCENTRIC) {
-							vE.setLayoutAndCenter(container.currentLayout, this.pos);
-						}
-						vE.show();
-					}
-				}
-			}
+			showInternalEdges();
 		}
 
 		// External edges
-
 		// If the user chooses to turn on/off the external edges
-		if (UserSettings.getInstance().showExternalEdges()) {
+		if (UserSettings.getInstance().showExternalEdges() && showEdges && comCover.isUnlocked()) {
 
-			// VCommunity open and it is not being modified by the user
-			if (showEdges && !Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this)
-					&& !Canvas.canvasBeingZoomed) {
-
-				// Show external edges
-				for (VEdge vEE : container.getVExtEdges()) {
-
-					// If the edge has any attribute
-					if (vEE.getEdge().getAttributeSize() > 0) {
-						vEE.setVisibility(UserSettings.getInstance().getWeight());
-					}
-
-					if (container.currentLayout == Container.CONCENTRIC) {
-						vEE.setLayoutAndCenter(container.currentLayout, this.pos);
-					}
-
-					// Set pink color
-					Color color = new Color(255, 100, 180);
-					vEE.setColor(color.getRGB());
-					vEE.show();
-				}
-			}
+			showExternalEdges();
 		}
 
 		// ** Display VNodes
@@ -252,92 +342,29 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// If the user chooses to turn on/off the nodes
 		if (UserSettings.getInstance().showNodes()) {
 
-			// VCommunity open
-			if (showNodes) {
+			// VCommunity open show:
+			// internal VCommunities if any
+			showVCommunities(showVAtoms);
 
-				// VCommunities
-				for (VCommunity vC : container.getVCommunities()) {
-
-					vC.setVisibility(true);
-
-					// set subCommunities coordinates relative to vCommunity
-					// position
-					if (!vCommunitiesCentered) {
-						container.translateVElementCoordinates(vC, this.getPos());
-					}
-
-					vC.show();
-
-					/*
-					 * 
-					 * if (vC.comCover.isUnlocked() && !vC.lock) {
-					 * container.setIncidentEdgesVisibility(vC.getNode(),
-					 * false); vC.lock = true; }
-					 * 
-					 * if (!vC.comCover.isUnlocked() && vC.lock) {
-					 * container.setIncidentEdgesVisibility(vC.getNode(), true);
-					 * vC.lock = false; }
-					 * 
-					 */
-
-				}
-
-				// This gate prevents vCommunity relocation in every draw() loop
-				vCommunitiesCentered = true;
-
-				// VNodes
-				if (container.isLayoutIterative()) {
-
-					container.stepIterativeLayout(pos).done();
-				}
-
-				// If the container does not contain vCommunities
-				if (container.getVCommunities().size() == 0) {
-
-					for (VNode vN : container.getVNodes()) {
-						vN.setVisibility(true);
-
-						// Center vNodes relative to a given position
-						if (!vNodesCentered) {
-
-							// set vNodes coordinates relative to vCommunity
-							// position
-							container.translateVElementCoordinates(vN, this.getPos());
-						}
-
-						// If vN is visible and not centered
-						if (vNodesCentered) {
-							vN.show(vN.isDisplayed());
-							vN.setDisplayed(true);
-						}
-					}
-					vNodesCentered = true;
-				}
-			} else {
-
-				// This block centers all the elements in the container
-				for (VisualAtom vA : container.getVNodes()) {
-
-					// We have to known which nodes are visible.
-					if (vA instanceof VNode) {
-						VNode vN = (VNode) vA;
-						vN.setDisplayed(false);
-					}
-				}
-				vNodesCentered = false;
-			}
+			// VNodes
+			showVNodes(showVAtoms);
 		}
 	}
 
-	public void updateContainer(boolean update) {
-		if (update) {
-			if (!lastPosition.equals(pos)) {
-				// Get the difference of centers
-				PVector diffPos = lastPosition.sub(pos);
-				// set new vNodes coordinates
-				container.updateVNodesCoordinates(diffPos);
-				lastPosition = pos;
-			}
+	/**
+	 * Update position of each visualElement in the container relative to
+	 * current vCommunity center.
+	 */
+	public void updateContainer() {
+
+		if (!lastPosition.equals(pos)) {
+
+			// Get the difference of centers
+			PVector diffPos = lastPosition.sub(pos);
+
+			// set new vNodes coordinates
+			container.updateVNodesCoordinates(diffPos);
+			lastPosition = pos;
 		}
 	}
 
@@ -355,21 +382,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 	}
-
-//	public void mouseEvent(MouseEvent e) {
-//		if (displayed) {
-//			detectMouseOver(Canvas.getCanvasMouse());
-//		}
-//		if (e.getAction() == MouseEvent.CLICK) {
-//			mouseClicked(e);
-//		} else if (e.getAction() == MouseEvent.RELEASE) {
-//			mouseReleased(e);
-//		} else if (e.getAction() == MouseEvent.PRESS) {
-//			mousePressed(e);
-//		} else if (e.getAction() == MouseEvent.DRAG) {
-//			mouseDragged(e);
-//		}
-//	}
 
 	// ***** Search Methods *******
 	/**

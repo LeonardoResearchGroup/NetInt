@@ -47,6 +47,7 @@ public abstract class VisualAtom implements Serializable {
 	public boolean isMouseOver;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
+	
 	// This variable is used to control that the vElement is displayed only
 	// once. It is useful to prevent that edges with the same source or target
 	// vNode display the nodes more than once
