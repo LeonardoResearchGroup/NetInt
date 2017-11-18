@@ -233,7 +233,7 @@ public class GraphPad {
 				parent.height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
-		Canvas.setEventOnCanvas(false);
+		Canvas.resetEventOnCanvas();
 		UserSettings.getInstance().setEventOnVSettings(false);
 	}
 

@@ -259,13 +259,18 @@ public class VEdge implements Serializable {
 
 		// Set the Visibility with the second Attribute of Edge Import. (The
 		// first id ID)
-		float weight = edge.getFloatAttribute((String) keys[1]);
+		try {
 
-		if (edgeVisibilityThreshold > weight || hidden) {
-			visibility = false;
+			float weight = edge.getFloatAttribute((String) keys[0]);
 
-		} else {
-			visibility = true;
+			if (edgeVisibilityThreshold > weight || hidden) {
+				visibility = false;
+
+			} else {
+				visibility = true;
+			}
+		} catch (NullPointerException np) {
+			np.printStackTrace();
 		}
 	}
 
