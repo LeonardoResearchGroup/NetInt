@@ -55,9 +55,12 @@ public class VCommunityCover implements Serializable {
 
 	protected void show(Container container, boolean containsSearchedNode) {
 
+		Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
+				communityNode.getDiameter());
+
 		// Colors and visual attributes
 		Canvas.app.stroke(100);
-		Canvas.app.strokeWeight(0);
+		Canvas.app.strokeWeight(1);
 		Canvas.app.fill(communityNode.getColorRGB());
 
 		// If community not opened
@@ -121,13 +124,13 @@ public class VCommunityCover implements Serializable {
 			showCoverLable(communityNode, container);
 		}
 
-		// If mouse over, darken its color
-		if (communityNode.isMouseOver) {
-			Canvas.app.fill(communityNode.darker());
-			if (!showLabel){
-				showCoverLable(communityNode, container);
-			}
-		}
+		// // If mouse over, darken its color
+		// if (communityNode.isMouseOver) {
+		// Canvas.app.fill(communityNode.darker());
+		// if (!showLabel){
+		// showCoverLable(communityNode, container);
+		// }
+		// }
 
 		// highlights itself if it contains a searched node and it has not been
 		// deployed
@@ -200,8 +203,8 @@ public class VCommunityCover implements Serializable {
 		this.strokeThickness = strokeThickness;
 	}
 
-//	public void setEnableClosing(boolean enableClosing) {
-//		this.enableClosing = enableClosing;
-//	}
+	// public void setEnableClosing(boolean enableClosing) {
+	// this.enableClosing = enableClosing;
+	// }
 
 }

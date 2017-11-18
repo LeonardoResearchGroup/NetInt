@@ -71,7 +71,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		comCover = new VCommunityCover(this);
 		node.setAbsoluteAttribute("Community size", container.size());
 		// Move vNodes relative to the vCommnity center
-		updateContainer(true);
+		updateContainer();
 		description = new VNodeDescription();
 		setDiameter(30);
 	}
@@ -108,7 +108,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void show() {
 		// Display the community cover
-		comCover.show(container, containsSearchedNode);
+		 comCover.show(container, containsSearchedNode);
+		
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 			setDisplayed(true);
@@ -156,7 +157,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Update position of each visualElement in the container relative to
 		// current vCommunity center. This is needed to reposition deployed and
 		// collapsed VCommunities with the mouse
-		updateContainer(Canvas.mouseEventOnCanvas);
+		if (Canvas.mouseEventOnCanvas) {
+			updateContainer();
+		}
 	}
 
 	/**
@@ -198,22 +201,23 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						}
 						vE.show();
 					}
-				} else {
-
-					// Show internal edges
-					for (VEdge vE : container.getVEdges()) {
-
-						// If the edge has any attribute
-						if (vE.getEdge().getAttributeSize() > 0) {
-							vE.setVisibility(UserSettings.getInstance().getWeight());
-						}
-
-						if (container.currentLayout == Container.CONCENTRIC) {
-							vE.setLayoutAndCenter(container.currentLayout, this.pos);
-						}
-						vE.show();
-					}
-				}
+				} 
+//				else {
+//
+//					// Show internal edges
+//					for (VEdge vE : container.getVEdges()) {
+//
+//						// If the edge has any attribute
+//						if (vE.getEdge().getAttributeSize() > 0) {
+//							vE.setVisibility(UserSettings.getInstance().getWeight());
+//						}
+//
+//						if (container.currentLayout == Container.CONCENTRIC) {
+//							vE.setLayoutAndCenter(container.currentLayout, this.pos);
+//						}
+//						vE.show();
+//					}
+//				}
 			}
 		}
 
@@ -267,18 +271,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					vC.show();
 
-					/*
-					 * 
-					 * if (vC.comCover.isUnlocked() && !vC.lock) {
-					 * container.setIncidentEdgesVisibility(vC.getNode(),
-					 * false); vC.lock = true; }
-					 * 
-					 * if (!vC.comCover.isUnlocked() && vC.lock) {
-					 * container.setIncidentEdgesVisibility(vC.getNode(), true);
-					 * vC.lock = false; }
-					 * 
-					 */
-
 				}
 
 				// This gate prevents vCommunity relocation in every draw() loop
@@ -328,15 +320,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 	}
 
-	public void updateContainer(boolean update) {
-		if (update) {
-			if (!lastPosition.equals(pos)) {
-				// Get the difference of centers
-				PVector diffPos = lastPosition.sub(pos);
-				// set new vNodes coordinates
-				container.updateVNodesCoordinates(diffPos);
-				lastPosition = pos;
-			}
+	public void updateContainer() {
+		if (!lastPosition.equals(pos)) {
+			// Get the difference of centers
+			PVector diffPos = lastPosition.sub(pos);
+			// set new vNodes coordinates
+			container.updateVNodesCoordinates(diffPos);
+			lastPosition = pos;
 		}
 	}
 

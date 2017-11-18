@@ -53,7 +53,7 @@ import processing.core.PVector;
  */
 public abstract class Container {
 	// Kinds of layouts
-//	public static final int CIRCULAR = 0;
+	// public static final int CIRCULAR = 0;
 	public static final int SPRING = 1;
 	public static final int FRUCHTERMAN_REINGOLD = 2;
 	public static final int LINEAR = 3;
@@ -77,10 +77,10 @@ public abstract class Container {
 	// Iteration gate control
 	private boolean initializationComplete = false;
 	public ArrayList<Container> betweenEdgeGates;
-	protected boolean done = false;
+	private boolean done = false;
 
 	protected Color color;
-	protected int iterations;
+	private int iterations = 0;
 	protected final int MAX_ITERATIONS = 70;
 
 	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
@@ -442,7 +442,10 @@ public abstract class Container {
 			iterations++;
 
 			done = iterations == MAX_ITERATIONS;
+		}else{
+			done = true;
 		}
+		
 		return itrContext;
 	}
 
@@ -526,11 +529,11 @@ public abstract class Container {
 
 		switch (kindOfLayout) {
 
-//		// Circular layout
-//		case (Container.CIRCULAR):
-//			layout = circle(dimension);
-//			layoutCenter = new PVector(0, 0);
-//			break;
+		// // Circular layout
+		// case (Container.CIRCULAR):
+		// layout = circle(dimension);
+		// layoutCenter = new PVector(0, 0);
+		// break;
 
 		// SpringLayout
 		case (Container.SPRING):
@@ -851,6 +854,7 @@ public abstract class Container {
 	 *            Node
 	 * @param visibility
 	 *            true if visible
+	 * @deprecated
 	 */
 	public void setIncidentEdgesVisibility(Node node, boolean visibility) {
 		for (Edge e : graph.getIncidentEdges(node)) {
