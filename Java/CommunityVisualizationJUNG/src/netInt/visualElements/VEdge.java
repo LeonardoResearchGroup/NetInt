@@ -221,7 +221,7 @@ public class VEdge implements Serializable {
 		}
 
 		if (Canvas.mouseEventOnCanvas) {
-				bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
+			bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
 		}
 
 		// Visualize the nodes and edges if not in propagation
@@ -316,8 +316,8 @@ public class VEdge implements Serializable {
 
 				/*
 				 * IMPORTANT: edges belonging to tiers above tier 0 might not
-				 * have the same attributes as the root edges, that is why the
-				 * NullPointerException is ignored.
+				 * have the same attributes as the root edges, that is why
+				 * NullPointerExceptions are ignored.
 				 */
 
 			} else {

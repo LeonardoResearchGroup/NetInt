@@ -119,10 +119,13 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void setup() {
-		System.out.println("CPanel initialized");
+		System.out.println("CPanel initialized 1");
 		this.surface.setSize(w, h);
+		System.out.println("CPanel initialized 2");
 		this.surface.setLocation(0, 45);
+		System.out.println("CPanel initialized 3");
 		this.surface.setAlwaysOnTop(false);
+		System.out.println("CPanel initialized 4");
 		if (logo == null) {
 			// URL url = GraphPad.class.getResource("/controlPanelImage.png");
 			// logo = loadImage(url.getPath());

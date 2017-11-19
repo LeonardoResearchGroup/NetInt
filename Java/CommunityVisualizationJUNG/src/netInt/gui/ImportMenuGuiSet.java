@@ -111,13 +111,10 @@ public class ImportMenuGuiSet implements Observer {
 	}
 
 	/**
-	 * Creates two ContorlP5.Group, one for nodes and one for edges. Both groups
-	 * are attached to an instance of ControlP5 that draws them in the PApplet
-	 * using an internal ControlP5.autoDraw() method. It initializes the
-	 * ControlP5 variables every time it is invoked. Albeit this is done in the
-	 * constructor, it is necessary to do it here in order to have fresh
-	 * variables every time the user loads new files without restarting the
-	 * application
+	 * Creates two GuiSet.ItemList, one for nodes and one for edges. Albeit this
+	 * is done in the constructor, it is necessary to do it here in order to
+	 * have fresh variables every time the user loads new files without
+	 * restarting the application
 	 * 
 	 * @param nodeAttributeKeys
 	 *            The list of node attributes retrieved from the graphml header
@@ -168,34 +165,35 @@ public class ImportMenuGuiSet implements Observer {
 			String[] nodeName = nodeNameList.getOrderedLabelList();
 
 			String[] edgeWeights = edgeWeightList.getSelectedLabels();
-			
 
 			// Don't know what this does
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeNameList.getItemLabels()));
 			UserSettings.getInstance().setDescriptiveStatisticKeys(temp);
 
-			// get the user selection for nodes
-			System.out.println("Node import selection:");
-
-			for (int i = 0; i < nodeName.length; i++) {
-				System.out.println("..." + nodeNameList.getName() + ": " + nodeName[i] + ", ");
-			}
-
-			// get the user selection for edges
-
-			System.out.println("Edge import selection:");
-
-			for (int i = 0; i < edgeWeights.length; i++) {
-				System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
-			}
-			
-			UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
-
-			System.out.println("_ _ _");
-
 			// Verify if the user selected at least the first two node
 			// attributes from the menu: one for community and one for label
-			if (communityStructure.length >= 1 && nodeName.length >= 1) {
+			if (communityStructure.length >= 1 && nodeName.length >= 1 && edgeWeights.length > 0) {
+
+				// get the user selection for nodes
+				System.out.println("Node import selection:");
+
+				for (int i = 0; i < nodeName.length; i++) {
+					System.out.println("..." + nodeNameList.getName() + ": " + nodeName[i] + ", ");
+				}
+
+				// get the user selection for edges
+
+				System.out.println("Edge import selection:");
+
+					for (int i = 0; i < edgeWeights.length; i++) {
+
+						System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
+					}
+
+					UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
+
+
+				System.out.println("_ _ _");
 
 				// Active the graph in the graphPad
 				GraphPad.setActiveGraph(true);
@@ -216,7 +214,7 @@ public class ImportMenuGuiSet implements Observer {
 				}
 
 				// Ask the assembler to load the graph
-				if (communityStructure[0] != null && nodeName != null) {
+				if (communityStructure[0] != null && nodeName != null && edgeWeights != null ) {
 
 					// set graphLoaded to true
 					graphLoaded = graphPad.getAssembler().loadGraph(GraphPad.getFile(), communityStructure, nodeName,
@@ -228,13 +226,13 @@ public class ImportMenuGuiSet implements Observer {
 				} else {
 
 					JOptionPane.showMessageDialog(graphPad.parent.frame,
-							"Missing either \"community\" or \"label\" attributes", "Import warning",
+							"Missing either \"community\", \"label\"  or \"edge weight\" attributes", "Import warning",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
 
 				JOptionPane.showMessageDialog(graphPad.parent.frame,
-						"Must select at least \"community\" and \"label\" attributes", "Import warning",
+						"Must select at least \"community\", \"label\" and \"edge weight\" attributes", "Import warning",
 						JOptionPane.WARNING_MESSAGE);
 			}
 
@@ -284,9 +282,9 @@ public class ImportMenuGuiSet implements Observer {
 		case "Concentric":
 			selection = Container.CONCENTRIC;
 			break;
-//		case "Circular":
-//			selection = Container.CIRCULAR;
-//			break;
+		// case "Circular":
+		// selection = Container.CIRCULAR;
+		// break;
 
 		}
 		return selection;

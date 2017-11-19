@@ -57,12 +57,13 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void settings() {
-		size(300, displayHeight - 60);
+		size(300, displayHeight/2);
 	}
 
 	public void setup() {
 		this.surface.setLocation(displayWidth - 400, 45);
 		this.surface.setAlwaysOnTop(true);
+		this.surface.setResizable(true);
 
 		// Font
 		font = createFont("Arial", 9, false);

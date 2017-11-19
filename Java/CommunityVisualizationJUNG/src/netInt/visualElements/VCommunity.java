@@ -113,8 +113,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
 
-			System.out.println(this.getNode().getId() + " " + tierSequence);
-
 			setDisplayed(true);
 
 			// if coordinates for all elements inside the container are set.
@@ -180,24 +178,24 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void showCommunityContents(boolean showVAtoms, boolean showEdges) {
 
-		// tierCount++;
-
 		// ** Display VEdges
 
 		// Internal Edges
 		// If the user chooses to turn on/off the internal edges
 		if (UserSettings.getInstance().showInternalEdges() && showEdges && comCover.isUnlocked()) {
 
-			if (UserSettings.getInstance().edgeVisibilityForTier(tierSequence))
+			if (UserSettings.getInstance().edgeVisibilityForTier(tierSequence)) {
 				showInternalEdges();
+			}
 		}
 
 		// External edges
 		// If the user chooses to turn on/off the external edges
 		if (UserSettings.getInstance().showExternalEdges() && showEdges && comCover.isUnlocked()) {
-			
-			if (UserSettings.getInstance().edgeVisibilityForTier(tierSequence))
+
+			if (UserSettings.getInstance().edgeVisibilityForTier(tierSequence)) {
 				showExternalEdges();
+			}
 		}
 
 		// ** Display VNodes
