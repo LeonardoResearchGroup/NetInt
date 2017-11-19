@@ -17,6 +17,7 @@
 package netInt.graphElements;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -43,13 +44,13 @@ public abstract class GraphElement implements Serializable {
 
 	// For key use the attribute name (Edge_Weight, Out_Degree). For value
 	// use the attribute value (either Numerical or categorical)
-	protected HashMap<String, Object> absoluteAttributes;
+	private HashMap<String, Object> absoluteAttributes;
 
 	// A set of attributes to be initiated by instances of classes that
 	// inherit from this class. The integer parameter identifies the
 	// community to which a set of relative attributes are related. (0 reserved
 	// for root graph)
-	protected HashMap<Integer, HashMap<String, Float>> relativeAttributes;
+	private HashMap<Integer, HashMap<String, Float>> relativeAttributes;
 
 	public GraphElement() {
 		absoluteAttributes = new HashMap<String, Object>();
@@ -71,7 +72,13 @@ public abstract class GraphElement implements Serializable {
 	 *         absolute attributes
 	 */
 	public Object getAttribute(String key) {
-		return absoluteAttributes.get(key);
+		Object rtn = null;
+		try {
+			rtn = absoluteAttributes.get(key);
+		} catch (NullPointerException np) {
+			System.out.println(this.getClass().getName() + " " + np.getMessage());
+		}
+		return rtn;
 	}
 
 	/**
@@ -83,12 +90,20 @@ public abstract class GraphElement implements Serializable {
 	 * @return String representation of attribute object
 	 */
 	public String getStringAttribute(String key) {
-		String rtn = "void";
+		String rtn = null;
 		try {
 			rtn = absoluteAttributes.get(key).toString();
 		} catch (Exception e) {
-			System.out
-					.println(this.getClass().getName() + " Attribute named: " + key + " couldn't be casted as String");
+			if (e instanceof NullPointerException) {
+				/*
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not
+				 * have the same attributes as the root edges, that is why the
+				 * NullPointerException is ignored.
+				 */
+			} else {
+				System.out.println(
+						this.getClass().getName() + " Value of attribute named: " + key + " couldn't be casted as String");
+			}
 		}
 		return rtn;
 	}
@@ -118,9 +133,16 @@ public abstract class GraphElement implements Serializable {
 				rtn = (float) absoluteAttributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println(this.getClass().getName() + " Attribute key: " + key
-					+ " - not available in absoluteAttributes collection. Value couldn't be casted as Float");
-			// throw (e);
+			if (e instanceof NullPointerException) {
+				/*
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not
+				 * have the same attributes as the root edges, that is why the
+				 * NullPointerException is ignored.
+				 */
+			} else {
+				System.out.println(
+						this.getClass().getName() + "Value of Attribute key: " + key + " couldn't be casted as Float ");
+			}
 		}
 		return rtn;
 	}
@@ -133,9 +155,8 @@ public abstract class GraphElement implements Serializable {
 	 *            key
 	 * @return the float value of the attribute associated to the key
 	 */
-
 	public int getIntegerAttribute(String key) {
-		Integer rtn = Integer.MIN_VALUE;
+		Integer rtn = null;
 		try {
 			// If Double
 			if (absoluteAttributes.get(key) instanceof Double) {
@@ -150,7 +171,16 @@ public abstract class GraphElement implements Serializable {
 				rtn = (Integer) absoluteAttributes.get(key);
 			}
 		} catch (Exception e) {
-			System.out.println(this.getClass().getName() + " Attribute named: " + key + " - couldn't be casted as int");
+			if (e instanceof NullPointerException) {
+				/*
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not
+				 * have the same attributes as the root edges, that is why the
+				 * NullPointerException is ignored.
+				 */
+			} else {
+				System.out.println(
+						this.getClass().getName() + "Value of attribute named: " + key + " - couldn't be casted as int");
+			}
 		}
 		return rtn;
 	}
@@ -255,10 +285,26 @@ public abstract class GraphElement implements Serializable {
 
 	public abstract void setAbsoluteAttribute(String key, Object value);
 
-	public abstract void addRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
+	public abstract void setRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
+
+	protected void addAbsoluteAtt(String key, Object value) {
+		this.absoluteAttributes.put(key, value);
+	}
+
+	protected void addRelativeAtt(int key, HashMap<String, Float> attributeSet) {
+		this.relativeAttributes.put(key, attributeSet);
+	}
 
 	public HashMap<String, Float> getRelativeAttributes(int key) {
 		return relativeAttributes.get(key);
+	}
+
+	public Collection<HashMap<String, Float>> getRelativeValues() {
+		return relativeAttributes.values();
+	}
+
+	public Set<Integer> getRelativeKeySet() {
+		return relativeAttributes.keySet();
 	}
 
 }

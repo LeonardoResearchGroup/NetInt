@@ -44,7 +44,7 @@ public abstract class VisualAtom implements Serializable {
 	// The difference between the
 	protected PVector deltaMouse;
 
-	public boolean isMouseOver;
+	public boolean isMouseOver, isDragged;
 	public boolean leftClicked, rightClicked, centerClicked;
 	public boolean leftPressed, rightPressed, centerPressed;
 	
@@ -230,6 +230,7 @@ public abstract class VisualAtom implements Serializable {
 		switch (e.getButton()) {
 		case PConstants.LEFT:
 			leftPressed = false;
+			isDragged = false;
 			deltaMouse = null;
 			MouseHook.getInstance().release();
 			break;
@@ -266,6 +267,7 @@ public abstract class VisualAtom implements Serializable {
 		// Move VAtom
 		if (MouseHook.getInstance().isHooked(this) && displayed) {
 			pos = Canvas.getCanvasMouse().sub(deltaMouse);
+			isDragged = true;
 		}
 	}
 

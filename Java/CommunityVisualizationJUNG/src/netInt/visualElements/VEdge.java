@@ -22,11 +22,14 @@ import java.util.HashMap;
 
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
+import netInt.canvas.MouseHook;
 import netInt.graphElements.Edge;
 import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.primitives.VisualAtom;
+import processing.core.PApplet;
 import processing.core.PVector;
+import processing.event.MouseEvent;
 
 /**
  * The visual representation of a grahElement.Edge. Each VEdge has a source and
@@ -36,32 +39,47 @@ import processing.core.PVector;
  *
  */
 public class VEdge implements Serializable {
+
 	private static final long serialVersionUID = 1L;
+
+	// The edge
 	private Edge edge;
+
 	// Visibility attributes
 	private boolean visibility = true;
 	private boolean hidden = false;
+
 	// Depends on degree of the nodes
 	private boolean anotherVisibility = true;
+
 	// Source and target nodes
 	private VNode vSource, vTarget;
+
 	// The curve linking the nodes
 	private Bezier bezier;
+
 	// Visual Attributes
 	private float thickness = 1;
 	private float scaleFactor = 3;
+	private int alpha = 150;
+
+	// The float value of the current user selected edge attribute
+	private float attributeValue;
+
 	// UserSettings
 	private String attributeName = "no_attribute";
 	private String converterName = Mapper.LINEAR;
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
+		// Canvas.app.registerMethod("mouseEvent", this);
 	}
 
 	public VEdge(VNode source, VNode target) {
 		this.edge = new Edge(source.getNode(), target.getNode(), true);
 		this.vSource = source;
 		this.vTarget = target;
+		// Canvas.app.registerMethod("mouseEvent", this);
 	}
 
 	/**
@@ -131,84 +149,109 @@ public class VEdge implements Serializable {
 	 * Visualize the VEdge on the Canvas
 	 */
 	public void show() {
-		int alpha = 150;
-
-		// If both source and target are above a visibility threshold
-		// source.show(source.isDisplayed());
-		// vTarget.show(vTarget.isDisplayed());
 
 		if (checkVisibility()) {
 
-			// This visibility is determined by a threshold parameter set at the
-			// Control Panel
+			// This visibility is determined by a on/off button and a threshold
+			// parameter set at the Control Panel
 			if (visibility && anotherVisibility) {
 
-				// Set thickness
-				try {
-					// determine the thickness based on the user selected
-					// attribute name
-					if (UserSettings.getInstance().getEdgeFilters() != null) {
-						if (!attributeName.equals(UserSettings.getInstance().getEdgeFilters())) {
-							attributeName = UserSettings.getInstance().getEdgeFilters();
-							float value = edge.getFloatAttribute(attributeName);
-							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
-							// System.out.println("VEdge > value of " +
-							// attributeName + " :" + value + ", mapped to: " +
-							// tmp);
-							setThickness(scaleFactor * tmp);
-
-							/// COLOR TEMPORARY
-							float mappedVal = Mapper.getInstance().convert(converterName, value, Mapper.EDGE,
-									attributeName);
-							int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
-							bezier.setColor(mappedColor);
-						}
-
-						// determine the thickness based on the user selected
-						// converter name
-						if (!converterName.equals(UserSettings.getInstance().getConverterEdge())) {
-							if (UserSettings.getInstance().getConverterEdge() != null)
-								converterName = UserSettings.getInstance().getConverterEdge();
-							float value = edge.getFloatAttribute(attributeName);
-							float tmp = Mapper.getInstance().convert(converterName, value, Mapper.EDGE, attributeName);
-							setThickness(scaleFactor * tmp);
-						}
-					}
-				} catch (NullPointerException npe) {
-					setThickness(1);
-				}
-
+				// *** Set thickness
 				Canvas.app.strokeWeight(thickness);
-				// Set color
-				if (vSource.isPropagated()) {
-					bezier.color(Bezier.PROPAGATE);
-				} else {
-					bezier.color(Bezier.NORMAL);
-				}
-				// If visualize the nodes and edges if not in propagation
-				if (!UserSettings.getInstance().getOnlyPropagation()) {
-					// if (!vSource.getPos().equals(vTarget.getPos()) &&
-					// Canvas.mouseEventOnCanvas)
-					bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
-					// If source and target nodes are in propagation
-					// Edge mode: normal, head, tail or both
-					if (vSource.isPropagated()) {
-						bezier.drawBezier2D(Canvas.app, 2f);
-						bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
-					} else {
-						bezier.drawBezier2D(Canvas.app, thickness);
-						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
+
+				// Set the thickness based on the user selected attribute name
+				// in control panel
+				if (UserSettings.eventOnVSettings) {
+
+					if (UserSettings.getInstance().getEdgeFilters() != null) {
+
+						if (!UserSettings.getInstance().getEdgeFilters().equals(attributeName)) {
+
+							attributeName = UserSettings.getInstance().getEdgeFilters();
+
+							attributeValue = edge.getFloatAttribute(attributeName);
+
+							float tmp = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
+									attributeName);
+
+							setThickness(scaleFactor * tmp);
+
+							/// Set color if new edge attribute selected in
+							/// control panel
+							float mappedVal = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
+									attributeName);
+
+							int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
+
+							bezier.setColor(mappedColor);
+
+						}
 					}
-				} else {
-					// If solo propagation
-					if (vSource.isPropagated()) {
-						// if (!vSource.getPos().equals(vTarget.getPos()))
-						bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
-						// Edge mode: normal, head, tail or both
-						bezier.drawBezier2D(Canvas.app, 2f);
-						bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
+
+					// Set the thickness based on the user selected converter
+					// name
+					if (UserSettings.getInstance().getConverterEdge() != null) {
+
+						if (!UserSettings.getInstance().getConverterEdge().equals(converterName)) {
+
+							converterName = UserSettings.getInstance().getConverterEdge();
+
+							float tmp = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
+									attributeName);
+
+							setThickness(scaleFactor * tmp);
+						}
 					}
 				}
+
+				drawBezier();
+			}
+		}
+	}
+
+	private void drawBezier() {
+		// Set color
+		if (vSource.isPropagated()) {
+
+			bezier.color(Bezier.PROPAGATE);
+
+		} else {
+
+			bezier.color(Bezier.NORMAL);
+		}
+
+		if (Canvas.mouseEventOnCanvas) {
+				bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
+		}
+
+		// Visualize the nodes and edges if not in propagation
+		if (!UserSettings.getInstance().getOnlyPropagation())
+
+		{
+
+			// If source and target nodes are in propagation
+			// Edge mode: normal, head, tail or both
+			if (vSource.isPropagated()) {
+
+				bezier.drawBezier2D(Canvas.app, 2f);
+
+				bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
+
+			} else {
+
+				bezier.drawBezier2D(Canvas.app, thickness);
+
+				bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
+			}
+		} else {
+
+			// If solo propagation
+			if (vSource.isPropagated()) {
+
+				// Edge mode: normal, head, tail or both
+				bezier.drawBezier2D(Canvas.app, 2f);
+
+				bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 			}
 		}
 	}
@@ -255,13 +298,11 @@ public class VEdge implements Serializable {
 	}
 
 	public void setVisibility(float edgeVisibilityThreshold) {
-		Object[] keys = edge.getAttributeKeys();
 
-		// Set the Visibility with the second Attribute of Edge Import. (The
-		// first id ID)
+		// Set the Visibility
 		try {
 
-			float weight = edge.getFloatAttribute((String) keys[0]);
+			float weight = edge.getFloatAttribute(UserSettings.getInstance().getEdgeWeightAttribute());
 
 			if (edgeVisibilityThreshold > weight || hidden) {
 				visibility = false;
@@ -269,9 +310,21 @@ public class VEdge implements Serializable {
 			} else {
 				visibility = true;
 			}
-		} catch (NullPointerException np) {
-			np.printStackTrace();
+		} catch (Exception e) {
+
+			if (e instanceof NullPointerException) {
+
+				/*
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not
+				 * have the same attributes as the root edges, that is why the
+				 * NullPointerException is ignored.
+				 */
+
+			} else {
+				System.out.println(this.getClass().getName() + " " + e.getMessage());
+			}
 		}
+
 	}
 
 	public void setHidden(boolean hidden) {
@@ -296,4 +349,13 @@ public class VEdge implements Serializable {
 
 	}
 
+	// // **** Events
+	//
+	// public void mouseEvent(MouseEvent e) {
+	// if (e.getAction() == MouseEvent.DRAG) {
+	// if (MouseHook.getInstance().isHooked(vSource) ||
+	// MouseHook.getInstance().isHooked(vTarget))
+	// bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
+	// }
+	// }
 }

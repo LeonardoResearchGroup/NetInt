@@ -266,6 +266,7 @@ public class GraphmlReader {
 
 							// Add the attribute value to the temporal edge;
 							e.setAbsoluteAttribute(edgeImportAttributes[i], tmpProperty);
+							
 						} else
 							throw new NullPointerException();
 					} catch (NullPointerException exception) {

@@ -48,7 +48,7 @@ public class ImportMenuGuiSet implements Observer {
 	private GuiSet menu;
 	private SelectableList communities;
 	private ItemList nodeNameList;
-	private ItemList edgeThicknessList;
+	private ItemList edgeWeightList;
 	private ItemList layoutList;
 	private Item loadButton;
 	private boolean graphLoaded = false;
@@ -82,8 +82,8 @@ public class ImportMenuGuiSet implements Observer {
 		nodeNameList.setItemSize(new PVector(120, 12));
 
 		// for edges
-		edgeThicknessList = new ItemList(550f, 145f, "Edge weight");
-		edgeThicknessList.setItemSize(new PVector(120, 12));
+		edgeWeightList = new ItemList(550f, 145f, "Edge weight");
+		edgeWeightList.setItemSize(new PVector(120, 12));
 
 		// for layout
 		layoutList = new ItemList(700f, 145f, "Visualization Layout");
@@ -99,7 +99,7 @@ public class ImportMenuGuiSet implements Observer {
 		// add elements to the gui set
 		menu.addGuiElement(communities);
 		menu.addGuiElement(nodeNameList);
-		menu.addGuiElement(edgeThicknessList);
+		menu.addGuiElement(edgeWeightList);
 		menu.addGuiElement(layoutList);
 		menu.addGuiElement(loadButton);
 
@@ -140,7 +140,7 @@ public class ImportMenuGuiSet implements Observer {
 
 		// Populate edge list
 		String[] edgeAttributeNames = edgeAttributeKeys.toArray(new String[edgeAttributeKeys.size()]);
-		edgeThicknessList.setItems(edgeAttributeNames, true);
+		edgeWeightList.setItems(edgeAttributeNames, true);
 
 		// Populate layout list
 		String[] layoutNames = layoutAttributeKeys.toArray(new String[layoutAttributeKeys.size()]);
@@ -167,7 +167,8 @@ public class ImportMenuGuiSet implements Observer {
 
 			String[] nodeName = nodeNameList.getOrderedLabelList();
 
-			String[] edgeThickness = edgeThicknessList.getSelectedLabels();
+			String[] edgeWeights = edgeWeightList.getSelectedLabels();
+			
 
 			// Don't know what this does
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeNameList.getItemLabels()));
@@ -184,9 +185,11 @@ public class ImportMenuGuiSet implements Observer {
 
 			System.out.println("Edge import selection:");
 
-			for (int i = 0; i < edgeThickness.length; i++) {
-				System.out.println("..." + edgeThicknessList.getName() + ": " + edgeThickness[i] + ", ");
+			for (int i = 0; i < edgeWeights.length; i++) {
+				System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
 			}
+			
+			UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
 
 			System.out.println("_ _ _");
 
@@ -217,7 +220,7 @@ public class ImportMenuGuiSet implements Observer {
 
 					// set graphLoaded to true
 					graphLoaded = graphPad.getAssembler().loadGraph(GraphPad.getFile(), communityStructure, nodeName,
-							edgeThickness, layoutSelection, GraphLoader.GRAPHML);
+							edgeWeights, layoutSelection, GraphLoader.GRAPHML);
 
 					// Enable some loop operations in GraphPad
 					GraphPad.setActiveGraph(graphLoaded);

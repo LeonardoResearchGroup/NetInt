@@ -40,7 +40,8 @@ public class Module_Example extends PApplet {
 	 * @see processing.core.PApplet#settings()
 	 */
 	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
+		//size(displayWidth - 201, displayHeight - 100, P2D);
+		size(displayWidth - 201, displayHeight - 400, P2D);
 	}
 
 	/**

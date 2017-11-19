@@ -38,8 +38,9 @@ public class UserSettings {
 	// EDGE Visibility Settings
 	private boolean showInternalEdges = true;
 	private boolean showExternalEdges = true;
-	private float weight;
-	private float propagation = 0;
+	private String edgeWeightAttribute;
+	private float thresholdWeight;
+	private float thresholdPropagation = 0;
 	private boolean onlyPorpagation= false;
 	private String filtersEdge;
 	private String converterEdge;
@@ -101,11 +102,11 @@ public class UserSettings {
 	}
 
 	public float getWeight() {
-		return weight;
+		return thresholdWeight;
 	}
 
 	public float getPropagation() {
-		return propagation;
+		return thresholdPropagation;
 	}
 
 	public String getEdgeFilters() {
@@ -152,8 +153,16 @@ public class UserSettings {
 		return fileExportName ;
 	}
 
-	// ***** SETTERS ******
+	public String getEdgeWeightAttribute() {
+		return edgeWeightAttribute;
+	}
 	
+	// ***** SETTERS ******
+
+	public void setEdgeWeightAttribute(String edgeWeightAttribute) {
+		this.edgeWeightAttribute = edgeWeightAttribute;
+	}
+
 	public void setFileExportName(String val){
 		this.fileExportName = val;
 	}
@@ -178,12 +187,12 @@ public class UserSettings {
 		this.filtersNode = filtrosNodo;
 	}
 
-	public void setWeight(float volTransaccion) {
-		this.weight = volTransaccion;
+	public void setWeight(float weight) {
+		this.thresholdWeight = weight;
 	}
 
 	public void setPropagation(float propagacion) {
-		this.propagation = propagacion;
+		this.thresholdPropagation = propagacion;
 	}
 
 	public void setEdgeFilters(String filtrosVinculo) {

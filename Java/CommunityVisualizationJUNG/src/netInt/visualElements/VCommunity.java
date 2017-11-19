@@ -217,7 +217,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
-							vE.setVisibility(UserSettings.getInstance().getWeight());
+							if (UserSettings.eventOnVSettings)
+								vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
 
 						if (container.currentLayout == Container.CONCENTRIC) {
@@ -233,7 +234,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					// If the edge has any attribute
 					if (vE.getEdge().getAttributeSize() > 0) {
-						vE.setVisibility(UserSettings.getInstance().getWeight());
+						if (UserSettings.eventOnVSettings)
+							vE.setVisibility(UserSettings.getInstance().getWeight());
 					}
 
 					if (container.currentLayout == Container.CONCENTRIC) {
@@ -247,7 +249,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 	}
 
-
 	private void showExternalEdges() {
 		// VCommunity open and it is not being modified by the user
 		if (!Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this) && !Canvas.canvasBeingZoomed) {
@@ -257,7 +258,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// If the edge has any attribute
 				if (vEE.getEdge().getAttributeSize() > 0) {
-					vEE.setVisibility(UserSettings.getInstance().getWeight());
+					if (UserSettings.eventOnVSettings)
+						vEE.setVisibility(UserSettings.getInstance().getWeight());
 				}
 
 				if (container.currentLayout == Container.CONCENTRIC) {
