@@ -119,13 +119,18 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void setup() {
+		
 		System.out.println("CPanel initialized 1");
 		this.surface.setSize(w, h);
+		
 		System.out.println("CPanel initialized 2");
 		this.surface.setLocation(0, 45);
+		
 		System.out.println("CPanel initialized 3");
 		this.surface.setAlwaysOnTop(false);
+		
 		System.out.println("CPanel initialized 4");
+		this.surface.setResizable(true);
 		if (logo == null) {
 			// URL url = GraphPad.class.getResource("/controlPanelImage.png");
 			// logo = loadImage(url.getPath());
@@ -178,7 +183,6 @@ public class ControlPanel extends PApplet {
 		Group communitiesGroup = new Group(secondary, "Community");
 		bancaGroup = new Group(secondary, "Financial Stats");
 
-
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 		backgGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(50);
@@ -205,13 +209,14 @@ public class ControlPanel extends PApplet {
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(180).setMinItemHeight(160);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(communitiesGroup).addItem(bancaGroup).addItem(bancaGroupEafit);
+		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(communitiesGroup)
+				.addItem(bancaGroup).addItem(bancaGroupEafit);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(1); //,2,3
+		accordion.open(1); // ,2,3
 
 		// Show controller
 		secondary.show();
@@ -305,7 +310,8 @@ public class ControlPanel extends PApplet {
 
 		// Weight
 		float[] minMaxWeightValue = Mapper.getInstance().getMinMaxForEdges(keyNamesForEdges.get(0));
-		secondary.addSlider("Weight").setPosition(5, 20).setSize(100, 10).setRange(minMaxWeightValue[0], minMaxWeightValue[1]).moveTo(group);
+		secondary.addSlider("Weight").setPosition(5, 20).setSize(100, 10)
+				.setRange(minMaxWeightValue[0], minMaxWeightValue[1]).moveTo(group);
 
 		// Propagation
 		secondary.addSlider("Succesors").setPosition(5, 33).setSize(68, 10).setRange(1, 10).moveTo(group)
