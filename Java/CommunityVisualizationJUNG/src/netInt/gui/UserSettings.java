@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserSettings {
-	
+
 	// FILE
 	private String fileExportName;
 
@@ -41,9 +41,10 @@ public class UserSettings {
 	private String edgeWeightAttribute;
 	private float thresholdWeight;
 	private float thresholdPropagation = 0;
-	private boolean onlyPorpagation= false;
+	private boolean onlyPorpagation = false;
 	private String filtersEdge;
 	private String converterEdge;
+	private static boolean[] edgeTierVisibility = new boolean[2];
 
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
@@ -53,8 +54,6 @@ public class UserSettings {
 	// VNodeDescriptions
 	private HashMap<String, Boolean> descriptiveStatistics;
 
-
-
 	private static UserSettings vSettingsInstance = null;
 
 	// An Event to inform if there was an event on the canvas
@@ -63,6 +62,8 @@ public class UserSettings {
 	public static UserSettings getInstance() {
 		if (vSettingsInstance == null) {
 			vSettingsInstance = new UserSettings();
+			edgeTierVisibility[0] = false;
+			edgeTierVisibility[1] = true;
 		}
 		return vSettingsInstance;
 	}
@@ -136,34 +137,38 @@ public class UserSettings {
 	public boolean isStatisticVisible(String key) {
 		return descriptiveStatistics.get(key);
 	}
-	
+
 	public HashMap<String, String> getDescriptiveKeys() {
 		return descriptiveKeys;
 	}
-	
+
 	public String getConverterNode() {
 		return converterNode;
 	}
-	
+
 	public String getConverterEdge() {
 		return converterEdge;
 	}
-	
-	public String getFileExportName(){
-		return fileExportName ;
+
+	public String getFileExportName() {
+		return fileExportName;
 	}
 
 	public String getEdgeWeightAttribute() {
 		return edgeWeightAttribute;
 	}
-	
+
+	public boolean edgeVisibilityForTier(int tier) {
+		return edgeTierVisibility[tier];
+	}
+
 	// ***** SETTERS ******
 
 	public void setEdgeWeightAttribute(String edgeWeightAttribute) {
 		this.edgeWeightAttribute = edgeWeightAttribute;
 	}
 
-	public void setFileExportName(String val){
+	public void setFileExportName(String val) {
 		this.fileExportName = val;
 	}
 
@@ -234,8 +239,8 @@ public class UserSettings {
 	public void setEventOnVSettings(boolean eventTriggered) {
 		eventOnVSettings = eventTriggered;
 	}
-	
-	public void setConverterNode (String val){
+
+	public void setConverterNode(String val) {
 		this.converterNode = val;
 	}
 

@@ -43,6 +43,7 @@ public class Canvas {
 	// control the visibility of visual elements while the mouse is acting over
 	// them
 	public static boolean mouseEventOnCanvas;
+	public static boolean keyEventOnCanvas;
 	// Transformation control
 	private boolean shiftDown;
 	public static boolean canvasBeingTransformed = false;
@@ -72,6 +73,7 @@ public class Canvas {
 
 	public void setPApplet(PApplet app) {
 		Canvas.app = app;
+		myRegister();
 	}
 
 	/**
@@ -203,20 +205,20 @@ public class Canvas {
 	public void keyEvent(KeyEvent k) {
 		kPressed(k);
 		kReleased(k);
-		setEventOnCanvas(true);
+		setKeyEventOnCanvas(true);
 	}
 
 	public void mouseEvent(MouseEvent e) {
 		if (e.getAction() == MouseEvent.RELEASE) {
 			mReleased(e);
-			setEventOnCanvas(true);
+			setMouseEventOnCanvas(true);
 		} else if (e.getAction() == MouseEvent.PRESS) {
 			mPressed(e);
-			setEventOnCanvas(true);
+			setMouseEventOnCanvas(true);
 		}
 		if (e.getAction() == MouseEvent.DRAG) {
 			mDragged(e);
-			setEventOnCanvas(true);
+			setMouseEventOnCanvas(true);
 		}
 
 	}
@@ -273,19 +275,29 @@ public class Canvas {
 	}
 
 	private void kReleased(KeyEvent k) {
-		if (k.getKeyCode() == 16 && k.getAction() == KeyEvent.RELEASE) {
-			shiftDown = false;
-			canvasBeingTransformed = false;
+		if (k.getAction() == KeyEvent.RELEASE) {
+			if (k.getKeyCode() == 16) {
+				shiftDown = false;
+				canvasBeingTransformed = false;
+			}
+			resetKeyEventsOnCanvas();
 		}
 	}
 
-	
-	private static void setEventOnCanvas(boolean eventOnCanvas) {
+	private static void setMouseEventOnCanvas(boolean eventOnCanvas) {
 		Canvas.mouseEventOnCanvas = eventOnCanvas;
 	}
-	
-	public static void resetEventOnCanvas() {
+
+	private static void setKeyEventOnCanvas(boolean eventOnCanvas) {
+		Canvas.keyEventOnCanvas = eventOnCanvas;
+	}
+
+	public static void resetMouseEventsOnCanvas() {
 		Canvas.mouseEventOnCanvas = false;
+	}
+
+	private static void resetKeyEventsOnCanvas() {
+		Canvas.keyEventOnCanvas = false;
 	}
 
 }

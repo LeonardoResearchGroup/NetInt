@@ -213,6 +213,9 @@ public class Assembler {
 		String nodeID = comName + "_" + String.valueOf(0);
 
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
+		
+		// Set tier sequence
+		communityTemp.setTierSequence(0);
 
 		// set diameter
 		//communityTemp.init();
@@ -280,6 +283,9 @@ public class Assembler {
 
 			// Set VCommunity color
 			communityTemp.setColor(myGradient[i]);
+			
+			// Set tier sequence
+			communityTemp.setTierSequence(1);
 
 			// Set label visibility for overcrowded first order communities
 			if (comNames.size() > 100)
