@@ -131,16 +131,22 @@ public class ControlPanel extends PApplet {
 		
 		System.out.println("CPanel initialized 4");
 		this.surface.setResizable(true);
+		
 		if (logo == null) {
 			// URL url = GraphPad.class.getResource("/controlPanelImage.png");
 			// logo = loadImage(url.getPath());
 			logo = loadImage("./images/netInt.png");
 		}
+		
 		keyNamesForNodes.add("empty list");
+		
 		keyNamesForEdges.add("empty list");
+		
 		initMain();
+		
 		// Font
 		font = createFont("Arial", 11, false);
+		
 		textFont(font);
 	}
 
