@@ -18,6 +18,7 @@ package netInt.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class UserSettings {
 
@@ -44,7 +45,7 @@ public class UserSettings {
 	private boolean onlyPorpagation = false;
 	private String filtersEdge;
 	private String converterEdge;
-	private static boolean[] edgeTierVisibility = new boolean[2];
+	private static TreeMap<Integer, TreeMap<String, Boolean>> edgeTierVisibility = new TreeMap<Integer, TreeMap<String, Boolean>>();
 
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
@@ -62,8 +63,6 @@ public class UserSettings {
 	public static UserSettings getInstance() {
 		if (vSettingsInstance == null) {
 			vSettingsInstance = new UserSettings();
-			edgeTierVisibility[0] = true;
-			edgeTierVisibility[1] = true;
 		}
 		return vSettingsInstance;
 	}
@@ -158,8 +157,12 @@ public class UserSettings {
 		return edgeWeightAttribute;
 	}
 
-	public boolean edgeVisibilityForTier(int tier) {
-		return edgeTierVisibility[tier];
+	public boolean internalEdgeVisibilityForTier(int tier) {
+		return edgeTierVisibility.get(tier).get("Internal");
+	}
+	
+	public boolean externalEdgeVisibilityForTier(int tier) {
+		return edgeTierVisibility.get(tier).get("External");
 	}
 
 	// ***** SETTERS ******
@@ -228,12 +231,12 @@ public class UserSettings {
 		showNodes = booleanValue;
 	}
 
-	public void setShowInternalEdges(boolean booleanValue) {
-		showInternalEdges = booleanValue;
+	public void setShowInternalEdges(int tier, boolean booleanValue) {
+		edgeTierVisibility.get(tier).put("Internal", booleanValue);
 	}
 
-	public void setShowExternalEdges(boolean booleanValue) {
-		showExternalEdges = booleanValue;
+	public void setShowExternalEdges(int tier, boolean booleanValue) {
+		edgeTierVisibility.get(tier).put("External", booleanValue);
 	}
 
 	public void setEventOnVSettings(boolean eventTriggered) {

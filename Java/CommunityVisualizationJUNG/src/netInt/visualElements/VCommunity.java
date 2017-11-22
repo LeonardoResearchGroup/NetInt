@@ -17,14 +17,11 @@
 package netInt.visualElements;
 
 import processing.core.PVector;
-import processing.event.KeyEvent;
-import processing.event.MouseEvent;
 import processing.core.PApplet;
 
 import java.awt.Color;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.canvas.MouseHook;
 import netInt.containers.Container;
@@ -184,7 +181,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// If the user chooses to turn on/off the internal edges
 		if (UserSettings.getInstance().showInternalEdges() && showEdges && comCover.isUnlocked()) {
 
-			if (UserSettings.getInstance().edgeVisibilityForTier(tierSequence)) {
+			if (UserSettings.getInstance().internalEdgeVisibilityForTier(tierSequence)) {
 				showInternalEdges();
 			}
 		}
@@ -193,7 +190,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// If the user chooses to turn on/off the external edges
 		if (UserSettings.getInstance().showExternalEdges() && showEdges && comCover.isUnlocked()) {
 
-			if (UserSettings.getInstance().edgeVisibilityForTier(tierSequence)) {
+			if (UserSettings.getInstance().externalEdgeVisibilityForTier(tierSequence)) {
 				showExternalEdges();
 			}
 		}

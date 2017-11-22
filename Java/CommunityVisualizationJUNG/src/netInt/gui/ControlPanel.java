@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import controlP5.Accordion;
+import controlP5.Button;
 import controlP5.CheckBox;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -230,7 +231,7 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(210);
+		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(225);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
@@ -270,37 +271,38 @@ public class ControlPanel extends PApplet {
 	private void setNodeComponents(ControllerGroup<Group> group) {
 
 		// Visibility control
-		
+
 		secondary.addLabel("Node visibility").setPosition(2, 7).moveTo(group);
-		
+
 		secondary.addToggle("On/Off Node").setPosition(5, 21).setSize(95, 10).setValue(true).moveTo(group)
 				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Name Visibility control
-		
+
 		secondary.addToggle("On/Off Name").setPosition(106, 21).setSize(95, 10).setValue(false).moveTo(group)
 				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Node search
-		
+
 		secondary.addLabel("Search by ID").setPosition(2, 41).moveTo(group);
-		
+
 		secondary.addTextfield("Search ID").setPosition(5, 56).setSize(94, 15).setAutoClear(false).moveTo(group)
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(35);
 
 		// Clear node search
 		secondary.addBang("Clear search").setPosition(106, 56).setSize(95, 15).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
-		
+
 		secondary.addLabel("Filter by out degree").setPosition(2, 81).moveTo(group);
 
-		secondary.addSlider("Min OutDegree").setPosition(5, 96).setSize(150, 10).setRange(0, 35).setNumberOfTickMarks(10)
-				.snapToTickMarks(true).showTickMarks(false).moveTo(group).getCaptionLabel().setPaddingX(10).setVisible(false); //
+		secondary.addSlider("Min OutDegree").setPosition(5, 96).setSize(150, 10).setRange(0, 35)
+				.setNumberOfTickMarks(10).snapToTickMarks(true).showTickMarks(false).moveTo(group).getCaptionLabel()
+				.setPaddingX(10).setVisible(false); //
 
 		// Node Appearance controllers
 
 		secondary.addLabel("Mapped node attribute").setPosition(2, 116).moveTo(group);
-		
+
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
 
@@ -316,7 +318,7 @@ public class ControlPanel extends PApplet {
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
-		
+
 		secondary.addScrollableList("Converter Node").addItems(items).setPosition(106, 131).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group); // .close();
 
@@ -330,44 +332,50 @@ public class ControlPanel extends PApplet {
 	 */
 	private void setEdgeComponents(Group group) {
 
-		// Visibility control
-		secondary.addLabel("Edge visibility by tier").setPosition(2, 7).moveTo(group);
+		// Visibility control tier 1
+		secondary.addLabel("Edge visibility tier 1").setPosition(2, 7).moveTo(group);
 
 		secondary.addToggle("Tier 1 Internal").setPosition(5, 21).setSize(95, 10).setValue(true).moveTo(group)
-				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+				.setCaptionLabel("Internal").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		secondary.addToggle("Tier 1 External").setPosition(106, 21).setSize(95, 10).setValue(true).moveTo(group)
-				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		
+		// Visibility control tier 2
+		secondary.addLabel("Edge visibility tier 2").setPosition(2, 41).moveTo(group);
 
-		secondary.addToggle("Tier 2 Internal").setPosition(5, 36).setSize(95, 10).setValue(true).moveTo(group)
-				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Tier 2 Internal").setPosition(5, 56).setSize(95, 10).setValue(true).moveTo(group)
+				.setCaptionLabel("Internal").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addToggle("Tier 2 External").setPosition(106, 36).setSize(95, 10).setValue(true).moveTo(group)
-				.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		secondary.addToggle("Tier 2 External").setPosition(106, 56).setSize(95, 10).setValue(true).moveTo(group)
+				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Weight
 
-		secondary.addLabel("Weight filter").setPosition(2, 56).moveTo(group);
+		secondary.addLabel("Weight filter").setPosition(2, 76).moveTo(group);
 
 		float[] minMaxWeightValue = Mapper.getInstance().getMinMaxForEdges(keyNamesForEdges.get(0));
 
-		secondary.addSlider("Weight").setPosition(5, 70).setSize(150, 10)
+		secondary.addSlider("Weight").setPosition(5, 90).setSize(150, 10)
 				.setRange(minMaxWeightValue[0], minMaxWeightValue[1]).moveTo(group);
 
 		// Propagation
 
-		secondary.addLabel("Propagation").setPosition(2, 90).moveTo(group);
+		secondary.addLabel("Propagation").setPosition(2, 110).moveTo(group);
 
-		secondary.addSlider("Succesors").setPosition(5, 104).setSize(150, 10).setRange(1, 10).moveTo(group)
+		secondary.addSlider("Succesors").setPosition(5, 124).setSize(95, 10).setRange(1, 10).moveTo(group)
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER).setPaddingX(10).setVisible(false);
 
-		// Visualize only propagation
-		secondary.addToggle("Filter").setPosition(160, 104).setSize(45, 10).moveTo(group).getCaptionLabel()
+		// Visualize and clear propagation
+		secondary.addToggle("Filter").setPosition(106, 124).setSize(45, 10).moveTo(group).getCaptionLabel()
+				.align(ControlP5.CENTER, ControlP5.CENTER);
+
+		secondary.addToggle("Clear").setPosition(155, 124).setSize(45, 10).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Appearance controllers
 
-		secondary.addLabel("Mapped edge atttribute").setPosition(2, 124).moveTo(group);
+		secondary.addLabel("Mapped edge atttribute").setPosition(2, 144).moveTo(group);
 
 		// Thickness
 		Object[] mappers = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys().toArray();
@@ -378,14 +386,14 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Thickness").setPosition(5, 139).setSize(95, 52).setBarHeight(13).setItemHeight(13)
+		secondary.addScrollableList("Thickness").setPosition(5, 159).setSize(95, 52).setBarHeight(13).setItemHeight(13)
 				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group);
 
 		// Converters
-		
+
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(106, 139).setSize(95, 52)
+		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(106, 159).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
 	}
 
@@ -454,7 +462,7 @@ public class ControlPanel extends PApplet {
 			manageFileSelection(selectionFile);
 			break;
 
-		// **** FONDO ****
+		// **** GraphPad Background ****
 		case "Luminosity":
 			UserSettings.getInstance().setColorBackground((int) theEvent.getController().getValue());
 			break;
@@ -492,19 +500,19 @@ public class ControlPanel extends PApplet {
 		// **** EDGES ****
 		case "Tier 1 Internal":
 			Toggle vinculoIntT1 = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setShowInternalEdges(vinculoIntT1.getBooleanValue());
+			UserSettings.getInstance().setShowInternalEdges(0, vinculoIntT1.getBooleanValue());
 			break;
 		case "Tier 1 External":
 			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setShowExternalEdges(vinculoExtT1.getBooleanValue());
+			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
 			break;
 		case "Tier 2 Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setShowInternalEdges(vinculoIntT2.getBooleanValue());
+			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
 			break;
 		case "Tier 2 External":
 			Toggle vinculoExtT2 = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setShowExternalEdges(vinculoExtT2.getBooleanValue());
+			UserSettings.getInstance().setShowExternalEdges(1, vinculoExtT2.getBooleanValue());
 			break;
 		case "Weight":
 			UserSettings.getInstance().setWeight(theEvent.getValue());
@@ -515,6 +523,10 @@ public class ControlPanel extends PApplet {
 		case "Filter":
 			Toggle solo = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setPropagationOnly(solo.getBooleanValue());
+			break;
+		case "Clear":
+			Button clear = (Button) theEvent.getController();
+			UserSettings.getInstance().setClearPropagation(clear.getBooleanValue());
 			break;
 		case "Converter Edge":
 			int valueCE = (int) secondary.get(ScrollableList.class, "Converter Edge").getValue();
@@ -542,18 +554,29 @@ public class ControlPanel extends PApplet {
 
 			try {
 				parent.cursor(WAIT);
+				
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
+				
 				GraphPad.setActiveGraph(false);
+				
 				Assembler.secondOrderVComm = deserializedWrapper.getvSubCommunities();
+				
 				for (netInt.visualElements.VCommunity com : Assembler.secondOrderVComm) {
 					com.eventRegister(parent);
 				}
+				
 				Assembler.firstOrderVComm = deserializedWrapper.getvSubSubCommunity();
+				
 				Assembler.firstOrderVComm.eventRegister(parent);
+				
 				Assembler.firstOrderVComm.container.runVEdgeFactory();
+				
 				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
+				
 				GraphLoader.theGraph = deserializedWrapper.getTheGraph();
+				
 				GraphPad.setActiveGraph(true);
+				
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
