@@ -142,7 +142,7 @@ public class Assembler {
 
 		// First order community: Community of communities
 		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
-				"Tier1_Comm", layout);
+				"Root", layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
 

@@ -38,10 +38,10 @@ public class Mapper {
 	public static final String LINEAR = "linear";
 	public static final String SINUSOIDAL = "sinusoidal";
 	public static final String LOGARITHMIC = "logarithmic";
-	public static final String RADIAL = "radial";
-	public static final String SIGMOID = "sigmoid";
+//	public static final String RADIAL = "radial";
+//	public static final String SIGMOID = "sigmoid";
 
-	private String[] converters = { "linear", "sinusoidal", "logarithmic", "radial", "sigmoid" };
+	private String[] converters = { "linear", "sinusoidal", "logarithmic"}; // "radial", "sigmoid" 
 	// MAXs & MINs nodes
 	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
 	private CategoricalCollection nodeCategoricalAttributes;

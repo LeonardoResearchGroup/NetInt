@@ -40,8 +40,8 @@ public class Module_Example extends PApplet {
 	 * @see processing.core.PApplet#settings()
 	 */
 	public void settings() {
-		//size(displayWidth - 201, displayHeight - 100, P2D);
-		size(displayWidth - 201, displayHeight - 400, P2D);
+		// size(displayWidth - 201, displayHeight - 100, P2D);
+		size(displayWidth - 227, displayHeight - 100, P2D);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Module_Example extends PApplet {
 		pad = new GraphPad(this);
 
 		// Initiate the Control Panel
-		new ControlPanel(this, 200, this.height - 25);
+		new ControlPanel(this, 226, this.height - 25);
 	}
 
 	/**

@@ -62,7 +62,7 @@ public class UserSettings {
 	public static UserSettings getInstance() {
 		if (vSettingsInstance == null) {
 			vSettingsInstance = new UserSettings();
-			edgeTierVisibility[0] = false;
+			edgeTierVisibility[0] = true;
 			edgeTierVisibility[1] = true;
 		}
 		return vSettingsInstance;

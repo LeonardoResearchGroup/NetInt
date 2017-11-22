@@ -62,7 +62,7 @@ public class MapperViewer extends PApplet {
 
 	public void setup() {
 		this.surface.setLocation(displayWidth - 400, 45);
-		this.surface.setAlwaysOnTop(true);
+		this.surface.setAlwaysOnTop(false);
 		this.surface.setResizable(true);
 
 		// Font
@@ -155,7 +155,7 @@ public class MapperViewer extends PApplet {
 		private int bins;
 		private int fills[];
 
-		// Contructor
+		// Constructor
 		public Bar(String attributeName) {
 			attribute = attributeName;
 			lenght = 150;

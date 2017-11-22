@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="libs/JUNG/jung-api-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/JUNG/collections-generic-4.01.jar"/>
 	<classpathentry kind="lib" path="libs/JUNG/jung-io-2.0.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_101]"/>
 	<classpathentry kind="lib" path="libs/XStream/xmlpull-1.1.3.1.jar"/>
 	<classpathentry kind="lib" path="libs/XStream/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="libs/XStream/xstream-1.4.9.jar"/>
