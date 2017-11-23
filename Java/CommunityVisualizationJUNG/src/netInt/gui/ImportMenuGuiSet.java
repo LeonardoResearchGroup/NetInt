@@ -162,7 +162,7 @@ public class ImportMenuGuiSet implements Observer {
 			// Get arrays to simplify verbose
 			String[] communityStructure = communities.getOrderedTargetList();
 
-			String[] nodeName = nodeNameList.getOrderedLabelList();
+			String[] nodeName = nodeNameList.getSelectedLabels();//nodeNameList.getOrderedLabelList();
 
 			String[] edgeWeights = edgeWeightList.getSelectedLabels();
 
