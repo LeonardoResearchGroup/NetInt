@@ -353,7 +353,7 @@ public class ControlPanel extends PApplet {
 
 		// Weight
 
-		secondary.addLabel("Weight filter").setPosition(2, 76).moveTo(group);
+		secondary.addLabel("Weight filter: " + UserSettings.getInstance().getEdgeWeightAttribute()).setPosition(2, 76).moveTo(group);
 
 		float[] minMaxWeightValue = Mapper.getInstance().getMinMaxForEdges(keyNamesForEdges.get(0));
 
