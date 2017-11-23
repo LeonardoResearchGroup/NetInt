@@ -117,6 +117,17 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	/**
+	 * This method is used to clear propagation from Control Panel user
+	 * selection
+	 * 
+	 * @param val
+	 */
+	protected void clearPropagation() {
+			leftClicked = false;
+			reclaim();
+	}
+
+	/**
 	 * Activates the method that mark this VNode as a link in the propagation
 	 * chain: propagationCount() and propagates the sequence in its collection
 	 * of successors
@@ -367,7 +378,5 @@ public class VNode extends VisualAtom implements Serializable {
 	public void eventRegister(PApplet theApp) {
 		theApp.registerMethod("mouseEvent", this);
 	}
-
-
 
 }

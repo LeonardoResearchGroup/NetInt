@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import controlP5.Accordion;
+import controlP5.Bang;
 import controlP5.Button;
 import controlP5.CheckBox;
 import controlP5.ControlEvent;
@@ -335,19 +336,19 @@ public class ControlPanel extends PApplet {
 		// Visibility control tier 1
 		secondary.addLabel("Edge visibility tier 1").setPosition(2, 7).moveTo(group);
 
-		secondary.addToggle("Tier 1 Internal").setPosition(5, 21).setSize(95, 10).setValue(true).moveTo(group)
+		secondary.addToggle("Tier_1_Internal").setPosition(5, 21).setSize(95, 10).setValue(true).moveTo(group)
 				.setCaptionLabel("Internal").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addToggle("Tier 1 External").setPosition(106, 21).setSize(95, 10).setValue(true).moveTo(group)
+		secondary.addToggle("Tier_1_External").setPosition(106, 21).setSize(95, 10).setValue(true).moveTo(group)
 				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
-		
+
 		// Visibility control tier 2
 		secondary.addLabel("Edge visibility tier 2").setPosition(2, 41).moveTo(group);
 
-		secondary.addToggle("Tier 2 Internal").setPosition(5, 56).setSize(95, 10).setValue(true).moveTo(group)
+		secondary.addToggle("Tier_2_Internal").setPosition(5, 56).setSize(95, 10).setValue(true).moveTo(group)
 				.setCaptionLabel("Internal").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addToggle("Tier 2 External").setPosition(106, 56).setSize(95, 10).setValue(true).moveTo(group)
+		secondary.addToggle("Tier_2_External").setPosition(106, 56).setSize(95, 10).setValue(true).moveTo(group)
 				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Weight
@@ -370,7 +371,7 @@ public class ControlPanel extends PApplet {
 		secondary.addToggle("Filter").setPosition(106, 124).setSize(45, 10).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addToggle("Clear").setPosition(155, 124).setSize(45, 10).moveTo(group).getCaptionLabel()
+		secondary.addBang("Clear").setPosition(155, 124).setSize(45, 10).moveTo(group).getCaptionLabel()
 				.align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Appearance controllers
@@ -469,7 +470,7 @@ public class ControlPanel extends PApplet {
 
 		// **** NODES ****
 		case "Search ID":
-			UserSettings.getInstance().setIDSerch(theEvent.getStringValue());
+			UserSettings.getInstance().setIDSearch(theEvent.getStringValue());
 			break;
 		case "Clear search":
 			secondary.get(Textfield.class, "Search ID").clear();
@@ -498,19 +499,19 @@ public class ControlPanel extends PApplet {
 			break;
 
 		// **** EDGES ****
-		case "Tier 1 Internal":
+		case "Tier_1_Internal":
 			Toggle vinculoIntT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(0, vinculoIntT1.getBooleanValue());
 			break;
-		case "Tier 1 External":
+		case "Tier_1_External":
 			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
 			break;
-		case "Tier 2 Internal":
+		case "Tier_2_Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
 			break;
-		case "Tier 2 External":
+		case "Tier_2_External":
 			Toggle vinculoExtT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(1, vinculoExtT2.getBooleanValue());
 			break;
@@ -525,8 +526,8 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setPropagationOnly(solo.getBooleanValue());
 			break;
 		case "Clear":
-			Button clear = (Button) theEvent.getController();
-			UserSettings.getInstance().setClearPropagation(clear.getBooleanValue());
+			Bang clearPropagation = (Bang) theEvent.getController();
+			UserSettings.getInstance().setClearPropagation(clearPropagation.getValue());
 			break;
 		case "Converter Edge":
 			int valueCE = (int) secondary.get(ScrollableList.class, "Converter Edge").getValue();
@@ -554,29 +555,29 @@ public class ControlPanel extends PApplet {
 
 			try {
 				parent.cursor(WAIT);
-				
+
 				SerializeWrapper deserializedWrapper = SerializeHelper.getInstance().deserialize(selectedFile);
-				
+
 				GraphPad.setActiveGraph(false);
-				
+
 				Assembler.secondOrderVComm = deserializedWrapper.getvSubCommunities();
-				
+
 				for (netInt.visualElements.VCommunity com : Assembler.secondOrderVComm) {
 					com.eventRegister(parent);
 				}
-				
+
 				Assembler.firstOrderVComm = deserializedWrapper.getvSubSubCommunity();
-				
+
 				Assembler.firstOrderVComm.eventRegister(parent);
-				
+
 				Assembler.firstOrderVComm.container.runVEdgeFactory();
-				
+
 				UserSettings.reloadInstance(deserializedWrapper.getvSettings());
-				
+
 				GraphLoader.theGraph = deserializedWrapper.getTheGraph();
-				
+
 				GraphPad.setActiveGraph(true);
-				
+
 				javax.swing.JOptionPane.showMessageDialog(null, "Finalizado.", "",
 						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 

@@ -45,8 +45,8 @@ public abstract class VisualAtom implements Serializable {
 	protected PVector deltaMouse;
 
 	public boolean isMouseOver, isDragged;
-	public boolean leftClicked, rightClicked, centerClicked;
-	public boolean leftPressed, rightPressed, centerPressed;
+	protected boolean leftClicked, rightClicked, centerClicked;
+	protected boolean leftPressed, rightPressed, centerPressed;
 	
 	// This variable is used to control that the vElement is displayed only
 	// once. It is useful to prevent that edges with the same source or target

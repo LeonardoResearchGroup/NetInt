@@ -41,7 +41,7 @@ public class Module_Example extends PApplet {
 	 */
 	public void settings() {
 		// size(displayWidth - 201, displayHeight - 100, P2D);
-		size(displayWidth - 227, displayHeight - 100, P2D);
+		size(displayWidth - 227, displayHeight - 300, P2D);
 	}
 
 	/**

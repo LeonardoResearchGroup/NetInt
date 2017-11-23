@@ -45,7 +45,8 @@ public class UserSettings {
 	private boolean onlyPorpagation = false;
 	private String filtersEdge;
 	private String converterEdge;
-	private static TreeMap<Integer, TreeMap<String, Boolean>> edgeTierVisibility = new TreeMap<Integer, TreeMap<String, Boolean>>();
+	private TreeMap<Integer, TreeMap<String, Boolean>> edgeTierVisibility;
+	private float clearPropagation;
 
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
@@ -74,6 +75,19 @@ public class UserSettings {
 	protected UserSettings() {
 		descriptiveKeys = new HashMap<String, String>();
 		descriptiveStatistics = new HashMap<String, Boolean>();
+		edgeTierVisibility = new TreeMap<Integer, TreeMap<String, Boolean>>();
+		initTierVisibility();
+	}
+
+	private void initTierVisibility() {
+		// Two tiers so far. Internal
+		for (int i = 0; i < 2; i++) {
+			TreeMap<String, Boolean> tmp = new TreeMap<String, Boolean>();
+			tmp.put("Internal", true);
+			tmp.put("External", true);
+			edgeTierVisibility.put(i, tmp);
+		}
+
 	}
 
 	// ******* GETTERS *******
@@ -160,7 +174,7 @@ public class UserSettings {
 	public boolean internalEdgeVisibilityForTier(int tier) {
 		return edgeTierVisibility.get(tier).get("Internal");
 	}
-	
+
 	public boolean externalEdgeVisibilityForTier(int tier) {
 		return edgeTierVisibility.get(tier).get("External");
 	}
@@ -207,7 +221,7 @@ public class UserSettings {
 		this.filtersEdge = filtrosVinculo;
 	}
 
-	public void setIDSerch(String stringValue) {
+	public void setIDSearch(String stringValue) {
 		idSearch = stringValue;
 	}
 
@@ -245,6 +259,16 @@ public class UserSettings {
 
 	public void setConverterNode(String val) {
 		this.converterNode = val;
+	}
+
+	public void setClearPropagation(float val) {
+		clearPropagation = val;
+	}
+
+	public boolean getClearPropagation() {
+		boolean rtn = clearPropagation == 1.0;
+		clearPropagation = 0f;
+		return rtn;
 	}
 
 }

@@ -104,6 +104,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void show() {
 
+		// Look for nodes based on id entered by user in control panel
+		searchNode();
+		
+		// Clear all propagation
+		if (UserSettings.getInstance().getClearPropagation()) {
+			clearPropagation();
+		}
+
 		// Display the community cover
 		comCover.show(container, containsSearchedNode);
 
@@ -357,6 +365,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	}
 
+	protected void clearPropagation() {
+		for (VNode vN : container.getVNodes()) {
+			vN.clearPropagation();
+		}
+	}
+
 	/**
 	 * Update position of each visualElement in the container relative to
 	 * current vCommunity center.
@@ -403,7 +417,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * Lower Order VCommunities
 	 */
 	public void searchNode() {
-		// Is the search tool is not null
+		// If the search tool is not null
 		if (UserSettings.getInstance().getIdSearch() != null) {
 			// If the search tool is looking for something new
 			if (idSearch != UserSettings.getInstance().getIdSearch()) {
