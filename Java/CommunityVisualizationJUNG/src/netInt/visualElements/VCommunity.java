@@ -179,7 +179,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
 				
-				if(Canvas.app.frameRate > 10 ) {
+				if(Canvas.app.frameRate > 15 ) {
 					container.degreeThresholdPercentage -= 0.01;
 					int degreeThresholdPosition = (int)((container.degreeThresholdPercentage/100) * container.getNodes().size() ) - 1;
 					if(degreeThresholdPosition < 0){
@@ -187,6 +187,17 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					}else{
 						container.degreeThreshold = container.degrees[degreeThresholdPosition];
 					}	
+				}else if(Canvas.app.frameRate < 13 ) {
+					container.degreeThresholdPercentage += 0.01;
+					if( container.degreeThresholdPercentage < 1){
+						container.degreeThresholdPercentage = 1;
+					}else if(container.degreeThresholdPercentage > 100){
+						container.degreeThresholdPercentage = 100;
+					}
+					int degreeThresholdPosition = (int)((container.degreeThresholdPercentage/100) * container.getNodes().size() ) - 1;
+
+					container.degreeThreshold = container.degrees[degreeThresholdPosition];
+					
 				}
 
 				// If the container Layout iterates to distribute nodes

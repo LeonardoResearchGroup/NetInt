@@ -260,6 +260,8 @@ public class Assembler {
 
 			// Name container
 			containerTemp.setName(communityName);
+			
+			containerTemp.setGraphDegrees();
 
 			// Initialize container
 			// containerTemp.initialize();
