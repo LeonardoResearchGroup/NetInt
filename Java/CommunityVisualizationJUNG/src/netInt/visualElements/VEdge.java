@@ -36,7 +36,7 @@ public class VEdge implements Serializable {
 	// Visibility attributes
 	private boolean visibility, hidden = true;
 	//Depends on degree of the nodes
-	private boolean anotherVisibility = true;
+	private boolean anotherVisibility = false;
 	// Source and target nodes
 	private VNode vSource, vTarget;
 	// The curve linking the nodes

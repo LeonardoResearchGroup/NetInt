@@ -81,7 +81,9 @@ public abstract class Container {
 	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 	
 	//Visibility
-	private double degreeThreshold;
+	public double degreeThreshold;
+	public int[] degrees;
+	public float degreeThresholdPercentage = 100;
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -168,9 +170,9 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
 			vEdges.add(vEdge);
-			if(e.getSource().getDegree(0) < degreeThreshold || e.getTarget().getDegree(0) < degreeThreshold) {
-				vEdge.setAnotherVisibility(false);
-			}
+//			if(e.getSource().getDegree(0) < degreeThreshold || e.getTarget().getDegree(0) < degreeThreshold) {
+//				vEdge.setAnotherVisibility(false);
+//			}
 		}
 	}
 
@@ -187,7 +189,7 @@ public abstract class Container {
 		int numberNodes = this.getGraph().getVertices().size();
 		int i = 0;
 		
-		int[] degrees = new int[numberNodes];
+		degrees = new int[numberNodes];
 
 		// For all the nodes in the graph
 		degreeThreshold = 0;
