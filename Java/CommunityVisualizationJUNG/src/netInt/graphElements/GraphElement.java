@@ -27,9 +27,9 @@ import java.util.Set;
  * attributes, i.e., raw attributes independent of any graph processing, e.g,
  * the amount sent by one payer to one beneficiary is the weight of an edge
  * linking their nodes. The second set are relative attributes, i.e., attributes
- * that get values from graph processing. An example of the latter is node
- * degree after clustering. A node has a relative degree inside each cluster to
- * which it belongs.
+ * relative to the community to which the element belongs. An example of the
+ * latter is node degree after clustering. A node has a relative degree inside
+ * each cluster to which it belongs.
  * 
  * For convenience, node and edge graph metrics (inDegree, outDegree, degree)
  * are stored in the collection of relative attributes in numbered sequence,
@@ -42,9 +42,9 @@ public abstract class GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	// For key use the attribute name (Edge_Weight, Out_Degree). For value
-	// use the attribute value (either Numerical or categorical)
-	private HashMap<String, Object> absoluteAttributes;
+	// For key use the attribute name. For value use the attribute value (either
+	// Numerical or categorical)
+	private  HashMap<String, Object> absoluteAttributes;
 
 	// A set of attributes to be initiated by instances of classes that
 	// inherit from this class. The integer parameter identifies the
@@ -101,8 +101,8 @@ public abstract class GraphElement implements Serializable {
 				 * NullPointerException is ignored.
 				 */
 			} else {
-				System.out.println(
-						this.getClass().getName() + " Value of attribute named: " + key + " couldn't be casted as String");
+				System.out.println(this.getClass().getName() + " Value of attribute named: " + key
+						+ " couldn't be casted as String");
 			}
 		}
 		return rtn;
@@ -116,7 +116,7 @@ public abstract class GraphElement implements Serializable {
 	 *            key
 	 * @return the float value of the attribute associated to the key
 	 */
-	public float getFloatAttribute(String key) {
+	public float getFloatAttribute(String key) throws NullPointerException {
 		Float rtn = null;
 
 		try {
@@ -139,6 +139,7 @@ public abstract class GraphElement implements Serializable {
 				 * have the same attributes as the root edges, that is why the
 				 * NullPointerException is ignored.
 				 */
+				throw (e);
 			} else {
 				System.out.println(
 						this.getClass().getName() + "Value of Attribute key: " + key + " couldn't be casted as Float ");
@@ -178,8 +179,8 @@ public abstract class GraphElement implements Serializable {
 				 * NullPointerException is ignored.
 				 */
 			} else {
-				System.out.println(
-						this.getClass().getName() + "Value of attribute named: " + key + " - couldn't be casted as int");
+				System.out.println(this.getClass().getName() + "Value of attribute named: " + key
+						+ " - couldn't be casted as int");
 			}
 		}
 		return rtn;
@@ -210,7 +211,7 @@ public abstract class GraphElement implements Serializable {
 	 * this graph element
 	 */
 	public void printAbsoluteAttributes() {
-		System.out.println("GRAPH ELEMENT> printAbsoluteAttributes():");
+		System.out.println("GRAPH ELEMENT " + getId());
 		Set<String> s = absoluteAttributes.keySet();
 		for (String keyName : s) {
 			System.out.println("   Key: " + keyName + ", Value: " + absoluteAttributes.get(keyName));
@@ -218,7 +219,7 @@ public abstract class GraphElement implements Serializable {
 	}
 
 	public void printRelativeAttributes() {
-		System.out.println("GRAPH ELEMENT> printRelativeAttributes():");
+		System.out.println("GRAPH ELEMENT "+ getId());
 
 		// Get the set of keys. This means the level in the nested structure of
 		// communities
@@ -288,11 +289,11 @@ public abstract class GraphElement implements Serializable {
 	public abstract void setRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
 
 	protected void addAbsoluteAtt(String key, Object value) {
-		this.absoluteAttributes.put(key, value);
+		absoluteAttributes.put(key, value);
 	}
 
 	protected void addRelativeAtt(int key, HashMap<String, Float> attributeSet) {
-		this.relativeAttributes.put(key, attributeSet);
+		relativeAttributes.put(key, attributeSet);
 	}
 
 	public HashMap<String, Float> getRelativeAttributes(int key) {

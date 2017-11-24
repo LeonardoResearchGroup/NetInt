@@ -19,6 +19,7 @@ package examples;
 import java.io.File;
 
 import netInt.GraphPad;
+import netInt.graphElements.GraphElement;
 import netInt.gui.ControlPanel;
 import netInt.gui.UserSettings;
 import processing.core.PApplet;

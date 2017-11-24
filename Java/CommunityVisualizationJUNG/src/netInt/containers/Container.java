@@ -299,7 +299,7 @@ public abstract class Container {
 
 					// Build edge
 					Edge tempEdge = new Edge(vCA.getNode(), vCB.getNode(), false);
-					tempEdge.setAbsoluteAttribute("weight", linkingEdges.getEdgeCount());
+					tempEdge.setAbsoluteAttribute("BtwnComm_weight", linkingEdges.getEdgeCount());
 
 					// Add edge
 					this.getGraph().addEdge(tempEdge, vCA.getNode(), vCB.getNode());

@@ -353,12 +353,12 @@ public class ControlPanel extends PApplet {
 
 		// Weight
 
-		secondary.addLabel("Weight filter: " + UserSettings.getInstance().getEdgeWeightAttribute()).setPosition(2, 76).moveTo(group);
+		secondary.addLabel("Weight filter: " + UserSettings.getInstance().getEdgeWeightAttribute()).setPosition(2, 76).moveTo(group); // 
 
 		float[] minMaxWeightValue = Mapper.getInstance().getMinMaxForEdges(keyNamesForEdges.get(0));
 
-		secondary.addSlider("Weight").setPosition(5, 90).setSize(150, 10)
-				.setRange(minMaxWeightValue[0], minMaxWeightValue[1]).moveTo(group);
+		secondary.addSlider("Edge_Weight").setPosition(5, 90).setSize(150, 10)
+				.setRange(minMaxWeightValue[0], minMaxWeightValue[1]).moveTo(group).getCaptionLabel().setVisible(false);
 
 		// Propagation
 
@@ -515,7 +515,7 @@ public class ControlPanel extends PApplet {
 			Toggle vinculoExtT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(1, vinculoExtT2.getBooleanValue());
 			break;
-		case "Weight":
+		case "Edge_Weight":
 			UserSettings.getInstance().setWeight(theEvent.getValue());
 			break;
 		case "Succesors":
@@ -704,5 +704,9 @@ public class ControlPanel extends PApplet {
 
 	public static void setLogo(PImage loadImage) {
 		logo = loadImage;
+	}
+	
+	public void tst(){
+		
 	}
 }

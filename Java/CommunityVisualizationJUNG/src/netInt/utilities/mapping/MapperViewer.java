@@ -57,7 +57,7 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void settings() {
-		size(300, displayHeight/2);
+		size(300, displayHeight / 2);
 	}
 
 	public void setup() {
@@ -97,7 +97,8 @@ public class MapperViewer extends PApplet {
 			if (Mapper.getInstance().getNodeNumericalAttributeKeys() != null) {
 				ArrayList<String> attributeKeys = Mapper.getInstance().getNodeNumericalAttributeKeys();
 				for (int i = 0; i < attributeKeys.size(); i++) {
-					// ************* THIS 'IF' CONDITIONAL IS NOT THE RIGHT WAY TO DO FILTER
+					// ************* THIS 'IF' IS NOT THE RIGHT WAY
+					// TO DO FILTER
 					// WHICH ATTRIBUTES HAVE VALUE.
 					// **************** MORE WORK NEED TO BE DONE HERE TO SOLVE
 					// THIS ISSUE
@@ -116,24 +117,20 @@ public class MapperViewer extends PApplet {
 		}
 
 		// EDGES
-		// try {
-		// if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
-		//
-		// ArrayList<String> attributeKeys =
-		// Mapper.getInstance().getEdgeNumericalAttributeKeys();
-		// for (int i = 0; i < attributeKeys.size(); i++) {
-		// Bar temp = new Bar(attributeKeys.get(i));
-		// temp.min =
-		// Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
-		// temp.max =
-		// Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
-		// bars.add(temp);
-		// }
-		// }
-		// } catch (NullPointerException np) {
-		// System.out.println(this.getClass().getName() + " Mapper does not have
-		// Edge Numerical Attributes");
-		// }
+//		try {
+//			if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
+//
+//				ArrayList<String> attributeKeys = Mapper.getInstance().getEdgeNumericalAttributeKeys();
+//				for (int i = 0; i < attributeKeys.size(); i++) {
+//					Bar temp = new Bar(attributeKeys.get(i));
+//					temp.min = Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+//					temp.max = Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+//					bars.add(temp);
+//				}
+//			}
+//		} catch (NullPointerException np) {
+//			System.out.println(this.getClass().getName() + " Mapper does not have Edge Numerical Attributes");
+//		}
 
 		System.out.println("MapperViewer initialized");
 	}

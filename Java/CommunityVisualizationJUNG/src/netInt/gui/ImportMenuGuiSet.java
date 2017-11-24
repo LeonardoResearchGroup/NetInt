@@ -23,13 +23,14 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
-import guiSet.GuiElement;
 import guiSet.GuiSet;
-import guiSet.Item;
-import guiSet.ItemList;
-import guiSet.SelectableList;
+import guiSet.buttons.PushButton;
+import guiSet.elements.GuiElement;
+import guiSet.lists.OrderedCheckList;
+import guiSet.lists.RadioButtonList;
 import netInt.GraphPad;
 import netInt.containers.Container;
+import netInt.graphElements.GraphElement;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.mapping.Mapper;
 import netInt.utilities.mapping.MapperViewer;
@@ -46,11 +47,11 @@ import processing.core.PVector;
  */
 public class ImportMenuGuiSet implements Observer {
 	private GuiSet menu;
-	private SelectableList communities;
-	private ItemList nodeNameList;
-	private ItemList edgeWeightList;
-	private ItemList layoutList;
-	private Item loadButton;
+	private OrderedCheckList communities;
+	private RadioButtonList nodeNameList;
+	private RadioButtonList edgeWeightList;
+	private RadioButtonList layoutList;
+	private PushButton loadButton;
 	private boolean graphLoaded = false;
 
 	public GraphPad graphPad;
@@ -73,24 +74,24 @@ public class ImportMenuGuiSet implements Observer {
 	public void init() {
 
 		// Selectable List for nested communities
-		communities = new SelectableList(100f, 110f, "Node Attributes", "Nesting order");
+		communities = new OrderedCheckList(100f, 110f, "Node Attributes", "Nesting order");
 		communities.setItemSize(100, 12);
 		communities.setName("Select nesting order");
 
 		// ItemList for node names
-		nodeNameList = new ItemList(400f, 145f, "Node name");
+		nodeNameList = new RadioButtonList(400f, 145f, "Node name");
 		nodeNameList.setItemSize(new PVector(120, 12));
 
 		// for edges
-		edgeWeightList = new ItemList(550f, 145f, "Edge weight");
+		edgeWeightList = new RadioButtonList(550f, 145f, "Edge weight");
 		edgeWeightList.setItemSize(new PVector(120, 12));
 
 		// for layout
-		layoutList = new ItemList(700f, 145f, "Visualization Layout");
+		layoutList = new RadioButtonList(700f, 145f, "Visualization Layout");
 		layoutList.setItemSize(new PVector(120, 12));
 
 		// for load button
-		loadButton = new Item();
+		loadButton = new PushButton();
 		loadButton.setDimension(new PVector(100, 25));
 		loadButton.setPosition(new PVector(850f, 145f));
 		loadButton.setLabel("Load Graph");
@@ -162,9 +163,11 @@ public class ImportMenuGuiSet implements Observer {
 			// Get arrays to simplify verbose
 			String[] communityStructure = communities.getOrderedTargetList();
 
-			String[] nodeName = nodeNameList.getSelectedLabels();//nodeNameList.getOrderedLabelList();
+			String[] nodeName = new String[1];
+			nodeName[0] = nodeNameList.getSelectedLabel();// nodeNameList.getOrderedLabelList();
 
-			String[] edgeWeights = edgeWeightList.getSelectedLabels();
+			String[] edgeWeights = new String[1];
+			edgeWeights[0] = edgeWeightList.getSelectedLabel();
 
 			// Don't know what this does
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeNameList.getItemLabels()));
@@ -185,13 +188,12 @@ public class ImportMenuGuiSet implements Observer {
 
 				System.out.println("Edge import selection:");
 
-					for (int i = 0; i < edgeWeights.length; i++) {
+				for (int i = 0; i < edgeWeights.length; i++) {
 
-						System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
-					}
+					System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
+				}
 
-					UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
-
+				UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
 
 				System.out.println("_ _ _");
 
@@ -205,16 +207,16 @@ public class ImportMenuGuiSet implements Observer {
 
 				try {
 
-					layoutSelection = layoutSelection(layoutList.getSelectedLabels()[0]);
+					layoutSelection = layoutSelection(layoutList.getSelectedLabel());
 
-				} catch (ArrayIndexOutOfBoundsException e) {
+				} catch (Exception e) {
 
 					layoutSelection = Container.CONCENTRIC;
 
 				}
 
 				// Ask the assembler to load the graph
-				if (communityStructure[0] != null && nodeName != null && edgeWeights != null ) {
+				if (communityStructure[0] != null && nodeName != null && edgeWeights != null) {
 
 					// set graphLoaded to true
 					graphLoaded = graphPad.getAssembler().loadGraph(GraphPad.getFile(), communityStructure, nodeName,
@@ -232,8 +234,8 @@ public class ImportMenuGuiSet implements Observer {
 			} else {
 
 				JOptionPane.showMessageDialog(graphPad.parent.frame,
-						"Must select at least \"community\", \"label\" and \"edge weight\" attributes", "Import warning",
-						JOptionPane.WARNING_MESSAGE);
+						"Must select at least \"community\", \"label\" and \"edge weight\" attributes",
+						"Import warning", JOptionPane.WARNING_MESSAGE);
 			}
 
 			if (graphLoaded) {

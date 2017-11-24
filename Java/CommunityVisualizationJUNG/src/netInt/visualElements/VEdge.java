@@ -169,21 +169,30 @@ public class VEdge implements Serializable {
 
 							attributeName = UserSettings.getInstance().getEdgeFilters();
 
-							attributeValue = edge.getFloatAttribute(attributeName);
+							// if this edge has the attribute selected by the
+							// user
+							if (edge.getAttributes().containsKey(attributeName)) {
 
-							float tmp = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
-									attributeName);
+								attributeValue = edge.getFloatAttribute(attributeName);
 
-							setThickness(scaleFactor * tmp);
+								float tmp = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
+										attributeName);
 
-							/// Set color if new edge attribute selected in
-							/// control panel
-							float mappedVal = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
-									attributeName);
+								setThickness(scaleFactor * tmp);
 
-							int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
+								/// Set color if new edge attribute selected in
+								/// control panel
+								float mappedVal = Mapper.getInstance().convert(converterName, attributeValue,
+										Mapper.EDGE, attributeName);
 
-							bezier.setColor(mappedColor);
+								int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
+
+								bezier.setColor(mappedColor);
+								
+							} else {
+
+								setThickness(0.1f);
+							}
 
 						}
 					}
@@ -299,32 +308,35 @@ public class VEdge implements Serializable {
 
 	public void setVisibility(float edgeVisibilityThreshold) {
 
-		// Set the Visibility
-		try {
+		// if this edge has that attributeName
+		if (edge.getAttributes().containsKey(UserSettings.getInstance().getEdgeWeightAttribute())) {
 
-			float weight = edge.getFloatAttribute(UserSettings.getInstance().getEdgeWeightAttribute());
+			// Set the Visibility
+			try {
 
-			if (edgeVisibilityThreshold > weight || hidden) {
-				visibility = false;
+				float weight = edge.getFloatAttribute(UserSettings.getInstance().getEdgeWeightAttribute());
 
-			} else {
-				visibility = true;
-			}
-		} catch (Exception e) {
+				if (edgeVisibilityThreshold > weight || hidden) {
+					visibility = false;
 
-			if (e instanceof NullPointerException) {
+				} else {
+					visibility = true;
+				}
+			} catch (Exception e) {
 
-				/*
-				 * IMPORTANT: edges belonging to tiers above tier 0 might not
-				 * have the same attributes as the root edges, that is why
-				 * NullPointerExceptions are ignored.
-				 */
+				if (e instanceof NullPointerException) {
 
-			} else {
-				System.out.println(this.getClass().getName() + " " + e.getMessage());
+					/*
+					 * IMPORTANT: edges belonging to tiers above tier 0 might
+					 * not have the same attributes as the root edges, that is
+					 * why NullPointerExceptions are ignored.
+					 */
+
+				} else {
+					System.out.println(this.getClass().getName() + " " + e.getMessage());
+				}
 			}
 		}
-
 	}
 
 	public void setHidden(boolean hidden) {
