@@ -374,6 +374,10 @@ public class Bezier {
 	public Color getPropagated() {
 		return propagated;
 	}
+	
+	public int getBodyColor() {
+		return bodyColor.getRGB();
+	}
 
 	public void setPropagated(Color propagated) {
 		this.propagated = propagated;

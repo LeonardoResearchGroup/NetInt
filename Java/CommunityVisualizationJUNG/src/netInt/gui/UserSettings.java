@@ -33,7 +33,8 @@ public class UserSettings {
 	private float thresholdOutDegree;
 	private boolean showNodes = true;
 	private boolean showName = false;
-	private String filtersNode;
+	private String nodeColorAttribute;
+	private String nodeSizeAttribute;
 	private String converterNode;
 
 	// EDGE Visibility Settings
@@ -43,7 +44,8 @@ public class UserSettings {
 	private float thresholdWeight;
 	private float thresholdPropagation = 0;
 	private boolean onlyPorpagation = false;
-	private String filtersEdge;
+	private String edgeThicknessAttribute;
+	private String edgeColorAttribute;
 	private String converterEdge;
 	private TreeMap<Integer, TreeMap<String, Boolean>> edgeTierVisibility;
 	private float clearPropagation;
@@ -90,11 +92,25 @@ public class UserSettings {
 
 	}
 
-	// ******* GETTERS *******
+	// **************************** GETTERS ****************************
+	// ***** FILE GETTERS ******
+	
+	public String getFileExportName() {
+		return fileExportName;
+	}
+	
+	// ***** BACKGROUND GETTERS ******
+	
+	public int getColorBackground() {
+		return colorBackground;
+	}
+	
+	// ***** NODE GETTERS ******
+	
 	public float getDegreeThreshold() {
 		return thresholdOutDegree;
 	}
-
+	
 	public boolean showName() {
 		return showName;
 	}
@@ -102,7 +118,25 @@ public class UserSettings {
 	public boolean showNodes() {
 		return showNodes;
 	}
+	
+	public String getNodeColor() {
+		return nodeColorAttribute;
+	}
+	
+	public String getNodeSize() {
+		return nodeSizeAttribute;
+	}
+	
+	public String getIdSearch() {
+		return idSearch;
+	}
 
+	public String getConverterNode() {
+		return converterNode;
+	}
+	
+	// ***** EDGE GETTERS ******
+	
 	public boolean showInternalEdges() {
 		return showInternalEdges;
 	}
@@ -110,67 +144,35 @@ public class UserSettings {
 	public boolean showExternalEdges() {
 		return showExternalEdges;
 	}
-
-	public String getNodeFilters() {
-		return filtersNode;
-	}
-
+	
 	public float getWeight() {
 		return thresholdWeight;
 	}
-
+	
 	public float getPropagation() {
 		return thresholdPropagation;
 	}
 
-	public String getEdgeFilters() {
-		return filtersEdge;
+	public String getEdgeColor() {
+		return edgeColorAttribute;
 	}
-
-	public String getIdSearch() {
-		return idSearch;
+	
+	public String getEdgeThickness() {
+		return edgeThicknessAttribute;
 	}
-
-	public int getColorBackground() {
-		return colorBackground;
-	}
-
+	
 	public boolean getOnlyPropagation() {
 		return onlyPorpagation;
 	}
-
-	public ArrayList<String> getDescriptiveStatisticKeys() {
-		return descriptiveStatisticKeys;
-	}
-
-	public HashMap<String, Boolean> getDescriptiveStatistics() {
-		return descriptiveStatistics;
-	}
-
-	public boolean isStatisticVisible(String key) {
-		return descriptiveStatistics.get(key);
-	}
-
-	public HashMap<String, String> getDescriptiveKeys() {
-		return descriptiveKeys;
-	}
-
-	public String getConverterNode() {
-		return converterNode;
-	}
-
+	
 	public String getConverterEdge() {
 		return converterEdge;
 	}
-
-	public String getFileExportName() {
-		return fileExportName;
-	}
-
+	
 	public String getEdgeWeightAttribute() {
 		return edgeWeightAttribute;
 	}
-
+	
 	public boolean internalEdgeVisibilityForTier(int tier) {
 		return edgeTierVisibility.get(tier).get("Internal");
 	}
@@ -179,22 +181,51 @@ public class UserSettings {
 		return edgeTierVisibility.get(tier).get("External");
 	}
 
-	// ***** SETTERS ******
-
-	public void setEdgeWeightAttribute(String edgeWeightAttribute) {
-		this.edgeWeightAttribute = edgeWeightAttribute;
+	public boolean getClearPropagation() {
+		boolean rtn = clearPropagation == 1.0;
+		clearPropagation = 0f;
+		return rtn;
 	}
+	
+	// ***** STATISTICS GETTERS ******
+	
+	public ArrayList<String> getDescriptiveStatisticKeys() {
+		return descriptiveStatisticKeys;
+	}
+	
+	public HashMap<String, Boolean> getDescriptiveStatistics() {
+		return descriptiveStatistics;
+	}
+	
+	public boolean isStatisticVisible(String key) {
+		return descriptiveStatistics.get(key);
+	}
+	
+	public HashMap<String, String> getDescriptiveKeys() {
+		return descriptiveKeys;
+	}
+	
+
+
+
+
+	// **************************** SETTERS ***************************
+	// ***** FILE SETTERS ******
 
 	public void setFileExportName(String val) {
 		this.fileExportName = val;
 	}
 
-	public void setConverterEdge(String converterEdge) {
-		this.converterEdge = converterEdge;
+	// ***** BACKGROUND SETTERS ******
+
+	public void setColorBackground(int colorValue) {
+		colorBackground = colorValue;
 	}
 
-	public void setDescriptiveStatisticKeys(ArrayList<String> descriptiveStatisticKeys) {
-		this.descriptiveStatisticKeys = descriptiveStatisticKeys;
+	// ***** NODE SETTERS ******
+
+	public void setShowNodes(boolean booleanValue) {
+		showNodes = booleanValue;
 	}
 
 	public void setDegreeThreshold(float umbralGrados) {
@@ -205,20 +236,12 @@ public class UserSettings {
 		this.showName = mostrarNombre;
 	}
 
-	public void setNodeFilters(String filtrosNodo) {
-		this.filtersNode = filtrosNodo;
+	public void setNodeColorAtt(String val) {
+		this.nodeColorAttribute = val;
 	}
-
-	public void setWeight(float weight) {
-		this.thresholdWeight = weight;
-	}
-
-	public void setPropagation(float propagacion) {
-		this.thresholdPropagation = propagacion;
-	}
-
-	public void setEdgeFilters(String filtrosVinculo) {
-		this.filtersEdge = filtrosVinculo;
+	
+	public void setNodeSizeAtt(String val) {
+		this.nodeSizeAttribute = val;
 	}
 
 	public void setIDSearch(String stringValue) {
@@ -229,20 +252,42 @@ public class UserSettings {
 		idSearch = null;
 	}
 
-	public void setColorBackground(int colorValue) {
-		colorBackground = colorValue;
+	public void setConverterNode(String val) {
+		this.converterNode = val;
+	}
+
+	// ***** EDGE SETTERS ******
+
+	public void setEdgeWeightAttribute(String edgeWeightAttribute) {
+		this.edgeWeightAttribute = edgeWeightAttribute;
+	}
+
+	public void setWeight(float weight) {
+		this.thresholdWeight = weight;
+	}
+
+	public void setConverterEdge(String converterEdge) {
+		this.converterEdge = converterEdge;
+	}
+
+	public void setEdgeColorAtt(String val) {
+		this.edgeColorAttribute = val;
+	}
+	
+	public void setEdgeThicknessAtt(String val) {
+		this.edgeThicknessAttribute = val;
+	}
+
+	public void setPropagation(float propagacion) {
+		this.thresholdPropagation = propagacion;
 	}
 
 	public void setPropagationOnly(boolean booleanValue) {
 		onlyPorpagation = booleanValue;
 	}
 
-	public void setStatisticVisibility(String key, boolean state) {
-		descriptiveStatistics.put(key, state);
-	}
-
-	public void setShowNodes(boolean booleanValue) {
-		showNodes = booleanValue;
+	public void setClearPropagation(float val) {
+		clearPropagation = val;
 	}
 
 	public void setShowInternalEdges(int tier, boolean booleanValue) {
@@ -253,22 +298,20 @@ public class UserSettings {
 		edgeTierVisibility.get(tier).put("External", booleanValue);
 	}
 
+	// ***** STATISTICS SETTERS ******
+
+	public void setDescriptiveStatisticKeys(ArrayList<String> descriptiveStatisticKeys) {
+		this.descriptiveStatisticKeys = descriptiveStatisticKeys;
+	}
+
+	public void setStatisticVisibility(String key, boolean state) {
+		descriptiveStatistics.put(key, state);
+	}
+
+	// ****** EVENT SETTERS ******
+
 	public void setEventOnVSettings(boolean eventTriggered) {
 		eventOnVSettings = eventTriggered;
-	}
-
-	public void setConverterNode(String val) {
-		this.converterNode = val;
-	}
-
-	public void setClearPropagation(float val) {
-		clearPropagation = val;
-	}
-
-	public boolean getClearPropagation() {
-		boolean rtn = clearPropagation == 1.0;
-		clearPropagation = 0f;
-		return rtn;
 	}
 
 }

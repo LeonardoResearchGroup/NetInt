@@ -279,8 +279,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 
 				// Set pink color
-				Color color = new Color(255, 100, 180);
-				vEE.setColor(color.getRGB());
+//				Color color = new Color(255, 100, 180);
+//				vEE.setColor(color.getRGB());
 				vEE.show();
 			}
 		}
@@ -291,7 +291,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// VCommunities
 			for (VCommunity vC : container.getVCommunities()) {
 
-				vC.setVisibility(true);
+				//vC.setVisibility(true);
 
 				// set subCommunities coordinates relative to vCommunity
 				// position
@@ -334,7 +334,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				for (VNode vN : container.getVNodes()) {
 
 					//
-					vN.setVisibility(true);
+					//vN.setVisibility(true);
 
 					// Center vNodes relative to a given position
 					// if (Canvas.mouseEventOnCanvas &&

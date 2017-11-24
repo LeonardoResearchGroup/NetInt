@@ -46,11 +46,11 @@ public class VEdge implements Serializable {
 	private Edge edge;
 
 	// Visibility attributes
-	private boolean visibility = true;
+	private boolean aboveVisibilityThreshold = true;
 	private boolean hidden = false;
 
 	// Depends on degree of the nodes
-	private boolean anotherVisibility = true;
+	private boolean sourceTargetVisibile = true;
 
 	// Source and target nodes
 	private VNode vSource, vTarget;
@@ -67,8 +67,12 @@ public class VEdge implements Serializable {
 	private float attributeValue;
 
 	// UserSettings
-	private String attributeName = "no_attribute";
-	private String converterName = Mapper.LINEAR;
+	private String thicknessAttributeName = "no_attribute";
+	private String colorAttributeName = "no_attribute";
+	
+	// Converters
+	private String converterThicknessName = Mapper.LINEAR;
+	private String converterColorName = Mapper.LINEAR;
 
 	public VEdge(Edge edge) {
 		this.edge = edge;
@@ -138,6 +142,7 @@ public class VEdge implements Serializable {
 	public void makeBezier() {
 		bezier = new Bezier(vSource.getPos(), vTarget.getPos());
 		int alpha = 100;
+		bezier.setColor(getSource().getColor().darker().darker().getRGB());
 		bezier.setAlpha(alpha);
 	}
 
@@ -152,68 +157,118 @@ public class VEdge implements Serializable {
 
 		if (checkVisibility()) {
 
-			// This visibility is determined by a on/off button and a threshold
+			// This visibility is determined by a a threshold
 			// parameter set at the Control Panel
-			if (visibility && anotherVisibility) {
-
-				// *** Set thickness
-				Canvas.app.strokeWeight(thickness);
+			if (aboveVisibilityThreshold && sourceTargetVisibile) {
 
 				// Set the thickness based on the user selected attribute name
 				// in control panel
 				if (UserSettings.eventOnVSettings) {
 
-					if (UserSettings.getInstance().getEdgeFilters() != null) {
+					// Set thickness
+					setThickness(calculateEdgeThickness());
 
-						if (!UserSettings.getInstance().getEdgeFilters().equals(attributeName)) {
+					// Set color
+					setColor(calculateEdgeColor());
 
-							attributeName = UserSettings.getInstance().getEdgeFilters();
+					// Convert thickness by current converter
+					convertThickness();
 
-							// if this edge has the attribute selected by the
-							// user
-							if (edge.getAttributes().containsKey(attributeName)) {
-
-								attributeValue = edge.getFloatAttribute(attributeName);
-
-								float tmp = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
-										attributeName);
-
-								setThickness(scaleFactor * tmp);
-
-								/// Set color if new edge attribute selected in
-								/// control panel
-								float mappedVal = Mapper.getInstance().convert(converterName, attributeValue,
-										Mapper.EDGE, attributeName);
-
-								int mappedColor = ColorMap.getInstance(ColorMap.PLASMA).getColorRGB(mappedVal);
-
-								bezier.setColor(mappedColor);
-								
-							} else {
-
-								setThickness(0.1f);
-							}
-
-						}
-					}
-
-					// Set the thickness based on the user selected converter
-					// name
-					if (UserSettings.getInstance().getConverterEdge() != null) {
-
-						if (!UserSettings.getInstance().getConverterEdge().equals(converterName)) {
-
-							converterName = UserSettings.getInstance().getConverterEdge();
-
-							float tmp = Mapper.getInstance().convert(converterName, attributeValue, Mapper.EDGE,
-									attributeName);
-
-							setThickness(scaleFactor * tmp);
-						}
-					}
+					// Convert color by current converter
+					convertColor();
 				}
 
+				// Set thickness on PApplet
+				Canvas.app.strokeWeight(thickness);
+
+				// Draw
 				drawBezier();
+
+			}
+		}
+	}
+
+	private float calculateEdgeThickness() {
+		float rtn = getThickness();
+
+		if (UserSettings.getInstance().getEdgeThickness() != null) {
+
+			if (!UserSettings.getInstance().getEdgeThickness().equals(thicknessAttributeName)) {
+
+				thicknessAttributeName = UserSettings.getInstance().getEdgeThickness();
+
+				if (edge.getAttributes().containsKey(thicknessAttributeName)) {
+
+					attributeValue = edge.getFloatAttribute(thicknessAttributeName);
+
+					rtn = Mapper.getInstance().convert(converterThicknessName, attributeValue, Mapper.EDGE,
+							thicknessAttributeName);
+
+				}
+			}
+		}
+		return rtn;
+	}
+
+	private int calculateEdgeColor() {
+		//int rtn = bezier.getBodyColor();
+		int rtn = getSource().getColor().getRGB();
+
+		if (UserSettings.getInstance().getEdgeColor() != null) {
+
+			if (!UserSettings.getInstance().getEdgeColor().equals(colorAttributeName)) {
+
+				colorAttributeName = UserSettings.getInstance().getEdgeColor();
+
+				// if this edge has the attribute selected by the user
+				if (edge.getAttributes().containsKey(colorAttributeName)) {
+
+					attributeValue = edge.getFloatAttribute(colorAttributeName);
+
+					float mappedVal = Mapper.getInstance().convert(converterColorName, attributeValue, Mapper.EDGE,
+							colorAttributeName);
+
+					rtn = ColorMap.getInstance().getColorRGB(mappedVal);
+
+				}
+			}
+		}
+		return rtn;
+	}
+
+	private void convertThickness() {
+		// Set the thickness based on the user selected converter
+		// name
+		if (UserSettings.getInstance().getConverterEdge() != null) {
+
+			if (!UserSettings.getInstance().getConverterEdge().equals(converterThicknessName)) {
+
+				converterThicknessName = UserSettings.getInstance().getConverterEdge();
+
+				float tmpThickness = Mapper.getInstance().convert(converterThicknessName, attributeValue, Mapper.EDGE,
+						thicknessAttributeName);
+
+				setThickness(scaleFactor * tmpThickness);
+			}
+		}
+	}
+
+	private void convertColor() {
+		// Set the thickness based on the user selected converter
+		// name
+		if (UserSettings.getInstance().getConverterEdge() != null) {
+
+			if (!UserSettings.getInstance().getConverterEdge().equals(converterColorName)) {
+
+				converterColorName = UserSettings.getInstance().getConverterEdge();
+
+				float tmpColor = Mapper.getInstance().convert(converterColorName, attributeValue, Mapper.EDGE,
+						colorAttributeName);
+
+				int mappedColor = ColorMap.getInstance().getColorRGB(tmpColor);
+
+				setColor(mappedColor);
+
 			}
 		}
 	}
@@ -265,7 +320,7 @@ public class VEdge implements Serializable {
 		}
 	}
 
-	// getters and setters
+	// ****** getters and setters *******
 
 	public void setColor(int color) {
 		bezier.setColor(color);
@@ -295,7 +350,7 @@ public class VEdge implements Serializable {
 		return thickness;
 	}
 
-	public void setThickness(float thickness) {
+	private void setThickness(float thickness) {
 		this.thickness = thickness;
 	}
 
@@ -317,10 +372,10 @@ public class VEdge implements Serializable {
 				float weight = edge.getFloatAttribute(UserSettings.getInstance().getEdgeWeightAttribute());
 
 				if (edgeVisibilityThreshold > weight || hidden) {
-					visibility = false;
+					aboveVisibilityThreshold = false;
 
 				} else {
-					visibility = true;
+					aboveVisibilityThreshold = true;
 				}
 			} catch (Exception e) {
 
@@ -344,21 +399,25 @@ public class VEdge implements Serializable {
 
 	}
 
-	public void setAnotherVisibility(boolean anotherVisibility) {
-		this.anotherVisibility = anotherVisibility;
+	public void setSourceTargetVisibility(boolean anotherVisibility) {
+		this.sourceTargetVisibile = anotherVisibility;
 	}
 
 	public boolean checkVisibility() {
+
 		boolean isVisible = vSource.isVisible() && vTarget.isVisible() && vSource.isDisplayed()
 				&& vTarget.isDisplayed();
+
 		if (vSource instanceof VCommunity) {
+
 			VCommunity vCSource = (VCommunity) vSource;
+
 			VCommunity vCTarget = (VCommunity) vTarget;
+
 			isVisible = isVisible && !vCSource.getComCover().isUnlocked() && !vCTarget.getComCover().isUnlocked();
-
 		}
-		return isVisible;
 
+		return isVisible;
 	}
 
 	// // **** Events

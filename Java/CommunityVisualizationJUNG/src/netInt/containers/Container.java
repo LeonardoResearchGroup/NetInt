@@ -174,7 +174,7 @@ public abstract class Container {
 			vEdge.makeBezier();
 			vEdges.add(vEdge);
 			if (e.getSource().getDegree(0) < degreeThreshold || e.getTarget().getDegree(0) < degreeThreshold) {
-				vEdge.setAnotherVisibility(false);
+				vEdge.setSourceTargetVisibility(false);
 			}
 		}
 	}

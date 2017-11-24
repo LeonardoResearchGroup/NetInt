@@ -232,7 +232,7 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(225);
+		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(282);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
@@ -302,7 +302,7 @@ public class ControlPanel extends PApplet {
 
 		// Node Appearance controllers
 
-		secondary.addLabel("Mapped node attribute").setPosition(2, 116).moveTo(group);
+		secondary.addLabel("Node attributes").setPosition(2, 116).moveTo(group);
 
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
@@ -313,14 +313,18 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Diameter").setLabel("Diameter").addItems(items).setPosition(5, 131).setSize(95, 52)
+		secondary.addScrollableList("Size").setLabel("Size").addItems(items).setPosition(5, 131).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).getCaptionLabel()
 				.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
+		
+		secondary.addScrollableList("Node_Color").setLabel("Color").addItems(items).setPosition(106, 131).setSize(95, 52)
+		.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).getCaptionLabel()
+		.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addScrollableList("Converter Node").addItems(items).setPosition(106, 131).setSize(95, 52)
+		secondary.addScrollableList("Converter Node").addItems(items).setPosition(5, 193).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group); // .close();
 
 	}
@@ -376,7 +380,7 @@ public class ControlPanel extends PApplet {
 
 		// Appearance controllers
 
-		secondary.addLabel("Mapped edge atttribute").setPosition(2, 144).moveTo(group);
+		secondary.addLabel("Edge attributes").setPosition(2, 144).moveTo(group);
 
 		// Thickness
 		Object[] mappers = Mapper.getInstance().getEdgeAttributesMax().getAttributeKeys().toArray();
@@ -387,14 +391,16 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Thickness").setPosition(5, 159).setSize(95, 52).setBarHeight(13).setItemHeight(13)
-				.addItems(items).setType(ScrollableList.DROPDOWN).moveTo(group);
+		secondary.addScrollableList("Edge_Thickness").setPosition(5, 159).setSize(95, 52).setBarHeight(13).setItemHeight(13)
+				.addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Thickness").moveTo(group);
+		
+		secondary.addScrollableList("Edge_Color").setPosition(106, 159).setSize(95, 52).setBarHeight(13).setItemHeight(13)
+		.addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Color").moveTo(group);
 
 		// Converters
-
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(106, 159).setSize(95, 52)
+		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(5, 221).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
 	}
 
@@ -487,15 +493,20 @@ public class ControlPanel extends PApplet {
 			Toggle nombre = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowName(nombre.getBooleanValue());
 			break;
+		case "Size":
+			int nodeSize = (int) secondary.get(ScrollableList.class, "Size").getValue();
+			UserSettings.getInstance().setNodeSizeAtt(
+					secondary.get(ScrollableList.class, "Size").getItem(nodeSize).get("name").toString());
+			break;
+		case "Node_Color":
+			int nodeColor = (int) secondary.get(ScrollableList.class, "Node_Color").getValue();
+			UserSettings.getInstance().setNodeColorAtt(
+					secondary.get(ScrollableList.class, "Node_Color").getItem(nodeColor).get("name").toString());
+			break;
 		case "Converter Node":
 			int valueCN = (int) secondary.get(ScrollableList.class, "Converter Node").getValue();
 			UserSettings.getInstance().setConverterNode(
 					secondary.get(ScrollableList.class, "Converter Node").getItem(valueCN).get("name").toString());
-			break;
-		case "Diameter":
-			int valueD = (int) secondary.get(ScrollableList.class, "Diameter").getValue();
-			UserSettings.getInstance().setNodeFilters(
-					secondary.get(ScrollableList.class, "Diameter").getItem(valueD).get("name").toString());
 			break;
 
 		// **** EDGES ****
@@ -534,11 +545,17 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setConverterEdge(
 					secondary.get(ScrollableList.class, "Converter Edge").getItem(valueCE).get("name").toString());
 			break;
-		case "Thickness":
-			int valueE = (int) secondary.get(ScrollableList.class, "Thickness").getValue();
+		case "Edge_Thickness":
+			int edgeThickness = (int) secondary.get(ScrollableList.class, "Edge_Thickness").getValue();
 
-			UserSettings.getInstance().setEdgeFilters(
-					secondary.get(ScrollableList.class, "Thickness").getItem(valueE).get("name").toString());
+			UserSettings.getInstance().setEdgeThicknessAtt(
+					secondary.get(ScrollableList.class, "Edge_Thickness").getItem(edgeThickness).get("name").toString());
+			break;
+		case "Edge_Color":
+			int valueE = (int) secondary.get(ScrollableList.class, "Edge_Color").getValue();
+
+			UserSettings.getInstance().setEdgeColorAtt(
+					secondary.get(ScrollableList.class, "Edge_Color").getItem(valueE).get("name").toString());
 			break;
 		default:
 			// Executable.retrieveControlPanelEvent(theEvent);
@@ -706,7 +723,4 @@ public class ControlPanel extends PApplet {
 		logo = loadImage;
 	}
 	
-	public void tst(){
-		
-	}
 }
