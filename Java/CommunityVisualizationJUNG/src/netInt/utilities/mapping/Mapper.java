@@ -38,10 +38,11 @@ public class Mapper {
 	public static final String LINEAR = "linear";
 	public static final String SINUSOIDAL = "sinusoidal";
 	public static final String LOGARITHMIC = "logarithmic";
-//	public static final String RADIAL = "radial";
-//	public static final String SIGMOID = "sigmoid";
+	// public static final String RADIAL = "radial";
+	// public static final String SIGMOID = "sigmoid";
 
-	private String[] converters = { "linear", "sinusoidal", "logarithmic"}; // "radial", "sigmoid" 
+	private String[] converters = { "linear", "sinusoidal", "logarithmic" }; // "radial",
+																				// "sigmoid"
 	// MAXs & MINs nodes
 	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
 	private CategoricalCollection nodeCategoricalAttributes;
@@ -146,8 +147,8 @@ public class Mapper {
 			rtn[0] = nodeAttributesMin.getValueofAttribute(attributeName);
 			rtn[1] = nodeAttributesMax.getValueofAttribute(attributeName);
 		} catch (NullPointerException e) {
-			System.out.println(
-					this.getClass().getName() + "> wrong attribute name: " + attributeName + " - at getMaxMin()");
+			System.out.println(this.getClass().getName() + "> wrong attribute name: " + attributeName
+					+ " - at getMinMaxForNodes()");
 		}
 		if (rtn[0] == rtn[1]) {
 			System.out.println(this.getClass().getName() + "> WARNING: min and max values of node attribute "
@@ -162,8 +163,8 @@ public class Mapper {
 			rtn[0] = edgeAttributesMin.getValueofAttribute(attributeName);
 			rtn[1] = edgeAttributesMax.getValueofAttribute(attributeName);
 		} catch (NullPointerException e) {
-			System.out.println(
-					this.getClass().getName() + "> wrong attribute name: " + attributeName + " - at getMaxMin()");
+			System.out.println(this.getClass().getName() + "> wrong attribute name: " + attributeName
+					+ " - at getMinMaxForEdges()");
 		}
 		if (rtn[0] == rtn[1]) {
 			System.out.println(this.getClass().getName() + "> WARNING: min and max values of edge attribute "
@@ -257,11 +258,18 @@ public class Mapper {
 	 * Base 10 Logarithm
 	 * 
 	 * @param weight
-	 * @return
+	 *            any number
+	 * @return Returns 0 if the parameter is less or equal to zero else the Base
+	 *         10 logarithm
 	 */
 	private float log(float weight) {
-		float rtn = (float) Math.log10(weight);
-		return rtn;
+
+		if (weight > 0) {
+			return (float) Math.log10(weight);
+		} else {
+			return 0;
+		}
+
 	}
 
 	/**
@@ -552,7 +560,7 @@ public class Mapper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the min and max value stored in a collection of attributes for
 	 * edges. It initializes the collection of attributes in case it is equal to

@@ -349,7 +349,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					// If vN is visible and not centered
 					if (vNodesCentered) {
-						vN.show(vN.isDisplayed());
+						//vN.show(vN.isDisplayed());
+						vN.show();
 						vN.setDisplayed(true);
 					}
 				}

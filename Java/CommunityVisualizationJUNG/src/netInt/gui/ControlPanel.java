@@ -324,7 +324,7 @@ public class ControlPanel extends PApplet {
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addScrollableList("Converter Node").addItems(items).setPosition(5, 193).setSize(95, 52)
+		secondary.addScrollableList("Converter_Node").addItems(items).setPosition(5, 193).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group); // .close();
 
 	}
@@ -400,7 +400,7 @@ public class ControlPanel extends PApplet {
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addScrollableList("Converter Edge").addItems(items).setPosition(5, 221).setSize(95, 52)
+		secondary.addScrollableList("Converter_Edge").addItems(items).setPosition(5, 221).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
 	}
 
@@ -503,10 +503,10 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setNodeColorAtt(
 					secondary.get(ScrollableList.class, "Node_Color").getItem(nodeColor).get("name").toString());
 			break;
-		case "Converter Node":
-			int valueCN = (int) secondary.get(ScrollableList.class, "Converter Node").getValue();
+		case "Converter_Node":
+			int valueCN = (int) secondary.get(ScrollableList.class, "Converter_Node").getValue();
 			UserSettings.getInstance().setConverterNode(
-					secondary.get(ScrollableList.class, "Converter Node").getItem(valueCN).get("name").toString());
+					secondary.get(ScrollableList.class, "Converter_Node").getItem(valueCN).get("name").toString());
 			break;
 
 		// **** EDGES ****
@@ -540,10 +540,10 @@ public class ControlPanel extends PApplet {
 			Bang clearPropagation = (Bang) theEvent.getController();
 			UserSettings.getInstance().setClearPropagation(clearPropagation.getValue());
 			break;
-		case "Converter Edge":
-			int valueCE = (int) secondary.get(ScrollableList.class, "Converter Edge").getValue();
+		case "Converter_Edge":
+			int valueCE = (int) secondary.get(ScrollableList.class, "Converter_Edge").getValue();
 			UserSettings.getInstance().setConverterEdge(
-					secondary.get(ScrollableList.class, "Converter Edge").getItem(valueCE).get("name").toString());
+					secondary.get(ScrollableList.class, "Converter_Edge").getItem(valueCE).get("name").toString());
 			break;
 		case "Edge_Thickness":
 			int edgeThickness = (int) secondary.get(ScrollableList.class, "Edge_Thickness").getValue();

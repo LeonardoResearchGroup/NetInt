@@ -21,6 +21,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.JOptionPane;
+
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.graphElements.Node;
@@ -58,7 +60,15 @@ public class VNode extends VisualAtom implements Serializable {
 	// UserSettings
 	private String converterSizeName = Mapper.LINEAR;
 	private String converterColorName = Mapper.LINEAR;
-	private int sizeFactor = 3;
+	private int sizeFactor = 10;
+	private int minSize = 3;
+
+	// Visual attributes
+	int textColor = new Color(200, 200, 200).getRGB();
+
+	int haloStrokeColor;
+	float haloStrokeWeight;
+	int haloOffset = 0;
 
 	public VNode(Node node, float x, float y) {
 		super(x, y);
@@ -96,26 +106,36 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	private void propagate(int sequence) {
+
 		// Controls iterative propagation
 		if (!propagated) {
+
 			// Successors
 			int next = propagationCount(sequence);
+
 			for (VNode vN : successors) {
+
 				vN.propagateSuccessor(next);
+
 				// Mark the next vNode as part of the propagation chain. This is
 				// important because vEdges are displayed as part of the
 				// propagation chain only if source and target nodes are marked
 				// as propagated
 				vN.inPropagationChain = true;
 			}
+
 			inPropagationChain = true;
+
 			propagated = true;
 		}
+
 		// this logic gate serves to update the propagation visualization
 		// every time the user changes the propagation setting in the control
 		// panel
 		if (propagationSteps != (int) UserSettings.getInstance().getPropagation()) {
+
 			reclaim();
+
 			propagationSteps = (int) UserSettings.getInstance().getPropagation();
 		}
 	}
@@ -180,67 +200,51 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	// *** SHOW METHODS ***
-	public void show() {
-
-	}
 
 	/**
 	 * @param communityDisplayed
 	 *            true if show
 	 */
-	public void show(boolean communityDisplayed) {
+	public void show() {
 		// Hide or show the vNode depending of the user defined degree threshold
 		if (filterVisibility()) {
-			
-			//Reset stroke weight
+
+			// Reset stroke weight
 			Canvas.app.noStroke();
 
 			// *** Set the vNode size
 			// If this node has the attribute selected by the user
-			if (node.getAttributes().containsKey(sizeAttributeName)) {
-
-				float sizeValue = node.getFloatAttribute(sizeAttributeName);
+			if (node.getAttributes().containsKey(UserSettings.getInstance().getNodeSize())) {
 
 				// Set the size with current converter and new selected
-				// attribute
-				// name
-				setDiameter(sizeFactor * calculateSize(sizeValue));
-
-				// Reset the size if user selects a new size converter
-				convertSize(sizeValue);
+				// attribute name
+				setDiameter(calculateSize());
 			}
+
+			// Reset the size if user selects a new size converter
+			convertSize();
 
 			// *** Set vNode color
-			// if this node has the attribute selected by the user
-			if (node.getAttributes().containsKey(colorAttributeName)) {
-
-				float colorValue = node.getFloatAttribute(colorAttributeName);
-
-				setColor(calculateColor(colorValue));
-
-				// Reset the color if user selects a new color converter
-				convertColor(colorValue);
-			}
+			// If this node has the attribute selected by the user
+			// if (node.getAttributes().containsKey(colorAttributeName)) {
+			//
+			// float colorValue = node.getFloatAttribute(colorAttributeName);
+			//
+			// setColor(calculateColor(colorValue));
+			//
+			// // Reset the color if user selects a new color converter
+			// convertColor(colorValue);
+			// }
 
 			// Show propagation
-			showPropagation(communityDisplayed);
 
-			if (isMouseOver) {
-				// canvas.app.fill(setColor(200, 0, 0, 120));
-				// canvas.app.noFill();
-				Canvas.app.strokeWeight(1);
-				Canvas.app.fill(brighter());
-				Canvas.app.stroke(225, 0, 0);
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-				// Show comments
-				description.show(this);
-			} else {
-				Canvas.app.noStroke();
-			}
+			drawNode();
+
+			showDescription();
 		}
 	}
 
-	private float calculateSize(float value) {
+	private float calculateSize() {
 
 		float rtn = getDiameter();
 
@@ -252,15 +256,50 @@ public class VNode extends VisualAtom implements Serializable {
 
 			sizeAttributeName = userSelectedFilter;
 
+			float value = node.getFloatAttribute(sizeAttributeName);
+
 			rtn = Mapper.getInstance().convert(converterSizeName, value, Mapper.NODE, sizeAttributeName);
 
-		} else {
+			rtn = (rtn * sizeFactor) + minSize;
 
-			// set default size
-			rtn = 1f;
 		}
 
 		return rtn;
+	}
+
+	private void convertSize() {
+
+		// user selected converter name
+		String userSelectedConverter = UserSettings.getInstance().getConverterNode();
+
+		// logical gate to prevent unnecessary looping
+		if (userSelectedConverter != null && !converterSizeName.equals(userSelectedConverter)) {
+
+			// Update converter name
+			converterSizeName = userSelectedConverter;
+
+			if (UserSettings.getInstance().getNodeSize() != null) {
+
+				sizeAttributeName = UserSettings.getInstance().getNodeSize();
+
+				float value = node.getFloatAttribute(sizeAttributeName);
+
+				// Map input with updated converter
+				float tmp = Mapper.getInstance().convert(converterSizeName, value, Mapper.NODE, sizeAttributeName);
+
+				tmp *= sizeFactor;
+
+				tmp += minSize;
+
+				setDiameter(tmp);
+
+			} else {
+
+				System.out.println(
+						this.getClass().getName() + " Missing node size attribute. Choose one in the control panel");
+			}
+
+		}
 	}
 
 	private int calculateColor(float value) {
@@ -287,29 +326,6 @@ public class VNode extends VisualAtom implements Serializable {
 		return rtn;
 	}
 
-	private void convertSize(float value) {
-
-		// user selected converter name
-		String userSelectedConverter = UserSettings.getInstance().getConverterNode();
-
-		// logical gate to prevent unnecessary looping
-		if (userSelectedConverter != null && !converterSizeName.equals(userSelectedConverter)) {
-
-			// Update converter name
-			converterSizeName = userSelectedConverter;
-
-			// Map input with updated converter
-			float tmp = Mapper.getInstance().convert(converterSizeName, value, Mapper.NODE, sizeAttributeName);
-
-			setDiameter(sizeFactor * tmp);
-
-		} else {
-
-			// set default size
-			setDiameter(1f);
-		}
-	}
-
 	private void convertColor(float value) {
 
 		// user selected converter name
@@ -327,114 +343,148 @@ public class VNode extends VisualAtom implements Serializable {
 			int mappedColor = ColorMap.getInstance().getColorRGB(tmpColor);
 
 			setColor(mappedColor);
-
 		}
 	}
 
-	private void showPropagation(boolean communityDisplayed) {
+	private void drawNode() {
 
-		if (UserSettings.getInstance().getOnlyPropagation()) {
+		// *** NORMAL STATE ***
+		// If the user DOES NOT select "only propagation" button.
+		if (!UserSettings.getInstance().getOnlyPropagation()) {
 
-			if (propagationSource || inPropagationChain) {
+			// nodeFill = getColorRGB();
 
-				communityDisplayed = true;
+			// Canvas.app.fill(getColorRGB());
+			// Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			haloOffset = 0;
+
+			// If show names enabled
+			if (UserSettings.getInstance().showName()) {
+
+				Canvas.app.fill(textColor);
+				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+			}
+
+			// Show Propagation Halo
+			showPropagationHalo();
+
+			// Show node if it is in a propagation chain
+			showPropagationChain(inPropagationChain);
+
+			// ***** draw dot
+			Canvas.app.noStroke();
+
+			if (node.isFound()) {
+
+				Canvas.app.fill(propagatedColor.getRGB());
+				haloOffset = 2;
 
 			} else {
 
-				communityDisplayed = false;
+				Canvas.app.fill(getColorRGB());
+			}
+
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + haloOffset, getDiameter() + haloOffset);
+
+		} else if (propagationSource || inPropagationChain) {
+
+			// Show node if it is in a propagation chain
+			showPropagationChain(inPropagationChain);
+
+			// Show Propagation Halo
+			showPropagationHalo();
+
+			// Visual atts
+			// halo
+			Canvas.app.stroke(haloStrokeColor);
+			Canvas.app.strokeWeight(haloStrokeWeight);
+
+			if (propagationSource) {
+
+				Canvas.app.fill(propagatedColor.getRGB());
+			}
+
+			if (node.isFound()) {
+
+				Canvas.app.fill(propagatedColor.getRGB());
+				haloOffset = 2;
+			}
+
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + haloOffset, getDiameter() + haloOffset);
+		}
+
+	}
+
+	private void showPropagationChain(boolean inPropagationChain) {
+
+		// if this node is in the propagation chain
+		if (inPropagationChain) {
+
+			setAlpha(195);
+
+			haloStrokeColor = new Color(255, 0, 0).getRGB();
+			haloOffset = 0;
+			haloStrokeWeight = 0.5f;
+
+			if (UserSettings.getInstance().showName()) {
+
+				Canvas.app.fill(textColor);
+				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+				Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
 			}
 
 		} else {
 
-			communityDisplayed = true;
+			setAlpha(150);
 		}
+	}
 
-		if (communityDisplayed && visible) {
+	private void showPropagationHalo() {
 
-			if (node.isFound()) {
+		// Show propagation and source halo permanently
+		if (leftClicked) {
 
-				Canvas.app.fill(255, 0, 0);
+			propagationSource = true;
 
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
-			}
+			// Show propagation
+			propagate((int) UserSettings.getInstance().getPropagation());
 
-			if (!UserSettings.getInstance().getOnlyPropagation()) {
+			haloStrokeColor = new Color(255, 0, 0).getRGB();
 
-				Canvas.app.fill(getColorRGB());
+			haloStrokeWeight = 1.5f;
 
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-			}
+			haloOffset = 3;
 
-			// if this node is in the propagation chain
-			if (inPropagationChain) {
+		} else {
 
-				setAlpha(195);
+			if (propagationSource) {
 
-				Canvas.app.fill(getColorRGB());
+				reclaim();
 
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
-
-				if (UserSettings.getInstance().showName()) {
-
-					Canvas.app.fill(200, 200, 200);
-
-					Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-
-					Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
-				}
-
-			} else {
-				// UserSettings contains all the visibility settings
-				// defined by the user in the control panel
-				if (UserSettings.getInstance().showName()) {
-
-					if (!UserSettings.getInstance().getOnlyPropagation()) {
-
-						// Canvas.app.fill(getColorRGB());
-						Canvas.app.fill(200, 200, 200);
-
-						Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-					}
-				}
-				setAlpha(150);
-			}
-			// Show propagation and source halo permanently
-			if (leftClicked) {
-
-				propagationSource = true;
-
-				// Show propagation
-				propagate((int) UserSettings.getInstance().getPropagation());
-
-				// propagate(propagationSteps);
-				Canvas.app.stroke(225, 0, 0);
-
-				Canvas.app.strokeWeight(1.5f);
-
-				Canvas.app.fill(getColorRGB());
-
-				Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 3, getDiameter() + 3);
-
-				Canvas.app.fill(225, 225, 225);
-
-				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-
-			} else {
-
-				if (propagationSource) {
-
-					reclaim();
-					propagationSource = false;
-				}
+				propagationSource = false;
 			}
 		}
 	}
 
-	public boolean hasNode(Node node) {
-		return this.node.equals(node);
+	private void showDescription() {
+
+		if (isMouseOver) {
+			Canvas.app.strokeWeight(1);
+			Canvas.app.fill(brighter());
+			Canvas.app.stroke(225, 0, 0);
+			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + 2, getDiameter() + 2);
+
+			// Show comments
+			description.show(this);
+		} else {
+			Canvas.app.noStroke();
+		}
+
 	}
 
-	// *** equals
+	// **** EQUALS
+
+	// *** EQUALS
 	public boolean equals(Object obj) {
 		VNode vN = (VNode) obj;
 		boolean rtn = vN.getNode().equals(this.node);
@@ -446,6 +496,12 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	// *** GETTERS AND SETTERS
+
+	// *** GETTERS AND SETTERS
+
+	public boolean hasNode(Node node) {
+		return this.node.equals(node);
+	}
 
 	public void absoluteToRelative(PVector center) {
 		pos = PVector.sub(pos, center);

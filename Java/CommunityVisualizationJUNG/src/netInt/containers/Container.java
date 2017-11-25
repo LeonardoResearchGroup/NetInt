@@ -148,13 +148,6 @@ public abstract class Container {
 		for (Node n : layout.getGraph().getVertices()) {
 			VNode tmp = new VNode(n, (float) layout.getX(n), (float) layout.getY(n)); // key
 
-			// Compute and set the node diameter
-			float diameter = Mapper.getInstance().convert(Mapper.LINEAR, n.getOutDegree(1), "Node", "outDegree");
-
-			if (diameter * 10 > tmp.getDiameter()) {
-				tmp.setDiameter(diameter * 10);
-			}
-
 			tmp.absoluteToRelative(layoutCenter);
 
 			tmp.setColor(color);

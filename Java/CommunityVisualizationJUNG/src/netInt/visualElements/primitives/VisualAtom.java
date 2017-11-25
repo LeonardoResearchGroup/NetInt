@@ -54,6 +54,8 @@ public abstract class VisualAtom implements Serializable {
 	protected boolean displayed;
 
 	protected Color color;
+	protected Color propagatedColor = new Color(255,0,0);
+	
 	// Events
 	protected boolean eventsRegistered;
 
@@ -186,11 +188,6 @@ public abstract class VisualAtom implements Serializable {
 		this.color = new Color(red, green, blue, alpha);
 		return this.color.getRGB();
 	}
-
-	// public int setColor(int brightness, int alpha) {
-	// this.color = new Color(brightness, brightness, brightness, alpha);
-	// return this.color.getRGB();
-	// }
 
 	public int darker() {
 		return this.color.darker().getRGB();
