@@ -306,7 +306,7 @@ public class Assembler {
 
 	public void show() {
 		// rootVCommunity.show();
-		firstOrderVComm.show();
+		firstOrderVComm.showCommunity();
 	}
 
 	public ArrayList<VCommunity> getVisualCommunities() {

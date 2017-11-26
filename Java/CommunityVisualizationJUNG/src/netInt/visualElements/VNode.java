@@ -53,21 +53,19 @@ public class VNode extends VisualAtom implements Serializable {
 
 	// attribute used to map node diameter. It gets its value from the
 	// UserSettings
-	private String sizeAttributeName = "no_attribute";
-	private String colorAttributeName = "no_attribute";
+	private static String sizeAttributeName = "no_attribute";
+	private static String colorAttributeName = "no_attribute";
 
 	// converter used to map node visual attributes. It gets its value from the
 	// UserSettings
-	private String converterSizeName = Mapper.LINEAR;
-	private String converterColorName = Mapper.LINEAR;
+	private static String converterSizeName = Mapper.LINEAR;
+	private static String converterColorName = Mapper.LINEAR;
 	private int sizeFactor = 10;
 	private int minSize = 3;
 
 	// Visual attributes
 	int textColor = new Color(200, 200, 200).getRGB();
 
-	int haloStrokeColor;
-	float haloStrokeWeight;
 	int haloOffset = 0;
 
 	public VNode(Node node, float x, float y) {
@@ -132,11 +130,11 @@ public class VNode extends VisualAtom implements Serializable {
 		// this logic gate serves to update the propagation visualization
 		// every time the user changes the propagation setting in the control
 		// panel
-		if (propagationSteps != (int) UserSettings.getInstance().getPropagation()) {
+		if (propagationSteps != (int) UserSettings.getInstance().getPropagationThreshold()) {
 
 			reclaim();
 
-			propagationSteps = (int) UserSettings.getInstance().getPropagation();
+			propagationSteps = (int) UserSettings.getInstance().getPropagationThreshold();
 		}
 	}
 
@@ -181,7 +179,7 @@ public class VNode extends VisualAtom implements Serializable {
 	public int propagationCount(int sequence) {
 		// this creates an arrayList indicating the position of this node in all
 		// propagation chains
-		propIndex.add((int) UserSettings.getInstance().getPropagation() - sequence);
+		propIndex.add((int) UserSettings.getInstance().getPropagationThreshold() - sequence);
 		if (sequence - 1 >= 0) {
 			inPropagationChain = true;
 		}
@@ -206,7 +204,7 @@ public class VNode extends VisualAtom implements Serializable {
 	 *            true if show
 	 */
 	public void show() {
-		// Hide or show the vNode depending of the user defined degree threshold
+		// Hide or show the vNode according to the user defined degree threshold
 		if (filterVisibility()) {
 
 			// Reset stroke weight
@@ -219,24 +217,19 @@ public class VNode extends VisualAtom implements Serializable {
 				// Set the size with current converter and new selected
 				// attribute name
 				setDiameter(calculateSize());
-			}
 
-			// Reset the size if user selects a new size converter
-			convertSize();
+				// Reset the size if user selects a new converter
+				convertSize();
+			}
 
 			// *** Set vNode color
 			// If this node has the attribute selected by the user
-			// if (node.getAttributes().containsKey(colorAttributeName)) {
-			//
-			// float colorValue = node.getFloatAttribute(colorAttributeName);
-			//
-			// setColor(calculateColor(colorValue));
-			//
-			// // Reset the color if user selects a new color converter
-			// convertColor(colorValue);
-			// }
+			if (node.getAttributes().containsKey(UserSettings.getInstance().getNodeColor())) {
 
-			// Show propagation
+				// Set the color with current converter and new selected
+				// attribute name
+				setColor(calculateColor());
+			}
 
 			drawNode();
 
@@ -251,7 +244,8 @@ public class VNode extends VisualAtom implements Serializable {
 		// user selected attribute name
 		String userSelectedFilter = UserSettings.getInstance().getNodeSize();
 
-		// logical gate to prevent unnecessary looping
+		// For any change of size settings in user settings. Logical gate to
+		// prevent unnecessary looping
 		if (userSelectedFilter != null && !sizeAttributeName.equals(userSelectedFilter)) {
 
 			sizeAttributeName = userSelectedFilter;
@@ -292,17 +286,11 @@ public class VNode extends VisualAtom implements Serializable {
 				tmp += minSize;
 
 				setDiameter(tmp);
-
-			} else {
-
-				System.out.println(
-						this.getClass().getName() + " Missing node size attribute. Choose one in the control panel");
 			}
-
 		}
 	}
 
-	private int calculateColor(float value) {
+	private int calculateColor() {
 
 		int rtn = getColor().getRGB();
 
@@ -314,18 +302,31 @@ public class VNode extends VisualAtom implements Serializable {
 
 			colorAttributeName = userSelectedFilter;
 
+			float value = node.getFloatAttribute(colorAttributeName);
+
 			float tmp = Mapper.getInstance().convert(converterColorName, value, Mapper.NODE, colorAttributeName);
 
 			rtn = ColorMap.getInstance().getColorRGB(tmp);
-		} else {
-			// Set node color to grey
-			Color tmp = new Color(125, 125, 125);
-			rtn = tmp.getRGB();
+		}
+
+		// For any change of user settings
+		if (UserSettings.eventOnVSettings && !colorAttributeName.equals("no_attribute")) {
+
+			float value = node.getFloatAttribute(colorAttributeName);
+
+			float tmp = Mapper.getInstance().convert(converterColorName, value, Mapper.NODE, colorAttributeName);
+
+			rtn = ColorMap.getInstance().getColorRGB(tmp);
 		}
 
 		return rtn;
 	}
 
+	/**
+	 * @param value
+	 * @deprecated
+	 */
+	@SuppressWarnings("unused")
 	private void convertColor(float value) {
 
 		// user selected converter name
@@ -348,112 +349,88 @@ public class VNode extends VisualAtom implements Serializable {
 
 	private void drawNode() {
 
-		// *** NORMAL STATE ***
-		// If the user DOES NOT select "only propagation" button.
-		if (!UserSettings.getInstance().getOnlyPropagation()) {
+		// Show Propagation Halo
+		propagationSourceHalo(leftClicked);
 
-			// nodeFill = getColorRGB();
+		if (propagationSource) {
 
-			// Canvas.app.fill(getColorRGB());
-			// Canvas.app.ellipse(pos.x, pos.y, getDiameter(), getDiameter());
+			// Set fill
+			Canvas.app.fill(propagatedColor.getRGB());
+
+			// Set stroke
+			Canvas.app.stroke(propagatedColor.getRGB());
+
+			// Set outline thickness
+			Canvas.app.strokeWeight(1f);
+
+			// Set offset
+			haloOffset = 3;
+
+		} else if (inPropagationChain) {
+
+			// Set fill
+			Canvas.app.fill(getColor().getRGB());
+
+			// Set stroke
+			Canvas.app.stroke(propagatedColor.getRGB());
+
+			// Set outline thickness
+			Canvas.app.strokeWeight(1f);
+
+			// Set offset
 			haloOffset = 0;
-
-			// If show names enabled
-			if (UserSettings.getInstance().showName()) {
-
-				Canvas.app.fill(textColor);
-				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-			}
-
-			// Show Propagation Halo
-			showPropagationHalo();
-
-			// Show node if it is in a propagation chain
-			showPropagationChain(inPropagationChain);
-
-			// ***** draw dot
-			Canvas.app.noStroke();
-
-			if (node.isFound()) {
-
-				Canvas.app.fill(propagatedColor.getRGB());
-				haloOffset = 2;
-
-			} else {
-
-				Canvas.app.fill(getColorRGB());
-			}
-
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + haloOffset, getDiameter() + haloOffset);
-
-		} else if (propagationSource || inPropagationChain) {
-
-			// Show node if it is in a propagation chain
-			showPropagationChain(inPropagationChain);
-
-			// Show Propagation Halo
-			showPropagationHalo();
-
-			// Visual atts
-			// halo
-			Canvas.app.stroke(haloStrokeColor);
-			Canvas.app.strokeWeight(haloStrokeWeight);
-
-			if (propagationSource) {
-
-				Canvas.app.fill(propagatedColor.getRGB());
-			}
-
-			if (node.isFound()) {
-
-				Canvas.app.fill(propagatedColor.getRGB());
-				haloOffset = 2;
-			}
-
-			Canvas.app.ellipse(pos.x, pos.y, getDiameter() + haloOffset, getDiameter() + haloOffset);
-		}
-
-	}
-
-	private void showPropagationChain(boolean inPropagationChain) {
-
-		// if this node is in the propagation chain
-		if (inPropagationChain) {
-
-			setAlpha(195);
-
-			haloStrokeColor = new Color(255, 0, 0).getRGB();
-			haloOffset = 0;
-			haloStrokeWeight = 0.5f;
-
-			if (UserSettings.getInstance().showName()) {
-
-				Canvas.app.fill(textColor);
-				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
-				Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
-			}
 
 		} else {
 
-			setAlpha(150);
+			// If the user selects "propagation filter" button in Control Panel
+			if (UserSettings.getInstance().filterPropagation()) {
+
+				// Set fill
+				Canvas.app.noFill();
+
+				// Set stroke
+				Canvas.app.noStroke();
+
+				// Set outline thickness
+				Canvas.app.strokeWeight(1f);
+
+			}
+
+			else {
+
+				// Set fill
+				Canvas.app.fill(getColorRGB());
+
+				// Set stroke
+				Canvas.app.noStroke();
+
+				// Set outline thickness
+				Canvas.app.strokeWeight(1f);
+			}
+
+			// Set offset
+			haloOffset = 0;
+
 		}
+
+		if (node.isFound()) {
+			Canvas.app.fill(propagatedColor.getRGB());
+			haloOffset = 2;
+
+		}
+
+		Canvas.app.ellipse(pos.x, pos.y, getDiameter() + haloOffset, getDiameter() + haloOffset);
 	}
 
-	private void showPropagationHalo() {
+	private void propagationSourceHalo(boolean selected) {
 
 		// Show propagation and source halo permanently
-		if (leftClicked) {
+		if (selected) {
 
 			propagationSource = true;
 
 			// Show propagation
-			propagate((int) UserSettings.getInstance().getPropagation());
-
-			haloStrokeColor = new Color(255, 0, 0).getRGB();
-
-			haloStrokeWeight = 1.5f;
-
-			haloOffset = 3;
+			propagate((int) UserSettings.getInstance().getPropagationThreshold());
 
 		} else {
 
@@ -468,6 +445,24 @@ public class VNode extends VisualAtom implements Serializable {
 
 	private void showDescription() {
 
+		// If show names enabled
+		if (UserSettings.getInstance().showName()) {
+
+			if (UserSettings.getInstance().filterPropagation()) {
+
+				if (inPropagationChain || propagationSource) {
+					Canvas.app.fill(textColor);
+					Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+					Canvas.app.text(propIndex.toString(), pos.x + 5, pos.y + 15);
+				}
+
+			} else {
+				Canvas.app.fill(textColor);
+				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+			}
+
+		}
+
 		if (isMouseOver) {
 			Canvas.app.strokeWeight(1);
 			Canvas.app.fill(brighter());
@@ -481,8 +476,6 @@ public class VNode extends VisualAtom implements Serializable {
 		}
 
 	}
-
-	// **** EQUALS
 
 	// *** EQUALS
 	public boolean equals(Object obj) {

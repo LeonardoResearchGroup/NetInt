@@ -43,7 +43,7 @@ public class UserSettings {
 	private String edgeWeightAttribute;
 	private float thresholdWeight;
 	private float thresholdPropagation = 0;
-	private boolean onlyPorpagation = false;
+	private boolean onlyPropagation = false;
 	private String edgeThicknessAttribute;
 	private String edgeColorAttribute;
 	private String converterEdge;
@@ -149,7 +149,7 @@ public class UserSettings {
 		return thresholdWeight;
 	}
 	
-	public float getPropagation() {
+	public float getPropagationThreshold() {
 		return thresholdPropagation;
 	}
 
@@ -161,8 +161,8 @@ public class UserSettings {
 		return edgeThicknessAttribute;
 	}
 	
-	public boolean getOnlyPropagation() {
-		return onlyPorpagation;
+	public boolean filterPropagation() {
+		return onlyPropagation;
 	}
 	
 	public String getConverterEdge() {
@@ -204,9 +204,6 @@ public class UserSettings {
 	public HashMap<String, String> getDescriptiveKeys() {
 		return descriptiveKeys;
 	}
-	
-
-
 
 
 	// **************************** SETTERS ***************************
@@ -282,8 +279,8 @@ public class UserSettings {
 		this.thresholdPropagation = propagacion;
 	}
 
-	public void setPropagationOnly(boolean booleanValue) {
-		onlyPorpagation = booleanValue;
+	public void setPropagationFilter(boolean booleanValue) {
+		onlyPropagation = booleanValue;
 	}
 
 	public void setClearPropagation(float val) {

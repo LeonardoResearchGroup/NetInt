@@ -102,14 +102,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// }
 	}
 
-	public void show() {
+	public void showCommunity() {
 
 		// Look for nodes based on id entered by user in control panel
 		searchNode();
-		
+
 		// Clear all propagation
 		if (UserSettings.getInstance().getClearPropagation()) {
-			clearPropagation();
+			clearPropagationInContainer();
 		}
 
 		// Display the community cover
@@ -279,8 +279,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 
 				// Set pink color
-//				Color color = new Color(255, 100, 180);
-//				vEE.setColor(color.getRGB());
+				// Color color = new Color(255, 100, 180);
+				// vEE.setColor(color.getRGB());
 				vEE.show();
 			}
 		}
@@ -291,7 +291,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// VCommunities
 			for (VCommunity vC : container.getVCommunities()) {
 
-				//vC.setVisibility(true);
+				// vC.setVisibility(true);
 
 				// set subCommunities coordinates relative to vCommunity
 				// position
@@ -299,7 +299,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					container.translateVElementCoordinates(vC, this.getPos());
 				}
 
-				vC.show();
+				vC.showCommunity();
 
 				/*
 				 * 
@@ -334,7 +334,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				for (VNode vN : container.getVNodes()) {
 
 					//
-					//vN.setVisibility(true);
+					// vN.setVisibility(true);
 
 					// Center vNodes relative to a given position
 					// if (Canvas.mouseEventOnCanvas &&
@@ -349,7 +349,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					// If vN is visible and not centered
 					if (vNodesCentered) {
-						//vN.show(vN.isDisplayed());
+						// vN.show(vN.isDisplayed());
 						vN.show();
 						vN.setDisplayed(true);
 					}
@@ -366,9 +366,22 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	}
 
-	protected void clearPropagation() {
-		for (VNode vN : container.getVNodes()) {
-			vN.clearPropagation();
+	protected void clearPropagationInContainer() {
+		
+		for (VisualAtom vA : container.getVNodes()) {
+			if (vA instanceof VCommunity) {
+				VCommunity vC = (VCommunity) vA;
+
+				for (VNode vN : vC.container.getVNodes()) {
+					vN.clearPropagation();
+				}
+
+			} else {
+				System.out.println("Clear prop VComm 3");
+				VNode vN = (VNode) vA;
+				vN.clearPropagation();
+
+			}
 		}
 	}
 
@@ -424,14 +437,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			if (idSearch != UserSettings.getInstance().getIdSearch()) {
 				idSearch = UserSettings.getInstance().getIdSearch();
 				boolean rtn = searchNodeSuperCommunity(idSearch);
-				System.out.println("VCommunity> searchNode: Search chain found: " + rtn);
+				if (rtn)
+					System.out.println("VCommunity>: " + idSearch + " found in " + getNode().getId());
 			}
 		} else {
 			// if the search tool is cleared
 			if (idSearch != null) {
 				resetNodeFoundSuperCommunity();
 				idSearch = null;
-				System.out.println("VCommunity> searchNode: Query didn't match any node");
 			}
 		}
 	}

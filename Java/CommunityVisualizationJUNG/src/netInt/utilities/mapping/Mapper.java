@@ -258,7 +258,8 @@ public class Mapper {
 	 * Base 10 Logarithm
 	 * 
 	 * @param weight
-	 *            any number
+	 *            any number. WARNING Numbers less or equal than zero return a
+	 *            zero value
 	 * @return Returns 0 if the parameter is less or equal to zero else the Base
 	 *         10 logarithm
 	 */

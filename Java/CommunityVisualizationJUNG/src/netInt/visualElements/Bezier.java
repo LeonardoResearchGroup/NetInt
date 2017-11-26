@@ -230,6 +230,25 @@ public class Bezier {
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
+	
+	/**
+	 * Draws just the bezier with the currentColor() and localAlpha values.
+	 * 
+	 * @param app The PApplet
+	 * @param thickness
+	 *            The thickness does not belong to this class but to VEdge,
+	 *            therefore it is received as a parameter. If the thickness is
+	 *            less that 1 it is set to 1.
+	 */
+	public void drawBezier2D(PApplet app, float thickness, int alpha) {
+		recalculateParameters();
+		app.noFill();
+		app.stroke(currentColor.getRGB(), alpha);
+		if (thickness < 1)
+			thickness = 1;
+		app.strokeWeight(thickness);
+		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
+	}
 
 	/**
 	 * Used to draw edge's tails and heads

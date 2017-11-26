@@ -22,14 +22,11 @@ import java.util.HashMap;
 
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
-import netInt.canvas.MouseHook;
 import netInt.graphElements.Edge;
 import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.primitives.VisualAtom;
-import processing.core.PApplet;
 import processing.core.PVector;
-import processing.event.MouseEvent;
 
 /**
  * The visual representation of a grahElement.Edge. Each VEdge has a source and
@@ -61,7 +58,7 @@ public class VEdge implements Serializable {
 	// Visual Attributes
 	private float thickness = 1;
 	private float scaleFactor = 3;
-	private int alpha = 150;
+	private int alpha = 50;
 
 	// The float value of the current user selected edge attribute
 	private float attributeValue;
@@ -69,7 +66,7 @@ public class VEdge implements Serializable {
 	// UserSettings
 	private String thicknessAttributeName = "no_attribute";
 	private String colorAttributeName = "no_attribute";
-	
+
 	// Converters
 	private String converterThicknessName = Mapper.LINEAR;
 	private String converterColorName = Mapper.LINEAR;
@@ -141,8 +138,7 @@ public class VEdge implements Serializable {
 
 	public void makeBezier() {
 		bezier = new Bezier(vSource.getPos(), vTarget.getPos());
-		int alpha = 100;
-		bezier.setColor(getSource().getColor().darker().darker().getRGB());
+		bezier.setColor(getSource().getColor().darker().getRGB());
 		bezier.setAlpha(alpha);
 	}
 
@@ -211,8 +207,8 @@ public class VEdge implements Serializable {
 	}
 
 	private int calculateEdgeColor() {
-		//int rtn = bezier.getBodyColor();
-		int rtn = getSource().getColor().getRGB();
+		int rtn = bezier.getBodyColor();
+		// int rtn = getSource().getColor().getRGB();
 
 		if (UserSettings.getInstance().getEdgeColor() != null) {
 
@@ -289,31 +285,28 @@ public class VEdge implements Serializable {
 		}
 
 		// Visualize the nodes and edges if not in propagation
-		if (!UserSettings.getInstance().getOnlyPropagation())
+		if (!UserSettings.getInstance().filterPropagation()) {
 
-		{
+			// Highlight edge
+			if (getSource().isMouseOver) {
 
-			// If source and target nodes are in propagation
-			// Edge mode: normal, head, tail or both
-			if (vSource.isPropagated()) {
-
-				bezier.drawBezier2D(Canvas.app, 2f);
-
-				bezier.drawHeadBezier2D(Canvas.app, 2, alpha);
+				bezier.drawBezier2D(Canvas.app, thickness, 250);
 
 			} else {
 
 				bezier.drawBezier2D(Canvas.app, thickness);
 
-				bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 			}
+
+			bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
+
 		} else {
 
 			// If solo propagation
 			if (vSource.isPropagated()) {
 
 				// Edge mode: normal, head, tail or both
-				bezier.drawBezier2D(Canvas.app, 2f);
+				bezier.drawBezier2D(Canvas.app, thickness);
 
 				bezier.drawHeadBezier2D(Canvas.app, thickness, alpha);
 			}

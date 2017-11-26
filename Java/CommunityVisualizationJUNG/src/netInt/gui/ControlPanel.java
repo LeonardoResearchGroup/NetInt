@@ -61,7 +61,6 @@ public class ControlPanel extends PApplet {
 
 	// Groups
 	private Group bancaGroup;
-	// private Group bancaGroupEafit;
 
 	// Other controller elements
 	private CheckBox cBox;
@@ -297,7 +296,7 @@ public class ControlPanel extends PApplet {
 		secondary.addLabel("Filter by out degree").setPosition(2, 81).moveTo(group);
 
 		secondary.addSlider("Min OutDegree").setPosition(5, 96).setSize(150, 10).setRange(0, 35)
-				.setNumberOfTickMarks(10).snapToTickMarks(true).showTickMarks(false).moveTo(group).getCaptionLabel()
+				.setNumberOfTickMarks(10).snapToTickMarks(false).showTickMarks(false).moveTo(group).getCaptionLabel()
 				.setPaddingX(10).setVisible(false); //
 
 		// Node Appearance controllers
@@ -313,7 +312,7 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Size").setLabel("Size").addItems(items).setPosition(5, 131).setSize(95, 52)
+		secondary.addScrollableList("Node_Size").setLabel("Size").addItems(items).setPosition(5, 131).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).getCaptionLabel()
 				.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
 		
@@ -493,10 +492,10 @@ public class ControlPanel extends PApplet {
 			Toggle nombre = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowName(nombre.getBooleanValue());
 			break;
-		case "Size":
-			int nodeSize = (int) secondary.get(ScrollableList.class, "Size").getValue();
+		case "Node_Size":
+			int nodeSize = (int) secondary.get(ScrollableList.class, "Node_Size").getValue();
 			UserSettings.getInstance().setNodeSizeAtt(
-					secondary.get(ScrollableList.class, "Size").getItem(nodeSize).get("name").toString());
+					secondary.get(ScrollableList.class, "Node_Size").getItem(nodeSize).get("name").toString());
 			break;
 		case "Node_Color":
 			int nodeColor = (int) secondary.get(ScrollableList.class, "Node_Color").getValue();
@@ -534,7 +533,7 @@ public class ControlPanel extends PApplet {
 			break;
 		case "Filter":
 			Toggle solo = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setPropagationOnly(solo.getBooleanValue());
+			UserSettings.getInstance().setPropagationFilter(solo.getBooleanValue());
 			break;
 		case "Clear":
 			Bang clearPropagation = (Bang) theEvent.getController();
