@@ -26,7 +26,7 @@ public class MapperViewer extends PApplet {
 
 	private static MapperViewer MVInstance = null;
 	private PFont font;
-	private ArrayList<Bar> bars;
+	private ArrayList<Bar> nodeBars, edgeBars;
 	private String currentColorMap;
 
 	// Singleton pattern
@@ -46,7 +46,8 @@ public class MapperViewer extends PApplet {
 	 */
 	public MapperViewer() {
 		super();
-		bars = new ArrayList<Bar>();
+		nodeBars = new ArrayList<Bar>();
+		edgeBars = new ArrayList<Bar>();
 		currentColorMap = ColorMap.getInstance().getColorMapName();
 		MVInstance = this;
 	}
@@ -59,7 +60,7 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void settings() {
-		size(300, displayHeight / 2);
+		size(300, displayHeight / 2, P2D);
 	}
 
 	public void setup() {
@@ -73,7 +74,9 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void draw() {
+
 		background(70);
+
 		ColorMap.getInstance().showPalette(this, 20, 15, 256);
 
 		if (!ColorMap.getInstance().getColorMapName().equals(currentColorMap)) {
@@ -81,42 +84,92 @@ public class MapperViewer extends PApplet {
 			resetBars();
 		}
 
-		if (bars != null) {
-			int j = 40;
-			text("PERCENTILES BELOW WHICH VALUES FALL", 20, j, 250, 150);
+		text("PERCENTILES BELOW WHICH VALUES FALL", 20, 35, 250, 150);
 
-			// j = 35;
+		int j = 20;
 
-			for (int i = 0; i < bars.size(); i++) {
-				bars.get(i).show(this, 20, 45 + (j + i * 35));
+		// Node Bars
+		if (nodeBars != null) {
+
+			int firstNodeBar = 65;
+
+			fill(165, 199, 236, 120);
+
+			textSize(10);
+
+			text("Node Attributes", 20, firstNodeBar);
+
+			stroke(165, 199, 236, 120);
+
+			line(20, firstNodeBar + 3, width - 20, firstNodeBar + 3);
+
+			fill(200, 200, 200);
+
+			firstNodeBar += j;
+
+			for (int i = 0; i < nodeBars.size(); i++) {
+				
+				nodeBars.get(i).show(this, 20, firstNodeBar + (i * j));
 			}
-
 		}
 
+		// Edge Bars
+		if (edgeBars != null) {
+
+			int firstEdgeBar = ((nodeBars.size() + 1) * j) + 80;
+
+			fill(165, 199, 236, 120);
+
+			textSize(10);
+
+			text("Edge attributes", 20, firstEdgeBar);
+
+			stroke(165, 199, 236, 120);
+
+			line(20, firstEdgeBar + 3, width - 20, firstEdgeBar + 3);
+
+			fill(200, 200, 200);
+
+			firstEdgeBar += j;
+
+			for (int i = 0; i < edgeBars.size(); i++) {
+				
+				edgeBars.get(i).show(this, 20, firstEdgeBar + (i * j));
+			}
+		}
+	}
+
+	/**
+	 * Launches PApplet and initializes bars
+	 */
+	public void init() {
+		kickOffPApplet();
+		initMinMaxValues();
 	}
 
 	public void initMinMaxValues() {
 
-		kickOffPApplet();
-
 		// NODES
 		try {
+			// If the Mapper has node numerical attributes
 			if (Mapper.getInstance().getNodeNumericalAttributeKeys() != null) {
+
+				// Get all numerical attribute names
 				ArrayList<String> attributeKeys = Mapper.getInstance().getNodeNumericalAttributeKeys();
+
+				// For each numerical attribute name
 				for (int i = 0; i < attributeKeys.size(); i++) {
-					// ************* THIS 'IF' IS NOT THE RIGHT WAY
-					// TO DO FILTER
-					// WHICH ATTRIBUTES HAVE VALUE.
-					// **************** MORE WORK NEED TO BE DONE HERE TO SOLVE
-					// THIS ISSUE
-					if (!attributeKeys.get(i).equals("Community size")) {
-						Bar temp = new Bar(attributeKeys.get(i));
-						temp.min = Mapper.getInstance().getNodeAttributesMin()
-								.getValueofAttribute(attributeKeys.get(i));
-						temp.max = Mapper.getInstance().getNodeAttributesMax()
-								.getValueofAttribute(attributeKeys.get(i));
-						bars.add(temp);
-					}
+
+					// Make a Bar
+					Bar temp = new Bar(attributeKeys.get(i), Mapper.NODE);
+
+					// Set min and max values
+					temp.min = Mapper.getInstance().getNodeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+
+					temp.max = Mapper.getInstance().getNodeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+
+					// Add bar to collection
+					nodeBars.add(temp);
 				}
 			}
 		} catch (NullPointerException np) {
@@ -124,73 +177,39 @@ public class MapperViewer extends PApplet {
 		}
 
 		// EDGES
-		// try {
-		// if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
-		//
-		// ArrayList<String> attributeKeys =
-		// Mapper.getInstance().getEdgeNumericalAttributeKeys();
-		// for (int i = 0; i < attributeKeys.size(); i++) {
-		// Bar temp = new Bar(attributeKeys.get(i));
-		// temp.min =
-		// Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
-		// temp.max =
-		// Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
-		// bars.add(temp);
-		// }
-		// }
-		// } catch (NullPointerException np) {
-		// System.out.println(this.getClass().getName() + " Mapper does not have
-		// Edge Numerical Attributes");
-		// }
+		try {
+			// If the Mapper has edge numerical attributes
+			if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
 
-		System.out.println("MapperViewer initialized");
+				// Get all numerical attribute names
+				ArrayList<String> attributeKeys = Mapper.getInstance().getEdgeNumericalAttributeKeys();
+
+				for (int i = 0; i < attributeKeys.size(); i++) {
+
+					// Make a bar
+					Bar temp = new Bar(attributeKeys.get(i), Mapper.EDGE);
+
+					// Set min an max
+					temp.min = Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+
+					temp.max = Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+
+					// Add Bars to collection
+					edgeBars.add(temp);
+				}
+			}
+		} catch (NullPointerException np) {
+			System.out.println(this.getClass().getName() + " Mapper does not have Edge Numerical Attributes");
+		}
+
+		System.out
+				.println("MapperViewer initialized. Node atts: " + nodeBars.size() + ", edge atts: " + edgeBars.size());
 	}
 
 	public void resetBars() {
-		
-		bars = new ArrayList<Bar>();
-
-		// NODES
-		try {
-			ArrayList<String> attributeKeys = Mapper.getInstance().getNodeNumericalAttributeKeys();
-			for (int i = 0; i < attributeKeys.size(); i++) {
-				// ************* THIS 'IF' IS NOT THE RIGHT WAY
-				// TO DO FILTER
-				// WHICH ATTRIBUTES HAVE VALUE.
-				// **************** MORE WORK NEED TO BE DONE HERE TO SOLVE
-				// THIS ISSUE
-				if (!attributeKeys.get(i).equals("Community size")) {
-					Bar temp = new Bar(attributeKeys.get(i));
-					temp.min = Mapper.getInstance().getNodeAttributesMin().getValueofAttribute(attributeKeys.get(i));
-					temp.max = Mapper.getInstance().getNodeAttributesMax().getValueofAttribute(attributeKeys.get(i));
-					bars.add(temp);
-				}
-			}
-
-		} catch (NullPointerException np) {
-			System.out.println(this.getClass().getName() + " Mapper does not have Node Numerical Attributes");
-		}
-
-		// EDGES
-		// try {
-		// if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
-		//
-		// ArrayList<String> attributeKeys =
-		// Mapper.getInstance().getEdgeNumericalAttributeKeys();
-		// for (int i = 0; i < attributeKeys.size(); i++) {
-		// Bar temp = new Bar(attributeKeys.get(i));
-		// temp.min =
-		// Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
-		// temp.max =
-		// Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
-		// bars.add(temp);
-		// }
-		// }
-		// } catch (NullPointerException np) {
-		// System.out.println(this.getClass().getName() + " Mapper does not have
-		// Edge Numerical Attributes");
-		// }
-
+		nodeBars = new ArrayList<Bar>();
+		edgeBars = new ArrayList<Bar>();
+		initMinMaxValues();
 	}
 
 	public void exit() {
@@ -211,41 +230,63 @@ public class MapperViewer extends PApplet {
 		private int fills[];
 
 		// Constructor
-		public Bar(String attributeName) {
+		public Bar(String attributeName, String graphElementType) {
 			attribute = attributeName;
 			lenght = 150;
 			min = 0;
 			max = 0;
 			bins = 10;
 			fills = new int[bins];
+			float[] percentiles;
 
 			// making of bin heights
-			float[] percentiles = SortedNodeList.getPercentileValues(bins, attributeName);
-			sizes = new float[percentiles.length];
-			float[] minMax = Mapper.getInstance().getMinMaxForNodes(attributeName);
-			for (int i = 0; i < percentiles.length; i++) {
-				/*
-				 * CHANGE CLASS TYPE TO EDGE FOR EDGE ATTRIBUTES!!!!!
-				 */
-				sizes[i] = Mapper.getInstance().convert(Mapper.LINEAR, percentiles[i], "Node", attributeName);
-				sizes[i] *= 10f;
-				// System.out.println(attributeName + " " + percentiles[i] +
-				// " " + sizes[i]);
-				// System.out.println("MIN: " + minMax[0] + " MAX:" +
-				// minMax[1] + " VAL:" + percentiles[i]);
+			try {
+				percentiles = SortedNodeList.getPercentileValues(bins, attributeName);
 
-				fills[i] = ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], percentiles[i]);
+				sizes = new float[percentiles.length];
+
+				float[] minMax = null;
+
+				switch (graphElementType) {
+
+				case Mapper.NODE:
+					minMax = Mapper.getInstance().getMinMaxForNodes(attributeName);
+					break;
+				case Mapper.EDGE:
+					minMax = Mapper.getInstance().getMinMaxForEdges(attributeName);
+					break;
+				default:
+					System.out.println("Mapper Viewer *** Warning: wrong graph element type in bar constructor");
+				}
+
+				for (int i = 0; i < percentiles.length; i++) {
+
+					sizes[i] = Mapper.getInstance().convert(Mapper.LINEAR, percentiles[i], graphElementType,
+							attributeName);
+
+					sizes[i] *= 10f;
+
+					fills[i] = ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], percentiles[i]);
+				}
+
+			} catch (Exception e) {
+
+				for (int j = 0; j < bins; j++) {
+					// White
+					fills[j] = 16777215;
+				}
 			}
 		}
 
 		public void show(PApplet app, int orgX, int orgY) {
 
 			// Bar name
+			app.textSize(10);
 			app.text(attribute, orgX, orgY);
 
 			// Bar line
 			app.stroke(155, 50);
-			app.line(orgX + tab + 5, orgY + 15, orgX + tab + lenght - 5, orgY + 15);
+			app.line(orgX + tab + 5, orgY + 10, orgX + tab + lenght - 5, orgY + 10);
 			app.textSize(8);
 
 			// Bins
@@ -253,15 +294,15 @@ public class MapperViewer extends PApplet {
 			for (int i = 0; i < bins; i++) {
 				// app.noStroke();
 				app.fill(fills[i]);
-				app.rect(orgX + tab + 5 + wdth * i, orgY + 15, wdth, -5); // sizes[i]
+				app.rect(orgX + tab + 5 + wdth * i, orgY + 10, wdth, -5); // sizes[i]
 				app.fill(155);
 			}
 
 			// Endpoint labels
 			app.textAlign(PApplet.RIGHT);
-			app.text(PApplet.nfs(min, 0, 1), orgX + tab, orgY + 15);
+			app.text(PApplet.nfs(min, 0, 1), orgX + tab, orgY + 10);
 			app.textAlign(PApplet.LEFT);
-			app.text(PApplet.nfs(max, 0, 1), orgX + tab + lenght, orgY + 15);
+			app.text(PApplet.nfs(max, 0, 1), orgX + tab + lenght, orgY + 10);
 			app.textSize(11);
 		}
 	}

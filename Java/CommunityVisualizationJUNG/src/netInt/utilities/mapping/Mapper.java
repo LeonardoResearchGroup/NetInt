@@ -85,32 +85,40 @@ public class Mapper {
 	 *            class name of the graph element to which the attribute belongs
 	 * @param graphAttribute
 	 *            the name of the graph attribute.
-	 * @return the value mapped between 0 and 1 except if converter is set to LOGARITHMIC. If Logarithmic, the lower value is 0. 
+	 * @return the value mapped between 0 and 1 except if converter is set to
+	 *         LOGARITHMIC. If Logarithmic, the lower value is 0.
 	 */
 	public float convert(String converter, float val, String graphElementClassName, String graphAttribute) {
+
 		float rtn = Float.POSITIVE_INFINITY;
+
 		switch (converter) {
+
 		case "linear":
 			if (graphElementClassName.equals(Mapper.NODE))
 				rtn = linear(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
 				rtn = linear(val, getMinMaxForEdges(graphAttribute));
 			break;
+
 		case "sinusoidal":
 			if (graphElementClassName.equals(Mapper.NODE))
 				rtn = sinusoidal(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
 				rtn = sinusoidal(val, getMinMaxForEdges(graphAttribute));
 			break;
+
 		case "logarithmic":
 			rtn = log(val);
 			break;
+
 		case "radial":
 			if (graphElementClassName.equals(Mapper.NODE))
 				rtn = radial(val, getMinMaxForNodes(graphAttribute));
 			if (graphElementClassName.equals(Mapper.EDGE))
 				rtn = radial(val, getMinMaxForEdges(graphAttribute));
 			break;
+
 		case "sigmoid":
 			if (graphElementClassName.equals(Mapper.NODE))
 				rtn = sigmoid(val, getMinMaxForNodes(graphAttribute));
@@ -120,9 +128,9 @@ public class Mapper {
 		}
 
 		if (rtn < 0) {
-			System.out.println("Mapper > Error in " + converter + " filter for att: " + graphAttribute + ". [min="
-					+ getMinMaxForEdges(graphAttribute)[0] + ", max=" + getMinMaxForEdges(graphAttribute)[1]
-					+ "]. Value: " + val + " corresponds to : " + rtn + ". Less than 0, thus mapped as 0");
+			System.out.println("Mapper Warning> The attribute name: '" + graphAttribute + "' is missing in some instances of "
+					+ graphElementClassName + "\n Input value: " + val + " filtered with " + converter + " converter is equal to "
+					+ rtn + ", that is less than 0, thus mapped as 0");
 			rtn = 0;
 		}
 

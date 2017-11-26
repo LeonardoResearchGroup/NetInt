@@ -255,7 +255,7 @@ public class ImportMenuGuiSet implements Observer {
 				}
 
 				// Feed min & max values to mapper viewer
-				MapperViewer.getInstance().initMinMaxValues();
+				MapperViewer.getInstance().init();
 
 				// Hide Import Menu from main panel
 				menu.setVisible(false);

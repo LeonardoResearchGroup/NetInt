@@ -28,22 +28,28 @@ public class NodeComparatorByAttribute implements Comparator<Node> {
 	}
 
 	public int compare(Node o1, Node o2) {
-		try {
-			float value = o1.getFloatAttribute(attributeName) - o2.getFloatAttribute(attributeName);
 
-			if (value < 0) {
-				return -1;
-			} else if (value > 0) {
-				return 1;
-			} else if (value == 0) {
-				return 0;
-			} else {
+		if (o1.getAttributes().containsKey(attributeName) && o2.getAttributes().containsKey(attributeName)) {
+
+			try {
+				float value = o1.getFloatAttribute(attributeName) - o2.getFloatAttribute(attributeName);
+
+				if (value < 0) {
+					return -1;
+				} else if (value > 0) {
+					return 1;
+				} else if (value == 0) {
+					return 0;
+				} else {
+					return 0;
+				}
+			} catch (Exception e) {
+				System.out.println(this.getClass().getName() + " " + e.toString() + " \n" + "    Attribute name - "
+						+ attributeName + " - not found in nodes. CHECK COMPARATOR RESULTS");
+
 				return 0;
 			}
-		} catch (Exception e) {
-			System.out.println(this.getClass().getName() + " " + e.toString() + " \n" + "    Attribute name - "
-					+ attributeName + " - not found in nodes. CHECK COMPARATOR RESULTS");
-
+		}else{
 			return 0;
 		}
 	}

@@ -22,15 +22,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.gui.ControlPanel;
 import netInt.gui.ImportMenuGuiSet;
 import netInt.gui.UserSettings;
 import netInt.utilities.Assembler;
-import netInt.utilities.GraphLoader;
 import netInt.utilities.GraphmlKeyReader;
-import netInt.utilities.SortedNodeList;
 import netInt.utilities.TestPerformance;
 import netInt.utilities.console.ConsoleCatcher;
 import netInt.utilities.mapping.MapperViewer;
