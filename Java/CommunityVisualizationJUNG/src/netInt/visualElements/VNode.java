@@ -53,19 +53,18 @@ public class VNode extends VisualAtom implements Serializable {
 
 	// attribute used to map node diameter. It gets its value from the
 	// UserSettings
-	private static String sizeAttributeName = "no_attribute";
-	private static String colorAttributeName = "no_attribute";
+	private String sizeAttributeName = "no_attribute";
+	private String colorAttributeName = "no_attribute";
 
 	// converter used to map node visual attributes. It gets its value from the
 	// UserSettings
-	private static String converterSizeName = Mapper.LINEAR;
-	private static String converterColorName = Mapper.LINEAR;
+	private String converterSizeName = Mapper.LINEAR;
+	private String converterColorName = Mapper.LINEAR;
 	private int sizeFactor = 10;
 	private int minSize = 3;
 
 	// Visual attributes
 	int textColor = new Color(200, 200, 200).getRGB();
-
 	int haloOffset = 0;
 
 	public VNode(Node node, float x, float y) {
@@ -145,8 +144,10 @@ public class VNode extends VisualAtom implements Serializable {
 	 * @param val
 	 */
 	protected void clearPropagation() {
-		leftClicked = false;
-		reclaim();
+		if (UserSettings.getInstance().getClearPropagation()) {
+			leftClicked = false;
+			reclaim();
+		}
 	}
 
 	/**
@@ -229,8 +230,10 @@ public class VNode extends VisualAtom implements Serializable {
 				// Set the color with current converter and new selected
 				// attribute name
 				setColor(calculateColor());
+				setAlpha(150);
 			}
 
+			// Draw node following propagation variables
 			drawNode();
 
 			showDescription();
@@ -348,6 +351,8 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	private void drawNode() {
+		
+		clearPropagation();
 
 		// Show Propagation Halo
 		propagationSourceHalo(leftClicked);

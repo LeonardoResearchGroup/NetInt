@@ -48,7 +48,7 @@ public class UserSettings {
 	private String edgeColorAttribute;
 	private String converterEdge;
 	private TreeMap<Integer, TreeMap<String, Boolean>> edgeTierVisibility;
-	private float clearPropagation;
+	private boolean clearPropagation;
 
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
@@ -182,9 +182,7 @@ public class UserSettings {
 	}
 
 	public boolean getClearPropagation() {
-		boolean rtn = clearPropagation == 1.0;
-		clearPropagation = 0f;
-		return rtn;
+		return clearPropagation;
 	}
 	
 	// ***** STATISTICS GETTERS ******
@@ -283,7 +281,7 @@ public class UserSettings {
 		onlyPropagation = booleanValue;
 	}
 
-	public void setClearPropagation(float val) {
+	public void setClearPropagation(boolean val) {
 		clearPropagation = val;
 	}
 
@@ -309,6 +307,12 @@ public class UserSettings {
 
 	public void setEventOnVSettings(boolean eventTriggered) {
 		eventOnVSettings = eventTriggered;
+	}
+	
+	// This method is invoked at the end of main draw
+	public void resetEvents(){
+		setEventOnVSettings(false);
+		setClearPropagation(false);
 	}
 
 }

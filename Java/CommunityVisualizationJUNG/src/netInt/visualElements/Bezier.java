@@ -225,8 +225,6 @@ public class Bezier {
 		recalculateParameters();
 		app.noFill();
 		app.stroke(currentColor.getRGB(), localAlpha);
-		if (thickness < 1)
-			thickness = 1;
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
@@ -244,8 +242,6 @@ public class Bezier {
 		recalculateParameters();
 		app.noFill();
 		app.stroke(currentColor.getRGB(), alpha);
-		if (thickness < 1)
-			thickness = 1;
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}

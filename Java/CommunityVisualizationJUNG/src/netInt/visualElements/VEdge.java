@@ -26,6 +26,7 @@ import netInt.graphElements.Edge;
 import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.primitives.VisualAtom;
+import processing.core.PApplet;
 import processing.core.PVector;
 
 /**
@@ -57,7 +58,8 @@ public class VEdge implements Serializable {
 
 	// Visual Attributes
 	private float thickness = 1;
-	private float scaleFactor = 3;
+	private float scaleFactor = 1;
+	private float minThickness = 0.3f;
 	private int alpha = 50;
 
 	// The float value of the current user selected edge attribute
@@ -157,25 +159,17 @@ public class VEdge implements Serializable {
 			// parameter set at the Control Panel
 			if (aboveVisibilityThreshold && sourceTargetVisibile) {
 
-				// Set the thickness based on the user selected attribute name
-				// in control panel
-				if (UserSettings.eventOnVSettings) {
+				// Set thickness
+				setThickness(calculateEdgeThickness());
+				//
+				// Convert thickness by current converter
+				convertThickness();
 
-					// Set thickness
-					setThickness(calculateEdgeThickness());
+				// Set color
+				setColor(calculateEdgeColor());
 
-					// Set color
-					setColor(calculateEdgeColor());
-
-					// Convert thickness by current converter
-					convertThickness();
-
-					// Convert color by current converter
-					convertColor();
-				}
-
-				// Set thickness on PApplet
-				Canvas.app.strokeWeight(thickness);
+				// Convert color by current converter
+				convertColor();
 
 				// Draw
 				drawBezier();
@@ -200,10 +194,63 @@ public class VEdge implements Serializable {
 					rtn = Mapper.getInstance().convert(converterThicknessName, attributeValue, Mapper.EDGE,
 							thicknessAttributeName);
 
+					// This is because the result could be larger than 1, and
+					// the thickness value must be between 0 and 1 to guarantee
+					// frame rate performance
+					if (converterThicknessName.equals(Mapper.LOGARITHMIC)) {
+
+						float min = (float) Math
+								.log10(Mapper.getInstance().getMinMaxForEdges(thicknessAttributeName)[0]);
+
+						float max = (float) Math
+								.log10(Mapper.getInstance().getMinMaxForEdges(thicknessAttributeName)[1]);
+
+						rtn = PApplet.map(rtn, min, max, 0, 1);
+
+					}
 				}
 			}
 		}
 		return rtn;
+	}
+
+	private void convertThickness() {
+		// Set the thickness based on the user selected converter
+		// name
+		if (UserSettings.getInstance().getConverterEdge() != null) {
+
+			if (!UserSettings.getInstance().getConverterEdge().equals(converterThicknessName)
+					&& !thicknessAttributeName.equals("no_attribute")) {
+
+				converterThicknessName = UserSettings.getInstance().getConverterEdge();
+
+				float tmpThickness = Mapper.getInstance().convert(converterThicknessName, attributeValue, Mapper.EDGE,
+						thicknessAttributeName);
+
+				// This is because the result could be larger than 1, and
+				// the thickness value must be between 0 and 1 to guarantee
+				// frame rate performance
+				if (converterThicknessName.equals(Mapper.LOGARITHMIC)) {
+
+					float min = (float) Math.log10(Mapper.getInstance().getMinMaxForEdges(thicknessAttributeName)[0]);
+
+					float max = (float) Math.log10(Mapper.getInstance().getMinMaxForEdges(thicknessAttributeName)[1]);
+
+					tmpThickness = PApplet.map(tmpThickness, min, max, 0, 1);
+
+				}
+
+				tmpThickness *= scaleFactor;
+
+				if (tmpThickness < minThickness) {
+					
+					tmpThickness = minThickness;
+				}
+
+				setThickness(tmpThickness);
+
+			}
+		}
 	}
 
 	private int calculateEdgeColor() {
@@ -224,6 +271,17 @@ public class VEdge implements Serializable {
 					float mappedVal = Mapper.getInstance().convert(converterColorName, attributeValue, Mapper.EDGE,
 							colorAttributeName);
 
+					// This is because the result could be larger than 1, and
+					// jViris needs a value between o and 1
+					if (converterColorName.equals(Mapper.LOGARITHMIC)) {
+
+						float min = (float) Math.log10(Mapper.getInstance().getMinMaxForEdges(colorAttributeName)[0]);
+
+						float max = (float) Math.log10(Mapper.getInstance().getMinMaxForEdges(colorAttributeName)[1]);
+
+						mappedVal = PApplet.map(mappedVal, min, max, 0, 1);
+					}
+
 					rtn = ColorMap.getInstance().getColorRGB(mappedVal);
 
 				}
@@ -232,34 +290,29 @@ public class VEdge implements Serializable {
 		return rtn;
 	}
 
-	private void convertThickness() {
-		// Set the thickness based on the user selected converter
-		// name
-		if (UserSettings.getInstance().getConverterEdge() != null) {
-
-			if (!UserSettings.getInstance().getConverterEdge().equals(converterThicknessName)) {
-
-				converterThicknessName = UserSettings.getInstance().getConverterEdge();
-
-				float tmpThickness = Mapper.getInstance().convert(converterThicknessName, attributeValue, Mapper.EDGE,
-						thicknessAttributeName);
-
-				setThickness(scaleFactor * tmpThickness);
-			}
-		}
-	}
-
 	private void convertColor() {
 		// Set the thickness based on the user selected converter
 		// name
 		if (UserSettings.getInstance().getConverterEdge() != null) {
 
-			if (!UserSettings.getInstance().getConverterEdge().equals(converterColorName)) {
+			if (!UserSettings.getInstance().getConverterEdge().equals(converterColorName)
+					&& !colorAttributeName.equals("no_attribute")) {
 
 				converterColorName = UserSettings.getInstance().getConverterEdge();
 
 				float tmpColor = Mapper.getInstance().convert(converterColorName, attributeValue, Mapper.EDGE,
 						colorAttributeName);
+
+				// This is because the result could be larger than 1, and jViris
+				// needs a value between o and 1
+				if (converterColorName.equals(Mapper.LOGARITHMIC)) {
+
+					float min = (float) Math.log10(Mapper.getInstance().getMinMaxForEdges(colorAttributeName)[0]);
+
+					float max = (float) Math.log10(Mapper.getInstance().getMinMaxForEdges(colorAttributeName)[1]);
+
+					tmpColor = PApplet.map(tmpColor, min, max, 0, 1);
+				}
 
 				int mappedColor = ColorMap.getInstance().getColorRGB(tmpColor);
 

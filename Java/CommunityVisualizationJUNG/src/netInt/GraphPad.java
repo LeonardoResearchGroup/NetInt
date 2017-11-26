@@ -234,7 +234,7 @@ public class GraphPad {
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.resetMouseEventsOnCanvas();
-		UserSettings.getInstance().setEventOnVSettings(false);
+		UserSettings.getInstance().resetEvents();
 	}
 
 	public Assembler getAssembler() {

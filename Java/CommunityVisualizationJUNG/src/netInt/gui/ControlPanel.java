@@ -33,6 +33,7 @@ import controlP5.Group;
 import controlP5.ScrollableList;
 import controlP5.Textfield;
 import controlP5.Toggle;
+import jViridis.ColorMap;
 import netInt.GraphPad;
 import netInt.utilities.Assembler;
 import netInt.utilities.ClassLoader;
@@ -207,7 +208,7 @@ public class ControlPanel extends PApplet {
 		setKeyNamesForEdges(edgeKeyNames);
 
 		// Group instantiation
-		Group backgGroup = new Group(secondary, "Background");
+		Group settingsGroup = new Group(secondary, "Settings");
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
 		// Group communitiesGroup = new Group(secondary, "Community");
@@ -215,7 +216,7 @@ public class ControlPanel extends PApplet {
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
-		backgGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		settingsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		// communitiesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
@@ -225,7 +226,7 @@ public class ControlPanel extends PApplet {
 		bancaGroup.setVisible(bancaModuleEnabled);
 
 		// Add Components to each group
-		setBackgroundComponents(backgGroup);
+		setBackgroundComponents(settingsGroup);
 		setNodeComponents(nodesGroup);
 		setEdgeComponents(edgesGroup);
 		setEstadisticasDescriptivasComponent();
@@ -234,7 +235,7 @@ public class ControlPanel extends PApplet {
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(282);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(backgGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
+		accordion.addItem(settingsGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
 
 		color = new Color(125, 125, 125);
 		accordion.setColorValue(color.getRGB());
@@ -251,7 +252,7 @@ public class ControlPanel extends PApplet {
 	}
 
 	/**
-	 * GUI component related to GraphPad's background color
+	 * GUI component related to GraphPad's graphic environment settings
 	 * 
 	 * @param group
 	 *            The Group of GUI elements
@@ -259,7 +260,16 @@ public class ControlPanel extends PApplet {
 	private void setBackgroundComponents(Group group) {
 		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(196, 18).setRange(0, 255).setValue(70)
 				.moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);
-		;
+		
+		secondary.addLabel("Viridis color map").setPosition(2, 48).moveTo(group);
+
+		// JViridis palette names
+		String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA, ColorMap.PLASMA };
+
+		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 63).setValue(0f)
+				.setSize(196, 66).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
+
 	}
 
 	/**
@@ -315,10 +325,10 @@ public class ControlPanel extends PApplet {
 		secondary.addScrollableList("Node_Size").setLabel("Size").addItems(items).setPosition(5, 131).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).getCaptionLabel()
 				.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
-		
-		secondary.addScrollableList("Node_Color").setLabel("Color").addItems(items).setPosition(106, 131).setSize(95, 52)
-		.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).getCaptionLabel()
-		.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
+
+		secondary.addScrollableList("Node_Color").setLabel("Color").addItems(items).setPosition(106, 131)
+				.setSize(95, 52).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
@@ -356,7 +366,8 @@ public class ControlPanel extends PApplet {
 
 		// Weight
 
-		secondary.addLabel("Weight filter: " + UserSettings.getInstance().getEdgeWeightAttribute()).setPosition(2, 76).moveTo(group); // 
+		secondary.addLabel("Weight filter: " + UserSettings.getInstance().getEdgeWeightAttribute()).setPosition(2, 76)
+				.moveTo(group); //
 
 		float[] minMaxWeightValue = Mapper.getInstance().getMinMaxForEdges(keyNamesForEdges.get(0));
 
@@ -390,11 +401,13 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Edge_Thickness").setPosition(5, 159).setSize(95, 52).setBarHeight(13).setItemHeight(13)
-				.addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Thickness").moveTo(group);
-		
-		secondary.addScrollableList("Edge_Color").setPosition(106, 159).setSize(95, 52).setBarHeight(13).setItemHeight(13)
-		.addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Color").moveTo(group);
+		secondary.addScrollableList("Edge_Thickness").setPosition(5, 159).setSize(95, 52).setBarHeight(13)
+				.setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Thickness")
+				.moveTo(group);
+
+		secondary.addScrollableList("Edge_Color").setPosition(106, 159).setSize(95, 52).setBarHeight(13)
+				.setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Color")
+				.moveTo(group);
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
@@ -473,7 +486,13 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setColorBackground((int) theEvent.getController().getValue());
 			break;
 
-		// **** NODES ****
+		case "Palette":
+			int valuePalette = (int) secondary.get(ScrollableList.class, "Palette").getValue();
+			String colorMapName = secondary.get(ScrollableList.class, "Palette").getItem(valuePalette).get("name")
+					.toString();
+			ColorMap.getInstance().setColorMap(colorMapName);
+
+			// **** NODES ****
 		case "Search ID":
 			UserSettings.getInstance().setIDSearch(theEvent.getStringValue());
 			break;
@@ -537,7 +556,8 @@ public class ControlPanel extends PApplet {
 			break;
 		case "Clear":
 			Bang clearPropagation = (Bang) theEvent.getController();
-			UserSettings.getInstance().setClearPropagation(clearPropagation.getValue());
+			clearPropagation.setTriggerEvent(Bang.RELEASE);
+			UserSettings.getInstance().setClearPropagation(true);
 			break;
 		case "Converter_Edge":
 			int valueCE = (int) secondary.get(ScrollableList.class, "Converter_Edge").getValue();
@@ -547,8 +567,8 @@ public class ControlPanel extends PApplet {
 		case "Edge_Thickness":
 			int edgeThickness = (int) secondary.get(ScrollableList.class, "Edge_Thickness").getValue();
 
-			UserSettings.getInstance().setEdgeThicknessAtt(
-					secondary.get(ScrollableList.class, "Edge_Thickness").getItem(edgeThickness).get("name").toString());
+			UserSettings.getInstance().setEdgeThicknessAtt(secondary.get(ScrollableList.class, "Edge_Thickness")
+					.getItem(edgeThickness).get("name").toString());
 			break;
 		case "Edge_Color":
 			int valueE = (int) secondary.get(ScrollableList.class, "Edge_Color").getValue();
@@ -721,5 +741,5 @@ public class ControlPanel extends PApplet {
 	public static void setLogo(PImage loadImage) {
 		logo = loadImage;
 	}
-	
+
 }

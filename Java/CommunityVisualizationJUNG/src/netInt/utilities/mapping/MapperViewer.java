@@ -27,6 +27,7 @@ public class MapperViewer extends PApplet {
 	private static MapperViewer MVInstance = null;
 	private PFont font;
 	private ArrayList<Bar> bars;
+	private String currentColorMap;
 
 	// Singleton pattern
 	public static MapperViewer getInstance() throws NullPointerException {
@@ -46,6 +47,7 @@ public class MapperViewer extends PApplet {
 	public MapperViewer() {
 		super();
 		bars = new ArrayList<Bar>();
+		currentColorMap = ColorMap.getInstance().getColorMapName();
 		MVInstance = this;
 	}
 
@@ -74,6 +76,11 @@ public class MapperViewer extends PApplet {
 		background(70);
 		ColorMap.getInstance().showPalette(this, 20, 15, 256);
 
+		if (!ColorMap.getInstance().getColorMapName().equals(currentColorMap)) {
+			currentColorMap = ColorMap.getInstance().getColorMapName();
+			resetBars();
+		}
+
 		if (bars != null) {
 			int j = 40;
 			text("PERCENTILES BELOW WHICH VALUES FALL", 20, j, 250, 150);
@@ -89,7 +96,7 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void initMinMaxValues() {
-		// Launch MapperViewer window
+
 		kickOffPApplet();
 
 		// NODES
@@ -117,22 +124,73 @@ public class MapperViewer extends PApplet {
 		}
 
 		// EDGES
-//		try {
-//			if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
-//
-//				ArrayList<String> attributeKeys = Mapper.getInstance().getEdgeNumericalAttributeKeys();
-//				for (int i = 0; i < attributeKeys.size(); i++) {
-//					Bar temp = new Bar(attributeKeys.get(i));
-//					temp.min = Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
-//					temp.max = Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
-//					bars.add(temp);
-//				}
-//			}
-//		} catch (NullPointerException np) {
-//			System.out.println(this.getClass().getName() + " Mapper does not have Edge Numerical Attributes");
-//		}
+		// try {
+		// if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
+		//
+		// ArrayList<String> attributeKeys =
+		// Mapper.getInstance().getEdgeNumericalAttributeKeys();
+		// for (int i = 0; i < attributeKeys.size(); i++) {
+		// Bar temp = new Bar(attributeKeys.get(i));
+		// temp.min =
+		// Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+		// temp.max =
+		// Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+		// bars.add(temp);
+		// }
+		// }
+		// } catch (NullPointerException np) {
+		// System.out.println(this.getClass().getName() + " Mapper does not have
+		// Edge Numerical Attributes");
+		// }
 
 		System.out.println("MapperViewer initialized");
+	}
+
+	public void resetBars() {
+		
+		bars = new ArrayList<Bar>();
+
+		// NODES
+		try {
+			ArrayList<String> attributeKeys = Mapper.getInstance().getNodeNumericalAttributeKeys();
+			for (int i = 0; i < attributeKeys.size(); i++) {
+				// ************* THIS 'IF' IS NOT THE RIGHT WAY
+				// TO DO FILTER
+				// WHICH ATTRIBUTES HAVE VALUE.
+				// **************** MORE WORK NEED TO BE DONE HERE TO SOLVE
+				// THIS ISSUE
+				if (!attributeKeys.get(i).equals("Community size")) {
+					Bar temp = new Bar(attributeKeys.get(i));
+					temp.min = Mapper.getInstance().getNodeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+					temp.max = Mapper.getInstance().getNodeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+					bars.add(temp);
+				}
+			}
+
+		} catch (NullPointerException np) {
+			System.out.println(this.getClass().getName() + " Mapper does not have Node Numerical Attributes");
+		}
+
+		// EDGES
+		// try {
+		// if (Mapper.getInstance().getEdgeNumericalAttributeKeys() != null) {
+		//
+		// ArrayList<String> attributeKeys =
+		// Mapper.getInstance().getEdgeNumericalAttributeKeys();
+		// for (int i = 0; i < attributeKeys.size(); i++) {
+		// Bar temp = new Bar(attributeKeys.get(i));
+		// temp.min =
+		// Mapper.getInstance().getEdgeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+		// temp.max =
+		// Mapper.getInstance().getEdgeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+		// bars.add(temp);
+		// }
+		// }
+		// } catch (NullPointerException np) {
+		// System.out.println(this.getClass().getName() + " Mapper does not have
+		// Edge Numerical Attributes");
+		// }
+
 	}
 
 	public void exit() {

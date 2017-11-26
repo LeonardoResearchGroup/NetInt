@@ -19,8 +19,6 @@ package netInt.visualElements;
 import processing.core.PVector;
 import processing.core.PApplet;
 
-import java.awt.Color;
-
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import netInt.canvas.Canvas;
 import netInt.canvas.MouseHook;
@@ -52,7 +50,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	protected VCommunity nodeFoundInSuperCommunity;
 	private String idSearch = null;
 	protected boolean containsSearchedNode = false;
-
 	private boolean vNodesCentered = false;
 	private boolean vCommunitiesCentered = false;
 
@@ -80,37 +77,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 			setDiameter(temp * 50);
 		}
-
-		// if ((temp * 10) < 2) {
-		// comCover.setStrokeThickness(1);
-		// } else {
-		// comCover.setStrokeThickness((int) (temp * 10));
-		// }
-		// try {
-		// float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
-		// getNode().printAbsoluteAttributes();
-		// float val = getNode().getFloatAttribute("degree");
-		// System.out.println("min: " + minMax[0] + " max:" + minMax[1] + "
-		// node:" + val);
-		//
-		// setColor(ColorMap.getInstance(ColorMap.PLASMA).getMappedColorRGB(minMax[0],
-		// minMax[1],
-		// getNode().getFloatAttribute("degree")), 100);
-		// } catch (NullPointerException n) {
-		// System.out.println(this.getClass().getName() + " " + n.toString());
-		// //setColor(new Color(0));
-		// }
 	}
 
 	public void showCommunity() {
 
 		// Look for nodes based on id entered by user in control panel
 		searchNode();
-
-		// Clear all propagation
-		if (UserSettings.getInstance().getClearPropagation()) {
-			clearPropagationInContainer();
-		}
 
 		// Display the community cover
 		comCover.show(container, containsSearchedNode);
@@ -223,19 +195,25 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 			// If the container Layout iterates to distribute nodes
 			if (container.isLayoutIterative()) {
+
 				if (container.isDone()) {
+
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
 
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
+
 							if (UserSettings.eventOnVSettings)
+
 								vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
 
 						if (container.currentLayout == Container.CONCENTRIC) {
+
 							vE.setLayoutAndCenter(container.currentLayout, this.pos);
 						}
+
 						vE.show();
 					}
 
@@ -246,11 +224,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					// If the edge has any attribute
 					if (vE.getEdge().getAttributeSize() > 0) {
-						if (UserSettings.eventOnVSettings)
-							vE.setVisibility(UserSettings.getInstance().getWeight());
+
+						vE.setVisibility(UserSettings.getInstance().getWeight());
 					}
 
 					if (container.currentLayout == Container.CONCENTRIC) {
+
 						vE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
 
@@ -366,25 +345,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	}
 
-	protected void clearPropagationInContainer() {
-		
-		for (VisualAtom vA : container.getVNodes()) {
-			if (vA instanceof VCommunity) {
-				VCommunity vC = (VCommunity) vA;
-
-				for (VNode vN : vC.container.getVNodes()) {
-					vN.clearPropagation();
-				}
-
-			} else {
-				System.out.println("Clear prop VComm 3");
-				VNode vN = (VNode) vA;
-				vN.clearPropagation();
-
-			}
-		}
-	}
-
 	/**
 	 * Update position of each visualElement in the container relative to
 	 * current vCommunity center.
@@ -403,6 +363,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	// ***** Getters & Setters
+
 	public void setContainer(Container nodesAndEdges) {
 		container = nodesAndEdges;
 	}
@@ -416,7 +377,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	// ***** Events
-
 	public VCommunityCover getComCover() {
 		return comCover;
 	}
@@ -450,6 +410,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	/**
+	 * 
 	 * Search for a Node using the ID parameter
 	 * 
 	 * @param id
@@ -492,14 +453,17 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 		return rtn;
 	}
+	
 
 	public boolean containsFoundNode() {
 		return containsSearchedNode;
 	}
+	
 
 	public void hasSoughtNode(boolean isSought) {
 		this.containsSearchedNode = isSought;
 	}
+	
 
 	/**
 	 * Reset the visual attributes of a Node that contains the node found by the
@@ -511,6 +475,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			containsSearchedNode = false;
 		}
 	}
+	
 
 	/**
 	 * Reset the visual attributes of a SubSubCommunity that contains a node
@@ -521,6 +486,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			nodeFoundInSuperCommunity.resetNodeFound();
 		}
 	}
+	
 
 	// ***** Between communities operations *****
 	public DirectedSparseMultigraph<Node, Edge> detectLinkedCommunities(final VCommunity otherCommunity) {
