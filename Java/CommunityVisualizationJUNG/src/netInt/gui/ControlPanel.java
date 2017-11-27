@@ -62,6 +62,8 @@ public class ControlPanel extends PApplet {
 
 	// Groups
 	private Group bancaGroup;
+	
+	private Group netIntbancaGroup;
 
 	// Other controller elements
 	private CheckBox cBox;
@@ -213,6 +215,7 @@ public class ControlPanel extends PApplet {
 		Group edgesGroup = new Group(secondary, "Edge");
 		// Group communitiesGroup = new Group(secondary, "Community");
 		bancaGroup = new Group(secondary, "Financial Stats");
+		netIntbancaGroup = new Group(secondary, "New Module");
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
@@ -221,6 +224,7 @@ public class ControlPanel extends PApplet {
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		// communitiesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
 		bancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		netIntbancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(bancaGroup);
 		bancaGroup.setVisible(bancaModuleEnabled);
@@ -235,7 +239,7 @@ public class ControlPanel extends PApplet {
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(282);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(settingsGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup);
+		accordion.addItem(settingsGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup).addItem(netIntbancaGroup);
 
 		color = new Color(125, 125, 125);
 		accordion.setColorValue(color.getRGB());

@@ -196,7 +196,7 @@ public abstract class Container {
 		System.out.println(this.getClass().getName() + " numberNodes: " + numberNodes);
 
 		// Percentage of degree threshold (0-100)
-		float degreeThresholdPercentage = 99;
+		float degreeThresholdPercentage = 0;
 
 		int degreeThresholdPosition = (int) ((degreeThresholdPercentage / 100) * numberNodes) - 1;
 

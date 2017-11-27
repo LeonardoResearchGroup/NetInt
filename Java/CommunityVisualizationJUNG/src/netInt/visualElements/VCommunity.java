@@ -157,19 +157,16 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		// ** Display VEdges
 
-		// Internal Edges
-		// If the user chooses to turn on/off the internal edges
 		if (showEdges && comCover.isUnlocked()) {
 
+			// Internal Edges
+			// If the user chooses to turn on/off the internal edges
 			if (UserSettings.getInstance().internalEdgeVisibilityForTier(tierSequence)) {
 				showInternalEdges();
 			}
-		}
 
-		// External edges
-		// If the user chooses to turn on/off the external edges
-		if (showEdges && comCover.isUnlocked()) {
-
+			// External edges
+			// If the user chooses to turn on/off the external edges
 			if (UserSettings.getInstance().externalEdgeVisibilityForTier(tierSequence)) {
 				showExternalEdges();
 			}
@@ -453,17 +450,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 		return rtn;
 	}
-	
 
 	public boolean containsFoundNode() {
 		return containsSearchedNode;
 	}
-	
 
 	public void hasSoughtNode(boolean isSought) {
 		this.containsSearchedNode = isSought;
 	}
-	
 
 	/**
 	 * Reset the visual attributes of a Node that contains the node found by the
@@ -475,7 +469,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			containsSearchedNode = false;
 		}
 	}
-	
 
 	/**
 	 * Reset the visual attributes of a SubSubCommunity that contains a node
@@ -486,7 +479,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			nodeFoundInSuperCommunity.resetNodeFound();
 		}
 	}
-	
 
 	// ***** Between communities operations *****
 	public DirectedSparseMultigraph<Node, Edge> detectLinkedCommunities(final VCommunity otherCommunity) {

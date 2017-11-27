@@ -70,8 +70,8 @@ public class UserSettings {
 
 	// On/Off boolean to display only propagated nodes and edges
 	private boolean filterPropagation = false;
-	
-	// True only for one (draw) cycle. Clear user selection propagation 
+
+	// True only for one (draw) cycle. Clear user selection propagation
 	private boolean clearPropagation;
 
 	// Name of attribute for edge thickness
@@ -83,8 +83,6 @@ public class UserSettings {
 	// Name of attribute to be applied to edges
 	private String converterEdge;
 
-
-
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
 
@@ -93,7 +91,6 @@ public class UserSettings {
 	// VNodeDescriptions
 	private HashMap<String, Boolean> descriptiveStatistics;
 
-	
 	// Singleton instance
 	private static UserSettings vSettingsInstance = null;
 
@@ -133,7 +130,7 @@ public class UserSettings {
 
 	// **************************** GETTERS ****************************
 	// ***** FILE GETTERS ******
-
+	// Export file name
 	public String getFileExportName() {
 		return fileExportName;
 	}
@@ -175,14 +172,6 @@ public class UserSettings {
 	}
 
 	// ***** EDGE GETTERS ******
-
-//	public boolean showInternalEdges() {
-//		return showInternalEdges;
-//	}
-//
-//	public boolean showExternalEdges() {
-//		return showExternalEdges;
-//	}
 
 	public float getWeight() {
 		return thresholdWeight;
