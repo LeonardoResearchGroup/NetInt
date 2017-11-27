@@ -19,8 +19,8 @@ package netInt.utilities;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import netInt.comparators.NodeComparatorByAttribute;
-import netInt.graphElements.Node;
+import netInt.comparators.EdgeComparatorByAttribute;
+import netInt.graphElements.Edge;
 
 /**
  * Utility class made to sort nodes by one of their attributes. It does not
@@ -29,17 +29,17 @@ import netInt.graphElements.Node;
  * @author jsalam
  *
  */
-public class SortedNodeList {
+public class SortedEdgeList {
 
-	private static ArrayList<Node> nodeList;
+	private static ArrayList<Edge> edgeList;
 	private static float[] percentileValues;
 
-	private static void makeSortedNodeList(String attributeName) {
+	private static void makeSortedEdgeList(String attributeName) {
 		// Get the node List
-		nodeList = new ArrayList<Node>(GraphLoader.theGraph.getVertices());
+		edgeList = new ArrayList<Edge>(GraphLoader.theGraph.getEdges());
 
 		// Sort the list with the comparator
-		Collections.sort(nodeList, new NodeComparatorByAttribute(attributeName));
+		Collections.sort(edgeList, new EdgeComparatorByAttribute(attributeName));
 	}
 
 	/**
@@ -49,14 +49,15 @@ public class SortedNodeList {
 	 *            the attribute to sort the list
 	 * @return sorted list of nodes
 	 */
-	public static ArrayList<Node> getSortedNodeList(String attributeName) {
-		makeSortedNodeList(attributeName);
-		return nodeList;
+	public static ArrayList<Edge> getSortedEdgeList(String attributeName) {
+		makeSortedEdgeList(attributeName);
+		return edgeList;
 
 	}
 
 	/**
-	 * This method sorts 
+	 * This method sorts
+	 * 
 	 * @param numberOfPercentiles
 	 * @param attributeName
 	 * @return
@@ -64,7 +65,7 @@ public class SortedNodeList {
 	public static float[] getPercentileValues(int numberOfPercentiles, String attributeName) {
 
 		// Sort the list
-		makeSortedNodeList(attributeName);
+		makeSortedEdgeList(attributeName);
 
 		// Store the percentiles
 		percentileValues = calculatePercentiles(numberOfPercentiles, attributeName);
@@ -79,23 +80,23 @@ public class SortedNodeList {
 			for (int i = p; i <= 100; i += p) {
 
 				// Get percentile range
-				double range = nodeList.size() / 100f;
+				double range = edgeList.size() / 100f;
 				// Get rank index
 				int rank = (int) (i * range);
 
-				if (rank > nodeList.size() - 1) {
-					rank = nodeList.size() - 1;
+				if (rank > edgeList.size() - 1) {
+					rank = edgeList.size() - 1;
 				}
-				
+
 				// get Value
-				if (nodeList.get((int) rank).getAttributes().containsKey(attributeName))
-					vals[(i / p) - 1] = nodeList.get((int) rank).getFloatAttribute(attributeName);
+				if (edgeList.get((int) rank).getAttributes().containsKey(attributeName))
+					vals[(i / p) - 1] = edgeList.get((int) rank).getFloatAttribute(attributeName);
 
 			}
 		} else {
 			vals = new float[1];
-			if (nodeList.get((int) -1).getAttributes().containsKey(attributeName))
-				vals[0] = nodeList.get(nodeList.size() - 1).getFloatAttribute(attributeName);
+			if (edgeList.get((int) -1).getAttributes().containsKey(attributeName))
+				vals[0] = edgeList.get(edgeList.size() - 1).getFloatAttribute(attributeName);
 		}
 
 		return vals;

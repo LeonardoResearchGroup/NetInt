@@ -123,6 +123,7 @@ public abstract class Container {
 				runVEdgeFactory();
 
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
+				
 				retrieveVNodeSuccessors(layout.getGraph());
 
 			} else {
@@ -132,7 +133,9 @@ public abstract class Container {
 
 				setVElementCoordinates();
 			}
+			
 			iterativeLayout = isCurrentLayoutIterative();
+			
 			initializationComplete = true;
 		}
 		return initializationComplete;

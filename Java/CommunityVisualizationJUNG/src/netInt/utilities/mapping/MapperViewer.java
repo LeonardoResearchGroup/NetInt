@@ -19,6 +19,7 @@ package netInt.utilities.mapping;
 import java.util.ArrayList;
 
 import jViridis.ColorMap;
+import netInt.utilities.SortedEdgeList;
 import netInt.utilities.SortedNodeList;
 import processing.core.*;
 
@@ -108,7 +109,7 @@ public class MapperViewer extends PApplet {
 			firstNodeBar += j;
 
 			for (int i = 0; i < nodeBars.size(); i++) {
-				
+
 				nodeBars.get(i).show(this, 20, firstNodeBar + (i * j));
 			}
 		}
@@ -133,7 +134,7 @@ public class MapperViewer extends PApplet {
 			firstEdgeBar += j;
 
 			for (int i = 0; i < edgeBars.size(); i++) {
-				
+
 				edgeBars.get(i).show(this, 20, firstEdgeBar + (i * j));
 			}
 		}
@@ -225,7 +226,6 @@ public class MapperViewer extends PApplet {
 		private float min;
 		private float max;
 		private int tab = 65;
-		private float sizes[];
 		private int bins;
 		private int fills[];
 
@@ -237,34 +237,34 @@ public class MapperViewer extends PApplet {
 			max = 0;
 			bins = 10;
 			fills = new int[bins];
-			float[] percentiles;
+			float[] percentiles = new float[0];
 
 			// making of bin heights
 			try {
-				percentiles = SortedNodeList.getPercentileValues(bins, attributeName);
-
-				sizes = new float[percentiles.length];
 
 				float[] minMax = null;
 
 				switch (graphElementType) {
 
 				case Mapper.NODE:
+
 					minMax = Mapper.getInstance().getMinMaxForNodes(attributeName);
+
+					percentiles = SortedNodeList.getPercentileValues(bins, attributeName);
+
 					break;
 				case Mapper.EDGE:
 					minMax = Mapper.getInstance().getMinMaxForEdges(attributeName);
+
+					percentiles = SortedEdgeList.getPercentileValues(bins, attributeName);
+
 					break;
 				default:
+					
 					System.out.println("Mapper Viewer *** Warning: wrong graph element type in bar constructor");
 				}
 
 				for (int i = 0; i < percentiles.length; i++) {
-
-					sizes[i] = Mapper.getInstance().convert(Mapper.LINEAR, percentiles[i], graphElementType,
-							attributeName);
-
-					sizes[i] *= 10f;
 
 					fills[i] = ColorMap.getInstance().getMappedColorRGB(minMax[0], minMax[1], percentiles[i]);
 				}
@@ -282,6 +282,7 @@ public class MapperViewer extends PApplet {
 
 			// Bar name
 			app.textSize(10);
+			app.fill(155);
 			app.text(attribute, orgX, orgY);
 
 			// Bar line
