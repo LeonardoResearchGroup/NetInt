@@ -260,7 +260,7 @@ public class ControlPanel extends PApplet {
 	private void setBackgroundComponents(Group group) {
 		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(196, 18).setRange(0, 255).setValue(70)
 				.moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);
-		
+
 		secondary.addLabel("Viridis color map").setPosition(2, 48).moveTo(group);
 
 		// JViridis palette names
@@ -466,6 +466,11 @@ public class ControlPanel extends PApplet {
 		}
 	}
 
+	/**
+	 * Handles events of group "secondary"
+	 * 
+	 * @param theEvent
+	 */
 	private void switchCaseCP5(ControlEvent theEvent) {
 		String controllerName = theEvent.getController().getName();
 		// System.out.println("ControlPanel> Event at: " + controllerName);

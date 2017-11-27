@@ -22,33 +22,68 @@ import java.util.TreeMap;
 
 public class UserSettings {
 
-	// FILE
+	// ***** FILE *****
 	private String fileExportName;
 
 	// BACKGROUND Visibility Settings
 	private int colorBackground = 70;
 
-	// NODE Visibility Settings
+	// ***** NODE Visibility Settings *****
+	// Search box
 	private String idSearch;
+
+	// Out Degree slider
 	private float thresholdOutDegree;
+
+	// On/Off boolean for nodes
 	private boolean showNodes = true;
+
+	// On/Off boolean for node names
 	private boolean showName = false;
+
+	// Name of numerical attribute for node color
 	private String nodeColorAttribute;
+
+	// Name of numerical attribute for node size
 	private String nodeSizeAttribute;
+
+	// Name of converter to be applied to nodes
 	private String converterNode;
 
-	// EDGE Visibility Settings
-	private boolean showInternalEdges = true;
-	private boolean showExternalEdges = true;
-	private String edgeWeightAttribute;
-	private float thresholdWeight;
-	private float thresholdPropagation = 0;
-	private boolean onlyPropagation = false;
-	private String edgeThicknessAttribute;
-	private String edgeColorAttribute;
-	private String converterEdge;
+	// ***** EDGE Visibility Settings *****
+	/*
+	 * Nested collections. Each primary collection corresponds to one tier. Its
+	 * contents correspond to the visibility of its internal and external edges
+	 * [Key = tier_level, Value = [Key = internal /external ,Value= On/Off edges
+	 * ]]
+	 */
 	private TreeMap<Integer, TreeMap<String, Boolean>> edgeTierVisibility;
+
+	// Name of numerical attribute for edge thickness
+	private String edgeWeightAttribute;
+
+	// Edge Weight slider
+	private float thresholdWeight;
+
+	// Edge propagation slider
+	private float thresholdPropagation = 0;
+
+	// On/Off boolean to display only propagated nodes and edges
+	private boolean filterPropagation = false;
+	
+	// True only for one (draw) cycle. Clear user selection propagation 
 	private boolean clearPropagation;
+
+	// Name of attribute for edge thickness
+	private String edgeThicknessAttribute;
+
+	// Name of attribute for edge color
+	private String edgeColorAttribute;
+
+	// Name of attribute to be applied to edges
+	private String converterEdge;
+
+
 
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
@@ -58,6 +93,8 @@ public class UserSettings {
 	// VNodeDescriptions
 	private HashMap<String, Boolean> descriptiveStatistics;
 
+	
+	// Singleton instance
 	private static UserSettings vSettingsInstance = null;
 
 	// An Event to inform if there was an event on the canvas
@@ -74,6 +111,7 @@ public class UserSettings {
 		vSettingsInstance = instance;
 	}
 
+	// Constructor
 	protected UserSettings() {
 		descriptiveKeys = new HashMap<String, String>();
 		descriptiveStatistics = new HashMap<String, Boolean>();
@@ -81,6 +119,7 @@ public class UserSettings {
 		initTierVisibility();
 	}
 
+	// Initializes tier visibility
 	private void initTierVisibility() {
 		// Two tiers so far. Internal
 		for (int i = 0; i < 2; i++) {
@@ -94,23 +133,23 @@ public class UserSettings {
 
 	// **************************** GETTERS ****************************
 	// ***** FILE GETTERS ******
-	
+
 	public String getFileExportName() {
 		return fileExportName;
 	}
-	
+
 	// ***** BACKGROUND GETTERS ******
-	
+
 	public int getColorBackground() {
 		return colorBackground;
 	}
-	
+
 	// ***** NODE GETTERS ******
-	
+
 	public float getDegreeThreshold() {
 		return thresholdOutDegree;
 	}
-	
+
 	public boolean showName() {
 		return showName;
 	}
@@ -118,15 +157,15 @@ public class UserSettings {
 	public boolean showNodes() {
 		return showNodes;
 	}
-	
+
 	public String getNodeColor() {
 		return nodeColorAttribute;
 	}
-	
+
 	public String getNodeSize() {
 		return nodeSizeAttribute;
 	}
-	
+
 	public String getIdSearch() {
 		return idSearch;
 	}
@@ -134,21 +173,21 @@ public class UserSettings {
 	public String getConverterNode() {
 		return converterNode;
 	}
-	
-	// ***** EDGE GETTERS ******
-	
-	public boolean showInternalEdges() {
-		return showInternalEdges;
-	}
 
-	public boolean showExternalEdges() {
-		return showExternalEdges;
-	}
-	
+	// ***** EDGE GETTERS ******
+
+//	public boolean showInternalEdges() {
+//		return showInternalEdges;
+//	}
+//
+//	public boolean showExternalEdges() {
+//		return showExternalEdges;
+//	}
+
 	public float getWeight() {
 		return thresholdWeight;
 	}
-	
+
 	public float getPropagationThreshold() {
 		return thresholdPropagation;
 	}
@@ -156,23 +195,23 @@ public class UserSettings {
 	public String getEdgeColor() {
 		return edgeColorAttribute;
 	}
-	
+
 	public String getEdgeThickness() {
 		return edgeThicknessAttribute;
 	}
-	
+
 	public boolean filterPropagation() {
-		return onlyPropagation;
+		return filterPropagation;
 	}
-	
+
 	public String getConverterEdge() {
 		return converterEdge;
 	}
-	
+
 	public String getEdgeWeightAttribute() {
 		return edgeWeightAttribute;
 	}
-	
+
 	public boolean internalEdgeVisibilityForTier(int tier) {
 		return edgeTierVisibility.get(tier).get("Internal");
 	}
@@ -184,25 +223,24 @@ public class UserSettings {
 	public boolean getClearPropagation() {
 		return clearPropagation;
 	}
-	
+
 	// ***** STATISTICS GETTERS ******
-	
+
 	public ArrayList<String> getDescriptiveStatisticKeys() {
 		return descriptiveStatisticKeys;
 	}
-	
+
 	public HashMap<String, Boolean> getDescriptiveStatistics() {
 		return descriptiveStatistics;
 	}
-	
+
 	public boolean isStatisticVisible(String key) {
 		return descriptiveStatistics.get(key);
 	}
-	
+
 	public HashMap<String, String> getDescriptiveKeys() {
 		return descriptiveKeys;
 	}
-
 
 	// **************************** SETTERS ***************************
 	// ***** FILE SETTERS ******
@@ -234,7 +272,7 @@ public class UserSettings {
 	public void setNodeColorAtt(String val) {
 		this.nodeColorAttribute = val;
 	}
-	
+
 	public void setNodeSizeAtt(String val) {
 		this.nodeSizeAttribute = val;
 	}
@@ -268,7 +306,7 @@ public class UserSettings {
 	public void setEdgeColorAtt(String val) {
 		this.edgeColorAttribute = val;
 	}
-	
+
 	public void setEdgeThicknessAtt(String val) {
 		this.edgeThicknessAttribute = val;
 	}
@@ -278,7 +316,7 @@ public class UserSettings {
 	}
 
 	public void setPropagationFilter(boolean booleanValue) {
-		onlyPropagation = booleanValue;
+		filterPropagation = booleanValue;
 	}
 
 	public void setClearPropagation(boolean val) {
@@ -308,9 +346,9 @@ public class UserSettings {
 	public void setEventOnVSettings(boolean eventTriggered) {
 		eventOnVSettings = eventTriggered;
 	}
-	
+
 	// This method is invoked at the end of main draw
-	public void resetEvents(){
+	public void resetEvents() {
 		setEventOnVSettings(false);
 		setClearPropagation(false);
 	}

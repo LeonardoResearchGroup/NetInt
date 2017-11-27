@@ -87,7 +87,7 @@ public class MapperViewer extends PApplet {
 
 		text("PERCENTILES BELOW WHICH VALUES FALL", 20, 35, 250, 150);
 
-		int j = 20;
+		int jump = 23;
 
 		// Node Bars
 		if (nodeBars != null) {
@@ -106,18 +106,18 @@ public class MapperViewer extends PApplet {
 
 			fill(200, 200, 200);
 
-			firstNodeBar += j;
+			firstNodeBar += jump;
 
 			for (int i = 0; i < nodeBars.size(); i++) {
 
-				nodeBars.get(i).show(this, 20, firstNodeBar + (i * j));
+				nodeBars.get(i).show(this, 20, firstNodeBar + (i * jump));
 			}
 		}
 
 		// Edge Bars
 		if (edgeBars != null) {
 
-			int firstEdgeBar = ((nodeBars.size() + 1) * j) + 80;
+			int firstEdgeBar = ((nodeBars.size() + 1) * jump) + 80;
 
 			fill(165, 199, 236, 120);
 
@@ -131,11 +131,11 @@ public class MapperViewer extends PApplet {
 
 			fill(200, 200, 200);
 
-			firstEdgeBar += j;
+			firstEdgeBar += jump;
 
 			for (int i = 0; i < edgeBars.size(); i++) {
 
-				edgeBars.get(i).show(this, 20, firstEdgeBar + (i * j));
+				edgeBars.get(i).show(this, 20, firstEdgeBar + (i * jump));
 			}
 		}
 	}

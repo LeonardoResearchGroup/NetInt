@@ -159,7 +159,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		// Internal Edges
 		// If the user chooses to turn on/off the internal edges
-		if (UserSettings.getInstance().showInternalEdges() && showEdges && comCover.isUnlocked()) {
+		if (showEdges && comCover.isUnlocked()) {
 
 			if (UserSettings.getInstance().internalEdgeVisibilityForTier(tierSequence)) {
 				showInternalEdges();
@@ -168,7 +168,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		// External edges
 		// If the user chooses to turn on/off the external edges
-		if (UserSettings.getInstance().showExternalEdges() && showEdges && comCover.isUnlocked()) {
+		if (showEdges && comCover.isUnlocked()) {
 
 			if (UserSettings.getInstance().externalEdgeVisibilityForTier(tierSequence)) {
 				showExternalEdges();
