@@ -61,9 +61,7 @@ public class ControlPanel extends PApplet {
 	private ControlP5 secondary;
 
 	// Groups
-	private Group bancaGroup;
-	
-	private Group netIntbancaGroup;
+	private Group statisticsGroup;
 
 	// Other controller elements
 	private CheckBox cBox;
@@ -214,8 +212,8 @@ public class ControlPanel extends PApplet {
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
 		// Group communitiesGroup = new Group(secondary, "Community");
-		bancaGroup = new Group(secondary, "Financial Stats");
-		netIntbancaGroup = new Group(secondary, "New Module");
+		statisticsGroup = new Group(secondary, "Financial Stats");
+
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
@@ -223,11 +221,10 @@ public class ControlPanel extends PApplet {
 		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		// communitiesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
-		bancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
-		netIntbancaGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		statisticsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
-		cBox.setPosition(5, 7).moveTo(bancaGroup);
-		bancaGroup.setVisible(bancaModuleEnabled);
+		cBox.setPosition(5, 7).moveTo(statisticsGroup);
+		statisticsGroup.setVisible(bancaModuleEnabled);
 
 		// Add Components to each group
 		setBackgroundComponents(settingsGroup);
@@ -236,10 +233,10 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(282);
+		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(302);
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(settingsGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(bancaGroup).addItem(netIntbancaGroup);
+		accordion.addItem(settingsGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statisticsGroup);
 
 		color = new Color(125, 125, 125);
 		accordion.setColorValue(color.getRGB());
@@ -326,18 +323,24 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addScrollableList("Node_Size").setLabel("Size").addItems(items).setPosition(5, 131).setSize(95, 52)
-				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group).getCaptionLabel()
-				.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
+		secondary.addLabel("nSize:").setLabel("Size").setPosition(5, 131).moveTo(group);
+		
+		secondary.addScrollableList("Node_Size").setLabel("Size").addItems(items).setPosition(5, 141).setSize(95, 52)
+				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);//.getCaptionLabel()
+				//.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
+		
+		secondary.addLabel("nColor:").setLabel("Color:").setPosition(106, 131).moveTo(group);
 
-		secondary.addScrollableList("Node_Color").setLabel("Color").addItems(items).setPosition(106, 131)
+		secondary.addScrollableList("Node_Color").setLabel("Color").addItems(items).setPosition(106, 141)
 				.setSize(95, 52).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
+		
+		secondary.addLabel("nConverter:").setLabel("Converter:").setPosition(5, 203).moveTo(group);
 
-		secondary.addScrollableList("Converter_Node").addItems(items).setPosition(5, 193).setSize(95, 52)
+		secondary.addScrollableList("Converter_Node").addItems(items).setPosition(5, 213).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group); // .close();
 
 	}
@@ -404,19 +407,25 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
+		
+		secondary.addLabel("eThickness:").setLabel("Thickness:").setPosition(5, 159).moveTo(group);
 
-		secondary.addScrollableList("Edge_Thickness").setPosition(5, 159).setSize(95, 52).setBarHeight(13)
+		secondary.addScrollableList("Edge_Thickness").setPosition(5, 169).setSize(95, 52).setBarHeight(13)
 				.setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Thickness")
 				.moveTo(group);
+		
+		secondary.addLabel("eColor:").setLabel("Color:").setPosition(106, 159).moveTo(group);
 
-		secondary.addScrollableList("Edge_Color").setPosition(106, 159).setSize(95, 52).setBarHeight(13)
+		secondary.addScrollableList("Edge_Color").setPosition(106, 169).setSize(95, 52).setBarHeight(13)
 				.setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Color")
 				.moveTo(group);
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
+		
+		secondary.addLabel("eConverter:").setLabel("Converter:").setPosition(5, 221).moveTo(group);
 
-		secondary.addScrollableList("Converter_Edge").addItems(items).setPosition(5, 221).setSize(95, 52)
+		secondary.addScrollableList("Converter_Edge").addItems(items).setPosition(5, 231).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
 	}
 
