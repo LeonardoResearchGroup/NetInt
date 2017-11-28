@@ -33,4 +33,10 @@ public class MyTestClass {
 		
 	}
 	
+	public void generateLuminosity(String type, String name)
+	{
+		System.out.println(">External Jar: getType:" + type);
+		System.out.println(">External Jar: getName:" + name);
+	}
+	
 }

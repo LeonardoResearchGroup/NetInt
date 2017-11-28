@@ -18,7 +18,7 @@
                           {
                             "buttonName": "MyButton2",
                             "buttonType": "Toggle",
-                            "methodName": "generateRadomBackgroundColor",
+                            "methodName": "generateLuminosity",
                             "withParameters": true,
                             "methodParameters": "getType:netInt.utilities.GraphmlKey;getName:netInt.utilities.GraphmlKey",
                             "className": "classes.MyTestClass",

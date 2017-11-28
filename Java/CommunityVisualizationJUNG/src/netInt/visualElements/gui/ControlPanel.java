@@ -647,7 +647,7 @@ public class ControlPanel extends PApplet {
 			String paramRegex = moduleElement.getMethodParameters();
 
 			// Defining the parameters.
-			String[] parameters = paramRegex.split(";");
+			String[] parameters = paramRegex.split(";",-1);
 
 			// Defining the array of parameters.
 			methodParameters = new Object[parameters.length];
