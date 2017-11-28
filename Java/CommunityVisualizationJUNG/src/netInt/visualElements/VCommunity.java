@@ -66,6 +66,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (container.size() != 0) {
 		
 			node.setAbsoluteAttribute("Community size", container.size());
+			
 		} else {
 			
 			node.setAbsoluteAttribute("Community size", 1);
@@ -77,6 +78,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void init() {
+		
 		float temp = Mapper.getInstance().convert(Mapper.LINEAR, container.size(), Mapper.NODE, "Community size");
 
 		if ((temp * 50) < 10) {

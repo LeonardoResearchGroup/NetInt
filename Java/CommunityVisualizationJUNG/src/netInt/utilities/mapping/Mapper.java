@@ -133,6 +133,11 @@ public class Mapper {
 					+ rtn + ", that is less than 0, thus mapped as 0");
 			rtn = 0;
 		}
+		
+		if (Float.isNaN(rtn)){
+			
+			rtn = 0;
+		}
 
 		return rtn;
 	}
