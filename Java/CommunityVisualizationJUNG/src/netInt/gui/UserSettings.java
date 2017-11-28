@@ -25,8 +25,14 @@ public class UserSettings {
 	// ***** FILE *****
 	private String fileExportName;
 
-	// BACKGROUND Visibility Settings
+	// ***** SETTINGS *****
+
+	// Background color
 	private int colorBackground = 70;
+
+	// Adaptive performance. It autonomously adjusts the number of edges
+	// displayed to guarantee a minimal framerate
+	private boolean adaptivePerformace = false;
 
 	// ***** NODE Visibility Settings *****
 	// Search box
@@ -135,10 +141,14 @@ public class UserSettings {
 		return fileExportName;
 	}
 
-	// ***** BACKGROUND GETTERS ******
+	// ***** SETTINGS GETTERS ******
 
 	public int getColorBackground() {
 		return colorBackground;
+	}
+	
+	public boolean getAdaptivePerformance() {
+		return adaptivePerformace;
 	}
 
 	// ***** NODE GETTERS ******
@@ -238,10 +248,14 @@ public class UserSettings {
 		this.fileExportName = val;
 	}
 
-	// ***** BACKGROUND SETTERS ******
+	// ***** SETTINGS SETTERS ******
 
 	public void setColorBackground(int colorValue) {
 		colorBackground = colorValue;
+	}
+
+	public void setAdaptivePerformance(boolean value) {
+		adaptivePerformace = value;
 	}
 
 	// ***** NODE SETTERS ******

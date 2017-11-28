@@ -214,7 +214,6 @@ public class ControlPanel extends PApplet {
 		// Group communitiesGroup = new Group(secondary, "Community");
 		statisticsGroup = new Group(secondary, "Financial Stats");
 
-
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 		settingsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
@@ -227,7 +226,7 @@ public class ControlPanel extends PApplet {
 		statisticsGroup.setVisible(bancaModuleEnabled);
 
 		// Add Components to each group
-		setBackgroundComponents(settingsGroup);
+		setSettingsComponents(settingsGroup);
 		setNodeComponents(nodesGroup);
 		setEdgeComponents(edgesGroup);
 		setEstadisticasDescriptivasComponent();
@@ -258,16 +257,27 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private void setBackgroundComponents(Group group) {
+	private void setSettingsComponents(Group group) {
+		
+		// Background color
 		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(196, 18).setRange(0, 255).setValue(70)
 				.moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);
 
-		secondary.addLabel("Viridis color map").setPosition(2, 48).moveTo(group);
+		// Adaptive performance
 
+		secondary.addLabel("Adaptive performance").setPosition(2, 48).moveTo(group);
+
+		secondary.addToggle("Adaptive_performance").setPosition(5, 63).setSize(196, 15).setValue(false)
+				.setCaptionLabel(" Adaptive performance").moveTo(group).getCaptionLabel()
+				.align(ControlP5.LEFT, ControlP5.CENTER);
+				
 		// JViridis palette names
+	
+		secondary.addLabel("Viridis color map").setPosition(2,83).moveTo(group);
+		
 		String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA, ColorMap.PLASMA };
 
-		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 63).setValue(0f)
+		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 98).setValue(0f)
 				.setSize(196, 66).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
 
@@ -324,11 +334,11 @@ public class ControlPanel extends PApplet {
 		}
 
 		secondary.addLabel("nSize:").setLabel("Size").setPosition(5, 131).moveTo(group);
-		
+
 		secondary.addScrollableList("Node_Size").setLabel("Size").addItems(items).setPosition(5, 141).setSize(95, 52)
-				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);//.getCaptionLabel()
-				//.align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
-		
+				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);// .getCaptionLabel()
+		// .align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
+
 		secondary.addLabel("nColor:").setLabel("Color:").setPosition(106, 131).moveTo(group);
 
 		secondary.addScrollableList("Node_Color").setLabel("Color").addItems(items).setPosition(106, 141)
@@ -337,7 +347,7 @@ public class ControlPanel extends PApplet {
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
-		
+
 		secondary.addLabel("nConverter:").setLabel("Converter:").setPosition(5, 203).moveTo(group);
 
 		secondary.addScrollableList("Converter_Node").addItems(items).setPosition(5, 213).setSize(95, 52)
@@ -407,13 +417,13 @@ public class ControlPanel extends PApplet {
 		for (int i = 0; i < mappers.length; i++) {
 			items[i] = (String) mappers[i];
 		}
-		
+
 		secondary.addLabel("eThickness:").setLabel("Thickness:").setPosition(5, 159).moveTo(group);
 
 		secondary.addScrollableList("Edge_Thickness").setPosition(5, 169).setSize(95, 52).setBarHeight(13)
 				.setItemHeight(13).addItems(items).setType(ScrollableList.DROPDOWN).setCaptionLabel("Thickness")
 				.moveTo(group);
-		
+
 		secondary.addLabel("eColor:").setLabel("Color:").setPosition(106, 159).moveTo(group);
 
 		secondary.addScrollableList("Edge_Color").setPosition(106, 169).setSize(95, 52).setBarHeight(13)
@@ -422,7 +432,7 @@ public class ControlPanel extends PApplet {
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
-		
+
 		secondary.addLabel("eConverter:").setLabel("Converter:").setPosition(5, 221).moveTo(group);
 
 		secondary.addScrollableList("Converter_Edge").addItems(items).setPosition(5, 231).setSize(95, 52)
@@ -504,13 +514,19 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setColorBackground((int) theEvent.getController().getValue());
 			break;
 
+		case "Adaptive_performance":
+			Toggle performance = (Toggle) theEvent.getController();
+			UserSettings.getInstance().setAdaptivePerformance(performance.getBooleanValue());
+			break;
+			
 		case "Palette":
 			int valuePalette = (int) secondary.get(ScrollableList.class, "Palette").getValue();
 			String colorMapName = secondary.get(ScrollableList.class, "Palette").getItem(valuePalette).get("name")
 					.toString();
 			ColorMap.getInstance().setColorMap(colorMapName);
+			break;
 
-			// **** NODES ****
+		// **** NODES ****
 		case "Search ID":
 			UserSettings.getInstance().setIDSearch(theEvent.getStringValue());
 			break;
