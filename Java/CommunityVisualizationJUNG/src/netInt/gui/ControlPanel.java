@@ -268,7 +268,7 @@ public class ControlPanel extends PApplet {
 		secondary.addLabel("Adaptive performance").setPosition(2, 48).moveTo(group);
 
 		secondary.addToggle("Adaptive_performance").setPosition(5, 63).setSize(196, 15).setValue(false)
-				.setCaptionLabel(" Adaptive performance").moveTo(group).getCaptionLabel()
+				.setCaptionLabel("Adaptive performance").moveTo(group).getCaptionLabel()
 				.align(ControlP5.LEFT, ControlP5.CENTER);
 				
 		// JViridis palette names
