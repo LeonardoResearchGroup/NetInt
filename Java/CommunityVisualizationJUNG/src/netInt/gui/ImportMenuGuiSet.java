@@ -74,7 +74,7 @@ public class ImportMenuGuiSet implements Observer {
 	public void init() {
 
 		// Selectable List for nested communities
-		communities = new OrderedCheckList(100f, 110f, "Node Attributes", "Nesting order");
+		communities = new OrderedCheckList(100f, 110f, "Communities", "Nesting order");
 		communities.setItemSize(100, 12);
 		communities.setName("Select nesting order");
 

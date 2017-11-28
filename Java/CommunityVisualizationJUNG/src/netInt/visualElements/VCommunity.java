@@ -62,7 +62,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		this.container = container;
 		lastPosition = pos;
 		comCover = new VCommunityCover(this);
-		node.setAbsoluteAttribute("Community size", container.size());
+		
+		if (container.size() != 0) {
+		
+			node.setAbsoluteAttribute("Community size", container.size());
+		} else {
+			
+			node.setAbsoluteAttribute("Community size", 1);
+		}
 		// Move vNodes relative to the vCommnity center
 		updateContainer();
 		description = new VNodeDescription();
@@ -80,8 +87,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void showCommunity() {
-		
-		System.out.println("Showing " + this.getNode().getId() + " size" + this.getDiameter());
 
 		// Look for nodes based on id entered by user in control panel
 		searchNode();
@@ -269,7 +274,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 			// VCommunities
 			for (VCommunity vC : container.getVCommunities()) {
-
 
 				// vC.setVisibility(true);
 
