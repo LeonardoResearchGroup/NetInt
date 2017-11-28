@@ -164,10 +164,20 @@ public class ImportMenuGuiSet implements Observer {
 			String[] communityStructure = communities.getOrderedTargetList();
 
 			String[] nodeName = new String[1];
-			nodeName[0] = nodeNameList.getSelectedLabel();// nodeNameList.getOrderedLabelList();
 
 			String[] edgeWeights = new String[1];
-			edgeWeights[0] = edgeWeightList.getSelectedLabel();
+
+			try {
+
+				nodeName[0] = nodeNameList.getSelectedLabel();
+
+				edgeWeights[0] = edgeWeightList.getSelectedLabel();
+
+			} catch (NullPointerException np) {
+
+				System.out.println(this.getClass().getName() + " Missing either node name or edge weight");
+
+			}
 
 			// Don't know what this does
 			ArrayList<String> temp = new ArrayList<String>(Arrays.asList(nodeNameList.getItemLabels()));
@@ -175,7 +185,7 @@ public class ImportMenuGuiSet implements Observer {
 
 			// Verify if the user selected at least the first two node
 			// attributes from the menu: one for community and one for label
-			if (communityStructure.length >= 1 && nodeName.length >= 1 && edgeWeights.length > 0) {
+			if (communityStructure.length >= 1 && nodeName.length >= 1) {
 
 				// get the user selection for nodes
 				System.out.println("Node import selection:");
@@ -188,12 +198,19 @@ public class ImportMenuGuiSet implements Observer {
 
 				System.out.println("Edge import selection:");
 
-				for (int i = 0; i < edgeWeights.length; i++) {
+				if (edgeWeights[0] != null) {
 
-					System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
+					for (int i = 0; i < edgeWeights.length; i++) {
+
+						System.out.println("..." + edgeWeightList.getName() + ": " + edgeWeights[i] + ", ");
+					}
+
+					UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
+					
+				} else {
+					
+					UserSettings.getInstance().setEdgeWeightAttribute("weight");
 				}
-
-				UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
 
 				System.out.println("_ _ _");
 

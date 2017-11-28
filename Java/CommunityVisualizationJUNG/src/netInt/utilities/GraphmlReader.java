@@ -256,7 +256,7 @@ public class GraphmlReader {
 			addEdgeToSubgraphs(e);
 
 			// Check if the edge has any of the edge Import attributes
-			if (edgeImportAttributes.length > 0) {
+			if (edgeImportAttributes[0] != null) {
 				for (int i = 0; i < edgeImportAttributes.length; i++) {
 					try {
 
@@ -271,7 +271,7 @@ public class GraphmlReader {
 							throw new NullPointerException();
 					} catch (NullPointerException exception) {
 						System.out.println(this.getClass().getName()
-								+ " Null Pointer Exception. Edges in the source file don't have attributes named: "
+								+ " NullPointerException. Edges in the source file don't have attributes named: "
 								+ edgeImportAttributes[i]);
 					}
 				}

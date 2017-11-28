@@ -80,6 +80,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void showCommunity() {
+		
+		System.out.println("Showing " + this.getNode().getId() + " size" + this.getDiameter());
 
 		// Look for nodes based on id entered by user in control panel
 		searchNode();
@@ -158,7 +160,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// ** Display VEdges
 
 		if (showEdges && comCover.isUnlocked()) {
-
 			// Internal Edges
 			// If the user chooses to turn on/off the internal edges
 			if (UserSettings.getInstance().internalEdgeVisibilityForTier(tierSequence)) {
@@ -263,9 +264,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	private void showVCommunities(boolean communityOpen) {
+
 		if (communityOpen) {
+
 			// VCommunities
 			for (VCommunity vC : container.getVCommunities()) {
+
 
 				// vC.setVisibility(true);
 
