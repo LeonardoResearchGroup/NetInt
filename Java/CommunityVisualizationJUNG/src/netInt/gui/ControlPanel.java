@@ -230,6 +230,7 @@ public class ControlPanel extends PApplet {
 		setNodeComponents(nodesGroup);
 		setEdgeComponents(edgesGroup);
 		setEstadisticasDescriptivasComponent();
+		
 
 		// Accordion GUI
 		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(302);

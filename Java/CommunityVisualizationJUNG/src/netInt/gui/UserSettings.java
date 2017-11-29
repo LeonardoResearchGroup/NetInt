@@ -31,7 +31,7 @@ public class UserSettings {
 	private int colorBackground = 70;
 
 	// Adaptive performance. It autonomously adjusts the number of edges
-	// displayed to guarantee a minimal framerate
+	// displayed to guarantee a minimal frame rate
 	private boolean adaptivePerformace = false;
 
 	// ***** NODE Visibility Settings *****
