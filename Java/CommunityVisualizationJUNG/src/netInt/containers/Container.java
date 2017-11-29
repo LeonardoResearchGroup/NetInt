@@ -83,7 +83,7 @@ public abstract class Container {
 	//Visibility
 	public double degreeThreshold;
 	public int[] degrees;
-	public float degreeThresholdPercentage = 100;
+	
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {

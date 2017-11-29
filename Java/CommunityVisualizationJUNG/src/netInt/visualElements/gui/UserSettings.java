@@ -47,7 +47,9 @@ public class UserSettings {
 	// VNodeDescriptions
 	private HashMap<String, Boolean> descriptiveStatistics;
 
-
+	//Adaptative performance
+	private boolean isAdapting;
+	private double degreeThresholdPercentage = 100;
 
 	private static UserSettings vSettingsInstance = null;
 
@@ -223,6 +225,30 @@ public class UserSettings {
 	
 	public void setConverterNode (String val){
 		this.converterNode = val;
+	}
+
+	public boolean isAdapting() {
+		return isAdapting;
+	}
+
+	public void setAdapting(boolean isAdapting) {
+		this.isAdapting = isAdapting;
+	}
+
+	public double getDegreeThresholdPercentage() {
+		return degreeThresholdPercentage;
+	}
+	
+	public void setDegreeThresholdPercentage(double degreeThresholdPercentage) {
+		this.degreeThresholdPercentage = degreeThresholdPercentage;
+	}
+
+	public void reduceDegreeThresholdPercentage(double r) {
+		this.degreeThresholdPercentage -= r;
+	}
+	
+	public void incrementDegreeThresholdPercentage(double i) {
+		this.degreeThresholdPercentage += i;
 	}
 
 }

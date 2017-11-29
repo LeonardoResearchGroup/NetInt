@@ -21,6 +21,7 @@ import org.jcolorbrewer.ColorBrewer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import jViridis.ColorMap;
+import netInt.containers.Container;
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
@@ -30,6 +31,7 @@ import netInt.utilities.filters.GraphSubsetterFilter;
 import netInt.utilities.mapping.Mapper;
 import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
+import netInt.visualElements.gui.UserSettings;
 import processing.core.PConstants;
 
 /**
@@ -297,6 +299,7 @@ public class Assembler {
 
 	public void show() {
 		// rootVCommunity.show();
+		adjustThresholdAdaptivePerformance();
 		firstOrderVComm.show();
 		firstOrderVComm.searchNode();
 	}
@@ -311,6 +314,24 @@ public class Assembler {
 
 	public void setRootDimension(Dimension rootDimension) {
 		this.rootDimension = rootDimension;
+	}
+	
+	private void adjustThresholdAdaptivePerformance(){
+		
+		UserSettings.getInstance().setAdapting(false);
+		if( Canvas.app.frameRate > 15 ) {
+			UserSettings.getInstance().reduceDegreeThresholdPercentage(0.02);
+			if( UserSettings.getInstance().getDegreeThresholdPercentage() < 1){
+				UserSettings.getInstance().setDegreeThresholdPercentage(1) ;
+			}
+			UserSettings.getInstance().setAdapting(true);
+		}else if( Canvas.app.frameRate < 13 ) {
+			UserSettings.getInstance().incrementDegreeThresholdPercentage(0.04);
+			if( UserSettings.getInstance().getDegreeThresholdPercentage() > 100 ){
+				UserSettings.getInstance().setDegreeThresholdPercentage(100) ;
+			}
+			UserSettings.getInstance().setAdapting(true);
+		}		
 	}
 
 }
