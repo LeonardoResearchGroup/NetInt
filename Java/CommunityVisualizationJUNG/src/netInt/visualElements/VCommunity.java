@@ -83,18 +83,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// } else {
 		// comCover.setStrokeThickness((int) (temp * 10));
 		// }
-//		try {
-//			float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
-//			getNode().printAbsoluteAttributes();
-//			float val = getNode().getFloatAttribute("degree");
-//			System.out.println("min: " + minMax[0] + " max:" + minMax[1] + " node:" + val);
-//
-//			setColor(ColorMap.getInstance(ColorMap.PLASMA).getMappedColorRGB(minMax[0], minMax[1],
-//					getNode().getFloatAttribute("degree")), 100);
-//		} catch (NullPointerException n) {
-//			System.out.println(this.getClass().getName() + " " + n.toString());
-//			//setColor(new Color(0));
-//		}
+		// try {
+		// float minMax[] = Mapper.getInstance().getMinMaxForNodes("degree");
+		// getNode().printAbsoluteAttributes();
+		// float val = getNode().getFloatAttribute("degree");
+		// System.out.println("min: " + minMax[0] + " max:" + minMax[1] + "
+		// node:" + val);
+		//
+		// setColor(ColorMap.getInstance(ColorMap.PLASMA).getMappedColorRGB(minMax[0],
+		// minMax[1],
+		// getNode().getFloatAttribute("degree")), 100);
+		// } catch (NullPointerException n) {
+		// System.out.println(this.getClass().getName() + " " + n.toString());
+		// //setColor(new Color(0));
+		// }
 	}
 
 	public void show() {
@@ -102,23 +104,31 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		comCover.show(container, containsSearchedNode);
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
+
 			setDisplayed(true);
 			// if coordinates for all elements inside the container are set.
 			// container.isInitializationComplete() is a boolean gate that
 			// controls iteration
 			if (container.isInitializationComplete()) {
+
 				// Build external Edges of VCommunities included in this
 				// VCommunity's container
 				int contador = 0;
 				for (VCommunity vC : container.getVCommunities()) {
 					if (vC.comCover.isDeployed()) {
+
 						// build external edges
 						vC.container.buildExternalEdges(container.getVCommunities());
 						contador++;
 					}
 				}
 			} else {
+
 				container.initialize();
+				
+				// set adaptive percentage
+				UserSettings.getInstance().setDegreeThresholdPercentage(100);
+				
 			}
 
 			// If the layout is iterative
@@ -176,14 +186,25 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 			// VCommunity open and it is not being modified by the user
 			if (showEdges && !Canvas.canvasBeingTransformed && !rightPressed && !Canvas.canvasBeingZoomed) {
-				
-				//If adaptive performance threshold was uptaded
-				if( UserSettings.getInstance().isAdapting() ){
-					int degreeThresholdPosition = (int)(( UserSettings.getInstance().getDegreeThresholdPercentage() / 100 ) * container.getNodes().size() ) - 1;
+
+				// If adaptive performance threshold was updated
+				if (UserSettings.getInstance().isAdapting()) {
+
+					// The position of this container's array of degrees
+					// corresponding to a given percentage of relevant nodes
+					int degreeThresholdPosition = (int) ((UserSettings.getInstance().getDegreeThresholdPercentage()
+							/ 100) * container.getNodes().size()) - 1;
+
+					if (degreeThresholdPosition < 0) {
+
+						container.degreeThreshold = 0;
+
+					} else {
+
 						container.degreeThreshold = container.degrees[degreeThresholdPosition];
+					}
+
 				}
-				
-				
 
 				// If the container Layout iterates to distribute nodes
 				if (container.isDone()) {
@@ -213,13 +234,19 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (container.currentLayout == Container.CIRCULAR) {
 							vE.setLayoutAndCenter(container.currentLayout, this.pos);
 						}
-						
-						// Edge is visible if both of their nodes are above the degree threshold
-						if(vE.getEdge().getSource().getDegree(0) > container.degreeThreshold && vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
+
+						// Edge is visible if both of its nodes are above the
+						// degree threshold
+						if (vE.getEdge().getSource().getDegree(0) > container.degreeThreshold
+								&& vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
+							
 							vE.setAnotherVisibility(true);
-						}else{
+						
+						} else {
+						
 							vE.setAnotherVisibility(false);
 						}
+						
 						vE.show();
 					}
 				}
@@ -274,22 +301,19 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					}
 
 					vC.show();
-					
+
 					/*
+					 * 
+					 * if (vC.comCover.isUnlocked() && !vC.lock) {
+					 * container.setIncidentEdgesVisibility(vC.getNode(),
+					 * false); vC.lock = true; }
+					 * 
+					 * if (!vC.comCover.isUnlocked() && vC.lock) {
+					 * container.setIncidentEdgesVisibility(vC.getNode(), true);
+					 * vC.lock = false; }
+					 * 
+					 */
 
-					if (vC.comCover.isUnlocked() && !vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), false);
-						vC.lock = true;
-					}
-
-					if (!vC.comCover.isUnlocked() && vC.lock) {
-						container.setIncidentEdgesVisibility(vC.getNode(), true);
-						vC.lock = false;
-					}
-					
-					*/
-					
-					
 				}
 
 				// This gate prevents vCommunity relocation in every draw() loop
@@ -300,20 +324,20 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 					container.stepIterativeLayout(pos).done();
 				}
-				
-				if(container.getVCommunities().size() == 0){
+
+				if (container.getVCommunities().size() == 0) {
 
 					for (VNode vN : container.getVNodes()) {
 						vN.setVisibility(true);
-	
+
 						// Center vNodes relative to a given position
 						if (!vNodesCentered) {
-	
+
 							// set vNodes coordinates relative to vCommunity
 							// position
 							container.translateVElementCoordinates(vN, this.getPos());
 						}
-	
+
 						// If vN is visible and not centered
 						// System.out.println(vN.isDisplayed());
 						if (vNodesCentered) {

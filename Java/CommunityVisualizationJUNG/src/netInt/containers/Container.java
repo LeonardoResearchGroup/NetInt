@@ -214,14 +214,18 @@ public abstract class Container {
 //			degreeThreshold += degree;
 		}
 		
+		// Nodes sorted for adaptive performance
 		Arrays.sort( degrees );
 		
 //		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
 //		degreeThreshold = 1000;
 		
 		if(degreeThresholdPosition < 0){
+			
 			degreeThreshold = 0;	
+		
 		}else{
+			
 			degreeThreshold = degrees[degreeThresholdPosition];
 		}
 			

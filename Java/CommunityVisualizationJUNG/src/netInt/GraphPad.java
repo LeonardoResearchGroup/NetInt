@@ -207,6 +207,9 @@ public class GraphPad {
 			canvas.showLegend(new PVector(parent.width - 20, 20));
 			canvas.displayValues(new PVector(parent.width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
+			if (true) {
+				canvas.adjustThresholdAdaptivePerformance();
+			}
 			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
 
 			// export a frame as png
@@ -299,7 +302,7 @@ public class GraphPad {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = { "Fruchterman-Reingold", "Spring", "Circular","Concentric", "Linear" };
+			String[] layoutKeys = { "Fruchterman-Reingold", "Spring", "Circular", "Concentric", "Linear" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");

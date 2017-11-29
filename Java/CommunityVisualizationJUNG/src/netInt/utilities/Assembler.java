@@ -299,7 +299,6 @@ public class Assembler {
 
 	public void show() {
 		// rootVCommunity.show();
-		adjustThresholdAdaptivePerformance();
 		firstOrderVComm.show();
 		firstOrderVComm.searchNode();
 	}
@@ -316,22 +315,4 @@ public class Assembler {
 		this.rootDimension = rootDimension;
 	}
 	
-	private void adjustThresholdAdaptivePerformance(){
-		
-		UserSettings.getInstance().setAdapting(false);
-		if( Canvas.app.frameRate > 15 ) {
-			UserSettings.getInstance().reduceDegreeThresholdPercentage(0.02);
-			if( UserSettings.getInstance().getDegreeThresholdPercentage() < 1){
-				UserSettings.getInstance().setDegreeThresholdPercentage(1) ;
-			}
-			UserSettings.getInstance().setAdapting(true);
-		}else if( Canvas.app.frameRate < 13 ) {
-			UserSettings.getInstance().incrementDegreeThresholdPercentage(0.04);
-			if( UserSettings.getInstance().getDegreeThresholdPercentage() > 100 ){
-				UserSettings.getInstance().setDegreeThresholdPercentage(100) ;
-			}
-			UserSettings.getInstance().setAdapting(true);
-		}		
-	}
-
 }
