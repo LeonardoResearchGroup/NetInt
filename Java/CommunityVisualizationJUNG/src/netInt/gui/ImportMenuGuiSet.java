@@ -53,6 +53,9 @@ public class ImportMenuGuiSet implements Observer {
 	private RadioButtonList layoutList;
 	private PushButton loadButton;
 	private boolean graphLoaded = false;
+	
+	// User selection of edgeWeight
+	private String[] edgeWeights;
 
 	public GraphPad graphPad;
 
@@ -155,6 +158,7 @@ public class ImportMenuGuiSet implements Observer {
 	 * pattern. This object observes buttons from the menu instance.
 	 * 
 	 */
+
 	private void choiceCatcher(GuiElement button) {
 
 		// If the load graph button is pressed
@@ -165,7 +169,7 @@ public class ImportMenuGuiSet implements Observer {
 
 			String[] nodeName = new String[1];
 
-			String[] edgeWeights = new String[1];
+			edgeWeights = new String[1];
 
 			try {
 
@@ -206,9 +210,9 @@ public class ImportMenuGuiSet implements Observer {
 					}
 
 					UserSettings.getInstance().setEdgeWeightAttribute(edgeWeights[0]);
-					
+
 				} else {
-					
+
 					UserSettings.getInstance().setEdgeWeightAttribute("weight");
 				}
 
@@ -264,8 +268,7 @@ public class ImportMenuGuiSet implements Observer {
 					ArrayList<String> nodeAttributesKeys = Mapper.getInstance().getNodeAttributesMax()
 							.getAttributeKeys();
 
-					ArrayList<String> edgeAttributeKeys = Mapper.getInstance().getEdgeAttributesMax()
-							.getAttributeKeys();
+					ArrayList<String> edgeAttributeKeys = new ArrayList<String>(Arrays.asList(edgeWeights));
 
 					ControlPanel.getInstance().initGroups(nodeAttributesKeys, edgeAttributeKeys);
 
