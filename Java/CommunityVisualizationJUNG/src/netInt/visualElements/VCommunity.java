@@ -198,6 +198,31 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// VCommunity open and it is not being modified by the user
 		if (!Canvas.canvasBeingTransformed && !MouseHook.getInstance().isHooked(this) && !Canvas.canvasBeingZoomed) {
 
+
+// ******
+
+// If adaptive performance threshold was updated
+				if (UserSettings.getInstance().isAdapting()) {
+
+					// The position of this container's array of degrees
+					// corresponding to a given percentage of relevant nodes
+					int degreeThresholdPosition = (int) ((UserSettings.getInstance().getAdaptiveDegreeThresholdPercentage()
+							/ 100) * container.getNodes().size()) - 1;
+
+					if (degreeThresholdPosition < 0) {
+
+						container.degreeThreshold = 0;
+
+					} else {
+
+						container.degreeThreshold = container.degrees[degreeThresholdPosition];
+					}
+
+				}
+
+
+// *******
+
 			// If the container Layout iterates to distribute nodes
 			if (container.isLayoutIterative()) {
 
@@ -237,6 +262,22 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 						vE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
+					
+					
+					// ********
+					// Edge is visible if both of its nodes are above the
+						// degree threshold
+						if (vE.getEdge().getSource().getDegree(0) > container.degreeThreshold
+								&& vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
+							
+							vE.setSourceTargetVisibility(true); 
+						
+						} else {
+						
+							vE.setSourceTargetVisibility(false); 
+						}
+						
+						// *******
 
 					vE.show();
 				}

@@ -45,10 +45,12 @@ public class VEdge implements Serializable {
 
 	// Visibility attributes
 	private boolean aboveVisibilityThreshold = true;
+	
+	// THIS WAS TRUE  in  Cesar's code
 	private boolean hidden = false;
 
 	// Depends on degree of the nodes
-	private boolean sourceTargetVisibile = true;
+	private boolean sourceTargetVisible = true;
 
 	// Source and target nodes
 	private VNode vSource, vTarget;
@@ -157,7 +159,7 @@ public class VEdge implements Serializable {
 
 			// This visibility is determined by a a threshold
 			// parameter set at the Control Panel
-			if (aboveVisibilityThreshold && sourceTargetVisibile) {
+			if (aboveVisibilityThreshold && sourceTargetVisible) {
 
 				// Set thickness
 				setThickness(calculateEdgeThickness());
@@ -446,7 +448,7 @@ public class VEdge implements Serializable {
 	}
 
 	public void setSourceTargetVisibility(boolean anotherVisibility) {
-		this.sourceTargetVisibile = anotherVisibility;
+		this.sourceTargetVisible = anotherVisibility;
 	}
 
 	public boolean checkVisibility() {

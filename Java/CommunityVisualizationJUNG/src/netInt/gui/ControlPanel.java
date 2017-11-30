@@ -518,6 +518,7 @@ public class ControlPanel extends PApplet {
 		case "Adaptive_performance":
 			Toggle performance = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setAdaptivePerformance(performance.getBooleanValue());
+			UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
 			break;
 			
 		case "Palette":

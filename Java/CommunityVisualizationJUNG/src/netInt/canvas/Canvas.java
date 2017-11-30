@@ -196,6 +196,34 @@ public class Canvas {
 		return canvasBeingTransformed;
 	}
 
+	/**
+	 * Adjusts the global node relevance threshold that allows its edges to be
+	 * displayed. The node relevance is determined by its degree.
+	 * 
+	 * In other words, it shows the edges connecting a given percentage of
+	 * highly connected nodes
+	 */
+	public void adjustThresholdAdaptivePerformance() {
+
+		UserSettings.getInstance().setAdapting(false);
+		if (Canvas.app.frameRate > 15) {
+			// The lower the parameter the faster the edge visualization
+			UserSettings.getInstance().reduceAdaptiveDegreeThresholdPercentage(0.2);
+			if (UserSettings.getInstance().getAdaptiveDegreeThresholdPercentage() < 1) {
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(1);
+			}
+			
+			UserSettings.getInstance().setAdapting(true);
+			
+		} else if (Canvas.app.frameRate < 13) {
+			UserSettings.getInstance().incrementAdaptiveDegreeThresholdPercentage(0.08);
+			if (UserSettings.getInstance().getAdaptiveDegreeThresholdPercentage() > 100) {
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+			}
+			UserSettings.getInstance().setAdapting(true);
+		}
+	}
+
 	// *** Events registration P3
 	public void myRegister() {
 		app.registerMethod("mouseEvent", this);

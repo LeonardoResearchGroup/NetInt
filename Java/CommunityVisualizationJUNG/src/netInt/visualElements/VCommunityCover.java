@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import netInt.canvas.Canvas;
 import netInt.containers.Container;
+import netInt.gui.UserSettings;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.event.KeyEvent;
@@ -28,25 +29,25 @@ import processing.event.MouseEvent;
 public class VCommunityCover implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	// The community was clicked to be opened
 	private boolean unlocked;
-	
+
 	// The community was completely open
 	private boolean coverDeployed;
-	
+
 	// Amount of degrees to open the community
 	private int increment;
-	
+
 	// the user presses "c" to close the community
 	private boolean enableClosing;
-	
+
 	// false if there are too many communities on canvas
 	private boolean showLabel = true;
-	
+
 	// Counter
 	private int i;
-	
+
 	// visibility settings
 	private int strokeThickness;
 	private float angle;
@@ -66,20 +67,19 @@ public class VCommunityCover implements Serializable {
 
 	protected void show(Container container, boolean containsSearchedNode) {
 
-
 		// If mouse over, darken its color
 		if (communityNode.isMouseOver) {
 			strokeThickness = 1;
-			
+
 			if (unlocked && enableClosing) {
 				strokeThickness = 2;
 			}
-			
+
 			if (!showLabel) {
 				showCoverLable(communityNode, container);
 			}
 		} else {
-			
+
 			strokeThickness = 0;
 		}
 
@@ -113,7 +113,6 @@ public class VCommunityCover implements Serializable {
 			Canvas.app.textSize(10);
 			showCoverLable(communityNode, container);
 		}
-
 
 		// highlights itself if it contains a searched node and it has
 		// not been deployed
@@ -220,6 +219,10 @@ public class VCommunityCover implements Serializable {
 			// If clicked, not opened and mouse over
 			if (!unlocked && communityNode.isMouseOver) {
 				unlocked = true;
+
+				// Used in adaptive performance. Switch off all edges
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+
 			}
 			// If clicked, opened and enabled to be closed
 			if (unlocked && enableClosing) {
