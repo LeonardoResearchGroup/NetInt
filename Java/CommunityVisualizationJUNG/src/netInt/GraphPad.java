@@ -301,7 +301,7 @@ public class GraphPad {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = { "Concentric","Fruchterman-Reingold", "Spring", "Linear" };
+			String[] layoutKeys = { "Concentric","Fruchterman-Reingold", "Spring"};
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");

@@ -57,6 +57,7 @@ public class Module_Example extends PApplet {
 
 		// Initiate the Control Panel
 		new ControlPanel(this, 226, this.height);
+
 	}
 
 	/**

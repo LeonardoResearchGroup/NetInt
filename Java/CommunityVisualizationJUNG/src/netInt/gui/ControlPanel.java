@@ -211,15 +211,13 @@ public class ControlPanel extends PApplet {
 		Group settingsGroup = new Group(secondary, "Settings");
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
-		// Group communitiesGroup = new Group(secondary, "Community");
-		statisticsGroup = new Group(secondary, "Financial Stats");
+		statisticsGroup = new Group(secondary, "Node attribute visibility");
 
 		// Group visual attributes
 		Color color = new Color(45, 45, 45);
 		settingsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
-		// communitiesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(350);
 		statisticsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(statisticsGroup);
