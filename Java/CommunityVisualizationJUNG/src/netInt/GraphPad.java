@@ -278,7 +278,7 @@ public class GraphPad {
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
 			importMenu = new ImportMenuGuiSet(this);
-			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getNumericKeyNamesForEdges(), layoutAttributes);
 		}
 	}
 
@@ -306,7 +306,7 @@ public class GraphPad {
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
 			importMenu = new ImportMenuGuiSet(this);
-			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getKeyNamesForEdges(), layoutAttributes);
+			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getNumericKeyNamesForEdges(), layoutAttributes);
 		}
 
 		for (int i = 0; i < strings.length; i++) {

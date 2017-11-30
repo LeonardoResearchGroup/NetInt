@@ -56,7 +56,7 @@ public class Module_Example extends PApplet {
 		pad = new GraphPad(this);
 
 		// Initiate the Control Panel
-		new ControlPanel(this, 226, this.height - 25);
+		new ControlPanel(this, 226, this.height);
 	}
 
 	/**

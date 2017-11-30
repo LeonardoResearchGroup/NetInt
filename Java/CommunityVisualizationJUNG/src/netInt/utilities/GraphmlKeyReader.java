@@ -148,6 +148,24 @@ public class GraphmlKeyReader {
 	}
 
 	/**
+	 * Returns all key names of edge attributes from the graphml
+	 * 
+	 * @return all key names of edge attributes from the graphml
+	 */
+	public ArrayList<String> getNumericKeyNamesForEdges() {
+		ArrayList<String> tmp = new ArrayList<String>();
+		for (GraphmlKey k : graphKeys) {
+			if (k.isEdgeKey()) {
+				String tmpKeyType = k.getType();
+				if (tmpKeyType.equals("double") || tmpKeyType.equals("float") || tmpKeyType.equals("int") || tmpKeyType.equals("long")) {
+					tmp.add(k.getName());
+				}
+			}
+		}
+		return tmp;
+	}
+
+	/**
 	 * Returns all key names of node attributes from the graphml
 	 * 
 	 * @return all key names of node attributes from the graphml

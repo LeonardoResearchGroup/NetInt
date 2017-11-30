@@ -140,7 +140,7 @@ public class ControlPanel extends PApplet {
 
 		this.surface.setSize(w, h);
 
-		this.surface.setLocation(0, 45);
+		this.surface.setLocation(0, 0);
 
 		this.surface.setAlwaysOnTop(false);
 

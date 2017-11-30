@@ -23,10 +23,21 @@ package netInt.utilities;
  *
  */
 public class GraphmlKey {
-	String name;
-	String type;
-	String element;
-	String id;
+	private String name;
+	private String type;
+	private String element;
+	private String id;
+
+	private static final String DOUBLE = "double";
+	private static final String BOOLEAN = "boolean";
+	private static final String FLOAT = "float";
+	private static final String INT = "int";
+	private static final String LONG = "long";
+	private static final String STRING = "string";
+
+	/*
+	 * GRAPHML SPECS FROM http://graphml.graphdrawing.org/specification.html
+	 */
 
 	public GraphmlKey() {
 
@@ -48,8 +59,8 @@ public class GraphmlKey {
 		return id;
 	}
 
-	public String toString(){
-		String rtn = name + "," + type + "," + element+","+id;
+	public String toString() {
+		String rtn = getName() + "," + getType() + "," + getElement() + "," + getId();
 		return rtn;
 	}
 
@@ -58,7 +69,38 @@ public class GraphmlKey {
 	}
 
 	public void setType(String type) {
-		this.type = type;
+
+		switch (type) {
+
+		case "string":
+			this.type = STRING;
+			break;
+			
+		case "boolean":
+			this.type = BOOLEAN;
+			break;
+			
+		case "int":
+			this.type = INT;
+			break;
+			
+		case "float":
+			this.type = FLOAT;
+			break;
+			
+		case "long":
+			this.type = LONG;
+			break;
+			
+		case "double":
+			this.type = DOUBLE;
+			break;
+
+		default:
+			System.out.println(
+					this.getClass().getName() + " WARNING. Attribute type of Graphml file does not match standards");
+		}
+
 	}
 
 	public void setElement(String element) {

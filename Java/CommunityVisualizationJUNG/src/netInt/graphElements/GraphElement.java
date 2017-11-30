@@ -288,11 +288,11 @@ public abstract class GraphElement implements Serializable {
 
 	public abstract void setRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
 
-	protected void addAbsoluteAtt(String key, Object value) {
+	public void addAbsoluteAtt(String key, Object value) {
 		absoluteAttributes.put(key, value);
 	}
 
-	protected void addRelativeAtt(int key, HashMap<String, Float> attributeSet) {
+	public void addRelativeAtt(int key, HashMap<String, Float> attributeSet) {
 		relativeAttributes.put(key, attributeSet);
 	}
 
