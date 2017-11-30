@@ -1,0 +1,32 @@
+{
+  "moduleName": "myModule",
+  "graphicalElements": 
+                        [
+                          {
+                            "buttonName": "Random Backdround",
+                            "buttonType": "Toggle",
+                            "methodName": "generateRadomBackgroundColor",
+                            "withParameters": false,
+                            "methodParameters": "",
+                            "className": "classes.MyTestClass",
+                            "externalClass": true,
+                            "posx": 5,
+                            "posy": 5,
+                            "height": 10,
+                            "width": 100
+                          },
+                          {
+                            "buttonName": "MyButton2",
+                            "buttonType": "Toggle",
+                            "methodName": "generateLuminosity",
+                            "withParameters": true,
+                            "methodParameters": "getType:netInt.utilities.GraphmlKey;getName:netInt.utilities.GraphmlKey",
+                            "className": "classes.MyTestClass",
+                            "externalClass": true,
+                            "posx": 5,
+                            "posy": 25,
+                            "height": 10,
+                            "width": 100
+                          }
+                        ]
+}
