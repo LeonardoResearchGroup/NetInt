@@ -18,9 +18,13 @@ package netInt.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.TreeMap;
 
-public class UserSettings {
+import controlP5.ControlEvent;
+import guiSet.elements.GuiElement;
+
+public class UserSettings extends Observable {
 
 	// ***** FILE *****
 	private String fileExportName;
@@ -355,5 +359,25 @@ public class UserSettings {
 		setEventOnVSettings(false);
 		setClearPropagation(false);
 	}
+	
+	// ******* OBSERVABLE *********
+	
+	private String latestEvent;
+	
+	
+	public String getLatestEvent() {
+		return latestEvent;
+	}
+
+	public void setLatestEvent(String latestEvent) {
+		this.latestEvent = latestEvent;
+		setChanged();
+		notifyObservers();
+	}
+
+//	public void notifyMyObservers(ControlEvent event) {
+//		//setChanged();
+//		notifyObservers(event);
+//	}
 
 }

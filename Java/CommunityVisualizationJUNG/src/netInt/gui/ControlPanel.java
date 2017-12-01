@@ -80,9 +80,6 @@ public class ControlPanel extends PApplet {
 	private ArrayList<String> keyNamesForNodes = new ArrayList<String>();
 	private ArrayList<String> keyNamesForEdges = new ArrayList<String>();
 
-	// Modules
-	private boolean bancaModuleEnabled = false;
-
 	// Singleton Pattern
 	private static ControlPanel CPInstance = null;
 
@@ -184,6 +181,11 @@ public class ControlPanel extends PApplet {
 		// Switch secondary controller invisible
 		secondary.hide();
 
+		// Accordeon
+		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(302);
+		Color color = new Color(125, 125, 125);
+		accordion.setColorValue(color.getRGB());
+
 		// Set background color
 		main.setColorBackground(0xff353535);
 		secondary.setColorBackground(0xff353535);
@@ -221,7 +223,6 @@ public class ControlPanel extends PApplet {
 		statisticsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(statisticsGroup);
-		statisticsGroup.setVisible(bancaModuleEnabled);
 
 		// Add Components to each group
 		setSettingsComponents(settingsGroup);
@@ -229,20 +230,14 @@ public class ControlPanel extends PApplet {
 		setEdgeComponents(edgesGroup);
 		setEstadisticasDescriptivasComponent();
 
-		// Accordion GUI
-		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(302);
-
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(settingsGroup).addItem(nodesGroup).addItem(edgesGroup).addItem(statisticsGroup);
-
-		color = new Color(125, 125, 125);
-		accordion.setColorValue(color.getRGB());
+		accordion.addItem(nodesGroup).addItem(statisticsGroup).addItem(edgesGroup).addItem(settingsGroup);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(1, 2); // ,2,3
+		// accordion.open(1, 2); // ,2,3
 
 		// Show controller
 		secondary.show();
@@ -256,7 +251,7 @@ public class ControlPanel extends PApplet {
 	 *            The Group of GUI elements
 	 */
 	private void setSettingsComponents(Group group) {
-		
+
 		// Background color
 		secondary.addSlider("Luminosity").setPosition(5, 10).setSize(196, 18).setRange(0, 255).setValue(70)
 				.moveTo(group).getCaptionLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE);
@@ -267,12 +262,12 @@ public class ControlPanel extends PApplet {
 
 		secondary.addToggle("Adaptive_performance").setPosition(5, 63).setSize(196, 15).setValue(false)
 				.setCaptionLabel("Adaptive performance").moveTo(group).getCaptionLabel()
-				.align(ControlP5.LEFT, ControlP5.CENTER);
-				
+				.align(ControlP5.LEFT, ControlP5.CENTER).setPaddingX(10);
+
 		// JViridis palette names
-	
-		secondary.addLabel("Viridis color map").setPosition(2,83).moveTo(group);
-		
+
+		secondary.addLabel("Viridis color map").setPosition(2, 83).moveTo(group);
+
 		String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA, ColorMap.PLASMA };
 
 		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 98).setValue(0f)
@@ -450,10 +445,6 @@ public class ControlPanel extends PApplet {
 		}
 	}
 
-	public void enableBancaModule() {
-		bancaModuleEnabled = true;
-	}
-
 	public void draw() {
 		background(70);
 		// logo
@@ -473,7 +464,11 @@ public class ControlPanel extends PApplet {
 		} else {
 			// **** All OTHER CONTROLLERS****
 			switchCaseCP5(theEvent);
-		}
+			
+			// Calls observable method and passes the event
+			UserSettings.getInstance().setLatestEvent(theEvent.getController().getName());
+		}	
+
 		// At any event notify VisibilitySettings class
 		UserSettings.getInstance().setEventOnVSettings(true);
 	}
@@ -516,7 +511,7 @@ public class ControlPanel extends PApplet {
 			Toggle performance = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setAdaptivePerformance(performance.getBooleanValue());
 			break;
-			
+
 		case "Palette":
 			int valuePalette = (int) secondary.get(ScrollableList.class, "Palette").getValue();
 			String colorMapName = secondary.get(ScrollableList.class, "Palette").getItem(valuePalette).get("name")
@@ -774,4 +769,7 @@ public class ControlPanel extends PApplet {
 		logo = loadImage;
 	}
 
+	public Accordion getAccordion() {
+		return accordion;
+	}
 }

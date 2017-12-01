@@ -281,7 +281,6 @@ public class ImportMenuGuiSet implements Observer {
 				menu.setVisible(false);
 			}
 		}
-
 	}
 
 	public boolean getGraphLoaded() {

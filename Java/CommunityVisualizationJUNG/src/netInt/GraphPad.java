@@ -309,12 +309,12 @@ public class GraphPad {
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getNumericKeyNamesForEdges(), layoutAttributes);
 		}
 
-		for (int i = 0; i < strings.length; i++) {
-			if (strings[i].equals("NetInt_Banca")) {
-				ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));
-				ControlPanel.getInstance().enableBancaModule();
-			}
-		}
+//		for (int i = 0; i < strings.length; i++) {
+//			if (strings[i].equals("NetInt_Banca")) {
+//				ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));
+//				ControlPanel.getInstance().enableBancaModule();
+//			}
+//		}
 	}
 
 	/**
