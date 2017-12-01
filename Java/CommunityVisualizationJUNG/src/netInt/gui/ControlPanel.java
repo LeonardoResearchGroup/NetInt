@@ -466,7 +466,7 @@ public class ControlPanel extends PApplet {
 			switchCaseCP5(theEvent);
 			
 			// Calls observable method and passes the event
-			UserSettings.getInstance().setLatestEvent(theEvent.getController().getName());
+			UserSettings.getInstance().setLatestEvent(theEvent);
 		}	
 
 		// At any event notify VisibilitySettings class

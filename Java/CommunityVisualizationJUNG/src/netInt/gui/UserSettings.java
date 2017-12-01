@@ -362,14 +362,14 @@ public class UserSettings extends Observable {
 	
 	// ******* OBSERVABLE *********
 	
-	private String latestEvent;
+	private ControlEvent latestEvent;
 	
 	
-	public String getLatestEvent() {
+	public ControlEvent getLatestEvent() {
 		return latestEvent;
 	}
 
-	public void setLatestEvent(String latestEvent) {
+	public void setLatestEvent(ControlEvent latestEvent) {
 		this.latestEvent = latestEvent;
 		setChanged();
 		notifyObservers();
