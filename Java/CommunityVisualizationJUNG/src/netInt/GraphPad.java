@@ -210,11 +210,11 @@ public class GraphPad {
 			canvas.displayValues(new PVector(parent.width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
 			
-			if (UserSettings.getInstance().getAdaptivePerformance()) {
+//			if (UserSettings.getInstance().getAdaptivePerformance()) {
 				canvas.adjustThresholdAdaptivePerformance();
-			} else {
-				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(0);
-			}
+//			} else {
+//				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(0);
+//			}
 			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
 
 			// export a frame as png
