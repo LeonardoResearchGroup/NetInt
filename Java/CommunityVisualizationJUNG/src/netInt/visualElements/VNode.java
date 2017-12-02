@@ -66,6 +66,9 @@ public class VNode extends VisualAtom implements Serializable {
 	// Visual attributes
 	int textColor = new Color(200, 200, 200).getRGB();
 	int haloOffset = 0;
+	
+	//Adaptive Performance
+	boolean isAboveDegreeThreshold = false;
 
 	public VNode(Node node, float x, float y) {
 		super(x, y);
@@ -536,6 +539,10 @@ public class VNode extends VisualAtom implements Serializable {
 	public boolean isVisible() {
 		return visible;
 	}
+	
+	public boolean isAboveDegreeThreshold() {
+		return isAboveDegreeThreshold;
+	}
 
 	public void setNode(Node node) {
 		this.node = node;
@@ -543,6 +550,10 @@ public class VNode extends VisualAtom implements Serializable {
 
 	public void setVertex(Node vertex) {
 		this.node = vertex;
+	}
+
+	public void setAboveDegreeThreshold(boolean isAboveDegreeThreshold) {
+		this.isAboveDegreeThreshold = isAboveDegreeThreshold;
 	}
 
 	private boolean filterVisibility() {

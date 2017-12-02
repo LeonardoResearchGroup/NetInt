@@ -652,6 +652,16 @@ public abstract class Container {
 	public Collection<VNode> getVNodes() {
 		return vNodes.values();
 	}
+	
+	/**
+	 * Returns a the entire set of this collection's VNodes containing both
+	 * VNodes and VCommunity instances in a HashMap which includes Ids for every node
+	 * 
+	 * @return List of vNodes
+	 */
+	public HashMap<String, VNode> getVNodesById() {
+		return vNodes;
+	}
 
 	/**
 	 * Returns a subset of this collection's VNodes that are also VCommunity
@@ -787,8 +797,8 @@ public abstract class Container {
 	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
-		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes.values());
-		vNodesBothCommunities.addAll(externalContainer.getVNodes());
+		HashMap<String, VNode> vNodesBothCommunities = new HashMap<String, VNode>(this.vNodes);
+		vNodesBothCommunities.putAll(externalContainer.getVNodesById());
 		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();

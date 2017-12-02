@@ -156,28 +156,41 @@ public class VEdge implements Serializable {
 	public void show() {
 
 		if (checkVisibility()) {
+			
+			if( checkDegreeThreshold() || vSource.isPropagated() ){
 
-			// This visibility is determined by a a threshold
-			// parameter set at the Control Panel
-			if (aboveVisibilityThreshold && sourceTargetVisible) {
-
-				// Set thickness
-				setThickness(calculateEdgeThickness());
-				//
-				// Convert thickness by current converter
-				convertThickness();
-
-				// Set color
-				setColor(calculateEdgeColor());
-
-				// Convert color by current converter
-				convertColor();
-
-				// Draw
-				drawBezier();
-
+				// This visibility is determined by a a threshold
+				// parameter set at the Control Panel
+				if (aboveVisibilityThreshold && sourceTargetVisible) {
+	
+					// Set thickness
+					setThickness(calculateEdgeThickness());
+					//
+					// Convert thickness by current converter
+					convertThickness();
+	
+					// Set color
+					setColor(calculateEdgeColor());
+	
+					// Convert color by current converter
+					convertColor();
+	
+					// Draw
+					drawBezier();
+	
+				}
 			}
 		}
+	}
+	
+	/**
+	 * Check if both of its nodes are above the degree threshold
+	 * @return
+	 */
+	// Edge is visible 
+	private boolean checkDegreeThreshold() {
+		return vSource.isAboveDegreeThreshold && vTarget.isAboveDegreeThreshold;
+		
 	}
 
 	private float calculateEdgeThickness() {

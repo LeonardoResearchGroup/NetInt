@@ -267,15 +267,15 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					// ********
 					// Edge is visible if both of its nodes are above the
 						// degree threshold
-						if (vE.getEdge().getSource().getDegree(0) > container.degreeThreshold
-								&& vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
-							
-							vE.setSourceTargetVisibility(true); 
-						
-						} else {
-						
-							vE.setSourceTargetVisibility(false); 
-						}
+//						if (vE.getEdge().getSource().getDegree(0) > container.degreeThreshold
+//								&& vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
+//							
+//							vE.setSourceTargetVisibility(true); 
+//						
+//						} else {
+//						
+//							vE.setSourceTargetVisibility(false); 
+//						}
 						
 						// *******
 
@@ -359,6 +359,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// Get all the nodes
 				for (VNode vN : container.getVNodes()) {
+					
+					if (vN.getNode().getDegree(0) > container.degreeThreshold ) {
+						vN.setAboveDegreeThreshold(true);
+					}else {
+						vN.setAboveDegreeThreshold(false);
+					}
 
 					//
 					// vN.setVisibility(true);
