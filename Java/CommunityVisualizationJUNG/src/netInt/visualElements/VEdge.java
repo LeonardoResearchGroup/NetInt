@@ -475,7 +475,8 @@ public class VEdge implements Serializable {
 
 			VCommunity vCTarget = (VCommunity) vTarget;
 
-			isVisible = isVisible && !vCSource.getComCover().isUnlocked() && !vCTarget.getComCover().isUnlocked();
+			//isVisible = isVisible && !vCSource.getComCover().isUnlocked() && !vCTarget.getComCover().isUnlocked();
+			isVisible = true && !vCSource.getComCover().isUnlocked() && !vCTarget.getComCover().isUnlocked();
 		}
 
 		return isVisible;
