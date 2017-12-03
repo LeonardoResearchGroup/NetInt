@@ -567,18 +567,30 @@ public class ControlPanel extends PApplet {
 		case "Tier_1_Internal":
 			Toggle vinculoIntT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(0, vinculoIntT1.getBooleanValue());
+			if( vinculoIntT1.getBooleanValue() ) {
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Tier_1_External":
 			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
+			if( vinculoExtT1.getBooleanValue() ) {
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Tier_2_Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
+			if( vinculoIntT2.getBooleanValue() ) {
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Tier_2_External":
 			Toggle vinculoExtT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(1, vinculoExtT2.getBooleanValue());
+			if( vinculoExtT2.getBooleanValue() ) {
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Edge_Weight":
 			UserSettings.getInstance().setWeight(theEvent.getValue());

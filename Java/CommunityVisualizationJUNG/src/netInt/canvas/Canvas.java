@@ -307,6 +307,7 @@ public class Canvas {
 			if (k.getKeyCode() == 16) {
 				shiftDown = false;
 				canvasBeingTransformed = false;
+				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
 			}
 			resetKeyEventsOnCanvas();
 		}
@@ -345,6 +346,7 @@ class RemindTask extends TimerTask {
 
 	public void run() {
 		Canvas.canvasBeingZoomed = false;
+		UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
 		System.out.println("Canvas> RemindTask> Time's up!");
 	}
 }
