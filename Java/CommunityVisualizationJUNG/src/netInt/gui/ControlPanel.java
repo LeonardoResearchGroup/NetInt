@@ -231,7 +231,7 @@ public class ControlPanel extends PApplet {
 		setEstadisticasDescriptivasComponent();
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(nodesGroup).addItem(statisticsGroup).addItem(edgesGroup).addItem(settingsGroup);
+		accordion.addItem(nodesGroup).addItem(edgesGroup).addItem(statisticsGroup).addItem(settingsGroup);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
@@ -426,9 +426,9 @@ public class ControlPanel extends PApplet {
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addLabel("eConverter:").setLabel("Converter:").setPosition(5, 221).moveTo(group);
+		secondary.addLabel("eConverter:").setLabel("Converter:").setPosition(5, 231).moveTo(group);
 
-		secondary.addScrollableList("Converter_Edge").addItems(items).setPosition(5, 231).setSize(95, 52)
+		secondary.addScrollableList("Converter_Edge").addItems(items).setPosition(5, 241).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
 	}
 

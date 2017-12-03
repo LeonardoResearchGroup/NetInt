@@ -41,8 +41,8 @@ public class Mapper {
 	// public static final String RADIAL = "radial";
 	// public static final String SIGMOID = "sigmoid";
 
-	private String[] converters = { "linear", "sinusoidal", "logarithmic" }; // "radial",
-																				// "sigmoid"
+	private String[] converters = { "linear",  "logarithmic" }; // "sinusoidal","radial","sigmoid"
+																				
 	// MAXs & MINs nodes
 	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
 	private CategoricalCollection nodeCategoricalAttributes;
