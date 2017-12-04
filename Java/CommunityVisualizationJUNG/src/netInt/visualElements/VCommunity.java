@@ -187,6 +187,31 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
+			
+			// ******
+
+			// If adaptive performance threshold was updated
+							if (Canvas.isAdapting()) {
+
+								// The position of this container's array of degrees
+								// corresponding to a given percentage of relevant nodes
+								int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage()
+										/ 100) * container.getNodes().size()) - 1;
+
+								if (degreeThresholdPosition < 0) {
+
+									container.degreeThreshold = 0;
+
+								} else {
+
+									container.degreeThreshold = container.degrees[degreeThresholdPosition];
+								}
+
+							}
+
+
+			// *******
+							
 
 			setDisplayed(true);
 
@@ -326,6 +351,22 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 						vE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
+					
+					
+					// ********
+					// Edge is visible if both of its nodes are above the
+						// degree threshold
+//						if (vE.getEdge().getSource().getDegree(0) > container.degreeThreshold
+//								&& vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
+//							
+//							vE.setSourceTargetVisibility(true); 
+//						
+//						} else {
+//						
+//							vE.setSourceTargetVisibility(false); 
+//						}
+						
+						// *******
 
 					vE.show();
 				}
@@ -364,7 +405,16 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (communityOpen) {
 
 			// VCommunities
-			for (VCommunity vC : container.getVCommunities()) {
+			for (VCommunity vC : container.getVCommunities()) {	
+				
+				if (vC.getNode().getDegree(0) >= container.degreeThreshold ) {
+					
+					vC.setAboveDegreeThreshold(true);
+			
+				}else {
+				
+					vC.setAboveDegreeThreshold(false);
+				}
 
 				// vC.setVisibility(true);
 
@@ -407,6 +457,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// Get all the nodes
 				for (VNode vN : container.getVNodes()) {
+					
+					if (vN.getNode().getDegree(0) >= container.degreeThreshold ) {
+						vN.setAboveDegreeThreshold(true);
+					}else {
+						vN.setAboveDegreeThreshold(false);
+					}
 
 					//
 					// vN.setVisibility(true);

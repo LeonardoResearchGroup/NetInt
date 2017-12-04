@@ -86,7 +86,9 @@ public abstract class Container {
 	protected ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 
 	// Visibility
-	private double degreeThreshold;
+	public double degreeThreshold;
+	public int[] degrees;
+	
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -169,9 +171,7 @@ public abstract class Container {
 			vEdge.setSourceAndTarget(vNodes);
 			vEdge.makeBezier();
 			vEdges.add(vEdge);
-			if (e.getSource().getDegree(0) < degreeThreshold || e.getTarget().getDegree(0) < degreeThreshold) {
-				vEdge.setSourceTargetVisibility(false);
-			}
+
 		}
 	}
 
@@ -188,20 +188,20 @@ public abstract class Container {
 		int numberNodes = this.getGraph().getVertices().size();
 		int i = 0;
 
-		int[] degrees = new int[numberNodes];
+		degrees = new int[numberNodes];
 
 		// For all the nodes in the graph
 		degreeThreshold = 0;
 
-		System.out.println(this.getClass().getName() + " numberNodes: " + numberNodes);
+		// System.out.println(this.getClass().getName() + " numberNodes: " + numberNodes);
 
 		// Percentage of degree threshold (0-100)
-		float degreeThresholdPercentage = 0;
+		//float degreeThresholdPercentage = 0;
 
-		int degreeThresholdPosition = (int) ((degreeThresholdPercentage / 100) * numberNodes) - 1;
-
-		System.out.println(this.getClass().getName() + " operacion: "
-				+ ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
+//		int degreeThresholdPosition = (int) ((degreeThresholdPercentage / 100) * numberNodes) - 1;
+//
+//		System.out.println(this.getClass().getName() + " operacion: "
+//				+ ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
 
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
@@ -213,23 +213,25 @@ public abstract class Container {
 			// degreeThreshold += degree;
 		}
 
-		Arrays.sort(degrees);
+		// Nodes sorted for adaptive performance
+		Arrays.sort( degrees );
+		
+//		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
+//		degreeThreshold = 1000;
+		
+//		if(degreeThresholdPosition < 0){
+//			
+//			degreeThreshold = 0;	
+//		
+//		}else{
+//			degreeThreshold = degrees[degreeThresholdPosition];
+//		}
+//
+//		System.out.println(this.getClass().getName() + " degreeThreshold: " + degreeThreshold);
+//
+//		System.out.println(this.getClass().getName() + " degreeThresholdPosition: " + degreeThresholdPosition);
 
-		// degreeThreshold = degreeThreshold /
-		// this.getGraph().getVertices().size();
-		// degreeThreshold = 1000;
-
-		if (degreeThresholdPosition < 0) {
-			degreeThreshold = 0;
-		} else {
-			degreeThreshold = degrees[degreeThresholdPosition];
-		}
-
-		System.out.println(this.getClass().getName() + " degreeThreshold: " + degreeThreshold);
-
-		System.out.println(this.getClass().getName() + " degreeThresholdPosition: " + degreeThresholdPosition);
-
-		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
+//		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
 	}
 
 	/**
@@ -650,6 +652,16 @@ public abstract class Container {
 	public Collection<VNode> getVNodes() {
 		return vNodes.values();
 	}
+	
+	/**
+	 * Returns a the entire set of this collection's VNodes containing both
+	 * VNodes and VCommunity instances in a HashMap which includes Ids for every node
+	 * 
+	 * @return List of vNodes
+	 */
+	public HashMap<String, VNode> getVNodesById() {
+		return vNodes;
+	}
 
 	/**
 	 * Returns a subset of this collection's VNodes that are also VCommunity
@@ -785,8 +797,8 @@ public abstract class Container {
 	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
-		ArrayList<VNode> vNodesBothCommunities = new ArrayList<VNode>(this.vNodes.values());
-		vNodesBothCommunities.addAll(externalContainer.getVNodes());
+		HashMap<String, VNode> vNodesBothCommunities = new HashMap<String, VNode>(this.vNodes);
+		vNodesBothCommunities.putAll(externalContainer.getVNodesById());
 		// Here, we get a copy of all edges between the two containers.
 		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();

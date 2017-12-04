@@ -35,7 +35,7 @@ public class UserSettings extends Observable {
 	private int colorBackground = 70;
 
 	// Adaptive performance. It autonomously adjusts the number of edges
-	// displayed to guarantee a minimal framerate
+	// displayed to guarantee a minimal frame rate
 	private boolean adaptivePerformace = false;
 
 	// ***** NODE Visibility Settings *****
@@ -114,6 +114,7 @@ public class UserSettings extends Observable {
 	// Singleton instance
 	private static UserSettings vSettingsInstance = null;
 
+
 	// An Event to inform if there was an event on the canvas
 	public static boolean eventOnVSettings = false;
 
@@ -160,10 +161,12 @@ public class UserSettings extends Observable {
 	public int getColorBackground() {
 		return colorBackground;
 	}
-	
+
+	// Button
 	public boolean getAdaptivePerformance() {
 		return adaptivePerformace;
 	}
+	
 
 	// ***** NODE GETTERS ******
 

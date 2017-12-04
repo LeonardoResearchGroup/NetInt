@@ -25,14 +25,12 @@ import org.jcolorbrewer.ColorBrewer;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import jViridis.ColorMap;
+
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
-import netInt.utilities.filters.GraphSubsetterFilter;
-import netInt.utilities.mapping.Mapper;
 import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
 import processing.core.PConstants;
@@ -253,11 +251,6 @@ public class Assembler {
 			// Get subGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.subGraphs.get(communityName);
 			
-			System.out.println("         " + communityName );
-			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount());
-			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount() + ", Edges: " + graphTemp.getEdgeCount());
-
-
 			// Set In and Out Degree
 			for (Node n : graphTemp.getVertices()) {
 				n.setOutDegree(n.getMetadataSize() - 1, graphTemp.getSuccessorCount(n));
@@ -270,6 +263,8 @@ public class Assembler {
 
 			// Name container
 			containerTemp.setName(communityName);
+			
+			containerTemp.setGraphDegrees();
 
 			// Initialize container
 			// containerTemp.initialize();
@@ -322,5 +317,5 @@ public class Assembler {
 	public void setRootDimension(Dimension rootDimension) {
 		this.rootDimension = rootDimension;
 	}
-
+	
 }

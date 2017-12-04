@@ -67,6 +67,9 @@ public class VNode extends VisualAtom implements Serializable {
 	int textColor = new Color(200, 200, 200).getRGB();
 	int haloOffset = 0;
 
+	// Adaptive Performance
+	boolean isAboveDegreeThreshold = false;
+
 	public VNode(Node node, float x, float y) {
 		super(x, y);
 		this.node = node;
@@ -351,7 +354,7 @@ public class VNode extends VisualAtom implements Serializable {
 	}
 
 	private void drawNode() {
-		
+
 		clearPropagation();
 
 		// Show Propagation Halo
@@ -463,7 +466,10 @@ public class VNode extends VisualAtom implements Serializable {
 
 			} else {
 				Canvas.app.fill(textColor);
-				Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
+
+				// Adaptive performance condition
+				if (isAboveDegreeThreshold)
+					Canvas.app.text(node.getName(), pos.x + 5, pos.y + 5);
 			}
 
 		}
@@ -537,12 +543,20 @@ public class VNode extends VisualAtom implements Serializable {
 		return visible;
 	}
 
+	public boolean isAboveDegreeThreshold() {
+		return isAboveDegreeThreshold;
+	}
+
 	public void setNode(Node node) {
 		this.node = node;
 	}
 
 	public void setVertex(Node vertex) {
 		this.node = vertex;
+	}
+
+	public void setAboveDegreeThreshold(boolean isAboveDegreeThreshold) {
+		this.isAboveDegreeThreshold = isAboveDegreeThreshold;
 	}
 
 	private boolean filterVisibility() {

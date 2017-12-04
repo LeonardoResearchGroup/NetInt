@@ -50,6 +50,11 @@ public class Canvas {
 	public static boolean canvasBeingZoomed = false;
 
 	public static PApplet app;
+	
+	// ***** ADAPTIVE PERFORMANCE
+	// Adaptative performance
+	private static boolean isAdapting; 
+	private static double adaptiveDegreeThresholdPercentage = 100;
 
 	public Canvas(PApplet app) {
 		Canvas.app = app;
@@ -196,6 +201,34 @@ public class Canvas {
 		return canvasBeingTransformed;
 	}
 
+	/**
+	 * Adjusts the global node relevance threshold that allows its edges to be
+	 * displayed. The node relevance is determined by its degree.
+	 * 
+	 * In other words, it shows the edges connecting a given percentage of
+	 * highly connected nodes
+	 */
+	public void adjustThresholdAdaptivePerformance() {
+
+		isAdapting = false;
+		if (Canvas.app.frameRate > 15) {
+			// The lower the parameter the faster the edge visualization
+			adaptiveDegreeThresholdPercentage -= 0.2;
+			if ( adaptiveDegreeThresholdPercentage < 1 ) {
+				adaptiveDegreeThresholdPercentage = 1;
+			}
+			
+			isAdapting = true;
+			
+		} else if (Canvas.app.frameRate < 13) {
+			adaptiveDegreeThresholdPercentage += 0.08;
+			if ( adaptiveDegreeThresholdPercentage > 100) {
+				adaptiveDegreeThresholdPercentage = 100;
+			}
+			isAdapting = true;
+		}
+	}
+
 	// *** Events registration P3
 	public void myRegister() {
 		app.registerMethod("mouseEvent", this);
@@ -279,6 +312,7 @@ public class Canvas {
 			if (k.getKeyCode() == 16) {
 				shiftDown = false;
 				canvasBeingTransformed = false;
+				adaptiveDegreeThresholdPercentage = 100;
 			}
 			resetKeyEventsOnCanvas();
 		}
@@ -299,6 +333,34 @@ public class Canvas {
 	private static void resetKeyEventsOnCanvas() {
 		Canvas.keyEventOnCanvas = false;
 	}
+	
+	// ***** ADAPTIVE PERFORMANCE
+	
+	public static boolean isAdapting() {
+		return isAdapting;
+	}
+
+	public static double getAdaptiveDegreeThresholdPercentage() {
+		return adaptiveDegreeThresholdPercentage;
+	}
+	
+	// ***** ADAPTIVE PEROFORMANCE
+	
+	public void setAdapting(boolean isAdapting) {
+		this.isAdapting = isAdapting;
+	}
+	
+	public static void setAdaptiveDegreeThresholdPercentage(double degreeThresholdPercentage) {
+		adaptiveDegreeThresholdPercentage = degreeThresholdPercentage;
+	}
+
+	public void reduceAdaptiveDegreeThresholdPercentage(double r) {
+		this.adaptiveDegreeThresholdPercentage -= r;
+	}
+	
+	public void incrementAdaptiveDegreeThresholdPercentage(double i) {
+		this.adaptiveDegreeThresholdPercentage += i;
+	}
 
 }
 
@@ -317,6 +379,7 @@ class RemindTask extends TimerTask {
 
 	public void run() {
 		Canvas.canvasBeingZoomed = false;
+		Canvas.setAdaptiveDegreeThresholdPercentage( 100 );
 		System.out.println("Canvas> RemindTask> Time's up!");
 	}
 }

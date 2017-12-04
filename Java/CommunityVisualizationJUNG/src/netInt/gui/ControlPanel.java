@@ -35,6 +35,7 @@ import controlP5.Textfield;
 import controlP5.Toggle;
 import jViridis.ColorMap;
 import netInt.GraphPad;
+import netInt.canvas.Canvas;
 import netInt.utilities.Assembler;
 import netInt.utilities.ClassLoader;
 import netInt.utilities.GraphLoader;
@@ -229,6 +230,7 @@ public class ControlPanel extends PApplet {
 		setNodeComponents(nodesGroup);
 		setEdgeComponents(edgesGroup);
 		setEstadisticasDescriptivasComponent();
+		
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
 		accordion.addItem(nodesGroup).addItem(edgesGroup).addItem(statisticsGroup).addItem(settingsGroup);
@@ -510,6 +512,7 @@ public class ControlPanel extends PApplet {
 		case "Adaptive_performance":
 			Toggle performance = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setAdaptivePerformance(performance.getBooleanValue());
+			Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			break;
 
 		case "Palette":
@@ -558,18 +561,30 @@ public class ControlPanel extends PApplet {
 		case "Tier_1_Internal":
 			Toggle vinculoIntT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(0, vinculoIntT1.getBooleanValue());
+			if( vinculoIntT1.getBooleanValue() ) {
+				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Tier_1_External":
 			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
+			if( vinculoExtT1.getBooleanValue() ) {
+				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Tier_2_Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
+			if( vinculoIntT2.getBooleanValue() ) {
+				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Tier_2_External":
 			Toggle vinculoExtT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(1, vinculoExtT2.getBooleanValue());
+			if( vinculoExtT2.getBooleanValue() ) {
+				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+			}
 			break;
 		case "Edge_Weight":
 			UserSettings.getInstance().setWeight(theEvent.getValue());
