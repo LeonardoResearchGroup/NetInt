@@ -252,9 +252,11 @@ public class Assembler {
 
 			// Get subGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.subGraphs.get(communityName);
+			
+			System.out.println("         " + communityName );
+			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount());
+			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount() + ", Edges: " + graphTemp.getEdgeCount());
 
-			System.out.println("         " + communityName + ": Nodes: " + graphTemp.getVertexCount() + ", Edges: "
-					+ graphTemp.getEdgeCount());
 
 			// Set In and Out Degree
 			for (Node n : graphTemp.getVertices()) {
