@@ -191,23 +191,12 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// ******
 
 			// If adaptive performance threshold was updated
-							if (Canvas.isAdapting()) {
+			if (Canvas.isAdapting()) {
+				changeContainerDegreeThreshold();
 
-								// The position of this container's array of degrees
-								// corresponding to a given percentage of relevant nodes
-								int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage()
-										/ 100) * container.getNodes().size()) - 1;
 
-								if (degreeThresholdPosition < 0) {
 
-									container.degreeThreshold = 0;
-
-								} else {
-
-									container.degreeThreshold = container.degrees[degreeThresholdPosition];
-								}
-
-							}
+			}
 
 
 			// *******
@@ -263,6 +252,25 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (Canvas.mouseEventOnCanvas && MouseHook.getInstance().isHooked(this)) {
 			updateContainer();
 		}
+	}
+
+	/**
+	 * Update the container degree threshold as a function of AdaptiveDegreeThresholdPercentage
+	 */
+	private void changeContainerDegreeThreshold() {
+		// The position of this container's array of degrees
+		// corresponding to a given percentage of relevant nodes
+		int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage()
+				/ 100) * container.getNodes().size()) - 1;
+
+		if (degreeThresholdPosition < 0) {
+
+			container.degreeThreshold = 0;
+
+		} else {
+
+			container.degreeThreshold = container.degrees[degreeThresholdPosition];
+		}		
 	}
 
 	/**
