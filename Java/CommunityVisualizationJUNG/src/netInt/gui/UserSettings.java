@@ -90,9 +90,19 @@ public class UserSettings extends Observable {
 	// Name of attribute for edge color
 	private String edgeColorAttribute;
 
-	// Name of attribute to be applied to edges
+	// Name of converter to be applied to edges
 	private String converterEdge;
 
+	
+	// ***** COMMUNITY Visibility Settings *****
+	private String communitySize;
+	
+	private String communityColor;
+	
+	// Name of converter to be applied to communities
+	private String converterCommunity;
+
+	
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
 
@@ -226,6 +236,20 @@ public class UserSettings extends Observable {
 	public boolean getClearPropagation() {
 		return clearPropagation;
 	}
+	
+	// ***** COMMUNITY GETTERS ******
+	
+	public String getCommunitySize() {
+		return communitySize;
+	}
+	
+	public String getCommunityColor() {
+		return communityColor;
+	}
+	
+	public String getCommunityConverter(){	
+		return converterCommunity;
+	}
 
 	// ***** STATISTICS GETTERS ******
 
@@ -336,6 +360,20 @@ public class UserSettings extends Observable {
 
 	public void setShowExternalEdges(int tier, boolean booleanValue) {
 		edgeTierVisibility.get(tier).put("External", booleanValue);
+	}
+	
+	// ***** COMMUNITY GETTERS ******
+	
+	public void setCommunitySize(String val) {
+		communitySize = val;
+	}
+	
+	public void setCommunityColor(String val) {
+		communityColor = val;
+	}
+	
+	public void setCommunityConverter(String val){	
+		converterCommunity = val;
 	}
 
 	// ***** STATISTICS SETTERS ******

@@ -151,7 +151,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 */
 	public void setAbsoluteAttribute(String key, Object value) {
 		addAbsoluteAtt (key, value);
-		netInt.utilities.mapping.Mapper.getInstance().setMaxMinNodeAttributes(key, value);
+		Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 		addRelativeAtt (tier, attributeSet);
 		// Update Mapper.minmax
 		for (String key : attributeSet.keySet()) {
-			netInt.utilities.mapping.Mapper.getInstance().setMaxMinNodeAttributes(key, attributeSet.get(key));
+			Mapper.getInstance().setMaxMinNodeAttributes(key, attributeSet.get(key));
 		}
 
 	}

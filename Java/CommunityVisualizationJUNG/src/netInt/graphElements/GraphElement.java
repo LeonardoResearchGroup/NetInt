@@ -211,7 +211,7 @@ public abstract class GraphElement implements Serializable {
 	 * this graph element
 	 */
 	public void printAbsoluteAttributes() {
-		System.out.println("GRAPH ELEMENT " + getId());
+		System.out.println(this.getClass().getName() + " absolute atts of: " + getId());
 		Set<String> s = absoluteAttributes.keySet();
 		for (String keyName : s) {
 			System.out.println("   Key: " + keyName + ", Value: " + absoluteAttributes.get(keyName));
@@ -219,7 +219,7 @@ public abstract class GraphElement implements Serializable {
 	}
 
 	public void printRelativeAttributes() {
-		System.out.println("GRAPH ELEMENT "+ getId());
+		System.out.println(this.getClass().getName() + " relative atts of: " + getId());
 
 		// Get the set of keys. This means the level in the nested structure of
 		// communities
@@ -289,6 +289,7 @@ public abstract class GraphElement implements Serializable {
 	public abstract void setRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
 
 	public void addAbsoluteAtt(String key, Object value) {
+		// System.out.println(this.getClass().getName() + " absolute att added. Key: " + key + ", value: "+value.toString());
 		absoluteAttributes.put(key, value);
 	}
 

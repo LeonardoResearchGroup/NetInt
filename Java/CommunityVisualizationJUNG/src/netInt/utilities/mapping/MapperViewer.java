@@ -164,19 +164,30 @@ public class MapperViewer extends PApplet {
 					// Make a Bar
 					Bar temp = new Bar(attributeKeys.get(i), Mapper.NODE);
 
-					// Set min and max values
-					temp.min = Mapper.getInstance().getNodeAttributesMin().getValueofAttribute(attributeKeys.get(i));
+					try {
 
-					temp.max = Mapper.getInstance().getNodeAttributesMax().getValueofAttribute(attributeKeys.get(i));
+						// Set min and max values
+						temp.min = Mapper.getInstance().getNodeAttributesMin()
+								.getValueofAttribute(attributeKeys.get(i));
 
-					// Add bar to collection
-					nodeBars.add(temp);
+						temp.max = Mapper.getInstance().getNodeAttributesMax()
+								.getValueofAttribute(attributeKeys.get(i));
+
+						// Add bar to collection
+						nodeBars.add(temp);
+
+					} catch (NullPointerException np) {
+						temp.min = 0;
+						temp.max = 0;
+						nodeBars.add(temp);
+						System.out.println(
+								this.getClass().getName() + ".  Min-max set to 0 for bar " + attributeKeys.get(i));
+					}
 				}
 			}
 		} catch (NullPointerException np) {
-			System.out.println(this.getClass().getName() + " Mapper does not have Node Numerical Attributes");
+			System.out.println(this.getClass().getName() + " WARNING. Mapper does not have Node Numerical Attributes");
 		}
-
 		// EDGES
 		try {
 			// If the Mapper has edge numerical attributes
@@ -260,7 +271,7 @@ public class MapperViewer extends PApplet {
 
 					break;
 				default:
-					
+
 					System.out.println("Mapper Viewer *** Warning: wrong graph element type in bar constructor");
 				}
 

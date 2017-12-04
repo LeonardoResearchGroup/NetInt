@@ -19,7 +19,10 @@ package netInt.visualElements;
 import processing.core.PVector;
 import processing.core.PApplet;
 
+import java.awt.Color;
+
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.canvas.MouseHook;
 import netInt.containers.Container;
@@ -53,6 +56,17 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private boolean vNodesCentered = false;
 	private boolean vCommunitiesCentered = false;
 
+	private String colorAttributeName = "no_attribute";
+	private String sizeAttributeName = "no_attribute";
+
+	// converter used to map node visual attributes. It gets its value from the
+	// UserSettings
+	private String converterSizeName = Mapper.LINEAR;
+	private String converterColorName = Mapper.LINEAR;
+
+	private float sizeFactor = 50;
+	private float minSize = 10;
+
 	private int tierSequence;
 
 	private VNodeDescription description;
@@ -62,13 +76,13 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		this.container = container;
 		lastPosition = pos;
 		comCover = new VCommunityCover(this);
-		
+
 		if (container.size() != 0) {
-		
+
 			node.setAbsoluteAttribute("Community size", container.size());
-			
+
 		} else {
-			
+
 			node.setAbsoluteAttribute("Community size", 1);
 		}
 		// Move vNodes relative to the vCommnity center
@@ -78,17 +92,92 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	public void init() {
-		
-		float temp = Mapper.getInstance().convert(Mapper.LINEAR, container.size(), Mapper.NODE, "Community size");
+
+		// Current size converter
+		String converter = UserSettings.getInstance().getCommunityConverter();
+
+		if (converter == null) {
+			converter = Mapper.LINEAR;
+		}
+
+		float temp = Mapper.getInstance().convert(converter, container.size(), Mapper.NODE, "Community size");
 
 		if ((temp * 50) < 10) {
 			setDiameter(10);
 		} else {
 			setDiameter(temp * 50);
 		}
+
+	}
+
+	public void convertSize() {
+
+		// user selected converter name
+		String userSelectedConverter = UserSettings.getInstance().getCommunityConverter();
+
+		// logical gate to prevent unnecessary looping
+		if (userSelectedConverter != null && !converterSizeName.equals(userSelectedConverter)) {
+
+			// Update converter name
+			converterSizeName = userSelectedConverter;
+
+			if (UserSettings.getInstance().getNodeSize() != null) {
+
+				sizeAttributeName = UserSettings.getInstance().getNodeSize();
+
+				float value = getNode().getFloatAttribute(sizeAttributeName);
+
+				// Map input with updated converter
+				float tmp = Mapper.getInstance().convert(converterSizeName, value, Mapper.NODE, sizeAttributeName);
+
+				tmp *= sizeFactor;
+
+				tmp += minSize;
+
+				setDiameter(tmp);
+			}
+		}
+	}
+
+	private int calculateColor() {
+
+		int rtn = getColor().getRGB();
+
+		// user selected attribute name
+		String userSelectedFilter = UserSettings.getInstance().getCommunityColor();
+
+		// logical gate to prevent unnecessary looping
+		if (userSelectedFilter != null && !colorAttributeName.equals(userSelectedFilter)) {
+
+			colorAttributeName = userSelectedFilter;
+
+			float value = getNode().getFloatAttribute(colorAttributeName);
+
+			float tmp = Mapper.getInstance().convert(converterColorName, value, Mapper.NODE, colorAttributeName);
+
+			rtn = ColorMap.getInstance().getColorRGB(tmp);
+		}
+
+		// For any change of user settings
+		if (UserSettings.eventOnVSettings && !colorAttributeName.equals("no_attribute")) {
+
+			float value = getNode().getFloatAttribute(colorAttributeName);
+
+			float tmp = Mapper.getInstance().convert(converterColorName, value, Mapper.NODE, colorAttributeName);
+
+			rtn = ColorMap.getInstance().getColorRGB(tmp);
+		}
+
+		return rtn;
 	}
 
 	public void showCommunity() {
+
+		// Calc community size
+		if (UserSettings.eventOnVSettings) {
+			convertSize();
+			calculateColor();
+		}
 
 		// Look for nodes based on id entered by user in control panel
 		searchNode();

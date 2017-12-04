@@ -182,7 +182,7 @@ public class ControlPanel extends PApplet {
 		secondary.hide();
 
 		// Accordeon
-		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(302);
+		accordion = secondary.addAccordion("acc").setPosition(10, 165).setWidth(206).setMinItemHeight(342);
 		Color color = new Color(125, 125, 125);
 		accordion.setColorValue(color.getRGB());
 
