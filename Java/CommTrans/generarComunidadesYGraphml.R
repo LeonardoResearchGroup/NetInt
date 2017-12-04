@@ -2,7 +2,7 @@
 args = commandArgs(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
 if (length(args) != 4 & length(args) != 3 ) {
-  stop("Est√° ingresando una cantidad inadecuada de argumentos al script", call.=FALSE)
+  stop("Est· ingresando una cantidad inadecuada de argumentos al script", call.=FALSE)
 }
 formaMatrizAdyacencia <- args[3]
 
@@ -37,13 +37,15 @@ if(formaMatrizAdyacencia!="Binario"){
 
 
 grafo <- graph.data.frame(transacciones, directed=FALSE, vertices = nodos)
+#Deletes any vertex withtout edeges
+grafo <- delete.vertices(grafo,degree(grafo) == 0)
 ebc <- cluster_louvain(grafo, weights = pesos)
 V(grafo)$community <- ebc$membership
 cantidadComunidades <- as.vector(table(V(grafo)$community))
 
 print(paste("Se detectaron",length(cantidadComunidades),"comunidades"))
 print("")
-print("La modularidad de la partici√≥n es:")
+print("La modularidad de la particiÛn es:")
 print(round(ebc$modularity[length(ebc$modularity)], digits = 3) )
 print("")
 
@@ -52,7 +54,7 @@ write.graph(grafo, nombreArchivoDestino, format="graphml")
 
 
 
-print("Tama√±o de las comunidades: ")
+print("TamaÒo de las comunidades: ")
 print("")
 
 for(i in  1:length(cantidadComunidades)){
