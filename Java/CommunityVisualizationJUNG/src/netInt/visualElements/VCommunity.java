@@ -202,11 +202,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 // ******
 
 // If adaptive performance threshold was updated
-				if (UserSettings.getInstance().isAdapting()) {
+				if (Canvas.isAdapting()) {
 
 					// The position of this container's array of degrees
 					// corresponding to a given percentage of relevant nodes
-					int degreeThresholdPosition = (int) ((UserSettings.getInstance().getAdaptiveDegreeThresholdPercentage()
+					int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage()
 							/ 100) * container.getNodes().size()) - 1;
 
 					if (degreeThresholdPosition < 0) {

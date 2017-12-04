@@ -221,7 +221,7 @@ public class VCommunityCover implements Serializable {
 				unlocked = true;
 
 				// Used in adaptive performance. Switch off all edges
-				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 
 			}
 			// If clicked, opened and enabled to be closed

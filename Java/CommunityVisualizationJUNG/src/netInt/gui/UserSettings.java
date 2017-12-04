@@ -100,12 +100,6 @@ public class UserSettings {
 	// Singleton instance
 	private static UserSettings vSettingsInstance = null;
 
-	// ***** ADAPTIVE PERFORMANCE
-	// Adaptative performance
-	private boolean isAdapting;
-	
-	// 
-	private double adaptiveDegreeThresholdPercentage = 100;
 
 	// An Event to inform if there was an event on the canvas
 	public static boolean eventOnVSettings = false;
@@ -250,15 +244,7 @@ public class UserSettings {
 		return descriptiveKeys;
 	}
 	
-	// ***** ADAPTIVE PERFORMANCE
-	
-	public boolean isAdapting() {
-		return isAdapting;
-	}
 
-	public double getAdaptiveDegreeThresholdPercentage() {
-		return adaptiveDegreeThresholdPercentage;
-	}
 
 	// **************************** SETTERS ***************************
 	// ***** FILE SETTERS ******
@@ -363,23 +349,7 @@ public class UserSettings {
 		descriptiveStatistics.put(key, state);
 	}
 	
-	// ***** ADAPTIVE PEROFORMANCE
-	
-	public void setAdapting(boolean isAdapting) {
-		this.isAdapting = isAdapting;
-	}
-	
-	public void setAdaptiveDegreeThresholdPercentage(double degreeThresholdPercentage) {
-		this.adaptiveDegreeThresholdPercentage = degreeThresholdPercentage;
-	}
 
-	public void reduceAdaptiveDegreeThresholdPercentage(double r) {
-		this.adaptiveDegreeThresholdPercentage -= r;
-	}
-	
-	public void incrementAdaptiveDegreeThresholdPercentage(double i) {
-		this.adaptiveDegreeThresholdPercentage += i;
-	}
 
 	// ****** EVENT SETTERS ******
 

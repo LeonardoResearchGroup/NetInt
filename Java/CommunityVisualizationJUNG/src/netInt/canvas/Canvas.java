@@ -50,6 +50,11 @@ public class Canvas {
 	public static boolean canvasBeingZoomed = false;
 
 	public static PApplet app;
+	
+	// ***** ADAPTIVE PERFORMANCE
+	// Adaptative performance
+	private static boolean isAdapting; 
+	private static double adaptiveDegreeThresholdPercentage = 100;
 
 	public Canvas(PApplet app) {
 		Canvas.app = app;
@@ -205,22 +210,22 @@ public class Canvas {
 	 */
 	public void adjustThresholdAdaptivePerformance() {
 
-		UserSettings.getInstance().setAdapting(false);
+		isAdapting = false;
 		if (Canvas.app.frameRate > 15) {
 			// The lower the parameter the faster the edge visualization
-			UserSettings.getInstance().reduceAdaptiveDegreeThresholdPercentage(0.2);
-			if (UserSettings.getInstance().getAdaptiveDegreeThresholdPercentage() < 1) {
-				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(1);
+			adaptiveDegreeThresholdPercentage -= 0.2;
+			if ( adaptiveDegreeThresholdPercentage < 1 ) {
+				adaptiveDegreeThresholdPercentage = 1;
 			}
 			
-			UserSettings.getInstance().setAdapting(true);
+			isAdapting = true;
 			
 		} else if (Canvas.app.frameRate < 13) {
-			UserSettings.getInstance().incrementAdaptiveDegreeThresholdPercentage(0.08);
-			if (UserSettings.getInstance().getAdaptiveDegreeThresholdPercentage() > 100) {
-				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+			adaptiveDegreeThresholdPercentage += 0.08;
+			if ( adaptiveDegreeThresholdPercentage > 100) {
+				adaptiveDegreeThresholdPercentage = 100;
 			}
-			UserSettings.getInstance().setAdapting(true);
+			isAdapting = true;
 		}
 	}
 
@@ -307,7 +312,7 @@ public class Canvas {
 			if (k.getKeyCode() == 16) {
 				shiftDown = false;
 				canvasBeingTransformed = false;
-				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+				adaptiveDegreeThresholdPercentage = 100;
 			}
 			resetKeyEventsOnCanvas();
 		}
@@ -328,6 +333,34 @@ public class Canvas {
 	private static void resetKeyEventsOnCanvas() {
 		Canvas.keyEventOnCanvas = false;
 	}
+	
+	// ***** ADAPTIVE PERFORMANCE
+	
+	public static boolean isAdapting() {
+		return isAdapting;
+	}
+
+	public static double getAdaptiveDegreeThresholdPercentage() {
+		return adaptiveDegreeThresholdPercentage;
+	}
+	
+	// ***** ADAPTIVE PEROFORMANCE
+	
+	public void setAdapting(boolean isAdapting) {
+		this.isAdapting = isAdapting;
+	}
+	
+	public static void setAdaptiveDegreeThresholdPercentage(double degreeThresholdPercentage) {
+		adaptiveDegreeThresholdPercentage = degreeThresholdPercentage;
+	}
+
+	public void reduceAdaptiveDegreeThresholdPercentage(double r) {
+		this.adaptiveDegreeThresholdPercentage -= r;
+	}
+	
+	public void incrementAdaptiveDegreeThresholdPercentage(double i) {
+		this.adaptiveDegreeThresholdPercentage += i;
+	}
 
 }
 
@@ -346,7 +379,7 @@ class RemindTask extends TimerTask {
 
 	public void run() {
 		Canvas.canvasBeingZoomed = false;
-		UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(100);
+		Canvas.setAdaptiveDegreeThresholdPercentage( 100 );
 		System.out.println("Canvas> RemindTask> Time's up!");
 	}
 }
