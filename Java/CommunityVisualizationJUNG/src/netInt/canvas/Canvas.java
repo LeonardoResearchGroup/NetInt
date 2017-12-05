@@ -212,8 +212,12 @@ public class Canvas {
 
 		isAdapting = false;
 		if (Canvas.app.frameRate > 15) {
-			// The lower the parameter the faster the edge visualization
-			adaptiveDegreeThresholdPercentage -= 0.2;
+			if(Canvas.app.frameRate < 17){
+				adaptiveDegreeThresholdPercentage -= 0.05;
+			}else{
+				// The lower the parameter the faster the edge visualization
+				adaptiveDegreeThresholdPercentage -= 0.2;
+			}
 			if ( adaptiveDegreeThresholdPercentage < 1 ) {
 				adaptiveDegreeThresholdPercentage = 1;
 			}
@@ -221,7 +225,11 @@ public class Canvas {
 			isAdapting = true;
 			
 		} else if (Canvas.app.frameRate < 13) {
-			adaptiveDegreeThresholdPercentage += 0.08;
+			if( Canvas.app.frameRate > 11 ){
+				adaptiveDegreeThresholdPercentage += 0.02;
+			}else{
+				adaptiveDegreeThresholdPercentage += 0.08;
+			}
 			if ( adaptiveDegreeThresholdPercentage > 100) {
 				adaptiveDegreeThresholdPercentage = 100;
 			}
