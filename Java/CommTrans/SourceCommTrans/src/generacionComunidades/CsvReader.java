@@ -54,8 +54,6 @@ public class CsvReader {
 			 System.out.println(sep);
 			 System.out.println(line);
 			 headers = line.split(sep);
-			 System.out.println(headers[1]+" "+headers[3]);
-			 System.out.println(headers[0]);
 	
 		     while ((line = br.readLine()) != null) {
 		    	 lines++;
