@@ -437,7 +437,7 @@ public abstract class Container {
 				}
 			}
 			iterations++;
-			done = iterations == MAX_ITERATIONS;
+			done = iterations == MAX_ITERATIONS || itrContext.done();
 		} 
 		return itrContext;
 	}

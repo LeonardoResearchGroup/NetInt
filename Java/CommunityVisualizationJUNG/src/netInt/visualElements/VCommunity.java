@@ -323,7 +323,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// If the container Layout iterates to distribute nodes
 			if (container.isLayoutIterative()) {
 
-				if (container.isDone()) {
+				if (container.isDone()) {		
 
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
