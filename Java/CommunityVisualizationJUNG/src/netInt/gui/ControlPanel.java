@@ -214,6 +214,7 @@ public class ControlPanel extends PApplet {
 		Group settingsGroup = new Group(secondary, "Settings");
 		Group nodesGroup = new Group(secondary, "Node");
 		Group edgesGroup = new Group(secondary, "Edge");
+		Group communitiesGroup = new Group(secondary, "Community");
 		statisticsGroup = new Group(secondary, "Node attribute visibility");
 
 		// Group visual attributes
@@ -221,6 +222,7 @@ public class ControlPanel extends PApplet {
 		settingsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		nodesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		edgesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
+		communitiesGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		statisticsGroup.setBackgroundColor(color.getRGB()).setBackgroundHeight(150);
 		cBox = new CheckBox(secondary, "Stats nodes");
 		cBox.setPosition(5, 7).moveTo(statisticsGroup);
@@ -229,17 +231,18 @@ public class ControlPanel extends PApplet {
 		setSettingsComponents(settingsGroup);
 		setNodeComponents(nodesGroup);
 		setEdgeComponents(edgesGroup);
+		setCommunityComponents(communitiesGroup);
 		setEstadisticasDescriptivasComponent();
-		
 
 		// create a new accordion. Add g1, g2, and g3 to the accordion.
-		accordion.addItem(nodesGroup).addItem(edgesGroup).addItem(statisticsGroup).addItem(settingsGroup);
+		accordion.addItem(nodesGroup).addItem(edgesGroup).addItem(communitiesGroup).addItem(statisticsGroup)
+				.addItem(settingsGroup);
 
 		// use Accordion.MULTI to allow multiple group to be open at a time.
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		// accordion.open(1, 2); // ,2,3
+		accordion.open(2); // ,2,3
 
 		// Show controller
 		secondary.show();
@@ -435,6 +438,56 @@ public class ControlPanel extends PApplet {
 	}
 
 	/**
+	 * GUI component related to Community Operations
+	 * 
+	 * @param group
+	 *            The Group of GUI elements
+	 */
+	private void setCommunityComponents(ControllerGroup<Group> group) {
+
+		// Visibility control
+
+		secondary.addLabel("Filter by community size").setPosition(2, 81).moveTo(group);
+
+		secondary.addSlider("Min Community Size").setPosition(5, 96).setSize(150, 10).setRange(0, 35)
+				.setNumberOfTickMarks(10).snapToTickMarks(false).showTickMarks(false).moveTo(group).getCaptionLabel()
+				.setPaddingX(10).setVisible(false); //
+
+		// Node Appearance controllers
+
+		secondary.addLabel("Community attributes").setPosition(2, 116).moveTo(group);
+
+		// Diameter
+		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
+
+		String[] items = new String[mappers.length];
+
+		for (int i = 0; i < mappers.length; i++) {
+			items[i] = (String) mappers[i];
+		}
+
+		secondary.addLabel("cSize:").setLabel("Size").setPosition(5, 131).moveTo(group);
+
+		secondary.addScrollableList("Community_Size").setLabel("Size").addItems(items).setPosition(5, 141)
+				.setSize(95, 52).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
+
+		secondary.addLabel("cColor:").setLabel("Color:").setPosition(106, 131).moveTo(group);
+
+		secondary.addScrollableList("Community_Color").setLabel("Color").addItems(items).setPosition(106, 141)
+				.setSize(95, 52).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
+				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER);
+
+		// Converters
+		items = Mapper.getInstance().getConvertersList();
+
+		secondary.addLabel("cConverter:").setLabel("Converter:").setPosition(5, 203).moveTo(group);
+
+		secondary.addScrollableList("Converter_Community").addItems(items).setPosition(5, 213).setSize(95, 52)
+				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group); // .close();
+
+	}
+
+	/**
 	 * GUI component related to descriptive statistics of clients
 	 * 
 	 * @param group
@@ -466,10 +519,10 @@ public class ControlPanel extends PApplet {
 		} else {
 			// **** All OTHER CONTROLLERS****
 			switchCaseCP5(theEvent);
-			
+
 			// Calls observable method and passes the event
 			UserSettings.getInstance().setLatestEvent(theEvent);
-		}	
+		}
 
 		// At any event notify VisibilitySettings class
 		UserSettings.getInstance().setEventOnVSettings(true);
@@ -561,28 +614,28 @@ public class ControlPanel extends PApplet {
 		case "Tier_1_Internal":
 			Toggle vinculoIntT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(0, vinculoIntT1.getBooleanValue());
-			if( vinculoIntT1.getBooleanValue() ) {
+			if (vinculoIntT1.getBooleanValue()) {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
 			break;
 		case "Tier_1_External":
 			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
-			if( vinculoExtT1.getBooleanValue() ) {
+			if (vinculoExtT1.getBooleanValue()) {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
 			break;
 		case "Tier_2_Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
-			if( vinculoIntT2.getBooleanValue() ) {
+			if (vinculoIntT2.getBooleanValue()) {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
 			break;
 		case "Tier_2_External":
 			Toggle vinculoExtT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowExternalEdges(1, vinculoExtT2.getBooleanValue());
-			if( vinculoExtT2.getBooleanValue() ) {
+			if (vinculoExtT2.getBooleanValue()) {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
 			break;
@@ -618,6 +671,30 @@ public class ControlPanel extends PApplet {
 			UserSettings.getInstance().setEdgeColorAtt(
 					secondary.get(ScrollableList.class, "Edge_Color").getItem(valueE).get("name").toString());
 			break;
+
+		// **** COMMUNITIES ****
+		case "Min Community Size": // slider
+			UserSettings.getInstance().setCommunitySizeThreshold(theEvent.getValue());
+			break;
+
+		case "Community_Size":
+			int communitySize = (int) secondary.get(ScrollableList.class, "Community_Size").getValue();
+			UserSettings.getInstance().setCommunitySizeAtt(
+					secondary.get(ScrollableList.class, "Community_Size").getItem(communitySize).get("name").toString());
+			break;
+
+		case "Community_Color":
+			int communityColor = (int) secondary.get(ScrollableList.class, "Community_Color").getValue();
+			UserSettings.getInstance().setCommunityColorAtt(
+					secondary.get(ScrollableList.class, "Community_Color").getItem(communityColor).get("name").toString());
+			break;
+
+		case "Converter_Community":
+			int valueCC = (int) secondary.get(ScrollableList.class, "Converter_Community").getValue();
+			UserSettings.getInstance().setConverterCommunity(
+					secondary.get(ScrollableList.class, "Converter_Community").getItem(valueCC).get("name").toString());
+			break;
+
 		default:
 			// Executable.retrieveControlPanelEvent(theEvent);
 			break;

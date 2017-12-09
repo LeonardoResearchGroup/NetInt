@@ -61,10 +61,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	// converter used to map node visual attributes. It gets its value from the
 	// UserSettings
-	private String converterSizeName = Mapper.LINEAR;
-	private String converterColorName = Mapper.LINEAR;
+	private String sizeConverterName = Mapper.LINEAR;
+	private String colorConverterName = Mapper.LINEAR;
 
-	private float sizeFactor = 50;
+	private float sizeFactor = 10;
 	private float minSize = 10;
 
 	private int tierSequence;
@@ -72,39 +72,44 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private VNodeDescription description;
 
 	public VCommunity(Node node, Container container) {
+
 		super(node, (float) container.getDimension().width / 2, (float) container.getDimension().height / 2);
+
 		this.container = container;
+
 		lastPosition = pos;
+
 		comCover = new VCommunityCover(this);
 
 		if (container.size() != 0) {
 
-			node.setAbsoluteAttribute("Community size", container.size());
+			getNode().setAbsoluteAttribute("Community size", container.size());
 
 		} else {
 
-			node.setAbsoluteAttribute("Community size", 1);
+			getNode().setAbsoluteAttribute("Community size", 1);
 		}
+
 		// Move vNodes relative to the vCommnity center
 		updateContainer();
+
 		description = new VNodeDescription();
+
 		setDiameter(30);
 	}
 
 	public void init() {
 
-		// Current size converter
-		String converter = UserSettings.getInstance().getCommunityConverter();
+		float temp = Mapper.getInstance().convert(sizeConverterName, container.size(), Mapper.NODE, "Community size");
 
-		if (converter == null) {
-			converter = Mapper.LINEAR;
-		}
-
-		float temp = Mapper.getInstance().convert(converter, container.size(), Mapper.NODE, "Community size");
+		sizeAttributeName = "Community size";
 
 		if ((temp * 50) < 10) {
+
 			setDiameter(10);
+
 		} else {
+
 			setDiameter(temp * 50);
 		}
 
@@ -112,60 +117,98 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 	public void convertSize() {
 
+		boolean newConverter = false;
+		boolean newAttribute = false;
+
 		// user selected converter name
 		String userSelectedConverter = UserSettings.getInstance().getCommunityConverter();
 
 		// logical gate to prevent unnecessary looping
-		if (userSelectedConverter != null && !converterSizeName.equals(userSelectedConverter)) {
+		if (userSelectedConverter != null && !sizeConverterName.equals(userSelectedConverter)) {
+			newConverter = true;
+			sizeConverterName = userSelectedConverter;
+		}
 
-			// Update converter name
-			converterSizeName = userSelectedConverter;
+		// user selected attribute name
+		String userSelectedAttSize = UserSettings.getInstance().getCommunitySizeAtt();
 
-			if (UserSettings.getInstance().getNodeSize() != null) {
+		// logical gate to prevent unnecessary looping
+		if (userSelectedAttSize != null && !sizeAttributeName.equals(userSelectedAttSize)) {
+			newAttribute = true;
+			sizeAttributeName = userSelectedAttSize;
+		}
 
-				sizeAttributeName = UserSettings.getInstance().getNodeSize();
+		if (newAttribute || newConverter) {
 
-				float value = getNode().getFloatAttribute(sizeAttributeName);
+			// If this node has a value for that attribute name
+			if (getNode().getAttributes().keySet().contains(sizeAttributeName)) {
 
-				// Map input with updated converter
-				float tmp = Mapper.getInstance().convert(converterSizeName, value, Mapper.NODE, sizeAttributeName);
+				try {
+					// get the value for that attribute key
+					float value = getNode().getFloatAttribute(sizeAttributeName);
 
-				tmp *= sizeFactor;
+					// Map input with latest converter
+					float tmp = Mapper.getInstance().convert(sizeConverterName, value, Mapper.NODE, sizeAttributeName);
 
-				tmp += minSize;
+					tmp *= sizeFactor;
 
-				setDiameter(tmp);
+					tmp += minSize;
+
+					setDiameter(tmp);
+
+				} catch (NullPointerException np) {
+					np.printStackTrace();
+				}
 			}
 		}
 	}
 
 	private int calculateColor() {
 
+		boolean newConverter = false;
+		boolean newAttribute = false;
+
 		int rtn = getColor().getRGB();
 
-		// user selected attribute name
-		String userSelectedFilter = UserSettings.getInstance().getCommunityColor();
+		// user selected converter name
+		String userSelectedConverter = UserSettings.getInstance().getCommunityConverter();
 
 		// logical gate to prevent unnecessary looping
-		if (userSelectedFilter != null && !colorAttributeName.equals(userSelectedFilter)) {
-
-			colorAttributeName = userSelectedFilter;
-
-			float value = getNode().getFloatAttribute(colorAttributeName);
-
-			float tmp = Mapper.getInstance().convert(converterColorName, value, Mapper.NODE, colorAttributeName);
-
-			rtn = ColorMap.getInstance().getColorRGB(tmp);
+		if (userSelectedConverter != null && !colorConverterName.equals(userSelectedConverter)) {
+			newConverter = true;
+			colorConverterName = userSelectedConverter;
 		}
 
-		// For any change of user settings
-		if (UserSettings.eventOnVSettings && !colorAttributeName.equals("no_attribute")) {
+		// user selected attribute name
+		String userSelectedAttColor = UserSettings.getInstance().getCommunityColorAtt();
 
-			float value = getNode().getFloatAttribute(colorAttributeName);
+		// logical gate to prevent unnecessary looping
+		if (userSelectedAttColor != null && !colorAttributeName.equals(userSelectedAttColor)) {
+			newAttribute = true;
+			colorAttributeName = userSelectedAttColor;
+		}
 
-			float tmp = Mapper.getInstance().convert(converterColorName, value, Mapper.NODE, colorAttributeName);
+		if (newConverter || newAttribute) {
 
-			rtn = ColorMap.getInstance().getColorRGB(tmp);
+			// If this node has a value for that attribute name
+			if (getNode().getAttributes().keySet().contains(colorAttributeName)) {
+
+				try {
+					// get the value for that attribute key
+					float value = getNode().getFloatAttribute(colorAttributeName);
+
+					// Map input with latest converter
+					float tmp = Mapper.getInstance().convert(colorConverterName, value, Mapper.NODE,
+							colorAttributeName);
+
+					rtn = ColorMap.getInstance().getColorRGB(tmp);
+
+				} catch (NullPointerException np) {
+
+					System.out.println(np.getClass().getName() + " in Community: " + getNode().getName()
+							+ " for color att: " + colorAttributeName + " and converter: "+ colorConverterName);
+				}
+			}
 		}
 
 		return rtn;
@@ -176,7 +219,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		// Calc community size
 		if (UserSettings.eventOnVSettings) {
 			convertSize();
-			calculateColor();
+			setColor(calculateColor(), 100);
 		}
 
 		// Look for nodes based on id entered by user in control panel
@@ -187,20 +230,16 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		// Check if community cover is completely deployed
 		if (comCover.isDeployed()) {
-			
+
 			// ******
 
 			// If adaptive performance threshold was updated
 			if (Canvas.isAdapting()) {
 				changeContainerDegreeThreshold();
 
-
-
 			}
 
-
 			// *******
-							
 
 			setDisplayed(true);
 
@@ -255,13 +294,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	/**
-	 * Update the container degree threshold as a function of AdaptiveDegreeThresholdPercentage
+	 * Update the container degree threshold as a function of
+	 * AdaptiveDegreeThresholdPercentage
 	 */
 	private void changeContainerDegreeThreshold() {
 		// The position of this container's array of degrees
 		// corresponding to a given percentage of relevant nodes
-		int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage()
-				/ 100) * container.getNodes().size()) - 1;
+		int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage() / 100)
+				* container.getNodes().size()) - 1;
 
 		if (degreeThresholdPosition < 0) {
 
@@ -270,7 +310,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		} else {
 
 			container.degreeThreshold = container.degrees[degreeThresholdPosition];
-		}		
+		}
 	}
 
 	/**
@@ -323,7 +363,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// If the container Layout iterates to distribute nodes
 			if (container.isLayoutIterative()) {
 
-				if (container.isDone()) {		
+				if (container.isDone()) {
 
 					// Show internal edges
 					for (VEdge vE : container.getVEdges()) {
@@ -359,22 +399,23 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 						vE.setLayoutAndCenter(container.currentLayout, this.pos);
 					}
-					
-					
+
 					// ********
 					// Edge is visible if both of its nodes are above the
-						// degree threshold
-//						if (vE.getEdge().getSource().getDegree(0) > container.degreeThreshold
-//								&& vE.getEdge().getTarget().getDegree(0) > container.degreeThreshold) {
-//							
-//							vE.setSourceTargetVisibility(true); 
-//						
-//						} else {
-//						
-//							vE.setSourceTargetVisibility(false); 
-//						}
-						
-						// *******
+					// degree threshold
+					// if (vE.getEdge().getSource().getDegree(0) >
+					// container.degreeThreshold
+					// && vE.getEdge().getTarget().getDegree(0) >
+					// container.degreeThreshold) {
+					//
+					// vE.setSourceTargetVisibility(true);
+					//
+					// } else {
+					//
+					// vE.setSourceTargetVisibility(false);
+					// }
+
+					// *******
 
 					vE.show();
 				}
@@ -413,14 +454,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (communityOpen) {
 
 			// VCommunities
-			for (VCommunity vC : container.getVCommunities()) {	
-				
-				if (vC.getNode().getDegree(0) >= container.degreeThreshold ) {
-					
+			for (VCommunity vC : container.getVCommunities()) {
+
+				if (vC.getNode().getDegree(0) >= container.degreeThreshold) {
+
 					vC.setAboveDegreeThreshold(true);
-			
-				}else {
-				
+
+				} else {
+
 					vC.setAboveDegreeThreshold(false);
 				}
 
@@ -465,10 +506,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// Get all the nodes
 				for (VNode vN : container.getVNodes()) {
-					
-					if (vN.getNode().getDegree(0) >= container.degreeThreshold ) {
+
+					if (vN.getNode().getDegree(0) >= container.degreeThreshold) {
 						vN.setAboveDegreeThreshold(true);
-					}else {
+					} else {
 						vN.setAboveDegreeThreshold(false);
 					}
 

@@ -22,6 +22,7 @@ import java.util.Observable;
 import java.util.TreeMap;
 
 import controlP5.ControlEvent;
+import controlP5.ScrollableList;
 import guiSet.elements.GuiElement;
 
 public class UserSettings extends Observable {
@@ -93,16 +94,20 @@ public class UserSettings extends Observable {
 	// Name of converter to be applied to edges
 	private String converterEdge;
 
-	
 	// ***** COMMUNITY Visibility Settings *****
-	private String communitySize;
-	
-	private String communityColor;
-	
+
+	// Community size eslider
+	private float communitySizeThreshold;
+
+	// Name of attribute for community size
+	private String communitySizeAtt;
+
+	// Name of attribute for community color
+	private String communityColorAtt;
+
 	// Name of converter to be applied to communities
 	private String converterCommunity;
 
-	
 	// DESCRIPTIVE STATISTICS Visibility Settings
 	private ArrayList<String> descriptiveStatisticKeys;
 
@@ -113,7 +118,6 @@ public class UserSettings extends Observable {
 
 	// Singleton instance
 	private static UserSettings vSettingsInstance = null;
-
 
 	// An Event to inform if there was an event on the canvas
 	public static boolean eventOnVSettings = false;
@@ -166,7 +170,6 @@ public class UserSettings extends Observable {
 	public boolean getAdaptivePerformance() {
 		return adaptivePerformace;
 	}
-	
 
 	// ***** NODE GETTERS ******
 
@@ -239,19 +242,23 @@ public class UserSettings extends Observable {
 	public boolean getClearPropagation() {
 		return clearPropagation;
 	}
-	
+
 	// ***** COMMUNITY GETTERS ******
-	
-	public String getCommunitySize() {
-		return communitySize;
+
+	public String getCommunitySizeAtt() {
+		return communitySizeAtt;
 	}
-	
-	public String getCommunityColor() {
-		return communityColor;
+
+	public String getCommunityColorAtt() {
+		return communityColorAtt;
 	}
-	
-	public String getCommunityConverter(){	
+
+	public String getCommunityConverter() {
 		return converterCommunity;
+	}
+
+	public float getCommunitySizeThreshold() {
+		return communitySizeThreshold;
 	}
 
 	// ***** STATISTICS GETTERS ******
@@ -364,18 +371,22 @@ public class UserSettings extends Observable {
 	public void setShowExternalEdges(int tier, boolean booleanValue) {
 		edgeTierVisibility.get(tier).put("External", booleanValue);
 	}
-	
+
 	// ***** COMMUNITY GETTERS ******
-	
-	public void setCommunitySize(String val) {
-		communitySize = val;
+
+	public void setCommunitySizeThreshold(float val) {
+		communitySizeThreshold = val;
 	}
-	
-	public void setCommunityColor(String val) {
-		communityColor = val;
+
+	public void setCommunitySizeAtt(String val) {
+		communitySizeAtt = val;
 	}
-	
-	public void setCommunityConverter(String val){	
+
+	public void setCommunityColorAtt(String val) {
+		communityColorAtt = val;
+	}
+
+	public void setConverterCommunity(String val) {
 		converterCommunity = val;
 	}
 
@@ -400,12 +411,11 @@ public class UserSettings extends Observable {
 		setEventOnVSettings(false);
 		setClearPropagation(false);
 	}
-	
+
 	// ******* OBSERVABLE *********
-	
+
 	private ControlEvent latestEvent;
-	
-	
+
 	public ControlEvent getLatestEvent() {
 		return latestEvent;
 	}
@@ -416,9 +426,9 @@ public class UserSettings extends Observable {
 		notifyObservers();
 	}
 
-//	public void notifyMyObservers(ControlEvent event) {
-//		//setChanged();
-//		notifyObservers(event);
-//	}
+	// public void notifyMyObservers(ControlEvent event) {
+	// //setChanged();
+	// notifyObservers(event);
+	// }
 
 }

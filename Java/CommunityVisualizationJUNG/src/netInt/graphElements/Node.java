@@ -45,9 +45,9 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 		super();
 		ElementAttributeMap metaData = new ElementAttributeMap();
 		// Initialize basic attributes
-		setAbsoluteAttribute ("id", id);
-		setAbsoluteAttribute ("label", "no name");
-		setRelativeAttributes (0, metaData);
+		setAbsoluteAttribute("id", id);
+		setAbsoluteAttribute("label", "no name");
+		setRelativeAttributes(0, metaData);
 	}
 
 	// Comparators
@@ -96,18 +96,30 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 		return this.getId().hashCode();
 	}
 
+	/**
+	 * Copy absolute attributes of the parameter node into this node
+	 * 
+	 * @param n
+	 *            source node
+	 */
+	public void copyAttributes(Node n) {
+		for (String sourceAtt : n.getAttributes().keySet()) {
+			setAbsoluteAttribute(sourceAtt, n.getAttribute(sourceAtt));
+		}
+	}
+
 	// *** Getters and setters
 
 	public String getName() {
-		return (String) getAttribute ("label");
+		return (String) getAttribute("label");
 	}
 
 	public float getSize() {
-		return (Float) getAttribute ("size");
+		return (Float) getAttribute("size");
 	}
 
 	public String getCommunity(int key) {
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		return tmp.getCommunityName();
 	}
 
@@ -116,7 +128,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	}
 
 	public Set<Integer> getMetadataKeys() {
-		return  getRelativeKeySet();
+		return getRelativeKeySet();
 	}
 
 	public boolean isFound() {
@@ -129,15 +141,15 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 
 	// Setters
 	public void setId(String id) {
-		setAbsoluteAttribute ("id", id);
+		setAbsoluteAttribute("id", id);
 	}
 
 	public void setName(String object) {
-		setAbsoluteAttribute ("label", object);
+		setAbsoluteAttribute("label", object);
 	}
 
 	public void setSize(float size) {
-		setAbsoluteAttribute ("size", size);
+		setAbsoluteAttribute("size", size);
 	}
 
 	/**
@@ -149,8 +161,9 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @param value
 	 *            value
 	 */
+
 	public void setAbsoluteAttribute(String key, Object value) {
-		addAbsoluteAtt (key, value);
+		addAbsoluteAtt(key, value);
 		Mapper.getInstance().setMaxMinNodeAttributes(key, value);
 	}
 
@@ -164,7 +177,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 *            An object containing a set of attributes
 	 */
 	public void setRelativeAttributes(int tier, HashMap<String, Float> attributeSet) {
-		addRelativeAtt (tier, attributeSet);
+		addRelativeAtt(tier, attributeSet);
 		// Update Mapper.minmax
 		for (String key : attributeSet.keySet()) {
 			Mapper.getInstance().setMaxMinNodeAttributes(key, attributeSet.get(key));
@@ -180,7 +193,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @return in degree of the node
 	 */
 	public int getInDegree(int key) {
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		return tmp.getCommunityInDegree();
 	}
 
@@ -190,7 +203,7 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @return out degree of the node
 	 */
 	public int getOutDegree(int key) {
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		return tmp.getCommunityOutDegree();
 	}
 
@@ -200,31 +213,31 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 	 * @return degree of the node
 	 */
 	public int getDegree(int key) {
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		return tmp.getCommunityDegree();
 	}
 
 	// Setters metrics
 	public void setInDegree(int key, int inDegree) {
 		if (key == 0)
-			setAbsoluteAttribute ("inDegree", inDegree);
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+			setAbsoluteAttribute("inDegree", inDegree);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		tmp.setCommunityInDegree(inDegree);
 		Mapper.getInstance().setMaxMinNodeAttributes("inDegree", inDegree);
 	}
 
 	public void setOutDegree(int key, int outDegree) {
 		if (key == 0)
-			setAbsoluteAttribute ("outDegree", outDegree);
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+			setAbsoluteAttribute("outDegree", outDegree);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		tmp.setCommunityOutDegree(outDegree);
 		Mapper.getInstance().setMaxMinNodeAttributes("outDegree", outDegree);
 	}
 
 	public void setDegree(int key, int degree) {
 		if (key == 0)
-			setAbsoluteAttribute ("degree", degree);
-		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes (key);
+			setAbsoluteAttribute("degree", degree);
+		ElementAttributeMap tmp = (ElementAttributeMap) getRelativeAttributes(key);
 		tmp.setCommunityDegree(degree);
 		Mapper.getInstance().setMaxMinNodeAttributes("degree", degree);
 	}

@@ -41,8 +41,8 @@ public class Mapper {
 	// public static final String RADIAL = "radial";
 	// public static final String SIGMOID = "sigmoid";
 
-	private String[] converters = { "linear",  "logarithmic" }; // "sinusoidal","radial","sigmoid"
-																				
+	private String[] converters = { "linear", "logarithmic" }; // "sinusoidal","radial","sigmoid"
+
 	// MAXs & MINs nodes
 	private NumericalCollection nodeAttributesMin, nodeAttributesMax;
 	private CategoricalCollection nodeCategoricalAttributes;
@@ -50,8 +50,8 @@ public class Mapper {
 	private NumericalCollection edgeAttributesMin, edgeAttributesMax;
 	private CategoricalCollection edgeCategoricalAttributes;
 	// MAXs & MINs communities
-	// private NumericalCollection commAttributesMin, commAttributesMax;
-	// private CategoricalCollection commCategoricalAttributes;
+	private NumericalCollection commAttributesMin, commAttributesMax;
+	//private CategoricalCollection commCategoricalAttributes;
 
 	// Other attributes for sigmoid filter
 	private float alpha = 1;
@@ -128,14 +128,15 @@ public class Mapper {
 		}
 
 		if (rtn < 0) {
-			System.out.println("Mapper Warning> The attribute name: '" + graphAttribute + "' is missing in some instances of "
-					+ graphElementClassName + "\n Input value: " + val + " filtered with " + converter + " converter is equal to "
-					+ rtn + ", that is less than 0, thus mapped as 0");
+			System.out.println(
+					"Mapper Warning> The attribute name: '" + graphAttribute + "' is missing in some instances of "
+							+ graphElementClassName + "\n Input value: " + val + " filtered with " + converter
+							+ " converter is equal to " + rtn + ", that is less than 0, thus mapped as 0");
 			rtn = 0;
 		}
-		
-		if (Float.isNaN(rtn)){
-			
+
+		if (Float.isNaN(rtn)) {
+
 			rtn = 0;
 		}
 
@@ -374,6 +375,8 @@ public class Mapper {
 		}
 	}
 
+	// ***** SETTERS *****
+	
 	/**
 	 * Sets the min and max value stored in a collection of attributes for
 	 * nodes. It initializes the collection of attributes in case it is equal to
@@ -383,6 +386,7 @@ public class Mapper {
 	 *            the node to set max min values into
 	 */
 	public void setMaxMinNodeAttributes(Node gElem) {
+		
 		// if the min and max collections are not initialized
 		if (nodeAttributesMin == null) {
 			// min values
@@ -698,6 +702,8 @@ public class Mapper {
 		}
 	}
 
+	// ***** GETTERS *****
+	
 	public NumericalCollection getNodeAttributesMin() throws NullPointerException {
 		return nodeAttributesMin;
 	}

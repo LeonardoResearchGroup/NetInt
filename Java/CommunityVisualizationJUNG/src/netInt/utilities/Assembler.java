@@ -199,10 +199,6 @@ public class Assembler {
 		// Assign visual elements to First Order Community
 		subContainer.assignVisualElements(communities);
 		
-		for(VCommunity vC: communities){
-			vC.init();
-		}
-		
 		// Initialize container NOTE: SEE VCommunity.show(). The container is
 		// only initialized if it going to be shown, That's is why this method
 		// is invoked inside VCommunity.show()
@@ -251,7 +247,7 @@ public class Assembler {
 			// Get subGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.subGraphs.get(communityName);
 			
-			// Set In and Out Degree
+			// Set In and Out Degree of each node of this community
 			for (Node n : graphTemp.getVertices()) {
 				n.setOutDegree(n.getMetadataSize() - 1, graphTemp.getSuccessorCount(n));
 				n.setInDegree(n.getMetadataSize() - 1, graphTemp.getPredecessorCount(n));
@@ -290,7 +286,7 @@ public class Assembler {
 
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
-
+			
 			i++;
 		}
 
