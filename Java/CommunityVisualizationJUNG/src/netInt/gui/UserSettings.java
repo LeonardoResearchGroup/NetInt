@@ -386,7 +386,7 @@ public class UserSettings extends Observable {
 		communityColorAtt = val;
 	}
 
-	public void setConverterCommunity(String val) {
+	public void setCommunityConverter(String val) {
 		converterCommunity = val;
 	}
 

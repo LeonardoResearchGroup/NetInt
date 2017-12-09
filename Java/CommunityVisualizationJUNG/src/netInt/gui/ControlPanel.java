@@ -691,7 +691,7 @@ public class ControlPanel extends PApplet {
 
 		case "Converter_Community":
 			int valueCC = (int) secondary.get(ScrollableList.class, "Converter_Community").getValue();
-			UserSettings.getInstance().setConverterCommunity(
+			UserSettings.getInstance().setCommunityConverter(
 					secondary.get(ScrollableList.class, "Converter_Community").getItem(valueCC).get("name").toString());
 			break;
 
