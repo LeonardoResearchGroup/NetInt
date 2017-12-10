@@ -64,8 +64,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private String sizeConverterName = Mapper.LINEAR;
 	private String colorConverterName = Mapper.LINEAR;
 
-	private float sizeFactor = 10;
-	private float minSize = 10;
+	private float sizeFactor = 1;
+	private float minSize = 5;
 
 	private int tierSequence;
 
@@ -95,27 +95,39 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		description = new VNodeDescription();
 
-		setDiameter(30);
+		setSize(minSize);
+
+		sizeFactor = 30;
 	}
 
+	/**
+	 * Sets the diameter relative to the size of other communities recorded in
+	 * the Mapper set of minMax size values
+	 */
 	public void init() {
-
-		float temp = Mapper.getInstance().convert(sizeConverterName, container.size(), Mapper.NODE, "Community size");
 
 		sizeAttributeName = "Community size";
 
-		if ((temp * 50) < 10) {
+		float temp = Mapper.getInstance().convert(sizeConverterName, container.size(), Mapper.NODE, sizeAttributeName);
 
-			setDiameter(10);
+		setSize(temp);
+	}
+
+	private void setSize(float val) {
+
+		float newSize = val * sizeFactor;
+
+		if (newSize < minSize) {
+
+			setDiameter(minSize);
 
 		} else {
 
-			setDiameter(temp * 50);
+			setDiameter(newSize);
 		}
-
 	}
 
-	public void convertSize() {
+	private void convertSize() {
 
 		boolean newConverter = false;
 		boolean newAttribute = false;
@@ -150,17 +162,16 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					// Map input with latest converter
 					float tmp = Mapper.getInstance().convert(sizeConverterName, value, Mapper.NODE, sizeAttributeName);
 
-					tmp *= sizeFactor;
-
-					tmp += minSize;
-
-					setDiameter(tmp);
+					setSize(tmp);
 
 				} catch (NullPointerException np) {
 					np.printStackTrace();
 				}
 			}
 		}
+		System.out.println(this.getClass().getName() + " " + this.getNode().getName() + ", size:" + container.size()
+				+ ", sizeFactor: " + sizeFactor + " diam:" + this.getDiameter());
+
 	}
 
 	private int calculateColor() {
@@ -177,6 +188,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (userSelectedConverter != null && !colorConverterName.equals(userSelectedConverter)) {
 			newConverter = true;
 			colorConverterName = userSelectedConverter;
+			counter++;
 		}
 
 		// user selected attribute name
@@ -205,8 +217,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				} catch (NullPointerException np) {
 
-					System.out.println(np.getClass().getName() + " in Community: " + getNode().getName()
-							+ " for color att: " + colorAttributeName + " and converter: "+ colorConverterName);
+					System.out.println(np.getClass().getName() + " in VCommunity: " + getNode().getName()
+							+ " for color att: " + colorAttributeName + " and converter: " + colorConverterName);
 				}
 			}
 		}
@@ -214,12 +226,18 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		return rtn;
 	}
 
+	private static int counter = 0;
+
 	public void showCommunity() {
 
 		// Calc community size
-		if (UserSettings.eventOnVSettings) {
+		if (UserSettings.getEventOnVSettings()) {
+
+			System.out.println(this.getClass().getName() + " " + this.getNode().getName() + ": "
+					+ UserSettings.getEventOnVSettings() + ", counter:" + counter);
 			convertSize();
 			setColor(calculateColor(), 100);
+			
 		}
 
 		// Look for nodes based on id entered by user in control panel
@@ -371,7 +389,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
 
-							if (UserSettings.eventOnVSettings)
+							if (UserSettings.getEventOnVSettings())
 
 								vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
@@ -433,7 +451,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// If the edge has any attribute
 				if (vEE.getEdge().getAttributeSize() > 0) {
-					if (UserSettings.eventOnVSettings)
+					if (UserSettings.getEventOnVSettings())
 						vEE.setVisibility(UserSettings.getInstance().getWeight());
 				}
 

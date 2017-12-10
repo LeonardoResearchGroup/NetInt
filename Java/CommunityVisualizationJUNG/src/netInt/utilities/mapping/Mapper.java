@@ -51,7 +51,7 @@ public class Mapper {
 	private CategoricalCollection edgeCategoricalAttributes;
 	// MAXs & MINs communities
 	private NumericalCollection commAttributesMin, commAttributesMax;
-	//private CategoricalCollection commCategoricalAttributes;
+	// private CategoricalCollection commCategoricalAttributes;
 
 	// Other attributes for sigmoid filter
 	private float alpha = 1;
@@ -109,7 +109,11 @@ public class Mapper {
 			break;
 
 		case "logarithmic":
-			rtn = log(val);
+			// rtn = log(val);
+			if (graphElementClassName.equals(Mapper.NODE))
+				rtn = log(val, getMinMaxForNodes(graphAttribute));
+			if (graphElementClassName.equals(Mapper.EDGE))
+				rtn = log(val, getMinMaxForEdges(graphAttribute));
 			break;
 
 		case "radial":
@@ -288,6 +292,26 @@ public class Mapper {
 	}
 
 	/**
+	 * Base 10 Logarithm
+	 * 
+	 * @param weight
+	 *            any number. WARNING Numbers less or equal than zero return a
+	 *            zero value
+	 * @return Returns 0 if the parameter is less or equal to zero else a value
+	 *         between 1 and 0
+	 */
+	private float log(float val, float[] minMax) {
+		if (val > 0) {
+			float minLog = (float) Math.log10(minMax[0]);
+			float maxLog = (float) Math.log10(minMax[1]);
+			val = log(val);
+			return PApplet.map(val, minLog, maxLog, 0, 1);
+		} else {
+			return 0;
+		}
+	}
+
+	/**
 	 * This method serves to normalize a number to a given scale defined by its
 	 * lower and higher boundaries. It is mainly used to draw widgets of the
 	 * mapping filter
@@ -376,7 +400,7 @@ public class Mapper {
 	}
 
 	// ***** SETTERS *****
-	
+
 	/**
 	 * Sets the min and max value stored in a collection of attributes for
 	 * nodes. It initializes the collection of attributes in case it is equal to
@@ -386,7 +410,7 @@ public class Mapper {
 	 *            the node to set max min values into
 	 */
 	public void setMaxMinNodeAttributes(Node gElem) {
-		
+
 		// if the min and max collections are not initialized
 		if (nodeAttributesMin == null) {
 			// min values
@@ -703,7 +727,7 @@ public class Mapper {
 	}
 
 	// ***** GETTERS *****
-	
+
 	public NumericalCollection getNodeAttributesMin() throws NullPointerException {
 		return nodeAttributesMin;
 	}
