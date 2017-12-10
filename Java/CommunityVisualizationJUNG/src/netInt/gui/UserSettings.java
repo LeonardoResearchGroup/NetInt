@@ -120,7 +120,7 @@ public class UserSettings extends Observable {
 	private static UserSettings vSettingsInstance = null;
 
 	// An Event to inform if there was an event on the canvas
-	public static boolean eventOnVSettings = false;
+	private static boolean eventOnVSettings = false;
 
 	public static UserSettings getInstance() {
 		if (vSettingsInstance == null) {
@@ -278,7 +278,12 @@ public class UserSettings extends Observable {
 	public HashMap<String, String> getDescriptiveKeys() {
 		return descriptiveKeys;
 	}
+	
+	// ***** EVENT GETTERS ****** 
 
+	public static boolean getEventOnVSettings(){
+		return eventOnVSettings;
+	}
 	// **************************** SETTERS ***************************
 	// ***** FILE SETTERS ******
 
@@ -402,13 +407,13 @@ public class UserSettings extends Observable {
 
 	// ****** EVENT SETTERS ******
 
-	public void setEventOnVSettings(boolean eventTriggered) {
-		eventOnVSettings = eventTriggered;
+	public void setEventOnVSettings() {
+		eventOnVSettings = true;
 	}
 
 	// This method is invoked at the end of main draw
 	public void resetEvents() {
-		setEventOnVSettings(false);
+		eventOnVSettings = false;
 		setClearPropagation(false);
 	}
 

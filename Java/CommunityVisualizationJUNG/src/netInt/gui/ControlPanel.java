@@ -525,7 +525,7 @@ public class ControlPanel extends PApplet {
 		}
 
 		// At any event notify VisibilitySettings class
-		UserSettings.getInstance().setEventOnVSettings(true);
+		UserSettings.getInstance().setEventOnVSettings();
 	}
 
 	private void switchBooleans() {

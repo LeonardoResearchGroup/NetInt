@@ -316,7 +316,7 @@ public class VNode extends VisualAtom implements Serializable {
 		}
 
 		// For any change of user settings
-		if (UserSettings.eventOnVSettings && !colorAttributeName.equals("no_attribute")) {
+		if (UserSettings.getEventOnVSettings() && !colorAttributeName.equals("no_attribute")) {
 
 			float value = node.getFloatAttribute(colorAttributeName);
 

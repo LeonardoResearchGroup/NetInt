@@ -139,8 +139,8 @@ public class Assembler {
 		secondOrderVComm = createSecondOrderVCommunities(GraphLoader.theGraph, rootGraph.getCommunityNames(), layout);
 
 		// First order community: Community of communities
-		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm,
-				"Root", layout);
+		firstOrderVComm = createFirstOrderVCommunity(rootGraph.getFirstOrderEdgeList(), secondOrderVComm, "Root",
+				layout);
 
 		Canvas.app.cursor(PConstants.ARROW);
 
@@ -158,14 +158,20 @@ public class Assembler {
 	 * @return a VCommunity for the graph
 	 */
 	public VCommunity createRootVCommunity(Graph<Node, Edge> graph) {
+
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CONCENTRIC, rootDimension);
+
 		mainCommunity.setName("Root");
+
 		// Root Community
 		String nodeID = mainCommunity.getName() + "_" + String.valueOf(0);
+
 		VCommunity vCommunity = new VCommunity(new Node(nodeID), mainCommunity);
+
 		// set diameter
 		vCommunity.init();
+
 		return vCommunity;
 	}
 
@@ -198,7 +204,7 @@ public class Assembler {
 
 		// Assign visual elements to First Order Community
 		subContainer.assignVisualElements(communities);
-		
+
 		// Initialize container NOTE: SEE VCommunity.show(). The container is
 		// only initialized if it going to be shown, That's is why this method
 		// is invoked inside VCommunity.show()
@@ -207,12 +213,12 @@ public class Assembler {
 		String nodeID = comName + "_" + String.valueOf(0);
 
 		VCommunity communityTemp = new VCommunity(new Node(nodeID), subContainer);
-		
+
 		// Set tier sequence
 		communityTemp.setTierSequence(0);
 
 		// set diameter
-		//communityTemp.init();
+		communityTemp.init();
 
 		return communityTemp;
 	}
@@ -246,7 +252,7 @@ public class Assembler {
 
 			// Get subGraph of each community
 			DirectedSparseMultigraph<Node, Edge> graphTemp = GraphLoader.subGraphs.get(communityName);
-			
+
 			// Set In and Out Degree of each node of this community
 			for (Node n : graphTemp.getVertices()) {
 				n.setOutDegree(n.getMetadataSize() - 1, graphTemp.getSuccessorCount(n));
@@ -259,7 +265,7 @@ public class Assembler {
 
 			// Name container
 			containerTemp.setName(communityName);
-			
+
 			containerTemp.setGraphDegrees();
 
 			// Initialize container
@@ -276,7 +282,7 @@ public class Assembler {
 
 			// Set VCommunity color
 			communityTemp.setColor(myGradient[i]);
-			
+
 			// Set tier sequence
 			communityTemp.setTierSequence(1);
 
@@ -286,13 +292,13 @@ public class Assembler {
 
 			// Add VCommunity to list of VCommunities
 			vCommunities.add(communityTemp);
-			
+
 			i++;
 		}
 
-//		for (VCommunity vC : vCommunities) {
-//			vC.init();
-//		}
+		// for (VCommunity vC : vCommunities) {
+		// vC.init();
+		// }
 
 		return vCommunities;
 	}
@@ -313,5 +319,5 @@ public class Assembler {
 	public void setRootDimension(Dimension rootDimension) {
 		this.rootDimension = rootDimension;
 	}
-	
+
 }
