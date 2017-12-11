@@ -242,7 +242,7 @@ public class ControlPanel extends PApplet {
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		accordion.open(2); // ,2,3
+		//accordion.open(2); // ,2,3
 
 		// Show controller
 		secondary.show();
@@ -460,12 +460,14 @@ public class ControlPanel extends PApplet {
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
 
-		String[] items = new String[mappers.length];
+//		String[] items = new String[mappers.length];
+//
+//		for (int i = 0; i < mappers.length; i++) {
+//			items[i] = (String) mappers[i];
+//		}
 
-		for (int i = 0; i < mappers.length; i++) {
-			items[i] = (String) mappers[i];
-		}
-
+		String [] items = {"Community size"};
+  		
 		secondary.addLabel("cSize:").setLabel("Size").setPosition(5, 57).moveTo(group);
 
 		secondary.addScrollableList("Community_Size").setLabel("Size").addItems(items).setPosition(5, 67)

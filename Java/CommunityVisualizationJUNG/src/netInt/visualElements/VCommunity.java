@@ -151,6 +151,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 
 		if (newAttribute || newConverter) {
+			
+			//System.out.println(this.getClass().getName() + " " + getNode().getId() + " contains userAttribute: " + sizeAttributeName + " " + getNode().getAttributes().keySet().contains(sizeAttributeName)  );
 
 			// If this node has a value for that attribute name
 			if (getNode().getAttributes().keySet().contains(sizeAttributeName)) {
@@ -199,7 +201,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 		if (newConverter || newAttribute) {
 
-			System.out.println(this.getClass().getName() + " ColorConvereted in community " + getNode().getId());
+			//System.out.println(this.getClass().getName() + " ColorConvereted in community " + getNode().getId());
 
 			// If this node has a value for that attribute name
 			if (getNode().getAttributes().keySet().contains(colorAttributeName)) {
