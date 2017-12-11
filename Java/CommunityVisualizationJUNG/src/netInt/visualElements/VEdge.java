@@ -348,9 +348,9 @@ public class VEdge implements Serializable {
 			bezier.color(Bezier.NORMAL);
 		}
 
-		if (Canvas.mouseEventOnCanvas) {
+//		if (Canvas.mouseEventOnCanvas) {
 			bezier.setSourceAndTarget(vSource.getPos(), vTarget.getPos());
-		}
+//		}
 
 		// Visualize the nodes and edges if not in propagation
 		if (!UserSettings.getInstance().filterPropagation()) {

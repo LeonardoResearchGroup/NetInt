@@ -437,7 +437,11 @@ public abstract class Container {
 				}
 			}
 			iterations++;
+			
 			done = iterations == MAX_ITERATIONS || itrContext.done();
+			if( done ) {
+				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+			}
 		} 
 		return itrContext;
 	}
