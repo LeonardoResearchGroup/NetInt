@@ -44,7 +44,7 @@ public abstract class GraphElement implements Serializable {
 
 	// For key use the attribute name. For value use the attribute value (either
 	// Numerical or categorical)
-	private  HashMap<String, Object> absoluteAttributes;
+	private HashMap<String, Object> absoluteAttributes;
 
 	// A set of attributes to be initiated by instances of classes that
 	// inherit from this class. The integer parameter identifies the
@@ -118,19 +118,26 @@ public abstract class GraphElement implements Serializable {
 	 */
 	public float getFloatAttribute(String key) throws NullPointerException {
 		Float rtn = null;
-
+		Object value = absoluteAttributes.get(key);
+		String type = "No defined.";
 		try {
+			if (value instanceof String) {
+				rtn = Float.parseFloat((String)(value)); 
+			}
 			// If Double
-			if (absoluteAttributes.get(key) instanceof Double) {
-				Double rtnObj = (Double) absoluteAttributes.get(key);
+			else if (value instanceof Double) {
+				type = "Double";
+				Double rtnObj = (Double) value;
 				rtn = rtnObj.floatValue();
 				// If Integer
-			} else if (absoluteAttributes.get(key) instanceof Integer) {
-				Integer rtnObj = (Integer) absoluteAttributes.get(key);
+			} else if (value instanceof Integer) {
+				type = "Integer";
+				Integer rtnObj = (Integer) value;
 				rtn = rtnObj.floatValue();
 				// If float
 			} else {
-				rtn = (float) absoluteAttributes.get(key);
+				type = "Float";
+				rtn = (float) value;
 			}
 		} catch (Exception e) {
 			if (e instanceof NullPointerException) {
@@ -141,8 +148,9 @@ public abstract class GraphElement implements Serializable {
 				 */
 				throw (e);
 			} else {
-				System.out.println(
-						this.getClass().getName() + "Value of Attribute key: " + key + " couldn't be casted as Float ");
+				System.out.println("Exception type: " + e.getClass().getName());
+				System.out.println(this.getClass().getName() + "Value: " + value + " of Attribute key: " + key
+						+ " couldn't be casted as " + type);
 			}
 		}
 		return rtn;
@@ -289,7 +297,8 @@ public abstract class GraphElement implements Serializable {
 	public abstract void setRelativeAttributes(int tier, HashMap<String, Float> attributeSet);
 
 	public void addAbsoluteAtt(String key, Object value) {
-		// System.out.println(this.getClass().getName() + " absolute att added. Key: " + key + ", value: "+value.toString());
+		// System.out.println(this.getClass().getName() + " absolute att added.
+		// Key: " + key + ", value: "+value.toString());
 		absoluteAttributes.put(key, value);
 	}
 
