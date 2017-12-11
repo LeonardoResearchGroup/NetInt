@@ -39,7 +39,7 @@ public class VNode extends VisualAtom implements Serializable {
 
 	// This variable is used to control if a given attribute is below or above a
 	// visibility threshold
-	private boolean visible;
+	protected boolean visible;
 
 	// propagation attributes
 	private boolean propagationSource, inPropagationChain, propagated = false;
@@ -316,7 +316,7 @@ public class VNode extends VisualAtom implements Serializable {
 		}
 
 		// For any change of user settings
-		if (UserSettings.getEventOnVSettings() && !colorAttributeName.equals("no_attribute")) {
+		if (UserSettings.getInstance().getEventOnVSettings() && !colorAttributeName.equals("no_attribute")) {
 
 			float value = node.getFloatAttribute(colorAttributeName);
 

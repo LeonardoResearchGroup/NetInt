@@ -447,15 +447,15 @@ public class ControlPanel extends PApplet {
 
 		// Visibility control
 
-		secondary.addLabel("Filter by community size").setPosition(2, 81).moveTo(group);
+		secondary.addLabel("Filter by community size").setPosition(2, 7).moveTo(group);
 
-		secondary.addSlider("Min Community Size").setPosition(5, 96).setSize(150, 10).setRange(0, 35)
+		secondary.addSlider("Min_Community_Size").setPosition(5, 22).setSize(150, 10).setRange(0, 1000)
 				.setNumberOfTickMarks(10).snapToTickMarks(false).showTickMarks(false).moveTo(group).getCaptionLabel()
 				.setPaddingX(10).setVisible(false); //
 
 		// Node Appearance controllers
 
-		secondary.addLabel("Community attributes").setPosition(2, 116).moveTo(group);
+		secondary.addLabel("Community attributes").setPosition(2, 42).moveTo(group);
 
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
@@ -466,23 +466,23 @@ public class ControlPanel extends PApplet {
 			items[i] = (String) mappers[i];
 		}
 
-		secondary.addLabel("cSize:").setLabel("Size").setPosition(5, 131).moveTo(group);
+		secondary.addLabel("cSize:").setLabel("Size").setPosition(5, 57).moveTo(group);
 
-		secondary.addScrollableList("Community_Size").setLabel("Size").addItems(items).setPosition(5, 141)
+		secondary.addScrollableList("Community_Size").setLabel("Size").addItems(items).setPosition(5, 67)
 				.setSize(95, 52).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group);
 
-		secondary.addLabel("cColor:").setLabel("Color:").setPosition(106, 131).moveTo(group);
+		secondary.addLabel("cColor:").setLabel("Color:").setPosition(106, 57).moveTo(group);
 
-		secondary.addScrollableList("Community_Color").setLabel("Color").addItems(items).setPosition(106, 141)
+		secondary.addScrollableList("Community_Color").setLabel("Color").addItems(items).setPosition(106, 67)
 				.setSize(95, 52).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER);
 
 		// Converters
 		items = Mapper.getInstance().getConvertersList();
 
-		secondary.addLabel("cConverter:").setLabel("Converter:").setPosition(5, 203).moveTo(group);
+		secondary.addLabel("cConverter:").setLabel("Converter:").setPosition(5, 129).moveTo(group);
 
-		secondary.addScrollableList("Converter_Community").addItems(items).setPosition(5, 213).setSize(95, 52)
+		secondary.addScrollableList("Converter_Community").addItems(items).setPosition(5, 139).setSize(95, 52)
 				.setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group); // .close();
 
 	}
@@ -511,6 +511,9 @@ public class ControlPanel extends PApplet {
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
+		// At any event notify VisibilitySettings class
+		UserSettings.getInstance().setEventOnVSettings();
+		
 		if (theEvent.isGroup()) {
 			// **** DESCRIPTIVE STATISTICS ****
 			if (theEvent.isFrom(cBox)) {
@@ -523,9 +526,6 @@ public class ControlPanel extends PApplet {
 			// Calls observable method and passes the event
 			UserSettings.getInstance().setLatestEvent(theEvent);
 		}
-
-		// At any event notify VisibilitySettings class
-		UserSettings.getInstance().setEventOnVSettings();
 	}
 
 	private void switchBooleans() {
@@ -673,7 +673,7 @@ public class ControlPanel extends PApplet {
 			break;
 
 		// **** COMMUNITIES ****
-		case "Min Community Size": // slider
+		case "Min_Community_Size": // slider
 			UserSettings.getInstance().setCommunitySizeThreshold(theEvent.getValue());
 			break;
 

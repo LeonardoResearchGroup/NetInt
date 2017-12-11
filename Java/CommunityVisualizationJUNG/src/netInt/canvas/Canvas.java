@@ -50,10 +50,10 @@ public class Canvas {
 	public static boolean canvasBeingZoomed = false;
 
 	public static PApplet app;
-	
+
 	// ***** ADAPTIVE PERFORMANCE
 	// Adaptative performance
-	private static boolean isAdapting; 
+	private static boolean isAdapting;
 	private static double adaptiveDegreeThresholdPercentage = 100;
 
 	public Canvas(PApplet app) {
@@ -165,6 +165,13 @@ public class Canvas {
 		app.text("Graph file: " + GraphPad.getFile().getName(), pos.x, pos.y + 15);
 		app.text("Mouse on canvas: " + canvasMouse, pos.x, pos.y + 25);
 		app.text("Zoom: " + zoom, pos.x, pos.y + 35);
+
+		if (UserSettings.getInstance().getAdaptivePerformance()) {
+			app.fill(255, 0, 0);
+			app.text("Adaptive Performance Enabled", pos.x, pos.y + 45);
+			app.fill(255, 90);
+		}
+
 		// app.text("Offset: " + offset, pos.x, pos.y + 45);
 		// app.text("startOffset: " + startOffset, pos.x, pos.y + 55);
 		// app.text("endOffset: " + endOffset, pos.x, pos.y + 65);
@@ -212,25 +219,25 @@ public class Canvas {
 
 		isAdapting = false;
 		if (Canvas.app.frameRate > 15) {
-			if(Canvas.app.frameRate < 17){
+			if (Canvas.app.frameRate < 17) {
 				adaptiveDegreeThresholdPercentage -= 0.05;
-			}else{
+			} else {
 				// The lower the parameter the faster the edge visualization
 				adaptiveDegreeThresholdPercentage -= 0.2;
 			}
-			if ( adaptiveDegreeThresholdPercentage < 1 ) {
+			if (adaptiveDegreeThresholdPercentage < 1) {
 				adaptiveDegreeThresholdPercentage = 1;
 			}
-			
+
 			isAdapting = true;
-			
+
 		} else if (Canvas.app.frameRate < 13) {
-			if( Canvas.app.frameRate > 11 ){
+			if (Canvas.app.frameRate > 11) {
 				adaptiveDegreeThresholdPercentage += 0.02;
-			}else{
+			} else {
 				adaptiveDegreeThresholdPercentage += 0.08;
 			}
-			if ( adaptiveDegreeThresholdPercentage > 100) {
+			if (adaptiveDegreeThresholdPercentage > 100) {
 				adaptiveDegreeThresholdPercentage = 100;
 			}
 			isAdapting = true;
@@ -341,9 +348,9 @@ public class Canvas {
 	private static void resetKeyEventsOnCanvas() {
 		Canvas.keyEventOnCanvas = false;
 	}
-	
+
 	// ***** ADAPTIVE PERFORMANCE
-	
+
 	public static boolean isAdapting() {
 		return isAdapting;
 	}
@@ -351,23 +358,21 @@ public class Canvas {
 	public static double getAdaptiveDegreeThresholdPercentage() {
 		return adaptiveDegreeThresholdPercentage;
 	}
-	
-	// ***** ADAPTIVE PEROFORMANCE
-	
+
 	public void setAdapting(boolean isAdapting) {
-		this.isAdapting = isAdapting;
+		Canvas.isAdapting = isAdapting;
 	}
-	
+
 	public static void setAdaptiveDegreeThresholdPercentage(double degreeThresholdPercentage) {
 		adaptiveDegreeThresholdPercentage = degreeThresholdPercentage;
 	}
 
 	public void reduceAdaptiveDegreeThresholdPercentage(double r) {
-		this.adaptiveDegreeThresholdPercentage -= r;
+		Canvas.adaptiveDegreeThresholdPercentage -= r;
 	}
-	
+
 	public void incrementAdaptiveDegreeThresholdPercentage(double i) {
-		this.adaptiveDegreeThresholdPercentage += i;
+		Canvas.adaptiveDegreeThresholdPercentage += i;
 	}
 
 }
@@ -387,7 +392,7 @@ class RemindTask extends TimerTask {
 
 	public void run() {
 		Canvas.canvasBeingZoomed = false;
-		Canvas.setAdaptiveDegreeThresholdPercentage( 100 );
+		Canvas.setAdaptiveDegreeThresholdPercentage(100);
 		System.out.println("Canvas> RemindTask> Time's up!");
 	}
 }

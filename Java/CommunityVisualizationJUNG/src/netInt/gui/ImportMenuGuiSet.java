@@ -30,7 +30,6 @@ import guiSet.lists.OrderedCheckList;
 import guiSet.lists.RadioButtonList;
 import netInt.GraphPad;
 import netInt.containers.Container;
-import netInt.graphElements.GraphElement;
 import netInt.utilities.GraphLoader;
 import netInt.utilities.mapping.Mapper;
 import netInt.utilities.mapping.MapperViewer;

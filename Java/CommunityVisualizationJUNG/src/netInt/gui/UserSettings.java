@@ -37,7 +37,7 @@ public class UserSettings extends Observable {
 
 	// Adaptive performance. It autonomously adjusts the number of edges
 	// displayed to guarantee a minimal frame rate
-	private boolean adaptivePerformace = false;
+	private boolean adaptivePerformance = false;
 
 	// ***** NODE Visibility Settings *****
 	// Search box
@@ -120,7 +120,7 @@ public class UserSettings extends Observable {
 	private static UserSettings vSettingsInstance = null;
 
 	// An Event to inform if there was an event on the canvas
-	private static boolean eventOnVSettings = false;
+	private boolean eventOnVSettings = false;
 
 	public static UserSettings getInstance() {
 		if (vSettingsInstance == null) {
@@ -129,6 +129,11 @@ public class UserSettings extends Observable {
 		return vSettingsInstance;
 	}
 
+	/**
+	 * Used to re instantiate a saved session
+	 * 
+	 * @param instance
+	 */
 	public static void reloadInstance(UserSettings instance) {
 		vSettingsInstance = instance;
 	}
@@ -168,7 +173,7 @@ public class UserSettings extends Observable {
 
 	// Button
 	public boolean getAdaptivePerformance() {
-		return adaptivePerformace;
+		return adaptivePerformance;
 	}
 
 	// ***** NODE GETTERS ******
@@ -278,12 +283,13 @@ public class UserSettings extends Observable {
 	public HashMap<String, String> getDescriptiveKeys() {
 		return descriptiveKeys;
 	}
-	
-	// ***** EVENT GETTERS ****** 
 
-	public static boolean getEventOnVSettings(){
+	// ***** EVENT GETTERS ******
+
+	public boolean getEventOnVSettings() {
 		return eventOnVSettings;
 	}
+
 	// **************************** SETTERS ***************************
 	// ***** FILE SETTERS ******
 
@@ -297,8 +303,8 @@ public class UserSettings extends Observable {
 		colorBackground = colorValue;
 	}
 
-	public void setAdaptivePerformance(boolean value) {
-		adaptivePerformace = value;
+	public void setAdaptivePerformance(boolean val) {
+		adaptivePerformance = val;
 	}
 
 	// ***** NODE SETTERS ******

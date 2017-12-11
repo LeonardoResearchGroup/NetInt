@@ -174,7 +174,13 @@ public class VCommunityCover implements Serializable {
 	public void showCoverLable(VNode communityNode, Container container) {
 		Canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);
 		Canvas.app.fill(250, 200);
-		Canvas.app.text(container.getName(), communityNode.getPos().x, communityNode.getPos().y);
+		Canvas.app.text(container.getName(), communityNode.getPos().x, communityNode.getPos().y + 10);
+		if (communityNode.isMouseOver) {
+			Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.getPos().x,
+					communityNode.getPos().y + 30);
+			Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), communityNode.getPos().x,
+					communityNode.getPos().y + 45);
+		}
 		Canvas.app.noFill();
 		Canvas.app.stroke(180);
 	}
@@ -230,7 +236,7 @@ public class VCommunityCover implements Serializable {
 			}
 		} else if (e.getAction() == MouseEvent.RELEASE) {
 			if (communityNode.isMouseOver) {
-				
+
 				// Used in adaptive performance. Switch off all edges
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}

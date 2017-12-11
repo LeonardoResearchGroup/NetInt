@@ -169,8 +169,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 			}
 		}
-		System.out.println(this.getClass().getName() + " " + this.getNode().getName() + ", size:" + container.size()
-				+ ", sizeFactor: " + sizeFactor + " diam:" + this.getDiameter());
 
 	}
 
@@ -188,7 +186,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		if (userSelectedConverter != null && !colorConverterName.equals(userSelectedConverter)) {
 			newConverter = true;
 			colorConverterName = userSelectedConverter;
-			counter++;
 		}
 
 		// user selected attribute name
@@ -201,6 +198,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		}
 
 		if (newConverter || newAttribute) {
+
+			System.out.println(this.getClass().getName() + " ColorConvereted in community " + getNode().getId());
 
 			// If this node has a value for that attribute name
 			if (getNode().getAttributes().keySet().contains(colorAttributeName)) {
@@ -226,88 +225,86 @@ public class VCommunity extends VNode implements java.io.Serializable {
 		return rtn;
 	}
 
-	private static int counter = 0;
-
 	public void showCommunity() {
 
-		// Calc community size
-		if (UserSettings.getEventOnVSettings()) {
+		// Hide or show the vCommunity according to the user defined degree
+		// threshold
+		if (filterVisibility()) {
 
-			System.out.println(this.getClass().getName() + " " + this.getNode().getName() + ": "
-					+ UserSettings.getEventOnVSettings() + ", counter:" + counter);
 			convertSize();
-			setColor(calculateColor(), 100);
-			
-		}
+			setColor(calculateColor(), getAlpha());
 
-		// Look for nodes based on id entered by user in control panel
-		searchNode();
+			// Look for nodes based on id entered by user in control panel
+			searchNode();
 
-		// Display the community cover
-		comCover.show(container, containsSearchedNode);
+			// Display the community cover
+			comCover.show(container, containsSearchedNode);
 
-		// Check if community cover is completely deployed
-		if (comCover.isDeployed()) {
+			// Check if community cover is completely deployed
+			if (comCover.isDeployed()) {
 
-			// ******
+				// ******
 
-			// If adaptive performance threshold was updated
-			if (Canvas.isAdapting()) {
-				changeContainerDegreeThreshold();
+				// If adaptive performance threshold was updated
+				if (Canvas.isAdapting()) {
 
-			}
-
-			// *******
-
-			setDisplayed(true);
-
-			// if coordinates for all elements inside the container are set.
-			// container.isInitializationComplete() is a boolean gate that
-			// controls iteration
-			if (container.isInitializationComplete()) {
-
-				// Build external Edges of VCommunities included in this
-				// VCommunity's container
-				for (VCommunity vC : container.getVCommunities()) {
-
-					if (vC.comCover.isDeployed()) {
-
-						// build external edges
-						vC.container.buildExternalEdges(container.getVCommunities());
-					}
+					changeContainerDegreeThreshold();
 				}
 
+				// *******
+
+				setDisplayed(true);
+
+				// if coordinates for all elements inside the container are set.
+				// container.isInitializationComplete() is a boolean gate that
+				// controls iteration
+				if (container.isInitializationComplete()) {
+
+					// Build external Edges of VCommunities included in this
+					// VCommunity's container
+					for (VCommunity vC : container.getVCommunities()) {
+
+						if (vC.comCover.isDeployed()) {
+
+							// build external edges
+							vC.container.buildExternalEdges(container.getVCommunities());
+						}
+					}
+
+				} else {
+					container.initialize();
+				}
+
+				// If the layout is iterative
+				if (container.isLayoutIterative()) {
+
+					// Show only nodes if layout is still organizing elements
+					showCommunityContents(comCover.isUnlocked(), comCover.isUnlocked());
+
+				} else {
+
+					// If layout not iterative show nodes and edges
+					showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
+				}
 			} else {
-				container.initialize();
+
+				setDisplayed(true);
+
+				// Show community overall description on mouse over
+				if (isMouseOver) {
+					description.show(this);
+				}
 			}
 
-			// If the layout is iterative
-			if (container.isLayoutIterative()) {
-
-				// Show only nodes if layout is still organizing elements
-				showCommunityContents(comCover.isUnlocked(), comCover.isUnlocked());
-
-			} else {
-
-				// If layout not iterative show nodes and edges
-				showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
+			/*
+			 * Update position of each visualElement in the container relative
+			 * to current vCommunity center. This is needed to reposition
+			 * deployed and collapsed VCommunities when the user interacts with
+			 * this VAtom
+			 */
+			if (Canvas.mouseEventOnCanvas && MouseHook.getInstance().isHooked(this)) {
+				updateContainer();
 			}
-		} else {
-			setDisplayed(true);
-
-			// Show community overall description on mouse over
-			if (isMouseOver) {
-				description.show(this);
-				Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), getPos().x, getPos().y + 20);
-				Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), getPos().x, getPos().y + 35);
-			}
-		}
-
-		// Update position of each visualElement in the container relative to
-		// current vCommunity center. This is needed to reposition deployed and
-		// collapsed VCommunities when the user interacts with this VAtom
-		if (Canvas.mouseEventOnCanvas && MouseHook.getInstance().isHooked(this)) {
-			updateContainer();
 		}
 	}
 
@@ -316,6 +313,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * AdaptiveDegreeThresholdPercentage
 	 */
 	private void changeContainerDegreeThreshold() {
+
 		// The position of this container's array of degrees
 		// corresponding to a given percentage of relevant nodes
 		int degreeThresholdPosition = (int) ((Canvas.getAdaptiveDegreeThresholdPercentage() / 100)
@@ -341,21 +339,23 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	 * @param showEdges
 	 *            true if show
 	 */
-
 	public void showCommunityContents(boolean showVAtoms, boolean showEdges) {
 
 		// ** Display VEdges
 
-		if (showEdges && comCover.isUnlocked()) {
+		// if this VCommunity is above community visibility threshold
+		if (showEdges && comCover.isUnlocked() && visible) {
 			// Internal Edges
 			// If the user chooses to turn on/off the internal edges
 			if (UserSettings.getInstance().internalEdgeVisibilityForTier(tierSequence)) {
+
 				showInternalEdges();
 			}
 
 			// External edges
 			// If the user chooses to turn on/off the external edges
 			if (UserSettings.getInstance().externalEdgeVisibilityForTier(tierSequence)) {
+
 				showExternalEdges();
 			}
 		}
@@ -389,7 +389,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						// If the edge has any attribute
 						if (vE.getEdge().getAttributeSize() > 0) {
 
-							if (UserSettings.getEventOnVSettings())
+							if (UserSettings.getInstance().getEventOnVSettings())
 
 								vE.setVisibility(UserSettings.getInstance().getWeight());
 						}
@@ -451,7 +451,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// If the edge has any attribute
 				if (vEE.getEdge().getAttributeSize() > 0) {
-					if (UserSettings.getEventOnVSettings())
+					if (UserSettings.getInstance().getEventOnVSettings())
 						vEE.setVisibility(UserSettings.getInstance().getWeight());
 				}
 
@@ -513,7 +513,9 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	}
 
 	private void showVNodes(boolean communityOpen) {
+
 		if (communityOpen) {
+
 			if (container.isLayoutIterative()) {
 
 				container.stepIterativeLayout(pos).done();
@@ -526,8 +528,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				for (VNode vN : container.getVNodes()) {
 
 					if (vN.getNode().getDegree(0) >= container.degreeThreshold) {
+
 						vN.setAboveDegreeThreshold(true);
+
 					} else {
+
 						vN.setAboveDegreeThreshold(false);
 					}
 
@@ -579,6 +584,49 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			container.updateVNodesCoordinates(diffPos);
 			lastPosition = pos;
 		}
+	}
+
+	/**
+	 * Filters visibility for all vCommunities. Special case for tier 0
+	 * communities. Albeit it sets its visibility to false they are still
+	 * visible otherwise their contents would not be visible and the graphPad
+	 * would be blank
+	 * 
+	 * @return
+	 */
+	private boolean filterVisibility() {
+
+		float visibilityThreshold = UserSettings.getInstance().getCommunitySizeThreshold();
+
+		if (visibilityThreshold > container.size()) {
+
+			visible = false;
+
+			if (containsSearchedNode) {
+				visible = true;
+			}
+
+		} else {
+
+			visible = true;
+
+		}
+
+		/*
+		 * Special case for tier 0 communities. Albeit it sets its visibility to
+		 * false they are still visible otherwise their contents would not be
+		 * visible and the graphPad would be blank
+		 */
+
+		if (tierSequence > 0) {
+
+			return visible;
+
+		} else {
+
+			return true;
+		}
+
 	}
 
 	// ***** Getters & Setters

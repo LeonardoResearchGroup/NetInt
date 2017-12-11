@@ -160,7 +160,7 @@ public class GraphPad {
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
 
-		//consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		// consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 		mapperViewer = new MapperViewer();
 
 		// Canvas
@@ -209,12 +209,11 @@ public class GraphPad {
 			canvas.showLegend(new PVector(parent.width - 20, 20));
 			canvas.displayValues(new PVector(parent.width - 20, 40));
 			canvas.showControlPanelMessages(new PVector(20, 20));
-			
-//			if (UserSettings.getInstance().getAdaptivePerformance()) {
+
+			if (UserSettings.getInstance().getAdaptivePerformance()) {
 				canvas.adjustThresholdAdaptivePerformance();
-//			} else {
-//				UserSettings.getInstance().setAdaptiveDegreeThresholdPercentage(0);
-//			}
+			} 
+			
 			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
 
 			// export a frame as png
@@ -232,8 +231,7 @@ public class GraphPad {
 		// Signature Message :)
 		parent.textAlign(PConstants.LEFT);
 		parent.fill(186, 216, 231);
-		parent.text("NetInt | Built with Processing 3 | 2017", 20,
-				parent.height - 10);
+		parent.text("NetInt | Built with Processing 3 | 2017", 20, parent.height - 10);
 
 		// Sets any event on the canvas to false. MUST be at the end of draw()
 		Canvas.resetMouseEventsOnCanvas();
@@ -307,7 +305,7 @@ public class GraphPad {
 			file = selection;
 			GraphmlKeyReader reader = new GraphmlKeyReader(selection);
 			// this creates and displays the menu
-			String[] layoutKeys = { "Concentric","Fruchterman-Reingold", "Spring"};
+			String[] layoutKeys = { "Concentric", "Fruchterman-Reingold", "Spring" };
 			ArrayList<String> layoutAttributes = new ArrayList<String>(Arrays.asList(layoutKeys));
 			// Import Menu
 			System.out.println("Instantiating Import Menu");
@@ -315,12 +313,12 @@ public class GraphPad {
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getNumericKeyNamesForEdges(), layoutAttributes);
 		}
 
-//		for (int i = 0; i < strings.length; i++) {
-//			if (strings[i].equals("NetInt_Banca")) {
-//				ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));
-//				ControlPanel.getInstance().enableBancaModule();
-//			}
-//		}
+		// for (int i = 0; i < strings.length; i++) {
+		// if (strings[i].equals("NetInt_Banca")) {
+		// ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));
+		// ControlPanel.getInstance().enableBancaModule();
+		// }
+		// }
 	}
 
 	/**

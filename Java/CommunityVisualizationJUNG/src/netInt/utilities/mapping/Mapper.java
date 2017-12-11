@@ -301,14 +301,36 @@ public class Mapper {
 	 *         between 1 and 0
 	 */
 	private float log(float val, float[] minMax) {
-		if (val > 0) {
-			float minLog = (float) Math.log10(minMax[0]);
-			float maxLog = (float) Math.log10(minMax[1]);
-			val = log(val);
-			return PApplet.map(val, minLog, maxLog, 0, 1);
+
+		// Convert minMax range to an acceptable logarithmic range. The range
+		// starts with 1. Any other number is translated to the new origin.
+		
+		// New min value set to 1 instead of 0 to avoid logarithm exception
+		float newMin = 1;
+
+		// new max value
+		float newMax = 10;
+
+		if (minMax[1] < 0) {
+			newMax = Math.abs(minMax[0]) - Math.abs(minMax[1]);
+
+		} else if (minMax[1] > 0) {
+			newMax = Math.abs(minMax[0]) + Math.abs(minMax[1]);
+
 		} else {
-			return 0;
+			newMax = Math.abs(minMax[0]);
 		}
+
+		// Convert val to new range
+		val = PApplet.map(val, minMax[0], minMax[1], newMin, newMax);
+
+		// Estimate logarithms
+
+		float minLog = (float) Math.log10(newMin);
+		float maxLog = (float) Math.log10(newMax);
+		val = log(val);
+
+		return PApplet.map(val, minLog, maxLog, 0, 1);
 	}
 
 	/**
