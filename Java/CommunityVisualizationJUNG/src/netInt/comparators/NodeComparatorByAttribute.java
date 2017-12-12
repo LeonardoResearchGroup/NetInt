@@ -44,8 +44,8 @@ public class NodeComparatorByAttribute implements Comparator<Node> {
 					return 0;
 				}
 			} catch (Exception e) {
-				System.out.println(this.getClass().getName() + " " + e.toString() + " \n" + "    Attribute name - "
-						+ attributeName + " - not found in nodes. CHECK COMPARATOR RESULTS");
+				System.out.println(this.getClass().getName() + " " + e.toString() + " \n" + " Comparation not possible by  Attribute name - "
+						+ attributeName + ". CHECK COMPARATOR RESULTS");
 
 				return 0;
 			}
