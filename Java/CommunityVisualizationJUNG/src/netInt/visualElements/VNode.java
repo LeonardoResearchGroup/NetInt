@@ -238,8 +238,6 @@ public class VNode extends VisualAtom implements Serializable {
 
 			// Draw node following propagation variables
 			drawNode();
-
-			showDescription();
 		}
 	}
 
@@ -428,6 +426,8 @@ public class VNode extends VisualAtom implements Serializable {
 		}
 
 		Canvas.app.ellipse(pos.x, pos.y, getDiameter() + haloOffset, getDiameter() + haloOffset);
+		
+		showDescription();
 	}
 
 	private void propagationSourceHalo(boolean selected) {
@@ -474,7 +474,7 @@ public class VNode extends VisualAtom implements Serializable {
 
 		}
 
-		if (isMouseOver) {
+		if (isMouseOver  || isPropagated()) {
 			Canvas.app.strokeWeight(1);
 			Canvas.app.fill(brighter());
 			Canvas.app.stroke(225, 0, 0);

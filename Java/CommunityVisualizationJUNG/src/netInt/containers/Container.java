@@ -127,6 +127,7 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 				
 				retrieveVNodeSuccessors(layout.getGraph());
+				
 
 			} else {
 				System.out
@@ -490,6 +491,7 @@ public abstract class Container {
 	 *            The graph
 	 */
 	public void retrieveVNodeSuccessors(Graph<Node, Edge> graph) {
+
 		for (VNode tmp : vNodes.values()) {
 			Collection<Node> succesorNodes = graph.getSuccessors(tmp.getNode());
 			tmp.setVNodeSuccessors(getVNodes(succesorNodes));
@@ -712,6 +714,7 @@ public abstract class Container {
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
 		for (VNode vN : vNodes.values()) {
+			
 			if (c.contains(vN.getNode())) {
 				rtn.add(vN);
 			}

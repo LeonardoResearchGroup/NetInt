@@ -42,7 +42,7 @@ public class VNodeDescription implements Serializable {
 
 	public void show(VNode vNode) {
 		Canvas.app.textAlign(PConstants.LEFT);
-		if (vNode.isMouseOver) {
+		if (vNode.isMouseOver || vNode.isPropagated()) {
 			Canvas.app.noStroke();
 			// canvas.app.fill(setColor(50, 150));
 			Canvas.app.fill(new Color(50, 50, 50, 150).getRGB());
