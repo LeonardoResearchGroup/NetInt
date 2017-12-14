@@ -191,8 +191,10 @@ public class Bezier {
 	 * Draws all the components of the bezier. It is useful to draft check the
 	 * structure of the curve
 	 * 
-	 * @param app The PApplet
-	 * @param thickness thickness
+	 * @param app
+	 *            The PApplet
+	 * @param thickness
+	 *            thickness
 	 */
 	public void drawBezierAndControls(PApplet app, float thickness) {
 		// This need to be controlled with an event Controller because it is not
@@ -215,7 +217,8 @@ public class Bezier {
 	/**
 	 * Draws just the bezier with the currentColor() and localAlpha values.
 	 * 
-	 * @param app The PApplet
+	 * @param app
+	 *            The PApplet
 	 * @param thickness
 	 *            The thickness does not belong to this class but to VEdge,
 	 *            therefore it is received as a parameter. If the thickness is
@@ -228,15 +231,18 @@ public class Bezier {
 		app.strokeWeight(thickness);
 		app.bezier(A.x, A.y, cA.x, cA.y, cB.x, cB.y, B.x, B.y);
 	}
-	
+
 	/**
 	 * Draws just the bezier with the currentColor() and localAlpha values.
 	 * 
-	 * @param app The PApplet
+	 * @param app
+	 *            The PApplet
 	 * @param thickness
 	 *            The thickness does not belong to this class but to VEdge,
 	 *            therefore it is received as a parameter. If the thickness is
 	 *            less that 1 it is set to 1.
+	 * @param alpha
+	 *            the transparency
 	 */
 	public void drawBezier2D(PApplet app, float thickness, int alpha) {
 		recalculateParameters();
@@ -249,10 +255,14 @@ public class Bezier {
 	/**
 	 * Used to draw edge's tails and heads
 	 * 
-	 * @param app PApplet
-	 * @param color color
-	 * @param thickness thickness
-	 * @param alpha transparency
+	 * @param app
+	 *            PApplet
+	 * @param color
+	 *            color
+	 * @param thickness
+	 *            thickness
+	 * @param alpha
+	 *            transparency
 	 */
 	private void drawBezier2D(PApplet app, Color color, float thickness, int alpha) {
 		app.noFill();
@@ -266,9 +276,12 @@ public class Bezier {
 	 * Draws the first third of the bezier curve starting from the source
 	 * PVector
 	 * 
-	 * @param app The PApplet
-	 * @param thickness thickness
-	 * @param alpha transparency
+	 * @param app
+	 *            The PApplet
+	 * @param thickness
+	 *            thickness
+	 * @param alpha
+	 *            transparency
 	 */
 	public void drawHeadBezier2D(PApplet app, float thickness, int alpha) {
 		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thickness, alpha);
@@ -278,9 +291,12 @@ public class Bezier {
 	/**
 	 * Draws the last third of the bezier curve starting from the source PVector
 	 * 
-	 * @param app PApplet
-	 * @param thickness thickness
-	 * @param alpha transparency
+	 * @param app
+	 *            PApplet
+	 * @param thickness
+	 *            thickness
+	 * @param alpha
+	 *            transparency
 	 */
 	public void drawTailBezier2D(PApplet app, float thickness, int alpha) {
 		getBezierThird(B, cB, cA, A).drawBezier2D(app, tailColor, thickness, alpha);
@@ -290,10 +306,14 @@ public class Bezier {
 	 * Draws both first and third parts of the bezier curve starting from the
 	 * source PVector
 	 * 
-	 * @param app PApplet
-	 * @param thicknessHead thicknessHead
-	 * @param thicknessTail thicknessTail
-	 * @param alpha transparency
+	 * @param app
+	 *            PApplet
+	 * @param thicknessHead
+	 *            thicknessHead
+	 * @param thicknessTail
+	 *            thicknessTail
+	 * @param alpha
+	 *            transparency
 	 */
 	public void drawHeadAndTailBezier2D(PApplet app, float thicknessHead, float thicknessTail, int alpha) {
 		getBezierThird(A, cA, cB, B).drawBezier2D(app, headColor, thicknessHead, alpha);
@@ -351,9 +371,12 @@ public class Bezier {
 	 * Returns a PVector corresponding to the first third of the line connecting
 	 * two points. The starting point is the first parameterized Vector
 	 * 
-	 * @param a starting point
-	 * @param b end point
-	 * @return PVector corresponding to the first third of the line connecting two points
+	 * @param a
+	 *            starting point
+	 * @param b
+	 *            end point
+	 * @return PVector corresponding to the first third of the line connecting
+	 *         two points
 	 */
 	private PVector getThird(PVector a, PVector b) {
 		float tempX = a.x - ((a.x - b.x) / 3);
@@ -389,7 +412,7 @@ public class Bezier {
 	public Color getPropagated() {
 		return propagated;
 	}
-	
+
 	public int getBodyColor() {
 		return bodyColor.getRGB();
 	}
@@ -429,7 +452,8 @@ public class Bezier {
 	 * Sets the bezier's body color to PROPAGATE color (red) or to NORMAL
 	 * bodyColor.
 	 * 
-	 * @param val the color
+	 * @param val
+	 *            the color
 	 */
 	public void color(int val) {
 		switch (val) {

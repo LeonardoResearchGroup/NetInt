@@ -144,7 +144,6 @@ public class VNode extends VisualAtom implements Serializable {
 	 * This method is used to clear propagation from Control Panel user
 	 * selection
 	 * 
-	 * @param val
 	 */
 	protected void clearPropagation() {
 		if (UserSettings.getInstance().getClearPropagation()) {
@@ -203,10 +202,7 @@ public class VNode extends VisualAtom implements Serializable {
 
 	// *** SHOW METHODS ***
 
-	/**
-	 * @param communityDisplayed
-	 *            true if show
-	 */
+
 	public void show() {
 		// Hide or show the vNode according to the user defined degree threshold
 		if (filterVisibility()) {

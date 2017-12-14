@@ -96,9 +96,11 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 	 * circumference is full, a new concentric circumference is created to
 	 * allocate the remaining elements and so on. The radius is increased by the
 	 * size of the largest element allocated in the previous circumference
+	 * 
 	 * @deprecated
 	 * @param radius
 	 *            the initial length
+	 * @return a hashmap
 	 */
 	public HashMap<Double, ArrayList<Double>> getLocations1(double radius) {
 
@@ -190,8 +192,10 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 
 		for (V v : vertex_ordered_list) {
 			Node n = (Node) v;
-			
-			float nodeLength = 10; //Mapper.getInstance().convert(Mapper.LINEAR, n.getFloatAttribute("degree"), Mapper.NODE, "degree") * 5;
+
+			float nodeLength = 10; // Mapper.getInstance().convert(Mapper.LINEAR,
+									// n.getFloatAttribute("degree"),
+									// Mapper.NODE, "degree") * 5;
 
 			accLength += nodeLength;
 
@@ -246,7 +250,7 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 	private double setLocations(ArrayList<V> nodes, double totalLength, double lastRadius) {
 
 		// Distribute all possible angles in all length units
-		double angleFraction =  (Math.PI * 2) / totalLength;
+		double angleFraction = (Math.PI * 2) / totalLength;
 
 		// Calculate the tier's radius
 		double radius = totalLength / (Math.PI * 2);
@@ -267,7 +271,9 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 		for (V v : nodes) {
 
 			Node n = (Node) v;
-			float nodeLength = 10; //Mapper.getInstance().convert(Mapper.LINEAR, n.getFloatAttribute("degree"), "Node", "degree") * 5;
+			float nodeLength = 10; // Mapper.getInstance().convert(Mapper.LINEAR,
+									// n.getFloatAttribute("degree"), "Node",
+									// "degree") * 5;
 
 			accLength += nodeLength;
 

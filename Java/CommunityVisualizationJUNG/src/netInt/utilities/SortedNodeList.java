@@ -52,14 +52,16 @@ public class SortedNodeList {
 	public static ArrayList<Node> getSortedNodeList(String attributeName) {
 		makeSortedNodeList(attributeName);
 		return nodeList;
-
 	}
 
 	/**
-	 * This method sorts 
+	 * This method sorts
+	 * 
 	 * @param numberOfPercentiles
+	 *            usually 10
 	 * @param attributeName
-	 * @return
+	 *            name of graph element attribute
+	 * @return array of percentile values
 	 */
 	public static float[] getPercentileValues(int numberOfPercentiles, String attributeName) {
 
@@ -86,7 +88,7 @@ public class SortedNodeList {
 				if (rank > nodeList.size() - 1) {
 					rank = nodeList.size() - 1;
 				}
-				
+
 				// get Value
 				if (nodeList.get((int) rank).getAttributes().containsKey(attributeName))
 					vals[(i / p) - 1] = nodeList.get((int) rank).getFloatAttribute(attributeName);

@@ -47,15 +47,15 @@ public abstract class VisualAtom implements Serializable {
 	public boolean isMouseOver, isDragged;
 	protected boolean leftClicked, rightClicked, centerClicked;
 	protected boolean leftPressed, rightPressed, centerPressed;
-	
+
 	// This variable is used to control that the vElement is displayed only
 	// once. It is useful to prevent that edges with the same source or target
 	// vNode display the nodes more than once
 	protected boolean displayed;
 
 	protected Color color;
-	protected Color propagatedColor = new Color(255,0,0);
-	
+	protected Color propagatedColor = new Color(255, 0, 0);
+
 	// Events
 	protected boolean eventsRegistered;
 
@@ -93,6 +93,9 @@ public abstract class VisualAtom implements Serializable {
 	 * mouseEvent(MouseEvent e)
 	 * 
 	 * @param mouse
+	 *            PVector with mouse coords
+	 * 
+	 * @return true if mouse over
 	 */
 	protected boolean detectMouseOver(PVector mouse) {
 		isMouseOver = false;
@@ -203,7 +206,7 @@ public abstract class VisualAtom implements Serializable {
 			switch (e.getButton()) {
 			case PConstants.LEFT:
 				leftPressed = true;
-				
+
 				// hooks this vAtom
 				MouseHook.getInstance().hook(this);
 
@@ -211,7 +214,7 @@ public abstract class VisualAtom implements Serializable {
 				if (deltaMouse == null) {
 					deltaMouse = new PVector(Canvas.getCanvasMouse().x - pos.x, Canvas.getCanvasMouse().y - pos.y);
 				}
-				
+
 				break;
 			case PConstants.CENTER:
 				centerPressed = true;
@@ -241,7 +244,7 @@ public abstract class VisualAtom implements Serializable {
 	}
 
 	protected void mouseClicked(MouseEvent e) {
-		
+
 		if (isMouseOver && displayed) {
 			// change booleans
 			switch (e.getButton()) {
@@ -260,7 +263,7 @@ public abstract class VisualAtom implements Serializable {
 	}
 
 	protected void mouseDragged(MouseEvent e) {
-		
+
 		// Move VAtom
 		if (MouseHook.getInstance().isHooked(this) && displayed) {
 			pos = Canvas.getCanvasMouse().sub(deltaMouse);

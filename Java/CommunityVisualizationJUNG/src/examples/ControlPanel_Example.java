@@ -25,9 +25,7 @@ import processing.core.PApplet;
 
 /**
  * 
- * @author jsalam
- * @version alpha
- * @date June 2017
+ * @author jsalam. June 2017
  *
  */
 public class ControlPanel_Example extends PApplet {

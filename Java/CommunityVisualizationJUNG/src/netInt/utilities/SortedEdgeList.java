@@ -59,8 +59,10 @@ public class SortedEdgeList {
 	 * This method sorts
 	 * 
 	 * @param numberOfPercentiles
+	 *            Usually 10
 	 * @param attributeName
-	 * @return
+	 *            name of graph element attribute
+	 * @return array of percentile values
 	 */
 	public static float[] getPercentileValues(int numberOfPercentiles, String attributeName) {
 

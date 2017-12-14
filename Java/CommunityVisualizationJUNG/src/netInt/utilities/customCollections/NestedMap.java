@@ -24,8 +24,8 @@ import java.util.Set;
 import netInt.graphElements.Node;
 
 /**
- * A collection of objects arranged in a nested structure: hashMap<K1,
- * hashMap<K2, hashSet<E>>>. It is extremely efficient to look for an object of
+ * A collection of objects arranged in a nested structure: hashMap K1,
+ * hashMap pair K2, hashSet. It is extremely efficient to look for an object of
  * type E if K1 and K2 are attributes of E
  * 
  * This nested collection has a tiered structure as follows:
@@ -50,30 +50,24 @@ import netInt.graphElements.Node;
  *            GraphElement type either netInt.graphElements.Node or
  *            netInt.graphElements.Edge
  */
-public abstract class NestedMap<K1, K2, E> extends Thread{
+public abstract class NestedMap<K1, K2, E> extends Thread {
 
 	private boolean initialized = false;
 
 	protected HashMap<K1, HashMap<K2, HashSet<E>>> nestedStructure;
-	
+
 	protected Collection<E> elements;
-	
+
 	protected K1 filter;
-	
 
 	/**
 	 * initializes Nested Structure. It calls private method arrangeElements().
 	 * 
-	 * @param elements
-	 *            collection of elements
-	 * @param filter
-	 *            attribute of elements. Not tried with null or N.As as of
-	 *            October 2017
 	 */
-	
+
 	public void run() {
-			nestedStructure = arrangeElements(elements, filter);
-			initialized = true;
+		nestedStructure = arrangeElements(elements, filter);
+		initialized = true;
 	}
 
 	/**
@@ -188,7 +182,7 @@ public abstract class NestedMap<K1, K2, E> extends Thread{
 	 * 
 	 * @param key
 	 *            Key1
-	 * @return a hashmap <K2,HashSet<E>>
+	 * @return a hashmap pair K2,HashSet
 	 */
 	public HashMap<K2, HashSet<E>> getValueOfK1(K1 key) {
 		return nestedStructure.get(key);
@@ -201,7 +195,7 @@ public abstract class NestedMap<K1, K2, E> extends Thread{
 	 *            Key1
 	 * @param key2
 	 *            Key2
-	 * @return a HashSet<E>
+	 * @return a HashSet
 	 */
 	public HashSet<E> getValueOfK1_K2(K1 key1, K2 key2) {
 		return getValueOfK1(key1).get(key2);
@@ -213,6 +207,7 @@ public abstract class NestedMap<K1, K2, E> extends Thread{
 	 * Prints out the structure result
 	 * 
 	 * @param tier1
+	 *            true if you want to print the nested structure
 	 */
 	public void report(boolean tier1) {
 

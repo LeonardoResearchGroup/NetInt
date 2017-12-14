@@ -23,7 +23,7 @@ import processing.core.PApplet;
 
 /**
  * This class is regularly used to store the set of Degree attributes of a node
- * in a tier, however it can store any <String, Float> using put()
+ * in a tier, however it can store any pair String, Float using put()
  * 
  * @author jsalam
  *

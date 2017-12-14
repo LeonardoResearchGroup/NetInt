@@ -21,8 +21,8 @@ import java.util.Collection;
 import netInt.graphElements.Node;
 
 /**
- * * A collection of node arranged in a nested structure: hashMap<K1,
- * hashMap<K2, hashSet<Node>>>. It is extremely efficient to look for an object
+ * * A collection of node arranged in a nested structure: hashMap K1,
+ * hashMap pair K2, hashSet. It is extremely efficient to look for an object
  * of type Node if K1 and K2 are attributes of Node
  * 
  * @author juan salamanca
@@ -60,8 +60,8 @@ public class NestedNodeMap<K1, K2> extends NestedMap<K1, K2, Node> {
 	/**
 	 * Retrieves a node by its id
 	 * 
-	 * @param id
-	 * @return
+	 * @param id node id
+	 * @return the node with such id
 	 */
 	public Node containsNode(String id) {
 		Character initial = id.charAt(0);
@@ -77,14 +77,14 @@ public class NestedNodeMap<K1, K2> extends NestedMap<K1, K2, Node> {
 				}
 			}
 		}
-	return null;
+		return null;
 	}
 
 	/**
 	 * Retrieves a node by its id
 	 * 
-	 * @param nodeId
-	 * @return
+	 * @param nodeId node id
+	 * @return the community to which that node belongs
 	 */
 	public K1 communityOfNode(String nodeId) {
 		Character initial = nodeId.charAt(0);

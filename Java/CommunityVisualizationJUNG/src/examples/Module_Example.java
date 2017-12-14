@@ -26,9 +26,7 @@ import processing.core.PApplet;
 
 /**
  * 
- * @author jsalam
- * @version alpha
- * @date June 2017
+ * @author jsalam. Date June 2017
  *
  */
 public class Module_Example extends PApplet {

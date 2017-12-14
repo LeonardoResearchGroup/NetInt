@@ -36,7 +36,6 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import netInt.comparators.LinkComparator;
 import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
-import netInt.utilities.customCollections.NestedNodeMap;
 import netInt.utilities.mapping.Mapper;
 
 /**
@@ -57,7 +56,7 @@ public class GraphmlReader {
 	private ArrayList<Edge> edgesBetweenCommunities;
 
 	// Collection of community subgraphs
-	private  HashMap<String, DirectedSparseMultigraph<Node, Edge>> subGraphs;
+	private HashMap<String, DirectedSparseMultigraph<Node, Edge>> subGraphs;
 
 	/**
 	 * Reader usually used to load pajek format files
@@ -126,8 +125,8 @@ public class GraphmlReader {
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
 
 			// Make a node with the retrieved ID
-			//Node nodeTmp = new Node(String.valueOf(id));
-			
+			// Node nodeTmp = new Node(String.valueOf(id));
+
 			Node nodeTmp = new Node(vertex.getId().toString());
 
 			try {
@@ -268,7 +267,7 @@ public class GraphmlReader {
 
 							// Add the attribute value to the temporal edge;
 							e.setAbsoluteAttribute(edgeImportAttributes[i], tmpProperty);
-							
+
 						} else
 							throw new NullPointerException();
 					} catch (NullPointerException exception) {
@@ -454,7 +453,6 @@ public class GraphmlReader {
 	}
 
 	private void addCommunity(String string) {
-
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
@@ -466,8 +464,10 @@ public class GraphmlReader {
 	 * Looks for the equal node in the graph
 	 * 
 	 * @param graph
+	 *            the jung graph
 	 * @param searchedNode
-	 * @return
+	 *            the node to be found
+	 * @return the equal node
 	 */
 	protected Node getEqualNode(edu.uci.ics.jung.graph.Graph<Node, Edge> graph, Node searchedNode) {
 		Node rtn = null;

@@ -88,7 +88,6 @@ public abstract class Container {
 	// Visibility
 	public double degreeThreshold;
 	public int[] degrees;
-	
 
 	// *** Constructor
 	public Container(Graph<Node, Edge> graph) {
@@ -125,9 +124,8 @@ public abstract class Container {
 				runVEdgeFactory();
 
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
-				
+
 				retrieveVNodeSuccessors(layout.getGraph());
-				
 
 			} else {
 				System.out
@@ -136,9 +134,9 @@ public abstract class Container {
 
 				setVElementCoordinates();
 			}
-			
+
 			iterativeLayout = isCurrentLayoutIterative();
-			
+
 			initializationComplete = true;
 		}
 		return initializationComplete;
@@ -194,15 +192,17 @@ public abstract class Container {
 		// For all the nodes in the graph
 		degreeThreshold = 0;
 
-		// System.out.println(this.getClass().getName() + " numberNodes: " + numberNodes);
+		// System.out.println(this.getClass().getName() + " numberNodes: " +
+		// numberNodes);
 
 		// Percentage of degree threshold (0-100)
-		//float degreeThresholdPercentage = 0;
+		// float degreeThresholdPercentage = 0;
 
-//		int degreeThresholdPosition = (int) ((degreeThresholdPercentage / 100) * numberNodes) - 1;
-//
-//		System.out.println(this.getClass().getName() + " operacion: "
-//				+ ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
+		// int degreeThresholdPosition = (int) ((degreeThresholdPercentage /
+		// 100) * numberNodes) - 1;
+		//
+		// System.out.println(this.getClass().getName() + " operacion: "
+		// + ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
 
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
@@ -215,24 +215,28 @@ public abstract class Container {
 		}
 
 		// Nodes sorted for adaptive performance
-		Arrays.sort( degrees );
-		
-//		degreeThreshold = degreeThreshold / this.getGraph().getVertices().size();
-//		degreeThreshold = 1000;
-		
-//		if(degreeThresholdPosition < 0){
-//			
-//			degreeThreshold = 0;	
-//		
-//		}else{
-//			degreeThreshold = degrees[degreeThresholdPosition];
-//		}
-//
-//		System.out.println(this.getClass().getName() + " degreeThreshold: " + degreeThreshold);
-//
-//		System.out.println(this.getClass().getName() + " degreeThresholdPosition: " + degreeThresholdPosition);
+		Arrays.sort(degrees);
 
-//		System.out.println(this.getClass().getName() + " Degrees of container's Graph assigned");
+		// degreeThreshold = degreeThreshold /
+		// this.getGraph().getVertices().size();
+		// degreeThreshold = 1000;
+
+		// if(degreeThresholdPosition < 0){
+		//
+		// degreeThreshold = 0;
+		//
+		// }else{
+		// degreeThreshold = degrees[degreeThresholdPosition];
+		// }
+		//
+		// System.out.println(this.getClass().getName() + " degreeThreshold: " +
+		// degreeThreshold);
+		//
+		// System.out.println(this.getClass().getName() + "
+		// degreeThresholdPosition: " + degreeThresholdPosition);
+
+		// System.out.println(this.getClass().getName() + " Degrees of
+		// container's Graph assigned");
 	}
 
 	/**
@@ -438,12 +442,12 @@ public abstract class Container {
 				}
 			}
 			iterations++;
-			
+
 			done = iterations == MAX_ITERATIONS || itrContext.done();
-			if( done ) {
+			if (done) {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
-		} 
+		}
 		return itrContext;
 	}
 
@@ -585,7 +589,9 @@ public abstract class Container {
 	 * http://jung.sourceforge.net/doc/api/index.html?edu/uci/ics/jung/
 	 * algorithms/layout/CircleLayout.CircleVertexData.html
 	 * 
-	 * @return
+	 * @param dimension An instance of Dimension that defines the boundaries of the
+	 *            layout
+	 * @return the Fruchterman Reingold layout set to a given Dimension
 	 */
 	protected AbstractLayout<Node, Edge> fruchtermanReingold(Dimension dimension) {
 		FRLayout<Node, Edge> frLayout = new FRLayout<Node, Edge>(graph, dimension);
@@ -658,10 +664,11 @@ public abstract class Container {
 	public Collection<VNode> getVNodes() {
 		return vNodes.values();
 	}
-	
+
 	/**
 	 * Returns a the entire set of this collection's VNodes containing both
-	 * VNodes and VCommunity instances in a HashMap which includes Ids for every node
+	 * VNodes and VCommunity instances in a HashMap which includes Ids for every
+	 * node
 	 * 
 	 * @return List of vNodes
 	 */
@@ -714,7 +721,7 @@ public abstract class Container {
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
 		for (VNode vN : vNodes.values()) {
-			
+
 			if (c.contains(vN.getNode())) {
 				rtn.add(vN);
 			}
@@ -840,7 +847,7 @@ public abstract class Container {
 	 *            Graph
 	 * @param seekNode
 	 *            node searched
-	 * @return
+	 * @return The node equal to the given node
 	 */
 	protected Node getEqualNode(Graph<Node, Edge> graph, Node seekNode) {
 		Node nodo = null;

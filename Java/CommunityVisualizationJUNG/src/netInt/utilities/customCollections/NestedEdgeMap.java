@@ -22,8 +22,8 @@ import netInt.graphElements.Edge;
 import netInt.graphElements.Node;
 
 /**
- * * A collection of node arranged in a nested structure: hashMap<K1,
- * hashMap<K2, hashSet<Edge>>>. It is extremely efficient to look for an object
+ * A collection of node arranged in a nested structure: hashMap K1,
+ * hashMap pair K2, hashSet. It is extremely efficient to look for an object
  * of type Edge if K1 and K2 are attributes of Edge
  * 
  

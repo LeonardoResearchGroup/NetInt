@@ -69,9 +69,7 @@ import processing.core.PVector;
  * loading time.
  * </p>
  * 
- * @author jsalam
- * @version alpha
- * @date June 2017
+ * @author jsalam. June 2017
  *
  */
 
@@ -160,7 +158,10 @@ public class GraphPad {
 		 * WARNING, it might trigger conflicts with Menu's File Open.
 		 */
 
-		// consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		// Visualization of system.out messages in external panel
+		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+
+		// Visualization of node and edge attributes in external panel
 		mapperViewer = new MapperViewer();
 
 		// Canvas
@@ -212,8 +213,8 @@ public class GraphPad {
 
 			if (UserSettings.getInstance().getAdaptivePerformance()) {
 				canvas.adjustThresholdAdaptivePerformance();
-			} 
-			
+			}
+
 			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
 
 			// export a frame as png
@@ -312,13 +313,6 @@ public class GraphPad {
 			importMenu = new ImportMenuGuiSet(this);
 			importMenu.makeLists(reader.getKeyNamesForNodes(), reader.getNumericKeyNamesForEdges(), layoutAttributes);
 		}
-
-		// for (int i = 0; i < strings.length; i++) {
-		// if (strings[i].equals("NetInt_Banca")) {
-		// ControlPanel.setLogo(parent.loadImage("./images/netIntBanca.png"));
-		// ControlPanel.getInstance().enableBancaModule();
-		// }
-		// }
 	}
 
 	/**

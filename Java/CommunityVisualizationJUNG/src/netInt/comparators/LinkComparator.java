@@ -89,7 +89,7 @@ public class LinkComparator {
 	 *            source node
 	 * @param target
 	 *            target node
-	 * @param return
+	 * @return
 	 *            true if it creates the first link between the pair of nodes
 	 */
 	public boolean link(Node source, Node target) {
@@ -119,12 +119,12 @@ public class LinkComparator {
 				// If the Character key DOES exist in internal hashtable
 				if (cache.get(source).containsKey(initial)) {
 					// if the internal list contains the target
-					//if (!cache.get(source).get(initial).contains(target)) {
-						cache.get(source).get(initial).add(target);
-						return true;
-//					}else{
-//						return false;
-//					}
+					// if (!cache.get(source).get(initial).contains(target)) {
+					cache.get(source).get(initial).add(target);
+					return true;
+					// }else{
+					// return false;
+					// }
 
 					// If the Character key DOES NOT exist in internal
 					// hashtable
@@ -145,8 +145,12 @@ public class LinkComparator {
 	 * weight 1 to the given collection
 	 * 
 	 * @param source
+	 *            the source node
 	 * @param target
+	 *            the target node
 	 * @param edges
+	 *            the list of edges to check if any link exists between source
+	 *            and target
 	 */
 	public void buildLink(Node source, Node target, ArrayList<Edge> edges) {
 		if (link(source, target)) {
@@ -159,7 +163,7 @@ public class LinkComparator {
 	/**
 	 * Makes a list of edges from stored values in cache
 	 * 
-	 * @return
+	 * @return the list of edges
 	 */
 	public ArrayList<Edge> cacheAsList() {
 		ArrayList<Edge> rtn = new ArrayList<Edge>();
@@ -177,9 +181,8 @@ public class LinkComparator {
 	}
 
 	/**
-	 * Makes a list of edges from stored values in cache
+	 * Prints a list of edges from stored values in cache
 	 * 
-	 * @return
 	 */
 	public void printCacheTable() {
 		Set<Node> sourceKeys = cache.keySet();

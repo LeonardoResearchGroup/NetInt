@@ -292,13 +292,20 @@ public class Mapper {
 	}
 
 	/**
-	 * Base 10 Logarithm
+	 * Base 10 Logarithm translated to a new origin. It works as follows:
+	 * 
+	 * The mapping range is translated to a new mapping start corresponding to 1
+	 * Thus the max value of the attribute is translated the magnitude of the
+	 * former min value. For instance translating the mapping range [-10, 10]
+	 * results in [1,20]. We do not use 0 as the min value because the logarithm
+	 * of 0 is Infinity, whereas the logarithm of 1 is equal to 0.
+	 * 
+	 * With this new mapping range we apply the logarithm base 10 to the range [minLog, maxLog],
+	 * and then we map the attribute value to that range.
 	 * 
 	 * @param weight
-	 *            any number. WARNING Numbers less or equal than zero return a
-	 *            zero value
-	 * @return Returns 0 if the parameter is less or equal to zero else a value
-	 *         between 1 and 0
+	 *            any number.
+	 * @return the converted parameter
 	 */
 	private float log(float val, float[] minMax) {
 

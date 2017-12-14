@@ -133,6 +133,7 @@ public class UserSettings extends Observable {
 	 * Used to re instantiate a saved session
 	 * 
 	 * @param instance
+	 *            the instance used to re instantiate a saved version
 	 */
 	public static void reloadInstance(UserSettings instance) {
 		vSettingsInstance = instance;

@@ -192,7 +192,7 @@ public class ControlPanel extends PApplet {
 		secondary.setColorBackground(0xff353535);
 
 		// Add list to main controller
-		String[] fileFunctions = { "Open", "Save", "Import", "Export", "Load Module", "Quit" };
+		String[] fileFunctions = { "Open", "Save", "Import", "Export_PNG",  "Quit" }; // "Load Module",
 		main.addScrollableList("File").setPosition(10, 55).setSize(206, 100).setBarHeight(18).setItemHeight(13)
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
@@ -367,8 +367,8 @@ public class ControlPanel extends PApplet {
 		secondary.addToggle("Tier_1_Internal").setPosition(5, 21).setSize(95, 10).setValue(true).moveTo(group)
 				.setCaptionLabel("Internal").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
-		secondary.addToggle("Tier_1_External").setPosition(106, 21).setSize(95, 10).setValue(true).moveTo(group)
-				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+//		secondary.addToggle("Tier_1_External").setPosition(106, 21).setSize(95, 10).setValue(true).moveTo(group)
+//				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
 		// Visibility control tier 2
 		secondary.addLabel("Edge visibility tier 2").setPosition(2, 41).moveTo(group);
@@ -624,13 +624,13 @@ public class ControlPanel extends PApplet {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
 			break;
-		case "Tier_1_External":
-			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
-			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
-			if (vinculoExtT1.getBooleanValue()) {
-				Canvas.setAdaptiveDegreeThresholdPercentage(100);
-			}
-			break;
+//		case "Tier_1_External":
+//			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
+//			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
+//			if (vinculoExtT1.getBooleanValue()) {
+//				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+//			}
+//			break;
 		case "Tier_2_Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
@@ -777,7 +777,7 @@ public class ControlPanel extends PApplet {
 			ChooseHelper.getInstance().showFileChooser(parent);
 			break;
 
-		case "Export":
+		case "Export_PGN":
 			if (accordion != null) {
 				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "png");
 				if (selectedPathExport != null) {

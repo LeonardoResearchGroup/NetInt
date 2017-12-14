@@ -42,8 +42,6 @@ public class MapperViewer extends PApplet {
 	 * This constructor is used to create a window for user visualization of
 	 * mapping attributes
 	 * 
-	 * @param _parent
-	 *            parent PApplet
 	 */
 	public MapperViewer() {
 		super();
