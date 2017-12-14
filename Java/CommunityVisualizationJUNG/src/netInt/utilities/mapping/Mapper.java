@@ -304,7 +304,7 @@ public class Mapper {
 
 		// Convert minMax range to an acceptable logarithmic range. The range
 		// starts with 1. Any other number is translated to the new origin.
-		
+
 		// New min value set to 1 instead of 0 to avoid logarithm exception
 		float newMin = 1;
 
@@ -451,6 +451,7 @@ public class Mapper {
 				Object value = gElem.getAttribute(key);
 				if (NumericalCollection.isNumerical(value)) {
 					try {
+
 						if (value instanceof Double) {
 							// If Double convert to float
 							Double rtnObj = (Double) value;
@@ -486,6 +487,20 @@ public class Mapper {
 					} catch (NumberFormatException e) {
 						System.out.println(this.getClass().getName() + " Node Attribute named: " + key
 								+ " - does not match the available Mapper data type: Double,Float,Integer");
+					}
+				} else {
+
+					if (value instanceof String) {
+						try {
+							float rtn = Float.parseFloat((String) (value));
+							// add to collection of min attributes else to
+							// collection of max Attributes
+							if (!nodeAttributesMin.addLowerValue(key, rtn)) {
+								nodeAttributesMax.addHigherValue(key, rtn);
+							}
+						} catch (NumberFormatException e) {
+							//
+						}
 					}
 				}
 			}
@@ -552,6 +567,20 @@ public class Mapper {
 				} catch (NumberFormatException e) {
 					System.out.println(this.getClass().getName() + " Node Attribute named: " + key
 							+ " - does not match the available Mapper data type: Double,Float,Integer");
+				}
+			} else {
+
+				if (value instanceof String) {
+					try {
+						float rtn = Float.parseFloat((String) (value));
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!nodeAttributesMin.addLowerValue(key, rtn)) {
+							nodeAttributesMax.addHigherValue(key, rtn);
+						}
+					} catch (NumberFormatException e) {
+						//
+					}
 				}
 			}
 		}
@@ -620,6 +649,20 @@ public class Mapper {
 						System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
 								+ " - does not match the available Mapper data type: Double,Float,Integer");
 					}
+				} else {
+
+					if (value instanceof String) {
+						try {
+							float rtn = Float.parseFloat((String) (value));
+							// add to collection of min attributes else to
+							// collection of max Attributes
+							if (!nodeAttributesMin.addLowerValue(key, rtn)) {
+								nodeAttributesMax.addHigherValue(key, rtn);
+							}
+						} catch (NumberFormatException e) {
+							//
+						}
+					}
 				}
 			}
 		}
@@ -685,6 +728,20 @@ public class Mapper {
 				} catch (NumberFormatException e) {
 					System.out.println(this.getClass().getName() + " Edge Attribute named: " + key
 							+ " - does not match the available Mapper data type: Double,Float,Integer");
+				}
+			} else {
+
+				if (value instanceof String) {
+					try {
+						float rtn = Float.parseFloat((String) (value));
+						// add to collection of min attributes else to
+						// collection of max Attributes
+						if (!nodeAttributesMin.addLowerValue(key, rtn)) {
+							nodeAttributesMax.addHigherValue(key, rtn);
+						}
+					} catch (NumberFormatException e) {
+						//
+					}
 				}
 			}
 		}

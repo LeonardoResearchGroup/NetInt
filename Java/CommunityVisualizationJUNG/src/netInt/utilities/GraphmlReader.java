@@ -126,7 +126,9 @@ public class GraphmlReader {
 			int id = Integer.parseInt(vertex.getId().toString().replace("n", ""));
 
 			// Make a node with the retrieved ID
-			Node nodeTmp = new Node(String.valueOf(id));
+			//Node nodeTmp = new Node(String.valueOf(id));
+			
+			Node nodeTmp = new Node(vertex.getId().toString());
 
 			try {
 				// For the first two attributes: node community and node
