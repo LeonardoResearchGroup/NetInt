@@ -495,7 +495,7 @@ public class ControlPanel extends PApplet {
 	 * @param group
 	 *            The Group of GUI elements
 	 */
-	private void setEstadisticasDescriptivasComponent() {
+	public void setEstadisticasDescriptivasComponent() {
 		// Set new names
 		for (int i = 0; i < keyNamesForNodes.size(); i++) {
 			cBox.addItem(keyNamesForNodes.get(i), 1);
@@ -839,7 +839,7 @@ public class ControlPanel extends PApplet {
 		}
 	}
 
-	private void setKeyNamesForNodes(ArrayList<String> keyNames) {
+	public void setKeyNamesForNodes(ArrayList<String> keyNames) {
 		keyNamesForNodes = keyNames;
 	}
 

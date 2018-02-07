@@ -31,7 +31,7 @@ public class VNodeDescription implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int width = 160;
+	private int width = 400;
 	private int height = -113;
 
 	public VNodeDescription() {
