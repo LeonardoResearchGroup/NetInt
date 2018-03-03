@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_label" for="node" attr.name="label" attr.type="string"/>
+  <key id="v_r" for="node" attr.name="r" attr.type="double"/>
+  <key id="v_g" for="node" attr.name="g" attr.type="double"/>
+  <key id="v_b" for="node" attr.name="b" attr.type="double"/>
+  <key id="v_x" for="node" attr.name="x" attr.type="double"/>
+  <key id="v_y" for="node" attr.name="y" attr.type="double"/>
+  <key id="v_size" for="node" attr.name="size" attr.type="double"/>
+  <key id="v_Continent" for="node" attr.name="Continent" attr.type="string"/>
+  <key id="v_Degree" for="node" attr.name="Degree" attr.type="double"/>
+  <key id="v_anotherOne" for="node" attr.name="anotherOne" attr.type="string"/>
+  <key id="e_weight" for="edge" attr.name="weight" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="n0">
+      <data key="v_label">Alaska</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-1042.5549</data>
+      <data key="v_y">800.05237</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n1">
+      <data key="v_label">Alberta</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-965.617</data>
+      <data key="v_y">650.5191</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n2">
+      <data key="v_label">Central America</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-855.8108</data>
+      <data key="v_y">310.53265</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n3">
+      <data key="v_label">Eastern United States</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-634.1504</data>
+      <data key="v_y">413.30655</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n4">
+      <data key="v_label">Greenland</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-485.89874</data>
+      <data key="v_y">726.47687</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n5">
+      <data key="v_label">Northwest Territory</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-752.58777</data>
+      <data key="v_y">698.2208</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n6">
+      <data key="v_label">Ontario</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-708.7735</data>
+      <data key="v_y">594.1668</data>
+      <data key="v_size">29.5</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">6</data>
+      <data key="v_anotherOne">29</data>
+    </node>
+    <node id="n7">
+      <data key="v_label">Quebec</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-537.29614</data>
+      <data key="v_y">596.5044</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n8">
+      <data key="v_label">Western United States</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">-883.5176</data>
+      <data key="v_y">400.7138</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">North America</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n9">
+      <data key="v_label">Argentina</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-750.68085</data>
+      <data key="v_y">-258.2079</data>
+      <data key="v_size">11</data>
+      <data key="v_Continent">South America</data>
+      <data key="v_Degree">2</data>
+      <data key="v_anotherOne">11</data>
+    </node>
+    <node id="n10">
+      <data key="v_label">Brazil</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-578.8207</data>
+      <data key="v_y">95.51556</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">South America</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n11">
+      <data key="v_label">Peru</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-839.4538</data>
+      <data key="v_y">66.323494</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">South America</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n12">
+      <data key="v_label">Venezuela</data>
+      <data key="v_r">10</data>
+      <data key="v_g">155</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-800.8732</data>
+      <data key="v_y">230.59958</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">South America</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n13">
+      <data key="v_label">Great Britain</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-332.90292</data>
+      <data key="v_y">524.634</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n14">
+      <data key="v_label">Iceland</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-364.09186</data>
+      <data key="v_y">629.38806</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n15">
+      <data key="v_label">Northern Europe</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-151.20024</data>
+      <data key="v_y">549.275</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n16">
+      <data key="v_label">Scandinavia</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-153.83685</data>
+      <data key="v_y">677.851</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n17">
+      <data key="v_label">Southern Europe</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-65.35152</data>
+      <data key="v_y">398.87354</data>
+      <data key="v_size">29.5</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">6</data>
+      <data key="v_anotherOne">29</data>
+    </node>
+    <node id="n18">
+      <data key="v_label">Ukraine</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">19.938993</data>
+      <data key="v_y">627.1872</data>
+      <data key="v_size">29.5</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">6</data>
+      <data key="v_anotherOne">29</data>
+    </node>
+    <node id="n19">
+      <data key="v_label">Western Europe</data>
+      <data key="v_r">10</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-367.0421</data>
+      <data key="v_y">402.1119</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Europe</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n20">
+      <data key="v_label">Congo</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-194.52162</data>
+      <data key="v_y">38.064728</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Afrika</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n21">
+      <data key="v_label">East Africa</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">43.041737</data>
+      <data key="v_y">132.38548</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Afrika</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n22">
+      <data key="v_label">Egypt</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-74.15408</data>
+      <data key="v_y">226.5307</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Afrika</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n23">
+      <data key="v_label">Madagascar</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">103.997406</data>
+      <data key="v_y">-65.02855</data>
+      <data key="v_size">11</data>
+      <data key="v_Continent">Afrika</data>
+      <data key="v_Degree">2</data>
+      <data key="v_anotherOne">11</data>
+    </node>
+    <node id="n24">
+      <data key="v_label">North Africa</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-390.78125</data>
+      <data key="v_y">237.44565</data>
+      <data key="v_size">29.5</data>
+      <data key="v_Continent">Afrika</data>
+      <data key="v_Degree">6</data>
+      <data key="v_anotherOne">29</data>
+    </node>
+    <node id="n25">
+      <data key="v_label">South Africa</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">155</data>
+      <data key="v_x">-153.35904</data>
+      <data key="v_y">-279.9642</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Afrika</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n26">
+      <data key="v_label">Afghanistan</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">298.08743</data>
+      <data key="v_y">420.12177</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n27">
+      <data key="v_label">China</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">746.3982</data>
+      <data key="v_y">360.59036</data>
+      <data key="v_size">29.5</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">6</data>
+      <data key="v_anotherOne">29</data>
+    </node>
+    <node id="n28">
+      <data key="v_label">India</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">379.3944</data>
+      <data key="v_y">172.85866</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n29">
+      <data key="v_label">Irkutsk</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">607.9373</data>
+      <data key="v_y">638.63245</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n30">
+      <data key="v_label">Japan</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">810.5609</data>
+      <data key="v_y">520.43176</data>
+      <data key="v_size">11</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">2</data>
+      <data key="v_anotherOne">11</data>
+    </node>
+    <node id="n31">
+      <data key="v_label">Kamchatka</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">779.1365</data>
+      <data key="v_y">788.1859</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n32">
+      <data key="v_label">Middle East</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">122.361</data>
+      <data key="v_y">278.72833</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n33">
+      <data key="v_label">Mongolia</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">673.6792</data>
+      <data key="v_y">488.58966</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n34">
+      <data key="v_label">Siam</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">683.82166</data>
+      <data key="v_y">232.5715</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n35">
+      <data key="v_label">Siberia</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">323.74176</data>
+      <data key="v_y">602.1527</data>
+      <data key="v_size">24.875</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">5</data>
+      <data key="v_anotherOne">24</data>
+    </node>
+    <node id="n36">
+      <data key="v_label">Ural</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">163.57271</data>
+      <data key="v_y">595.91754</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n37">
+      <data key="v_label">Yakutsk</data>
+      <data key="v_r">155</data>
+      <data key="v_g">155</data>
+      <data key="v_b">10</data>
+      <data key="v_x">516.5769</data>
+      <data key="v_y">734.2418</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Asia</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n38">
+      <data key="v_label">Eastern Australia</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">10</data>
+      <data key="v_x">685.7429</data>
+      <data key="v_y">-142.88466</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Australia</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n39">
+      <data key="v_label">Indonesia</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">10</data>
+      <data key="v_x">678.5824</data>
+      <data key="v_y">161.41547</data>
+      <data key="v_size">20.25</data>
+      <data key="v_Continent">Australia</data>
+      <data key="v_Degree">4</data>
+      <data key="v_anotherOne">20</data>
+    </node>
+    <node id="n40">
+      <data key="v_label">New Guinea</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">10</data>
+      <data key="v_x">961.6873</data>
+      <data key="v_y">33.78579</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Australia</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <node id="n41">
+      <data key="v_label">Western Australia</data>
+      <data key="v_r">155</data>
+      <data key="v_g">10</data>
+      <data key="v_b">10</data>
+      <data key="v_x">783.27106</data>
+      <data key="v_y">-4.45732</data>
+      <data key="v_size">15.625</data>
+      <data key="v_Continent">Australia</data>
+      <data key="v_Degree">3</data>
+      <data key="v_anotherOne">15</data>
+    </node>
+    <edge source="n0" target="n1">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n0" target="n5">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n0" target="n31">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n1" target="n5">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n1" target="n6">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n1" target="n8">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n2" target="n3">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n2" target="n8">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n2" target="n12">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n3" target="n6">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n3" target="n7">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n3" target="n8">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n4" target="n5">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n4" target="n6">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n4" target="n14">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n5" target="n6">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n6" target="n7">
+      <data key="e_weight">100000000</data>
+    </edge>
+    <edge source="n7" target="n4">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n8" target="n6">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n9" target="n10">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n10" target="n24">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n11" target="n9">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n11" target="n10">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n12" target="n10">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n12" target="n11">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n13" target="n15">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n13" target="n16">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n13" target="n19">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n14" target="n13">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n14" target="n16">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n15" target="n16">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n15" target="n17">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n15" target="n18">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n16" target="n18">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n17" target="n18">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n17" target="n22">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n17" target="n24">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n17" target="n32">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n18" target="n26">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n18" target="n36">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n19" target="n15">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n19" target="n17">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n19" target="n24">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n20" target="n25">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n21" target="n20">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n21" target="n23">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n21" target="n25">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n22" target="n21">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n22" target="n32">
+      <data key="e_weight">100000000</data>
+    </edge>
+    <edge source="n24" target="n20">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n24" target="n21">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n24" target="n22">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n25" target="n23">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n26" target="n27">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n26" target="n28">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n26" target="n36">
+      <data key="e_weight">100000000</data>
+    </edge>
+    <edge source="n27" target="n33">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n27" target="n34">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n27" target="n35">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n27" target="n36">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n28" target="n27">
+      <data key="e_weight">10000000</data>
+    </edge>
+    <edge source="n28" target="n34">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n29" target="n31">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n29" target="n35">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n29" target="n37">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n30" target="n33">
+      <data key="e_weight">100000000</data>
+    </edge>
+    <edge source="n31" target="n30">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n32" target="n18">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n32" target="n26">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n32" target="n28">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n33" target="n29">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n33" target="n31">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n33" target="n35">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n34" target="n39">
+      <data key="e_weight">1000000</data>
+    </edge>
+    <edge source="n35" target="n36">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n35" target="n37">
+      <data key="e_weight">100000000</data>
+    </edge>
+    <edge source="n37" target="n31">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n38" target="n40">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n39" target="n38">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n39" target="n40">
+      <data key="e_weight">100000</data>
+    </edge>
+    <edge source="n39" target="n41">
+      <data key="e_weight">10000</data>
+    </edge>
+    <edge source="n40" target="n41">
+      <data key="e_weight">1000</data>
+    </edge>
+    <edge source="n41" target="n38">
+      <data key="e_weight">10000</data>
+    </edge>
+  </graph>
+</graphml>

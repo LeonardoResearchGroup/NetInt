@@ -70,6 +70,17 @@ public class Node extends GraphElement implements Serializable, Comparable<Node>
 		}
 		return rtn;
 	}
+	
+	// Methods community related
+
+	public boolean belongsTo(String community, String communityTag) {
+//		printAttributes();
+		boolean rtn = false;
+		if(getStringAttribute(communityTag).equals(community)){
+			rtn = true;
+		}
+		return rtn;
+	}
 
 	public String getCommunityNames() {
 		String communities = "";

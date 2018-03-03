@@ -97,27 +97,72 @@ public class Filters {
 			return problemGraph;
 		}
 	}
-//	
-//	/**
-//	 * Returns a subgraph of jungGraph whose nodes belong to the specified
-//	 * community. It uses CUSTOM MADE filtering that outperforms JUNG's predicates
-//	 * @param community community name
-//	 * 
-//	 * @return a subgraph in form of DirectedSparseMultigraph
-//	 */
-//	public static DirectedSparseMultigraph<Node, Edge> filterNodeInCommunity(final String community) {
-//
-//		// Check if this filter was used with this community before. If so,
-//		// return the stored result
-//		String key = makeKey(community, "edgeInterCommunities");
-//		
-//		if (filteredResults.containsKey(key)) {
-//			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(key);
-//		} else {
-//
-//		
-//		}
-//	}
+	
+	/**
+	 * Returns a subgraph of jungGraph whose nodes belong to the specified
+	 * community from a specified graph.
+	 * 
+	 * @return
+	 */
+	public static DirectedSparseMultigraph<Node, Edge> filterNodeInCommunity(final String community, DirectedSparseMultigraph<Node, Edge> graph ) {
+
+		// Check if this filter was used with this community before. If so,
+		// return the stored result
+		String key = makeKey(community, "edgeInterCommunities");
+		if (filteredResults.containsKey(key)) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(key);
+		} else {
+
+			// Make the predicate
+			VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(
+					Predicates.nodeInCommunity(community));
+			// Filter the graph
+			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+					.transform(graph);
+			// Set In and Out Degree
+			for (Node n : problemGraph.getVertices()) {
+				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
+				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
+			}
+			// System.out.println(getInstance().getClass().getName() + "
+			// filter:"+ key);
+			// filterResults.put(key, problemGraph);
+			return problemGraph;
+		}
+	}
+	
+	/**
+	 * Returns a subgraph of jungGraph whose nodes belong to the specified
+	 * community from a specified graph.
+	 * 
+	 * @return
+	 */
+	public static DirectedSparseMultigraph<Node, Edge> filterNodeInCommunity(final String community, DirectedSparseMultigraph<Node, Edge> graph, final String communityTag ) {
+
+		// Check if this filter was used with this community before. If so,
+		// return the stored result
+		String key = makeKey(community, "edgeInterCommunities");
+		if (filteredResults.containsKey(key)) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(key);
+		} else {
+
+			// Make the predicate
+			VertexPredicateFilter<Node, Edge> filter = new VertexPredicateFilter<Node, Edge>(
+					Predicates.nodeInCommunity(community,communityTag));
+			// Filter the graph
+			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+					.transform(graph);
+			// Set In and Out Degree
+			for (Node n : problemGraph.getVertices()) {
+				n.setOutDegree(n.getMetadataSize() - 1, problemGraph.getSuccessorCount(n));
+				n.setInDegree(n.getMetadataSize() - 1, problemGraph.getPredecessorCount(n));
+			}
+			// System.out.println(getInstance().getClass().getName() + "
+			// filter:"+ key);
+			// filterResults.put(key, problemGraph);
+			return problemGraph;
+		}
+	}
 
 	/**
 	 * Returns a subgraph of jungGraph whose edges connect the specified
@@ -146,6 +191,43 @@ public class Filters {
 			// Filter and extractor
 			EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
 					Predicates.edgeLinkingCommunities(communityNameA, communityNameB));
+			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
+					.transform(GraphLoader.theGraph);
+			// filterResults.put(keys[0], problemGraph);
+			return problemGraph;
+		}
+	}
+	
+	/**
+	 * Returns a subgraph of a jungGraph whose edges connect the specified
+	 * communities in either direction
+	 * 
+	 * @param communityNameA
+	 *            The name of one community
+	 * @param communityNameB
+	 *            The name of a second community
+	 * @param graph
+	 *            The jung graph
+	 * @return
+	 */
+	public static DirectedSparseMultigraph<Node, Edge> filterEdgeLinkingCommunities(final String communityNameA,
+			final String communityNameB, final String communityTag,  DirectedSparseMultigraph<Node, Edge> graph) {
+
+		// Check if this filter was used in these communities before. If so,
+		// return the stored result
+		String[] keys = makeDoubleKey(communityNameA, communityNameB, "edgeInterCommunities");
+		if (filteredResults.containsKey(keys[0])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(keys[0]);
+		} else if (filteredResults.containsKey(keys[1])) {
+			return (DirectedSparseMultigraph<Node, Edge>) filteredResults.get(keys[1]);
+		} else {
+
+			// System.out.println(getInstance().getClass().getName() + " filter:
+			// " + keys[0]);
+			// Filter and extractor
+			System.out.println(getInstance().getClass().getName() + " tamño de grafo: N:"+graph.getVertexCount()+" E:"+graph.getEdgeCount());
+			EdgePredicateFilter<Node, Edge> filter = new EdgePredicateFilter<Node, Edge>(
+					Predicates.edgeLinkingCommunities(communityNameA, communityNameB, communityTag));
 			DirectedSparseMultigraph<Node, Edge> problemGraph = (DirectedSparseMultigraph<Node, Edge>) filter
 					.transform(GraphLoader.theGraph);
 			// filterResults.put(keys[0], problemGraph);

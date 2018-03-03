@@ -64,7 +64,7 @@ public class SubContainer extends Container implements Serializable {
 		setDimension(dimension);
 		this.color = color;
 	}
-
+	
 	/**
 	 * Get instances of the visual elements from a given list whose Nodes are
 	 * included in the Container's graph
@@ -72,6 +72,7 @@ public class SubContainer extends Container implements Serializable {
 	 * @param vCommunities
 	 *            Visual Communities
 	 */
+	 /*Deprecated
 	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
 		// For each node of this container's Graph
 		for (Node n : graph.getVertices()) {
@@ -82,6 +83,7 @@ public class SubContainer extends Container implements Serializable {
 				 * If the current node of the subGraph matches the node inside
 				 * the VisualAtom retrieved from the collection of visual atoms
 				 */
+				 /*
 				if (n.equals(vC.getNode())) {
 					vNodes.put(n.getId(),vC);
 					
@@ -94,6 +96,8 @@ public class SubContainer extends Container implements Serializable {
 			}
 		}
 	}
+	
+	*/
 
 	/**
 	 * Get instances of the visual elements from a given graph (usually
@@ -170,6 +174,19 @@ public class SubContainer extends Container implements Serializable {
 				}
 			}
 		}
+	}
+
+	/**
+
+	 * Set instances of the visual elements from a given list 
+	 * 
+	 * @param vCommunities
+	 */
+	public void assignVisualElements(ArrayList<VCommunity> vCommunities) {
+			for (VCommunity vC : vCommunities) {
+				vNodes.put(vC.getNode().getId(), vC);
+			}
+//		}
 	}
 
 	/**

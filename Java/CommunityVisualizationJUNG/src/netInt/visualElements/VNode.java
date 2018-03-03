@@ -78,6 +78,7 @@ public class VNode extends VisualAtom implements Serializable {
 		propagationSteps = 0;
 		description = new VNodeDescription();
 		visible = false;
+		
 		// Register mouse, touch or key events triggered on this object in the
 		// context of the canvas
 		registerEvents();

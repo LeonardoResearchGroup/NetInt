@@ -19,6 +19,8 @@ package netInt.utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
@@ -106,6 +108,15 @@ public class GraphLoader {
 			return null;
 		}
 	}
+	//This should be deleted.
+	//public ArrayList<String> getCommunityNames2() {
+	//		System.out.println("Borrar");
+	//		return GMLreader.getCommunities2();
+	//}
+	
+	public LinkedHashMap<String, ArrayList<String>> getNestedCommunities() {
+		return GMLreader.getNestedCommunities();
+}
 
 	/**
 	 * Uses 0 as index because this method is only used for root Graphs
@@ -150,6 +161,19 @@ public class GraphLoader {
 			return GMLreader.getEdgesBetweenCommunities();
 		else if (fileFormat == GraphLoader.PAJEK)
 			return PJKreader.getEdgesBetweenCommunities();
+		else
+			return null;
+	}
+	
+	/**
+		It is to get edges between VCommunities
+	*/
+
+	public HashMap<String,ArrayList<Edge>> getCommunitiesOrderEdgeList() {
+		if (fileFormat == GraphLoader.GRAPHML)
+			return GMLreader.getEdgesBetweenCommunitiesPerClassifier();
+		//else if (fileFormat == GraphLoader.PAJEK)
+		//	return PJKreader.getEdgesBetweenCommunities();
 		else
 			return null;
 	}

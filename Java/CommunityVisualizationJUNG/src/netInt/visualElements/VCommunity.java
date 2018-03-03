@@ -269,7 +269,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 						if (vC.comCover.isDeployed()) {
 
 							// build external edges
-							vC.container.buildExternalEdges(container.getVCommunities());
+							vC.container.buildExternalEdges(container.getVCommunities(), (DirectedSparseMultigraph<Node, Edge>)this.container.getGraph());
+						
 						}
 					}
 

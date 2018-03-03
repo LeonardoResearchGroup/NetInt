@@ -60,6 +60,12 @@ public abstract class Container {
 	public static final int CONCENTRIC = 4;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
+	
+	//This could be deprecated in the future
+	//This is a graph made of nodes in opposite of "graph" which could be made of communities
+	protected Graph<Node, Edge> graphOfNodes;
+
+
 	// Visual Elements
 	// All VNodes including VCommunities
 	protected HashMap<String, VNode> vNodes;
@@ -68,6 +74,9 @@ public abstract class Container {
 
 	// Custom Layouts
 	protected String name = "no name";
+	//Variable which this community was generated
+	protected String communityTag = "no tag";
+
 	private PVector layoutCenter;
 	public AbstractLayout<Node, Edge> layout;
 	public int currentLayout;
@@ -192,18 +201,6 @@ public abstract class Container {
 		// For all the nodes in the graph
 		degreeThreshold = 0;
 
-		// System.out.println(this.getClass().getName() + " numberNodes: " +
-		// numberNodes);
-
-		// Percentage of degree threshold (0-100)
-		// float degreeThresholdPercentage = 0;
-
-		// int degreeThresholdPosition = (int) ((degreeThresholdPercentage /
-		// 100) * numberNodes) - 1;
-		//
-		// System.out.println(this.getClass().getName() + " operacion: "
-		// + ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
-
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
@@ -217,26 +214,7 @@ public abstract class Container {
 		// Nodes sorted for adaptive performance
 		Arrays.sort(degrees);
 
-		// degreeThreshold = degreeThreshold /
-		// this.getGraph().getVertices().size();
-		// degreeThreshold = 1000;
 
-		// if(degreeThresholdPosition < 0){
-		//
-		// degreeThreshold = 0;
-		//
-		// }else{
-		// degreeThreshold = degrees[degreeThresholdPosition];
-		// }
-		//
-		// System.out.println(this.getClass().getName() + " degreeThreshold: " +
-		// degreeThreshold);
-		//
-		// System.out.println(this.getClass().getName() + "
-		// degreeThresholdPosition: " + degreeThresholdPosition);
-
-		// System.out.println(this.getClass().getName() + " Degrees of
-		// container's Graph assigned");
 	}
 
 	/**
@@ -317,8 +295,10 @@ public abstract class Container {
 	 * 
 	 * @param otherVCommunities
 	 *            The VCommunities different than this one
+	 * @param graph
+	 *            The graph to which external edges are built
 	 */
-	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities) {
+	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities, DirectedSparseMultigraph<Node, Edge> graph) {
 		// For all otherCommunities
 		for (VCommunity vC : otherVCommunities) {
 
@@ -337,7 +317,7 @@ public abstract class Container {
 						System.out.println(this.getClass().getName() + " " + this.getName()
 								+ " is building External Edges for Vnodes with:" + otherContainer.getName());
 
-						this.runExternalEdgeFactory(otherContainer.getName(), otherContainer);
+						this.runExternalEdgeFactory(otherContainer.getName(), otherContainer, graph);
 
 						this.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, otherContainer);
 
@@ -355,6 +335,7 @@ public abstract class Container {
 	}
 
 	/**
+     * Must be deprecated
 	 * Builds all the external edges of this container with the one of a
 	 * deployed community community
 	 * 
@@ -376,7 +357,7 @@ public abstract class Container {
 					System.out.println(this.getClass().getName() + " " + this.getName()
 							+ " is building External Edges for Vnodes with:" + otherContainer.getName());
 
-					this.runExternalEdgeFactory(otherContainer.getName(), otherContainer);
+					this.runExternalEdgeFactory(otherContainer.getName(), otherContainer, (DirectedSparseMultigraph<Node, Edge>)this.graph);
 
 					this.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, otherContainer);
 
@@ -807,14 +788,16 @@ public abstract class Container {
 	 *            Name of external community
 	 * @param externalContainer
 	 *            External container
+     * @param graph
+	 *            The graph to which edges are built
 	 */
-	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer) {
+	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer, DirectedSparseMultigraph<Node, Edge> graph) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
 		HashMap<String, VNode> vNodesBothCommunities = new HashMap<String, VNode>(this.vNodes);
 		vNodesBothCommunities.putAll(externalContainer.getVNodesById());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName);
+		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName, communityTag, graph);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
@@ -901,5 +884,14 @@ public abstract class Container {
 				originShifted.x + (dimension.width / 2), originShifted.y + dimension.height);
 		Canvas.app.line(originShifted.x, originShifted.y + (dimension.height / 2), originShifted.x + +(dimension.width),
 				originShifted.y + +(dimension.height / 2));
+	}
+	
+	
+	public void setGraphOfNodes(Graph<Node, Edge> graphOfNodes) {
+		this.graphOfNodes = graphOfNodes;
+	}
+	
+	public void setCommunityTag(String communitieTag) {
+		this.communityTag = communitieTag;
 	}
 }

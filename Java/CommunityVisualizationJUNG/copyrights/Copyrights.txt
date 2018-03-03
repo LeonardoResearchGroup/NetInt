@@ -21,7 +21,7 @@ Source: https://processing.org/
 License: LGPL license
 Authors: https://processing.org/people/
 
-JOGL
+Processing uses JOGL
 Source: http://jogamp.org/jogl/www/
 License: New BSD 2-Clause License http://jogamp.org/git/?p=jogl.git;a=blob;f=LICENSE.txt
 Authors: 
