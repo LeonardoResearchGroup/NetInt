@@ -176,9 +176,10 @@ public abstract class Container {
 	public void runVEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
-			vEdge.setSourceAndTarget(vNodes);
-			vEdge.makeBezier();
-			vEdges.add(vEdge);
+			if(vEdge.setSourceAndTarget(vNodes)){
+				vEdge.makeBezier();
+				vEdges.add(vEdge);
+			}
 
 		}
 	}
@@ -495,7 +496,8 @@ public abstract class Container {
 	public void retrieveExternalVNodeSuccessors(Graph<Node, Edge> graph, Container extContainer) {
 		for (VNode tmp : vNodes.values()) {
 			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
-			tmp.setVNodeSuccessors(extContainer.getVNodes(nodes));
+			if(nodes != null)
+				tmp.setVNodeSuccessors(extContainer.getVNodes(nodes));
 		}
 	}
 
@@ -702,7 +704,7 @@ public abstract class Container {
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
 		for (VNode vN : vNodes.values()) {
-
+			System.out.println("Node without node: "+ vN.getNode().getName());
 			if (c.contains(vN.getNode())) {
 				rtn.add(vN);
 			}
@@ -804,17 +806,18 @@ public abstract class Container {
 			// Make a VEdge
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			// Set source and target nodes
-			vEdge.setSourceAndTarget(vNodesBothCommunities);
-			// Make the linking curve
-			vEdge.makeBezier();
-			// Add vEdge to externalEdges of this container if the source node
-			// belongs to this container
-			if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {
-				vExtEdges.add(vEdge);
-			} else {
-				// Otherwise, add it to externalEdges of the external container
-				if (!externalContainer.vExtEdges.contains(vEdge)) {
-					externalContainer.vExtEdges.add(vEdge);
+			if(vEdge.setSourceAndTarget(vNodesBothCommunities)){;
+				// Make the linking curve
+				vEdge.makeBezier();
+				// Add vEdge to externalEdges of this container if the source node
+				// belongs to this container
+				if (this.graph.containsVertex(edgeBetweenCommunities.getSource())) {
+					vExtEdges.add(vEdge);
+				} else {
+					// Otherwise, add it to externalEdges of the external container
+					if (!externalContainer.vExtEdges.contains(vEdge)) {
+						externalContainer.vExtEdges.add(vEdge);
+					}
 				}
 			}
 		}

@@ -103,6 +103,8 @@ public class Assembler {
 	
 	//Data structure for nested communities
 	private HashMap<String,ArrayList<Edge>> communitiesOrderEdgeList;
+	
+	private HashMap<String, Node> vCommunityNodesPerClassifier; 
 
 	/**
 	 * Loads and builds a graph from a given graph-formated file (graphml or
@@ -137,6 +139,7 @@ public class Assembler {
 		Filters.getInstance().setRootGraph();
 		
 		communitiesOrderEdgeList =  rootGraph.getCommunitiesOrderEdgeList();
+		vCommunityNodesPerClassifier = rootGraph.getvCommunityNodesPerClassifier();
 
 		/*
 		 * ArrayList<String>comm1 = rootGraph.getCommunityNames();
@@ -432,8 +435,9 @@ public class Assembler {
 				containerTemp.setCommunityTag(communityTag);
 
 				// Make Node for CommunityCover
-				Node tmpNode = new Node(communityName);
-
+				//Node tmpNode = new Node(communityName);
+				Node tmpNode = vCommunityNodesPerClassifier.get(communityName);
+				
 				// Name Node
 				tmpNode.setName(communityName);
 
@@ -486,7 +490,12 @@ public class Assembler {
 		// containerTemp.initialize();
 
 		// Make Node for CommunityCover
-		Node tmpNode = new Node(nameCommunity);
+		//Node tmpNode = new Node(nameCommunity);
+		Node tmpNode;
+		if(nameCommunity == "basic")
+			tmpNode = new Node(nameCommunity);
+		else
+			tmpNode = vCommunityNodesPerClassifier.get(nameCommunity);
 
 		containerTemp.assignVisualElements(vCommunities);
 		

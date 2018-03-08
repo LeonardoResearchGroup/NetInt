@@ -110,6 +110,7 @@ public class GraphmlReader {
 		subGraphs = new HashMap<String, DirectedSparseMultigraph<Node, Edge>>();
 	}
 
+
 	/**
 	 * This class was initially designed to return an array of nodes but it
 	 * needed to be changed to a TreeMap because it was not possible to
@@ -606,6 +607,10 @@ public class GraphmlReader {
 	
 	public LinkedHashMap<String, ArrayList<String>> getNestedCommunities() {
 		return nestedCommunities;
+	}
+	
+	public HashMap<String, Node> getvCommunityNodesPerClassifier() {
+		return vCommunityNodesPerClassifier;
 	}
 
 }

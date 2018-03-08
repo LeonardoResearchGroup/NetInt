@@ -177,5 +177,9 @@ public class GraphLoader {
 		else
 			return null;
 	}
+	
+	public HashMap<String, Node> getvCommunityNodesPerClassifier() {
+		return GMLreader.getvCommunityNodesPerClassifier();
+	}
 
 }
