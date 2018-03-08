@@ -266,8 +266,10 @@ public abstract class VisualAtom implements Serializable {
 
 		// Move VAtom
 		if (MouseHook.getInstance().isHooked(this) && displayed) {
-			pos = Canvas.getCanvasMouse().sub(deltaMouse);
-			isDragged = true;
+			if(deltaMouse != null){
+				pos = Canvas.getCanvasMouse().sub(deltaMouse);
+				isDragged = true;
+			}
 		}
 	}
 
