@@ -171,7 +171,7 @@ public class Assembler {
 		// "FirstOrderCommunity", layout);
 		firstOrderVComm = createStructureRecursive((DirectedSparseMultigraph<Node, Edge>) GraphLoader.theGraph, hmap,
 				"basic", layout);
-		//firstOrderVComm.initialize();
+		firstOrderVComm.initialize();
 
 
 		Canvas.app.cursor(PConstants.ARROW);

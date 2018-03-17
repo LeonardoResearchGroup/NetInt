@@ -135,6 +135,8 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 
 				retrieveVNodeSuccessors(layout.getGraph());
+				
+				initializeElements();
 
 			} else {
 				System.out
@@ -142,6 +144,8 @@ public abstract class Container {
 				runVEdgeFactory();
 
 				setVElementCoordinates();
+				
+				initializeElements();
 			}
 
 			iterativeLayout = isCurrentLayoutIterative();
@@ -896,5 +900,15 @@ public abstract class Container {
 	
 	public void setCommunityTag(String communitieTag) {
 		this.communityTag = communitieTag;
+	}
+	
+	/**
+	 * Register events of every node.
+	 */
+	private void initializeElements() {
+//		System.out.println(this.getClass().getName() + " Comunidad:"+getName() + " Inicializando");
+		for (VNode vN : vNodes.values()) {
+			vN.initialize();
+		}
 	}
 }
