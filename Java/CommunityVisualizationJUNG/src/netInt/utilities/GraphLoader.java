@@ -78,10 +78,19 @@ public class GraphLoader {
 			subGraphs = GMLreader.getSubGraphs();
 			totalCommunities = GMLreader.getCommunities().size();
 		}
+		int totNodes = theGraph.getVertexCount();
+		int totEdges = theGraph.getEdgeCount();
+		
 		System.out.println("     Jung Graph Created from file:" + file);
-		System.out.println("        Total Nodes in the graph: " + theGraph.getVertexCount());
-		System.out.println("        Total Edges in the graph: " + theGraph.getEdgeCount());
+		System.out.println("        Total Nodes in the graph: " + totNodes);
+		System.out.println("        Total Edges in the graph: " + totEdges);
+		System.out.println("        Graph Density (indirected edges): " + (2*totEdges)/(totNodes*(totNodes-1f)));
+		System.out.println("        Graph Density (directed edges): " + totEdges/(totNodes*(totNodes-1f)));
 		System.out.println("     " + totalCommunities + " communities names identified");
+
+		
+	 
+
 
 		// Iterate over elements to set attributes of nodes in the
 		// GraphElements and Mapping
