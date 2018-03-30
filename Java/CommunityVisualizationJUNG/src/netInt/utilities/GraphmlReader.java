@@ -333,15 +333,16 @@ public class GraphmlReader {
 			
 			//Creates edges between VCommunities v2.0
 			for(String classifier: nestedAttributesOrder){
+
 				// For the first order community graph
-				Edge metaE = new Edge(vCommunityNodesPerClassifier.get(nodes.get(idSource).getAttribute(classifier)),
-						vCommunityNodesPerClassifier.get(nodes.get(idTarget).getAttribute(classifier)), true);
+				Edge metaE = new Edge(vCommunityNodesPerClassifier.get(nodes.get(idSource).getAttribute(classifier).toString()),
+						vCommunityNodesPerClassifier.get(nodes.get(idTarget).getAttribute(classifier).toString()), true);
 				// if no attributes selected set the weight to 1
 				metaE.setAbsoluteAttribute("weight", 1);
 	
 				if (!edgesBetweenCommunitiesPerClassifier.get(classifier).contains(metaE)) {
-					System.out.println(classifier);
-					System.out.println("Veces");
+//					System.out.println(classifier);
+//					System.out.println("Veces");
 					
 					edgesBetweenCommunitiesPerClassifier.get(classifier).add(metaE);
 				}

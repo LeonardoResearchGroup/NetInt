@@ -23,12 +23,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import org.jcolorbrewer.ColorBrewer;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-
+import jViridis.ColorGradient;
 import netInt.containers.RootContainer;
 import netInt.containers.SubContainer;
 import netInt.graphElements.Edge;
@@ -170,7 +171,7 @@ public class Assembler {
 		// secondOrderVComm,
 		// "FirstOrderCommunity", layout);
 		firstOrderVComm = createStructureRecursive((DirectedSparseMultigraph<Node, Edge>) GraphLoader.theGraph, hmap,
-				"basic", layout);
+				"basic", layout, null);
 		firstOrderVComm.initialize();
 
 
@@ -370,7 +371,7 @@ public class Assembler {
 	 * @return
 	 */
 	public VCommunity createStructureRecursive(DirectedSparseMultigraph<Node, Edge> graph,
-			LinkedHashMap<String, ArrayList<String>> communityClassifiers, String nameCommunity, int layout) {
+			LinkedHashMap<String, ArrayList<String>> communityClassifiers, String nameCommunity, int layout,  Stack<Color> colors) {
 
 		// VCommunities whose will be added to 'nameCommunity'
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
@@ -385,15 +386,26 @@ public class Assembler {
 		System.out.println(
 				this.getClass().getName() + " Number of communities for " + nameCommunity + " " + numberOfCommunities);
 
-		// Color
-		boolean colorBlindSafe = false;
-		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
-		ColorBrewer myBrewer = qualitativePalettes[2];
-		Color[] myGradient = myBrewer.getColorPalette(numberOfCommunities);
-		//
+		// Color	
+		Color[] qualitativePalette = null;
+		if(nameCommunity == "basic") {
+			boolean colorBlindSafe = false;
+			ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
+			ColorBrewer myBrewer = qualitativePalettes[2];
+			qualitativePalette = myBrewer.getColorPalette(numberOfCommunities);
+		}
+		
 		
 		
 		for (int i = 0; i < numberOfCommunities; i++) {
+			
+			if(nameCommunity == "basic") {
+				colors = ColorGradient.getColorGradientAsStack(qualitativePalette[i], communityClassifiers.size() + 1);
+				
+			}
+			
+			System.out.println("Color: " + colors.peek().toString());
+			System.out.println("Colors size: " + colors.size());
 
 			String communityName = communityClassifiers.get(communityTag).get(i);
 
@@ -424,11 +436,11 @@ public class Assembler {
 			// decreases by 1 until there is only 1 object in that list, thus
 			// when its size is equal to 1 it reached the last instance
 			if (communityClassifiers.size() == 1) {
-
+				
 				// Creation of a community made of nodes instead of communities
-
 				SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension(600, 600),
-						myGradient[i]);
+						colors.firstElement());
+				
 
 				// Name container
 				containerTemp.setName(communityName);
@@ -443,6 +455,7 @@ public class Assembler {
 
 				// Create temporal community
 				communityTemp = new VCommunity(tmpNode, containerTemp);
+				communityTemp.setColor(colors.firstElement());
 				communityTemp.init();
 
 			} else {
@@ -453,7 +466,10 @@ public class Assembler {
 				LinkedHashMap<String, ArrayList<String>> communityClasifiersCopy = new LinkedHashMap<String, ArrayList<String>>(
 						communityClassifiers);
 				communityClasifiersCopy.remove(communityTag);
-				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout);
+				Stack<Color> colorsCopy = new Stack<>();
+				colorsCopy.addAll(colors);
+				colorsCopy.pop();
+				communityTemp = createStructureRecursive(graphTemp, communityClasifiersCopy, communityName, layout, colorsCopy);
 				communityTemp.container.setCommunityTag(communityTag);
 			}
 
@@ -474,7 +490,7 @@ public class Assembler {
 		Graph<Node, Edge> graphBetweenCommunities = new DirectedSparseMultigraph<Node, Edge>();
 
 		// SubContainers for each VCommunity
-		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), new Color(5));
+		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), colors.peek());
 		
 		containerTemp.populateGraphfromEdgeList(communitiesOrderEdgeList.get(communityTag));
 		containerTemp.setGraphDegrees();
@@ -505,6 +521,7 @@ public class Assembler {
 
 		// Create temporal community
 		VCommunity communityFather = new VCommunity(tmpNode, containerTemp);
+		communityFather.setColor(colors.peek());
 		communityFather.init();
 
 		return communityFather;
