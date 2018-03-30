@@ -287,14 +287,14 @@ public class GraphmlReader {
 			
 			for(String classifier: nestedAttributesOrder){
 				// For the first order community graph
-				Edge metaE = new Edge(vCommunityNodesPerClassifier.get(nodes.get(idSource).getAttribute(classifier)),
-						vCommunityNodesPerClassifier.get(nodes.get(idTarget).getAttribute(classifier)), true);
+				Edge metaE = new Edge(vCommunityNodesPerClassifier.get(nodes.get(idSource).getAttribute(classifier).toString()),
+						vCommunityNodesPerClassifier.get(nodes.get(idTarget).getAttribute(classifier).toString()), true);
 				// if no attributes selected set the weight to 1
 				metaE.setAttribute("weight", 1);
 	
 				if (!edgesBetweenCommunitiesPerClassifier.get(classifier).contains(metaE)) {
-					System.out.println(classifier);
-					System.out.println("Veces");
+//					System.out.println(classifier);
+//					System.out.println("Veces");
 					
 					edgesBetweenCommunitiesPerClassifier.get(classifier).add(metaE);
 				}
@@ -306,7 +306,7 @@ public class GraphmlReader {
 			// Create the edge with source and target nodes
 			rtnGraph.addEdge(e, nodes.get(idSource), nodes.get(idTarget), EdgeType.DIRECTED);
 		}
-		System.out.println(this.getClass().getName() +" Edges Continent" +  edgesBetweenCommunitiesPerClassifier.get("Continent").get(0).getTarget().getId());
+		//System.out.println(this.getClass().getName() +" Edges Continent" +  edgesBetweenCommunitiesPerClassifier.get("Continent").get(0).getTarget().getId());
 		return rtnGraph;
 	}
 
