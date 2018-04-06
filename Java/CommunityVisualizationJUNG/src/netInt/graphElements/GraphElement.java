@@ -68,8 +68,8 @@ public abstract class GraphElement implements Serializable {
 	 * 
 	 * @param key
 	 *            key
-	 * @return the object attribute associated to the key from the map of
-	 *         absolute attributes
+	 * @return the object attribute associated to the key from the map of absolute
+	 *         attributes
 	 */
 	public Object getAttribute(String key) {
 		Object rtn = null;
@@ -82,8 +82,8 @@ public abstract class GraphElement implements Serializable {
 	}
 
 	/**
-	 * Gets the String representation of the object attribute associated to the
-	 * key. The object is retrieved from the map of absolute attributes
+	 * Gets the String representation of the object attribute associated to the key.
+	 * The object is retrieved from the map of absolute attributes
 	 * 
 	 * @param key
 	 *            key
@@ -96,9 +96,9 @@ public abstract class GraphElement implements Serializable {
 		} catch (Exception e) {
 			if (e instanceof NullPointerException) {
 				/*
-				 * IMPORTANT: edges belonging to tiers above tier 0 might not
-				 * have the same attributes as the root edges, that is why the
-				 * NullPointerException is ignored.
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not have the same
+				 * attributes as the root edges, that is why the NullPointerException is
+				 * ignored.
 				 */
 			} else {
 				System.out.println(this.getClass().getName() + " Value of attribute named: " + key
@@ -121,11 +121,8 @@ public abstract class GraphElement implements Serializable {
 		Object value = absoluteAttributes.get(key);
 		String type = "No defined.";
 		try {
-			if (value instanceof String) {
-				rtn = Float.parseFloat((String)(value)); 
-			}
 			// If Double
-			else if (value instanceof Double) {
+			if (value instanceof Double) {
 				type = "Double";
 				Double rtnObj = (Double) value;
 				rtn = rtnObj.floatValue();
@@ -135,22 +132,21 @@ public abstract class GraphElement implements Serializable {
 				Integer rtnObj = (Integer) value;
 				rtn = rtnObj.floatValue();
 				// If float
-			} else {
+			} else if (value instanceof Float){
 				type = "Float";
 				rtn = (float) value;
 			}
 		} catch (Exception e) {
 			if (e instanceof NullPointerException) {
 				/*
-				 * IMPORTANT: edges belonging to tiers above tier 0 might not
-				 * have the same attributes as the root edges, that is why the
-				 * NullPointerException is ignored.
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not have the same
+				 * attributes as the root edges, that is why the NullPointerException is
+				 * ignored.
 				 */
 				throw (e);
 			} else {
-				System.out.println("Exception type: " + e.getClass().getName());
-				System.out.println(this.getClass().getName() + "Value: " + value + " of Attribute key: " + key
-						+ " couldn't be casted as " + type);
+				System.out.println(this.getClass().getName() + " Value: " + value + " of Attribute key: " + key
+						+ " couldn't be casted as " + type + ". " + e.getClass().getName());
 			}
 		}
 		return rtn;
@@ -182,9 +178,9 @@ public abstract class GraphElement implements Serializable {
 		} catch (Exception e) {
 			if (e instanceof NullPointerException) {
 				/*
-				 * IMPORTANT: edges belonging to tiers above tier 0 might not
-				 * have the same attributes as the root edges, that is why the
-				 * NullPointerException is ignored.
+				 * IMPORTANT: edges belonging to tiers above tier 0 might not have the same
+				 * attributes as the root edges, that is why the NullPointerException is
+				 * ignored.
 				 */
 			} else {
 				System.out.println(this.getClass().getName() + "Value of attribute named: " + key
@@ -206,8 +202,7 @@ public abstract class GraphElement implements Serializable {
 	/**
 	 * The vector of keys associated to the attributes of this graph element
 	 * 
-	 * @return The vector of keys associated to the attributes of this graph
-	 *         element
+	 * @return The vector of keys associated to the attributes of this graph element
 	 */
 	public Object[] getAttributeKeys() {
 		Set<String> keys = absoluteAttributes.keySet();
@@ -215,8 +210,8 @@ public abstract class GraphElement implements Serializable {
 	}
 
 	/**
-	 * Prints the pairs of key-value associated to the AbsoluteAttributes of
-	 * this graph element
+	 * Prints the pairs of key-value associated to the AbsoluteAttributes of this
+	 * graph element
 	 */
 	public void printAbsoluteAttributes() {
 		System.out.println(this.getClass().getName() + " absolute atts of: " + getId());
@@ -256,12 +251,12 @@ public abstract class GraphElement implements Serializable {
 	 * @param community
 	 *            the community name to which the node belongs
 	 * @param key
-	 *            the metadata level associated to the community. This means
-	 *            that some statistics of the node such as betweenness or degree
-	 *            are relative to the community to which it belongs. If the node
-	 *            belongs to more than one community, then the key identifies
-	 *            the community to which the attributes are associated. 0 is
-	 *            reserved for the root community
+	 *            the metadata level associated to the community. This means that
+	 *            some statistics of the node such as betweenness or degree are
+	 *            relative to the community to which it belongs. If the node belongs
+	 *            to more than one community, then the key identifies the community
+	 *            to which the attributes are associated. 0 is reserved for the root
+	 *            community
 	 */
 	public void setCommunity(String community, int key) {
 		// create meta-datum
@@ -276,12 +271,12 @@ public abstract class GraphElement implements Serializable {
 	 * @param metaData
 	 *            the Metadata that contains the community attributes
 	 * @param key
-	 *            the metadata level associated to the community. This means
-	 *            that some statistics of the node such as betweenness or degree
-	 *            are relative to the community to which it belongs. If the node
-	 *            belongs to more than one community, then the key identifies
-	 *            the community to which the attributes are associated. 0 is
-	 *            reserved for the root community
+	 *            the metadata level associated to the community. This means that
+	 *            some statistics of the node such as betweenness or degree are
+	 *            relative to the community to which it belongs. If the node belongs
+	 *            to more than one community, then the key identifies the community
+	 *            to which the attributes are associated. 0 is reserved for the root
+	 *            community
 	 */
 	public void setCommunity(ElementAttributeMap metaData, int key) {
 		relativeAttributes.put(key, metaData);

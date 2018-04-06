@@ -63,7 +63,7 @@ public class MapperViewer extends PApplet {
 	}
 
 	public void setup() {
-		this.surface.setLocation(displayWidth - 400, 45);
+		this.surface.setLocation(displayWidth, 45);
 		this.surface.setAlwaysOnTop(true);
 		this.surface.setResizable(true);
 

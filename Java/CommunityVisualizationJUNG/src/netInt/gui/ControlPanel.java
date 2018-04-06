@@ -777,7 +777,7 @@ public class ControlPanel extends PApplet {
 			ChooseHelper.getInstance().showFileChooser(parent);
 			break;
 
-		case "Export_PGN":
+		case "Export_PNG":
 			if (accordion != null) {
 				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "png");
 				if (selectedPathExport != null) {
