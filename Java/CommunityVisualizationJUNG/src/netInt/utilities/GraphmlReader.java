@@ -152,12 +152,8 @@ public class GraphmlReader {
 			try {
 			
 				for(String classifier: nestedAttributesOrder){
-					System.out.println(this.getClass().getName() +
-							" classifier " + classifier);
 					Object value = vertex.getProperty(classifier);
 					if (value != null) {
-						System.out.println(this.getClass().getName() +
-								" value " + value.toString());
 						addCommunity(classifier, value.toString());
 					}
 				}
@@ -339,7 +335,7 @@ public class GraphmlReader {
 						vCommunityNodesPerClassifier.get(nodes.get(idTarget).getAttribute(classifier).toString()), true);
 				// if no attributes selected set the weight to 1
 				metaE.setAbsoluteAttribute("weight", 1);
-	
+				
 				if (!edgesBetweenCommunitiesPerClassifier.get(classifier).contains(metaE)) {
 //					System.out.println(classifier);
 //					System.out.println("Veces");

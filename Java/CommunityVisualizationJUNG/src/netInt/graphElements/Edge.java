@@ -150,6 +150,6 @@ public class Edge extends GraphElement implements Serializable {
 
 	public boolean equals(Object obj) {
 		Edge edge = (Edge) obj;
-		return getId().equals(edge);
+		return getId().equals(edge.getId());
 	}
 }

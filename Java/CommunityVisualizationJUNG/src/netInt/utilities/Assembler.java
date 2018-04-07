@@ -493,6 +493,7 @@ public class Assembler {
 		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension(600, 600), colors.peek());
 		
 		containerTemp.populateGraphfromEdgeList(communitiesOrderEdgeList.get(communityTag));
+		System.out.println("edges: " + communitiesOrderEdgeList.get(communityTag).size());
 		containerTemp.setGraphDegrees();
 		
 		//
