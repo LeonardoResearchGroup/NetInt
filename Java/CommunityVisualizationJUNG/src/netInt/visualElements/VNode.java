@@ -64,7 +64,7 @@ public class VNode extends VisualAtom implements Serializable {
 	private int minSize = 3;
 
 	// Visual attributes
-	int textColor = new Color(200, 200, 200).getRGB();
+	int textColor = new Color(100, 100, 100).getRGB();
 	int haloOffset = 0;
 
 	// Adaptive Performance

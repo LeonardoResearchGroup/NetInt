@@ -173,7 +173,7 @@ public class VCommunityCover implements Serializable {
 	 */
 	public void showCoverLable(VNode communityNode, Container container) {
 		Canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);
-		Canvas.app.fill(250, 200);
+		Canvas.app.fill(100);
 		Canvas.app.text(container.getName(), communityNode.getPos().x, communityNode.getPos().y + 10);
 		if (communityNode.isMouseOver) {
 			Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.getPos().x,

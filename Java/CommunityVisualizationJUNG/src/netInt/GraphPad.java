@@ -35,6 +35,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import processing.core.PVector;
+import processing.pdf.*;
 
 /**
  * <p>
@@ -142,8 +143,8 @@ public class GraphPad {
 
 	/**
 	 * Required method from parent class. It runs only once at the PApplet
-	 * initialization. Instantiate the classes and initialize attributes
-	 * declared in this class within this code block.
+	 * initialization. Instantiate the classes and initialize attributes declared in
+	 * this class within this code block.
 	 * 
 	 * @see processing.core.PApplet#setup()
 	 */
@@ -154,12 +155,12 @@ public class GraphPad {
 		parent.smooth();
 
 		/*
-		 * Output Console Catcher. The line below enables a console Catcher.
-		 * WARNING, it might trigger conflicts with Menu's File Open.
+		 * Output Console Catcher. The line below enables a console Catcher. WARNING, it
+		 * might trigger conflicts with Menu's File Open.
 		 */
 
 		// Visualization of system.out messages in external panel
-		//consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		// consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 
 		// Visualization of node and edge attributes in external panel
 		mapperViewer = new MapperViewer();
@@ -185,13 +186,17 @@ public class GraphPad {
 	}
 
 	/**
-	 * Required method from parent class. It draws visualElements and other
-	 * PApplet elements on the visualization pad. It constantly iterates over
-	 * its contents
+	 * Required method from parent class. It draws visualElements and other PApplet
+	 * elements on the visualization pad. It constantly iterates over its contents
 	 * 
 	 * @see processing.core.PApplet#draw()
 	 */
 	public void show() {
+		
+		// start export a frame as pdf
+		if (UserSettings.getInstance().getFileExportName() != null) {
+			exportFrameAsPDF(true);
+		}
 
 		// User defines import parameters choosing from import menu
 		if (importMenu != null) {
@@ -199,6 +204,8 @@ public class GraphPad {
 		}
 
 		if (activeGraph) {
+
+
 
 			parent.pushMatrix();
 			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
@@ -217,17 +224,19 @@ public class GraphPad {
 
 			performance.displayValues(new PVector(parent.width - 20, parent.height - 60));
 
-			// export a frame as png
-			if (UserSettings.getInstance().getFileExportName() != null) {
-				exportFrameAsPNG();
-			}
-
 		} else {
 			if (netIntLogo != null)
 				parent.image(netIntLogo, 100, 50);
 			else
 				parent.text("Missing NetInt Logo", 100, 50);
 		}
+		
+		// end export a frame as pdf
+		if (UserSettings.getInstance().getFileExportName() != null) {
+			exportFrameAsPDF(false);
+			UserSettings.getInstance().setFileExportName(null);
+		}
+		
 
 		// Signature Message :)
 		parent.textAlign(PConstants.LEFT);
@@ -264,9 +273,9 @@ public class GraphPad {
 	}
 
 	/**
-	 * Receives the file with the path pointing to the graph file and triggers
-	 * an import process. The import process follows the parameters chosen by
-	 * the user from the import menu.
+	 * Receives the file with the path pointing to the graph file and triggers an
+	 * import process. The import process follows the parameters chosen by the user
+	 * from the import menu.
 	 * 
 	 * The method is invoked by showFileChooser() at the ChooseHelper class
 	 * 
@@ -288,17 +297,16 @@ public class GraphPad {
 	}
 
 	/**
-	 * Receives the file with the path pointing to the graph file and triggers
-	 * an import process. The import process follows the parameters chosen by
-	 * the user from the import menu.
+	 * Receives the file with the path pointing to the graph file and triggers an
+	 * import process. The import process follows the parameters chosen by the user
+	 * from the import menu.
 	 * 
 	 * The method is invoked by showFileChooser() at the ChooseHelper class
 	 * 
 	 * @param selection
 	 *            The file to be imported
 	 * @param strings
-	 *            The second parameter is the array of complementary module
-	 *            names
+	 *            The second parameter is the array of complementary module names
 	 */
 	public void selectImport(File selection, String[] strings) {
 
@@ -342,4 +350,22 @@ public class GraphPad {
 		UserSettings.getInstance().setFileExportName(null);
 		parent.cursor(PApplet.ARROW);
 	}
+
+	/**
+	 * Exports the last frame of the draw loop in format "pdf"
+	 */
+	private void exportFrameAsPDF(boolean condition) {
+		parent.cursor(PApplet.WAIT);
+		if (condition) {
+			parent.beginRecord(PApplet.PDF, UserSettings.getInstance().getFileExportName() + ".pdf");
+		} else {
+			parent.endRecord();
+			javax.swing.JOptionPane.showMessageDialog(null,
+					"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "pdf", "",
+					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+			UserSettings.getInstance().setFileExportName(null);
+			parent.cursor(PApplet.ARROW);
+		}
+	}
+
 }
