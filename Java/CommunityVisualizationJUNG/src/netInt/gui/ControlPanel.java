@@ -192,7 +192,7 @@ public class ControlPanel extends PApplet {
 		secondary.setColorBackground(0xff353535);
 
 		// Add list to main controller
-		String[] fileFunctions = { "Open", "Save", "Import", "Export_PNG",  "Quit" }; // "Load Module",
+		String[] fileFunctions = { "Open", "Save", "Import", "Export_PDF",  "Quit" }; // "Load Module",
 		main.addScrollableList("File").setPosition(10, 55).setSize(206, 100).setBarHeight(18).setItemHeight(13)
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
@@ -777,9 +777,9 @@ public class ControlPanel extends PApplet {
 			ChooseHelper.getInstance().showFileChooser(parent);
 			break;
 
-		case "Export_PNG":
+		case "Export_PDF":
 			if (accordion != null) {
-				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "png");
+				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "pdf");
 				if (selectedPathExport != null) {
 					UserSettings.getInstance().setFileExportName(selectedPathExport);
 				}

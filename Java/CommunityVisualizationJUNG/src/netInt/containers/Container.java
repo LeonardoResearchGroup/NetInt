@@ -252,17 +252,22 @@ public abstract class Container {
 	 * Each edge has a weight equals to the number of edges linking both
 	 * communities
 	 * 
+	 * 
 	 * @param edgeList
 	 *            list of edges
 	 */
-	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList) {
+	public void populateGraphfromEdgeList(ArrayList<Edge> edgeList, ArrayList<VCommunity> communities) {
+		
+		for (VCommunity vC : communities) {
+			this.getGraph().addVertex(vC.getNode());
+		}
 
 		for (Edge e : edgeList) {
 
 			this.getGraph().addEdge(e, e.getSource(), e.getTarget());
 		}
 
-		System.out.println(this.getClass().getName() + " Container's Graph Population Completed");
+		System.out.println(this.getClass().getName() + " Container's Graph Population Completed: " + this.getGraph().getVertexCount() + " total nodes.");
 	}
 
 	/**
@@ -306,6 +311,10 @@ public abstract class Container {
 
 					// Add edge
 					this.getGraph().addEdge(tempEdge, vCA.getNode(), vCB.getNode());
+				} else {
+					
+					// Add unlinked communities
+					this.getGraph().addVertex(vCA.getNode());
 				}
 			}
 		}
