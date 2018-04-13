@@ -161,7 +161,6 @@ public class Assembler {
 
 		// Container of rootGraph
 		RootContainer mainCommunity = new RootContainer(graph, RootContainer.CONCENTRIC, rootDimension);
-
 		mainCommunity.setName("Root");
 
 		// Root Community
@@ -189,11 +188,19 @@ public class Assembler {
 		// make a SubContainer
 		SubContainer subContainer = new SubContainer(graphTemp, layout, rootDimension);
 
+		
+		System.out.println(
+				"      ****** Adding " + communities.size() + " hfashjkdfgjhasdgfjhkas");
+		
+		
 		// make graph from communities
-		// subContainer.populateGraphfromVCommunities(communities);
+		 subContainer.populateGraphfromVCommunities(communities);
 
 		// make graph from first order edge list
-		subContainer.populateGraphfromEdgeList(firstOrderEdgeList);
+		// subContainer.populateGraphfromEdgeList(firstOrderEdgeList);
+		
+		System.out.println(
+				"      ****** Adding " + subContainer.size() + " Second Order VCommunities to Higher Order container");
 
 		// Set the degrees of the internal graph. The graph is usually made of
 		// community nodes

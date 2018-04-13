@@ -453,6 +453,7 @@ public class GraphmlReader {
 	}
 
 	private void addCommunity(String string) {
+		
 		// If community not in the list yet
 		if (!communities.contains(string)) {
 			communities.add(string);
