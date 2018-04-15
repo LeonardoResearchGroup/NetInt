@@ -470,7 +470,8 @@ public class VNode extends VisualAtom implements Serializable {
 
 		}
 
-		if (isMouseOver  || isPropagated()) {
+		//if (isMouseOver  || isPropagated()) {
+		if (isMouseOver  || propagationSource) {
 			Canvas.app.strokeWeight(1);
 			Canvas.app.fill(brighter());
 			Canvas.app.stroke(225, 0, 0);

@@ -285,7 +285,7 @@ public class Assembler {
 			communityTemp.setTierSequence(1);
 
 			// Set label visibility for overcrowded first order communities
-			if (comNames.size() > 100)
+			if (comNames.size() > 200)
 				communityTemp.getComCover().setShowLabel(false);
 
 			// Add VCommunity to list of VCommunities
