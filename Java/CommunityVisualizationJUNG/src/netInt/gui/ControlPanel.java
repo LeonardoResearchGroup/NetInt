@@ -246,6 +246,8 @@ public class ControlPanel extends PApplet {
 
 		// Show controller
 		secondary.show();
+		
+		switchBooleans();
 
 	}
 

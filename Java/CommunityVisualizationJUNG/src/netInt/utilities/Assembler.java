@@ -37,6 +37,7 @@ import netInt.graphElements.Node;
 import netInt.utilities.filters.Filters;
 import netInt.canvas.Canvas;
 import netInt.visualElements.VCommunity;
+import netInt.visualElements.VNode;
 import processing.core.PConstants;
 
 /**
@@ -395,6 +396,8 @@ public class Assembler {
 			qualitativePalette = myBrewer.getColorPalette(numberOfCommunities);
 		}
 		
+		//ArrayList<E> communitiesTagEdges = communitiesOrderEdgeList.get(communityTag);
+		
 		
 		
 		for (int i = 0; i < numberOfCommunities; i++) {
@@ -457,6 +460,12 @@ public class Assembler {
 				communityTemp = new VCommunity(tmpNode, containerTemp);
 				communityTemp.setColor(colors.firstElement());
 				communityTemp.init();
+				
+				double aggregatedROE = 0;
+				for (Node n : communityTemp.container.getNodes()) {
+					aggregatedROE += (double)n.getAttribute("ROE");
+				}
+				communityTemp.getNode().setAbsoluteAttribute("ROE", aggregatedROE);
 
 			} else {
 				// RECURSION
@@ -524,6 +533,49 @@ public class Assembler {
 		VCommunity communityFather = new VCommunity(tmpNode, containerTemp);
 		communityFather.setColor(colors.peek());
 		communityFather.init();
+		
+		/*
+		double aggregatedROE = 0;
+		int numberUnamedNodes = 0;
+		System.out.println(this.getClass().getName() + " number of nodes: " + communityFather.container.getNodes().size());
+		for (Node n : communityFather.container.getNodes()) {
+			if(!n.getName().equals("no name")) {
+//				System.out.println(this.getClass().getName() + "NAME: " + n.getName());
+//				System.out.println(this.getClass().getName() + "ROE: " + n.getAttribute("ROE"));
+				if(n.getAttribute("ROE") instanceof Integer) {
+					Integer roe = (Integer) n.getAttribute("ROE");
+					aggregatedROE += roe.intValue();
+				}else {
+					aggregatedROE += (double) n.getAttribute("ROE");
+				}
+			}else {
+				numberUnamedNodes++;
+			}
+			
+		}
+		System.out.println(this.getClass().getName() + " number of unamed nodes: " +  numberUnamedNodes);
+		communityFather.getNode().setAbsoluteAttribute("ROE", aggregatedROE);
+		*/
+		
+		double aggregatedROE = 0;
+		System.out.println(this.getClass().getName() + " number of nodes: " + communityFather.container.getVNodes().size());
+		for (VNode n : communityFather.container.getVNodes()) {
+			//if(!n.getNode().getName().equals("no name")) {
+				System.out.println(this.getClass().getName() + "NAME: " + n.getNode().getName());
+				System.out.println(this.getClass().getName() + "ROE: " + n.getNode().getAttribute("ROE"));
+				if(n.getNode().getAttribute("ROE") instanceof Integer) {
+					Integer roe = (Integer) n.getNode().getAttribute("ROE");
+					aggregatedROE += roe.intValue();
+				}else {
+					aggregatedROE += (double) n.getNode().getAttribute("ROE");
+				}
+			//}else {
+				//numberUnamedNodes++;
+			//}
+			
+		}
+		//System.out.println(this.getClass().getName() + " number of unamed nodes: " +  numberUnamedNodes);
+		communityFather.getNode().setAbsoluteAttribute("ROE", aggregatedROE);
 
 		return communityFather;
 	}

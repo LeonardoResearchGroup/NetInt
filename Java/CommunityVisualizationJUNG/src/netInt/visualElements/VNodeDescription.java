@@ -81,13 +81,13 @@ public class VNodeDescription implements Serializable {
 			HashMap<String, Boolean> descriptiveStats = UserSettings.getInstance().getDescriptiveStatistics();
 			count = 0;
 			for (String key : descriptiveStats.keySet()) {
-				// If the map of descriptive stats has any true boolean
-				if (descriptiveStats.get(key)) {
+				//If the map of descriptive stats has any true boolean
+//				if (descriptiveStats.get(key)) {
 					shift = count * 12;
 					Canvas.app.text(key + ": " + vNode.getNode().getStringAttribute(key), vNode.getPos().x + 5,
 							vNode.getPos().y - 125 - shift);
 					count++;
-				}
+//				}
 			}
 			heightComplement = shift + 20;
 		}
@@ -125,7 +125,22 @@ public class VNodeDescription implements Serializable {
 			}
 			Canvas.app.strokeWeight(1);
 			Canvas.app.line(vComm.getPos().x + 5, vComm.getPos().y - 50 - shift, vComm.getPos().x + 150, vComm.getPos().y - 50 - shift);
-
+			
+			
+			int count = 0;
+			HashMap<String, Boolean> descriptiveStats = UserSettings.getInstance().getDescriptiveStatistics();
+			for (String key : descriptiveStats.keySet()) {
+				//If the map of descriptive stats has any true boolean
+//				if (descriptiveStats.get(key)) {
+					if( vComm.getNode().getAttribute(key) != null) {
+						shift = count * 12;
+						Canvas.app.text(key + ": " + vComm.getNode().getStringAttribute(key), vComm.getPos().x + 5,
+								vComm.getPos().y - 125 - shift);
+						count++;
+					}
+//				}
+			}
+			
 			heightComplement = shift + 20;
 		}
 		Canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);
