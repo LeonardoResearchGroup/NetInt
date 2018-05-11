@@ -477,14 +477,14 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			// VCommunities
 			for (VCommunity vC : container.getVCommunities()) {
 
-				if (vC.getNode().getDegree(0) >= container.degreeThreshold) {
+				//if (vC.getNode().getDegree(0) >= container.degreeThreshold) {
 
 					vC.setAboveDegreeThreshold(true);
 
-				} else {
+				//} else {
 
-					vC.setAboveDegreeThreshold(false);
-				}
+				//	vC.setAboveDegreeThreshold(false);
+				//}
 
 				// vC.setVisibility(true);
 

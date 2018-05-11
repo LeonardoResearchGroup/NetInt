@@ -450,8 +450,8 @@ public class Assembler {
 				containerTemp.setCommunityTag(communityTag);
 
 				// Make Node for CommunityCover
-				//Node tmpNode = new Node(communityName);
-				Node tmpNode = vCommunityNodesPerClassifier.get(communityName);
+				Node tmpNode = new Node(communityName);
+				//Node tmpNode = vCommunityNodesPerClassifier.get(communityName);
 				
 				// Name Node
 				tmpNode.setName(communityName);
@@ -465,6 +465,8 @@ public class Assembler {
 				for (Node n : communityTemp.container.getNodes()) {
 					aggregatedROE += (double)n.getAttribute("ROE");
 				}
+				System.out.println(this.getClass().getName() + " Community: " + communityName);
+				System.out.println(this.getClass().getName() + " ROE: " + aggregatedROE);
 				communityTemp.getNode().setAbsoluteAttribute("ROE", aggregatedROE);
 
 			} else {
@@ -518,11 +520,12 @@ public class Assembler {
 		// Make Node for CommunityCover
 		//Node tmpNode = new Node(nameCommunity);
 		Node tmpNode;
-		if(nameCommunity == "basic")
+		if(nameCommunity == "basic"){
 			tmpNode = new Node(nameCommunity);
-		else
-			tmpNode = vCommunityNodesPerClassifier.get(nameCommunity);
-
+		}else{
+			tmpNode = new Node(nameCommunity);
+			//tmpNode = vCommunityNodesPerClassifier.get(nameCommunity);
+		}
 		containerTemp.assignVisualElements(vCommunities);
 		
 
@@ -561,8 +564,8 @@ public class Assembler {
 		System.out.println(this.getClass().getName() + " number of nodes: " + communityFather.container.getVNodes().size());
 		for (VNode n : communityFather.container.getVNodes()) {
 			//if(!n.getNode().getName().equals("no name")) {
-				System.out.println(this.getClass().getName() + "NAME: " + n.getNode().getName());
-				System.out.println(this.getClass().getName() + "ROE: " + n.getNode().getAttribute("ROE"));
+				//System.out.println(this.getClass().getName() + "NAME: " + n.getNode().getName());
+				//System.out.println(this.getClass().getName() + "ROE: " + n.getNode().getAttribute("ROE"));
 				if(n.getNode().getAttribute("ROE") instanceof Integer) {
 					Integer roe = (Integer) n.getNode().getAttribute("ROE");
 					aggregatedROE += roe.intValue();
