@@ -102,6 +102,11 @@ public class GraphPad {
 	private PImage netIntLogo;
 	private static File file;
 
+	// PDF recording
+	private boolean recording;
+	private PGraphicsPDF pdf;
+	private String pdfFilePath = "screenCapture.pdf";
+
 	/**
 	 * Launches a visualization pad together with a Console Catcher
 	 * 
@@ -181,6 +186,9 @@ public class GraphPad {
 		// Performance
 		performance = new TestPerformance();
 
+		// pdf
+		pdf = (PGraphicsPDF) parent.createGraphics(parent.width, parent.height, PApplet.PDF, pdfFilePath);
+
 		System.out.println("** GraphPad Init() completed **");
 
 	}
@@ -192,10 +200,10 @@ public class GraphPad {
 	 * @see processing.core.PApplet#draw()
 	 */
 	public void show() {
-		
+
 		// start export a frame as pdf
-		if (UserSettings.getInstance().getFileExportName() != null) {
-			exportFrameAsPDF(true);
+		if (parent.key == 'r') {
+			exportFrameAsPDFKey(true);
 		}
 
 		// User defines import parameters choosing from import menu
@@ -204,9 +212,6 @@ public class GraphPad {
 		}
 
 		if (activeGraph) {
-
-
-
 			parent.pushMatrix();
 			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
 					(parent.height - app.getRootDimension().height) / 2);
@@ -230,13 +235,14 @@ public class GraphPad {
 			else
 				parent.text("Missing NetInt Logo", 100, 50);
 		}
-		
+
 		// end export a frame as pdf
-		if (UserSettings.getInstance().getFileExportName() != null) {
-			exportFrameAsPDF(false);
-			UserSettings.getInstance().setFileExportName(null);
+		if (parent.key == 'r') {
+			exportFrameAsPDFKey(false);
+			parent.key = '_';
 		}
-		
+
+		keyPressed();
 
 		// Signature Message :)
 		parent.textAlign(PConstants.LEFT);
@@ -368,4 +374,34 @@ public class GraphPad {
 		}
 	}
 
+	/**
+	 * Exports the last frame of the draw loop in format "pdf"
+	 */
+	private void exportFrameAsPDFKey(boolean condition) {
+		parent.cursor(PApplet.WAIT);
+		if (condition) {
+			parent.beginRecord(pdf);
+		} else {
+			parent.endRecord();
+			javax.swing.JOptionPane.showMessageDialog(null,
+					"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "pdf", "",
+					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+			UserSettings.getInstance().setFileExportName(null);
+			parent.cursor(PApplet.ARROW);
+		}
+	}
+
+	void keyPressed() {
+		if (parent.key == 'r') {
+			if (recording) {
+				parent.endRecord();
+				PApplet.println("Recording stopped.");
+				recording = false;
+			} else {
+				parent.beginRecord(pdf);
+				PApplet.println("Recording started.");
+				recording = true;
+			}
+		}
+	}
 }
