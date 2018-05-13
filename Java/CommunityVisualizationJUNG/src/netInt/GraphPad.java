@@ -202,7 +202,7 @@ public class GraphPad {
 	public void show() {
 
 		// start export a frame as pdf
-		if (parent.key == 'r') {
+		if (parent.key == 'e') {
 			exportFrameAsPDFKey(true);
 		}
 
@@ -237,12 +237,10 @@ public class GraphPad {
 		}
 
 		// end export a frame as pdf
-		if (parent.key == 'r') {
+		if (parent.key == 'e') {
 			exportFrameAsPDFKey(false);
 			parent.key = '_';
 		}
-
-		keyPressed();
 
 		// Signature Message :)
 		parent.textAlign(PConstants.LEFT);
@@ -391,17 +389,17 @@ public class GraphPad {
 		}
 	}
 
-	void keyPressed() {
-		if (parent.key == 'r') {
-			if (recording) {
-				parent.endRecord();
-				PApplet.println("Recording stopped.");
-				recording = false;
-			} else {
-				parent.beginRecord(pdf);
-				PApplet.println("Recording started.");
-				recording = true;
-			}
-		}
-	}
+//	void keyPressed() {
+//		if (parent.key == 'r') {
+//			if (recording) {
+//				parent.endRecord();
+//				PApplet.println("Recording stopped.");
+//				recording = false;
+//			} else {
+//				parent.beginRecord(pdf);
+//				PApplet.println("Recording started.");
+//				recording = true;
+//			}
+//		}
+//	}
 }
