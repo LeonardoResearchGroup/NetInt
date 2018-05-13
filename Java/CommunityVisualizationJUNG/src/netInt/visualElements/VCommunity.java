@@ -255,6 +255,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 
 				// *******
 
+				//comCover.showTray();
 				setDisplayed(true);
 
 				// if coordinates for all elements inside the container are set.
@@ -289,6 +290,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					// If layout not iterative show nodes and edges
 					showCommunityContents(comCover.isUnlocked(), comCover.isDeployed());
 				}
+				
 			} else {
 
 				setDisplayed(true);

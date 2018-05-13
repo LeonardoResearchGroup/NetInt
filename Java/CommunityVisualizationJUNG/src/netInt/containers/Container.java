@@ -120,6 +120,7 @@ public abstract class Container {
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 
 			distributeNodesInLayout(currentLayout, dimension);
+			System.out.println(this.getClass().getName() + " "+ dimension.getHeight());
 
 			if (vNodes.size() == 0) {
 

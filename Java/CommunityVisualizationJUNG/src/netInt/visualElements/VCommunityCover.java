@@ -103,10 +103,13 @@ public class VCommunityCover implements Serializable {
 				unfold();
 				drawArcs();
 			}
+
 		}
 
 		Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
 				communityNode.getDiameter());
+
+		drawTray(container.getDimension().width);
 
 		// Labels
 		if (showLabel) {
@@ -137,6 +140,16 @@ public class VCommunityCover implements Serializable {
 			i += increment;
 		} else {
 			coverDeployed = true;
+		}
+	}
+
+	// This is the ellipse underneath all the community nodes
+	private void drawTray(int radius) {
+
+		if (unlocked) {
+			Canvas.app.fill(communityNode.getColorRGB(),30);
+			Canvas.app.noStroke();
+			Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, radius/2, radius/2);
 		}
 	}
 

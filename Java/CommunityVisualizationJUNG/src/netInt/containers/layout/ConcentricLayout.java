@@ -69,6 +69,8 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 
 			double width = size.getWidth();
 			double height = size.getHeight();
+			System.out.println(this.getClass().getName()+ " "+ width);
+			
 			float radius;
 
 			if (width - height > 0) {
@@ -82,7 +84,6 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 			}
 			getLocations2(radius);
 		}
-
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 		double lastRadius = 0;
 
 		for (V v : vertex_ordered_list) {
-			Node n = (Node) v;
+			//Node n = (Node) v;
 
 			float nodeLength = 10; // Mapper.getInstance().convert(Mapper.LINEAR,
 									// n.getFloatAttribute("degree"),
@@ -256,9 +257,10 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 		double radius = totalLength / (Math.PI * 2);
 
 		// If the radius is too small
-		if (radius < 200) {
-			radius = 200;
+		if (radius < 60) {
+			radius = 60;
 		}
+		System.out.println(this.getClass().getName() + " radius= " + radius );
 
 		// If the radius is smaller than the previous tier
 		if (radius < lastRadius) {
