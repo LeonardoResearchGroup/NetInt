@@ -31,5 +31,7 @@
 	<classpathentry kind="lib" path="libs/colorMaps/jViridis.jar"/>
 	<classpathentry kind="lib" path="libs/controlP5.jar"/>
 	<classpathentry kind="lib" path="libs/customGui/guiSet.jar"/>
+	<classpathentry kind="lib" path="libs/pdf/itext.jar"/>
+	<classpathentry kind="lib" path="libs/pdf/pdf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
