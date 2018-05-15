@@ -240,7 +240,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			searchNode();
 
 			// Display the community cover
-			comCover.show(container, containsSearchedNode);
+			comCover.show(containsSearchedNode);
 
 			// Check if community cover is completely deployed
 			if (comCover.isDeployed()) {
@@ -496,6 +496,10 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					container.translateVElementCoordinates(vC, this.getPos());
 				}
 
+				// update circle in Community Cover
+				vC.getComCover().tray.updateCircle2(this.getPos().x, this.getPos().y, container.getDimension().width);
+				
+				// Show VCommunity
 				vC.showCommunity();
 
 				/*

@@ -438,7 +438,7 @@ public class Assembler {
 			if (communityClassifiers.size() == 1) {
 				
 				// Creation of a community made of nodes instead of communities
-				double dim = 300 + 50 * Math.log10((double)graphTemp.getVertexCount());
+				double dim = 50 + 50 * Math.log10((double)graphTemp.getVertexCount());
 				SubContainer containerTemp = new SubContainer(graphTemp, layout, new Dimension((int)Math.floor(dim), (int)Math.floor(dim)),
 						colors.firstElement());
 				
@@ -491,7 +491,7 @@ public class Assembler {
 		Graph<Node, Edge> graphBetweenCommunities = new DirectedSparseMultigraph<Node, Edge>();
 
 		// SubContainers for each VCommunity
-		double dim = 300 + 50 * Math.log10((double) vCommunities.size());
+		double dim = 50 + 50 * Math.log10((double) vCommunities.size());
 		SubContainer containerTemp = new SubContainer(graphBetweenCommunities, layout, new Dimension((int)Math.floor(dim), (int) Math.floor(dim)), colors.peek());
 		
 		containerTemp.populateGraphfromEdgeList(communitiesOrderEdgeList.get(communityTag));

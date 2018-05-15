@@ -257,9 +257,9 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 		double radius = totalLength / (Math.PI * 2);
 
 		// If the radius is too small
-		if (radius < 60) {
-			radius = 60;
-		}
+//		if (radius < 60) {
+//			radius = 60;
+//		}
 		System.out.println(this.getClass().getName() + " radius= " + radius );
 
 		// If the radius is smaller than the previous tier
@@ -272,7 +272,7 @@ public class ConcentricLayout<V, E> extends AbstractLayout<V, E> {
 
 		for (V v : nodes) {
 
-			Node n = (Node) v;
+			//Node n = (Node) v;
 			float nodeLength = 10; // Mapper.getInstance().convert(Mapper.LINEAR,
 									// n.getFloatAttribute("degree"), "Node",
 									// "degree") * 5;
