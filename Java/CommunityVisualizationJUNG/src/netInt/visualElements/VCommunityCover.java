@@ -365,7 +365,7 @@ public class VCommunityCover implements Serializable {
 
 			if (circle2 != null) {
 				// display
-				Canvas.app.noStroke();
+				Canvas.app.stroke(30,70);
 				// Canvas.app.fill(100, 30);
 				Canvas.app.beginShape();
 				// first circle
@@ -378,7 +378,7 @@ public class VCommunityCover implements Serializable {
 					// ellipse(posX, posY, 5, 5);
 				}
 
-				// seconb circle
+				// second circle
 				for (int i = 0; i < anglesB.length; i++) {
 					posX = circle2.x + PApplet.cos(anglesB[i]) * circle2.z / 2;
 					posY = circle2.y + PApplet.sin(anglesB[i]) * circle2.z / 2;

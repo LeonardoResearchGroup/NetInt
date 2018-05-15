@@ -404,8 +404,8 @@ public class Assembler {
 				
 			}
 			
-			System.out.println("Color: " + colors.peek().toString());
-			System.out.println("Colors size: " + colors.size());
+			//System.out.println("Color: " + colors.peek().toString());
+			//System.out.println("Colors size: " + colors.size());
 
 			String communityName = communityClassifiers.get(communityTag).get(i);
 
