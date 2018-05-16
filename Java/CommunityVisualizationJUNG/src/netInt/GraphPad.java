@@ -101,6 +101,10 @@ public class GraphPad {
 	// Instance attributes
 	private PImage netIntLogo;
 	private static File file;
+	
+	// PDF recording
+	private PGraphicsPDF pdf;
+	private String pdfFilePath = "screenCapture.pdf";
 
 	/**
 	 * Launches a visualization pad together with a Console Catcher
@@ -180,6 +184,9 @@ public class GraphPad {
 
 		// Performance
 		performance = new TestPerformance();
+		
+		// pdf
+				pdf = (PGraphicsPDF) parent.createGraphics(parent.width, parent.height, PApplet.PDF, pdfFilePath);
 
 		System.out.println("** GraphPad Init() completed **");
 
@@ -194,8 +201,8 @@ public class GraphPad {
 	public void show() {
 		
 		// start export a frame as pdf
-		if (UserSettings.getInstance().getFileExportName() != null) {
-			exportFrameAsPDF(true);
+		if (parent.key == 'e') {
+			exportFrameAsPDFKey(true);
 		}
 
 		// User defines import parameters choosing from import menu
@@ -232,9 +239,9 @@ public class GraphPad {
 		}
 		
 		// end export a frame as pdf
-		if (UserSettings.getInstance().getFileExportName() != null) {
-			exportFrameAsPDF(false);
-			UserSettings.getInstance().setFileExportName(null);
+		if (parent.key == 'e') {
+			exportFrameAsPDFKey(false);
+			parent.key = '_';
 		}
 		
 
@@ -358,6 +365,23 @@ public class GraphPad {
 		parent.cursor(PApplet.WAIT);
 		if (condition) {
 			parent.beginRecord(PApplet.PDF, UserSettings.getInstance().getFileExportName() + ".pdf");
+		} else {
+			parent.endRecord();
+			javax.swing.JOptionPane.showMessageDialog(null,
+					"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "pdf", "",
+					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+			UserSettings.getInstance().setFileExportName(null);
+			parent.cursor(PApplet.ARROW);
+		}
+	}
+	
+	/**
+	 * Exports the last frame of the draw loop in format "pdf"
+	 */
+	private void exportFrameAsPDFKey(boolean condition) {
+		parent.cursor(PApplet.WAIT);
+		if (condition) {
+			parent.beginRecord(pdf);
 		} else {
 			parent.endRecord();
 			javax.swing.JOptionPane.showMessageDialog(null,
