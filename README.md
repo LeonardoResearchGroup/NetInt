@@ -2,7 +2,6 @@
 
 NetInt is a Java-based node-link visualization tool initially developed to analyze financial communities of hundreds of thousands of bank clients clustered by their transactions. The latest open-source release is designed to visualize all kinds of directed graphs.
 
-<<<<<<< HEAD
 It supports the visual discovery of patterns across the entire dataset, affording a hierarchical view of disjoint clusters of vertices that could be filtered, zoomed in or drilled down. The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph library that handles all the operations on nodes or edges. The interactive environment for visualization and user direct manipulation is based on the core library of [Processing](http://processing.org) and OpenGL. NetInt allows for the connection of R scripts and packages such as [IGraph](http://igraph.org/) to do statistical processing not offered by JUNG.
 
 ![netint_hierarchy](https://user-images.githubusercontent.com/10836823/40263709-1dad979a-5adc-11e8-979f-db0c0b3a8954.png)
@@ -10,12 +9,7 @@ It supports the visual discovery of patterns across the entire dataset, affordin
 The dataset of the example above contains circa 20K vertices and 200K edges. The user choosed two aggregation attributes (financial community and industry segment), and NetInt created an interactive nested-tier structure. Some of the edges are concealed to simplify the visualization.
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40263878-a8c9782e-5ade-11e8-87fb-d1702c6c1076.png)
-=======
-It supports the visual discovery of patterns across the entire dataset, affording a hierarchical view of disjoint clusters of vertices that could be filtered, zoomed in or drilled down. The user chooses aggregation attributes of vertices, either categorical or numerical (integers) and NetInt presents them in a nested-tier structure. The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph library that handles all the operations on nodes or edges. The interactive environment for visualization and user direct manipulation is based on the core library of [Processing](http://processing.org) and OpenGL. NetInt allows for the connection of R scripts and packages such as [IGraph](http://igraph.org/) to do statistical processing not offered by JUNG.
 
-![netint_hierarchy](https://user-images.githubusercontent.com/10836823/40263709-1dad979a-5adc-11e8-979f-db0c0b3a8954.png)
-
->>>>>>> 46d91d41f2a7ccc01e9322c4dfcd04c5401eb5a7
 
 ### What is this repository for? ###
 
