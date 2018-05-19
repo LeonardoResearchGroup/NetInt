@@ -1,6 +1,6 @@
 # NetInt. Networked Interaction Visualization in Java #
 
-NetInt is a Java-based node-link visualization prototype designed to visualize all kinds of directed graphs. It was originally developed to analyze financial communities of hundreds of thousands of bank clients clustered by their money transactions. 
+NetInt is a Java-based node-link visualization prototype designed to visualize all kinds of directed graphs.
 
 It supports the visual discovery of patterns across the entire dataset by displaying disjoint clusters of vertices that could be filtered, zoomed in or drilled down interactively. The graphical user interface allows the user to get a nested interactive structure by choosing the clustering attribute from a list of categorical vertex attributes.
 
@@ -10,6 +10,12 @@ A soon to be released version of NetInt will integrate a hierarchical visualizat
 
 The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph library that handles all the operations on nodes or edges. The interactive environment for visualization and user direct manipulation is based on the core library of [Processing](http://processing.org) and OpenGL. NetInt allows for the connection of R scripts and packages such as [IGraph](http://igraph.org/) to do statistical processing not offered by JUNG.
 
+## Motivation ##
+
+NetInt was originally developed to analyze financial communities of bank clients clustered by their money transactions. Our initial attempt was to visualize the dataset in [Gephi](https://gephi.org/), but it did not handle efficiently the hundreds of thousands of graph elements, therefore we decided to prototype our own solution. Moreover, we were interested in community detection and financial analysis of the resulting communities, therefore we needed to subset the graph and display the results relative to each community. 
+
+Caveat: NetInt doesn't do community detection itself it relies on third party community detection libraries such as iGraph in R. What it does is to subset the graph in subgraphs using JUNG and display them all at once in an interactive manner.  
+
 ## Main functionalities ##
 
 ### Graphical user interface ###
@@ -18,15 +24,22 @@ The prototype works on three windows simultaneously. The window on the left is t
 
 ### Layouts ### 
 
-Vertices are presented as dots and edges as arcs splited in thirds. The third touching the source vertex appears lighter than the third touching the target vertex. 
+Vertices are displayed as circles and edges as arcs. Arcs are splited in thirds, each drawn by s bezier curve. To indicate esde directionality, the third touching the source vertex appears lighter than the third touching the target vertex. 
 
-So far it works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/).
+So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/).
 
 ### Mapping Edges and Vertices attributes ### 
 
-### Characterizing Communities ###
+
+
+### Community characterization ###
+
+
+### Intercommunity interaction ###
+
 
 ### Filtering ###
+
 
 ### Graph computations ###
 
