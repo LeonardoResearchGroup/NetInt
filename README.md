@@ -39,7 +39,7 @@ GraphLoader.subGraphs;
 	
 ### Propagation ###
 
-The detection and visualization of communities is extremely valuable in the study of propagation because it revealed community structures, key vertices, critical intermediaries, suspicious sources, and transaction loops. NetInt allows users to interactively explore potential propagations or contagions in the network by choosing an specific source and observe the percolation step by step. The exmaple below shows how the transaccions of a single source reach two communities in three steps. 
+The detection and visualization of communities is extremely valuable in the study of propagation because it revealed community structures, key vertices, critical intermediaries, suspicious sources, and transaction loops. NetInt allows users to interactively explore potential propagations or contagions in the network by choosing an specific source and observe the percolation step by step. The example below shows how the transaccions of a single source reach two communities in three steps. 
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40265268-a5600f92-5afa-11e8-9a42-11be472904ed.png)
 
@@ -93,10 +93,6 @@ The detection and visualization of communities is extremely valuable in the stud
 		}
 	}
 
-### What is this repository for? ###
-
-* Quick summary
-* Version
 
 ### How do I get set up? ###
 
@@ -105,9 +101,6 @@ The detection and visualization of communities is extremely valuable in the stud
 * Configuration: Your computer should have Java 1.8 or higher.
 
 * File configuration: NetInt works with graphml files only. The file should follow the graphml [standard](http://graphml.graphdrawing.org/).
-
-* How to run tests
-* Deployment instructions
 
 ### Who do I talk to? ###
 
