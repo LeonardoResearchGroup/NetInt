@@ -20,21 +20,30 @@ The prototype works on three windows simultaneously. The window on the left is t
 
 Vertices are presented as dots and edges as arcs splited in thirds. The third touching the source vertex appears lighter than the third touching the target vertex. 
 
-So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashio to [circos](http://circos.ca/).
+So far it works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/).
 
 ### Vertices ###  
 
 ### Edges ###  
 
-### Communities ###   
+### Communities ###
+
+### Graph computations ###
+
+NetInt is not intended to do graph computations, but you can do operations on the graph such as calculate centralities or do graph partitions if you use methods from JUNG library directly on the graph. This would require you to access the static attribute *theGraph* of the class *GraphLoader* 
+'''
+(GraphLoader.theGraph)
+'''
 
 ### Propagation ###
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40263878-a8c9782e-5ade-11e8-87fb-d1702c6c1076.png)
 
+### How to run it? ###
 
-### How to run it ###
+The released version is an executable jar. Just open it and import your graphml file.
 
+### How is it built? ###
 
 	import java.io.File;
 	import netInt.GraphPad;

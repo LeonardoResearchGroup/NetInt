@@ -32,20 +32,19 @@ public class ControlPanel_Example extends PApplet {
 	GraphPad pad;
 
 	/**
-	 * Required method from parent class. Define here the size of the
-	 * visualization pad
+	 * Required method from parent class. Define here the size of the visualization
+	 * pad
 	 * 
 	 * @see processing.core.PApplet#settings()
 	 */
 	public void settings() {
-	//	size(displayWidth - 201, displayHeight - 100, P2D);
-		size(1000,600,P2D);
+		size(displayWidth - 201, displayHeight - 100, P2D);
 	}
 
 	/**
 	 * Required method from parent class. It runs only once at the PApplet
-	 * initialization. Instantiate the classes and initialize attributes
-	 * declared in this class within this code block.
+	 * initialization. Instantiate the classes and initialize attributes declared in
+	 * this class within this code block.
 	 * 
 	 * @see processing.core.PApplet#setup()
 	 */
@@ -57,9 +56,8 @@ public class ControlPanel_Example extends PApplet {
 	}
 
 	/**
-	 * Required method from parent class. It draws visualElements and other
-	 * PApplet elements on the visualization pad. It constantly iterates over
-	 * its contents
+	 * Required method from parent class. It draws visualElements and other PApplet
+	 * elements on the visualization pad. It constantly iterates over its contents
 	 * 
 	 * @see processing.core.PApplet#draw()
 	 */
@@ -75,7 +73,7 @@ public class ControlPanel_Example extends PApplet {
 	 *            the file chosen by the user at the Control Panel
 	 */
 	public void selectImport(File selection) {
-		
+
 		pad.selectImport(selection);
 	}
 
