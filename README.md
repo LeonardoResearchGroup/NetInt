@@ -47,14 +47,14 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 		GraphPad pad;
 
 		/**
-		 * Define here the size of the visualization pad
+		 * Defines the visualization pad size
 		 */
 		public void settings() {
 			size(displayWidth - 201, displayHeight - 100, P2D);
 		}
 
 		/**
-		 * Instantiate the classes and initialize attributes declared in this class within this method.
+		 * Instantiates the classes and initializes attributes declared in this class within this method.
 		 */
 		public void setup() {
 			pad = new GraphPad(this);
@@ -62,8 +62,7 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 		}
 
 		/**
-		 * It draws visualElements and other visual elements on the visualization pad. 
-		 * It constantly iterates over its contents
+		 * Recursively draws visual elements on the visualization pad.
 		 */
 		public void draw() {
 			background(UserSettings.getInstance().getColorBackground());
