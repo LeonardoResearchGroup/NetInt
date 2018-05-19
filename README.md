@@ -98,11 +98,9 @@ GraphLoader.subGraphs;
 
 ### How do I get set up? ###
 
-* Summary of set up
-If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the released execultable file (NetIntTest.jar), run it and import your file. 
+* Summary of set up: If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the released execultable file (NetIntTest.jar), run it and import your file. 
 
-* Configuration
-Your computer should have Java 1.8 or higher.
+* Configuration: Your computer should have Java 1.8 or higher.
 
 * File configuration: NetInt works with graphml files only. The file should follow the graphml [standard](http://graphml.graphdrawing.org/).
 
@@ -111,5 +109,4 @@ Your computer should have Java 1.8 or higher.
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* This project is developed and maintained by Juan Salamanca (jsal@illinois.edu) and Cesar Loaiza (cdloaiza@icesi.edu.co). Luis Felipe Rivera and Javier Diaz have contributed extensively.
