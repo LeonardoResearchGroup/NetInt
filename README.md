@@ -20,7 +20,9 @@ Caveat: NetInt doesn't do community detection itself. It relies on third party c
 
 ### Fast community visualization of large graphs ###
 
-Netint does not show the whole graph at once. It starts displaying a top tier and progresively unpacks graph portions on demand. To do so, during loading process the user is asked to select a clustering attribute from the list of vertices' categorical attributes. Netint creates containers for each category, inserts in each container the corresponding nodes, and displays only the containers. But, be aware that if the selected clustering attribute has many values (more than 200), the loading process will be lengthy.    
+Netint does not show the whole graph at once. It starts displaying a top tier and progresively unpacks graph portions on demand. To do so, during loading process the user is asked to select a clustering attribute from the list of vertices' categorical attributes. Netint creates containers for each category, inserts in each container the corresponding nodes, and displays only the containers. But, be aware that if the selected clustering attribute has many values (more than 200), the loading process could be lengthy.
+
+![netint_sizemoney](https://user-images.githubusercontent.com/10836823/40270993-ace2e28c-5b5c-11e8-8b3c-df130d77c49d.png)  
 
 ### Graphical user interface ###
 
