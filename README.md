@@ -1,6 +1,6 @@
 # NetInt. Networked Interaction Visualization in Java #
 
-NetInt is a Java-based node-link visualization prototype designed to visualize all kinds of directed graphs.
+NetInt is a Java-based node-link visualization prototype designed to visualize communities in directed graphs.
 
 It supports the visual discovery of patterns across the entire dataset by displaying disjoint clusters of vertices that could be filtered, zoomed in or drilled down interactively. The graphical user interface allows the user to get a nested interactive structure by choosing the clustering attribute from a list of categorical vertex attributes.
 
@@ -12,11 +12,17 @@ The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph 
 
 ## Motivation ##
 
-NetInt was originally developed to analyze financial communities of bank clients clustered by their money transactions. Our initial attempt was to visualize the dataset in [Gephi](https://gephi.org/), but even with professional GPUs it didn't display efficiently the hundreds of thousands of graph elements, therefore we decided to prototype our own graph visualization solution. Moreover, we were interested in community detection and financial analysis of the resulting communities, therefore we needed to subset the graph and display the results relative to each community. All these things are possible in Gephi, but the process to get the result is tedious, specially when you load large graphs.    
+NetInt was originally developed to analyze financial communities of bank clients clustered by their money transactions. Our initial attempt was to visualize the dataset in [Gephi](https://gephi.org/), but even with professional GPUs it didn't display efficiently the hundreds of thousands of graph elements, therefore we decided to prototype our own graph visualization solution. Moreover, we were interested in community detection and financial analysis of the resulting communities, therefore we needed to subset the graph and display the results relative to each community. All these things are possible in Gephi, but when you work with large graphs getting the result is tedious.
 
 Caveat: NetInt doesn't do community detection itself. It relies on third party community detection libraries such as iGraph in R. What it does is to subset the graph in subgraphs using JUNG and display them all at once in an interactive manner.  
 
 ## Main functionalities ##
+
+### Fast community visualization of large graphs ###
+
+Netint does not show the whole graph at once. It starts displaying a top tier of the graph and progresively unpacks portions on demand. To do so, during the graph loading process the user is asked to select a clustering attribute from the list of vertices' categorical attributes. Netint creates containers for each category, inserts in each container the corresponding nodes, and displays only the containers.
+
+However, if the selected attribute has many values, the loading process could be lengthy.    
 
 ### Graphical user interface ###
 
@@ -26,10 +32,9 @@ The prototype works on three windows simultaneously. The window on the left is t
 
 Vertices are displayed as circles and edges as arcs. Arcs are splited in thirds, each drawn by s bezier curve. To indicate esde directionality, the third touching the source vertex appears lighter than the third touching the target vertex. 
 
-So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/).
+So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/). Graphs are visualized by default with the concentric layout because it is extremely fast. 
 
 ### Mapping Edges and Vertices attributes ### 
-
 
 
 ### Community characterization ###
