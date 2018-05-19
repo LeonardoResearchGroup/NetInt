@@ -14,7 +14,7 @@ The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph 
 
 ### Graphical user interface ###
 
-The prototype works on three windows simultanoeusly. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. *GraphPad* is the main window at the center where all graph visual elements are displayed. On the right, *Mapper Viewer* window  shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  An optional fourth window is the *Output console* where all Java console messages are displayed for debugging.  
+The prototype works on three windows simultaneously. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. The central window, where all graph visual elements are displayed, is named *Graph Pad*. On the right, the *Mapper Viewer* window shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  An optional fourth window is the *Output console* where all Java console messages are displayed for debugging.  
 
 ### Layouts ### 
 
