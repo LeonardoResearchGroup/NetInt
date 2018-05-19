@@ -34,73 +34,57 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 
 
 ### How to run it ###
-package examples;
 
-import java.io.File;
 
-import netInt.GraphPad;
-import netInt.gui.ControlPanel;
-import netInt.gui.UserSettings;
-import processing.core.PApplet;
+	import java.io.File;
+	import netInt.GraphPad;
+	import netInt.gui.ControlPanel;
+	import netInt.gui.UserSettings;
+	import processing.core.PApplet;
 
-/**
- * 
- * @author jsalam. June 2017
- *
- */
-public class ControlPanel_Example extends PApplet {
-	GraphPad pad;
+	public class ControlPanel_Example extends PApplet {
+		GraphPad pad;
 
-	/**
-	 * Required method from parent class. Define here the size of the visualization
-	 * pad
-	 * 
-	 * @see processing.core.PApplet#settings()
-	 */
-	public void settings() {
-		size(displayWidth - 201, displayHeight - 100, P2D);
+		/**
+		 * Required method from parent class. Define here the size of the visualization
+		 * pad
+		 */
+		public void settings() {
+			size(displayWidth - 201, displayHeight - 100, P2D);
+		}
+
+		/**
+		 * Required method from parent class. It runs only once at the PApplet
+		 * initialization. Instantiate the classes and initialize attributes declared in
+		 * this class within this code block.
+		 */
+		public void setup() {
+			pad = new GraphPad(this);
+			new ControlPanel(this, 200, this.height - 25);
+		}
+
+		/**
+		 * Required method from parent class. It draws visualElements and other PApplet
+		 * elements on the visualization pad. It constantly iterates over its contents
+		 */
+		public void draw() {
+			background(UserSettings.getInstance().getColorBackground());
+			pad.show();
+		}
+
+		/**
+		 * Required method to launch graph import menu
+		 * @param selection
+		 *            the file chosen by the user in the Control Panel
+		 */
+		public void selectImport(File selection) {
+			pad.selectImport(selection);
+		}
+
+		public static void main(String[] args) {
+			PApplet.main("examples.ControlPanel_Example");
+		}
 	}
-
-	/**
-	 * Required method from parent class. It runs only once at the PApplet
-	 * initialization. Instantiate the classes and initialize attributes declared in
-	 * this class within this code block.
-	 * 
-	 * @see processing.core.PApplet#setup()
-	 */
-	public void setup() {
-		pad = new GraphPad(this);
-
-		// Initiate the Control Panel
-		new ControlPanel(this, 200, this.height - 25);
-	}
-
-	/**
-	 * Required method from parent class. It draws visualElements and other PApplet
-	 * elements on the visualization pad. It constantly iterates over its contents
-	 * 
-	 * @see processing.core.PApplet#draw()
-	 */
-	public void draw() {
-		background(UserSettings.getInstance().getColorBackground());
-		pad.show();
-	}
-
-	/**
-	 * Required method to launch graph import menu
-	 * 
-	 * @param selection
-	 *            the file chosen by the user at the Control Panel
-	 */
-	public void selectImport(File selection) {
-
-		pad.selectImport(selection);
-	}
-
-	public static void main(String[] args) {
-		PApplet.main("examples.ControlPanel_Example");
-	}
-}
 
 ### What is this repository for? ###
 
