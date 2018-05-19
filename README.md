@@ -31,9 +31,10 @@ So far it works with two force-directed layouts (Fuchterman-Reingold, Spring) an
 ### Graph computations ###
 
 NetInt is not intended to do graph computations, but you can do operations on the graph such as calculate centralities or do graph partitions if you use methods from JUNG library directly on the graph. This would require you to access the static attribute *theGraph* of the class *GraphLoader* 
-'''
+
+```
 (GraphLoader.theGraph)
-'''
+```
 
 ### Propagation ###
 
