@@ -1,6 +1,6 @@
-# NetInt #
+# NetInt. Networked Interaction Visualization in Java #
 
-NetInt is a Java-based node-link visualization tool designed to visualize all kinds of directed graphs. It was originally developed to analyze financial communities of hundreds of thousands of bank clients clustered by their money transactions. 
+NetInt is a Java-based node-link visualization prototype designed to visualize all kinds of directed graphs. It was originally developed to analyze financial communities of hundreds of thousands of bank clients clustered by their money transactions. 
 
 This visualization platform supports the visual discovery of patterns across the entire dataset, affording a view of disjoint clusters of vertices that could be filtered, zoomed in or drilled down. The graphical user interface allows the user to choose an aggregation attributes from a list of vertex attributes, displaying an interactive structure.
 
@@ -12,11 +12,21 @@ The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph 
 
 ## Main functionalities ##
 
-### Graph format and layouts ###
+### File format and layouts ###
 
 NetInt works with directed graphml files only. Vertices are presented as dots and edges as arcs splited in thirds. The third touching the source vertex appears lighter than the third touching the target vertex. 
 
-So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashio to [circos](http://circos.ca/)      
+So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashio to [circos](http://circos.ca/).
+
+### Graphical user interface ###
+
+The prototype works on three windows simultanoeusly. *GraphPad* is the main window where all graph visual elements are displayed. *Control Panel* contains all the GUI elements to load and export files, control visuael elements settings, tweek environment settings and load custom-made modules. *Mapper Viewer* shows the color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).       
+
+### Vertices ###  
+
+### Edges ###  
+
+### Communities ###   
 
 ### Propagation ###
 
@@ -27,7 +37,6 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 
 * Quick summary
 * Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
@@ -37,12 +46,6 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 * Database configuration
 * How to run tests
 * Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
 
 ### Who do I talk to? ###
 
