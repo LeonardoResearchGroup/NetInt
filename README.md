@@ -26,7 +26,9 @@ Netint does not show the whole graph at once. It starts displaying a top tier an
 
 ### Graphical user interface ###
 
-The prototype works on three windows simultaneously. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. The central window, where all graph visual elements are displayed, is named *Graph Pad*. On the right, the *Mapper Viewer* window shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  An optional fourth window is the *Console catcher* where Java console messages are displayed for debugging.  
+The prototype works on three windows simultaneously. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. The central window, where all graph visual elements are displayed, is named *Graph Pad*. On the right, the *Mapper Viewer* window shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  An optional fourth window is the *Console catcher* where Java console messages are displayed for debugging. 
+
+![controlpanel](https://user-images.githubusercontent.com/10836823/40272885-1a957042-5b7b-11e8-9a5c-bd41f54096b1.png) 
 
 ### Layouts ### 
 
