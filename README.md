@@ -12,15 +12,15 @@ The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph 
 
 ## Main functionalities ##
 
-### File format and layouts ###
-
-NetInt works with directed graphml files only. Vertices are presented as dots and edges as arcs splited in thirds. The third touching the source vertex appears lighter than the third touching the target vertex. 
-
-So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashio to [circos](http://circos.ca/).
-
 ### Graphical user interface ###
 
-The prototype works on three windows simultanoeusly. *GraphPad* is the main window where all graph visual elements are displayed. *Control Panel* contains all the GUI elements to load and export files, control visuael elements settings, tweek environment settings and load custom-made modules. *Mapper Viewer* shows the color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).       
+The prototype works on three windows simultanoeusly. *GraphPad* is the main window where all graph visual elements are displayed. *Control Panel* contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. *Mapper Viewer* shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  
+
+### Layouts ### 
+
+Vertices are presented as dots and edges as arcs splited in thirds. The third touching the source vertex appears lighter than the third touching the target vertex. 
+
+So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashio to [circos](http://circos.ca/).
 
 ### Vertices ###  
 
@@ -43,7 +43,7 @@ The prototype works on three windows simultanoeusly. *GraphPad* is the main wind
 * Summary of set up
 * Configuration
 * Dependencies
-* Database configuration
+* File configuration: NetInt works with directed graphml files only. 
 * How to run tests
 * Deployment instructions
 
