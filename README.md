@@ -12,9 +12,9 @@ The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph 
 
 ## Motivation ##
 
-NetInt was originally developed to analyze financial communities of bank clients clustered by their money transactions. Our initial attempt was to visualize the dataset in [Gephi](https://gephi.org/), but it did not handle efficiently the hundreds of thousands of graph elements, therefore we decided to prototype our own solution. Moreover, we were interested in community detection and financial analysis of the resulting communities, therefore we needed to subset the graph and display the results relative to each community. 
+NetInt was originally developed to analyze financial communities of bank clients clustered by their money transactions. Our initial attempt was to visualize the dataset in [Gephi](https://gephi.org/), but even with professional GPUs it didn't display efficiently the hundreds of thousands of graph elements, therefore we decided to prototype our own graph visualization solution. Moreover, we were interested in community detection and financial analysis of the resulting communities, therefore we needed to subset the graph and display the results relative to each community. All these things are possible in Gephi, but the process to get the result is tedious, specially when you load large graphs.    
 
-Caveat: NetInt doesn't do community detection itself it relies on third party community detection libraries such as iGraph in R. What it does is to subset the graph in subgraphs using JUNG and display them all at once in an interactive manner.  
+Caveat: NetInt doesn't do community detection itself. It relies on third party community detection libraries such as iGraph in R. What it does is to subset the graph in subgraphs using JUNG and display them all at once in an interactive manner.  
 
 ## Main functionalities ##
 
@@ -66,7 +66,7 @@ The detection and visualization of communities is extremely valuable in the stud
 
 ## How is it built? ##
 
-In general terms, it is all about creating instances of GraphPad and ControlPanel classes, and visualize the output on an instance of the PApplet class. The instance of GrapPad contains all the interactive visual elements inside containers. Each container has methods that map the attributes of vertices and edges of subgraphs to the attributes of visual elements. The code below shows how this process happens in the main executable class.    
+In general terms, it is all about creating instances of GraphPad and ControlPanel classes, and visualize the output on an instance of the PApplet class. The instance of GrapPad contains all the interactive visual elements inside community containers. Each container has methods that map the attributes of vertices and edges to the attributes of visual elements. The code below shows how this process happens in the main executable class.    
 
 	import java.io.File;
 	import netInt.GraphPad;
