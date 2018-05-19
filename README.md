@@ -2,7 +2,7 @@
 
 NetInt is a Java-based node-link visualization prototype designed to visualize all kinds of directed graphs. It was originally developed to analyze financial communities of hundreds of thousands of bank clients clustered by their money transactions. 
 
-This visualization platform supports the visual discovery of patterns across the entire dataset, affording a view of disjoint clusters of vertices that could be filtered, zoomed in or drilled down. The graphical user interface allows the user to choose an aggregation attributes from a list of vertex attributes, displaying an interactive structure.
+It supports the visual discovery of patterns across the entire dataset by displaying disjoint clusters of vertices that could be filtered, zoomed in or drilled down interactively. The graphical user interface allows the user to get a clustered interactive structure by choosing the aggregation attribute from a list of categorical vertex attributes.
 
 A soon to be released version of NetInt will integrate a hierarchical visualization, allowing users to choose several aggregation attributes to display the graph as an interactive nested-tier structure. 
 
@@ -14,7 +14,7 @@ The graph processing core is [JUNG](http://jung.sourceforge.net/), a Java graph 
 
 ### Graphical user interface ###
 
-The prototype works on three windows simultanoeusly. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. *GraphPad* is the main window at the center where all graph visual elements are displayed. On the right, *Mapper Viewer* window  shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  
+The prototype works on three windows simultanoeusly. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. *GraphPad* is the main window at the center where all graph visual elements are displayed. On the right, *Mapper Viewer* window  shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  An optional fourth window is the *Output console* where all Java console messages are displayed for debugging.  
 
 ### Layouts ### 
 
