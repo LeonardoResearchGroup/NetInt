@@ -22,9 +22,11 @@ Vertices are presented as dots and edges as arcs splited in thirds. The third to
 
 So far it works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/).
 
-### Mapping Edges and Vertices attributes ###   
+### Mapping Edges and Vertices attributes ### 
 
 ### Characterizing Communities ###
+
+### Filtering ###
 
 ### Graph computations ###
 
