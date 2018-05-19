@@ -41,9 +41,6 @@ GraphLoader.subGraphs;
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40263878-a8c9782e-5ade-11e8-87fb-d1702c6c1076.png)
 
-### How to run it? ###
-
-If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the released execulatble (it the executable file NetInt.jar), run it and import your file.
 
 ### How is it built? ###
 
@@ -102,9 +99,13 @@ If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format read
 ### How do I get set up? ###
 
 * Summary of set up
+If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the released execultable file (NetIntTest.jar), run it and import your file. 
+
 * Configuration
-* Dependencies
-* File configuration: NetInt works with graphml files only. The file should follow the [standard](http://graphml.graphdrawing.org/)
+Your computer should have Java 1.8 or higher.
+
+* File configuration: NetInt works with graphml files only. The file should follow the graphml [standard](http://graphml.graphdrawing.org/).
+
 * How to run tests
 * Deployment instructions
 
