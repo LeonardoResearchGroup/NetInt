@@ -43,8 +43,15 @@ The detection and visualization of communities is extremely valuable in the stud
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40265268-a5600f92-5afa-11e8-9a42-11be472904ed.png)
 
+## How do I get set up? ##
 
-### How is it built? ###
+* Summary of set up: If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the latest released execultable [file](https://github.com/LeonardoResearchGroup/NetInt/releases), run it and import your file. 
+
+* Configuration: Your computer should have Java 1.8 or higher.
+
+* File configuration: NetInt works with graphml files only. The file should follow the graphml [standard](http://graphml.graphdrawing.org/).
+
+## How is it built? ##
 
 	import java.io.File;
 	import netInt.GraphPad;
@@ -93,14 +100,6 @@ The detection and visualization of communities is extremely valuable in the stud
 		}
 	}
 
-
-### How do I get set up? ###
-
-* Summary of set up: If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the latest released execultable [file](https://github.com/LeonardoResearchGroup/NetInt/releases), run it and import your file. 
-
-* Configuration: Your computer should have Java 1.8 or higher.
-
-* File configuration: NetInt works with graphml files only. The file should follow the graphml [standard](http://graphml.graphdrawing.org/).
 
 ### Who do I talk to? ###
 
