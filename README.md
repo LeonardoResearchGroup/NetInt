@@ -43,6 +43,8 @@ The detection and visualization of communities is extremely valuable in the stud
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40265268-a5600f92-5afa-11e8-9a42-11be472904ed.png)
 
+<img width="1011" alt="artboard 1 2x" src="https://user-images.githubusercontent.com/10836823/40269876-8dc558a2-5b49-11e8-86d7-6346e2bb4ec2.png">
+
 ## How do I get set up? ##
 
 * Summary of set up: If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the latest released execultable [file](https://github.com/LeonardoResearchGroup/NetInt/releases), run it and import your file. 
