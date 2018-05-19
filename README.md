@@ -51,7 +51,7 @@ The detection and visualization of communities is extremely valuable in the stud
 
 ## How is it built? ##
 
-In general it is all about creating and instance of GraphPad and ControlPanel, and visualize the output on an instance of PApplet. The instance of GrapPad contains all the sets of visual elements inside containers.   
+In general terms, it is all about creating instances of GraphPad and ControlPanel, and visualize the output on an instance of PApplet. The instance of GrapPad contains all the interactive visual elements inside containers. Each container has methods that map the attributes of vertices and edges of subgraphs to the attributes of visual elements. The code below shows how this process happens in the main executable class.    
 
 	import java.io.File;
 	import netInt.GraphPad;
