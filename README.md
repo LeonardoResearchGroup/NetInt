@@ -96,7 +96,7 @@ The detection and visualization of communities is extremely valuable in the stud
 
 ### How do I get set up? ###
 
-* Summary of set up: If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the released execultable file [(NetIntTest.jar)](https://github.com/LeonardoResearchGroup/NetInt/releases), run it and import your file. 
+* Summary of set up: If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the latest released execultable file [(NetIntTest.jar)](https://github.com/LeonardoResearchGroup/NetInt/releases), run it and import your file. 
 
 * Configuration: Your computer should have Java 1.8 or higher.
 
