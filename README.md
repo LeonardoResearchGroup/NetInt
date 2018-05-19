@@ -22,11 +22,9 @@ Vertices are presented as dots and edges as arcs splited in thirds. The third to
 
 So far it works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/).
 
-### Vertices ###  
+### Mapping Edges and Vertices attributes ###   
 
-### Edges ###  
-
-### Communities ###
+### Characterizing Communities ###
 
 ### Graph computations ###
 
@@ -52,6 +50,8 @@ The detection and visualization of communities is extremely valuable in the stud
 * File configuration: NetInt works with graphml files only. The file should follow the graphml [standard](http://graphml.graphdrawing.org/).
 
 ## How is it built? ##
+
+In general it is all about creating and instance of GraphPad and ControlPanel, and visualize the output on an instance of PApplet. The instance of GrapPad contains all the sets of visual elements inside containers.   
 
 	import java.io.File;
 	import netInt.GraphPad;
