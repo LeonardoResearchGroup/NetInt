@@ -23,6 +23,7 @@ Caveat: NetInt doesn't do community detection itself. It relies on third party c
 Netint does not show the whole graph at once. It starts displaying a top tier and progresively unpacks graph portions on demand. To do so, during loading process the user is asked to select a clustering attribute from the list of vertices' categorical attributes. Netint creates containers for each category, inserts in each container the corresponding nodes, and displays only the containers. But, be aware that if the selected clustering attribute has many values (more than 200), the loading process could be lengthy.
 
 <img width="420" alt="asset 1 2x" src="https://user-images.githubusercontent.com/10836823/40271062-a8dc2ab2-5b5d-11e8-83f2-5c8bbb1e7f06.png">
+
 *Example of top tier visualizaton of 20K nodes and 200K edges cluestered in 22 communities* 
 
 ### Graphical user interface ###
