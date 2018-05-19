@@ -164,7 +164,7 @@ public class GraphPad {
 		 */
 
 		// Visualization of system.out messages in external panel
-		// consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
+		consoleCatcher = new ConsoleCatcher(initSystemOutToConsole());
 
 		// Visualization of node and edge attributes in external panel
 		mapperViewer = new MapperViewer();
