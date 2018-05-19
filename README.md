@@ -30,12 +30,13 @@ So far it works with two force-directed layouts (Fuchterman-Reingold, Spring) an
 
 ### Graph computations ###
 
-NetInt is not intended to do graph computations, but you can do operations on the graph such as calculate centralities or do graph partitions if you use methods from JUNG library directly on the graph. This would require you to access the static attribute *theGraph* of the class *GraphLoader* 
+NetInt is not intended to do graph computations, but you can do operations on the graph such as calculate centralities or do graph partitions if you use methods from JUNG library directly on the graph. This would require you to access the static attribute *theGraph* of the class *GraphLoader*. If you want to do operations on the user defined graph partitions, you have access to all of them retrieving the static collection *subGraphs* of the same class.   
 
 ```
-(GraphLoader.theGraph)
+GraphLoader.theGraph;
+GraphLoader.subGraphs;
 ```
-
+	
 ### Propagation ###
 
 ![netint_propagation](https://user-images.githubusercontent.com/10836823/40263878-a8c9782e-5ade-11e8-87fb-d1702c6c1076.png)
