@@ -41,6 +41,7 @@ So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring
 
 ### Mapping Edges and Vertices attributes ### 
 
+<img width="312" alt="screen shot 2018-05-19 at 3 22 39 pm" src="https://user-images.githubusercontent.com/10836823/40272945-c3bba442-5b7c-11e8-808f-8c4e28f5aa18.png">
 
 ### Community characterization ###
 
