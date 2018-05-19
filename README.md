@@ -41,8 +41,6 @@ GraphLoader.subGraphs;
 
 The detection and visualization of communities is extremely valuable in the study of propagation because it revealed community structures, key vertices, critical intermediaries, suspicious sources, and transaction loops. NetInt allows users to interactively explore potential propagations or contagions in the network by choosing an specific source and observe the percolation step by step. The example below shows how the transaccions of a single source reach two communities in three steps. 
 
-![netint_propagation](https://user-images.githubusercontent.com/10836823/40265268-a5600f92-5afa-11e8-9a42-11be472904ed.png)
-
 <img width="1011" alt="artboard 1 2x" src="https://user-images.githubusercontent.com/10836823/40269876-8dc558a2-5b49-11e8-86d7-6346e2bb4ec2.png">
 
 ## How do I get set up? ##
