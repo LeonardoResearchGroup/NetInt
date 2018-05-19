@@ -43,7 +43,7 @@ GraphLoader.subGraphs;
 
 ### How to run it? ###
 
-The released version is an executable jar. Just open it and import your graphml file.
+If you have a dataset in [graphml](http://graphml.graphdrawing.org/) format ready to be visualized, just download the released execulatble (it the executable file NetInt.jar), run it and import your file.
 
 ### How is it built? ###
 
@@ -104,7 +104,7 @@ The released version is an executable jar. Just open it and import your graphml 
 * Summary of set up
 * Configuration
 * Dependencies
-* File configuration: NetInt works with directed graphml files only. 
+* File configuration: NetInt works with graphml files only. The file should follow the [standard](http://graphml.graphdrawing.org/)
 * How to run tests
 * Deployment instructions
 
