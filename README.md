@@ -42,21 +42,19 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 	import netInt.gui.UserSettings;
 	import processing.core.PApplet;
 
-	public class ControlPanel_Example extends PApplet {
+	public class Example extends PApplet {
+		
 		GraphPad pad;
 
 		/**
-		 * Required method from parent class. Define here the size of the visualization
-		 * pad
+		 * Define here the size of the visualization pad
 		 */
 		public void settings() {
 			size(displayWidth - 201, displayHeight - 100, P2D);
 		}
 
 		/**
-		 * Required method from parent class. It runs only once at the PApplet
-		 * initialization. Instantiate the classes and initialize attributes declared in
-		 * this class within this code block.
+		 * Instantiate the classes and initialize attributes declared in this class within this method.
 		 */
 		public void setup() {
 			pad = new GraphPad(this);
@@ -64,8 +62,8 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 		}
 
 		/**
-		 * Required method from parent class. It draws visualElements and other PApplet
-		 * elements on the visualization pad. It constantly iterates over its contents
+		 * It draws visualElements and other visual elements on the visualization pad. 
+		 * It constantly iterates over its contents
 		 */
 		public void draw() {
 			background(UserSettings.getInstance().getColorBackground());
@@ -82,7 +80,7 @@ So far it workd with two force-directed layouts (Fuchterman-Reingold, Spring) an
 		}
 
 		public static void main(String[] args) {
-			PApplet.main("examples.ControlPanel_Example");
+			PApplet.main("yourPackage.Example");
 		}
 	}
 
