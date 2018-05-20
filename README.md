@@ -35,13 +35,13 @@ The prototype works on three windows simultaneously: Control panel, Graph pad, a
 
 ### Layouts ### 
 
-Vertices are displayed as circles and edges as arcs. Arcs are splited in thirds, each drawn by s bezier curve. To indicate esde directionality, the third touching the source vertex appears lighter than the third touching the target vertex. 
+Vertices are displayed as circles and edges as arcs. Arcs are splited in three, each drawn by separate bezier curves. To indicate edde directionality, the section touching the source vertex has a lighter color than the section touching the target vertex. 
 
 So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/). Graphs are visualized by default with the concentric layout because it is extremely fast. 
 
 ### Mapping Edges and Vertices attributes ### 
 
-NetInt implements the [Viridis](https://bids.github.io/colormap/)color palete in all its four modes (viridis, magma, plasma and inferno).
+NetInt implements the [Viridis](https://bids.github.io/colormap/)color palette in all its four modes (viridis, magma, plasma and inferno).
 
 <img width="312" alt="screen shot 2018-05-19 at 3 22 39 pm" src="https://user-images.githubusercontent.com/10836823/40272945-c3bba442-5b7c-11e8-808f-8c4e28f5aa18.png">
 
