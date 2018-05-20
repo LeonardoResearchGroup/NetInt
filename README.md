@@ -31,15 +31,15 @@ Netint does not show the whole graph at once. It starts displaying a top tier an
 The prototype runs on three windows simultaneously: Control panel, Graph pad, and Mapper viewer. The **Control panel** contains two GUI accordeons. One for all the GUI elements to load and export files, and another for the visual elements' settings (node, edge, and community), environment settings, and custom-made modules. The **Graph pad** is the canvas for all the graph visual elements. Finally, the **Mapper viewer** shows the distribution of color gradients of all the numeric variables of vertices and edges. An optional fourth window is the Console catcher, where Java console messages are displayed for debugging.
 
 ![controlpanel](https://user-images.githubusercontent.com/10836823/40272885-1a957042-5b7b-11e8-9a5c-bd41f54096b1.png)
-*Accordeon sections of Control Panel* 
+*Accordeon sections of Control panel* 
 
 ### Layouts ### 
 
-Vertices are displayed as circles and edges as arcs. Arcs are splited in three, each drawn by separate bezier curves. To indicate edde directionality, the section touching the source vertex has a lighter color than the section touching the target vertex. 
-
-So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/). Graphs are visualized by default with the concentric layout because it is extremely fast. 
+So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/). Graphs are visualized by default with the concentric layout because it is extremely fast.
 
 ### Mapping Edges and Vertices attributes ### 
+
+Vertices are displayed as circles and edges as arcs. Arcs are splited in three sections, each drawn by separate bezier curves. To indicate edge directionality, the section touching the source vertex has a lighter color than the section touching the target vertex. 
 
 NetInt implements the [Viridis](https://bids.github.io/colormap/)color palette in all its four modes (viridis, magma, plasma and inferno).
 
