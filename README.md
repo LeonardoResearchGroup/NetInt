@@ -20,7 +20,7 @@ Caveat: NetInt doesn't do community detection itself. It relies on third party c
 
 ### Fast community visualization of large graphs ###
 
-Netint does not show the whole graph at once. It starts displaying a top tier and progresively unpacks graph portions on demand. To do so, during loading process the user is asked to select a clustering attribute from the list of vertices' categorical attributes. Netint creates containers for each category, inserts in each container the corresponding nodes, and displays only the containers. But, be aware that if the selected clustering attribute has many values (more than 200), the loading process could be lengthy.
+Netint does not show the whole graph at once. It starts displaying a top tier and progresively unpacks graph portions on demand. To do so, during loading process the user is asked to select a clustering attribute from the list of vertices' categorical attributes. Netint creates containers for each category, inserts in each container the corresponding nodes, and displays only the containers (See image below). But, be aware that if the user selects a clustering attribute with many values (in the order than 200), the loading process could be lengthy.
 
 <img width="420" alt="asset 1 2x" src="https://user-images.githubusercontent.com/10836823/40271062-a8dc2ab2-5b5d-11e8-83f2-5c8bbb1e7f06.png">
 
@@ -28,10 +28,10 @@ Netint does not show the whole graph at once. It starts displaying a top tier an
 
 ### Graphical user interface ###
 
-The prototype works on three windows simultaneously. The window on the left is the *Control Panel*. It contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. The central window, where all graph visual elements are displayed, is named *Graph Pad*. On the right, the *Mapper Viewer* window shows the distribution of color gradients of all the numeric variables of vertices and edges. NetInt implements the [Viridis](https://bids.github.io/colormap/) color palete in all its four modes (viridis, magma, plasma and inferno).  An optional fourth window is the *Console catcher* where Java console messages are displayed for debugging. 
+The prototype works on three windows simultaneously: Control panel, Graph pad, and Mapper viewer. The *Control Panel* contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. The *Graph pad* is the canvas for all the graph visual elements. Finally, the *Mapper Viewer* shows the distribution of color gradients of all the numeric variables of vertices and edges. An optional fourth window is the *Console catcher* where Java console messages are displayed for debugging. 
 
 ![controlpanel](https://user-images.githubusercontent.com/10836823/40272885-1a957042-5b7b-11e8-9a5c-bd41f54096b1.png)
-*Accordeon sections of Control Panel GUI* 
+*Accordeon sections of Control Panel* 
 
 ### Layouts ### 
 
@@ -40,6 +40,8 @@ Vertices are displayed as circles and edges as arcs. Arcs are splited in thirds,
 So far NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and one concentric layout that arrange edges in a similar fashion to [circos](http://circos.ca/). Graphs are visualized by default with the concentric layout because it is extremely fast. 
 
 ### Mapping Edges and Vertices attributes ### 
+
+NetInt implements the [Viridis](https://bids.github.io/colormap/)color palete in all its four modes (viridis, magma, plasma and inferno).
 
 <img width="312" alt="screen shot 2018-05-19 at 3 22 39 pm" src="https://user-images.githubusercontent.com/10836823/40272945-c3bba442-5b7c-11e8-808f-8c4e28f5aa18.png">
 
