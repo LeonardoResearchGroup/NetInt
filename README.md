@@ -28,7 +28,7 @@ Netint does not show the whole graph at once. It starts displaying a top tier an
 
 ### Graphical user interface ###
 
-The prototype works on three windows simultaneously: Control panel, Graph pad, and Mapper viewer. The *Control Panel* contains all the GUI elements to load and export files, control visual elements settings, tweek environment settings, and load custom-made modules. The *Graph pad* is the canvas for all the graph visual elements. Finally, the *Mapper Viewer* shows the distribution of color gradients of all the numeric variables of vertices and edges. An optional fourth window is the *Console catcher* where Java console messages are displayed for debugging. 
+The prototype works on three windows simultaneously: Control panel, Graph pad, and Mapper viewer. The *Control Panel* contains two GUI accordeons. One for all the GUI elements to load and export files, and another for the visual elements settings (node, edge and community), environment settings, and custom-made modules. The *Graph pad* is the canvas for all the graph visual elements. Finally, the *Mapper Viewer* shows the distribution of color gradients of all the numeric variables of vertices and edges. An optional fourth window is the *Console catcher* where Java console messages are displayed for debugging. 
 
 ![controlpanel](https://user-images.githubusercontent.com/10836823/40272885-1a957042-5b7b-11e8-9a5c-bd41f54096b1.png)
 *Accordeon sections of Control Panel* 
