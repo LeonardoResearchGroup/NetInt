@@ -53,6 +53,7 @@ In case of color representation of numerical attributes, NetInt maps the attribu
 
 ### Filtering ###
 
+By default NetInt allows the user to filter nodes by out-degree, edges by weight, and communities by size. But filters can be customizable to any numerical attribute.
 
 ### Graph computations ###
 
