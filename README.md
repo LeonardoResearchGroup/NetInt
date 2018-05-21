@@ -47,9 +47,7 @@ In case of color representation of numerical attributes, NetInt maps the attribu
 
 ### Community characterization ###
 
-
-### Intercommunity interaction ###
-
+<img width="616" alt="artboard 1 2x" src="https://user-images.githubusercontent.com/10836823/40290199-13af75d6-5c82-11e8-91a2-4a000b4011a4.png">
 
 ### Filtering ###
 
