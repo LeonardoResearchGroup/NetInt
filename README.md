@@ -59,7 +59,7 @@ By default NetInt allows the user to filter nodes by out-degree, edges by weight
 
 ### Graph computations ###
 
-NetInt is not intended to do graph computations, but you can do operations on the graph such as calculate centralities or do graph partitions if you use methods from JUNG library directly on the graph. This would require you to access the static attribute *theGraph* of the class *GraphLoader*. If you want to do operations on the user defined graph partitions, you have access to all of them retrieving the static collection *subGraphs* of the same class.   
+NetInt is not designed to do graph computations, but developers can compute operations on the graph, such as calculate centralities or do graph partitions, using methods from JUNG library directly on the graph. This would require to retrieve the graph (static attribute *theGraph* of the class *GraphLoader*) or its partitions (static collection *subGraphs* of the same class).   
 
 ```
 GraphLoader.theGraph;
