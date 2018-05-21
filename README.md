@@ -57,14 +57,6 @@ In case of color representation of numerical attributes, NetInt maps the attribu
 
 By default NetInt allows the user to filter nodes by out-degree, edges by weight, and communities by size. But filters can be customizable to any numerical attribute.
 
-### Graph computations ###
-
-NetInt is not designed to do graph computations, but developers can do operations on the graph, such as calculate centralities or compute graph modularity, using methods from JUNG library directly on the graph. This would require to retrieve the graph (static attribute *theGraph* of the class *GraphLoader*) or its partitions (static collection *subGraphs* of the same class).   
-
-```
-GraphLoader.theGraph;
-GraphLoader.subGraphs;
-```
 	
 ### Propagation ###
 
@@ -131,6 +123,14 @@ In general terms, it is all about creating instances of GraphPad and ControlPane
 		}
 	}
 
+### Graph computations ###
+
+NetInt is not designed to do graph computations, but developers can do operations on the graph, such as calculate centralities or compute graph modularity, using methods from JUNG library directly on the graph. This would require to retrieve the graph (static attribute *theGraph* of the class *GraphLoader*) or its partitions (static collection *subGraphs* of the same class).   
+
+```
+GraphLoader.theGraph;
+GraphLoader.subGraphs;
+```
 
 ### Who do I talk to? ###
 
