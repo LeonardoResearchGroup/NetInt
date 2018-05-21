@@ -50,7 +50,7 @@ NetInt works with two force-directed layouts (Fuchterman-Reingold, Spring) and o
 
 Vertices are displayed as dots and edges as arcs. The diameter and color of dots could represent any attribute of vertices. Arcs are splited in three sections, each drawn by separate bezier curves. To indicate edge directionality, the section touching the source vertex has a lighter color than the section touching the target vertex. The tickness and color of edges could represent edge's attributes.
 
-In case of color representation of numerical attributes, NetInt maps the attribute value to the user selected color mode (viridis, magma, plasma, and inferno) of the [Viridis](https://bids.github.io/colormap/)color palette. By default, the mappings are made linearly, but it is also possible to make them logarithmically.
+In case of color representation of numerical attributes, NetInt maps the attribute value to the user selected color mode (viridis, magma, plasma, and inferno) of the [Viridis](https://bids.github.io/colormap/) color palette. By default, the mappings are made linearly, but it is also possible to make them logarithmically.
 
 
 ### Filtering ###
