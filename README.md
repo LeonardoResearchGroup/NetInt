@@ -28,6 +28,13 @@ Netint does not show the whole graph at once. It starts displaying a top tier an
 
 *Example of top tier visualizaton of 20K nodes and 200K edges clustered in 22 communities* 
 
+### Community characterization ###
+
+Custom made community analysis modules can be imported to NetInt to study community properties. In the example below a bank clients profitability module was used to characterize communities detected by their transactional properties. The overlaying rectangle 
+
+<img width="571" alt="community characterization" src="https://user-images.githubusercontent.com/10836823/40290413-81c9ec30-5c83-11e8-803d-092c0871dcb2.png">
+
+
 ### Graphical user interface ###
 
 The prototype runs on three complementary windows simultaneously: Control panel, Graph pad, and Mapper viewer (see first image). The **Control panel** contains two GUI accordeons. One for all the GUI elements to load and export files, and another for the visual elements' settings (node, edge, and community), environment settings, and custom-made modules. The **Graph pad** is the canvas for all the graph visual elements. Finally, the **Mapper viewer** shows the distribution of color gradients of all the numeric variables of vertices and edges. An optional fourth window is the Console catcher, where Java console messages are displayed for debugging.
@@ -45,9 +52,6 @@ Vertices are displayed as dots and edges as arcs. The diameter and color of dots
 
 In case of color representation of numerical attributes, NetInt maps the attribute value to the user selected color mode (viridis, magma, plasma, and inferno) of the [Viridis](https://bids.github.io/colormap/)color palette. By default, the mappings are made linearly, but it is also possible to make them logarithmically.
 
-### Community characterization ###
-
-<img width="616" alt="artboard 1 2x" src="https://user-images.githubusercontent.com/10836823/40290199-13af75d6-5c82-11e8-91a2-4a000b4011a4.png">
 
 ### Filtering ###
 
