@@ -30,7 +30,7 @@ Netint does not show the whole graph at once. It starts displaying a top tier an
 
 ### Community characterization ###
 
-Custom-made community analysis modules can be imported to study community properties. In the example below, filtered communities of bank clients, clustered by their transactional properties, are analyzed in terms of profitability, transacted amounts, and assets value. The diameter represents the community profitability, the color represents the total amount of money payed within the community. The overlaying rectangle is interactively displayed as the user rolls over the pointer on top of each community.   
+Custom-made community analysis modules developed in Java and R can be imported to study community properties. In the example below, filtered communities of bank clients, clustered by their transactional properties, are analyzed in terms of profitability, transacted amounts, and assets value. The diameter represents the community profitability, the color represents the total amount of money payed within the community. The overlaying rectangle is interactively displayed as the user rolls over the pointer on top of each community.   
 
 <img width="571" alt="community characterization" src="https://user-images.githubusercontent.com/10836823/40290413-81c9ec30-5c83-11e8-803d-092c0871dcb2.png">
 
