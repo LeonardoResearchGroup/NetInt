@@ -60,7 +60,7 @@ By default NetInt allows the user to filter nodes by out-degree, edges by weight
 	
 ### Propagation ###
 
-The detection and visualization of communities is extremely valuable in the study of propagation because it revealed community structures, key vertices, critical intermediaries, suspicious sources, and transaction loops. NetInt allows users to interactively explore potential propagations or contagions in the network by choosing an specific source and observe the percolation step by step. The example below shows how the transaccions of a single source reach two communities in three steps. 
+The detection and visualization of communities are extremely valuable in the study of propagation because it reveals community structures, central vertices, critical intermediaries, suspicious sources, and transaction loops. NetInt allows users to interactively explore potential propagations or contagions in the network by choosing an specific source and observe the percolation step by step. The example below shows how the transaccions of a single source reach two communities in three steps. 
 
 <img width="1011" alt="artboard 1 2x" src="https://user-images.githubusercontent.com/10836823/40269876-8dc558a2-5b49-11e8-86d7-6346e2bb4ec2.png">
 
