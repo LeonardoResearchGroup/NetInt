@@ -21,8 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.JOptionPane;
-
 import jViridis.ColorMap;
 import netInt.canvas.Canvas;
 import netInt.graphElements.Node;
@@ -30,7 +28,6 @@ import netInt.gui.UserSettings;
 import netInt.utilities.mapping.Mapper;
 import netInt.visualElements.primitives.VisualAtom;
 import processing.core.*;
-import processing.event.MouseEvent;
 
 public class VNode extends VisualAtom implements Serializable {
 
