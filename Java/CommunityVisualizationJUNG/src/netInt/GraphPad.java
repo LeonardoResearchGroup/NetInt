@@ -22,8 +22,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import geomerative.RG;
 import netInt.canvas.Canvas;
-import netInt.gui.ControlPanel;
 import netInt.gui.ImportMenuGuiSet;
 import netInt.gui.UserSettings;
 import netInt.utilities.Assembler;
@@ -188,6 +188,9 @@ public class GraphPad {
 
 		// pdf
 		pdf = (PGraphicsPDF) parent.createGraphics(parent.width, parent.height, PApplet.PDF, pdfFilePath);
+		
+		// Geomerative init
+		RG.init(parent);
 
 		System.out.println("** GraphPad Init() completed **");
 

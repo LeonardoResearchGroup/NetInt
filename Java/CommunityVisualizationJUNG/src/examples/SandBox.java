@@ -26,8 +26,15 @@ import processing.core.PApplet;
 public class SandBox extends PApplet {
 
 	RShape union;
+	RShape master;
 	ArrayList<RShape> paras;
 	ArrayList<RShape> circles;
+
+	/*
+	 * The idea is that you create a master RShape which is the circle of this
+	 * VCommunity. To that master shape you should intersect the circles of all other
+	 * VCommunities contained in this VCommunity
+	 */
 
 	public void settings() {
 		size(displayWidth - 227, displayHeight - 300, P2D);
@@ -35,11 +42,13 @@ public class SandBox extends PApplet {
 
 	public void setup() {
 		RG.init(this);
+		master = RShape.createCircle(500, 300, 200);
 		circles = new ArrayList<RShape>();
-		circles.add(RShape.createCircle(500, 300, 200));
+		circles.add(master);
 		circles.add(RShape.createCircle(700, 300, 500));
 		circles.add(RShape.createCircle(400, 300, 300));
 		paras = new ArrayList<RShape>();
+		
 		union = circles.get(0).union(circles.get(1));
 	}
 
@@ -53,8 +62,8 @@ public class SandBox extends PApplet {
 	}
 
 	public void mouseMoved() {
-		circles.get(0).translate(mouseX - circles.get(0).getX() - circles.get(0).getWidth() / 2,
-				mouseY - circles.get(0).getY() - circles.get(0).getHeight() / 2);
+		circles.get(1).translate(mouseX - circles.get(1).getX() - circles.get(1).getWidth() / 2,
+				mouseY - circles.get(1).getY() - circles.get(1).getHeight() / 2);
 		intersectShapes();
 	}
 

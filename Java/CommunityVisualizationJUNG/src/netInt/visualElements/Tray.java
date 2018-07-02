@@ -1,138 +1,139 @@
 package netInt.visualElements;
 
+import java.util.ArrayList;
+
+import geomerative.RG;
+import geomerative.RShape;
 import netInt.canvas.Canvas;
+import netInt.containers.Container;
+import netInt.graphElements.Node;
 import netInt.utilities.geometry.CircleCircleIntersection;
 import netInt.utilities.geometry.CircleCircleTangent;
 import netInt.visualElements.primitives.VisualAtom;
 import processing.core.PApplet;
 import processing.core.PVector;
+import processing.event.MouseEvent;
 
 public class Tray extends VisualAtom {
-	
-	private PVector circle1;
-	
-	private PVector circle2;
-	
-	private int segments;
-	
-	private float[] anglesA;
-	
-	private float[] anglesB;
 
-	public Tray(float circle1X, float circle1Y, int circle1R) {
-		
-		super(circle1X, circle1Y, circle1R, circle1R);
-		
-		circle1 = new PVector(circle1X, circle1Y, circle1R);
-		
-		segments = 7;
-		
-		anglesA = new float[segments + 3];
-		
-		anglesB = new float[segments + 3];
+	private static final long serialVersionUID = 1L;
+
+	// The resulting shape
+	private RShape union;
+
+	// All the circles including this at the first position
+	private ArrayList<RShape> circles;
+
+	// Constructor
+	public Tray(VCommunity communityNode, Container container) {
+
+		super(communityNode.getX(), communityNode.getY(), container.getDimension().width,
+				container.getDimension().width);
+
+		circles = new ArrayList<RShape>();
+
+		// this is the master shape of this VCommunity
+		circles.add(RShape.createCircle(communityNode.getX(), communityNode.getY(), container.getDimension().width));
+
+		// initialize resulting union
+		union = circles.get(0);
+
+		// populate circles
+		getOtherVCommunitiesCircles(container);
+
+		// events
+		eventRegister(Canvas.app);
+
 	}
 
-//	public Tray(float circle1X, float circle1Y, int circle1R, float circle2X, float circle2Y, int circle2R) {
-//		
-//		super(circle1X, circle1Y, circle1R, circle1R);
-//		
-//		circle1 = new PVector(circle1X, circle1Y, circle1R);
-//		
-//		circle2 = new PVector(circle2X, circle2Y, circle2R);
-//		
-//		segments = 7;
-//		
-//		anglesA = new float[segments + 3];
-//		
-//		anglesB = new float[segments + 3];
-//		
-//		makeTangents();
-//	}
+	/**
+	 * intersects all the shapes to build the final RShape.
+	 * 
+	 * First, it creates all the parallelepipeds described by the tangential points
+	 * between all the circles. Then merge them all in a single RShape. Then it
+	 * unites all the circles to the merged RShape
+	 */
+	public void intersectShapes() {
+		// fresh start
+		ArrayList<RShape> paras = new ArrayList<RShape>();
+		union = null;
 
-//	public void update(float circle1X, float circle1Y, float circle1R, float circle2X, float circle2Y,
-//			float circle2R) {
-//		
-//		circle1 = new PVector(circle1X, circle1Y, circle1R);
-//		
-//		circle2 = new PVector(circle2X, circle2Y, circle2R);
-//		
-//		makeTangents();
-//	}
+		try {
+			// create all the parallelepipeds
+			for (int i = 0; i < circles.size() - 1; i++) {
+				for (int j = i + 1; j < circles.size(); j++) {
+					if (circles.get(i) != null && circles.get(j) != null) {
+						paras.add(CircleCircleTangent.getTangentRBox(circles.get(i), circles.get(j)));
+					}
+				}
+			}
 
-	PVector [] points;
-	public void updateCircle1(float circle1X, float circle1Y, float circle1R) {
-		circle1 = new PVector(circle1X, circle1Y, circle1R);
-		
-		if (circle2 != null)
-		
-			//makeTangents();
-			
-			points = CircleCircleTangent.getTangetPoints(circle1, circle2);
+			// get the first parallelepiped in the list
+			for (int i = 0; i < paras.size(); i++) {
+				if (paras.get(i) != null) {
+					union = paras.get(i);
+					break;
+				}
+			}
+
+			// merge all parallelepipeds
+			for (int i = 0; i < paras.size() - 1; i++) {
+				for (int j = i + 1; j < paras.size(); j++) {
+					if (paras.get(i) != null && paras.get(j) != null) {
+						union = union.union(paras.get(j));
+					}
+				}
+			}
+			// add all the circles
+			if (union == null) {
+				union = circles.get(0);
+				for (int i = 1; i < circles.size(); i++) {
+					union = union.union(circles.get(i));
+				}
+			} else {
+				for (int i = 0; i < circles.size(); i++) {
+					union = union.union(circles.get(i));
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println(this.getClass().getName() + "" + e.getMessage());
+		}
+
 	}
 
-	public void updateCircle2(float circle2X, float circle2Y, float circle2R) {
-		circle2 = new PVector(circle2X, circle2Y, circle2R);
-		
-		//makeTangents();
-		
-		points = CircleCircleTangent.getTangetPoints(circle1, circle2);
+	private void getOtherVCommunitiesCircles(Container container) {
+
+		for (VCommunity vC : container.getVCommunities()) {
+
+			circles.add(RShape.createCircle(vC.getPos().x, vC.getPos().y, container.getDimension().width));
+
+		}
 	}
 
 	public void show() {
-		
-		if (points != null) {
-			Canvas.app.stroke(0);
-			Canvas.app.strokeWeight(3);
-			Canvas.app.line(points[0].x, points[0].y, points[1].x, points[1].y);
-			Canvas.app.line(points[2].x, points[2].y, points[3].x, points[3].y);
-		}
-
-		Canvas.app.fill(color.getRGB(), 20);
-
-		if (circle2 != null) {
-			// display
-			Canvas.app.stroke(30,70);
-			
-			Canvas.app.beginShape();
-			
-			// first circle
-			float posX = 0;
-			
-			float posY = 0;
-			
-			for (int i = 0; i < anglesA.length - 1; i++) {
-			
-				posX = circle1.x + PApplet.cos(anglesA[i]) * circle1.z / 2;
-				
-				posY = circle1.y + PApplet.sin(anglesA[i]) * circle1.z / 2;
-				
-				Canvas.app.curveVertex(posX, posY);
-				
-			}
-
-			// second circle
-			for (int i = 0; i < anglesB.length; i++) {
-			
-				posX = circle2.x + PApplet.cos(anglesB[i]) * circle2.z / 2;
-				
-				posY = circle2.y + PApplet.sin(anglesB[i]) * circle2.z / 2;
-				
-				Canvas.app.curveVertex(posX, posY);
-			}
-			
-			Canvas.app.endShape(PApplet.CLOSE);
-			
-		} else {
-
-			Canvas.app.ellipse(circle1.x, circle1.y, circle1.z, circle1.z);
-		}
-
+		RG.shape(union);
 	}
 
-	@Override
 	public void eventRegister(PApplet theApp) {
-		// TODO Auto-generated method stub
-		
+		theApp.registerMethod("mouseEvent", this);
 	}
 
+	public void mouseEvent(MouseEvent e) {
+
+		if (e.getAction() == MouseEvent.DRAG) {
+			// Relocate this circle
+//			circles.get(0).translate(Canvas.getCanvasMouse().x - circles.get(0).getX() - circles.get(0).getWidth() / 2,
+//					Canvas.getCanvasMouse().y - circles.get(0).getY() - circles.get(0).getHeight() / 2);
+			
+//			circles.get(0).translate(Canvas.app.mouseX - circles.get(0).getX() - circles.get(0).getWidth() / 2,
+//					Canvas.app.mouseY - circles.get(0).getY() - circles.get(0).getHeight() / 2);
+
+			
+			//if (circles.get(0).contains(Canvas.getCanvasMouse().x, Canvas.getCanvasMouse().y)) {
+				// Intersect shapes
+				//intersectShapes();
+			//}
+		}
+	}
 }

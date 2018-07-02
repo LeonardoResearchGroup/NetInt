@@ -60,22 +60,21 @@ public abstract class Container {
 	public static final int CONCENTRIC = 4;
 	// JUNG graph
 	protected Graph<Node, Edge> graph;
-	
-	//This could be deprecated in the future
-	//This is a graph made of nodes in opposite of "graph" which could be made of communities
+
+	/*
+	 * This could be deprecated in the future This is a graph made of nodes in
+	 * opposite of "graph" which could be made of communities
+	 */
 	protected Graph<Node, Edge> graphOfNodes;
 
-
 	// Visual Elements
-	// All VNodes including VCommunities
-	protected HashMap<String, VNode> vNodes;
+	protected HashMap<String, VNode> vNodes; // All VNodes including VCommunities
 	protected ArrayList<VEdge> vEdges;
 	protected ArrayList<VEdge> vExtEdges;
 
 	// Custom Layouts
 	protected String name = "no name";
-	//Variable which this community was generated
-	protected String communityTag = "no tag";
+	protected String communityTag = "no tag"; // Variable which this community was generated
 
 	private PVector layoutCenter;
 	public AbstractLayout<Node, Edge> layout;
@@ -109,8 +108,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * This method is used to distribute nodes in layout only once after the
-	 * user clicks (opens) on the vCommunity cover
+	 * This method is used to distribute nodes in layout only once after the user
+	 * clicks (opens) on the vCommunity cover
 	 * 
 	 * @return true if initialization completed
 	 */
@@ -120,7 +119,7 @@ public abstract class Container {
 			System.out.println(this.getClass().getName() + " Initializing nodes in container of " + getName());
 
 			distributeNodesInLayout(currentLayout, dimension);
-			System.out.println(this.getClass().getName() + " "+ dimension.getHeight());
+			System.out.println(this.getClass().getName() + " " + dimension.getHeight());
 
 			if (vNodes.size() == 0) {
 
@@ -136,7 +135,7 @@ public abstract class Container {
 				System.out.println(this.getClass().getName() + " Retrieving VNode successors");
 
 				retrieveVNodeSuccessors(layout.getGraph());
-				
+
 				initializeElements();
 
 			} else {
@@ -145,7 +144,7 @@ public abstract class Container {
 				runVEdgeFactory();
 
 				setVElementCoordinates();
-				
+
 				initializeElements();
 			}
 
@@ -181,7 +180,7 @@ public abstract class Container {
 	public void runVEdgeFactory() {
 		for (Edge e : graph.getEdges()) {
 			VEdge vEdge = new VEdge(e);
-			if(vEdge.setSourceAndTarget(vNodes)){
+			if (vEdge.setSourceAndTarget(vNodes)) {
 				vEdge.makeBezier();
 				vEdges.add(vEdge);
 			}
@@ -192,9 +191,9 @@ public abstract class Container {
 	// *** Other methods
 
 	/**
-	 * Sets the degrees of this container graph. It is useful because the graph
-	 * of higher tier containers is populated during the loading time. This
-	 * graph usually contains nodes that represent communities and edges linking
+	 * Sets the degrees of this container graph. It is useful because the graph of
+	 * higher tier containers is populated during the loading time. This graph
+	 * usually contains nodes that represent communities and edges linking
 	 * communities
 	 */
 	public void setGraphDegrees() {
@@ -220,21 +219,18 @@ public abstract class Container {
 		// Nodes sorted for adaptive performance
 		Arrays.sort(degrees);
 
-
 	}
 
 	/**
 	 * This method is intended to populate a container's empty graph with
-	 * GraphElements from the non-empty subGraphs of edges between nodes marked
-	 * a members of this community and those marked as members of other
-	 * communities.
+	 * GraphElements from the non-empty subGraphs of edges between nodes marked a
+	 * members of this community and those marked as members of other communities.
 	 * 
-	 * It creates an edge between the VCommunity to which this container belongs
-	 * and VCommunities received as parameter if there is an actual edge whose
-	 * source or target are marked as members of either communities.
+	 * It creates an edge between the VCommunity to which this container belongs and
+	 * VCommunities received as parameter if there is an actual edge whose source or
+	 * target are marked as members of either communities.
 	 * 
-	 * Each edge has a weight equals to the number of edges linking both
-	 * communities
+	 * Each edge has a weight equals to the number of edges linking both communities
 	 * 
 	 * @param edgeList
 	 *            list of edges
@@ -251,16 +247,14 @@ public abstract class Container {
 
 	/**
 	 * This method is intended to populate a container's empty graph with
-	 * GraphElements from the non-empty subGraphs of edges between nodes marked
-	 * a members of this community and those marked as members of other
-	 * communities.
+	 * GraphElements from the non-empty subGraphs of edges between nodes marked a
+	 * members of this community and those marked as members of other communities.
 	 * 
-	 * It creates an edge between the VCommunity to which this container belongs
-	 * and VCommunities received as parameter if there is an actual edge whose
-	 * source or target are marked as members of either communities.
+	 * It creates an edge between the VCommunity to which this container belongs and
+	 * VCommunities received as parameter if there is an actual edge whose source or
+	 * target are marked as members of either communities.
 	 * 
-	 * Each edge has a weight equals to the number of edges linking both
-	 * communities
+	 * Each edge has a weight equals to the number of edges linking both communities
 	 * 
 	 * @param intVComm
 	 *            the list of VCommunities
@@ -304,7 +298,8 @@ public abstract class Container {
 	 * @param graph
 	 *            The graph to which external edges are built
 	 */
-	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities, DirectedSparseMultigraph<Node, Edge> graph) {
+	public void buildExternalEdges(ArrayList<VCommunity> otherVCommunities,
+			DirectedSparseMultigraph<Node, Edge> graph) {
 		// For all otherCommunities
 		for (VCommunity vC : otherVCommunities) {
 
@@ -341,9 +336,8 @@ public abstract class Container {
 	}
 
 	/**
-     * Must be deprecated
-	 * Builds all the external edges of this container with the one of a
-	 * deployed community community
+	 * Must be deprecated Builds all the external edges of this container with the
+	 * one of a deployed community community
 	 * 
 	 * @param otherVCommunity
 	 *            VCommunity
@@ -363,7 +357,8 @@ public abstract class Container {
 					System.out.println(this.getClass().getName() + " " + this.getName()
 							+ " is building External Edges for Vnodes with:" + otherContainer.getName());
 
-					this.runExternalEdgeFactory(otherContainer.getName(), otherContainer, (DirectedSparseMultigraph<Node, Edge>)this.graph);
+					this.runExternalEdgeFactory(otherContainer.getName(), otherContainer,
+							(DirectedSparseMultigraph<Node, Edge>) this.graph);
 
 					this.retrieveExternalVNodeSuccessors(GraphLoader.theGraph, otherContainer);
 
@@ -392,8 +387,7 @@ public abstract class Container {
 	}
 
 	/**
-	 * Check if the current layout is an IterativeContext and runs one layout
-	 * step
+	 * Check if the current layout is an IterativeContext and runs one layout step
 	 * 
 	 * @param vCommunityCenter
 	 *            The new center
@@ -439,9 +433,9 @@ public abstract class Container {
 	}
 
 	/**
-	 * True if the container's layout implements IterativeContext. This means
-	 * that the layout needs to iterate over several times to achieve the
-	 * distribution of vNodes
+	 * True if the container's layout implements IterativeContext. This means that
+	 * the layout needs to iterate over several times to achieve the distribution of
+	 * vNodes
 	 * 
 	 * @return true if iterative
 	 */
@@ -462,9 +456,9 @@ public abstract class Container {
 	}
 
 	/**
-	 * Clears the ArrayList of VNodes and VEdges and recreates all the VNodes
-	 * and VEdges. It is used to update the positions after invoking a
-	 * comparator. Sort methods invoke updateNetwork() by default
+	 * Clears the ArrayList of VNodes and VEdges and recreates all the VNodes and
+	 * VEdges. It is used to update the positions after invoking a comparator. Sort
+	 * methods invoke updateNetwork() by default
 	 */
 	public void remakeVisualElements() {
 		vNodes.clear();
@@ -490,8 +484,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Retrieves all the external VNode successors (taken from extContainer) for
-	 * all VNodes of the container from a given graph
+	 * Retrieves all the external VNode successors (taken from extContainer) for all
+	 * VNodes of the container from a given graph
 	 * 
 	 * @param graph
 	 *            The graph
@@ -501,15 +495,15 @@ public abstract class Container {
 	public void retrieveExternalVNodeSuccessors(Graph<Node, Edge> graph, Container extContainer) {
 		for (VNode tmp : vNodes.values()) {
 			Collection<Node> nodes = graph.getSuccessors(tmp.getNode());
-			if(nodes != null)
+			if (nodes != null)
 				tmp.setVNodeSuccessors(extContainer.getVNodes(nodes));
 		}
 	}
 
 	// *** Layouts
 	/**
-	 * Distributes nodes within the boundaries of a two dimensional space
-	 * following the given algorithm
+	 * Distributes nodes within the boundaries of a two dimensional space following
+	 * the given algorithm
 	 * 
 	 * @param kindOfLayout
 	 *            Defined as static attribute
@@ -577,8 +571,8 @@ public abstract class Container {
 	 * http://jung.sourceforge.net/doc/api/index.html?edu/uci/ics/jung/
 	 * algorithms/layout/CircleLayout.CircleVertexData.html
 	 * 
-	 * @param dimension An instance of Dimension that defines the boundaries of the
-	 *            layout
+	 * @param dimension
+	 *            An instance of Dimension that defines the boundaries of the layout
 	 * @return the Fruchterman Reingold layout set to a given Dimension
 	 */
 	protected AbstractLayout<Node, Edge> fruchtermanReingold(Dimension dimension) {
@@ -644,8 +638,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Returns a the entire set of this collection's VNodes containing both
-	 * VNodes and VCommunity instances
+	 * Returns a the entire set of this collection's VNodes containing both VNodes
+	 * and VCommunity instances
 	 * 
 	 * @return List of vNodes
 	 */
@@ -654,9 +648,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Returns a the entire set of this collection's VNodes containing both
-	 * VNodes and VCommunity instances in a HashMap which includes Ids for every
-	 * node
+	 * Returns a the entire set of this collection's VNodes containing both VNodes
+	 * and VCommunity instances in a HashMap which includes Ids for every node
 	 * 
 	 * @return List of vNodes
 	 */
@@ -709,7 +702,7 @@ public abstract class Container {
 	public Collection<VNode> getVNodes(Collection<Node> c) {
 		Collection<VNode> rtn = new ArrayList<VNode>();
 		for (VNode vN : vNodes.values()) {
-			System.out.println("Node without node: "+ vN.getNode().getName());
+			System.out.println("Node without node: " + vN.getNode().getName());
 			if (c.contains(vN.getNode())) {
 				rtn.add(vN);
 			}
@@ -788,30 +781,33 @@ public abstract class Container {
 	}
 
 	/**
-	 * Build the vEdges between the nodes of this container and the container
-	 * from another community.
+	 * Build the vEdges between the nodes of this container and the container from
+	 * another community.
 	 * 
 	 * @param externalCommunityName
 	 *            Name of external community
 	 * @param externalContainer
 	 *            External container
-     * @param graph
+	 * @param graph
 	 *            The graph to which edges are built
 	 */
-	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer, DirectedSparseMultigraph<Node, Edge> graph) {
+	public void runExternalEdgeFactory(String externalCommunityName, Container externalContainer,
+			DirectedSparseMultigraph<Node, Edge> graph) {
 		// Put all the VNodes from this container and the external container in
 		// a single collection
 		HashMap<String, VNode> vNodesBothCommunities = new HashMap<String, VNode>(this.vNodes);
 		vNodesBothCommunities.putAll(externalContainer.getVNodesById());
 		// Here, we get a copy of all edges between the two containers.
-		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName, communityTag, graph);
+		Graph<Node, Edge> filteredGraph = Filters.filterEdgeLinkingCommunities(this.getName(), externalCommunityName,
+				communityTag, graph);
 		Collection<Edge> edgesBetweenCommunities = filteredGraph.getEdges();
 		// For each edge between containers
 		for (Edge edgeBetweenCommunities : edgesBetweenCommunities) {
 			// Make a VEdge
 			VEdge vEdge = new VEdge(edgeBetweenCommunities);
 			// Set source and target nodes
-			if(vEdge.setSourceAndTarget(vNodesBothCommunities)){;
+			if (vEdge.setSourceAndTarget(vNodesBothCommunities)) {
+				;
 				// Make the linking curve
 				vEdge.makeBezier();
 				// Add vEdge to externalEdges of this container if the source node
@@ -875,8 +871,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Draws the rectangular boundaries of the container starting from the
-	 * origin. Draws a cross hair at the center of the Dimension rectangle
+	 * Draws the rectangular boundaries of the container starting from the origin.
+	 * Draws a cross hair at the center of the Dimension rectangle
 	 * 
 	 * @param origin
 	 *            rectangle origin
@@ -893,21 +889,21 @@ public abstract class Container {
 		Canvas.app.line(originShifted.x, originShifted.y + (dimension.height / 2), originShifted.x + +(dimension.width),
 				originShifted.y + +(dimension.height / 2));
 	}
-	
-	
+
 	public void setGraphOfNodes(Graph<Node, Edge> graphOfNodes) {
 		this.graphOfNodes = graphOfNodes;
 	}
-	
+
 	public void setCommunityTag(String communitieTag) {
 		this.communityTag = communitieTag;
 	}
-	
+
 	/**
 	 * Register events of every node.
 	 */
 	private void initializeElements() {
-//		System.out.println(this.getClass().getName() + " Comunidad:"+getName() + " Inicializando");
+		// System.out.println(this.getClass().getName() + " Comunidad:"+getName() + "
+		// Inicializando");
 		for (VNode vN : vNodes.values()) {
 			vN.initialize();
 		}

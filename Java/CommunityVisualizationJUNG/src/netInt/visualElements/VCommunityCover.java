@@ -57,7 +57,7 @@ public class VCommunityCover implements Serializable {
 	private VCommunity communityNode;
 	private Container container;
 
-	// Tray (internal class)
+	// Tray
 	public Tray tray;
 
 	public VCommunityCover(VCommunity communityNode) {
@@ -70,7 +70,7 @@ public class VCommunityCover implements Serializable {
 		enableClosing = false;
 		eventRegister(Canvas.app);
 		this.container = communityNode.container;
-		tray = new Tray(communityNode.getX(), communityNode.getY(), container.getDimension().width);
+		tray = new Tray(communityNode, container);
 	}
 
 	protected void show(boolean containsSearchedNode) {
@@ -103,7 +103,7 @@ public class VCommunityCover implements Serializable {
 			if (coverDeployed) {
 				fold();
 			}
-
+			// If community is opened
 		} else {
 			Canvas.app.fill(100, 50);
 
@@ -111,10 +111,10 @@ public class VCommunityCover implements Serializable {
 				unfold();
 				drawArcs();
 			}
-			tray.updateCircle1(communityNode.getPos().x, communityNode.getPos().y, container.getDimension().width);
+			//**********************tray.updateCircle1(communityNode.getPos().x, communityNode.getPos().y, container.getDimension().width);
 
 			tray.setColor(communityNode.getColor());
-			
+
 			tray.show();
 
 		}

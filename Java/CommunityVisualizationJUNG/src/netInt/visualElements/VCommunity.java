@@ -488,8 +488,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 					vC.setAboveDegreeThreshold(false);
 				}
 
-				// vC.setVisibility(true);
-
 				// set subCommunities coordinates relative to vCommunity
 				// position
 				if (!vCommunitiesCentered) {
@@ -497,22 +495,11 @@ public class VCommunity extends VNode implements java.io.Serializable {
 				}
 
 				// update circle in Community Cover
-				vC.getComCover().tray.updateCircle2(this.getPos().x, this.getPos().y, container.getDimension().width);
+				//*********************vC.getComCover().tray.;
 				
 				// Show VCommunity
 				vC.showCommunity();
 
-				/*
-				 * 
-				 * if (vC.comCover.isUnlocked() && !vC.lock) {
-				 * container.setIncidentEdgesVisibility(vC.getNode(), false);
-				 * vC.lock = true; }
-				 * 
-				 * if (!vC.comCover.isUnlocked() && vC.lock) {
-				 * container.setIncidentEdgesVisibility(vC.getNode(), true);
-				 * vC.lock = false; }
-				 * 
-				 */
 			}
 
 		}
