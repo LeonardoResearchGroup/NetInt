@@ -16,53 +16,95 @@
  ******************************************************************************/
 package examples;
 
-import java.io.File;
+import java.util.ArrayList;
 
 import geomerative.RG;
 import geomerative.RShape;
 import netInt.utilities.geometry.CircleCircleTangent;
 import processing.core.PApplet;
-import processing.core.PVector;
 
 public class SandBox extends PApplet {
 
-	PVector c1, c2;
-	PVector[] points;
-	RShape parallelepiped, union;
-	RShape rC1, rC2;
+	RShape union;
+	ArrayList<RShape> paras;
+	ArrayList<RShape> circles;
 
 	public void settings() {
-
 		size(displayWidth - 227, displayHeight - 300, P2D);
 	}
 
 	public void setup() {
 		RG.init(this);
-		c1 = new PVector(500, 300, 200);
-		c2 = new PVector(700, 300, 500);
-		rC1 = RShape.createCircle(500, 300, 200);
-		rC2 = RShape.createCircle(700, 300, 500);
-		union = rC1.union(rC2);
+		circles = new ArrayList<RShape>();
+		circles.add(RShape.createCircle(500, 300, 200));
+		circles.add(RShape.createCircle(700, 300, 500));
+		circles.add(RShape.createCircle(400, 300, 300));
+		paras = new ArrayList<RShape>();
+		union = circles.get(0).union(circles.get(1));
 	}
 
 	public void draw() {
-		background(200);
-		noStroke();
-		fill(105, 30);
+		background(250);
 		stroke(0);
+		noFill();
 		RG.shape(union);
+		fill(0);
+		text(frameRate, 10, 10);
 	}
 
 	public void mouseMoved() {
-		rC1.translate(mouseX - rC1.getX(), mouseY - rC1.getY());
-		parallelepiped = CircleCircleTangent.getTangentRBox(rC1, rC2);
+		circles.get(0).translate(mouseX - circles.get(0).getX() - circles.get(0).getWidth() / 2,
+				mouseY - circles.get(0).getY() - circles.get(0).getHeight() / 2);
+		intersectShapes();
+	}
 
-		if (parallelepiped != null) {
-			union = parallelepiped.union(rC1);
-			union = union.union(rC2);
-		} else {
-			union = rC1.union(rC2);
+	private void intersectShapes() {
+		// fresh start
+		paras.clear();
+		union = null;
+
+		try {
+			// create all the parallelepipeds
+			for (int i = 0; i < circles.size() - 1; i++) {
+				for (int j = i + 1; j < circles.size(); j++) {
+					if (circles.get(i) != null && circles.get(j) != null) {
+						paras.add(CircleCircleTangent.getTangentRBox(circles.get(i), circles.get(j)));
+					}
+				}
+			}
+
+			// get the first parallelepiped in the list
+			for (int i = 0; i < paras.size(); i++) {
+				if (paras.get(i) != null) {
+					union = paras.get(i);
+					break;
+				}
+			}
+
+			// merge all the parallelepipeds
+			for (int i = 0; i < paras.size() - 1; i++) {
+				for (int j = i + 1; j < paras.size(); j++) {
+					if (paras.get(i) != null && paras.get(j) != null) {
+						union = union.union(paras.get(j));
+					}
+				}
+			}
+			// add all the circles
+			if (union == null) {
+				union = circles.get(0);
+				for (int i = 1; i < circles.size(); i++) {
+					union = union.union(circles.get(i));
+				}
+			} else {
+				for (int i = 0; i < circles.size(); i++) {
+					union = union.union(circles.get(i));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	public static void main(String[] args) {
