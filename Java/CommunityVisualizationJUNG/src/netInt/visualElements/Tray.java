@@ -1,61 +1,46 @@
 package netInt.visualElements;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import geomerative.RG;
 import geomerative.RShape;
 import netInt.canvas.Canvas;
 import netInt.containers.Container;
-import netInt.graphElements.Node;
-import netInt.utilities.geometry.CircleCircleIntersection;
 import netInt.utilities.geometry.CircleCircleTangent;
-import netInt.visualElements.primitives.VisualAtom;
-import processing.core.PApplet;
-import processing.core.PVector;
-import processing.event.MouseEvent;
 
-public class Tray extends VisualAtom {
-
-	private static final long serialVersionUID = 1L;
+public class Tray {
 
 	// The resulting shape
 	private RShape union;
 
-	// All the circles including this at the first position
-	private ArrayList<RShape> circles;
+	// The RShape of this container
+	private RShape master;
 
-	// Constructor
-	public Tray(VCommunity communityNode, Container container) {
+	private Container container;
 
-		super(communityNode.getX(), communityNode.getY(), container.getDimension().width,
-				container.getDimension().width);
+	public Tray(RShape master, Container container) {
 
-		circles = new ArrayList<RShape>();
+		this.master = master;
 
-		// this is the master shape of this VCommunity
-		circles.add(RShape.createCircle(communityNode.getX(), communityNode.getY(), container.getDimension().width));
-
-		// initialize resulting union
-		union = circles.get(0);
-
-		// populate circles
-		getOtherVCommunitiesCircles(container);
-
-		// events
-		eventRegister(Canvas.app);
-
+		this.container = container;
 	}
 
 	/**
 	 * intersects all the shapes to build the final RShape.
 	 * 
-	 * First, it creates all the parallelepipeds described by the tangential points
-	 * between all the circles. Then merge them all in a single RShape. Then it
-	 * unites all the circles to the merged RShape
+	 * First, it retrieves all the RShape circles. Then it creates all the
+	 * parallelepipeds described by the tangential points between all the circles.
+	 * Then merge them all in a single RShape. Then it unites all the circles to the
+	 * merged RShape
 	 */
 	public void intersectShapes() {
 		// fresh start
+		// populate circles
+		ArrayList<RShape> circles = getVCommunitiesCircles(container);
+
 		ArrayList<RShape> paras = new ArrayList<RShape>();
+
 		union = null;
 
 		try {
@@ -63,7 +48,12 @@ public class Tray extends VisualAtom {
 			for (int i = 0; i < circles.size() - 1; i++) {
 				for (int j = i + 1; j < circles.size(); j++) {
 					if (circles.get(i) != null && circles.get(j) != null) {
-						paras.add(CircleCircleTangent.getTangentRBox(circles.get(i), circles.get(j)));
+						RShape tmp = CircleCircleTangent.getTangentRBox(circles.get(i), circles.get(j));
+						paras.add(tmp);
+						// this is to set union with the first element in para
+						// if (tmp != null && union == null) {
+						// union = tmp;
+						// }
 					}
 				}
 			}
@@ -102,38 +92,35 @@ public class Tray extends VisualAtom {
 
 	}
 
-	private void getOtherVCommunitiesCircles(Container container) {
+	/**
+	 * Goes over all the VCommunities inside the container and creates a RShape for
+	 * each one
+	 * 
+	 * @param container
+	 * @return
+	 */
+	private ArrayList<RShape> getVCommunitiesCircles(Container container) {
+
+		ArrayList<RShape> tmp = new ArrayList<RShape>();
+
+		tmp.add(master);
 
 		for (VCommunity vC : container.getVCommunities()) {
 
-			circles.add(RShape.createCircle(vC.getPos().x, vC.getPos().y, container.getDimension().width));
+			tmp.add(RShape.createCircle(vC.getX(), vC.getY(), container.getDimension().width));
 
 		}
+
+		return tmp;
 	}
 
 	public void show() {
+		Canvas.app.stroke(Color.YELLOW.getRGB());
 		RG.shape(union);
 	}
 
-	public void eventRegister(PApplet theApp) {
-		theApp.registerMethod("mouseEvent", this);
+	public void update() {
+		intersectShapes();
 	}
 
-	public void mouseEvent(MouseEvent e) {
-
-		if (e.getAction() == MouseEvent.DRAG) {
-			// Relocate this circle
-//			circles.get(0).translate(Canvas.getCanvasMouse().x - circles.get(0).getX() - circles.get(0).getWidth() / 2,
-//					Canvas.getCanvasMouse().y - circles.get(0).getY() - circles.get(0).getHeight() / 2);
-			
-//			circles.get(0).translate(Canvas.app.mouseX - circles.get(0).getX() - circles.get(0).getWidth() / 2,
-//					Canvas.app.mouseY - circles.get(0).getY() - circles.get(0).getHeight() / 2);
-
-			
-			//if (circles.get(0).contains(Canvas.getCanvasMouse().x, Canvas.getCanvasMouse().y)) {
-				// Intersect shapes
-				//intersectShapes();
-			//}
-		}
-	}
 }

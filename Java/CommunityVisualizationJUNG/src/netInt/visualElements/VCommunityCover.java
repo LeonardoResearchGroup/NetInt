@@ -19,6 +19,8 @@ package netInt.visualElements;
 import java.awt.Color;
 import java.io.Serializable;
 
+import geomerative.RG;
+import geomerative.RShape;
 import netInt.canvas.Canvas;
 import netInt.containers.Container;
 import netInt.gui.UserSettings;
@@ -46,6 +48,9 @@ public class VCommunityCover implements Serializable {
 
 	// false if there are too many communities on canvas
 	private boolean showLabel = true;
+	
+	// Community silhouette
+	private RShape silhouette;
 
 	// Counter
 	private int i;
@@ -70,7 +75,10 @@ public class VCommunityCover implements Serializable {
 		enableClosing = false;
 		eventRegister(Canvas.app);
 		this.container = communityNode.container;
-		tray = new Tray(communityNode, container);
+		
+		// this elements are for the tray
+		silhouette = RShape.createCircle(communityNode.getX(), communityNode.getY(), container.getDimension().width);
+		tray = new Tray(silhouette, container);
 	}
 
 	protected void show(boolean containsSearchedNode) {
@@ -111,10 +119,15 @@ public class VCommunityCover implements Serializable {
 				unfold();
 				drawArcs();
 			}
-			//**********************tray.updateCircle1(communityNode.getPos().x, communityNode.getPos().y, container.getDimension().width);
-
-			tray.setColor(communityNode.getColor());
-
+			float currentX = silhouette.getX();
+			float currentY = silhouette.getY();
+			float currentWidth = silhouette.getWidth();
+			silhouette.translate(communityNode.getX() - currentX - currentWidth / 2,
+					communityNode.getY() - currentY - currentWidth / 2);
+			
+			
+			//RG.shape(silhouette);
+			
 			tray.show();
 
 		}
@@ -245,6 +258,9 @@ public class VCommunityCover implements Serializable {
 
 				// Used in adaptive performance. Switch off all edges
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+				
+				// Intersect RShapes in tray
+				//tray.intersectShapes();
 
 			}
 			// If clicked, opened and enabled to be closed
@@ -256,7 +272,11 @@ public class VCommunityCover implements Serializable {
 
 				// Used in adaptive performance. Switch off all edges
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
+				
+				
 			}
+			
+			tray.update();
 		}
 	}
 
