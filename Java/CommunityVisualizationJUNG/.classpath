@@ -28,10 +28,10 @@
 	<classpathentry kind="lib" path="libs/processing/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="libs/processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
-	<classpathentry kind="lib" path="libs/colorMaps/jViridis.jar"/>
 	<classpathentry kind="lib" path="libs/controlP5.jar"/>
 	<classpathentry kind="lib" path="libs/customGui/guiSet.jar"/>
 	<classpathentry kind="lib" path="libs/pdf/itext.jar"/>
 	<classpathentry kind="lib" path="libs/pdf/pdf.jar"/>
+	<classpathentry kind="lib" path="libs/colorMaps/2018/jViridis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

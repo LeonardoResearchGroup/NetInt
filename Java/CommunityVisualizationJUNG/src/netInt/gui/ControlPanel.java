@@ -273,7 +273,8 @@ public class ControlPanel extends PApplet {
 
 		secondary.addLabel("Viridis color map").setPosition(2, 83).moveTo(group);
 
-		String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA, ColorMap.PLASMA };
+		//String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA, ColorMap.PLASMA };
+		String[] items = ColorMap.getInstance().getColorPaletteNames();
 
 		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 98).setValue(0f)
 				.setSize(196, 66).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
