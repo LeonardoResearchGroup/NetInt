@@ -105,6 +105,7 @@ public class GraphPad {
 	// PDF recording
 	private PGraphicsPDF pdf;
 	private String pdfFilePath = "screenCapture.pdf";
+	private boolean recording = false;
 
 	/**
 	 * Launches a visualization pad together with a Console Catcher
@@ -186,7 +187,7 @@ public class GraphPad {
 		performance = new TestPerformance();
 		
 		// pdf
-				pdf = (PGraphicsPDF) parent.createGraphics(parent.width, parent.height, PApplet.PDF, pdfFilePath);
+		pdf = (PGraphicsPDF) parent.createGraphics(parent.width, parent.height, PApplet.PDF, pdfFilePath);
 
 		System.out.println("** GraphPad Init() completed **");
 
@@ -204,6 +205,12 @@ public class GraphPad {
 		if (parent.key == 'e') {
 			exportFrameAsPDFKey(true);
 		}
+		
+		if (UserSettings.getInstance().getFileExportName() != null) {
+			exportFrameAsPDF(true);
+			recording = true;
+		}
+		
 
 		// User defines import parameters choosing from import menu
 		if (importMenu != null) {
@@ -211,8 +218,6 @@ public class GraphPad {
 		}
 
 		if (activeGraph) {
-
-
 
 			parent.pushMatrix();
 			canvas.translateCenter((parent.width - app.getRootDimension().width) / 2,
@@ -242,6 +247,11 @@ public class GraphPad {
 		if (parent.key == 'e') {
 			exportFrameAsPDFKey(false);
 			parent.key = '_';
+		}
+		
+		if (recording) {
+			exportFrameAsPDF(false);
+			recording = false;
 		}
 		
 
@@ -384,9 +394,7 @@ public class GraphPad {
 			parent.beginRecord(pdf);
 		} else {
 			parent.endRecord();
-			javax.swing.JOptionPane.showMessageDialog(null,
-					"File exported to " + UserSettings.getInstance().getFileExportName() + "." + "pdf", "",
-					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+			javax.swing.JOptionPane.showMessageDialog(null, "File exported to " + pdfFilePath, "", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			UserSettings.getInstance().setFileExportName(null);
 			parent.cursor(PApplet.ARROW);
 		}

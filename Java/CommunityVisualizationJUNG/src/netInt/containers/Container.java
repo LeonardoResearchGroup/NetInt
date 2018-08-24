@@ -192,18 +192,6 @@ public abstract class Container {
 		// For all the nodes in the graph
 		degreeThreshold = 0;
 
-		// System.out.println(this.getClass().getName() + " numberNodes: " +
-		// numberNodes);
-
-		// Percentage of degree threshold (0-100)
-		// float degreeThresholdPercentage = 0;
-
-		// int degreeThresholdPosition = (int) ((degreeThresholdPercentage /
-		// 100) * numberNodes) - 1;
-		//
-		// System.out.println(this.getClass().getName() + " operacion: "
-		// + ((int) ((degreeThresholdPercentage / 100) * numberNodes) - 1));
-
 		for (Node n : this.getGraph().getVertices()) {
 			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
 			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
@@ -216,24 +204,6 @@ public abstract class Container {
 
 		// Nodes sorted for adaptive performance
 		Arrays.sort(degrees);
-
-		// degreeThreshold = degreeThreshold /
-		// this.getGraph().getVertices().size();
-		// degreeThreshold = 1000;
-
-		// if(degreeThresholdPosition < 0){
-		//
-		// degreeThreshold = 0;
-		//
-		// }else{
-		// degreeThreshold = degrees[degreeThresholdPosition];
-		// }
-		//
-		// System.out.println(this.getClass().getName() + " degreeThreshold: " +
-		// degreeThreshold);
-		//
-		// System.out.println(this.getClass().getName() + "
-		// degreeThresholdPosition: " + degreeThresholdPosition);
 
 		// System.out.println(this.getClass().getName() + " Degrees of
 		// container's Graph assigned");

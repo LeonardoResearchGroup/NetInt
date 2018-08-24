@@ -99,8 +99,8 @@ public class Assembler {
 	}
 
 	/**
-	 * Loads and builds a graph from a given graph-formated file (graphml or
-	 * pajek) using the import attributes selected by the user
+	 * Loads and builds a graph from a given graph-formated file (graphml or pajek)
+	 * using the import attributes selected by the user
 	 * 
 	 * @param file
 	 *            The path to the source file
@@ -150,8 +150,8 @@ public class Assembler {
 	}
 
 	/**
-	 * Creates a single VCommunity of the graph with no subCommunities yet
-	 * contains all the VNodes
+	 * Creates a single VCommunity of the graph with no subCommunities yet contains
+	 * all the VNodes
 	 * 
 	 * @param graph
 	 *            the graph
@@ -192,8 +192,8 @@ public class Assembler {
 		// subContainer.populateGraphfromVCommunities(communities);
 
 		// make graph from first order edge list
-		 subContainer.populateGraphfromEdgeList(firstOrderEdgeList, communities);
-		
+		subContainer.populateGraphfromEdgeList(firstOrderEdgeList, communities);
+
 		// Set the degrees of the internal graph. The graph is usually made of
 		// community nodes
 		subContainer.setGraphDegrees();
@@ -230,13 +230,22 @@ public class Assembler {
 		ArrayList<VCommunity> vCommunities = new ArrayList<VCommunity>();
 
 		// Color
-		boolean colorBlindSafe = false;
-		ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
-		ColorBrewer myBrewer = qualitativePalettes[2];
-		Color[] myGradient = myBrewer.getColorPalette(comNames.size());
-		for (int i = 0; i < myGradient.length; i++) {
-			myGradient[i] = new Color(myGradient[i].getRed(), myGradient[i].getGreen(), myGradient[i].getBlue(), 100);
+		String categoricalCMapName = ColorMap.getInstance().getCategoricalColorMapName();
+		Color[] myGradient;
+		System.out.println("Palette: "+ categoricalCMapName);
+		// Tries to retieve a categorical color palette from jViridis, if any.
+		if (categoricalCMapName != null) {
+			ColorMap categoricalCMap = ColorMap.getInstance(categoricalCMapName);
+			categoricalCMap.extendCategoricalPalette(comNames.size());
+			myGradient = categoricalCMap.getColorMap();
+		} else {
+			// If there are no categorical palettes, then it retrieves one from ColorBrewer
+			boolean colorBlindSafe = false;
+			ColorBrewer[] qualitativePalettes = ColorBrewer.getQualitativeColorPalettes(colorBlindSafe);
+			ColorBrewer myBrewer = qualitativePalettes[2];
+			myGradient = myBrewer.getColorPalette(comNames.size());
 		}
+
 
 		System.out.println("     Generating Graphs for " + comNames.size() + " communities ..." + "\n"
 				+ "     Creating Second Order VCommunity: ");
@@ -264,7 +273,8 @@ public class Assembler {
 			// Name container
 			containerTemp.setName(communityName);
 
-			containerTemp.setGraphDegrees();
+			// **Note: commented because it overwrites the 
+			//containerTemp.setGraphDegrees();
 
 			// Initialize container
 			// containerTemp.initialize();

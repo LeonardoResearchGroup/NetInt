@@ -192,7 +192,7 @@ public class ControlPanel extends PApplet {
 		secondary.setColorBackground(0xff353535);
 
 		// Add list to main controller
-		String[] fileFunctions = { "Open", "Save", "Import", "Export_PDF",  "Quit" }; // "Load Module",
+		String[] fileFunctions = { "Open", "Save", "Import", "Export_PDF", "Quit" }; // "Load Module",
 		main.addScrollableList("File").setPosition(10, 55).setSize(206, 100).setBarHeight(18).setItemHeight(13)
 				.addItems(fileFunctions).setType(ScrollableList.LIST).open();
 	}
@@ -242,7 +242,7 @@ public class ControlPanel extends PApplet {
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		// open close sections
-		//accordion.open(2); // ,2,3
+		// accordion.open(2); // ,2,3
 
 		// Show controller
 		secondary.show();
@@ -271,12 +271,13 @@ public class ControlPanel extends PApplet {
 
 		// JViridis palette names
 
-		secondary.addLabel("Viridis color map").setPosition(2, 83).moveTo(group);
+		secondary.addLabel("Color map").setPosition(2, 83).moveTo(group);
 
-		//String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA, ColorMap.PLASMA };
+		// String[] items = { ColorMap.VIRIDIS, ColorMap.INFERNO, ColorMap.MAGMA,
+		// ColorMap.PLASMA };
 		String[] items = ColorMap.getInstance().getColorPaletteNames();
 
-		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 98).setValue(0f)
+		secondary.addScrollableList("Palette").setLabel("Color Palette").addItems(items).setPosition(5, 98).setValue(1f)
 				.setSize(196, 66).setBarHeight(13).setItemHeight(13).setType(ScrollableList.DROPDOWN).moveTo(group)
 				.getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER); // .close()
 
@@ -368,8 +369,10 @@ public class ControlPanel extends PApplet {
 		secondary.addToggle("Tier_1_Internal").setPosition(5, 21).setSize(95, 10).setValue(true).moveTo(group)
 				.setCaptionLabel("Internal").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
 
-//		secondary.addToggle("Tier_1_External").setPosition(106, 21).setSize(95, 10).setValue(true).moveTo(group)
-//				.setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+		// secondary.addToggle("Tier_1_External").setPosition(106, 21).setSize(95,
+		// 10).setValue(true).moveTo(group)
+		// .setCaptionLabel("External").getCaptionLabel().align(ControlP5.CENTER,
+		// ControlP5.CENTER);
 
 		// Visibility control tier 2
 		secondary.addLabel("Edge visibility tier 2").setPosition(2, 41).moveTo(group);
@@ -461,14 +464,14 @@ public class ControlPanel extends PApplet {
 		// Diameter
 		Object[] mappers = Mapper.getInstance().getNodeAttributesMax().getAttributeKeys().toArray();
 
-//		String[] items = new String[mappers.length];
-//
-//		for (int i = 0; i < mappers.length; i++) {
-//			items[i] = (String) mappers[i];
-//		}
+		// String[] items = new String[mappers.length];
+		//
+		// for (int i = 0; i < mappers.length; i++) {
+		// items[i] = (String) mappers[i];
+		// }
 
-		String [] items = {"Community size"};
-  		
+		String[] items = { "Community size" };
+
 		secondary.addLabel("cSize:").setLabel("Size").setPosition(5, 57).moveTo(group);
 
 		secondary.addScrollableList("Community_Size").setLabel("Size").addItems(items).setPosition(5, 67)
@@ -516,7 +519,7 @@ public class ControlPanel extends PApplet {
 	public void controlEvent(ControlEvent theEvent) {
 		// At any event notify VisibilitySettings class
 		UserSettings.getInstance().setEventOnVSettings();
-		
+
 		if (theEvent.isGroup()) {
 			// **** DESCRIPTIVE STATISTICS ****
 			if (theEvent.isFrom(cBox)) {
@@ -568,9 +571,9 @@ public class ControlPanel extends PApplet {
 		case "Adaptive_performance":
 			Toggle performance = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setAdaptivePerformance(performance.getBooleanValue());
-			if( performance.getBooleanValue() ){
+			if (performance.getBooleanValue()) {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
-			}else{
+			} else {
 				Canvas.setAdaptiveDegreeThresholdPercentage(0);
 			}
 			break;
@@ -625,13 +628,14 @@ public class ControlPanel extends PApplet {
 				Canvas.setAdaptiveDegreeThresholdPercentage(100);
 			}
 			break;
-//		case "Tier_1_External":
-//			Toggle vinculoExtT1 = (Toggle) theEvent.getController();
-//			UserSettings.getInstance().setShowExternalEdges(0, vinculoExtT1.getBooleanValue());
-//			if (vinculoExtT1.getBooleanValue()) {
-//				Canvas.setAdaptiveDegreeThresholdPercentage(100);
-//			}
-//			break;
+		// case "Tier_1_External":
+		// Toggle vinculoExtT1 = (Toggle) theEvent.getController();
+		// UserSettings.getInstance().setShowExternalEdges(0,
+		// vinculoExtT1.getBooleanValue());
+		// if (vinculoExtT1.getBooleanValue()) {
+		// Canvas.setAdaptiveDegreeThresholdPercentage(100);
+		// }
+		// break;
 		case "Tier_2_Internal":
 			Toggle vinculoIntT2 = (Toggle) theEvent.getController();
 			UserSettings.getInstance().setShowInternalEdges(1, vinculoIntT2.getBooleanValue());
@@ -686,14 +690,14 @@ public class ControlPanel extends PApplet {
 
 		case "Community_Size":
 			int communitySize = (int) secondary.get(ScrollableList.class, "Community_Size").getValue();
-			UserSettings.getInstance().setCommunitySizeAtt(
-					secondary.get(ScrollableList.class, "Community_Size").getItem(communitySize).get("name").toString());
+			UserSettings.getInstance().setCommunitySizeAtt(secondary.get(ScrollableList.class, "Community_Size")
+					.getItem(communitySize).get("name").toString());
 			break;
 
 		case "Community_Color":
 			int communityColor = (int) secondary.get(ScrollableList.class, "Community_Color").getValue();
-			UserSettings.getInstance().setCommunityColorAtt(
-					secondary.get(ScrollableList.class, "Community_Color").getItem(communityColor).get("name").toString());
+			UserSettings.getInstance().setCommunityColorAtt(secondary.get(ScrollableList.class, "Community_Color")
+					.getItem(communityColor).get("name").toString());
 			break;
 
 		case "Converter_Community":
@@ -783,6 +787,9 @@ public class ControlPanel extends PApplet {
 				String selectedPathExport = ChooseHelper.getInstance().showJFileChooser(true, "pdf");
 				if (selectedPathExport != null) {
 					UserSettings.getInstance().setFileExportName(selectedPathExport);
+				} else {
+					javax.swing.JOptionPane.showMessageDialog(null, "No file name entered", "",
+							javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				}
 			} else {
 				javax.swing.JOptionPane.showMessageDialog(null, "No frames to export. Try loading a graph first", "",
