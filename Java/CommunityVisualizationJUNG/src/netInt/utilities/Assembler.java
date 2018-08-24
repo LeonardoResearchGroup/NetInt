@@ -197,6 +197,9 @@ public class Assembler {
 		// Set the degrees of the internal graph. The graph is usually made of
 		// community nodes
 		subContainer.setGraphDegrees();
+		
+		// For adaptive performance purposes
+		subContainer.sortNodesDegrees();
 
 		// Name the community
 		subContainer.setName(comName);
@@ -273,11 +276,11 @@ public class Assembler {
 			// Name container
 			containerTemp.setName(communityName);
 
-			// **Note: commented because it overwrites the 
-			//containerTemp.setGraphDegrees();
+			//
+			containerTemp.sortNodesDegrees();
 
 			// Initialize container
-			// containerTemp.initialize();
+			containerTemp.initialize();
 
 			// Make Node for CommunityCover
 			Node tmpNode = new Node(communityName);

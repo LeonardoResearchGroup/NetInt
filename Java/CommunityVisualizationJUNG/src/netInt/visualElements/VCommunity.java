@@ -64,7 +64,7 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private String sizeConverterName = Mapper.LINEAR;
 	private String colorConverterName = Mapper.LINEAR;
 
-	private float sizeFactor = 1;
+	private float sizeFactor = 7;
 	private float minSize = 5;
 
 	private int tierSequence;
@@ -326,7 +326,6 @@ public class VCommunity extends VNode implements java.io.Serializable {
 			container.degreeThreshold = 0;
 
 		} else {
-
 			container.degreeThreshold = container.degrees[degreeThresholdPosition];
 		}
 	}

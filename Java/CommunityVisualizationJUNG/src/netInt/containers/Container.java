@@ -183,30 +183,31 @@ public abstract class Container {
 	 * communities
 	 */
 	public void setGraphDegrees() {
-
+		for (Node n : this.getGraph().getVertices()) {
+			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
+			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
+			n.setDegree(0, this.getGraph().degree(n));
+		}
+	}
+	
+	/**
+	 * This method is used only for the adaptive performance function
+	 */
+	public void sortNodesDegrees() {
 		int numberNodes = this.getGraph().getVertices().size();
 		int i = 0;
-
 		degrees = new int[numberNodes];
 
 		// For all the nodes in the graph
 		degreeThreshold = 0;
 
 		for (Node n : this.getGraph().getVertices()) {
-			n.setInDegree(0, this.getGraph().getPredecessorCount(n));
-			n.setOutDegree(0, this.getGraph().getSuccessorCount(n));
 			int degree = this.getGraph().degree(n);
-			n.setDegree(0, degree);
 			degrees[i] = degree;
 			i++;
-			// degreeThreshold += degree;
 		}
-
 		// Nodes sorted for adaptive performance
 		Arrays.sort(degrees);
-
-		// System.out.println(this.getClass().getName() + " Degrees of
-		// container's Graph assigned");
 	}
 
 	/**

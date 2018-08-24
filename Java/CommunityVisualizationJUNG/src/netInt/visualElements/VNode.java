@@ -60,8 +60,8 @@ public class VNode extends VisualAtom implements Serializable {
 	// UserSettings
 	private String converterSizeName = Mapper.LINEAR;
 	private String converterColorName = Mapper.LINEAR;
-	private int sizeFactor = 10;
-	private int minSize = 3;
+	private int sizeFactor = 15;
+	private int minSize = 5;
 
 	// Visual attributes
 	int textColor = new Color(100, 100, 100).getRGB();
