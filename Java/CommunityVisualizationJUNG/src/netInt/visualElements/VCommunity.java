@@ -64,8 +64,8 @@ public class VCommunity extends VNode implements java.io.Serializable {
 	private String sizeConverterName = Mapper.LINEAR;
 	private String colorConverterName = Mapper.LINEAR;
 
-	private float sizeFactor = 7;
-	private float minSize = 5;
+	private float sizeFactor = 3;
+	private float minSize = 3;
 
 	private int tierSequence;
 

@@ -101,6 +101,7 @@ public class VCommunityCover implements Serializable {
 
 			if (!coverDeployed) {
 				unfold();
+				
 				drawArcs();
 			}
 		}
@@ -111,6 +112,7 @@ public class VCommunityCover implements Serializable {
 		// Labels
 		if (showLabel) {
 			Canvas.app.textSize(10);
+			
 			showCoverLable(communityNode, container);
 		}
 
@@ -118,6 +120,7 @@ public class VCommunityCover implements Serializable {
 		// not been deployed
 		if (containsSearchedNode) {
 			Canvas.app.fill(255, 0, 0);
+			
 			Canvas.app.ellipse(communityNode.getPos().x, communityNode.getPos().y, communityNode.getDiameter(),
 					communityNode.getDiameter());
 		}
@@ -144,6 +147,7 @@ public class VCommunityCover implements Serializable {
 
 		// *** DRAWS RIGHT HALF INVOLUTE
 		Canvas.app.stroke(communityNode.getColorRGB());
+		
 		Canvas.app.noFill();
 
 		// Increments the angle of the involute
@@ -172,16 +176,24 @@ public class VCommunityCover implements Serializable {
 	 *            container
 	 */
 	public void showCoverLable(VNode communityNode, Container container) {
+		
 		Canvas.app.textAlign(PConstants.CENTER, PConstants.CENTER);
+		
 		Canvas.app.fill(100);
+		
 		Canvas.app.text(container.getName(), communityNode.getPos().x, communityNode.getPos().y + 10);
+		
 		if (communityNode.isMouseOver) {
+			
 			Canvas.app.text("Nodes: " + container.getGraph().getVertexCount(), communityNode.getPos().x,
 					communityNode.getPos().y + 30);
+			
 			Canvas.app.text("Edges: " + container.getGraph().getEdgeCount(), communityNode.getPos().x,
 					communityNode.getPos().y + 45);
 		}
+		
 		Canvas.app.noFill();
+		
 		Canvas.app.stroke(180);
 	}
 

@@ -229,8 +229,9 @@ public class VNode extends VisualAtom implements Serializable {
 				// Set the color with current converter and new selected
 				// attribute name
 				setColor(calculateColor());
-				setAlpha(150);
+				//setAlpha(150);
 			}
+			setAlpha(150);
 
 			// Draw node following propagation variables
 			drawNode();
